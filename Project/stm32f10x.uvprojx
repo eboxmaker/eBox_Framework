@@ -643,9 +643,9 @@
               <FilePath>.\boardcfg.h</FilePath>
             </File>
             <File>
-              <FileName>analogWrite.cpp</FileName>
+              <FileName>uart3.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\example\analog\analogWrite.cpp</FilePath>
+              <FilePath>..\example\uart\uart3.cpp</FilePath>
             </File>
           </Files>
         </Group>

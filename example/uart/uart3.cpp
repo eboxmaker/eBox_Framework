@@ -1,17 +1,8 @@
-#include "boardcfg.h"
-#include "math.h"
-
 #include "ebox.h"
 
-#include "pwm.h"
-
-#include "lcd1602.h"
 #include "uartx.h"
-//PWM p(7);
-/*
-analog pin table
-0,1,2,3,6,7,16,17,22,23,24,25,26,27
-*/
+
+
 int rcvok;
 
 char rcv[100];
@@ -21,19 +12,18 @@ void test()
 	rcv[i++] = USART_ReceiveData(USART3);
 	if(rcv[i-1] == '!')
 	{
-			rcvok =1;
-			i = 0;	
+		rcvok =1;
+		i = 0;	
 	}
 
-
-	//digitalWrite(7,!digitalRead(7));
 }
 	
 void setup()
 {
 	eBoxInit();
 	uart3.begin(115200);
-	uart3.attachInterrupt(test);
+	uart3.interrupt(ENABLE);
+	uart3.attachInterrupt(test,1);
 	pinMode(7,OUTPUT);
 }
 
@@ -42,23 +32,19 @@ int main(void)
 {
 
 	setup();
-	uart3.printf("shentqlfsdfafadfadf");
+	uart3.printf("shentqlf\r\n");
 
 	while(1)
 	{		 	
 		if(rcvok == 1)
 		{
 		
-			uart3.putStr(rcv);
+			uart3.printf(rcv);
 			rcvok = 0;
+			for(int i = 0; i < 100; i ++)
+				rcv[i] = 0;
 		}
 
-//		x = x + PI*0.01;
-//		if(x >= PI)x=0;
-//		y = 2000 - (sin(x)+1)*1000;
-		
-	//	analogWrite(7,y);
-	//	delay_ms(50);
 	}
 
 
