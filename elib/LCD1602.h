@@ -8,6 +8,7 @@ class LCD1602
 	public:
 		LCD1602(uint8_t LEDPin,uint8_t ENPin,uint8_t RWPin,uint8_t RSPin,uint8_t DB0,uint8_t DB1,uint8_t DB2,uint8_t DB3,uint8_t DB4,uint8_t DB5,uint8_t DB6,uint8_t DB7);
 		LCD1602(uint8_t LEDPin,uint8_t ENPin,uint8_t RWPin,uint8_t RSPin,uint8_t DB0,uint8_t DB1,uint8_t DB2,uint8_t DB3);
+	void begin(void);
 	void Setpos(uint8_t row,uint8_t col);
 	void DispChar(char ch);
 	void Setpos_DispChar(uint8_t row,uint8_t col,char ch);
@@ -16,7 +17,6 @@ class LCD1602
 	void Dispnum(uint32_t num);
 	void Setpos_Dispnum(uint8_t row,uint8_t col,uint32_t num);
 	void BackLight(u8 i);
-	void init(void);
 	void TEST(void);
 	void ShiftLeft();
 	void ShiftRight(void);

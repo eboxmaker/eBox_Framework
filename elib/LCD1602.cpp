@@ -32,7 +32,6 @@ LCD1602::LCD1602(uint8_t LEDPin,uint8_t ENPin,uint8_t RWPin,uint8_t RSPin,uint8_
 	pinMode(_DB7,OUTPUT);	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
 	 GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
-	init();
 	nDelay = 10;
 }
 LCD1602::LCD1602(uint8_t LEDPin,uint8_t ENPin,uint8_t RWPin,uint8_t RSPin,uint8_t DB0,uint8_t DB1,uint8_t DB2,uint8_t DB3)
@@ -344,9 +343,9 @@ void LCD1602::CloseFlicker(void)
 void LCD1602::FlickerScreen(void)
 {
 	wcmd(0x08);//关显示
-	LCDdelay(500000);
+	LCDdelay(0x3fffff);
 	wcmd(0x0C);//开显示
-	LCDdelay(500000);
+	LCDdelay(0x3fffff);
 }
 void LCD1602::BackLight(u8 i)
 {
@@ -373,7 +372,7 @@ void LCD1602::BackLight(u8 i)
 *          0x18:屏幕上所有字符同时左移一格，适合滚动显示 40us
 *          0x1C:屏幕上所有字符同时右移一格，适合滚动显示 40us
 *********************************************************************/
-void LCD1602::init(void)
+void LCD1602::begin(void)
 {   
 	wcmd(0x38);  //16*2显示，5*7点阵，8位数据
 	LCDdelay(100);
@@ -393,14 +392,11 @@ void LCD1602::init(void)
 }
 void LCD1602::TEST(void)
 {
-	char str[]={"SHENTQLF!"};
-	Setpos_DispString(1,3,str);
-//	DispFreq(123456);
+	char str[]={"Hello World  !"};
+	Setpos_DispString(1,1,str);
 	FlickerChar(2,3);
 	FlickerScreen();
 	FlickerScreen();
 	FlickerScreen();
-	LCDdelay(100);
-	CloseFlicker();	          
 }
 
