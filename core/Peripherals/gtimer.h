@@ -27,8 +27,10 @@ class TIM
 	
 		void TIMxBaseInit(uint16_t period,uint16_t prescaler);
 		void Interrupt(FunctionalState x);
-		void CMD_Enable(FunctionalState x);
+		void begin(void);
+		void stop(void);
 		void SetReload(uint16_t Autoreload);
+		void clearCount(void);
 		void attachInterrupt(void(*callback)(void))
 		{
 				gTimxcbTable[_id] = callback;

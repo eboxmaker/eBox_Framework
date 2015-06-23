@@ -1,5 +1,9 @@
 #include "gtimer.h"
 
+
+//默认配置为预分频72分频
+//默认配置为溢出值 1000
+//默认配置：1ms中断一次
 #define PRESCALE 72
 #define PEROID	1000
 
@@ -13,8 +17,8 @@ TIM::TIM(TIM_TypeDef* TIMx)
 	_irq = TIMxToIRQ(TIMx);
 	
 	TIMxBaseInit(PEROID,PRESCALE);
-	Interrupt(ENABLE);
-	CMD_Enable(ENABLE);
+	Interrupt(DISABLE);
+	stop();
 
 }
 TIM::TIM(TIM_TypeDef* TIMx,uint32_t period,uint32_t prescaler)
@@ -27,8 +31,8 @@ TIM::TIM(TIM_TypeDef* TIMx,uint32_t period,uint32_t prescaler)
 	_irq = TIMxToIRQ(TIMx);
 	
 	TIMxBaseInit(period,prescaler);
-	Interrupt(ENABLE);
-	CMD_Enable(ENABLE);
+	Interrupt(DISABLE);
+	stop();
 }
 
 void TIM::Interrupt(FunctionalState x)
@@ -43,9 +47,14 @@ void TIM::Interrupt(FunctionalState x)
  NVIC_Init(&NVIC_InitStructure);
 
 }
-void TIM::CMD_Enable(FunctionalState x)
+
+void TIM::begin(void)
 {
-	 TIM_Cmd(_TIMx, x); //????
+	 TIM_Cmd(_TIMx, ENABLE); //????
+}
+void TIM::stop(void)
+{
+	 TIM_Cmd(_TIMx, DISABLE); //????
 }
 void TIM::TIMxBaseInit(uint16_t period,uint16_t prescaler)
 {
@@ -67,6 +76,10 @@ void TIM::TIMxBaseInit(uint16_t period,uint16_t prescaler)
 void TIM::SetReload(uint16_t Autoreload)
 {
 	TIM_SetAutoreload(_TIMx,Autoreload);
+}
+void TIM::clearCount(void)
+{
+	_TIMx->CNT = 0;
 }
 
 

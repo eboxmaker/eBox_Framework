@@ -18,7 +18,7 @@ EXTIx::EXTIx(uint8_t pin, EXTITrigger_TypeDef trigger)
 	_irqch			= PinToExti[_pin].irqch;
 
 
-	pinMode(_pin,INPUT_PULLUP);
+	pinMode(_pin,INPUT);
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
 	
@@ -39,8 +39,8 @@ EXTIx::EXTIx(uint8_t pin, EXTITrigger_TypeDef trigger)
   
   /* ≈‰÷√P[A|B|C|D|E]0Œ™÷–∂œ‘¥ */
   NVIC_InitStructure.NVIC_IRQChannel = _irqch;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 15;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
 }

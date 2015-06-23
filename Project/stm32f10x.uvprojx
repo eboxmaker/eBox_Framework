@@ -643,9 +643,9 @@
               <FilePath>.\boardcfg.h</FilePath>
             </File>
             <File>
-              <FileName>uart3.cpp</FileName>
+              <FileName>main.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\example\uart\uart3.cpp</FilePath>
+              <FilePath>.\main.cpp</FilePath>
             </File>
           </Files>
         </Group>
