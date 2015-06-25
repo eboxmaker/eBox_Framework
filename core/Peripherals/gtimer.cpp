@@ -15,11 +15,8 @@ TIM::TIM(TIM_TypeDef* TIMx)
 	_id = TIMxToID(_TIMx);
 	_rcc = TIMxToRCC(TIMx);
 	_irq = TIMxToIRQ(TIMx);
-	
-	TIMxBaseInit(PEROID,PRESCALE);
-	Interrupt(DISABLE);
-	stop();
-
+	_period = PEROID;
+	_prescaler = PRESCALE;
 }
 TIM::TIM(TIM_TypeDef* TIMx,uint32_t period,uint32_t prescaler)
 {
@@ -29,12 +26,15 @@ TIM::TIM(TIM_TypeDef* TIMx,uint32_t period,uint32_t prescaler)
 	_id = TIMxToID(_TIMx);
 	_rcc = TIMxToRCC(TIMx);
 	_irq = TIMxToIRQ(TIMx);
-	
-	TIMxBaseInit(period,prescaler);
+	_period = period;
+	_prescaler = prescaler;
+}
+void TIM::begin(void)
+{
+	TIMxBaseInit(_period,_prescaler);
 	Interrupt(DISABLE);
 	stop();
 }
-
 void TIM::Interrupt(FunctionalState x)
 {
  TIM_ClearITPendingBit(_TIMx , TIM_FLAG_Update);
@@ -42,16 +42,18 @@ void TIM::Interrupt(FunctionalState x)
  NVIC_InitTypeDef NVIC_InitStructure;
  NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);  //使用全局控制值
  NVIC_InitStructure.NVIC_IRQChannel = _irq;//
- NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;// 
+ NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;// 
+ NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;// 
  NVIC_InitStructure.NVIC_IRQChannelCmd = x;
  NVIC_Init(&NVIC_InitStructure);
 
 }
 
-void TIM::begin(void)
+void TIM::start(void)
 {
 	 TIM_Cmd(_TIMx, ENABLE); //????
 }
+
 void TIM::stop(void)
 {
 	 TIM_Cmd(_TIMx, DISABLE); //????

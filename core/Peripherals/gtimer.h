@@ -26,8 +26,9 @@ class TIM
 		TIM(TIM_TypeDef* TIMx,uint8_t nothing);
 	
 		void TIMxBaseInit(uint16_t period,uint16_t prescaler);
-		void Interrupt(FunctionalState x);
 		void begin(void);
+		void Interrupt(FunctionalState x);
+		void start(void);
 		void stop(void);
 		void SetReload(uint16_t Autoreload);
 		void clearCount(void);
