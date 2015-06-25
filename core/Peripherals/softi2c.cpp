@@ -25,7 +25,7 @@ void Softi2c::stop()
 	digitalWrite(_SCLpin,1);delay_us(_delaytimes);
 	digitalWrite(_SDApin,1);
 }
-uint8_t Softi2c::_wait_ack()
+uint8_t Softi2c::wait_ack()
 {
 	uint8_t cErrTime = 5;
 	pinMode(_SDApin,INPUT_PULLUP);

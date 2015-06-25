@@ -16,7 +16,7 @@ class Softi2c
 		Softi2c(uint8_t SDApin, uint8_t SCLpin);
 		void 		start();
 		void 		stop();
-		uint8_t		_wait_ack();
+		uint8_t	wait_ack();
 		void 		send_ack();
 		void 		send_no_ack();
 		void 		send_byte(uint8_t Byte);
