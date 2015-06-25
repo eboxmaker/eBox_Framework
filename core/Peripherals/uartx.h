@@ -41,10 +41,12 @@
 		uint32_t _irq;
 	  uint8_t _initialized;
  
- };
- extern class USART uart1;
- extern class USART uart2;
- extern class USART uart3; 
+};
+extern class USART uart1;
+#ifdef STM32F103C8T6
+	extern class USART uart2;
+	extern class USART uart3;
+#endif
 #ifdef __cplusplus
 }
 #endif

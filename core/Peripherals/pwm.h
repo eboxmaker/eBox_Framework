@@ -10,7 +10,10 @@ extern "C"{
 	#define PWM_TIM_PERIOD 		1000
 	#define PWM_TIM_PRESCALER	72
 	
-	
+		//PWMPin:有定时器oc通道的io
+		//period：定时器的周期。溢出值
+		//prescaler:定时器预分频器
+	  //pwm的频率 = 72M/72/1000;
 class PWM
 {
 	private:
@@ -29,9 +32,6 @@ class PWM
 
 	
 	public:
-		//PWMPin:有定时器oc通道的io
-		//period：定时器的周期。溢出值
-		//prescaler:定时器预分频器
 		PWM(uint8_t PWMpin);
 		PWM(uint8_t PWMpin,uint16_t period,uint16_t prescaler);
 		void TIMxBaseInit(uint16_t period,uint16_t prescaler);

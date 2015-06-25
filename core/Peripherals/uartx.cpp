@@ -105,5 +105,7 @@ void USART::printf(const char* fmt,...)
 	putstr(buffer);
 }
 class USART uart1(USART1);
+#ifdef STM32F103C8T6
 class USART uart2(USART2);
 class USART uart3(USART3);
+#endif

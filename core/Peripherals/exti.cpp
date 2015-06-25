@@ -6,11 +6,8 @@
 //  				EXTI_Trigger_Rising_Falling 
 EXTIx::EXTIx(uint8_t pin, EXTITrigger_TypeDef trigger)
 {
-//		uint32_t _ExtiLine;
-//		uint8_t _PortSource;
-//		uint8_t _PinSource;
-//		uint32_t _irqch;
-//		uint8_t  _pin;
+
+	
 	_pin = pin;
 	_PortSource = PinToExti[_pin].PortSource;
 	_PinSource  = PinToExti[_pin].PinSource;
