@@ -34,6 +34,7 @@ void TIM::begin(void)
 	TIMxBaseInit(_period,_prescaler);
 	Interrupt(DISABLE);
 	stop();
+	//start();
 }
 void TIM::Interrupt(FunctionalState x)
 {
@@ -67,12 +68,15 @@ void TIM::TIMxBaseInit(uint16_t period,uint16_t prescaler)
  TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
  TIM_DeInit(_TIMx);
  RCC_APB1PeriphClockCmd(_rcc, ENABLE);
- TIM_TimeBaseStructure.TIM_Period=period-1;//ARR??
+	
+ TIM_TimeBaseStructure.TIM_Period=period-1;//ARR¼Ä´æÆ÷
  TIM_TimeBaseStructure.TIM_Prescaler=prescaler-1;
- TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; //??????
+ TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; //µ¥±ßÐ±ÆÂ
+ TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+
  TIM_TimeBaseInit(_TIMx, &TIM_TimeBaseStructure);
- TIM_ARRPreloadConfig(_TIMx, ENABLE);
- TIM_Cmd(_TIMx, ENABLE); //????
+ TIM_ARRPreloadConfig(_TIMx, ENABLE);	//¿ØÖÆARR¼Ä´æÆ÷ÊÇ·ñÊ¹ÓÃÓ°×Ó¼Ä´æÆ÷
+
 
 }
 void TIM::SetReload(uint16_t Autoreload)
