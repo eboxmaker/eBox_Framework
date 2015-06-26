@@ -16,7 +16,7 @@ class EXTIx
 	
 		void attachInterrupt(void (*callbackFun)(void))
 		{
-				ExticbTable[_PinSource] = callbackFun;
+				extiCallbackTable[_PinSource] = callbackFun;
 		}
 	
 };

@@ -30,9 +30,9 @@
 		void attachInterrupt(void (*callbackFun)(void),uint8_t IKind)
 		{
 			if(IKind == 1)
-				UARTcbTable[(_id - 1) * 2] = callbackFun;//×¢²árxÖÐ¶Ïº¯Êý
+				UARTCallbackTable[(_id - 1) * 2] = callbackFun;//×¢²árxÖÐ¶Ïº¯Êý
 			if(IKind == 2)
-				UARTcbTable[(_id - 1) * 2 + 1] = callbackFun;//×¢²átxÖÐ¶Ïº¯Êý
+				UARTCallbackTable[(_id - 1) * 2 + 1] = callbackFun;//×¢²átxÖÐ¶Ïº¯Êý
 		}
 	 private:
 		USART_TypeDef * _USARTx;

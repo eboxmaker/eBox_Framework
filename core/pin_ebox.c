@@ -2,9 +2,9 @@
 #include "pin_ebox.h"
 //打印以下几个数组可知IO是否冲突
 //////////////////////////////////////////////
-uint16_t IOPinStatu[TOTAL_PIN];//IO口是否使用
-uint16_t AnalogPinStatu[TOTAL_PIN];//是否配置为AIN模式
-uint8_t PwmPinStatu[TOTAL_PIN];//是否配置为PWM模式
+uint16_t ioPinStatu[TOTAL_PIN];//IO口是否使用
+uint16_t analogPinStatu[TOTAL_PIN];//是否配置为AIN模式
+uint8_t pwmPinStatu[TOTAL_PIN];//是否配置为PWM模式
 //////////////////////////////////////////////////
 
 const PIN_INFO _PinInfo[]=
@@ -231,7 +231,7 @@ const USARTx_INFO _USARTxInfo[]=
 	{3,USART3,RCC_APB1Periph_USART3,USART3_IRQn},
 };
 //////////////////////////////////////////////////////////////
-TIM_TypeDef* PinToTIMx(uint8_t pin)
+TIM_TypeDef* pinToTIMx(uint8_t pin)
 {
 	int i;
 	for(i = 0; i<PWM_PIN_NUM; i++)
@@ -243,7 +243,7 @@ TIM_TypeDef* PinToTIMx(uint8_t pin)
 	return 0;
 }
 
-uint8_t PinToTIM_ch(uint8_t pin)
+uint8_t pinToTIM_ch(uint8_t pin)
 {
 		int i;
 
@@ -255,7 +255,7 @@ uint8_t PinToTIM_ch(uint8_t pin)
 	}
 	return 0;
 }
-uint32_t PinToTIM_rcc(uint8_t pin)
+uint32_t pinToTIM_rcc(uint8_t pin)
 {
 		int i;
 
@@ -267,7 +267,7 @@ uint32_t PinToTIM_rcc(uint8_t pin)
 	}
 	return 0;
 }
-uint32_t PinToTIM_irq(uint8_t pin)
+uint32_t pinToTIM_irq(uint8_t pin)
 {
 		int i;
 
@@ -280,7 +280,7 @@ uint32_t PinToTIM_irq(uint8_t pin)
 	return 0;
 }
 
-uint8_t IsPwmPin(uint8_t pin)
+uint8_t isPwmPin(uint8_t pin)
 {
 	int i;
 	for( i = 0; i<PWM_PIN_NUM; i++)
@@ -392,7 +392,7 @@ uint8_t USARTxToID(USART_TypeDef* USARTx)
 }
 
 /////////////////////////////////////////////////////
-uint8_t IsAnalogPin(uint8_t pin)
+uint8_t isAnalogPin(uint8_t pin)
 {
 	int i;
 	for( i = 0; i<ANALOG_PIN_NUM; i++)
@@ -403,7 +403,7 @@ uint8_t IsAnalogPin(uint8_t pin)
 	}
 	return 0;
 }
-uint8_t IsPinNeedRemap(uint8_t pin)
+uint8_t isPinNeedRemap(uint8_t pin)
 {
 	int i;
 
@@ -464,7 +464,7 @@ uint8_t IsPinNeedRemap(uint8_t pin)
 //#define GPIO_Remap_TIM67_DAC_DMA    ((uint32_t)0x80000800)  /*!< TIM6/TIM7 and DAC DMA requests remapping (only for High density Value line devices) */
 //#define GPIO_Remap_TIM12            ((uint32_t)0x80001000)  /*!< TIM12 Alternate Function mapping (only for High density Value line devices) */
 //#define GPIO_Remap_MISC             ((uint32_t)0x80002000)  /*!< Miscellaneous Remap (DMA2 Channel5 Position and DAC Trigger remapping, 
-void ReMapCtr(void)
+void remapCtr(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
 	 GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
@@ -477,22 +477,22 @@ void ReMapCtr(void)
 //	GPIO_PinRemapConfig(GPIO_FullRemap_TIM3,ENABLE);
 }
 #ifdef STM32F103C8T6
-void ReMap15_19_26_27ToTIM2(void)
+void remap15_19_26_27ToTIM2(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
 	GPIO_PinRemapConfig(GPIO_FullRemap_TIM2,ENABLE);
 }
-void ReMap15ToTIM2(void)
+void remap15ToTIM2(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
 	GPIO_PinRemapConfig(GPIO_PartialRemap1_TIM2,ENABLE);
 }
-void ReMap19ToTIM2(void)
+void remap19ToTIM2(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
 	GPIO_PinRemapConfig(GPIO_PartialRemap1_TIM2,ENABLE);
 }
-void ReMap16_17_20_21ToTIM3(void)
+void remap16_17_20_21ToTIM3(void)
 {
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
 	GPIO_PinRemapConfig(GPIO_FullRemap_TIM3,ENABLE);

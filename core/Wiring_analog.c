@@ -101,10 +101,10 @@ void Init_ADC1(void)
 uint16_t analogRead(uint8_t pin)
 {
 	int i;
-	if(AnalogPinStatu[pin] == 0)
+	if(analogPinStatu[pin] == 0)
 	{
 		pinMode(pin,AIN);
-		AnalogPinStatu[pin] = 1;
+		analogPinStatu[pin] = 1;
 	}
 	
 	for(i=0;i<16;i++)

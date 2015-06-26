@@ -34,7 +34,7 @@ class TIM
 		void clearCount(void);
 		void attachInterrupt(void(*callback)(void))
 		{
-				gTimxcbTable[_id] = callback;
+				gTimxCallbackTable[_id] = callback;
 		}
 };
 #endif

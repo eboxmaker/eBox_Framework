@@ -23,7 +23,7 @@ class TIMERONE
 		void interrupt(FunctionalState x);
 		void attachInterrupt(void(*callback)(void))
 		{
-			 TimOnecbTable[0] = callback;
+			 timOneCallbackTable[0] = callback;
 		}
 };
 #endif

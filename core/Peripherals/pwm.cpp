@@ -3,16 +3,16 @@
 //	PWMpin	: ebox pin
 PWM::PWM(uint8_t PWMpin)
 {
-	if(IsPwmPin(PWMpin))
+	if(isPwmPin(PWMpin))
 	{
 		_pin = PWMpin;
 		_period = PWM_TIM_PERIOD;
 		_prescaler = PWM_TIM_PRESCALER;
 		
-		_TIMx = PinToTIMx(_pin);
-		_rcc = PinToTIM_rcc(_pin);
-		_irq = PinToTIM_irq(_pin);
-		_ch = PinToTIM_ch(_pin);
+		_TIMx = pinToTIMx(_pin);
+		_rcc = pinToTIM_rcc(_pin);
+		_irq = pinToTIM_irq(_pin);
+		_ch = pinToTIM_ch(_pin);
 		
 		pinMode(_pin,AF_PP);
 		baseInit(_period,_prescaler);
@@ -23,16 +23,16 @@ PWM::PWM(uint8_t PWMpin)
 
 PWM::PWM(uint8_t PWMpin,uint16_t period,uint16_t prescaler)
 {
-	if(IsPwmPin(PWMpin))
+	if(isPwmPin(PWMpin))
 	{
 		_pin = PWMpin;
 		_period = period;
 		_prescaler = prescaler;
 		
-		_TIMx = PinToTIMx(_pin);
-		_rcc = PinToTIM_rcc(_pin);
-		_irq = PinToTIM_irq(_pin);
-		_ch = PinToTIM_ch(_pin);
+		_TIMx = pinToTIMx(_pin);
+		_rcc = pinToTIM_rcc(_pin);
+		_irq = pinToTIM_irq(_pin);
+		_ch = pinToTIM_ch(_pin);
 		
 		pinMode(_pin,AF_PP);
 		baseInit(_period,_prescaler);
@@ -108,9 +108,9 @@ void PWM::setDuty(uint16_t duty)
 //duty:0-1000∂‘”¶0%-100.0%
 void analogWrite(uint8_t PWMpin, uint16_t duty) 
 {
-	if(IsPwmPin(PWMpin))
+	if(isPwmPin(PWMpin))
 	{
-			PwmPinStatu[PWMpin] = 1;
+			pwmPinStatu[PWMpin] = 1;
 			PWM p(PWMpin);
 			//p.SetFrq(1000,1);
 			p.setDuty(duty);
