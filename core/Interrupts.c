@@ -1,6 +1,6 @@
 #include "interrupts.h"
 #include "mcuconfig.h"
-callbackFun TiminecbTable[5];
+callbackFun TimionecbTable[5];
 callbackFun gTimxcbTable[TIM_NUM +1];
 callbackFun ExticbTable[EXTI_LINE_NUM + 1];
 callbackFun UARTcbTable[USART_NUM * 2];//支持串口的rx和tx中断
@@ -13,7 +13,7 @@ void TIM1_UP_IRQHandler(void)
  if(TIM_GetITStatus(TIM1 , TIM_IT_Update) == SET)
  {
   TIM_ClearITPendingBit(TIM1 , TIM_FLAG_Update);
-		TiminecbTable[0]();
+		TimionecbTable[0]();
  }
 }
 void TIM2_IRQHandler(void)
