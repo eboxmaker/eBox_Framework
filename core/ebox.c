@@ -17,6 +17,7 @@ void eBoxInit(void)
 	{
 		SysTick_Config(9000);//  每隔 (nhz/9,000,000)s产生一次中断
 		SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);//9Mhz的systemticks clock；
+		Init_ADC1();
 	}
 uint32_t millis( void )
 {
@@ -53,7 +54,8 @@ void delay(uint32_t ms )
 	while(SysTick->VAL > systick)
 		{
 			;
-		}}
+		}
+}
 
 void delayMicroseconds(uint16_t us)
 {
