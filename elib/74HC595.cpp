@@ -9,7 +9,7 @@ _74hc595::_74hc595(uint8_t dataPin, uint8_t sckPin,uint8_t rckPin)
 	 pinMode(_sckPin, OUTPUT);
 	 pinMode(_rckPin, OUTPUT);
 }
-void _74hc595::RowOut(uint8_t* Data,uint8_t dataLen)
+void _74hc595::rowOut(uint8_t* Data,uint8_t dataLen)
 {
 
 	digitalWrite(_rckPin, LOW);

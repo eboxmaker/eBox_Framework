@@ -15,8 +15,8 @@ class Button
         Button(void);
         Button(uint8_t pin, uint8_t puEnable);
 			uint8_t read(void);
-			uint8_t Release(void);
-			uint8_t Click(void);
+			uint8_t release(void);
+			uint8_t click(void);
 			uint8_t pressedFor(uint32_t ms,uint8_t times);
     
     private:

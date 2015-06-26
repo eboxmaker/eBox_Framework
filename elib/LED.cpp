@@ -15,7 +15,7 @@ void LED::ShowTimeHMS(uint8_t hour,uint8_t min,uint8_t sec)
 		_LEDBuf[i++] = _LEDNum[hour%10];
 		_LEDBuf[i++] = _LEDNum[hour/10];
 
-		RowOut(_LEDBuf,8);
+		rowOut(_LEDBuf,8);
 }
 void LED::ShowDateTime(uint16_t year,uint8_t month,uint8_t date)
 {
@@ -31,5 +31,5 @@ void LED::ShowDateTime(uint16_t year,uint8_t month,uint8_t date)
 		_LEDBuf[i++] = _LEDNum[year/1000];
 
 
-		RowOut(_LEDBuf,8);
+		rowOut(_LEDBuf,8);
 }

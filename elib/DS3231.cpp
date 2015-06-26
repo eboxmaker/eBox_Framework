@@ -3,7 +3,7 @@
 	
 	
 
-uint8_t DS3231::write_byte(uint8_t addr, uint8_t write_data)
+uint8_t DS3231::writeByte(uint8_t addr, uint8_t write_data)
 {
 		start();
 		sendByte(DS3231_WriteAddress);
@@ -23,7 +23,7 @@ uint8_t DS3231::write_byte(uint8_t addr, uint8_t write_data)
     delay_us(10);      
     return 1;
 }
-uint8_t DS3231::read_current(void)
+uint8_t DS3231::readCurrent(void)
 {
     unsigned char read_data;
 		start();
@@ -31,12 +31,12 @@ uint8_t DS3231::read_current(void)
 		if (waitAck() == 0)
        return (0);
 
-		read_data = readByte();
+		read_data = receiveByte();
 		sendNoAck();
 		stop();
     return read_data;
 }
-uint8_t DS3231::read_random(uint8_t random_addr)
+uint8_t DS3231::readRandom(uint8_t random_addr)
 {
 		start();
 		sendByte(DS3231_WriteAddress);
@@ -48,7 +48,7 @@ uint8_t DS3231::read_random(uint8_t random_addr)
        return (0);
 		
 
-    return(read_current());
+    return(readCurrent());
 }
 
 uint8_t DS3231::BcdToDec(uint8_t BCDCode)
@@ -69,15 +69,15 @@ uint8_t DS3231::DecToBcd(uint8_t Dec)
 	return Bcd;
 }
 
-void	DS3231::get_time(DateTime *t)
+void	DS3231::getTime(DateTime *t)
 {
-	buf[6]=read_random(DS3231_YEAR);			//年份低两位
-	buf[5]=read_random(DS3231_MONTH);	   	//月份
-	buf[4]=read_random(DS3231_DAY);		//日期
-	buf[3]=read_random(DS3231_WEEK);
-	buf[2]=read_random(DS3231_HOUR) & 0x3f;		//时
-	buf[1]=read_random(DS3231_MINUTE);		//分
-	buf[0]=read_random(DS3231_SECOND);	    	//秒
+	buf[6]=readRandom(DS3231_YEAR);			//年份低两位
+	buf[5]=readRandom(DS3231_MONTH);	   	//月份
+	buf[4]=readRandom(DS3231_DAY);		//日期
+	buf[3]=readRandom(DS3231_WEEK);
+	buf[2]=readRandom(DS3231_HOUR) & 0x3f;		//时
+	buf[1]=readRandom(DS3231_MINUTE);		//分
+	buf[0]=readRandom(DS3231_SECOND);	    	//秒
 
 //	timer.w_year,timer.w_month,timer.w_date,timer.hour,timer.min,timer.sec
 /******将读取的十六进制数据转换为十进制数据******/
@@ -89,7 +89,7 @@ void	DS3231::get_time(DateTime *t)
 	t->min			=BcdToDec(buf[1]);
 	t->sec	    =BcdToDec(buf[0]);	
 }
-void	DS3231::set_time(DateTime *t)
+void	DS3231::setTime(DateTime *t)
 {
 		DateTime tBCD;
 		tBCD.week = DecToBcd(t->week);
@@ -100,16 +100,16 @@ void	DS3231::set_time(DateTime *t)
 		tBCD.min = DecToBcd(t->min);
 		tBCD.sec = DecToBcd(t->sec);
    
-    write_byte(DS3231_WEEK,tBCD.week);   //修改周
-		write_byte(DS3231_YEAR,tBCD.year);   //修改年
-    write_byte(DS3231_MONTH,tBCD.month);  //修改月
+    writeByte(DS3231_WEEK,tBCD.week);   //修改周
+		writeByte(DS3231_YEAR,tBCD.year);   //修改年
+    writeByte(DS3231_MONTH,tBCD.month);  //修改月
    
-    write_byte(DS3231_DAY,tBCD.date);    //修改日
+    writeByte(DS3231_DAY,tBCD.date);    //修改日
    
-    write_byte(DS3231_HOUR,tBCD.hour);   //修改时
+    writeByte(DS3231_HOUR,tBCD.hour);   //修改时
    
-    write_byte(DS3231_MINUTE,tBCD.min); //修改分
+    writeByte(DS3231_MINUTE,tBCD.min); //修改分
    
-    write_byte(DS3231_SECOND,tBCD.sec ); //修改秒
+    writeByte(DS3231_SECOND,tBCD.sec ); //修改秒
 }
 	

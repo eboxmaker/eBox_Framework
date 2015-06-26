@@ -60,7 +60,7 @@ uint8_t Button::read(void)
 }
 
 //等待按键松开后才返回1；
-uint8_t Button::Release(void)
+uint8_t Button::release(void)
 {
 	if(_state&&_changed){
 		_changed = 0;
@@ -70,7 +70,7 @@ uint8_t Button::Release(void)
 		return 0;
 }
 //按键按下返回1；
-uint8_t Button::Click(void)
+uint8_t Button::click(void)
 {
 	if(!_state&&_changed){
 		_changed = 0;

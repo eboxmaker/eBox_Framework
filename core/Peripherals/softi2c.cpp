@@ -75,7 +75,7 @@ void Softi2c::sendByte(uint8_t byte)
 
 	}
 }
-uint8_t Softi2c::readByte()
+uint8_t Softi2c::receiveByte()
 {
 	uint8_t i = 8;
 	uint8_t byte = 0;

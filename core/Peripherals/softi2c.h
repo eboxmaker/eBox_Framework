@@ -20,7 +20,7 @@ class Softi2c
 		void 		sendAck();
 		void 		sendNoAck();
 		void 		sendByte(uint8_t Byte);
-		uint8_t readByte();
+		uint8_t receiveByte();
 		void delay_ii(uint16_t count)
 		{
 			for(int i = 10; i < 10; i++)

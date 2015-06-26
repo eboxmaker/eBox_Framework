@@ -49,9 +49,9 @@
  {
 	 private:
 		uint8_t buf[8];
-		uint8_t write_byte(uint8_t addr, uint8_t write_data);
-		uint8_t read_current(void);
-		uint8_t read_random(uint8_t random_addr);
+		uint8_t writeByte(uint8_t addr, uint8_t write_data);
+		uint8_t readCurrent(void);
+		uint8_t readRandom(uint8_t random_addr);
 		uint8_t BcdToDec(uint8_t BCDCode);
 		uint8_t DecToBcd(uint8_t Dec);
 	 public:
@@ -59,8 +59,8 @@
 		 DS3231(uint8_t SDApin,uint8_t SCLpin):Softi2c(SDApin,SCLpin){
 		 // do nothing;
 		 };										
-		void get_time(DateTime *t);
-		void set_time(DateTime *t);
+		void getTime(DateTime *t);
+		void setTime(DateTime *t);
  
  };
 
