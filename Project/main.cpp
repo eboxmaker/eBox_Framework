@@ -67,6 +67,7 @@ int main(void)
 		{
 			uart3.printf("\r\ntimer1 is triggered 1000 times !",xx);
 			flag1 = 0;
+			
 		}
 	}
 
