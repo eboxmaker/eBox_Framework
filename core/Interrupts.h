@@ -13,7 +13,7 @@ extern "C" {
 	
 typedef void (*callbackFun)(void);
 	
-extern callbackFun TimionecbTable[];
+extern callbackFun TimOnecbTable[];
 extern callbackFun gTimxcbTable[];
 extern callbackFun ExticbTable[];
 extern callbackFun UARTcbTable[];

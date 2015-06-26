@@ -31,7 +31,7 @@ TIM::TIM(TIM_TypeDef* TIMx,uint32_t period,uint32_t prescaler)
 }
 void TIM::begin(void)
 {
-	TIMxBaseInit(_period,_prescaler);
+	BaseInit(_period,_prescaler);
 	Interrupt(DISABLE);
 	stop();
 	//start();
@@ -59,7 +59,7 @@ void TIM::stop(void)
 {
 	 TIM_Cmd(_TIMx, DISABLE); //????
 }
-void TIM::TIMxBaseInit(uint16_t period,uint16_t prescaler)
+void TIM::BaseInit(uint16_t period,uint16_t prescaler)
 {
 
 	_period = period;
