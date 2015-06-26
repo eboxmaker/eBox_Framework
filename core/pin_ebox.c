@@ -7,7 +7,7 @@ uint16_t analogPinStatu[TOTAL_PIN];//是否配置为AIN模式
 uint8_t pwmPinStatu[TOTAL_PIN];//是否配置为PWM模式
 //////////////////////////////////////////////////
 
-const PIN_INFO _PinInfo[]=
+const PIN_INFO pinInfo[]=
 {
 	//0-15
   { GPIOA, GPIO_Pin_0,  RCC_APB2Periph_GPIOA}, //1
@@ -121,7 +121,7 @@ const PIN_INFO _PinInfo[]=
 
 	
 /////////////////////////////////////////////
-const PIN_TO_ANALOAG _PinToAnalog[]=
+const PIN_TO_ANALOAG pinToAnalog[]=
 {
 	//{CH,APin}
 	#ifdef STM32F103C8T6
@@ -138,7 +138,7 @@ const PIN_TO_ANALOAG _PinToAnalog[]=
 	#endif
 };
 /////////////////////////////////////////////
-const PIN_TO_EXTI PinToExti[]=
+const PIN_TO_EXTI pinToExti[]=
 {
 	//{extix,PinSourcex,irqch,APin}
 	
@@ -180,7 +180,7 @@ const PIN_TO_EXTI PinToExti[]=
 };
 ////////////////////////////////////////////
 /////////PWM pin support////////////////////
-const PIN_TO_TIMx _PinTOTimx[]=
+const PIN_TO_TIMx pinTOTimx[]=
 {
 	//{TIMx,rcc,irqch,TIMxCHx,needremap,pin}
 	#ifdef STM32F103C8T6
@@ -211,7 +211,7 @@ const PIN_TO_TIMx _PinTOTimx[]=
 
 };
 ////////////外设及其附属属性对应表///////////////////////////
-const TIMx_INFO _TIMxInfo[]=
+const TIMx_INFO TIMxInfo[]=
 {
 	{1,TIM1,RCC_APB2Periph_TIM1,TIM1_UP_IRQn},//暂时不支持
 	{2,TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn},
@@ -224,7 +224,7 @@ const TIMx_INFO _TIMxInfo[]=
 #endif
 };
 ////////////////////////////////////////////////////////////
-const USARTx_INFO _USARTxInfo[]=
+const USARTx_INFO USARTxInfo[]=
 {
 	{1,USART1,RCC_APB2Periph_USART1,USART1_IRQn},//暂时不支持
 	{2,USART2,RCC_APB1Periph_USART2,USART2_IRQn},
@@ -236,9 +236,9 @@ TIM_TypeDef* pinToTIMx(uint8_t pin)
 	int i;
 	for(i = 0; i<PWM_PIN_NUM; i++)
 	{
-		if(_PinTOTimx[i].pin == pin)
+		if(pinTOTimx[i].pin == pin)
 			
-			return _PinTOTimx[i].TIMx;
+			return pinTOTimx[i].TIMx;
 	}
 	return 0;
 }
@@ -249,9 +249,9 @@ uint8_t pinToTIM_ch(uint8_t pin)
 
 	for( i = 0; i<PWM_PIN_NUM; i++)
 	{
-		if(_PinTOTimx[i].pin == pin)
+		if(pinTOTimx[i].pin == pin)
 			
-			return _PinTOTimx[i].ch;
+			return pinTOTimx[i].ch;
 	}
 	return 0;
 }
@@ -261,9 +261,9 @@ uint32_t pinToTIM_rcc(uint8_t pin)
 
 	for( i = 0; i<PWM_PIN_NUM; i++)
 	{
-		if(_PinTOTimx[i].pin == pin)
+		if(pinTOTimx[i].pin == pin)
 			
-			return _PinTOTimx[i].rcc;
+			return pinTOTimx[i].rcc;
 	}
 	return 0;
 }
@@ -273,9 +273,9 @@ uint32_t pinToTIM_irq(uint8_t pin)
 
 	for( i = 0; i<PWM_PIN_NUM; i++)
 	{
-		if(_PinTOTimx[i].pin == pin)
+		if(pinTOTimx[i].pin == pin)
 			
-			return _PinTOTimx[i].irq;
+			return pinTOTimx[i].irq;
 	}
 	return 0;
 }
@@ -285,7 +285,7 @@ uint8_t isPwmPin(uint8_t pin)
 	int i;
 	for( i = 0; i<PWM_PIN_NUM; i++)
 	{
-		if(_PinTOTimx[i].pin == pin)
+		if(pinTOTimx[i].pin == pin)
 			
 			return 1;
 	}
@@ -298,9 +298,9 @@ uint32_t  TIMxToRCC(TIM_TypeDef* TIMx)
 	uint32_t rcc;
 	for(i=0;i<TIM_NUM;i++)
 	{
-		if(_TIMxInfo[i].timx == TIMx)
+		if(TIMxInfo[i].timx == TIMx)
 		{
-					rcc = _TIMxInfo[i].rcc;
+					rcc = TIMxInfo[i].rcc;
 			break;
 
 		}
@@ -314,9 +314,9 @@ uint32_t TIMxToIRQ(TIM_TypeDef* TIMx)
 	int i;
 	for(i=0;i<TIM_NUM;i++)
 	{
-		if(_TIMxInfo[i].timx == TIMx)
+		if(TIMxInfo[i].timx == TIMx)
 		{
-			irq = _TIMxInfo[i].irq;
+			irq = TIMxInfo[i].irq;
 			break;
 		}
 	
@@ -330,9 +330,9 @@ uint8_t TIMxToID(TIM_TypeDef* TIMx)
 	int i;
 	for(i=0;i<TIM_NUM;i++)
 	{
-		if(_TIMxInfo[i].timx == TIMx)
+		if(TIMxInfo[i].timx == TIMx)
 		{
-			id = _TIMxInfo[i].id;
+			id = TIMxInfo[i].id;
 			break;
 		}
 	
@@ -348,9 +348,9 @@ uint32_t  USARTxToRCC(USART_TypeDef* USARTx)
 	uint32_t rcc;
 	for(i=0;i<USART_NUM;i++)
 	{
-		if(_USARTxInfo[i].usart == USARTx)
+		if(USARTxInfo[i].usart == USARTx)
 		{
-					rcc = _USARTxInfo[i].rcc;
+					rcc = USARTxInfo[i].rcc;
 			break;
 
 		}
@@ -364,9 +364,9 @@ uint32_t USARTxToIRQ(USART_TypeDef* USARTx)
 	int i;
 	for(i=0;i<USART_NUM;i++)
 	{
-		if(_USARTxInfo[i].usart == USARTx)
+		if(USARTxInfo[i].usart == USARTx)
 		{
-			irq = _USARTxInfo[i].irq;
+			irq = USARTxInfo[i].irq;
 			break;
 		}
 	
@@ -380,9 +380,9 @@ uint8_t USARTxToID(USART_TypeDef* USARTx)
 	int i;
 	for(i=0;i<USART_NUM;i++)
 	{
-		if(_USARTxInfo[i].usart == USARTx)
+		if(USARTxInfo[i].usart == USARTx)
 		{
-			id = _USARTxInfo[i].id;
+			id = USARTxInfo[i].id;
 			break;
 		}
 	
@@ -397,7 +397,7 @@ uint8_t isAnalogPin(uint8_t pin)
 	int i;
 	for( i = 0; i<ANALOG_PIN_NUM; i++)
 	{
-		if(_PinToAnalog[i].pin == pin)
+		if(pinToAnalog[i].pin == pin)
 			
 			return 1;
 	}
@@ -409,9 +409,9 @@ uint8_t isPinNeedRemap(uint8_t pin)
 
 	for( i = 0; i<255; i++)
 	{
-		if(_PinTOTimx[i].pin == pin)
+		if(pinTOTimx[i].pin == pin)
 			
-			return _PinTOTimx[i].needremap;
+			return pinTOTimx[i].needremap;
 	}
 		return 0XFF;
 }

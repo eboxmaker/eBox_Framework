@@ -56,12 +56,12 @@ typedef struct
 
 
 
-extern const PIN_INFO _PinInfo[];
-extern const TIMx_INFO _TIMxInfo[];
-extern const USARTx_INFO _USARTxInfo[];
+extern const PIN_INFO pinInfo[];
+extern const TIMx_INFO TIMxInfo[];
+extern const USARTx_INFO USARTxInfo[];
 
-extern const PIN_TO_ANALOAG _PinToAnalog[];
-extern const PIN_TO_EXTI PinToExti[];
+extern const PIN_TO_ANALOAG pinToAnalog[];
+extern const PIN_TO_EXTI pinToExti[];
 
 extern uint16_t analogPinStatu[];//是否配置为AIN模式
 extern uint8_t  pwmPinStatu[];//

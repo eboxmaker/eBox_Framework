@@ -109,8 +109,8 @@ uint16_t analogRead(uint8_t pin)
 	
 	for(i=0;i<16;i++)
 	{
-		if(_PinToAnalog[i].pin == pin)
-		return AD_Value[_PinToAnalog[i].analogch];
+		if(pinToAnalog[i].pin == pin)
+		return AD_Value[pinToAnalog[i].analogch];
 	}
 	return 0;
 
