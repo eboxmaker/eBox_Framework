@@ -41,12 +41,12 @@ void setup()
 	uart3.begin(115200);
 	
 	timer2.begin();
-	timer2.Interrupt(ENABLE);
+	timer2.interrupt(ENABLE);
 	timer2.attachInterrupt(t2it);
 	timer2.start();
 	
 	t1.begin();
-	t1.Interrupt(ENABLE);
+	t1.interrupt(ENABLE);
 	t1.attachInterrupt(t1it);
 	t1.start();
 	pinMode(7,OUTPUT);

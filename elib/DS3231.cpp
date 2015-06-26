@@ -6,17 +6,17 @@
 uint8_t DS3231::write_byte(uint8_t addr, uint8_t write_data)
 {
 		start();
-		send_byte(DS3231_WriteAddress);
-    if (wait_ack() == 0)
+		sendByte(DS3231_WriteAddress);
+    if (waitAck() == 0)
         return 0;
 		
-		send_byte(addr);
-    if (wait_ack() == 0)
+		sendByte(addr);
+    if (waitAck() == 0)
         return 0;
 
    
-		send_byte(write_data);
-    if (wait_ack() == 0)
+		sendByte(write_data);
+    if (waitAck() == 0)
         return 0;
 		stop();
 
@@ -27,24 +27,24 @@ uint8_t DS3231::read_current(void)
 {
     unsigned char read_data;
 		start();
-		send_byte(DS3231_ReadAddress);
-		if (wait_ack() == 0)
+		sendByte(DS3231_ReadAddress);
+		if (waitAck() == 0)
        return (0);
 
-		read_data = read_byte();
-		send_no_ack();
+		read_data = readByte();
+		sendNoAck();
 		stop();
     return read_data;
 }
 uint8_t DS3231::read_random(uint8_t random_addr)
 {
 		start();
-		send_byte(DS3231_WriteAddress);
-		if (wait_ack() == 0)
+		sendByte(DS3231_WriteAddress);
+		if (waitAck() == 0)
        return (0);
 		
-		send_byte(random_addr);
-		if (wait_ack() == 0)
+		sendByte(random_addr);
+		if (waitAck() == 0)
        return (0);
 		
 

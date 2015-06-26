@@ -17,7 +17,8 @@ class TIM
 		TIM_TypeDef *_TIMx;
 		uint32_t _rcc;
 		uint32_t _irq;
-		void BaseInit(uint16_t period,uint16_t prescaler);
+	
+		void baseInit(uint16_t period,uint16_t prescaler);
 	
 	public:
 
@@ -26,10 +27,10 @@ class TIM
 		TIM(TIM_TypeDef* TIMx,uint32_t period,uint32_t prescaler);
 	
 		void begin(void);
-		void Interrupt(FunctionalState x);
+		void interrupt(FunctionalState x);
 		void start(void);
 		void stop(void);
-		void SetReload(uint16_t Autoreload);
+		void setReload(uint16_t Autoreload);
 		void clearCount(void);
 		void attachInterrupt(void(*callback)(void))
 		{

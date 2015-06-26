@@ -12,7 +12,7 @@ EXTIx::EXTIx(uint8_t pin, EXTITrigger_TypeDef trigger)
 	_PortSource = PinToExti[_pin].PortSource;
 	_PinSource  = PinToExti[_pin].PinSource;
 	_ExtiLine		= PinToExti[_pin].ExtiLine;
-	_irqch			= PinToExti[_pin].irqch;
+	_irq			= PinToExti[_pin].irqch;
 
 
 	pinMode(_pin,INPUT);
@@ -35,7 +35,7 @@ EXTIx::EXTIx(uint8_t pin, EXTITrigger_TypeDef trigger)
   NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);//使用全局控制值
   
   /* 配置P[A|B|C|D|E]0为中断源 */
-  NVIC_InitStructure.NVIC_IRQChannel = _irqch;
+  NVIC_InitStructure.NVIC_IRQChannel = _irq;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;

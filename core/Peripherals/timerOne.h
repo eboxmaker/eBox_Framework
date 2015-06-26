@@ -17,10 +17,10 @@ class TIMERONE
 		void begin();
 		void start();
 		void stop();
-		void BaseInit(uint16_t period,uint16_t prescaler);
-		void SetReload(uint16_t Autoreload);
+		void baseInit(uint16_t period,uint16_t prescaler);
+		void setReload(uint16_t Autoreload);
 		void clearCount(void);
-		void Interrupt(FunctionalState x);
+		void interrupt(FunctionalState x);
 		void attachInterrupt(void(*callback)(void))
 		{
 			 TimOnecbTable[0] = callback;

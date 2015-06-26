@@ -15,7 +15,7 @@ PWM::PWM(uint8_t PWMpin)
 		_ch = PinToTIM_ch(_pin);
 		
 		pinMode(_pin,AF_PP);
-		TIMxBaseInit(_period,_prescaler);
+		baseInit(_period,_prescaler);
 
 	}
 }
@@ -35,11 +35,11 @@ PWM::PWM(uint8_t PWMpin,uint16_t period,uint16_t prescaler)
 		_ch = PinToTIM_ch(_pin);
 		
 		pinMode(_pin,AF_PP);
-		TIMxBaseInit(_period,_prescaler);
+		baseInit(_period,_prescaler);
 		digitalWrite(_pin,HIGH);
 	}
 }
-void PWM::TIMxBaseInit(uint16_t period,uint16_t prescaler)
+void PWM::baseInit(uint16_t period,uint16_t prescaler)
 {
 	_period = period;
 	_prescaler = prescaler;
@@ -56,37 +56,37 @@ void PWM::TIMxBaseInit(uint16_t period,uint16_t prescaler)
 	TIM_Cmd(_TIMx, ENABLE); //
 
 }		
-void PWM::SetFrq(uint16_t period,uint16_t prescaler)
+void PWM::setFrq(uint16_t period,uint16_t prescaler)
 {
 	_period = period;
 	_prescaler = prescaler;
-	TIMxBaseInit(_period,_prescaler);
-	SetDuty(_duty);
+	baseInit(_period,_prescaler);
+	setDuty(_duty);
 
 }
 
 
 //duty:0-1000¶ÔÓ¦0%-100.0%
-void PWM::SetDuty(uint16_t duty)
+void PWM::setDuty(uint16_t duty)
 {
 
 			_duty = duty;
 	
-			uint16_t Pulse = 0;
+			uint16_t pulse = 0;
 			float percent;
 					
 			if(_duty>1000)
 				_duty = 1000;
 			percent = _duty/1000.0;
 			
-		  Pulse = (uint16_t) (( percent * _period ));
+		  pulse = (uint16_t) (( percent * _period ));
 			
 			TIM_OCInitTypeDef  TIM_OCInitStructure;
 			
 			TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 			TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 			TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-			TIM_OCInitStructure.TIM_Pulse = Pulse;
+			TIM_OCInitStructure.TIM_Pulse = pulse;
 				switch(_ch)
 				{
 					case TIMxCH1:
@@ -113,7 +113,7 @@ void analogWrite(uint8_t PWMpin, uint16_t duty)
 			PwmPinStatu[PWMpin] = 1;
 			PWM p(PWMpin);
 			//p.SetFrq(1000,1);
-			p.SetDuty(duty);
+			p.setDuty(duty);
 
 	}
 	else

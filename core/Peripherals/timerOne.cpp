@@ -14,11 +14,11 @@ TIMERONE::TIMERONE()
 }
 void TIMERONE::begin(void)
 {
-	BaseInit(_period,_prescaler);
-	Interrupt(DISABLE);
+	baseInit(_period,_prescaler);
+	interrupt(DISABLE);
 	stop();
 }
-void TIMERONE::Interrupt(FunctionalState x)
+void TIMERONE::interrupt(FunctionalState x)
 {
  TIM_ClearITPendingBit(TIM1 , TIM_FLAG_Update);
  TIM_ITConfig(TIM1,TIM_IT_Update,x);
@@ -41,7 +41,7 @@ void TIMERONE::stop(void)
 {
 	 TIM_Cmd(TIM1, DISABLE); //????
 }
-void TIMERONE::BaseInit(uint16_t period,uint16_t prescaler)
+void TIMERONE::baseInit(uint16_t period,uint16_t prescaler)
 {
 	_period = period;
 	_prescaler = prescaler;
@@ -64,7 +64,7 @@ void TIMERONE::BaseInit(uint16_t period,uint16_t prescaler)
 // TIM_ARRPreloadConfig(TIM1, ENABLE);
 	
 }
-void TIMERONE::SetReload(uint16_t Autoreload)
+void TIMERONE::setReload(uint16_t Autoreload)
 {
 	TIM_SetAutoreload(TIM1,Autoreload);
 }

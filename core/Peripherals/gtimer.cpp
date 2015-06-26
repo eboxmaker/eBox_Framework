@@ -31,12 +31,12 @@ TIM::TIM(TIM_TypeDef* TIMx,uint32_t period,uint32_t prescaler)
 }
 void TIM::begin(void)
 {
-	BaseInit(_period,_prescaler);
-	Interrupt(DISABLE);
+	baseInit(_period,_prescaler);
+	interrupt(DISABLE);
 	stop();
 	//start();
 }
-void TIM::Interrupt(FunctionalState x)
+void TIM::interrupt(FunctionalState x)
 {
  TIM_ClearITPendingBit(_TIMx , TIM_FLAG_Update);
  TIM_ITConfig(_TIMx,TIM_IT_Update,x);
@@ -59,7 +59,7 @@ void TIM::stop(void)
 {
 	 TIM_Cmd(_TIMx, DISABLE); //????
 }
-void TIM::BaseInit(uint16_t period,uint16_t prescaler)
+void TIM::baseInit(uint16_t period,uint16_t prescaler)
 {
 
 	_period = period;
@@ -79,7 +79,7 @@ void TIM::BaseInit(uint16_t period,uint16_t prescaler)
 
 
 }
-void TIM::SetReload(uint16_t Autoreload)
+void TIM::setReload(uint16_t Autoreload)
 {
 	TIM_SetAutoreload(_TIMx,Autoreload);
 }

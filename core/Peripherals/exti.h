@@ -8,7 +8,7 @@ class EXTIx
 		uint32_t _ExtiLine;
 		uint8_t _PortSource;
 		uint8_t _PinSource;
-		uint32_t _irqch;
+		uint32_t _irq;
 		uint8_t  _pin;
 
 	public:

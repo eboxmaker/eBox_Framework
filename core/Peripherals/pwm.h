@@ -34,9 +34,9 @@ class PWM
 	public:
 		PWM(uint8_t PWMpin);
 		PWM(uint8_t PWMpin,uint16_t period,uint16_t prescaler);
-		void TIMxBaseInit(uint16_t period,uint16_t prescaler);
-		void SetFrq(uint16_t period,uint16_t prescaler);
-		void SetDuty(uint16_t duty);
+		void baseInit(uint16_t period,uint16_t prescaler);
+		void setFrq(uint16_t period,uint16_t prescaler);
+		void setDuty(uint16_t duty);
 
 };
 void analogWrite(uint8_t pin, uint16_t duty);
