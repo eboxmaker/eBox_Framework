@@ -46,7 +46,7 @@ void setup()
 	timer2.start();
 	
 	t1.begin();
-	t1.Interrupt(ENABLE);
+	t1.interrupt(ENABLE);
 	t1.attachInterrupt(t1it);
 	t1.start();
 	pinMode(7,OUTPUT);
