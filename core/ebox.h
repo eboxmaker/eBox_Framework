@@ -79,11 +79,9 @@ void eBoxInit(void);
 uint32_t millis( void ) ;
 
 void delay_ms(uint32_t ms);
-void delay(uint32_t ms );
-
 void delay_us(uint16_t us);
 void delayMicroseconds(uint16_t us);
-void _delayus(uint32_t us);
+void delayus(uint32_t us);
 
 
 void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);

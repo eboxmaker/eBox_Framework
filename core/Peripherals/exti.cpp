@@ -9,9 +9,9 @@ EXTIx::EXTIx(uint8_t pin, EXTITrigger_TypeDef trigger)
 
 	
 	_pin = pin;
-	_PortSource = pinToExti[_pin].PortSource;
-	_PinSource  = pinToExti[_pin].PinSource;
-	_ExtiLine		= pinToExti[_pin].ExtiLine;
+	_PortSource = pinToExti[_pin].portSource;
+	_PinSource  = pinToExti[_pin].pinSource;
+	_ExtiLine		= pinToExti[_pin].extiLine;
 	_irq				= pinToExti[_pin].irqch;
 
 

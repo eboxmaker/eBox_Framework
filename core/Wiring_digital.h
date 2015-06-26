@@ -8,7 +8,7 @@
 #endif
 	 
 void pinMode(uint32_t pin, uint32_t mode);
-void digitalWrite( uint32_t Pin, uint32_t ulVal );
+void digitalWrite( uint32_t pin, uint32_t ulVal );
 int digitalRead( uint32_t pin );
 
 

@@ -4,11 +4,11 @@
 #include "ebox.h"
 
 /* Types used for the tables below */
-typedef struct _PinInfo
+typedef struct 
 {
-  GPIO_TypeDef* Port ;
-  uint32_t Pin ;
-  uint32_t Rcc ;
+  GPIO_TypeDef* port ;
+  uint32_t pin ;
+  uint32_t rcc ;
 } PIN_INFO ;
 
 typedef struct 
@@ -27,9 +27,9 @@ typedef struct
 
 typedef struct
 {
-	uint32_t ExtiLine;
-	uint8_t PortSource;
-	uint8_t PinSource;
+	uint32_t extiLine;
+	uint8_t portSource;
+	uint8_t pinSource;
 	uint32_t irqch;
 	uint8_t  pin;
 

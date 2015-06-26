@@ -11,12 +11,12 @@ void pinMode(uint32_t pin, uint32_t mode)
 	
 //	GPIO_TypeDef *gpio_port = g_APinDescription[Pin].pPort;
 //  uint16_t gpio_pin = g_APinDescription[Pin].Pin;
-	GPIO_TypeDef * gpio_port = pinInfo[pin].Port;
-	uint16_t gpio_pin = pinInfo[pin].Pin;
+	GPIO_TypeDef * gpio_port = pinInfo[pin].port;
+	uint16_t gpio_pin = pinInfo[pin].pin;
 	
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
-  RCC_APB2PeriphClockCmd(pinInfo[pin].Rcc,ENABLE);
+  RCC_APB2PeriphClockCmd(pinInfo[pin].rcc,ENABLE);
   GPIO_InitStructure.GPIO_Pin = gpio_pin;
 
 	switch(mode)
@@ -56,20 +56,20 @@ void pinMode(uint32_t pin, uint32_t mode)
 		GPIO_Init(gpio_port, &GPIO_InitStructure);   //³õÊ¼»¯GPIOC¶Ë¿Ú
 
 }
-void digitalWrite( uint32_t Pin, uint32_t ulVal )
+void digitalWrite( uint32_t pin, uint32_t ulVal )
 {
   if ( ulVal == 0 )
   {
-    pinInfo[Pin].Port->BRR = pinInfo[Pin].Pin;
+    pinInfo[pin].port->BRR = pinInfo[pin].pin;
   }
   else
   {
-    pinInfo[Pin].Port->BSRR = pinInfo[Pin].Pin;
+    pinInfo[pin].port->BSRR = pinInfo[pin].pin;
   }
 }
  int digitalRead( uint32_t pin )
 {
-	if((pinInfo[pin].Port->IDR & pinInfo[pin].Pin) != 0)
+	if((pinInfo[pin].port->IDR & pinInfo[pin].pin) != 0)
 		return 1;
 	return 0;
 }

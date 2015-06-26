@@ -42,20 +42,7 @@ void delay_ms(uint32_t ms)
 			;
 		}
 }   
-void delay(uint32_t ms )
-{
-   
-	uint32_t end = millis() + ms;
-  uint32_t systick = SysTick->VAL;
 
-	while (millis() < end) {
-		;
-		}
-	while(SysTick->VAL > systick)
-		{
-			;
-		}
-}
 
 void delayMicroseconds(uint16_t us)
 {
@@ -127,7 +114,7 @@ void delay_us(uint16_t us)
 	}
 	Interrupts();
 }
-void _delayus(uint32_t us)
+void delayus(uint32_t us)
 {	 		
 	int i;
 	 for(i=0; i<11*us; i++){
