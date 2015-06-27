@@ -632,6 +632,11 @@
               <FileType>8</FileType>
               <FilePath>..\core\Peripherals\timerOne.cpp</FilePath>
             </File>
+            <File>
+              <FileName>rtc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\core\Peripherals\rtc.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

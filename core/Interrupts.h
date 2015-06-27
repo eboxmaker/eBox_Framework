@@ -17,6 +17,7 @@ extern callbackFun timOneCallbackTable[];
 extern callbackFun gTimxCallbackTable[];
 extern callbackFun extiCallbackTable[];
 extern callbackFun UARTCallbackTable[];
+extern callbackFun rtcCallbackTable[];
 
 
 	
