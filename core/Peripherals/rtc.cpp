@@ -116,3 +116,4 @@ void RTC_CLASS::interrupt(FunctionalState x)
 	RTC_ITConfig(RTC_IT_SEC, x);
 	
 }
+

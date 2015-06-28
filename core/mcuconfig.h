@@ -5,6 +5,10 @@
 
 #define STM32F103C8T6
 
+#define MCUPIN48
+//#define MCUPIN64
+//#define MCUPIN100
+//#define MCUPIN144
 
 /////////////////////////////////////
 	#ifdef STM32F103C8T6

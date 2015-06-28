@@ -124,17 +124,23 @@ const PIN_INFO pinInfo[]=
 const PIN_TO_ANALOAG pinToAnalog[]=
 {
 	//{CH,APin}
-	#ifdef STM32F103C8T6
-	{0,0},
-	{1,1},
-	{2,2},
-	{3,3},
-	{4,4},
-	{5,5},
-	{6,6},
-	{7,7},
-	{8,16},
-	{9,17}
+		{0,0},
+		{1,1},
+		{2,2},
+		{3,3},
+		{4,4},
+		{5,5},
+		{6,6},
+		{7,7},
+		{8,0x16},
+		{9,0x17},
+	#if defined (MCUPIN64) || (defined MCUPIN100) || (defined MCUPIN144)
+		{10,0x20},
+		{11,0x21},
+		{12,0x22},
+		{13,0x23},
+		{14,0x24},
+		{15,0x25}
 	#endif
 };
 /////////////////////////////////////////////
@@ -183,30 +189,52 @@ const PIN_TO_EXTI pinToExti[]=
 const PIN_TO_TIMx pinTOTimx[]=
 {
 	//{TIMx,rcc,irqch,TIMxCHx,needremap,pin}
-	#ifdef STM32F103C8T6
 
-		{TIM1,RCC_APB2Periph_TIM1,TIM1_UP_IRQn,TIMxCH1,0,8},//暂时不支持
-		{TIM1,RCC_APB2Periph_TIM1,TIM1_UP_IRQn,TIMxCH2,0,9},//暂时不支持
-		{TIM1,RCC_APB2Periph_TIM1,TIM1_UP_IRQn,TIMxCH3,0,10},//暂时不支持
-		{TIM1,RCC_APB2Periph_TIM1,TIM1_UP_IRQn,TIMxCH4,0,11},//暂时不支持
+//		{TIM1,RCC_APB2Periph_TIM1,TIM1_UP_IRQn,TIMxCH1,0,0x08},//暂时不支持
+//		{TIM1,RCC_APB2Periph_TIM1,TIM1_UP_IRQn,TIMxCH2,0,0x09},//暂时不支持
+//		{TIM1,RCC_APB2Periph_TIM1,TIM1_UP_IRQn,TIMxCH3,0,0x0a},//暂时不支持
+//		{TIM1,RCC_APB2Periph_TIM1,TIM1_UP_IRQn,TIMxCH4,0,0x0b},//暂时不支持
 
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH1,0,0},
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH2,0,1},
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH3,0,2},
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH4,0,3},
+		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH1,0,0x00},
+		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH2,0,0x01},
+		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH3,0,0x02},
+		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH4,0,0x03},
 		
-		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH1,0,6},
-		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH2,0,7},
-		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH3,0,16},
-		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH4,0,17},
+		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH1,0,0x06},
+		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH2,0,0x07},
+		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH3,0,0x10},
+		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH4,0,0x11},
 		
-		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH1,0,22},
-		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH2,0,23},
-		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH3,0,24},
-		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH4,0,25},
+		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH1,0,0x16},
+		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH2,0,0x17},
+		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH3,0,0x18},
+		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH4,0,0x19},
 		/////一下引脚需要开启ReMaping///////////////////////////
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH3,1,26},//pb10
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH4,1,27},//PB11
+	#if defined (MCUPIN48) || (defined MCUPIN64) || (defined MCUPIN100) || (defined MCUPIN144)
+
+		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH1,1,0x00},//pa0
+		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH2,1,0x01},//Pa1
+		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH1,1,0x0f},//pa15
+		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH2,1,0x1d},//Pb13
+		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH3,1,0x1a},//pb10
+		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH4,1,0x1b},//PB11
+	#if defined (MCUPIN64) || (defined MCUPIN100) || (defined MCUPIN144)
+		
+		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH1,1,0x10},//pb0
+		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH2,1,0x11},//pb1
+		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH1,1,0x26},//pc6
+		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH2,1,0x27},
+		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH3,1,0x28},
+		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH4,1,0x29},
+		
+	#if defined (MCUPIN100) || (defined MCUPIN144)
+		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH1,1,0x3c},//pd12
+		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH2,1,0x3d},
+		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH3,1,0x3e},
+		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH4,1,0x3f},
+		
+	#endif
+	#endif
 	#endif
 
 };
@@ -217,11 +245,11 @@ const TIMx_INFO TIMxInfo[]=
 	{2,TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn},
 	{3,TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn},
 	{4,TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn},
-#ifdef STM32F10X_CL
-	{5,TIM5,RCC_APB1Periph_TIM5,NULL},
-	{6,TIM6,RCC_APB1Periph_TIM6,NULL},
-	{7,TIM7,RCC_APB1Periph_TIM7,NULL},
-#endif
+	#if defined (MCUPIN64) || (defined MCUPIN100) || (defined MCUPIN144)
+		{5,TIM5,RCC_APB1Periph_TIM5,NULL},
+		{6,TIM6,RCC_APB1Periph_TIM6,NULL},
+		{7,TIM7,RCC_APB1Periph_TIM7,NULL}
+	#endif
 };
 ////////////////////////////////////////////////////////////
 const USARTx_INFO USARTxInfo[]=

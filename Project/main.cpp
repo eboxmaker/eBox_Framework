@@ -5,6 +5,7 @@
 
 #include "rtc.h"
 
+
 uint8_t h,m,s;
 uint32_t counter;
 void rtcit()
@@ -19,7 +20,7 @@ void setup()
 {
 	eBoxInit();
 	uart3.begin(115200);
-	
+
 	rtc.begin();
 	rtc.interrupt(ENABLE);
 	rtc.attachInterrupt(rtcit);
@@ -32,6 +33,7 @@ void setup()
 int main(void)
 {
 	setup();
+	
 	while(1)
 	{
 
