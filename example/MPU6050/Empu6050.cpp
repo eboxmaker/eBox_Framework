@@ -35,6 +35,7 @@ int main(void)
 		uart3.printf("\r\nx = %d",tmp[1]);
 		uart3.printf("\r\nx = %d",tmp[2]);
 		uart3.printf("\r\n==========");
+		
 //		uart3.printf("\r\nX = %d",x);
 //		uart3.printf("\r\nY = %d",y);
 //		uart3.printf("\r\nZ = %d",z);
