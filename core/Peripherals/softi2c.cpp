@@ -7,10 +7,11 @@ Softi2c::Softi2c(uint8_t SDApin, uint8_t SCLpin)
 	_SCLpin = SCLpin;
 	pinMode(_SDApin,OUTPUT);
 	pinMode(_SCLpin,OUTPUT);
-	_delayTimes = 4;
+	_delayTimes = 1;//
 }		
 void Softi2c::start()
 {
+	pinMode(_SDApin,OUTPUT);
 	digitalWrite(_SDApin,1);
 	digitalWrite(_SCLpin,1);delay_us(_delayTimes);
 	digitalWrite(_SDApin,0);delay_us(_delayTimes);
@@ -20,6 +21,7 @@ void Softi2c::start()
 
 void Softi2c::stop()
 {
+	pinMode(_SDApin,OUTPUT);
 	digitalWrite(_SCLpin,0);
 	digitalWrite(_SDApin,0);delay_us(_delayTimes);
 	digitalWrite(_SCLpin,1);delay_us(_delayTimes);
@@ -43,12 +45,12 @@ uint8_t Softi2c::waitAck()
 		}
 	
 	}
-	pinMode(_SDApin,OUTPUT);
 	digitalWrite(_SCLpin,0);delay_us(_delayTimes);
 	return 1;
 }
 void Softi2c::sendAck()
 {
+	pinMode(_SDApin,OUTPUT);
 	digitalWrite(_SDApin,0);delay_us(_delayTimes);
 	digitalWrite(_SCLpin,1);delay_us(_delayTimes);
 	digitalWrite(_SCLpin,0);delay_us(_delayTimes);
@@ -56,6 +58,7 @@ void Softi2c::sendAck()
 }
 void Softi2c::sendNoAck()	
 {
+	pinMode(_SDApin,OUTPUT);
 	digitalWrite(_SDApin,1);delay_us(_delayTimes);
 	digitalWrite(_SCLpin,1);delay_us(_delayTimes);
 	digitalWrite(_SCLpin,0);delay_us(_delayTimes);
@@ -65,6 +68,7 @@ void Softi2c::sendByte(uint8_t byte)
 {
 
 	uint8_t ii = 8;
+	pinMode(_SDApin,OUTPUT);
 	while( ii-- )
 	{
 		digitalWrite(_SCLpin,0);
@@ -72,8 +76,8 @@ void Softi2c::sendByte(uint8_t byte)
 		byte += byte;//<<1
 		digitalWrite(_SCLpin,1);delay_us(_delayTimes);
 		digitalWrite(_SCLpin,0);delay_us(_delayTimes);
-
 	}
+
 }
 uint8_t Softi2c::receiveByte()
 {
@@ -88,7 +92,6 @@ uint8_t Softi2c::receiveByte()
 		byte |= digitalRead(_SDApin);
 	}
 	digitalWrite(_SCLpin,0);delay_us(_delayTimes);
-	pinMode(_SDApin,OUTPUT);
 
 	return byte;
 }
