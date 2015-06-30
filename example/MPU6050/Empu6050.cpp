@@ -15,10 +15,11 @@ void setup()
 
 	
 	mpu.begin();
+	mpu.setSpeed(100000);
 	pinMode(7,OUTPUT);
 }
 
-int16_t tmp[10];
+int16_t tmp[7];
 int16_t x,y,z;
 int main(void)
 {
@@ -26,18 +27,18 @@ int main(void)
 	
 	while(1)
 	{
-		mpu.getData(ACCEL_XOUT_H,tmp,10);
-		x = mpu.getData(ACCEL_XOUT_H);
-		y = mpu.getData(ACCEL_YOUT_H);
-		z = mpu.getData(ACCEL_ZOUT_H);
+		mpu.getData(ACCEL_XOUT_H,tmp,3);
+//		x = mpu.getData(ACCEL_XOUT_H);
+//		y = mpu.getData(ACCEL_YOUT_H);
+//		z = mpu.getData(ACCEL_ZOUT_H);
 		uart3.printf("\r\nx = %d",tmp[0]);
 		uart3.printf("\r\nx = %d",tmp[1]);
 		uart3.printf("\r\nx = %d",tmp[2]);
 		uart3.printf("\r\n==========");
-		uart3.printf("\r\nX = %d",x);
-		uart3.printf("\r\nY = %d",y);
-		uart3.printf("\r\nZ = %d",z);
-		uart3.printf("\r\n==========");
+//		uart3.printf("\r\nX = %d",x);
+//		uart3.printf("\r\nY = %d",y);
+//		uart3.printf("\r\nZ = %d",z);
+//		uart3.printf("\r\n==========");
 		delay_ms(500);
 	}
 

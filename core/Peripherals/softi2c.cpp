@@ -1,14 +1,37 @@
 #include "softi2c.h"
 
-
+#define DELAYTIMES 1
 Softi2c::Softi2c(uint8_t SDApin, uint8_t SCLpin)
 {
 	_SDApin = SDApin;
 	_SCLpin = SCLpin;
 	pinMode(_SDApin,OUTPUT);
 	pinMode(_SCLpin,OUTPUT);
-	_delayTimes = 1;//
-}		
+	_delayTimes = DELAYTIMES;//
+}	
+void Softi2c::setSpeed(uint32_t speed)
+{
+	switch(speed)
+	{
+		case 400000:
+			_delayTimes = 0;
+			break;
+		case 300000:
+			_delayTimes = 1;
+			break;
+		case 200000:
+			_delayTimes = 2;
+			break;
+		case 100000:
+			_delayTimes = 3;
+			break;
+		default:
+			_delayTimes = speed;
+			break;
+			
+	
+	}
+}
 void Softi2c::start()
 {
 	pinMode(_SDApin,OUTPUT);

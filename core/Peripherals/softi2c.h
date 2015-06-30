@@ -14,6 +14,7 @@ class Softi2c
 
   public:
 		Softi2c(uint8_t SDApin, uint8_t SCLpin);
+		void 		setSpeed(uint32_t speed);
 		void 		start();
 		void 		stop();
 		uint8_t	waitAck();

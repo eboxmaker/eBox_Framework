@@ -109,8 +109,8 @@ int8_t  MPU6050::getData(uint8_t regAddress,int16_t* buf,uint8_t numToRead)
 	uint8_t i,readnum;
 	int8_t tmpbuf[20];
 	
-	readnum = readByte(regAddress,tmpbuf,numToRead);
-	for(i=0;i<10;i++)
+	readnum = readByte(regAddress,tmpbuf,numToRead*2);
+	for(i=0;i<readnum/2;i++)
 	{
 		*buf++ = (tmpbuf[i*2 + 0]<<8) + (tmpbuf[i*2 + 1]);
 	}
