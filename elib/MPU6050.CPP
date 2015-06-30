@@ -48,8 +48,7 @@ int8_t MPU6050::readByte(uint8_t regAddress)
     if (waitAck() == 0)
         return 0;
 
-		
-			start();
+		start();
 		sendByte(SlaveAddress + 1);
     if (waitAck() == 0)
         return 0;
@@ -62,6 +61,41 @@ int8_t MPU6050::readByte(uint8_t regAddress)
 	return readData;
 }
 
+int8_t 	MPU6050::readByte(uint8_t regAddress,int8_t* buf,uint8_t numToRead)
+{
+
+	int i = 0;
+		start();
+		sendByte(SlaveAddress);
+    if (waitAck() == 0)
+        return 0;
+
+		sendByte(regAddress);
+    if (waitAck() == 0)
+        return 0;
+
+		start();
+		sendByte(SlaveAddress + 1);
+    if (waitAck() == 0)
+        return 0;
+		while(numToRead)
+		{
+			*buf++ = receiveByte();
+			numToRead--;
+			i++;
+			if(numToRead == 0)
+			{
+				sendNoAck();
+				stop();
+				return i;
+			}
+			else
+				sendAck();
+		}
+
+	return i;
+}
+
 int16_t  MPU6050::getData(uint8_t regAddress)
 {
 	char tmpH,tmpL;
@@ -69,5 +103,18 @@ int16_t  MPU6050::getData(uint8_t regAddress)
 	tmpL = readByte(regAddress + 1);
 	return (tmpH<<8) + tmpL;
 
+}
+int8_t  MPU6050::getData(uint8_t regAddress,int16_t* buf,uint8_t numToRead)
+{
+	uint8_t i,readnum;
+	int8_t tmpbuf[20];
+	
+	readnum = readByte(regAddress,tmpbuf,numToRead);
+	for(i=0;i<10;i++)
+	{
+		*buf++ = (tmpbuf[i*2 + 0]<<8) + (tmpbuf[i*2 + 1]);
+	}
+
+	return readnum/2;
 }
 

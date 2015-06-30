@@ -697,6 +697,11 @@
               <FileType>8</FileType>
               <FilePath>..\elib\LED.cpp</FilePath>
             </File>
+            <File>
+              <FileName>MPU6050.CPP</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\elib\MPU6050.CPP</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
