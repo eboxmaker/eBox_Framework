@@ -23,37 +23,40 @@
 #define	WHO_AM_I			0x75	//IIC地址寄存器(默认数值0x68，只读)
 #define	SlaveAddress	0xD0	//IIC写入时的地址字节数据
 
-void  I2C::init()
+void  I2C::i2cBegin()
 {
 	
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
 		/* 使能与 I2C1 有关的时钟 */
-	RCC_APB2PeriphClockCmd  (RCC_APB2Periph_GPIOB,ENABLE ); 
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1,ENABLE);  
 
-	 /* PB6-I2C1_SCL、PB7-I2C1_SDA*/
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7; 
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD; 
-	GPIO_Init(GPIOB, &GPIO_InitStructure); 
-	
-	
-	 /* Initialize the I2C1 according to the I2C_InitStructure members */ 
-	I2C_InitTypeDef I2C_InitStructure; 
-	 
+	pinMode(_SDAPin,AF_OD);
+	pinMode(_SCLPin,AF_OD);
+
+
 	  /* I2C 配置 */
 	I2C_InitStructure.I2C_Mode = I2C_Mode_I2C ; 
 	//I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2; 
 	//I2C_InitStructure.I2C_OwnAddress1 = SlaveAddress; 
 	I2C_InitStructure.I2C_Ack = I2C_Ack_Enable; 
 	I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit; 
-	I2C_InitStructure.I2C_ClockSpeed = 50000; 
-
+	I2C_InitStructure.I2C_ClockSpeed = 200000; 
 
 	/* I2C1 初始化 */
 	I2C_Init(I2C1, &I2C_InitStructure);	   
 	
+	/* 使能 I2C1 */
+	I2C_Cmd  (I2C1,ENABLE); 
+	/*允许应答模式*/
+	I2C_AcknowledgeConfig(I2C1, ENABLE);   
+
+}
+
+void I2C::setSpeed(uint32_t speed)
+{
+	I2C_InitStructure.I2C_ClockSpeed = speed; 
+	I2C_Init(I2C1, &I2C_InitStructure);	   
 	/* 使能 I2C1 */
 	I2C_Cmd  (I2C1,ENABLE); 
 	/*允许应答模式*/
@@ -109,12 +112,12 @@ uint8_t I2C::receiveByte()
 }
 
 
-void I2C::writeByte(uint8_t regAddress,uint8_t regData)
+void I2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t regData)
 {
 	
 
 	start();
-	send7BitsAddress(SlaveAddress);
+	send7BitsAddress(slaveAddress);
 	sendByte(regAddress);
 	sendByte(regData);
 	stop();
@@ -163,38 +166,3 @@ int8_t I2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint8
 	return i;
 }
 
-void I2C::mpuInit()
-{
-	writeByte(PWR_MGMT_1,0x00);//解除休眠状态
-	writeByte(SMPLRT_DIV,0x07);
-	writeByte(CONFIG,0x06);
-	writeByte(GYRO_CONFIG,0x18);
-	writeByte(ACCEL_CONFIG,0x01);
-}
-
-int8_t 	I2C::getID(uint8_t* data)
-{
-  readByte(SlaveAddress,WHO_AM_I,data);
-	return 0;
-};
-
-int16_t I2C::getData(uint8_t REG_Address)
-{
-	uint8_t H,L;
-	readByte(SlaveAddress,REG_Address,&H);
-	readByte(SlaveAddress,REG_Address+1,&L);
-	return ((H<<8)+L);   //合成数据
-}
-
-int8_t  I2C::getData(uint8_t regAddress,int16_t* buf,uint8_t numToRead)
-{
-	uint8_t i,readnum;
-	uint8_t tmpbuf[20];
-	
-	readnum = readByte(SlaveAddress,regAddress,tmpbuf,numToRead*2);
-	for(i=0;i<readnum/2;i++)
-	{
-		*buf++ = (tmpbuf[i*2 + 0]<<8) + (tmpbuf[i*2 + 1]);
-	}
-	return readnum/2;
-}

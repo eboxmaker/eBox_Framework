@@ -61,10 +61,10 @@
 #define	SlaveAddress	0xD0	//IIC写入时的地址字节数据
 
 
-class MPU6050 : public Softi2c
+class MPU6050 : public I2C
 {
 	public:
-		 MPU6050(uint8_t SDApin,uint8_t SCLpin):Softi2c(SDApin,SCLpin){
+		 MPU6050(uint8_t SDApin,uint8_t SCLpin):I2C(SDApin,SCLpin){
 		 // do nothing;
 		 };	
 		void begin();
