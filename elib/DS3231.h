@@ -33,7 +33,7 @@
  typedef struct
  {
 	 u8 w;
-	 u16 year;
+	 u8 year;
 	 u8 month;
 	 u8 date;
 	 u8 hour;
@@ -48,19 +48,20 @@
  class DS3231:public Softi2c
  {
 	 private:
-		uint8_t buf[8];
-		uint8_t writeByte(uint8_t addr, uint8_t write_data);
-		uint8_t readCurrent(void);
-		uint8_t readRandom(uint8_t random_addr);
-		uint8_t BcdToDec(uint8_t BCDCode);
-		uint8_t DecToBcd(uint8_t Dec);
+			uint8_t buf[8];
+			uint8_t BcdToDec(uint8_t BCDCode);
+			uint8_t DecToBcd(uint8_t Dec);
 	 public:
-		 DateTime t;
-		 DS3231(uint8_t SDApin,uint8_t SCLpin):Softi2c(SDApin,SCLpin){
-		 // do nothing;
-		 };										
-		void getTime(DateTime *t);
-		void setTime(DateTime *t);
+			DateTime t;
+			DS3231(uint8_t SDApin,uint8_t SCLpin):Softi2c(SDApin,SCLpin){
+			// do nothing;
+			};	
+			void begin()
+			{
+				i2cBegin();
+			};
+			void getTime(DateTime *t);
+			void setTime(DateTime *t);
  
  };
 

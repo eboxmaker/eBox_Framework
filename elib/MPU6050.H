@@ -67,16 +67,10 @@ class MPU6050 : public Softi2c
 		 // do nothing;
 		 };	
 		void begin();
-		uint8_t	 	writeByte(uint8_t regAddress,uint8_t regData);
-		int8_t 	readByte(uint8_t regAddress);
-		int8_t 	readByte(uint8_t regAddress,int8_t* buf,uint8_t numToRead);
+
 		int16_t 	getData(uint8_t regAddress);
-		int8_t 	getData(uint8_t regAddress,int16_t* buf,uint8_t numToRead);
-		 
-		int8_t 	getID()
-		{
-		 return readByte(WHO_AM_I);
-		};
+		int8_t 		getData(uint8_t regAddress,int16_t* buf,uint8_t numToRead);
+		void 	getID(uint8_t* id);
 
 	private:
 		

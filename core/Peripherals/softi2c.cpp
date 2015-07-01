@@ -1,15 +1,19 @@
 #include "softi2c.h"
 
-#define DELAYTIMES 1
+#define DELAYTIMES 3
 Softi2c::Softi2c(uint8_t SDApin, uint8_t SCLpin)
 {
 	_SDApin = SDApin;
 	_SCLpin = SCLpin;
-	pinMode(_SDApin,OUTPUT);
-	pinMode(_SCLpin,OUTPUT);
 	_delayTimes = DELAYTIMES;//
 }	
-void Softi2c::setSpeed(uint32_t speed)
+void Softi2c::i2cBegin()
+{
+	setSpeed(100000);
+	pinMode(_SDApin,OUTPUT);
+	pinMode(_SCLpin,OUTPUT);
+}
+int8_t Softi2c::setSpeed(uint32_t speed)
 {
 	switch(speed)
 	{
@@ -28,9 +32,8 @@ void Softi2c::setSpeed(uint32_t speed)
 		default:
 			_delayTimes = speed;
 			break;
-			
-	
 	}
+	return 0;
 }
 void Softi2c::start()
 {
@@ -50,7 +53,7 @@ void Softi2c::stop()
 	digitalWrite(_SCLpin,1);delay_us(_delayTimes);
 	digitalWrite(_SDApin,1);
 }
-uint8_t Softi2c::waitAck()
+int8_t Softi2c::waitAck()
 {
 	uint8_t cErrTime = 5;
 	pinMode(_SDApin,INPUT_PULLUP);
@@ -63,13 +66,13 @@ uint8_t Softi2c::waitAck()
 		{
 			pinMode(_SDApin,OUTPUT);
 			stop();
-			return 0;
+			return -1;
 		
 		}
 	
 	}
 	digitalWrite(_SCLpin,0);delay_us(_delayTimes);
-	return 1;
+	return 0;
 }
 void Softi2c::sendAck()
 {
@@ -117,4 +120,84 @@ uint8_t Softi2c::receiveByte()
 	digitalWrite(_SCLpin,0);delay_us(_delayTimes);
 
 	return byte;
+}
+int8_t Softi2c::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
+{
+		start();
+		sendByte(slaveAddress);
+    if (waitAck() == -1)
+        return -1;
+		
+		sendByte(regAddress);
+    if (waitAck() == -1)
+        return -2;
+
+   
+		sendByte(data);
+    if (waitAck() == -1)
+        return -3;
+		stop();
+
+    delay_us(10);      
+    return 0;
+}
+int8_t Softi2c::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data )
+{
+
+	uint8_t readData;
+	
+		start();
+		sendByte(slaveAddress);
+    if (waitAck() == -1)
+        return -1;
+
+		sendByte(regAddress);
+    if (waitAck() == -1)
+        return -2;
+
+		start();
+		sendByte(slaveAddress + 1);
+    if (waitAck() == -1)
+        return -3;
+
+		*data = receiveByte();
+		sendNoAck();
+		
+		stop();
+		
+	return 0;
+}
+int8_t 	Softi2c::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* buf,uint8_t numToRead)
+{
+
+	int i = 0;
+		start();
+		sendByte(slaveAddress);
+    if (waitAck() == -1)
+        return -1;
+
+		sendByte(regAddress);
+    if (waitAck() == -1)
+        return -2;
+
+		start();
+		sendByte(slaveAddress + 1);
+    if (waitAck() == -1)
+        return -3;
+		while(numToRead)
+		{
+			*buf++ = receiveByte();
+			numToRead--;
+			i++;
+			if(numToRead == 0)
+			{
+				sendNoAck();
+				stop();
+				return i;
+			}
+			else
+				sendAck();
+		}
+
+	return i;
 }
