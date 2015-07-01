@@ -637,6 +637,11 @@
               <FileType>8</FileType>
               <FilePath>..\core\Peripherals\rtc.cpp</FilePath>
             </File>
+            <File>
+              <FileName>i2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\core\Peripherals\i2c.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

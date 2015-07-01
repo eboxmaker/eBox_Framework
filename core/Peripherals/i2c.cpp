@@ -128,7 +128,6 @@ uint8_t I2C::readByte(uint8_t regAddress)
 	send7BitsAddress(SlaveAddress);
 	I2C_Cmd(I2C1,ENABLE);
 	sendByte(regAddress);
-
 	start();
 	send7BitsAddress(SlaveAddress + 1);
 	sendNoAck();
