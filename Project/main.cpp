@@ -4,18 +4,22 @@
 #include "interrupts.h"
 
 #include "mpu6050.h"
+#include "i2c.h"
 
+I2C m;
 
-MPU6050 mpu(0x17,0x16);
 
 void setup()
 {
 	eBoxInit();
 	uart3.begin(115200);
+	
+	m.init();
+	m.init();
+	m.mpuInit();
+	m.mpuInit();
+	m.mpuInit();
 
-	mpu.begin();
-	mpu.begin();
-	mpu.setSpeed(400000);
 
 }
 
@@ -25,14 +29,13 @@ uint8_t id;
 int main(void)
 {
 	setup();
-	
 	while(1)
 	{
-	  mpu.getID(&id);
-		mpu.getData(ACCEL_XOUT_H,tmp,7);
-		x = mpu.getData(ACCEL_XOUT_H);
-		y = mpu.getData(ACCEL_YOUT_H);
-		z = mpu.getData(ACCEL_ZOUT_H);
+	  m.getID(&id);
+		x = m.getData(ACCEL_XOUT_H);
+		y = m.getData(ACCEL_YOUT_H);
+		z = m.getData(ACCEL_ZOUT_H);
+		m.getData(ACCEL_XOUT_H,tmp,7);
 		uart3.printf("\r\nid = %d",id);
 		uart3.printf("\r\naccx = %d",tmp[0]);
 		uart3.printf("\r\naccy = %d",tmp[1]);

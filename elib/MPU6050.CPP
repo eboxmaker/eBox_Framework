@@ -9,7 +9,8 @@ void MPU6050::begin()
 	writeByte(SlaveAddress,SMPLRT_DIV,0x07);
 	writeByte(SlaveAddress,CONFIG,0x06);
 	writeByte(SlaveAddress,GYRO_CONFIG,0x18);
-	writeByte(SlaveAddress,ACCEL_CONFIG,0x08);
+	writeByte(SlaveAddress,ACCEL_CONFIG,0x01);
+
 }
 void MPU6050::getID(uint8_t* id)
 {

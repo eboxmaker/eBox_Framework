@@ -18,12 +18,15 @@ class I2C
 		uint8_t receiveByte();
 	
 		void writeByte(uint8_t regAddress,uint8_t regData);
-		uint8_t readByte(uint8_t regAddress);
-		uint16_t readByte(uint8_t regAddress,uint8_t* buf,uint8_t numToRead);
+		int8_t readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data);
+		int8_t readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint8_t numToRead);
+
 		void mpuInit();
-		int8_t getID();
+		int8_t getID(uint8_t* data);
 	
-		int16_t GetData(uint8_t REG_Address);
+		int16_t getData(uint8_t REG_Address);
+		int8_t  getData(uint8_t regAddress,int16_t* buf,uint8_t numToRead);
+
 	private:
 		
 };

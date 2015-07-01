@@ -4,6 +4,7 @@
 
 #include "ebox.h"
 #include "softi2c.h"
+#include "i2c.h"
 
 /* MPU6050 Register Address ------------------------------------------------------------*/
 #define MPU6050_RA_XG_OFFS_TC       0x00 //[7] PWR_MODE, [6:1] XG_OFFS_TC, [0] OTP_BNK_VLD
@@ -67,7 +68,6 @@ class MPU6050 : public Softi2c
 		 // do nothing;
 		 };	
 		void begin();
-
 		int16_t 	getData(uint8_t regAddress);
 		int8_t 		getData(uint8_t regAddress,int16_t* buf,uint8_t numToRead);
 		void 	getID(uint8_t* id);

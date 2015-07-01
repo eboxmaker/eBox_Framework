@@ -121,21 +121,48 @@ void I2C::writeByte(uint8_t regAddress,uint8_t regData)
 
 	
 }
-uint8_t I2C::readByte(uint8_t regAddress)
+int8_t I2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
 {
-	uint8_t REG_data;
 	start();
-	send7BitsAddress(SlaveAddress);
+	send7BitsAddress(slaveAddress);
 	I2C_Cmd(I2C1,ENABLE);
 	sendByte(regAddress);
 	start();
 	send7BitsAddress(SlaveAddress + 1);
 	sendNoAck();
 	stop();
-	REG_data = receiveByte();
-
-	return REG_data;
+	*data = receiveByte();
+	sendAck();
+	return 0;
 }
+
+int8_t I2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint8_t numToRead)
+{
+	uint8_t i;
+	start();
+	send7BitsAddress(slaveAddress);
+	I2C_Cmd(I2C1,ENABLE);
+	sendByte(regAddress);
+	start();
+	send7BitsAddress(SlaveAddress + 1);
+	
+		while(numToRead)
+		{
+			if(numToRead == 1)
+			{
+				sendNoAck();
+				stop();
+			}
+			*data = receiveByte();
+			data++;
+			numToRead--;
+			i++;
+		}
+		sendAck();
+
+	return i;
+}
+
 void I2C::mpuInit()
 {
 	writeByte(PWR_MGMT_1,0x00);//解除休眠状态
@@ -145,21 +172,29 @@ void I2C::mpuInit()
 	writeByte(ACCEL_CONFIG,0x01);
 }
 
-int8_t 	I2C::getID()
+int8_t 	I2C::getID(uint8_t* data)
 {
- return readByte(WHO_AM_I);
+  readByte(SlaveAddress,WHO_AM_I,data);
+	return 0;
 };
 
-int16_t I2C::GetData(uint8_t REG_Address)
+int16_t I2C::getData(uint8_t REG_Address)
 {
-	char H,L;
-	H=readByte(REG_Address);
-	L=readByte(REG_Address+1);
-	return (H<<8)+L;   //合成数据
+	uint8_t H,L;
+	readByte(SlaveAddress,REG_Address,&H);
+	readByte(SlaveAddress,REG_Address+1,&L);
+	return ((H<<8)+L);   //合成数据
 }
 
-uint16_t I2C::readByte(uint8_t regAddress,uint8_t* buf,uint8_t numToRead)
+int8_t  I2C::getData(uint8_t regAddress,int16_t* buf,uint8_t numToRead)
 {
-
-return 0;
+	uint8_t i,readnum;
+	uint8_t tmpbuf[20];
+	
+	readnum = readByte(SlaveAddress,regAddress,tmpbuf,numToRead*2);
+	for(i=0;i<readnum/2;i++)
+	{
+		*buf++ = (tmpbuf[i*2 + 0]<<8) + (tmpbuf[i*2 + 1]);
+	}
+	return readnum/2;
 }
