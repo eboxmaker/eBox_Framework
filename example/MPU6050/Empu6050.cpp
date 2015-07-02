@@ -14,8 +14,7 @@ void setup()
 	uart3.begin(115200);
 
 	mpu.begin();
-	mpu.begin();
-	mpu.setSpeed(400000);
+	mpu.setSpeed(100000);
 
 }
 
@@ -33,6 +32,7 @@ int main(void)
 		x = mpu.getData(ACCEL_XOUT_H);
 		y = mpu.getData(ACCEL_YOUT_H);
 		z = mpu.getData(ACCEL_ZOUT_H);
+		delay_ms(10);
 		uart3.printf("\r\nid = %d",id);
 		uart3.printf("\r\naccx = %d",tmp[0]);
 		uart3.printf("\r\naccy = %d",tmp[1]);

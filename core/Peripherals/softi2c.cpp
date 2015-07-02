@@ -105,7 +105,7 @@ void Softi2c::sendByte(uint8_t byte)
 	}
 
 }
-uint8_t Softi2c::receiveByte()
+uint8_t Softi2c::receiveByte(void)
 {
 	uint8_t i = 8;
 	uint8_t byte = 0;
@@ -132,16 +132,63 @@ int8_t Softi2c::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
     if (waitAck() == -1)
         return -2;
 
-   
 		sendByte(data);
     if (waitAck() == -1)
         return -3;
+		
 		stop();
 
     delay_us(10);      
     return 0;
 }
-int8_t 	Softi2c::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* buf,uint8_t numToRead)
+int8_t Softi2c::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
+{
+		start();
+		sendByte(slaveAddress);
+    if (waitAck() == -1)
+        return -1;
+		
+		sendByte(regAddress);
+    if (waitAck() == -1)
+        return -2;
+
+		while(numToRead--)
+		{
+			sendByte(*data++);
+			if (waitAck() == -1)
+					return -3;
+		}
+		
+		stop();
+
+    delay_us(10);      
+    return 0;
+}
+int8_t 	Softi2c::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
+{
+
+	int i = 0;
+		start();
+		sendByte(slaveAddress);
+    if (waitAck() == -1)
+        return -1;
+
+		sendByte(regAddress);
+    if (waitAck() == -1)
+        return -2;
+
+		start();
+		sendByte(slaveAddress + 1);
+    if (waitAck() == -1)
+        return -3;
+
+		*data = receiveByte();
+		sendNoAck();
+		stop();
+
+	return i;
+}
+int8_t 	Softi2c::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
 {
 
 	int i = 0;
@@ -160,7 +207,7 @@ int8_t 	Softi2c::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* buf,u
         return -3;
 		while(numToRead)
 		{
-			*buf++ = receiveByte();
+			*data++ = receiveByte();
 			numToRead--;
 			i++;
 			if(numToRead == 0)

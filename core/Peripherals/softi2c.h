@@ -25,7 +25,9 @@ class Softi2c
 							Softi2c(uint8_t SDApin, uint8_t SCLpin);
 		int8_t 		setSpeed(uint32_t speed);
 		int8_t		writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);
-		int8_t 		readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* buf,uint8_t numToRead);
+		int8_t 		writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
+		int8_t 		readByte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data);
+		int8_t 		readByte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
 
 		void delay_ii(uint16_t count)
 		{

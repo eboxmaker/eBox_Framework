@@ -1,6 +1,6 @@
 #include "i2c.h"
 #include "uartx.h"
-#define DEBUG 0
+#define DEBUG 1
 
 void  I2C::i2cBegin()
 {
@@ -145,14 +145,32 @@ int8_t I2C::receiveByte(uint8_t* data)
 }
 
 
-int8_t I2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t regData)
+int8_t I2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
 {
 	uint16_t err;
 
 	start();
 	send7BitsAddress(slaveAddress);
 	sendByte(regAddress);
-	sendByte(regData);
+	sendByte(data);
+	stop();
+
+	return err;
+	
+}
+int8_t I2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
+{
+	uint16_t err;
+	uint16_t i;
+
+	start();
+	send7BitsAddress(slaveAddress);
+	sendByte(regAddress);
+	while(numToRead--)
+	{
+	  sendByte(*data);
+		data++;
+	}
 	stop();
 
 	return err;
@@ -173,7 +191,7 @@ int8_t I2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
 	return 0;
 }
 
-int8_t I2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint8_t numToRead)
+int8_t I2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
 {
 	uint8_t i;
 	start();

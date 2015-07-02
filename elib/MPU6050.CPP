@@ -4,27 +4,32 @@
 
 void MPU6050::begin()
 {
+	uint8_t table[] = {0x00,0x07,0x06,0x18,0x01};
 	i2cBegin();
-	writeByte(SlaveAddress,PWR_MGMT_1,0x00);
-	writeByte(SlaveAddress,SMPLRT_DIV,0x07);
-	writeByte(SlaveAddress,CONFIG,0x06);
-	writeByte(SlaveAddress,GYRO_CONFIG,0x18);
-	writeByte(SlaveAddress,ACCEL_CONFIG,0x01);
+//	writeByte(SlaveAddress,PWR_MGMT_1,0);
+//	writeByte(SlaveAddress,SMPLRT_DIV,0x07);
+//	writeByte(SlaveAddress,CONFIG,0x06);
+//	writeByte(SlaveAddress,GYRO_CONFIG,0x18);
+//	writeByte(SlaveAddress,ACCEL_CONFIG,0x01);
+	writeByte(SlaveAddress,PWR_MGMT_1,&table[0],1);
+	writeByte(SlaveAddress,SMPLRT_DIV,&table[1],1);
+	writeByte(SlaveAddress,CONFIG,&table[2],1);
+	writeByte(SlaveAddress,GYRO_CONFIG,&table[3],1);
+	writeByte(SlaveAddress,ACCEL_CONFIG,&table[4],1);
 
 }
 void MPU6050::getID(uint8_t* id)
 {
-	readByte(SlaveAddress,WHO_AM_I,id);
+	readByte(SlaveAddress,WHO_AM_I,id,1);
 };
 
 int16_t  MPU6050::getData(uint8_t regAddress)
 {
-	uint8_t tmpH,tmpL;
+	uint8_t tmp[2];
 	
-	readByte(SlaveAddress,regAddress,&tmpH);
-	readByte(SlaveAddress,regAddress,&tmpL);
+	readByte(SlaveAddress,regAddress,tmp,2);
 
-	return ((tmpH<<8) + tmpL);
+	return ((tmp[0]<<8) + tmp[1]);
 
 }
 int8_t  MPU6050::getData(uint8_t regAddress,int16_t* buf,uint8_t numToRead)
