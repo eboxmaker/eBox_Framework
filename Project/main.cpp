@@ -15,12 +15,12 @@ void setup()
 	eBoxInit();
 	uart3.begin(115200);
 	mpu.begin();
-	mpu.setSpeed(200000);
+	mpu.setSpeed(100000);
 //	m.i2cBegin();
 //	m.mpuInit();
 //	m.mpuInit();
 //	m.mpuInit();
-
+	delay_ms(100);
 
 }
 
@@ -33,10 +33,10 @@ int main(void)
 	while(1)
 	{
 	  mpu.getID(&id);
+		mpu.getData(ACCEL_XOUT_H,tmp,7);
 		x = mpu.getData(ACCEL_XOUT_H);
 		y = mpu.getData(ACCEL_YOUT_H);
 		z = mpu.getData(ACCEL_ZOUT_H);
-		mpu.getData(ACCEL_XOUT_H,tmp,7);
 //	  m.getID(&id);
 //		x = m.getData(ACCEL_XOUT_H);
 //		y = m.getData(ACCEL_YOUT_H);

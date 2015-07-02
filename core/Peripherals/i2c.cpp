@@ -1,16 +1,16 @@
 #include "i2c.h"
-
+#include "uartx.h"
+#define DEBUG 0
 
 void  I2C::i2cBegin()
 {
 	
+		/* 使能与 I2C1 有关的时钟 */
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1,ENABLE);  
 	
-
 	pinMode(_SDAPin,AF_OD);
 	pinMode(_SCLPin,AF_OD);
 
-		/* 使能与 I2C1 有关的时钟 */
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1,ENABLE);  
 
 	  /* I2C 配置 */
 	I2C_InitStructure.I2C_Mode = I2C_Mode_I2C ; 
@@ -18,15 +18,13 @@ void  I2C::i2cBegin()
 	//I2C_InitStructure.I2C_OwnAddress1 = SlaveAddress; 
 	I2C_InitStructure.I2C_Ack = I2C_Ack_Enable; 
 	I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit; 
-	I2C_InitStructure.I2C_ClockSpeed = 200000; 
+	I2C_InitStructure.I2C_ClockSpeed = 100000; 
 
 	/* I2C1 初始化 */
 	I2C_Init(I2C1, &I2C_InitStructure);	   
 	
 	/* 使能 I2C1 */
 	I2C_Cmd  (I2C1,ENABLE); 
-	/*允许应答模式*/
-	I2C_AcknowledgeConfig(I2C1, ENABLE);   
 
 }
 
@@ -40,58 +38,116 @@ void I2C::setSpeed(uint32_t speed)
 	I2C_AcknowledgeConfig(I2C1, ENABLE);   
 
 }
-void I2C::start()
+int8_t I2C::start()
 {
+	uint16_t times=1000;
+	int8_t err = 0;
 	I2C_GenerateSTART(I2C1,ENABLE);
 
-	while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_MODE_SELECT));
-
-}
-void I2C::stop()
-{
-	I2C_GenerateSTOP(I2C1,ENABLE);
-}
-void I2C::sendNoAck()
-{
-	I2C_AcknowledgeConfig(I2C1,DISABLE);
-
-}
-void I2C::sendAck()
-{
-	I2C_AcknowledgeConfig(I2C1,ENABLE);
-
-}
-
-
-void I2C::sendByte(uint8_t Data)
-{
-	I2C_SendData(I2C1,Data);
-	while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_BYTE_TRANSMITTED));
-}
-void I2C::send7BitsAddress(uint8_t address)
-{
-	if(address&0x01)
+	while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_MODE_SELECT))
 	{
-		I2C_Send7bitAddress(I2C1,address,I2C_Direction_Receiver);
-		while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));		
+		times--;
+		if(times == 0)
+		{
+			err = -1;
+			#if  DEBUG
+				uart3.printf("err = %d",err);
+			#endif
+			break;
+		}
+	}
+	return err;
+}
+int8_t I2C::stop()
+{
+	int8_t err = 0;
+	I2C_GenerateSTOP(I2C1,ENABLE);
+	return err;
+}
+int8_t I2C::sendNoAck()
+{
+	int8_t err = 0;
+	I2C_AcknowledgeConfig(I2C1,DISABLE);
+	return err;
+}
+int8_t I2C::sendAck()
+{
+	int8_t err = 0;
+	I2C_AcknowledgeConfig(I2C1,ENABLE);
+	return err;
+}
+
+
+int8_t I2C::sendByte(uint8_t data)
+{
+	uint16_t times = 1000;
+	int8_t err = 0;
+	I2C_SendData(I2C1,data);
+	while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+	{
+		times--;
+		if(times == 0)
+		{
+			err = -2;
+			break;
+		}
+	}
+	return err;
+}
+int8_t I2C::send7BitsAddress(uint8_t slaveAddress)
+{
+	uint16_t times = 1000;
+	int8_t err;
+	if(slaveAddress&0x01)
+	{
+		I2C_Send7bitAddress(I2C1,slaveAddress,I2C_Direction_Receiver);
+		while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
+		{
+			times--;
+			if(times == 0)
+			{
+				err = -3;
+				break;
+			}
+		}
 	}
 	else
 	{
-		I2C_Send7bitAddress(I2C1,address,I2C_Direction_Transmitter);
-		while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+		I2C_Send7bitAddress(I2C1,slaveAddress,I2C_Direction_Transmitter);
+		while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
+		{
+			times--;
+			if(times == 0)
+			{
+				err = -4;
+				break;
+			}
+		}
 	}
+	return err;
 
 }
-uint8_t I2C::receiveByte()
-{
-	while(!(I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_BYTE_RECEIVED)));
-	return I2C_ReceiveData(I2C1);//读出寄存器数据
+int8_t I2C::receiveByte(uint8_t* data)
+{	
+	uint16_t times = 1000;
+	int8_t err;
+	while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_BYTE_RECEIVED))
+	{
+		times--;
+		if(times == 0)
+		{
+			err = -5;
+			break;
+		}
+	}
+	*data = I2C_ReceiveData(I2C1);//读出寄存器数据
+	return err;
 }
 
 
-void I2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t regData)
+int8_t I2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t regData)
 {
-	
+	uint16_t err;
 
 	start();
 	send7BitsAddress(slaveAddress);
@@ -99,6 +155,7 @@ void I2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t regData)
 	sendByte(regData);
 	stop();
 
+	return err;
 	
 }
 int8_t I2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
@@ -111,7 +168,7 @@ int8_t I2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
 	send7BitsAddress(slaveAddress + 1);
 	sendNoAck();
 	stop();
-	*data = receiveByte();
+	receiveByte(data);
 	sendAck();
 	return 0;
 }
@@ -126,19 +183,19 @@ int8_t I2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint8
 	start();
 	send7BitsAddress(slaveAddress + 1);
 	
-		while(numToRead)
+	while(numToRead)
+	{
+		if(numToRead == 1)
 		{
-			if(numToRead == 1)
-			{
-				sendNoAck();
-				stop();
-			}
-			*data = receiveByte();
-			data++;
-			numToRead--;
-			i++;
+			sendNoAck();
+			stop();
 		}
-		sendAck();
+	  receiveByte(data);
+		data++;
+		numToRead--;
+		i++;
+	}
+	sendAck();
 
 	return i;
 }
