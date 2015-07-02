@@ -48,7 +48,6 @@
  class DS3231:public Softi2c
  {
 	 private:
-			uint8_t buf[8];
 			uint8_t BcdToDec(uint8_t BCDCode);
 			uint8_t DecToBcd(uint8_t Dec);
 	 public:
@@ -60,7 +59,9 @@
 			{
 				i2cBegin();
 			};
-			void getTime(DateTime *t);
+			void getDateTime(DateTime *t);
+			void getTime(char* buf);
+			void getDate(char* buf);
 			void setTime(DateTime *t);
  
  };

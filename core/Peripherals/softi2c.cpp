@@ -141,32 +141,6 @@ int8_t Softi2c::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
     delay_us(10);      
     return 0;
 }
-int8_t Softi2c::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data )
-{
-
-	uint8_t readData;
-	
-		start();
-		sendByte(slaveAddress);
-    if (waitAck() == -1)
-        return -1;
-
-		sendByte(regAddress);
-    if (waitAck() == -1)
-        return -2;
-
-		start();
-		sendByte(slaveAddress + 1);
-    if (waitAck() == -1)
-        return -3;
-
-		*data = receiveByte();
-		sendNoAck();
-		
-		stop();
-		
-	return 0;
-}
 int8_t 	Softi2c::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* buf,uint8_t numToRead)
 {
 

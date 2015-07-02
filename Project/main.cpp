@@ -1,60 +1,47 @@
 
 #include "ebox.h"
+#include "boardcfg.h"
 #include "uartx.h"
 #include "interrupts.h"
 
-#include "mpu6050.h"
-//#include "i2c.h"
+#include "ds3231.h"
 
-//I2C m(0X17,0X16);
+DS3231 ds(DS3231_SDA_PIN,DS3231_SCL_PIN);
 
-MPU6050 mpu(0X17,0X16);
+DateTime t;
+char time[9];
+char date[9];
 
 void setup()
 {
 	eBoxInit();
 	uart3.begin(115200);
-	mpu.begin();
-	mpu.setSpeed(100000);
-//	m.i2cBegin();
-//	m.mpuInit();
-//	m.mpuInit();
-//	m.mpuInit();
-	delay_ms(100);
-
+	ds.begin();
+	ds.setSpeed(400000);
+	
+	t.year = 15;
+	t.month = 7;
+	t.date = 3;
+	t.hour = 23;
+	t.min = 59;
+	t.sec = 55;
 }
-
-int16_t tmp[7];
-int16_t x,y,z;
-uint8_t id;
 int main(void)
 {
 	setup();
+	ds.setTime(&t);
 	while(1)
-	{
-	  mpu.getID(&id);
-		mpu.getData(ACCEL_XOUT_H,tmp,7);
-		x = mpu.getData(ACCEL_XOUT_H);
-		y = mpu.getData(ACCEL_YOUT_H);
-		z = mpu.getData(ACCEL_ZOUT_H);
-//	  m.getID(&id);
-//		x = m.getData(ACCEL_XOUT_H);
-//		y = m.getData(ACCEL_YOUT_H);
-//		z = m.getData(ACCEL_ZOUT_H);
-//		m.getData(ACCEL_XOUT_H,tmp,7);
-		uart3.printf("\r\nid = %d",id);
-		uart3.printf("\r\naccx = %d",tmp[0]);
-		uart3.printf("\r\naccy = %d",tmp[1]);
-		uart3.printf("\r\naccz = %d",tmp[2]);
-		uart3.printf("\r\ntemp = %d",tmp[3]);
-		uart3.printf("\r\ngyrox = %d",tmp[4]);
-		uart3.printf("\r\ngyroy = %d",tmp[5]);
-		uart3.printf("\r\ngyroz = %d",tmp[6]);
-		uart3.printf("\r\n==========");
-		uart3.printf("\r\nX = %d",x);
-		uart3.printf("\r\nY = %d",y);
-		uart3.printf("\r\nZ = %d",z);
-		uart3.printf("\r\n==========");
+	{	
+		ds.getDateTime(&t);
+		ds.getTime(time);
+		ds.getDate(date);
+		uart3.printf("=======\r\n");
+		uart3.printf("%02d-%02d-%02d %02d:%02d:%02d\r\n",t.year,t.month,t.date,t.hour,t.min,t.sec);
+
+		uart3.printf(date);
+		uart3.printf(" ");
+		uart3.printf(time);
+		uart3.printf("\r\n");
 		delay_ms(1000);
 	}
 

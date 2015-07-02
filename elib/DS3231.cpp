@@ -21,15 +21,11 @@ uint8_t DS3231::DecToBcd(uint8_t Dec)
 	return Bcd;
 }
 
-void	DS3231::getTime(DateTime *t)
+void	DS3231::getDateTime(DateTime *t)
 {
-	readByte(DS3231_WriteAddress,DS3231_YEAR,&buf[6]);			//年份低两位
-	readByte(DS3231_WriteAddress,DS3231_MONTH,&buf[5]);			//月份
-	readByte(DS3231_WriteAddress,DS3231_DAY,&buf[4]);				//日期
-	readByte(DS3231_WriteAddress,DS3231_WEEK,&buf[3]);			//周
-	readByte(DS3231_WriteAddress,DS3231_HOUR,&buf[2]);			//时
-	readByte(DS3231_WriteAddress,DS3231_MINUTE,&buf[1]);		//分
-	readByte(DS3231_WriteAddress,DS3231_SECOND,&buf[0]);		//秒
+	uint8_t buf[8];
+
+	readByte(DS3231_WriteAddress,DS3231_SECOND,buf,7);
 
 
 //	timer.w_year,timer.w_month,timer.w_date,timer.hour,timer.min,timer.sec
@@ -42,6 +38,41 @@ void	DS3231::getTime(DateTime *t)
 	t->min			=BcdToDec(buf[1]);
 	t->sec	    =BcdToDec(buf[0]);	
 }
+#include "softi2c.h"
+void DS3231::getDate(char* buf)
+{		
+	uint8_t tmpbuf[3];
+
+	readByte(DS3231_WriteAddress,DS3231_DAY,tmpbuf,3);				//日期
+
+	buf[0] =char( (tmpbuf[2]>>4) + 0x30);
+	buf[1] =char( (tmpbuf[2]&0x0f) + 0x30);
+	buf[2] = '-';
+	buf[3] =char( (tmpbuf[1]>>4) + 0x30);
+	buf[4] =char( (tmpbuf[1]&0x0f) + 0x30);
+	buf[5] = '-';
+	buf[6] =char( (tmpbuf[0]>>4) + 0x30);
+	buf[7] =char( (tmpbuf[0]&0x0f) + 0x30);
+	buf[8] ='\0';
+}
+void DS3231::getTime(char* buf)
+{
+	uint8_t tmpbuf[3];
+
+	readByte(DS3231_WriteAddress,DS3231_SECOND,tmpbuf,3);		//秒
+
+	buf[0] =char( (tmpbuf[2]>>4) + 0x30);
+	buf[1] =char( (tmpbuf[2]&0x0f) + 0x30);
+	buf[2] = ':';
+	buf[3] =char( (tmpbuf[1]>>4) + 0x30);
+	buf[4] =char( (tmpbuf[1]&0x0f) + 0x30);
+	buf[5] = ':';
+	buf[6] =char( (tmpbuf[0]>>4) + 0x30);
+	buf[7] =char( (tmpbuf[0]&0x0f) + 0x30);
+	buf[8] ='\0';
+
+	
+}
 void	DS3231::setTime(DateTime *t)
 {
 		DateTime tBCD;
@@ -52,7 +83,8 @@ void	DS3231::setTime(DateTime *t)
 		tBCD.hour = DecToBcd(t->hour);
 		tBCD.min = DecToBcd(t->min);
 		tBCD.sec = DecToBcd(t->sec);
-   
+	
+
     writeByte(DS3231_WriteAddress,DS3231_WEEK,tBCD.week);   //修改周
 		writeByte(DS3231_WriteAddress,DS3231_YEAR,tBCD.year);   //修改年
     writeByte(DS3231_WriteAddress,DS3231_MONTH,tBCD.month);  //修改月

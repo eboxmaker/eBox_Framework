@@ -1,8 +1,8 @@
 #include "rtc.h"
 RTC_CLASS 	rtc;
 
-
 #define RTC_CLOCK_SOURCE 0
+//#define RTC_CLOCK_SOURCE 1
 
 void RTC_CLASS::begin()
 {
@@ -75,7 +75,7 @@ void RTC_CLASS::config(void)
 	
 	/* Wait until last write operation on RTC registers has finished */
 	RTC_WaitForLastTask();
-		if(RTC_CLOCK_SOURCE)
+	if(RTC_CLOCK_SOURCE)
 	{
 		/* Set RTC prescaler: set RTC period to 1sec */
 		RTC_SetPrescaler(32767); /* RTC period = RTCCLK/RTC_PR = (32.768 KHz)/(32767+1) */
