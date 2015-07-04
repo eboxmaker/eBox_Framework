@@ -108,9 +108,6 @@ void delayMicroseconds(uint16_t us);
 void delayus(uint32_t us);
 
 
-void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
-uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
-
 
 
 #ifdef __cplusplus

@@ -582,11 +582,6 @@
               <FileType>1</FileType>
               <FilePath>..\core\Wiring_digital.c</FilePath>
             </File>
-            <File>
-              <FileName>wiring_shift.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\core\wiring_shift.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
