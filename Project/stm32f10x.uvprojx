@@ -673,11 +673,6 @@
               <FilePath>..\elib\74HC595.cpp</FilePath>
             </File>
             <File>
-              <FileName>att7022.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\elib\att7022.cpp</FilePath>
-            </File>
-            <File>
               <FileName>Button.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\elib\Button.cpp</FilePath>

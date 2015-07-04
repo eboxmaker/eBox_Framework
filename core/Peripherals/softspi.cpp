@@ -3,60 +3,76 @@ SOFTSPI::SOFTSPI(uint8_t sckPin,uint8_t misoPin,uint8_t mosiPin)
 {
 	_mosiPin = mosiPin;
 	_misoPin = misoPin;
-	_sckPin = sckPin;
+	_sckPin =  sckPin;
 	
-	_bitOrder = MSBFIRST;
-	_mode = SPI_MODE0;
-	_spidelay = 0;
+//	_bitOrder = MSBFIRST;
+//	_mode = SPI_MODE0;
+//	_spidelay = 0;
 
 }
-
-void SOFTSPI::begin()
+void SOFTSPI::begin(SPICONFIG* spiConfig)
 {
-	setMode(_mode);
-	setBitOrder(_bitOrder);
-	setClockDivider(_spidelay);
 
-	pinMode(_mosiPin,1);
-	pinMode(_misoPin,1);
-	pinMode(_sckPin,1);
-
+	pinMode(_mosiPin,OUTPUT);
+	pinMode(_misoPin,INPUT);
+	pinMode(_sckPin,OUTPUT);
+	
+	config(spiConfig);
 	switch(_mode)
 	{
 		case SPI_MODE0:
-			 _cpol = CPOL_Low;
-			 _cpha = CPHA_1Edge;
 				digitalWrite(_sckPin,0);
 				break;
 		case SPI_MODE1:
-			 _cpol = CPOL_Low;
-			 _cpha = CPHA_2Edge;
 				digitalWrite(_sckPin,0);		
 				break;
 		case SPI_MODE2:
-			 _cpol = CPOL_High;
-			 _cpha = CPHA_1Edge;
 				digitalWrite(_sckPin,1);		
 				break;
 		case SPI_MODE3:
-			 _cpol = CPOL_High;
 				digitalWrite(_sckPin,1);		
-			 _cpha = CPHA_2Edge;
 				break;			
 	}
 }
-void SOFTSPI::setBitOrder(uint8_t bitOrder)
+void SOFTSPI::config(SPICONFIG* spiConfig)
 {
-	_bitOrder = bitOrder;
+	currentDevNum = spiConfig->devNum;
+	_mode = spiConfig->mode;
+	_bitOrder = spiConfig->bitOrder;
+	switch(spiConfig->prescaler)
+	{
+		case SPI_BaudRatePrescaler_2:
+			_spidelay = 0;
+			break;
+		case SPI_BaudRatePrescaler_4:
+			_spidelay = 1;
+			break;
+		case SPI_BaudRatePrescaler_8:
+			_spidelay = 2;
+			break;
+		case SPI_BaudRatePrescaler_16:
+			_spidelay = 4;
+			break;
+		case SPI_BaudRatePrescaler_32:
+			_spidelay = 8;
+			break;
+		case SPI_BaudRatePrescaler_64:
+			_spidelay = 16;
+			break;
+		case SPI_BaudRatePrescaler_128:
+			_spidelay = 32;
+			break;
+		case SPI_BaudRatePrescaler_256:
+			_spidelay = 1;
+			break;
+		default:
+			_spidelay = 0;
+			break;
+	}
 }
-void SOFTSPI::setClockDivider(uint8_t count)
+uint8_t SOFTSPI::readConfig(void)
 {
-	_spidelay = count;
-}
-void SOFTSPI::setMode(uint8_t spimode)
-{
-	_mode = spimode;
-
+	return currentDevNum; 
 }
 uint8_t SOFTSPI::transfer(uint8_t data)
 {
@@ -69,8 +85,7 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 			//第一个是上升沿：读取数据；
 			//第二个是下降沿：输出数据；
 				for (i = 0; i < 8; i++)  {
-					digitalWrite(_sckPin,1);
-					if (_bitOrder == LSBFIRST)
+					if (_bitOrder == SPI_BITODER_LSB)
 					{
 						RcvData |= digitalRead(_misoPin)<<i;
 						digitalWrite(_mosiPin, !!(data & (1 << i)));
@@ -81,8 +96,9 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 						digitalWrite(_mosiPin, !!(data & (1 << (7 - i))));
 					}
 					delay_us(_spidelay);
-					digitalWrite(_sckPin,0);
+					digitalWrite(_sckPin,1);
 					delay_us(_spidelay);
+					digitalWrite(_sckPin,0);
 				}
 				break;
 		case SPI_MODE1:
@@ -91,8 +107,7 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 			//第二个是下降沿：读取数据；
 				for (i = 0; i < 8; i++)  {
 					///////////////////上升沿输出//////////
-					digitalWrite(_sckPin,1);
-					if (_bitOrder == LSBFIRST)
+					if (_bitOrder == SPI_BITODER_LSB)
 					{
 						digitalWrite(_mosiPin, !!(data & (1 << i)));
 					}
@@ -102,7 +117,9 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 						digitalWrite(_mosiPin, !!(data & (1 << (7 - i))));
 					}
 					delay_us(_spidelay);
+					digitalWrite(_sckPin,1);
 					/////////////////下降沿采样////////////
+					delay_us(_spidelay);
 					digitalWrite(_sckPin,0);
 					if (_bitOrder == LSBFIRST)
 					{
@@ -113,7 +130,6 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 						RcvData |= (digitalRead(_misoPin)<<(7-i));
 						digitalWrite(_mosiPin, !!(data & (1 << (7 - i))));
 					}	
-					delay_us(_spidelay);
 				}
 				break;
 
@@ -123,7 +139,8 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 			//第二个是上升沿：输出数据；
 				for (i = 0; i < 8; i++)  {
 					digitalWrite(_sckPin,0);
-					if (_bitOrder == LSBFIRST)
+					delay_us(_spidelay);
+					if (_bitOrder == SPI_BITODER_LSB)
 					{
 						RcvData |= digitalRead(_misoPin)<<i;
 						digitalWrite(_mosiPin, !!(data & (1 << i)));
@@ -135,7 +152,6 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 					}
 					delay_us(_spidelay);
 					digitalWrite(_sckPin,1);
-					delay_us(_spidelay);
 				}
 				break;
 				
@@ -146,7 +162,8 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 				for (i = 0; i < 8; i++)  {
 					///////////////////下降沿沿输出
 					digitalWrite(_sckPin,0);
-					if (_bitOrder == LSBFIRST)
+					delay_us(_spidelay);
+					if (_bitOrder == SPI_BITODER_LSB)
 					{
 						digitalWrite(_mosiPin, !!(data & (1 << i)));
 					}
@@ -155,9 +172,9 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 						RcvData |= (digitalRead(_misoPin)<<(7-i));
 						digitalWrite(_mosiPin, !!(data & (1 << (7 - i))));
 					}
-					delay_us(_spidelay);
 					/////////////////上升沿采样////////////
 					digitalWrite(_sckPin,1);
+					delay_us(_spidelay);
 					if (_bitOrder == LSBFIRST)
 					{
 						digitalWrite(_mosiPin, !!(data & (1 << i)));
@@ -167,12 +184,12 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 						RcvData |= (digitalRead(_misoPin)<<(7-i));
 						digitalWrite(_mosiPin, !!(data & (1 << (7 - i))));
 					}	
-					delay_us(_spidelay);
 				}
 				break;
 		}
 				return RcvData;
 }
+SOFTSPI spis(0x05,0x06,0x07);
 
 
 

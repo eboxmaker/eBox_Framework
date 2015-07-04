@@ -6,7 +6,7 @@ void W25X::begin()
 {
 	spiDevW25x16.devNum = 1;
 	spiDevW25x16.mode = SPI_MODE0;
-	spiDevW25x16.prescaler = SPI_CLOCK_DIV2;
+	spiDevW25x16.prescaler = SPI_CLOCK_DIV256;
 	spiDevW25x16.bitOrder = SPI_BITODER_MSB;
 	
 	spi1.begin(&spiDevW25x16);
@@ -47,6 +47,7 @@ void W25X::read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)
 	spi1.transfer((u8)((ReadAddr)>>16));  //发送24bit地址    
 	spi1.transfer((u8)((ReadAddr)>>8));   
 	spi1.transfer((u8)ReadAddr);   
+//	spi1.transfer(0xff,pBuffer,NumByteToRead);
 	for(i=0;i<NumByteToRead;i++)
 	{ 
         pBuffer[i]=spi1.transfer(0XFF);   //循环读数  
@@ -72,6 +73,7 @@ void W25X::fastRead(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)
 	spi1.transfer((u8)((ReadAddr)>>8));   
 	spi1.transfer((u8)ReadAddr);   
 	spi1.transfer(0xff);   //空字节
+//	spi1.transfer(0xff,pBuffer,NumByteToRead);
 	for(i=0;i<NumByteToRead;i++)
 	{ 
         pBuffer[i]=spi1.transfer(0XFF);   //循环读数  
@@ -153,6 +155,7 @@ void W25X::writePage(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
 	spi1.transfer((u8)((WriteAddr)>>8));   
 	spi1.transfer((u8)WriteAddr);   
 	for(i=0;i<NumByteToWrite;i++)spi1.transfer(pBuffer[i]);//循环写数  
+//	spi1.transfer(pBuffer,NumByteToWrite);
 	digitalWrite(cs,HIGH);
 	_waitBusy();					   //等待写入结束
 } 
