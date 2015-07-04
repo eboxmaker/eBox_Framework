@@ -608,19 +608,24 @@
               <FilePath>..\core\Peripherals\pwm.cpp</FilePath>
             </File>
             <File>
+              <FileName>i2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\core\Peripherals\i2c.cpp</FilePath>
+            </File>
+            <File>
               <FileName>softi2c.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\core\Peripherals\softi2c.cpp</FilePath>
             </File>
             <File>
-              <FileName>softspi.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\core\Peripherals\softspi.cpp</FilePath>
-            </File>
-            <File>
               <FileName>SPI.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\core\Peripherals\SPI.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>softspi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\core\Peripherals\softspi.cpp</FilePath>
             </File>
             <File>
               <FileName>uartx.cpp</FileName>
@@ -636,11 +641,6 @@
               <FileName>rtc.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\core\Peripherals\rtc.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>i2c.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\core\Peripherals\i2c.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -706,6 +706,11 @@
               <FileName>MPU6050.CPP</FileName>
               <FileType>8</FileType>
               <FilePath>..\elib\MPU6050.CPP</FilePath>
+            </File>
+            <File>
+              <FileName>w25x16.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\elib\w25x16.cpp</FilePath>
             </File>
           </Files>
         </Group>

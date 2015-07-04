@@ -50,7 +50,7 @@ class ATT7022
 		{
 			pinMode(ATT_RST_PIN,OUTPUT);
 			pinMode(ATT_CS_PIN,OUTPUT);
-			SPI.begin();
+			//spi1.begin();
 			ResetATT7022();
 			ParaInit();
 			WriteAdjustRegister(0x3f,ParaDlg.AdcGainRegister); 	
@@ -68,12 +68,12 @@ class ATT7022
 		void ClearAdjustRegister(void)
 		{
 			unsigned char cmdbuf[3] = {0,0,0};
-//			SPIWrite(0xC3,cmdbuf); 
+//			spi1Write(0xC3,cmdbuf); 
 			digitalWrite(ATT_CS_PIN,0);
-			SPI.transfer(0XC3);
-			SPI.transfer(cmdbuf[0]);
-			SPI.transfer(cmdbuf[1]);
-			SPI.transfer(cmdbuf[2]);		
+			spi1.transfer(0XC3);
+			spi1.transfer(cmdbuf[0]);
+			spi1.transfer(cmdbuf[1]);
+			spi1.transfer(cmdbuf[2]);		
 			digitalWrite(ATT_CS_PIN,1);
 			delay_ms(200);
 		}
@@ -107,24 +107,24 @@ long ReadSampleRegister(unsigned char cmd)
 {
     long datatemp;
 	unsigned char cmdbuf[3]={0,0,0xaa};
-//    SPIWrite(0xC6,cmdbuf); 
+//    spi1Write(0xC6,cmdbuf); 
 //    Delay_US(50);
 			digitalWrite(ATT_CS_PIN,0);
-			SPI.transfer(0xC6);
-			SPI.transfer(cmdbuf[0]);
-			SPI.transfer(cmdbuf[1]);
-			SPI.transfer(cmdbuf[2]);		
+			spi1.transfer(0xC6);
+			spi1.transfer(cmdbuf[0]);
+			spi1.transfer(cmdbuf[1]);
+			spi1.transfer(cmdbuf[2]);		
 			digitalWrite(ATT_CS_PIN,1);
 
 	
 	cmdbuf[2] = 0x00 ;
-//    SPIRead(0x0D+APhase,cmdbuf);
+//    spi1Read(0x0D+APhase,cmdbuf);
 //    datatemp=ArrayTogether(cmdbuf,3);
 			digitalWrite(ATT_CS_PIN,0);
-			SPI.transfer(0x0D+APhase);
-			cmdbuf[0] = SPI.transfer(0XFF);
-			cmdbuf[1] = SPI.transfer(0XFF);
-			cmdbuf[2] = SPI.transfer(0XFF);
+			spi1.transfer(0x0D+APhase);
+			cmdbuf[0] = spi1.transfer(0XFF);
+			cmdbuf[1] = spi1.transfer(0XFF);
+			cmdbuf[2] = spi1.transfer(0XFF);
 			digitalWrite(ATT_CS_PIN,1);
 			datatemp=ArrayTogether(cmdbuf,3);
 			
@@ -141,31 +141,31 @@ void WriteAdjustRegister(unsigned char addr,unsigned char *tmpbuf)
 	soubuf[1] = tmpbuf[1];
 	soubuf[2] = tmpbuf[2];
 	
-//	SPIWrite(0xC9,cmdbuf);  //??????????
+//	spi1Write(0xC9,cmdbuf);  //??????????
 			digitalWrite(ATT_CS_PIN,0);
-			SPI.transfer(0xC9);
-			SPI.transfer(cmdbuf[0]);
-			SPI.transfer(cmdbuf[1]);
-			SPI.transfer(cmdbuf[2]);		
+			spi1.transfer(0xC9);
+			spi1.transfer(cmdbuf[0]);
+			spi1.transfer(cmdbuf[1]);
+			spi1.transfer(cmdbuf[2]);		
 			digitalWrite(ATT_CS_PIN,1);
 
 	delay_ms(5);
-//  	SPIWrite(addr,soubuf);  //???
+//  	spi1Write(addr,soubuf);  //???
 			digitalWrite(ATT_CS_PIN,0);
-			SPI.transfer(addr);
-			SPI.transfer(soubuf[0]);
-			SPI.transfer(soubuf[1]);
-			SPI.transfer(soubuf[2]);		
+			spi1.transfer(addr);
+			spi1.transfer(soubuf[0]);
+			spi1.transfer(soubuf[1]);
+			spi1.transfer(soubuf[2]);		
 			digitalWrite(ATT_CS_PIN,1);
 
 	delay_ms(5);
 	cmdbuf[2] = 1 ;
-//  	SPIWrite(0xC9,cmdbuf);  //??????????,?????
+//  	spi1Write(0xC9,cmdbuf);  //??????????,?????
 			digitalWrite(ATT_CS_PIN,0);
-			SPI.transfer(0xC9);
-			SPI.transfer(cmdbuf[0]);
-			SPI.transfer(cmdbuf[1]);
-			SPI.transfer(cmdbuf[2]);		
+			spi1.transfer(0xC9);
+			spi1.transfer(cmdbuf[0]);
+			spi1.transfer(cmdbuf[1]);
+			spi1.transfer(cmdbuf[2]);		
 			digitalWrite(ATT_CS_PIN,1);
 
 	delay_ms(20);
@@ -174,21 +174,21 @@ void WriteAdjustRegister(unsigned char addr,unsigned char *tmpbuf)
 void ReadAdjustRegister(unsigned char addr,unsigned char *tmpbuf)
 {
     unsigned char cmdbuf[3] = {0,0,0x5a} ;
-//	SPIWrite(0xC6,cmdbuf);  //??????????
+//	spi1Write(0xC6,cmdbuf);  //??????????
 			digitalWrite(ATT_CS_PIN,0);
-			SPI.transfer(0xC6);
-			SPI.transfer(cmdbuf[0]);
-			SPI.transfer(cmdbuf[1]);
-			SPI.transfer(cmdbuf[2]);		
+			spi1.transfer(0xC6);
+			spi1.transfer(cmdbuf[0]);
+			spi1.transfer(cmdbuf[1]);
+			spi1.transfer(cmdbuf[2]);		
 			digitalWrite(ATT_CS_PIN,1);
 
   	delay_ms(10);
-//	SPIRead(addr,tmpbuf);   //???
+//	spi1Read(addr,tmpbuf);   //???
 			digitalWrite(ATT_CS_PIN,0);
-			SPI.transfer(0x0D+APhase);
-			tmpbuf[0] = SPI.transfer(0XFF);
-			tmpbuf[1] = SPI.transfer(0XFF);
-			tmpbuf[2] = SPI.transfer(0XFF);
+			spi1.transfer(0x0D+APhase);
+			tmpbuf[0] = spi1.transfer(0XFF);
+			tmpbuf[1] = spi1.transfer(0XFF);
+			tmpbuf[2] = spi1.transfer(0XFF);
 			digitalWrite(ATT_CS_PIN,1);
 
 	delay_ms(100);

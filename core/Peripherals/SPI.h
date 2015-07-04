@@ -27,27 +27,28 @@
 #define SPI_CLOCK_DIV128   SPI_BaudRatePrescaler_128
 #define SPI_CLOCK_DIV256   SPI_BaudRatePrescaler_256
 
-#define SP1_BITODER_MSB		SPI_FirstBit_MSB                
-#define SP1_BITODER_LSB		SPI_FirstBit_LSB                
+#define SPI_BITODER_MSB		SPI_FirstBit_MSB                
+#define SPI_BITODER_LSB		SPI_FirstBit_LSB                
+typedef struct
+{
+	uint8_t devNum;
+	uint8_t mode;
+	uint16_t prescaler;
+	uint16_t bitOrder;
+}SPICONFIG;
 
 
 class	SPIClass 
 {
 public:
-	SPIClass(	SPI_TypeDef *spi)
+	SPIClass(SPI_TypeDef *spi)
 	{
 		_spi = spi;
-		_prescaler = SPI_CLOCK_DIV256;
-		_mode = SPI_MODE0;
-		_bitOrder = SP1_BITODER_MSB;
-		
-
 	};
-	void config();
-	void begin();
-	void setMode(uint8_t spimode);
-	void setClockDivider( uint8_t divider);
-	void setBitOrder(uint16_t bitOrder);
+	void begin(SPICONFIG* spiConfig);
+	void ioInit();
+	void config(SPICONFIG* spiConfig);
+	uint8_t readConfig(void);
 	uint8_t transfer(uint8_t data) 
 	{
 	  while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
@@ -90,12 +91,9 @@ public:
 	
 	SPI_TypeDef *_spi;
 	SPI_InitTypeDef SPI_InitStructure;
-	uint8_t _mode;
-	uint8_t _prescaler;
-	uint8_t _bitOrder;
-	
-	uint8_t _initialized;
+
+	uint8_t currentDevNum;
 };
-extern SPIClass SPI;
+extern SPIClass spi1;
 
 #endif
