@@ -4,16 +4,26 @@ callbackFun timOneCallbackTable[5];
 callbackFun gTimxCallbackTable[TIM_NUM +1];
 callbackFun extiCallbackTable[EXTI_LINE_NUM + 1];
 callbackFun UARTCallbackTable[USART_NUM * 2];//支持串口的rx和tx中断
-callbackFun rtcCallbackTable[1];//
+callbackFun rtcCallbackTable[3];//
 
 
 void RTC_IRQHandler(void)
 {
-	if (RTC_GetITStatus(RTC_IT_SEC) != RESET)
+	if (RTC_GetITStatus(RTC_IT_OW) != RESET)
 	{	
 		rtcCallbackTable[0]();
+		RTC_ClearITPendingBit(RTC_IT_OW);
+	}	
+	if (RTC_GetITStatus(RTC_IT_ALR) != RESET)
+	{	
+		rtcCallbackTable[1]();
+		RTC_ClearITPendingBit(RTC_IT_ALR);
+	}	
+	if (RTC_GetITStatus(RTC_IT_SEC) != RESET)
+	{	
+
+		rtcCallbackTable[2]();
 		RTC_ClearITPendingBit(RTC_IT_SEC);
-		
 	}
 }
 
