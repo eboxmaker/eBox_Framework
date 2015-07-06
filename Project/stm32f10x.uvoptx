@@ -659,8 +659,8 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\ioanalog.c</PathWithFileName>
-      <FilenameWithoutPath>ioanalog.c</FilenameWithoutPath>
+      <PathWithFileName>..\core\ebox_pin.c</PathWithFileName>
+      <FilenameWithoutPath>ebox_pin.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -672,8 +672,8 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\iodigital.c</PathWithFileName>
-      <FilenameWithoutPath>iodigital.c</FilenameWithoutPath>
+      <PathWithFileName>..\core\analog.c</PathWithFileName>
+      <FilenameWithoutPath>analog.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -685,8 +685,8 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\ebox_pin.c</PathWithFileName>
-      <FilenameWithoutPath>ebox_pin.c</FilenameWithoutPath>
+      <PathWithFileName>..\core\digital.c</PathWithFileName>
+      <FilenameWithoutPath>digital.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

@@ -563,19 +563,19 @@
               <FilePath>..\core\ebox.c</FilePath>
             </File>
             <File>
-              <FileName>ioanalog.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\core\ioanalog.c</FilePath>
-            </File>
-            <File>
-              <FileName>iodigital.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\core\iodigital.c</FilePath>
-            </File>
-            <File>
               <FileName>ebox_pin.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\core\ebox_pin.c</FilePath>
+            </File>
+            <File>
+              <FileName>analog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\core\analog.c</FilePath>
+            </File>
+            <File>
+              <FileName>digital.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\core\digital.c</FilePath>
             </File>
           </Files>
         </Group>

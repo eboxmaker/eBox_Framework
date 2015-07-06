@@ -19,6 +19,7 @@ This specification is preliminary and is subject to change at any time without n
 
 /*
 	1.支持tim2,3,4
+	2.提供一个xhz的中断
 */
 
 

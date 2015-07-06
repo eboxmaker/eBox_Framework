@@ -92,8 +92,8 @@ typedef struct
 }SPICONFIG;
 /////////////////////////////////////////////////////////////
 //interrupts functions are in WInterrupts.c file
-#define Interrupts() __enable_irq()
-#define noInterrupts() __disable_irq()
+#define Interrupts() 		__enable_irq()
+#define noInterrupts() 	__disable_irq()
 
 
 	 
@@ -120,9 +120,6 @@ uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
 	
 	
 typedef void (*callbackFun)(void);
-
-
-
 
 
 

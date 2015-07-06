@@ -1,11 +1,6 @@
 #include "timerone.h"
 
-//默认配置为预分频72分频
-//默认配置为溢出值 1000
-//默认配置：1ms中断一次
-#define PRESCALE 72
-#define PEROID	1000
- 
+
 callbackFun timOneCallbackTable[1];
 
 TIMERONE::TIMERONE()
