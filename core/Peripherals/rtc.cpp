@@ -1,15 +1,13 @@
 #include "rtc.h"
 RTC_CLASS 	rtc;
 
-#define RTC_CLOCK_SOURCE 0
-//#define RTC_CLOCK_SOURCE 1
 
 void RTC_CLASS::begin()
 {
 //	if(isConfig() == 0)
 //	{
 		config();
-		setConfigFlag();
+		setConfigFlag(RTC_CFG_FLAG);
 //	}
 //	else
 //	{
@@ -91,6 +89,17 @@ void RTC_CLASS::config(void)
 	RTC_WaitForLastTask();
 
 }
+uint8_t RTC_CLASS::isConfig(uint16_t configFlag)
+{
+	uint8_t flag = 0;
+	if(BKP_ReadBackupRegister(BKP_DR1) == configFlag)
+		flag = 1;
+	return flag;
+}
+void RTC_CLASS::setConfigFlag(uint16_t configFlag)
+{
+		BKP_WriteBackupRegister(BKP_DR1, configFlag);
+}
 void RTC_CLASS::setCounter(uint32_t count)
 {
 	/* Wait until last write operation on RTC registers has finished */
@@ -135,7 +144,7 @@ void RTC_CLASS::interrupt(uint32_t bits,FunctionalState x)
 	RTC_ITConfig(bits, x);
 	
 }
-void RTC_CLASS::attachInterrupt(void (*callbackFun)(void),uint16_t event)
+void RTC_CLASS::attachInterrupt(uint16_t event, void (*callbackFun)(void))
 {
 	switch(event)
 	{

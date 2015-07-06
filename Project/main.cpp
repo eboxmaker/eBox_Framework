@@ -35,13 +35,12 @@ void setup()
 	
 	rtc.begin();
 	rtc.interrupt(RTC_EVENT_OW | RTC_EVENT_ALR| RTC_EVENT_SEC,ENABLE);
-	rtc.attachInterrupt(rtc_it_ow,RTC_EVENT_OW);
-	rtc.attachInterrupt(rtc_it_alr,RTC_EVENT_ALR);
-	rtc.attachInterrupt(rtc_it_sec,RTC_EVENT_SEC);
+	rtc.attachInterrupt(RTC_EVENT_OW,rtc_it_ow);
+	rtc.attachInterrupt(RTC_EVENT_ALR,rtc_it_alr);
+	rtc.attachInterrupt(RTC_EVENT_SEC,rtc_it_sec);
 	rtc.setAlarm(23,59,55);
 	rtc.setTimeHMS(23,59,50);
 	
-	pinMode(7,OUTPUT);
 }
 
 
