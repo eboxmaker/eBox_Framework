@@ -5,6 +5,8 @@
 //默认配置：1ms中断一次
 #define PRESCALE 72
 #define PEROID	1000
+ 
+callbackFun timOneCallbackTable[1];
 
 TIMERONE::TIMERONE()
 {
@@ -14,7 +16,18 @@ TIMERONE::TIMERONE()
 }
 void TIMERONE::begin(void)
 {
+	NVIC_InitTypeDef NVIC_InitStructure;
+	
 	baseInit(_period,_prescaler);
+	
+	NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);  //使用全局控制值
+	NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;//
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;// 
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;// 
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+
+	
 	interrupt(DISABLE);
 	stop();
 }
@@ -22,13 +35,6 @@ void TIMERONE::interrupt(FunctionalState x)
 {
  TIM_ClearITPendingBit(TIM1 , TIM_FLAG_Update);
  TIM_ITConfig(TIM1,TIM_IT_Update,x);
- NVIC_InitTypeDef NVIC_InitStructure;
- NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);  //使用全局控制值
- NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;//
- NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;// 
- NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;// 
- NVIC_InitStructure.NVIC_IRQChannelCmd = x;
- NVIC_Init(&NVIC_InitStructure);
 
 }
 
@@ -71,4 +77,19 @@ void TIMERONE::setReload(uint16_t Autoreload)
 void TIMERONE::clearCount(void)
 {
 	TIM1->CNT = 0;
+}
+void TIMERONE::attachInterrupt(void(*callback)(void))
+{
+	 timOneCallbackTable[0] = callback;
+}
+extern "C" {
+	void TIM1_UP_IRQHandler(void)
+	{
+
+	 if(TIM_GetITStatus(TIM1 , TIM_IT_Update) == SET)
+	 {
+		TIM_ClearITPendingBit(TIM1 , TIM_FLAG_Update);
+			timOneCallbackTable[0]();
+	 }
+	}
 }

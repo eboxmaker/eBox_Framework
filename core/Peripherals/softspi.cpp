@@ -63,10 +63,10 @@ void SOFTSPI::config(SPICONFIG* spiConfig)
 			_spidelay = 32;
 			break;
 		case SPI_BaudRatePrescaler_256:
-			_spidelay = 1;
+			_spidelay = 64;
 			break;
 		default:
-			_spidelay = 0;
+			_spidelay = spiConfig->prescaler;
 			break;
 	}
 }

@@ -17,11 +17,8 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "ebox.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
-extern  __IO uint32_t TimingMillis;
+ __IO uint32_t TimingMillis;
 
 void eBoxInit(void)
 {
@@ -96,7 +93,10 @@ void delayus(uint32_t us)
 		}
 } 
 
+void SysTick_Handler(void)
+{
 
-#ifdef __cplusplus
+	TimingMillis++;
+
 }
-#endif
+

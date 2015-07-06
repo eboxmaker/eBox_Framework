@@ -18,7 +18,7 @@ void  I2C::i2cBegin()
 	//I2C_InitStructure.I2C_OwnAddress1 = SlaveAddress; 
 	I2C_InitStructure.I2C_Ack = I2C_Ack_Enable; 
 	I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit; 
-	I2C_InitStructure.I2C_ClockSpeed = 100000; 
+	I2C_InitStructure.I2C_ClockSpeed = I2C_SPEED; 
 
 	/* I2C1 ≥ı ºªØ */
 	I2C_Init(I2C1, &I2C_InitStructure);	   

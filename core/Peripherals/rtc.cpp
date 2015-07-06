@@ -1,6 +1,7 @@
 #include "rtc.h"
-RTC_CLASS 	rtc;
 
+RTC_CLASS 	rtc;
+callbackFun rtcCallbackTable[3];//
 
 void RTC_CLASS::begin()
 {
@@ -179,9 +180,30 @@ void RTC_CLASS::getTimeHMS(uint8_t* h,uint8_t* m,uint8_t* s)
 	*m = (tmp % 3600)/60;
 	*s = (tmp % 3600) %60;
 };
-void RTC_CLASS::setTimeHMS(uint8_t h,uint8_t m,uint8_t s)
-{
-	uint32_t tmp = 0;
-	tmp = h*3600 + m*60 + s;
-	setCounter(tmp);
+extern "C"{
+	void RTC_CLASS::setTimeHMS(uint8_t h,uint8_t m,uint8_t s)
+	{
+		uint32_t tmp = 0;
+		tmp = h*3600 + m*60 + s;
+		setCounter(tmp);
+	}
+	void RTC_IRQHandler(void)
+	{
+		if (RTC_GetITStatus(RTC_IT_OW) != RESET)
+		{	
+			rtcCallbackTable[0]();
+			RTC_ClearITPendingBit(RTC_IT_OW);
+		}	
+		if (RTC_GetITStatus(RTC_IT_ALR) != RESET)
+		{	
+			rtcCallbackTable[1]();
+			RTC_ClearITPendingBit(RTC_IT_ALR);
+		}	
+		if (RTC_GetITStatus(RTC_IT_SEC) != RESET)
+		{	
+
+			rtcCallbackTable[2]();
+			RTC_ClearITPendingBit(RTC_IT_SEC);
+		}
+	}
 }

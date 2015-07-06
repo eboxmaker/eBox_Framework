@@ -1,12 +1,23 @@
 #include "spi.h"
 
-void SPIClass::begin(SPICONFIG* spiConfig)
-{
+SPIClass spi1(SPI1);
+SPIClass spi2(SPI2);
+SPIClass spi3(SPI3);
 
-	ioInit();
-	config(spiConfig);
-}
-void SPIClass::ioInit()
+#define SPI1_MOSI_PIN  7
+#define SPI1_MISO_PIN  6
+#define SPI1_SCK_PIN   5
+
+#define SPI2_MOSI_PIN  31
+#define SPI2_MISO_PIN  30
+#define SPI2_SCK_PIN   29
+
+SPIClass::SPIClass(SPI_TypeDef *spi)
+{
+	_spi = spi;
+};
+
+void SPIClass::begin(SPICONFIG* spiConfig)
 {
 	if(_spi == SPI1)
 	{	
@@ -19,12 +30,17 @@ void SPIClass::ioInit()
 	if(_spi == SPI2)
 	{	
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE);
+		
+		pinMode(SPI2_SCK_PIN,AF_PP);
+		pinMode(SPI2_MISO_PIN,AF_PP);
+		pinMode(SPI2_MOSI_PIN,AF_PP);
 	}
 	if(_spi == SPI3)
 	{	
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,ENABLE);
 	}
 
+	config(spiConfig);
 }
 void SPIClass::config(SPICONFIG* spiConfig)
 {
@@ -67,10 +83,47 @@ uint8_t SPIClass::readConfig(void)
 	return currentDevNum; 
 }
 
+uint8_t SPIClass::transfer(uint8_t data) 
+{
+	while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+	;
+	_spi->DR = data;
+	while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+	;
+	return (_spi->DR);
+}
 
-SPIClass spi1(SPI1);
+void SPIClass::transfer(uint8_t *data,uint16_t dataln) 
+{
+	__IO uint8_t dummyByte;
+	if(dataln == 0)
+		return;
+	while(dataln--)
+	{
+		while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+			;
+		_spi->DR = *data++;
+		while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+			;
+		dummyByte = _spi->DR;
+	}
+}
 
 
+void SPIClass::transfer(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln) 
+{
+	if(dataln == 0)
+		return;
+	while(dataln--)
+	{
+		while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+			;
+		_spi->DR = dummyByte;
+		while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+			;
+		*rcvdata++ = _spi->DR;
+	}
+}
 
 
 

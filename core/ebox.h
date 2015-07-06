@@ -65,7 +65,7 @@ This specification is preliminary and is subject to change at any time without n
 #define CHANGE 2
 #define FALLING 3
 #define RISING 4
- 
+ //spi相关公共宏和声明//////////////////////////////////
 #define SPI_MODE0 0x02
 #define SPI_MODE1 0x00
 #define SPI_MODE2 0x03
@@ -90,7 +90,7 @@ typedef struct
 	uint16_t prescaler;
 	uint16_t bitOrder;
 }SPICONFIG;
-
+/////////////////////////////////////////////////////////////
 //interrupts functions are in WInterrupts.c file
 #define Interrupts() __enable_irq()
 #define noInterrupts() __disable_irq()
@@ -120,13 +120,10 @@ uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
 	
 	
 typedef void (*callbackFun)(void);
-	
-extern callbackFun timOneCallbackTable[];
-extern callbackFun gTimxCallbackTable[];
-extern callbackFun extiCallbackTable[];
-extern callbackFun UARTCallbackTable[];
-extern callbackFun rtcCallbackTable[];
- 
+
+
+
+
 
 
 #ifdef __cplusplus

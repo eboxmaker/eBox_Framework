@@ -1,12 +1,7 @@
 #include "gtimer.h"
 
 
-//默认配置为预分频72分频
-//默认配置为溢出值 1000
-//默认配置：1ms中断一次
-#define PRESCALE 72
-#define PEROID	1000
-
+callbackFun gTimxCallbackTable[TIM_NUM +1];
 
 TIM::TIM(TIM_TypeDef* TIMx)
 {
@@ -31,7 +26,17 @@ TIM::TIM(TIM_TypeDef* TIMx,uint32_t period,uint32_t prescaler)
 }
 void TIM::begin(void)
 {
+	NVIC_InitTypeDef NVIC_InitStructure;
+	
 	baseInit(_period,_prescaler);
+	
+	NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);  //使用全局控制值
+	NVIC_InitStructure.NVIC_IRQChannel = _irq;//
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;// 
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;// 
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+
 	interrupt(DISABLE);
 	stop();
 	//start();
@@ -40,13 +45,6 @@ void TIM::interrupt(FunctionalState x)
 {
  TIM_ClearITPendingBit(_TIMx , TIM_FLAG_Update);
  TIM_ITConfig(_TIMx,TIM_IT_Update,x);
- NVIC_InitTypeDef NVIC_InitStructure;
- NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);  //使用全局控制值
- NVIC_InitStructure.NVIC_IRQChannel = _irq;//
- NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;// 
- NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;// 
- NVIC_InitStructure.NVIC_IRQChannelCmd = x;
- NVIC_Init(&NVIC_InitStructure);
 
 }
 
@@ -87,7 +85,35 @@ void TIM::clearCount(void)
 {
 	_TIMx->CNT = 0;
 }
+void TIM::attachInterrupt(void(*callback)(void))
+{
+		gTimxCallbackTable[_id] = callback;
+}
+extern "C"{
+	void TIM2_IRQHandler(void)
+	{
 
-
-
+	 if(TIM_GetITStatus(TIM2 , TIM_IT_Update) == SET)
+	 {
+		TIM_ClearITPendingBit(TIM2 , TIM_FLAG_Update);
+			gTimxCallbackTable[2]();
+	 }
+	}
+	void TIM3_IRQHandler(void)
+	{
+	 if(TIM_GetITStatus(TIM3 , TIM_IT_Update) == SET)
+	 {
+		TIM_ClearITPendingBit(TIM3 , TIM_FLAG_Update);
+			gTimxCallbackTable[3]();
+	 }
+	}
+	void TIM4_IRQHandler(void)
+	{
+	 if(TIM_GetITStatus(TIM4 , TIM_IT_Update) == SET)
+	 {
+		TIM_ClearITPendingBit(TIM4 , TIM_FLAG_Update);
+			gTimxCallbackTable[4]();
+	 }
+	}
+}
 

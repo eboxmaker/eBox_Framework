@@ -28,11 +28,16 @@ void rtc_it_alr()
 
 //	uart3.printf("\r\n alr occured\r\n");
 }
+void uart3tc()
+{
+;	
+}
 void setup()
 {
 	eBoxInit();
 	uart3.begin(115200);
-	
+	uart3.attachInterrupt(uart3tc);
+	uart3.interrupt(ENABLE);
 	rtc.begin();
 	rtc.interrupt(RTC_EVENT_OW | RTC_EVENT_ALR| RTC_EVENT_SEC,ENABLE);
 	rtc.attachInterrupt(RTC_EVENT_OW,rtc_it_ow);
@@ -51,8 +56,6 @@ int main(void)
 	{
 
 	}
-
-
 }
 
 

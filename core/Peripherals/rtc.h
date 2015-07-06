@@ -49,6 +49,9 @@ class RTC_CLASS
 	
 	public:
 		void begin();
+		void interrupt(uint32_t bits,FunctionalState x);
+		void attachInterrupt(uint16_t event, void (*callbackFun)(void));
+	
 		void setCounter(uint32_t count);
 		void setAlarm(uint32_t count);
 		uint32_t getCounter();
@@ -57,8 +60,6 @@ class RTC_CLASS
 		void getTimeHMS(uint8_t* h,uint8_t* m,uint8_t* s);
 		void setTimeHMS(uint8_t h,uint8_t m,uint8_t s);
 		
-		void interrupt(uint32_t bits,FunctionalState x);
-		void attachInterrupt(uint16_t event, void (*callbackFun)(void));
 	
 	private:
 		void config();

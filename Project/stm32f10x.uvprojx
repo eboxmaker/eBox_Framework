@@ -563,11 +563,6 @@
               <FilePath>..\core\ebox.c</FilePath>
             </File>
             <File>
-              <FileName>Interrupts.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\core\Interrupts.c</FilePath>
-            </File>
-            <File>
               <FileName>ioanalog.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\core\ioanalog.c</FilePath>

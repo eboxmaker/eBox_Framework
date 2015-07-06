@@ -19,8 +19,7 @@ PWM::PWM(uint8_t PWMpin)
 
 	}
 }
-//	PWMpin	: arduino pin
-
+//	
 PWM::PWM(uint8_t PWMpin,uint16_t period,uint16_t prescaler)
 {
 	if(isPwmPin(PWMpin))
@@ -46,12 +45,12 @@ void PWM::baseInit(uint16_t period,uint16_t prescaler)
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	
 	RCC_APB1PeriphClockCmd(_rcc, ENABLE);
-	TIM_TimeBaseStructure.TIM_Period=period-1;//ARR??
+	TIM_TimeBaseStructure.TIM_Period=period-1;//ARR
 	TIM_TimeBaseStructure.TIM_Prescaler=prescaler-1;
-	TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; //??????
+	TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; //
 	TIM_TimeBaseInit(_TIMx, &TIM_TimeBaseStructure);
 	
-	//TIM_ARRPreloadConfig(_TIMx, ENABLE);
+	TIM_ARRPreloadConfig(_TIMx, ENABLE);
 
 	TIM_Cmd(_TIMx, ENABLE); //
 

@@ -21,9 +21,6 @@ class TIMERONE
 		void setReload(uint16_t Autoreload);
 		void clearCount(void);
 		void interrupt(FunctionalState x);
-		void attachInterrupt(void(*callback)(void))
-		{
-			 timOneCallbackTable[0] = callback;
-		}
+		void attachInterrupt(void(*callback)(void));
 };
 #endif
