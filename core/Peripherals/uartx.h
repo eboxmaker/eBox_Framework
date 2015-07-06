@@ -1,5 +1,5 @@
 /*
-file   : rtc.h
+file   : uartx.h
 author : shentq
 version: V1.0
 date   : 2015/7/5

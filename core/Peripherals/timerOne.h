@@ -1,5 +1,5 @@
 /*
-file   : rtc.h
+file   : timerone.h
 author : shentq
 version: V1.0
 date   : 2015/7/5

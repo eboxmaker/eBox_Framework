@@ -1,5 +1,5 @@
 /*
-file   : i2c.h
+file   : softi2c.h
 author : shentq
 version: V1.0
 date   : 2015/7/5
