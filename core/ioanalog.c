@@ -1,4 +1,19 @@
-#include "wiring_analog.h"
+/*
+file   : ebox_pin.h
+author : shentq
+version: V1.0
+date   : 2015/7/5
+brief  : analog read function
+
+Copyright (c) 2015, eBox by shentqlf@163.com. All Rights Reserved.
+
+Copyright Notice
+No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentqlf@163.com.
+
+Disclaimer
+This specification is preliminary and is subject to change at any time without notice. shentqlf@163.com assumes no responsibility for any errors contained herein.
+*/
+#include "ebox.h"
 
 
 //默认开启16通道 采用DMA+ADC连续转换模式。提供AD采集服务

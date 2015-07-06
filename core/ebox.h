@@ -1,3 +1,18 @@
+/*
+file   : ebox.h
+author : shentq
+version: V1.0
+date   : 2015/7/5
+brief  : This file provides time service , analog,digital,interrupt functions , and so on.
+
+Copyright (c) 2015, eBox by shentqlf@163.com. All Rights Reserved.
+
+Copyright Notice
+No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentqlf@163.com.
+
+Disclaimer
+This specification is preliminary and is subject to change at any time without notice. shentqlf@163.com assumes no responsibility for any errors contained herein.
+*/
 #ifndef __EBOX_H
 #define __EBOX_H
 
@@ -7,12 +22,8 @@
 #endif 
 
 	 #include "stm32f10x.h"                  // Device header
-	 #include "mcuconfig.h"
-
-	 #include "pin_ebox.h" 
-	 #include "wiring_digital.h"
-	 #include "wiring_analog.h"
-	 #include "interrupts.h"
+	 #include "eboxconfig.h"
+	 #include "ebox_pin.h" 
 
 	 
 
@@ -32,11 +43,6 @@
 
 
 	 
- 
-	 
-	 
-	
-	 
 #define PI 3.1415926535897932384626433832795
 #define HALF_PI 1.5707963267948966192313216916398
 #define TWO_PI 6.283185307179586476925286766559
@@ -49,6 +55,9 @@
  
 #define HIGH 0x1
 #define LOW  0x0
+
+#define NVIC_GROUP_CONFIG NVIC_PriorityGroup_2   /*!< 2 bits for pre-emption priority
+                                                 2 bits for subpriority */
 
 #define LSBFIRST 0
 #define MSBFIRST 1
@@ -86,28 +95,38 @@ typedef struct
 #define Interrupts() __enable_irq()
 #define noInterrupts() __disable_irq()
 
-//#define lowByte(w) ((uint8_t) ((w) & 0xff))
-//#define highByte(w) ((uint8_t) ((w) >> 8))
 
-//#define bitRead(value, bit) (((value) >> (bit)) & 0x01)
-//#define bitSet(value, bit) ((value) |= (1UL << (bit)))
-//#define bitClear(value, bit) ((value) &= ~(1UL << (bit)))
-//#define bitWrite(value, bit, bitvalue) (bitvalue ? bitSet(value, bit) : bitClear(value, bit))
-
-//typedef unsigned int word;
-
-//#define bit(b) (1UL << (b))	 
 	 
 	 
-void eBoxInit(void);	 
+void eBoxInit(void);	
+
 uint32_t millis( void ) ;
 
 void delay_ms(uint32_t ms);
 void delay_us(uint16_t us);
-void delayMicroseconds(uint16_t us);
 void delayus(uint32_t us);
 
+void pinMode(uint32_t pin, uint32_t mode);
+void digitalWrite( uint32_t pin, uint32_t ulVal );
+int  digitalRead( uint32_t pin );
 
+void 			Init_ADC1(void);
+uint16_t 	analogRead(uint8_t pin);
+uint16_t 	analogReadToVoltage(uint8_t pin); 
+
+void 		shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
+uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
+
+	
+	
+typedef void (*callbackFun)(void);
+	
+extern callbackFun timOneCallbackTable[];
+extern callbackFun gTimxCallbackTable[];
+extern callbackFun extiCallbackTable[];
+extern callbackFun UARTCallbackTable[];
+extern callbackFun rtcCallbackTable[];
+ 
 
 
 #ifdef __cplusplus

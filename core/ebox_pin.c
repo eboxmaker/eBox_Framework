@@ -1,6 +1,21 @@
+/*
+file   : ebox_pin.h
+author : shentq
+version: V1.0
+date   : 2015/7/5
+brief  : This file  defined Peripheral Information
 
-#include "pin_ebox.h"
-//打印以下几个数组可知IO是否冲突
+Copyright (c) 2015, eBox by shentqlf@163.com. All Rights Reserved.
+
+Copyright Notice
+No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentqlf@163.com.
+
+Disclaimer
+This specification is preliminary and is subject to change at any time without notice. shentqlf@163.com assumes no responsibility for any errors contained herein.
+*/
+
+#include "ebox_pin.h"
+
 //////////////////////////////////////////////
 uint16_t ioPinStatu[TOTAL_PIN];//IO口是否使用
 uint16_t analogPinStatu[TOTAL_PIN];//是否配置为AIN模式

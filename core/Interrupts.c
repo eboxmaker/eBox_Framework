@@ -1,11 +1,35 @@
-#include "interrupts.h"
-#include "mcuconfig.h"
+/*
+file   : interrupts.c
+author : shentq
+version: V1.0
+date   : 2015/7/5
+brief  : binding interrupt callback function
+
+Copyright (c) 2015, eBox by shentqlf@163.com. All Rights Reserved.
+
+Copyright Notice
+No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentqlf@163.com.
+
+Disclaimer
+This specification is preliminary and is subject to change at any time without notice. shentqlf@163.com assumes no responsibility for any errors contained herein.
+*/
+
+#include "ebox.h"
+
+ __IO uint32_t TimingMillis;
+ 
 callbackFun timOneCallbackTable[5];
 callbackFun gTimxCallbackTable[TIM_NUM +1];
 callbackFun extiCallbackTable[EXTI_LINE_NUM + 1];
 callbackFun UARTCallbackTable[USART_NUM * 2];//支持串口的rx和tx中断
 callbackFun rtcCallbackTable[3];//
 
+void SysTick_Handler(void)
+{
+
+	TimingMillis++;
+
+}
 
 void RTC_IRQHandler(void)
 {
@@ -63,109 +87,109 @@ void TIM4_IRQHandler(void)
 }
 void EXTI0_IRQHandler(void)
 {
-  if(EXTI_GetITStatus(EXTI_Line0) != RESET) //确保是否产生了EXTI Line中断
+  if(EXTI_GetITStatus(EXTI_Line0) != RESET) 
   {
 		extiCallbackTable[0]();
-    EXTI_ClearITPendingBit(EXTI_Line0);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line0);    
   }  	
 }
 void EXTI1_IRQHandler(void)
 {
-  if(EXTI_GetITStatus(EXTI_Line1) != RESET) //确保是否产生了EXTI Line中断
+  if(EXTI_GetITStatus(EXTI_Line1) != RESET)
   {
 		extiCallbackTable[1]();
 
-    EXTI_ClearITPendingBit(EXTI_Line1);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line1);    
   }  	
 }
 void EXTI2_IRQHandler(void)
 {
-  if(EXTI_GetITStatus(EXTI_Line2) != RESET) //确保是否产生了EXTI Line中断
+  if(EXTI_GetITStatus(EXTI_Line2) != RESET) 
   {
 
 		extiCallbackTable[2]();
 
-    EXTI_ClearITPendingBit(EXTI_Line2);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line2);    
   }  	
 }
 void EXTI3_IRQHandler(void)
 {
-  if(EXTI_GetITStatus(EXTI_Line3) != RESET) //确保是否产生了EXTI Line中断
+  if(EXTI_GetITStatus(EXTI_Line3) != RESET) 
   {
 		extiCallbackTable[3]();
-    EXTI_ClearITPendingBit(EXTI_Line3);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line3);     
   }  	
 }
 void EXTI4_IRQHandler(void)
 {
-  if(EXTI_GetITStatus(EXTI_Line4) != RESET) //确保是否产生了EXTI Line中断
+  if(EXTI_GetITStatus(EXTI_Line4) != RESET) 
   {
 		extiCallbackTable[4]();
-    EXTI_ClearITPendingBit(EXTI_Line4);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line4);     
   }  	
 }
 
 void EXTI9_5_IRQHandler(void)
 {
-  if(EXTI_GetITStatus(EXTI_Line5) != RESET) //确保是否产生了EXTI Line中断
+  if(EXTI_GetITStatus(EXTI_Line5) != RESET) 
   {
 		extiCallbackTable[5]();
-    EXTI_ClearITPendingBit(EXTI_Line5);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line5);     
   }   
-	if(EXTI_GetITStatus(EXTI_Line6) != RESET) //确保是否产生了EXTI Line中断
+	if(EXTI_GetITStatus(EXTI_Line6) != RESET) 
   {
 		extiCallbackTable[6]();
-    EXTI_ClearITPendingBit(EXTI_Line6);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line6);    
   }  
-  if(EXTI_GetITStatus(EXTI_Line7) != RESET) //确保是否产生了EXTI Line中断
+  if(EXTI_GetITStatus(EXTI_Line7) != RESET) 
   {
 		extiCallbackTable[7]();
-    EXTI_ClearITPendingBit(EXTI_Line7);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line7);     
   }   
-	if(EXTI_GetITStatus(EXTI_Line8) != RESET) //确保是否产生了EXTI Line中断
+	if(EXTI_GetITStatus(EXTI_Line8) != RESET) 
   {
 		extiCallbackTable[8]();
-    EXTI_ClearITPendingBit(EXTI_Line8);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line8);    
   }	
-  if(EXTI_GetITStatus(EXTI_Line9) != RESET) //确保是否产生了EXTI Line中断
+  if(EXTI_GetITStatus(EXTI_Line9) != RESET) 
   {
 		extiCallbackTable[9]();
-    EXTI_ClearITPendingBit(EXTI_Line9);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line9);    
   }   
 
 }
 
 void EXTI15_10_IRQHandler(void)
 {
-  if(EXTI_GetITStatus(EXTI_Line10) != RESET) //确保是否产生了EXTI Line中断
+  if(EXTI_GetITStatus(EXTI_Line10) != RESET) 
   {
 		extiCallbackTable[10]();
-    EXTI_ClearITPendingBit(EXTI_Line10);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line10);     
   }   
-	if(EXTI_GetITStatus(EXTI_Line11) != RESET) //确保是否产生了EXTI Line中断
+	if(EXTI_GetITStatus(EXTI_Line11) != RESET) 
   {
 		extiCallbackTable[11]();
-    EXTI_ClearITPendingBit(EXTI_Line11);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line11);     
   }  
-  if(EXTI_GetITStatus(EXTI_Line12) != RESET) //确保是否产生了EXTI Line中断
+  if(EXTI_GetITStatus(EXTI_Line12) != RESET) 
   {
 		extiCallbackTable[12]();
-    EXTI_ClearITPendingBit(EXTI_Line12);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line12);     
   }   
-	if(EXTI_GetITStatus(EXTI_Line13) != RESET) //确保是否产生了EXTI Line中断
+	if(EXTI_GetITStatus(EXTI_Line13) != RESET) 
   {
 		extiCallbackTable[13]();
-    EXTI_ClearITPendingBit(EXTI_Line13);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line13);     
   }	
-  if(EXTI_GetITStatus(EXTI_Line14) != RESET) //确保是否产生了EXTI Line中断
+  if(EXTI_GetITStatus(EXTI_Line14) != RESET) 
   {
 		extiCallbackTable[14]();
-    EXTI_ClearITPendingBit(EXTI_Line14);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line14);     
   }   
-  if(EXTI_GetITStatus(EXTI_Line15) != RESET) //确保是否产生了EXTI Line中断
+  if(EXTI_GetITStatus(EXTI_Line15) != RESET) 
   {
 		extiCallbackTable[15]();
-    EXTI_ClearITPendingBit(EXTI_Line15);     //清除中断标志位
+    EXTI_ClearITPendingBit(EXTI_Line15);    
   }   
 
 }

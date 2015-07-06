@@ -568,19 +568,19 @@
               <FilePath>..\core\Interrupts.c</FilePath>
             </File>
             <File>
-              <FileName>pin_ebox.c</FileName>
+              <FileName>ioanalog.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\core\pin_ebox.c</FilePath>
+              <FilePath>..\core\ioanalog.c</FilePath>
             </File>
             <File>
-              <FileName>Wiring_analog.c</FileName>
+              <FileName>iodigital.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\core\Wiring_analog.c</FilePath>
+              <FilePath>..\core\iodigital.c</FilePath>
             </File>
             <File>
-              <FileName>Wiring_digital.c</FileName>
+              <FileName>ebox_pin.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\core\Wiring_digital.c</FilePath>
+              <FilePath>..\core\ebox_pin.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,5 +1,20 @@
-#ifndef __PIN_EBOX_H
-#define __PIN_EBOX_H
+/*
+file   : ebox_pin.h
+author : shentq
+version: V1.0
+date   : 2015/7/5
+brief  : This file  defined Peripheral Information
+
+Copyright (c) 2015, eBox by shentqlf@163.com. All Rights Reserved.
+
+Copyright Notice
+No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentqlf@163.com.
+
+Disclaimer
+This specification is preliminary and is subject to change at any time without notice. shentqlf@163.com assumes no responsibility for any errors contained herein.
+*/
+#ifndef __EBOX_PIN_H
+#define __EBOX_PIN_H
 
 #include "ebox.h"
 

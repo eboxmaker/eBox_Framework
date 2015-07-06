@@ -1,7 +1,7 @@
 #ifndef __EXTI_H
 #define __EXTI_H
 #include "ebox.h"
-#include "interrupts.h"
+
 class EXTIx
 {
 	private:

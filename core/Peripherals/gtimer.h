@@ -2,7 +2,7 @@
 #define __GTIMER_H
 
 #include "ebox.h"
-#include "interrupts.h"
+
 class TIM
 {
 	protected:

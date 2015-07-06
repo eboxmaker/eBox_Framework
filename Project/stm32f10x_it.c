@@ -46,15 +46,6 @@
   * @param  None
   * @retval None
   */
- __IO uint32_t TimingMillis;
-void SysTick_Handler(void)
-{
-
-//		digitalWrite(7,!digitalRead(7));
-		//digitalWrite(7,0);		
-	TimingMillis++;
-
-}
 
 /******************************************************************************/
 /*                 STM32F10x Peripherals Interrupt Handlers                   */

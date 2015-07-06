@@ -39,7 +39,7 @@ public:
 
 	void transfer(uint8_t *data,uint16_t dataln) 
 	{
-		uint8_t dummyByte;
+		__IO uint8_t dummyByte;
 		if(dataln == 0)
 			return;
 		while(dataln--)

@@ -3,7 +3,7 @@ file   : ebox.c
 author : shentq
 version: V1.0
 date   : 2015/7/5
-brief  : This file provides time service and init ADCConfiguration.
+brief  : This file provides time service , analog,digital,interrupt functions , and so on.
 
 Copyright (c) 2015, eBox by shentqlf@163.com. All Rights Reserved.
 
@@ -24,11 +24,11 @@ extern "C" {
 extern  __IO uint32_t TimingMillis;
 
 void eBoxInit(void)
-	{
-		SysTick_Config(9000);//  每隔 (nhz/9,000,000)s产生一次中断
-		SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);//9Mhz的systemticks clock；
-		Init_ADC1();
-	}
+{
+	SysTick_Config(9000);//  每隔 (nhz/9,000,000)s产生一次中断
+	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);//9Mhz的systemticks clock；
+	Init_ADC1();
+}
 uint32_t millis( void )
 {
   return TimingMillis;
@@ -54,42 +54,6 @@ void delay_ms(uint32_t ms)
 }   
 
 
-void delayMicroseconds(uint16_t us)
-{
-	uint32_t systick = SysTick->VAL;
-	uint16_t count ;
-	
-	if(us == 0 || us >999)
-		return;
-	count= (us)*9;
-	noInterrupts();
-	if(systick < count)
-	{
-		count  = (8995  + systick - count);///
-		while(SysTick->VAL <= count)
-		{
-			;
-		}
-		if(count == 0)
-			count = 1;
-
-		while(SysTick->VAL > count)
-		{
-			;
-		}
-	}
-	else
-	{
-		count  =  systick - count;
-		if(count == 0)
-			count = 1; 
-		while(SysTick->VAL > count)
-		{
-			;
-		}
-	}
-	Interrupts();
-}
     								   
 void delay_us(uint16_t us)
 {		 

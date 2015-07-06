@@ -148,7 +148,6 @@ void RTC_CLASS::attachInterrupt(void (*callbackFun)(void),uint16_t event)
 		case RTC_EVENT_SEC:
 			rtcCallbackTable[2] = callbackFun;
 			break;
-	
 	}
 }
 

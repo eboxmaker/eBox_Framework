@@ -161,7 +161,6 @@ int8_t I2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
 int8_t I2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
 {
 	uint16_t err;
-	uint16_t i;
 
 	start();
 	send7BitsAddress(slaveAddress);

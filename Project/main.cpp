@@ -1,7 +1,6 @@
 
 #include "ebox.h"
 #include "uartx.h"
-#include "interrupts.h"
 
 #include "rtc.h"
 
