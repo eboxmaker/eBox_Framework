@@ -20,47 +20,47 @@ This specification is preliminary and is subject to change at any time without n
 #include <stdio.h>
 #include <stdarg.h>  
 
+#define BUSY 	1
+#define FREE 	0
+
 /*
 	1.支持串口1,2,3.
 	2.支持一个中断事件 rx_it
-	3.发送模式采用中断模式，大大节省cpu占用。发送缓存最大为UART_MAX_SEND_BUF
+	3.发送模式采用DMA自动发送模式，大大节省cpu占用。发送缓存最大为UART_MAX_SEND_BUF
 	4.支持强大的printf
 	5.暂时不支持引脚的remap
 */
-
+//用户配置
+#define USE_DMA
 #define UART_MAX_SEND_BUF 128 
 
 class USART
 {
 	 public:
 			char 			sendBuf[UART_MAX_SEND_BUF];
-			uint16_t 	count;
-			uint16_t 	sendLength;
-			uint8_t 	sendOver;	 
+			uint8_t 	state;	 
 	 public:
 			USART(USART_TypeDef * USARTx);
 			void begin(uint32_t BaudRate);
+			void attachInterrupt(void (*callbackFun)(void));
 			void interrupt(FunctionalState enable);
+	 
+
 			void printf(const char* fmt,...);		
 			void printfln(const char *str,uint16_t length);
 
-			void attachInterrupt(void (*callbackFun)(void));
-	 void test(){
-	 
-		 for(int i = 0;i < 100; i ++)
-			 sendBuf[i] = '1';
-//    while (sendOver == 0);  
-    sendOver = 0;  
-    DMA_SetCurrDataCounter(DMA1_Channel2,128);  
-    DMA_Cmd(DMA1_Channel2,ENABLE);  
-	 };
+
 	 
 	 private:
-		USART_TypeDef * _USARTx;
+		USART_TypeDef* 			_USARTx;
+	  DMA_Channel_TypeDef* _DMA1_Channelx;
 	 	uint8_t _id;
 		uint32_t _rcc;
 		uint32_t _irq;
 	  uint8_t _initialized;
+		int 	putChar(char ch);
+		void 	putString(const char *str);
+		void 	putString(const char *str,uint16_t length);
 
  
 };

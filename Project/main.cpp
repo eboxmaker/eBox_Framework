@@ -13,9 +13,8 @@ void rtc_it_sec()
 	counter = rtc.getCounter();
 	if(counter == 0x1517f)
 		rtc.setCounter(0);
-//	uart3.printf("timeNow = %02d:%02d:%02d !",h,m,s);
-//	uart3.printf("  counter = %x \r\n",counter);
-	uart3.test();
+	uart1.printf("timeNow = %02d:%02d:%02d !",h,m,s);
+	uart1.printf("counter = %x \r\n",counter);
 }
 void rtc_it_ow()
 {
@@ -37,9 +36,9 @@ void uart3tc()
 void setup()
 {
 	eBoxInit();
-	uart3.begin(115200);
-	uart3.attachInterrupt(uart3tc);
-	uart3.interrupt(ENABLE);
+	uart1.begin(115200);
+	uart1.attachInterrupt(uart3tc);
+	uart1.interrupt(ENABLE);
 	rtc.begin();
 	rtc.interrupt(RTC_EVENT_OW | RTC_EVENT_ALR| RTC_EVENT_SEC,ENABLE);
 	rtc.attachInterrupt(RTC_EVENT_OW,rtc_it_ow);

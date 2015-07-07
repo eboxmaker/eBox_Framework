@@ -1,5 +1,5 @@
 /*
-file   : ebox_pin.h
+file   : ebox_pin.c
 author : shentq
 version: V1.0
 date   : 2015/7/5

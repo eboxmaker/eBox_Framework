@@ -18,7 +18,6 @@ This specification is preliminary and is subject to change at any time without n
 #define __EBOXCONFIG_H
 
 
-#define STM32F103C8T6
 
 #define MCUPIN48
 //#define MCUPIN64
@@ -26,17 +25,17 @@ This specification is preliminary and is subject to change at any time without n
 //#define MCUPIN144
 
 /////////////////////////////////////
-	#ifdef STM32F103C8T6
 
-		#define TOTAL_PIN 48
-		#define PWM_PIN_NUM 20
-		#define ANALOG_PIN_NUM 9
-		
-		
-		#define EXTI_LINE_NUM 18
-		#define TIM_NUM 5
-		#define USART_NUM 3
-	#endif	
+	#define TOTAL_PIN 48
+	#define PWM_PIN_NUM 20
+	#define ANALOG_PIN_NUM 9
+	
+	
+	#define EXTI_LINE_NUM 16
+	#define TIM_NUM 5
+	#define USART_NUM 3
+	#define SPI_NUM 3
+	#define I2C_NUM 2
 	
 	
 #endif

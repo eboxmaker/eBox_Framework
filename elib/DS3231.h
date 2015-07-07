@@ -1,3 +1,18 @@
+/*
+file   : ds3231.h
+author : shentq
+version: V1.0
+date   : 2015/7/5
+
+Copyright (c) 2015, eBox by shentqlf@163.com. All Rights Reserved.
+
+Copyright Notice
+No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentqlf@163.com.
+
+Disclaimer
+This specification is preliminary and is subject to change at any time without notice. shentqlf@163.com assumes no responsibility for any errors contained herein.
+*/
+
 #ifndef __DS3231_H__
 #define __DS3231_H__
 
@@ -40,16 +55,11 @@
 	 u8 min;
 	 u8 sec;
 	 u8 week;
-
-	 
  
  }DateTime;
 
  class DS3231:public Softi2c
  {
-	 private:
-			uint8_t BcdToDec(uint8_t BCDCode);
-			uint8_t DecToBcd(uint8_t Dec);
 	 public:
 			DateTime t;
 			DS3231(uint8_t SDApin,uint8_t SCLpin):Softi2c(SDApin,SCLpin){
@@ -64,6 +74,9 @@
 			void getDate(char* buf);
 			void setTime(DateTime *t);
  
+	 private:
+			uint8_t BcdToDec(uint8_t BCDCode);
+			uint8_t DecToBcd(uint8_t Dec);
  };
 
 

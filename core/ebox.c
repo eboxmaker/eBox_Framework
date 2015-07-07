@@ -3,7 +3,6 @@ file   : ebox.c
 author : shentq
 version: V1.0
 date   : 2015/7/5
-brief  : This file provides time service , analog,digital,interrupt functions , and so on.
 
 Copyright (c) 2015, eBox by shentqlf@163.com. All Rights Reserved.
 
@@ -17,6 +16,7 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "ebox.h"
 
+void 	Init_ADC1(void);
 
  __IO uint32_t TimingMillis;
 
@@ -29,11 +29,6 @@ void eBoxInit(void)
 uint32_t millis( void )
 {
   return TimingMillis;
-}
-
-uint32_t micros( void )
-{
-	return 0;
 }
 
 void delay_ms(uint32_t ms)

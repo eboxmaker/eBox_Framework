@@ -1,5 +1,5 @@
 /*
-file   : iodigital.c
+file   : digital.c
 author : shentq
 version: V1.0
 date   : 2015/7/5

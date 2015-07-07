@@ -109,7 +109,6 @@ void pinMode(uint32_t pin, uint32_t mode);
 void digitalWrite( uint32_t pin, uint32_t ulVal );
 int  digitalRead( uint32_t pin );
 
-void 			Init_ADC1(void);
 uint16_t 	analogRead(uint8_t pin);
 uint16_t 	analogReadToVoltage(uint8_t pin); 
 

@@ -43,8 +43,8 @@ class TIM
 		TIM(TIM_TypeDef* TIMx,uint32_t period,uint32_t prescaler);
 	
 		void begin(void);
-		void interrupt(FunctionalState x);
 		void attachInterrupt(void(*callback)(void));
+		void interrupt(FunctionalState x);
 		void start(void);
 	
 		void stop(void);
