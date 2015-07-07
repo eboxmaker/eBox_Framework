@@ -14,7 +14,7 @@ Disclaimer
 This specification is preliminary and is subject to change at any time without notice. shentqlf@163.com assumes no responsibility for any errors contained herein.
 */
 
-#include "ebox.h"
+#include "common.h"
 
 //uint16_t ioPinStatu[TOTAL_PIN];//IO口是否使用
 

@@ -15,7 +15,7 @@ This specification is preliminary and is subject to change at any time without n
 
 #ifndef __TIMERONE_H
 #define __TIMERONE_H
-#include "ebox.h"
+#include "common.h"
 
 /*
 	1.提供一个xhz的中断

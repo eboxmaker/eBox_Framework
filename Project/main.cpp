@@ -1,8 +1,7 @@
 
 #include "ebox.h"
-#include "uartx.h"
 
-#include "rtc.h"
+
 
 uint8_t h,m,s;
 uint32_t counter;

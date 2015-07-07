@@ -15,7 +15,7 @@ This specification is preliminary and is subject to change at any time without n
 #ifndef __I2C_H
 #define __I2C_H
 
-#include "ebox.h"
+#include "common.h"
 /*
 	1.暂时只支持I2C1
 	2.暂时不支持remap，后续很快会完成

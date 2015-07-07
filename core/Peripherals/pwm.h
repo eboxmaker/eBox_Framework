@@ -15,7 +15,7 @@ This specification is preliminary and is subject to change at any time without n
 #ifndef __PWM_H
 #define __PWM_H
 
-#include "ebox.h"
+#include "common.h"
 /*
 	1.支持TIM2,3,4下的CH1-4通道。
 	2.额外封装了一个analogWrite函数，可以直接调用analogWrite实现pwm

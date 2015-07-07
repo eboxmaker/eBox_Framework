@@ -13,7 +13,7 @@ No part of this software may be used for any commercial activities by any form o
 Disclaimer
 This specification is preliminary and is subject to change at any time without notice. shentqlf@163.com assumes no responsibility for any errors contained herein.
 */
-#include "ebox.h"
+#include "common.h"
 
 
 

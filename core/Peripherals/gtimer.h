@@ -15,7 +15,7 @@ This specification is preliminary and is subject to change at any time without n
 #ifndef __GTIMER_H
 #define __GTIMER_H
 
-#include "ebox.h"
+#include "common.h"
 
 /*
 	1.Ö§³Ötim2,3,4

@@ -16,7 +16,7 @@ This specification is preliminary and is subject to change at any time without n
 #ifndef __UARTX_H
 #define __UARTX_H
 
-#include "ebox.h"
+#include "common.h"
 #include <stdio.h>
 #include <stdarg.h>  
 

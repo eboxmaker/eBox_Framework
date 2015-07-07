@@ -16,6 +16,7 @@ This specification is preliminary and is subject to change at any time without n
 #ifndef __SPI_H
 #define __SPI_H
 #include "ebox.h"
+#include "common.h"
 
 
 /*

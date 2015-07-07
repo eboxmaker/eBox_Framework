@@ -16,7 +16,7 @@ This specification is preliminary and is subject to change at any time without n
 #ifndef __SOFTSPI_H
 #define __SOFTSPI_H
 
-#include "ebox.h"
+#include "common.h"
 
 /*
 	1.支持任何IO引脚的定义
