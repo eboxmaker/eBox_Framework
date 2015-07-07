@@ -6,6 +6,10 @@ class USART uart3(USART3);
 #define SEND_MODE_P 	0
 #define SEND_MODE_LN 	1	
 
+#define BUSY 	1
+#define FREE 	0
+
+//uint8_t uart1State,uart2State,uart3State;
 
 callbackFun UARTCallbackTable[USART_NUM];//支持串口的rx中断
 

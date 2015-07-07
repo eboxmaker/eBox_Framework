@@ -649,46 +649,46 @@
 
   <Group>
     <GroupName>core</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>4</GroupNumber>
       <FileNumber>27</FileNumber>
-      <FileType>1</FileType>
+      <FileType>8</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\ebox.c</PathWithFileName>
-      <FilenameWithoutPath>ebox.c</FilenameWithoutPath>
+      <PathWithFileName>..\core\ebox.cpp</PathWithFileName>
+      <FilenameWithoutPath>ebox.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>4</GroupNumber>
       <FileNumber>28</FileNumber>
-      <FileType>1</FileType>
+      <FileType>8</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\analog.c</PathWithFileName>
-      <FilenameWithoutPath>analog.c</FilenameWithoutPath>
+      <PathWithFileName>..\core\digital.cpp</PathWithFileName>
+      <FilenameWithoutPath>digital.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>4</GroupNumber>
       <FileNumber>29</FileNumber>
-      <FileType>1</FileType>
+      <FileType>8</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\digital.c</PathWithFileName>
-      <FilenameWithoutPath>digital.c</FilenameWithoutPath>
+      <PathWithFileName>..\core\analog.cpp</PathWithFileName>
+      <FilenameWithoutPath>analog.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -696,7 +696,7 @@
 
   <Group>
     <GroupName>Peripherals</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -834,7 +834,7 @@
 
   <Group>
     <GroupName>user</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -881,7 +881,7 @@
 
   <Group>
     <GroupName>elib</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

@@ -558,19 +558,19 @@
           <GroupName>core</GroupName>
           <Files>
             <File>
-              <FileName>ebox.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\core\ebox.c</FilePath>
+              <FileName>ebox.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\core\ebox.cpp</FilePath>
             </File>
             <File>
-              <FileName>analog.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\core\analog.c</FilePath>
+              <FileName>digital.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\core\digital.cpp</FilePath>
             </File>
             <File>
-              <FileName>digital.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\core\digital.c</FilePath>
+              <FileName>analog.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\core\analog.cpp</FilePath>
             </File>
           </Files>
         </Group>

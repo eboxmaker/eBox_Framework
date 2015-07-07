@@ -1,5 +1,5 @@
 #include "i2c.h"
-#include "uartx.h"
+
 #define DEBUG 1
 
 void  I2C::i2cBegin()
@@ -51,7 +51,7 @@ int8_t I2C::start()
 		{
 			err = -1;
 			#if  DEBUG
-				uart3.printf("err = %d",err);
+				//uart3.printf("err = %d",err);
 			#endif
 			break;
 		}

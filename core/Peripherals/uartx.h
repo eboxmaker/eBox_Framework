@@ -20,8 +20,6 @@ This specification is preliminary and is subject to change at any time without n
 #include <stdio.h>
 #include <stdarg.h>  
 
-#define BUSY 	1
-#define FREE 	0
 
 /*
 	1.Ö§³Ö´®¿Ú1,2,3.
