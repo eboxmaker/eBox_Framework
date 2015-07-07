@@ -9,6 +9,26 @@ class USART uart3(USART3);
 
 callbackFun UARTCallbackTable[USART_NUM];//支持串口的rx中断
 
+typedef struct 
+{
+	uint8_t id ;
+	USART_TypeDef *usart;
+	uint32_t rcc;
+	uint32_t irq;
+} USARTx_INFO ;
+
+////////////////////////////////////////////////////////////
+const USARTx_INFO USARTxInfo[]=
+{
+	{1,USART1,RCC_APB2Periph_USART1,USART1_IRQn},//暂时不支持
+	{2,USART2,RCC_APB1Periph_USART2,USART2_IRQn},
+	{3,USART3,RCC_APB1Periph_USART3,USART3_IRQn},
+};
+//////////////////////////
+uint32_t  USARTxToRCC(USART_TypeDef* USARTx);
+uint32_t 	USARTxToIRQ(USART_TypeDef* USARTx);
+uint8_t 	USARTxToID(USART_TypeDef* USARTx);
+
 USART::USART(USART_TypeDef * USARTx)
 {
 	_USARTx = USARTx;
@@ -208,6 +228,58 @@ void USART::printf(const char* fmt,...)
 	#endif
 	
 }
+
+////////////////////////////////////////////////////
+uint32_t  USARTxToRCC(USART_TypeDef* USARTx)
+{
+	int i;
+	uint32_t rcc;
+	for(i=0;i<USART_NUM;i++)
+	{
+		if(USARTxInfo[i].usart == USARTx)
+		{
+					rcc = USARTxInfo[i].rcc;
+			break;
+
+		}
+	
+	}
+	return rcc;
+}
+uint32_t USARTxToIRQ(USART_TypeDef* USARTx)
+{
+	uint32_t irq;
+	int i;
+	for(i=0;i<USART_NUM;i++)
+	{
+		if(USARTxInfo[i].usart == USARTx)
+		{
+			irq = USARTxInfo[i].irq;
+			break;
+		}
+	
+	}	
+
+	return irq;
+}
+uint8_t USARTxToID(USART_TypeDef* USARTx)
+{
+	uint32_t id;
+	int i;
+	for(i=0;i<USART_NUM;i++)
+	{
+		if(USARTxInfo[i].usart == USARTx)
+		{
+			id = USARTxInfo[i].id;
+			break;
+		}
+	
+	}	
+
+	return id;
+}
+
+
 
 extern "C"{
 	

@@ -16,6 +16,126 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "ebox.h"
 
+//uint16_t ioPinStatu[TOTAL_PIN];//IO口是否使用
+
+typedef struct 
+{
+  GPIO_TypeDef* port ;
+  uint32_t pin ;
+  uint32_t rcc ;
+} PIN_INFO ;
+
+const PIN_INFO pinInfo[]=
+{
+	//0-15
+  { GPIOA, GPIO_Pin_0,  RCC_APB2Periph_GPIOA}, //1
+  { GPIOA, GPIO_Pin_1,  RCC_APB2Periph_GPIOA}, // 2
+  { GPIOA, GPIO_Pin_2,  RCC_APB2Periph_GPIOA}, // 3
+  { GPIOA, GPIO_Pin_3,  RCC_APB2Periph_GPIOA}, //4
+  { GPIOA, GPIO_Pin_4,  RCC_APB2Periph_GPIOA}, // 5
+  { GPIOA, GPIO_Pin_5,  RCC_APB2Periph_GPIOA}, //6
+  { GPIOA, GPIO_Pin_6,  RCC_APB2Periph_GPIOA}, // 7
+  { GPIOA, GPIO_Pin_7,  RCC_APB2Periph_GPIOA}, //8
+  { GPIOA, GPIO_Pin_8,  RCC_APB2Periph_GPIOA}, // 9
+  { GPIOA, GPIO_Pin_9,  RCC_APB2Periph_GPIOA}, //10
+  { GPIOA, GPIO_Pin_10,  RCC_APB2Periph_GPIOA}, // 11
+  { GPIOA, GPIO_Pin_11,  RCC_APB2Periph_GPIOA}, //12
+  { GPIOA, GPIO_Pin_12,  RCC_APB2Periph_GPIOA}, // 13
+  { GPIOA, GPIO_Pin_13,  RCC_APB2Periph_GPIOA}, //14
+  { GPIOA, GPIO_Pin_14,  RCC_APB2Periph_GPIOA}, // 15
+  { GPIOA, GPIO_Pin_15,  RCC_APB2Periph_GPIOA}, //16
+
+	
+	
+	//16-31
+  { GPIOB, GPIO_Pin_0,  RCC_APB2Periph_GPIOB}, //16 
+  { GPIOB, GPIO_Pin_1,  RCC_APB2Periph_GPIOB}, //17 
+  { GPIOB, GPIO_Pin_2,  RCC_APB2Periph_GPIOB}, //18 
+  { GPIOB, GPIO_Pin_3,  RCC_APB2Periph_GPIOB}, // 19
+  { GPIOB, GPIO_Pin_4,  RCC_APB2Periph_GPIOB}, // 20
+  { GPIOB, GPIO_Pin_5,  RCC_APB2Periph_GPIOB}, // 21
+  { GPIOB, GPIO_Pin_6,  RCC_APB2Periph_GPIOB}, // 22
+  { GPIOB, GPIO_Pin_7,  RCC_APB2Periph_GPIOB}, // 23
+  { GPIOB, GPIO_Pin_8,  RCC_APB2Periph_GPIOB}, // 24
+  { GPIOB, GPIO_Pin_9,  RCC_APB2Periph_GPIOB}, // 25
+  { GPIOB, GPIO_Pin_10,  RCC_APB2Periph_GPIOB}, // 26
+  { GPIOB, GPIO_Pin_11,  RCC_APB2Periph_GPIOB}, // 27
+  { GPIOB, GPIO_Pin_12,  RCC_APB2Periph_GPIOB}, //28 
+  { GPIOB, GPIO_Pin_13,  RCC_APB2Periph_GPIOB}, // 29
+  { GPIOB, GPIO_Pin_14,  RCC_APB2Periph_GPIOB}, // 30
+  { GPIOB, GPIO_Pin_15,  RCC_APB2Periph_GPIOB}, // 31
+	
+	//32-47
+	{ GPIOC, GPIO_Pin_0,  RCC_APB2Periph_GPIOC}, // 32
+  { GPIOC, GPIO_Pin_1,  RCC_APB2Periph_GPIOC}, //33 
+  { GPIOC, GPIO_Pin_2,  RCC_APB2Periph_GPIOC}, //34 
+  { GPIOC, GPIO_Pin_3,  RCC_APB2Periph_GPIOC}, //35 
+  { GPIOC, GPIO_Pin_4,  RCC_APB2Periph_GPIOC}, //36 
+  { GPIOC, GPIO_Pin_5,  RCC_APB2Periph_GPIOC}, //37 
+  { GPIOC, GPIO_Pin_6,  RCC_APB2Periph_GPIOC}, //38 
+  { GPIOC, GPIO_Pin_7,  RCC_APB2Periph_GPIOC}, //39 
+  { GPIOC, GPIO_Pin_8,  RCC_APB2Periph_GPIOC}, //40 
+  { GPIOC, GPIO_Pin_9,  RCC_APB2Periph_GPIOC}, //41 
+  { GPIOC, GPIO_Pin_10,  RCC_APB2Periph_GPIOC}, //42 
+  { GPIOC, GPIO_Pin_11,  RCC_APB2Periph_GPIOC}, //43 
+  { GPIOC, GPIO_Pin_12,  RCC_APB2Periph_GPIOC}, // 44
+  { GPIOC, GPIO_Pin_13,  RCC_APB2Periph_GPIOC}, //45 
+  { GPIOC, GPIO_Pin_14,  RCC_APB2Periph_GPIOC}, //46 
+  { GPIOC, GPIO_Pin_15,  RCC_APB2Periph_GPIOC}, // 47
+	
+	//48-63
+	{ GPIOD, GPIO_Pin_0,  RCC_APB2Periph_GPIOD}, //48 
+  { GPIOD, GPIO_Pin_1,  RCC_APB2Periph_GPIOD}, //49 
+  { GPIOD, GPIO_Pin_2,  RCC_APB2Periph_GPIOD}, //50 
+  { GPIOD, GPIO_Pin_3,  RCC_APB2Periph_GPIOD}, // 51
+  { GPIOD, GPIO_Pin_4,  RCC_APB2Periph_GPIOD}, // 52
+  { GPIOD, GPIO_Pin_5,  RCC_APB2Periph_GPIOD}, // 53
+  { GPIOD, GPIO_Pin_6,  RCC_APB2Periph_GPIOD}, // 54
+  { GPIOD, GPIO_Pin_7,  RCC_APB2Periph_GPIOD}, // 55
+  { GPIOD, GPIO_Pin_8,  RCC_APB2Periph_GPIOD}, // 56
+  { GPIOD, GPIO_Pin_9,  RCC_APB2Periph_GPIOD}, //57 
+  { GPIOD, GPIO_Pin_10,  RCC_APB2Periph_GPIOD}, //58 
+  { GPIOD, GPIO_Pin_11,  RCC_APB2Periph_GPIOD}, //59 
+  { GPIOD, GPIO_Pin_12,  RCC_APB2Periph_GPIOD}, //60 
+  { GPIOD, GPIO_Pin_13,  RCC_APB2Periph_GPIOD}, //61 
+  { GPIOD, GPIO_Pin_14,  RCC_APB2Periph_GPIOD}, //62 
+  { GPIOD, GPIO_Pin_15,  RCC_APB2Periph_GPIOD}, // 63	
+
+	//64-79
+	{ GPIOE, GPIO_Pin_0,  RCC_APB2Periph_GPIOE}, // 64
+  { GPIOE, GPIO_Pin_1,  RCC_APB2Periph_GPIOE}, // 65
+  { GPIOE, GPIO_Pin_2,  RCC_APB2Periph_GPIOE}, // 66
+  { GPIOE, GPIO_Pin_3,  RCC_APB2Periph_GPIOE}, // 67
+  { GPIOE, GPIO_Pin_4,  RCC_APB2Periph_GPIOE}, // 68
+  { GPIOE, GPIO_Pin_5,  RCC_APB2Periph_GPIOE}, // 69
+  { GPIOE, GPIO_Pin_6,  RCC_APB2Periph_GPIOE}, // 70
+  { GPIOE, GPIO_Pin_7,  RCC_APB2Periph_GPIOE}, // 71
+  { GPIOE, GPIO_Pin_8,  RCC_APB2Periph_GPIOE}, // 72
+  { GPIOE, GPIO_Pin_9,  RCC_APB2Periph_GPIOE}, // 73
+  { GPIOE, GPIO_Pin_10,  RCC_APB2Periph_GPIOE}, // 74
+  { GPIOE, GPIO_Pin_11,  RCC_APB2Periph_GPIOE}, // 75
+  { GPIOE, GPIO_Pin_12,  RCC_APB2Periph_GPIOE}, //76 
+  { GPIOE, GPIO_Pin_13,  RCC_APB2Periph_GPIOE}, // 77
+  { GPIOE, GPIO_Pin_14,  RCC_APB2Periph_GPIOE}, // 78
+  { GPIOE, GPIO_Pin_15,  RCC_APB2Periph_GPIOE}, // 79	
+	//80-95
+	{ GPIOF, GPIO_Pin_0,  RCC_APB2Periph_GPIOF}, // 80
+  { GPIOF, GPIO_Pin_1,  RCC_APB2Periph_GPIOF}, // 81
+  { GPIOF, GPIO_Pin_2,  RCC_APB2Periph_GPIOF}, // 82
+  { GPIOF, GPIO_Pin_3,  RCC_APB2Periph_GPIOF}, // 83
+  { GPIOF, GPIO_Pin_4,  RCC_APB2Periph_GPIOF}, // 84
+  { GPIOF, GPIO_Pin_5,  RCC_APB2Periph_GPIOF}, // 85
+  { GPIOF, GPIO_Pin_6,  RCC_APB2Periph_GPIOF}, // 86
+  { GPIOE, GPIO_Pin_7,  RCC_APB2Periph_GPIOF}, // 87
+  { GPIOF, GPIO_Pin_8,  RCC_APB2Periph_GPIOF}, // 88
+  { GPIOF, GPIO_Pin_9,  RCC_APB2Periph_GPIOF}, // 89
+  { GPIOF, GPIO_Pin_10,  RCC_APB2Periph_GPIOF}, // 90
+  { GPIOF, GPIO_Pin_11,  RCC_APB2Periph_GPIOF}, // 91
+  { GPIOF, GPIO_Pin_12,  RCC_APB2Periph_GPIOF}, //92 
+  { GPIOF, GPIO_Pin_13,  RCC_APB2Periph_GPIOF}, // 93
+  { GPIOF, GPIO_Pin_14,  RCC_APB2Periph_GPIOF}, // 94
+  { GPIOF, GPIO_Pin_15,  RCC_APB2Periph_GPIOF}, // 95
+};
 
 void pinMode(uint32_t pin, uint32_t mode)
 {

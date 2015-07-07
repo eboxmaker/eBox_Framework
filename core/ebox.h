@@ -13,8 +13,8 @@ No part of this software may be used for any commercial activities by any form o
 Disclaimer
 This specification is preliminary and is subject to change at any time without notice. shentqlf@163.com assumes no responsibility for any errors contained herein.
 */
-#ifndef __XXX_H
-#define __XXX_H
+#ifndef __EBOX_H
+#define __EBOX_H
 
 	 #include "stm32f10x.h"                  // Device header
 	 #include "eboxconfig.h"
@@ -23,7 +23,6 @@ This specification is preliminary and is subject to change at any time without n
  extern "C" {
 #endif 
 
-	 #include "ebox_pin.h" 
 	 
 
 

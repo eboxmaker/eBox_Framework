@@ -1,7 +1,36 @@
 #include "gtimer.h"
 
 
+
 callbackFun gTimxCallbackTable[TIM_NUM +1];
+
+typedef struct 
+{
+	uint8_t id ;
+	TIM_TypeDef *timx;
+	uint32_t rcc;
+	uint32_t irq;
+} TIMx_INFO ;
+
+////////////外设及其附属属性对应表///////////////////////////
+const TIMx_INFO TIMxInfo[]=
+{
+	{1,TIM1,RCC_APB2Periph_TIM1,TIM1_UP_IRQn},//暂时不支持
+	{2,TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn},
+	{3,TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn},
+	{4,TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn},
+	#if defined (MCUPIN64) || (defined MCUPIN100) || (defined MCUPIN144)
+		{5,TIM5,RCC_APB1Periph_TIM5,NULL},
+		{6,TIM6,RCC_APB1Periph_TIM6,NULL},
+		{7,TIM7,RCC_APB1Periph_TIM7,NULL}
+	#endif
+};
+
+//////////////////////////////////////
+uint32_t TIMxToRCC(TIM_TypeDef* TIMx);
+uint32_t TIMxToIRQ(TIM_TypeDef* TIMx);
+uint8_t TIMxToID(TIM_TypeDef* TIMx);
+
 
 TIM::TIM(TIM_TypeDef* TIMx)
 {
@@ -89,6 +118,59 @@ void TIM::attachInterrupt(void(*callback)(void))
 {
 		gTimxCallbackTable[_id] = callback;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+uint32_t  TIMxToRCC(TIM_TypeDef* TIMx)
+{
+	int i;
+	uint32_t rcc;
+	for(i=0;i<TIM_NUM;i++)
+	{
+		if(TIMxInfo[i].timx == TIMx)
+		{
+					rcc = TIMxInfo[i].rcc;
+			break;
+
+		}
+	
+	}
+	return rcc;
+}
+uint32_t TIMxToIRQ(TIM_TypeDef* TIMx)
+{
+	uint32_t irq;
+	int i;
+	for(i=0;i<TIM_NUM;i++)
+	{
+		if(TIMxInfo[i].timx == TIMx)
+		{
+			irq = TIMxInfo[i].irq;
+			break;
+		}
+	
+	}	
+
+	return irq;
+}
+uint8_t TIMxToID(TIM_TypeDef* TIMx)
+{
+	uint32_t id;
+	int i;
+	for(i=0;i<TIM_NUM;i++)
+	{
+		if(TIMxInfo[i].timx == TIMx)
+		{
+			id = TIMxInfo[i].id;
+			break;
+		}
+	
+	}	
+
+	return id;
+}
+
+
 extern "C"{
 	void TIM2_IRQHandler(void)
 	{

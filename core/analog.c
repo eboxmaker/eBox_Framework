@@ -16,6 +16,40 @@ This specification is preliminary and is subject to change at any time without n
 #include "ebox.h"
 
 
+
+uint16_t analogPinStatu[TOTAL_PIN];//是否配置为AIN模式
+
+typedef struct
+{
+	uint8_t pin;
+	u16 analogch;
+}PIN_TO_ANALOAG;
+
+/////////////////////////////////////////////
+const PIN_TO_ANALOAG pinToAnalog[]=
+{
+	//{CH,APin}
+		{0,0},
+		{1,1},
+		{2,2},
+		{3,3},
+		{4,4},
+		{5,5},
+		{6,6},
+		{7,7},
+		{8,0x16},
+		{9,0x17},
+	#if defined (MCUPIN64) || (defined MCUPIN100) || (defined MCUPIN144)
+		{10,0x20},
+		{11,0x21},
+		{12,0x22},
+		{13,0x23},
+		{14,0x24},
+		{15,0x25}
+	#endif
+};
+
+
 //默认开启16通道 采用DMA+ADC连续转换模式。提供AD采集服务
 //只需将IO设置为AIN模式即可读取引脚相应的电压
 #define CH 16

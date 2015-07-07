@@ -1,10 +1,9 @@
-#ifndef __XX_H
-#define __XX_H
+#ifndef __COMMON_H
+#define __COMMON_H
 
 #include "ebox.h"
 #include "stm32f10x.h"                  // Device header
 #include "eboxconfig.h"
-#include "ebox_pin.h" 
 
 #define INPUT 0x0
 #define INPUT_PULLUP 0x2
