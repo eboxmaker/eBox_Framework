@@ -47,9 +47,9 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>stm32f10x</OutputName>
-          <CreateExecutable>1</CreateExecutable>
-          <CreateLib>0</CreateLib>
+          <OutputName>ebox</OutputName>
+          <CreateExecutable>0</CreateExecutable>
+          <CreateLib>1</CreateLib>
           <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
@@ -369,7 +369,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F10X_MD,HSE_VALUE=8000000</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\Project;..\core;..\core\Peripherals;..\elib</IncludePath>
+              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\Project;..\ebox;..\ebox\core;..\ebox\Peripherals;..\elib</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -555,77 +555,72 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>core</GroupName>
+          <GroupName>ebox</GroupName>
           <Files>
             <File>
-              <FileName>ebox.cpp</FileName>
+              <FileName>core.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\core\ebox.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>digital.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\core\digital.cpp</FilePath>
+              <FilePath>..\ebox\core\core.cpp</FilePath>
             </File>
             <File>
               <FileName>analog.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\core\analog.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Peripherals</GroupName>
-          <Files>
-            <File>
-              <FileName>exti.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\core\Peripherals\exti.cpp</FilePath>
+              <FilePath>..\ebox\core\analog.cpp</FilePath>
             </File>
             <File>
-              <FileName>gtimer.cpp</FileName>
+              <FileName>digital.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\core\Peripherals\gtimer.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>pwm.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\core\Peripherals\pwm.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>i2c.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\core\Peripherals\i2c.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>softi2c.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\core\Peripherals\softi2c.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>SPI.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\core\Peripherals\SPI.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>softspi.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\core\Peripherals\softspi.cpp</FilePath>
+              <FilePath>..\ebox\core\digital.cpp</FilePath>
             </File>
             <File>
               <FileName>uartx.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\core\Peripherals\uartx.cpp</FilePath>
+              <FilePath>..\ebox\Peripherals\uartx.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>exti.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\Peripherals\exti.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gtimer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\Peripherals\gtimer.cpp</FilePath>
             </File>
             <File>
               <FileName>timerOne.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\core\Peripherals\timerOne.cpp</FilePath>
+              <FilePath>..\ebox\Peripherals\timerOne.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>pwm.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\Peripherals\pwm.cpp</FilePath>
             </File>
             <File>
               <FileName>rtc.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\core\Peripherals\rtc.cpp</FilePath>
+              <FilePath>..\ebox\Peripherals\rtc.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>i2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\Peripherals\i2c.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>softi2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\Peripherals\softi2c.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>softspi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\Peripherals\softspi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SPI.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\Peripherals\SPI.cpp</FilePath>
             </File>
           </Files>
         </Group>

@@ -648,8 +648,8 @@
   </Group>
 
   <Group>
-    <GroupName>core</GroupName>
-    <tvExp>0</tvExp>
+    <GroupName>ebox</GroupName>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -661,8 +661,8 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\ebox.cpp</PathWithFileName>
-      <FilenameWithoutPath>ebox.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\ebox\core\core.cpp</PathWithFileName>
+      <FilenameWithoutPath>core.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -674,8 +674,8 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\digital.cpp</PathWithFileName>
-      <FilenameWithoutPath>digital.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\ebox\core\analog.cpp</PathWithFileName>
+      <FilenameWithoutPath>analog.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -687,146 +687,138 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\analog.cpp</PathWithFileName>
-      <FilenameWithoutPath>analog.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\ebox\core\digital.cpp</PathWithFileName>
+      <FilenameWithoutPath>digital.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
-  </Group>
-
-  <Group>
-    <GroupName>Peripherals</GroupName>
-    <tvExp>0</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>5</GroupNumber>
+      <GroupNumber>4</GroupNumber>
       <FileNumber>30</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\Peripherals\exti.cpp</PathWithFileName>
-      <FilenameWithoutPath>exti.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\ebox\Peripherals\uartx.cpp</PathWithFileName>
+      <FilenameWithoutPath>uartx.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>5</GroupNumber>
+      <GroupNumber>4</GroupNumber>
       <FileNumber>31</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\Peripherals\gtimer.cpp</PathWithFileName>
-      <FilenameWithoutPath>gtimer.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\ebox\Peripherals\exti.cpp</PathWithFileName>
+      <FilenameWithoutPath>exti.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>5</GroupNumber>
+      <GroupNumber>4</GroupNumber>
       <FileNumber>32</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\Peripherals\pwm.cpp</PathWithFileName>
-      <FilenameWithoutPath>pwm.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\ebox\Peripherals\gtimer.cpp</PathWithFileName>
+      <FilenameWithoutPath>gtimer.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>5</GroupNumber>
+      <GroupNumber>4</GroupNumber>
       <FileNumber>33</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\Peripherals\i2c.cpp</PathWithFileName>
-      <FilenameWithoutPath>i2c.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\ebox\Peripherals\timerOne.cpp</PathWithFileName>
+      <FilenameWithoutPath>timerOne.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>5</GroupNumber>
+      <GroupNumber>4</GroupNumber>
       <FileNumber>34</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\Peripherals\softi2c.cpp</PathWithFileName>
-      <FilenameWithoutPath>softi2c.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\ebox\Peripherals\pwm.cpp</PathWithFileName>
+      <FilenameWithoutPath>pwm.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>5</GroupNumber>
+      <GroupNumber>4</GroupNumber>
       <FileNumber>35</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\Peripherals\SPI.cpp</PathWithFileName>
-      <FilenameWithoutPath>SPI.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\ebox\Peripherals\rtc.cpp</PathWithFileName>
+      <FilenameWithoutPath>rtc.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>5</GroupNumber>
+      <GroupNumber>4</GroupNumber>
       <FileNumber>36</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\Peripherals\softspi.cpp</PathWithFileName>
-      <FilenameWithoutPath>softspi.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\ebox\Peripherals\i2c.cpp</PathWithFileName>
+      <FilenameWithoutPath>i2c.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>5</GroupNumber>
+      <GroupNumber>4</GroupNumber>
       <FileNumber>37</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\Peripherals\uartx.cpp</PathWithFileName>
-      <FilenameWithoutPath>uartx.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\ebox\Peripherals\softi2c.cpp</PathWithFileName>
+      <FilenameWithoutPath>softi2c.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>5</GroupNumber>
+      <GroupNumber>4</GroupNumber>
       <FileNumber>38</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\Peripherals\timerOne.cpp</PathWithFileName>
-      <FilenameWithoutPath>timerOne.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\ebox\Peripherals\softspi.cpp</PathWithFileName>
+      <FilenameWithoutPath>softspi.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>5</GroupNumber>
+      <GroupNumber>4</GroupNumber>
       <FileNumber>39</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\core\Peripherals\rtc.cpp</PathWithFileName>
-      <FilenameWithoutPath>rtc.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\ebox\Peripherals\SPI.cpp</PathWithFileName>
+      <FilenameWithoutPath>SPI.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -834,12 +826,12 @@
 
   <Group>
     <GroupName>user</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>6</GroupNumber>
+      <GroupNumber>5</GroupNumber>
       <FileNumber>40</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -852,7 +844,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>6</GroupNumber>
+      <GroupNumber>5</GroupNumber>
       <FileNumber>41</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
@@ -865,7 +857,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>6</GroupNumber>
+      <GroupNumber>5</GroupNumber>
       <FileNumber>42</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
@@ -886,7 +878,7 @@
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>7</GroupNumber>
+      <GroupNumber>6</GroupNumber>
       <FileNumber>43</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
@@ -899,7 +891,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
+      <GroupNumber>6</GroupNumber>
       <FileNumber>44</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
@@ -912,7 +904,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
+      <GroupNumber>6</GroupNumber>
       <FileNumber>45</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
@@ -925,7 +917,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
+      <GroupNumber>6</GroupNumber>
       <FileNumber>46</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
@@ -938,7 +930,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
+      <GroupNumber>6</GroupNumber>
       <FileNumber>47</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
@@ -951,7 +943,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
+      <GroupNumber>6</GroupNumber>
       <FileNumber>48</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
@@ -964,7 +956,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
+      <GroupNumber>6</GroupNumber>
       <FileNumber>49</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
@@ -977,7 +969,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>7</GroupNumber>
+      <GroupNumber>6</GroupNumber>
       <FileNumber>50</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>

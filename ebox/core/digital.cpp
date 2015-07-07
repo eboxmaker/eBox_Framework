@@ -1,5 +1,5 @@
 /*
-file   : digital.c
+file   : digital.cpp
 author : shentq
 version: V1.0
 date   : 2015/7/5
