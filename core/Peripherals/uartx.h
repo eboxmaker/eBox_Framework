@@ -36,7 +36,6 @@ class USART
 			char 			sendBuf[UART_MAX_SEND_BUF];
 			uint16_t 	count;
 			uint16_t 	sendLength;
-			uint8_t 	sendMode;
 			uint8_t 	sendOver;	 
 	 public:
 			USART(USART_TypeDef * USARTx);

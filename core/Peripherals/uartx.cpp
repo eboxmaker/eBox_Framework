@@ -99,7 +99,6 @@ void USART::printfln(const char *str,uint16_t length)
 {
 	uint16_t i;
 	length = length % UART_MAX_SEND_BUF;
-	sendMode = SEND_MODE_LN;
 	sendLength = length;
 	while(sendOver == 0);
 	do
@@ -116,15 +115,14 @@ void USART::printfln(const char *str,uint16_t length)
 }
 void USART::printf(const char* fmt,...)
 {
-	
+	uint16_t length;
 	while(sendOver == 0);
 	va_list va_params;   
 	va_start(va_params,fmt);   
-	vsprintf(sendBuf,fmt,va_params);   
+	length = vsprintf(sendBuf,fmt,va_params);   
 	va_end(va_params);   
 	
-	
-	sendMode = SEND_MODE_P;
+	sendLength = length;
 	sendOver = 0;
 	
 	USART_ITConfig(_USARTx, USART_IT_TXE, ENABLE); 
@@ -143,32 +141,17 @@ void USART1_IRQHandler(void)
 	}
 	if(USART_GetITStatus(USART1, USART_IT_TXE) != RESET)
   {
-		if(uart1.sendMode == SEND_MODE_P)
+
+		if(uart1.count == uart1.sendLength)
 		{
-			if(uart1.sendBuf[uart1.count] == '\0')
-			{
-				USART_ClearITPendingBit(USART1	,USART_IT_TXE);
-				USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
-				USART_ITConfig(USART1, USART_IT_TC, ENABLE);
-				uart1.count = 0;
-				uart1.sendOver = 1;
-			}
-			else
-				USART_SendData(USART1, uart1.sendBuf[uart3.count++]);
+			USART_ClearITPendingBit(USART1	,USART_IT_TXE);
+			USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
+			USART_ITConfig(USART1, USART_IT_TC, ENABLE);
+			uart1.count = 0;
+			uart1.sendOver = 1;
 		}
-		else if(uart1.sendMode == SEND_MODE_LN)
-		{
-			if(uart1.count == uart1.sendLength)
-			{
-				USART_ClearITPendingBit(USART1	,USART_IT_TXE);
-				USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
-				USART_ITConfig(USART1, USART_IT_TC, ENABLE);
-				uart1.count = 0;
-				uart1.sendOver = 1;
-			}
-			else
-				USART_SendData(USART1, uart1.sendBuf[uart1.count++]);
-		}
+		else
+			USART_SendData(USART1, uart1.sendBuf[uart1.count++]);
   }
 	if(USART_GetITStatus(USART1, USART_IT_TC) != RESET)
 	{
@@ -185,39 +168,24 @@ void USART2_IRQHandler(void)
 		USART_ClearITPendingBit(USART2,USART_IT_RXNE);
 		return;
 	}
-	if(USART_GetITStatus(USART2, USART_IT_TXE) != RESET)
+	if(USART_GetITStatus(USART1, USART_IT_TXE) != RESET)
   {
-		if(uart2.sendMode == SEND_MODE_P)
+
+		if(uart2.count == uart2.sendLength)
 		{
-			if(uart2.sendBuf[uart2.count] == '\0')
-			{
-				USART_ClearITPendingBit(USART2	,USART_IT_TXE);
-				USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
-				USART_ITConfig(USART2, USART_IT_TC, ENABLE);
-				uart2.count = 0;
-				uart2.sendOver = 1;
-			}
-			else
-				USART_SendData(USART2, uart2.sendBuf[uart2.count++]);
+			USART_ClearITPendingBit(USART2	,USART_IT_TXE);
+			USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
+			USART_ITConfig(USART2, USART_IT_TC, ENABLE);
+			uart2.count = 0;
+			uart2.sendOver = 1;
 		}
-		else if(uart2.sendMode == SEND_MODE_LN)
+		else
+			USART_SendData(USART2, uart2.sendBuf[uart2.count++]);
+		if(USART_GetITStatus(USART2, USART_IT_TC) != RESET)
 		{
-			if(uart2.count == uart2.sendLength)
-			{
-				USART_ClearITPendingBit(USART2	,USART_IT_TXE);
-				USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
-				USART_ITConfig(USART2, USART_IT_TC, ENABLE);
-				uart2.count = 0;
-				uart2.sendOver = 1;
-			}
-			else
-				USART_SendData(USART2, uart2.sendBuf[uart2.count++]);
+		 USART_ClearITPendingBit(USART2,USART_IT_TC);
+		 USART_ITConfig(USART2, USART_IT_TC, DISABLE);
 		}
-  }
-	if(USART_GetITStatus(USART2, USART_IT_TC) != RESET)
-	{
-	 USART_ClearITPendingBit(USART2,USART_IT_TC);
-	 USART_ITConfig(USART2, USART_IT_TC, DISABLE);
 	}
 }
 void USART3_IRQHandler(void)
@@ -231,38 +199,23 @@ void USART3_IRQHandler(void)
 	}
 	if(USART_GetITStatus(USART3, USART_IT_TXE) != RESET)
   {
-		if(uart3.sendMode == SEND_MODE_P)
+		if(uart3.count == uart3.sendLength)
 		{
-			if(uart3.sendBuf[uart3.count] == '\0')
-			{
-				USART_ClearITPendingBit(USART3	,USART_IT_TXE);
-				USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
-				USART_ITConfig(USART3, USART_IT_TC, ENABLE);
-				uart3.count = 0;
-				uart3.sendOver = 1;
-			}
-			else
-				USART_SendData(USART3, uart3.sendBuf[uart3.count++]);
+			USART_ClearITPendingBit(USART3	,USART_IT_TXE);
+			USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
+			USART_ITConfig(USART3, USART_IT_TC, ENABLE);
+			uart3.count = 0;
+			uart3.sendOver = 1;
 		}
-		else if(uart3.sendMode == SEND_MODE_LN)
-		{
-			if(uart3.count == uart3.sendLength)
-			{
-				USART_ClearITPendingBit(USART3	,USART_IT_TXE);
-				USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
-				USART_ITConfig(USART3, USART_IT_TC, ENABLE);
-				uart3.count = 0;
-				uart3.sendOver = 1;
-			}
-			else
-				USART_SendData(USART3, uart3.sendBuf[uart3.count++]);
-		}
-  }
+		else
+			USART_SendData(USART3, uart3.sendBuf[uart3.count++]);
+	}
 	if(USART_GetITStatus(USART3, USART_IT_TC) != RESET)
 	{
 	 USART_ClearITPendingBit(USART3,USART_IT_TC);
 	 USART_ITConfig(USART3, USART_IT_TC, DISABLE);
 	}
+	
 }
 
 	
