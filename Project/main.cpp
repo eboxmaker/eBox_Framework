@@ -13,8 +13,9 @@ void rtc_it_sec()
 	counter = rtc.getCounter();
 	if(counter == 0x1517f)
 		rtc.setCounter(0);
-	uart3.printf("timeNow = %02d:%02d:%02d !",h,m,s);
-	uart3.printf("  counter = %x \r\n",counter);
+//	uart3.printf("timeNow = %02d:%02d:%02d !",h,m,s);
+//	uart3.printf("  counter = %x \r\n",counter);
+	uart3.test();
 }
 void rtc_it_ow()
 {

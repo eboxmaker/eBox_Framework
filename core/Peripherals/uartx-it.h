@@ -45,15 +45,6 @@ class USART
 			void printfln(const char *str,uint16_t length);
 
 			void attachInterrupt(void (*callbackFun)(void));
-	 void test(){
-	 
-		 for(int i = 0;i < 100; i ++)
-			 sendBuf[i] = '1';
-//    while (sendOver == 0);  
-    sendOver = 0;  
-    DMA_SetCurrDataCounter(DMA1_Channel2,128);  
-    DMA_Cmd(DMA1_Channel2,ENABLE);  
-	 };
 	 
 	 private:
 		USART_TypeDef * _USARTx;

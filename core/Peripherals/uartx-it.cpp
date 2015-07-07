@@ -24,10 +24,6 @@ void USART::begin(uint32_t BaudRate)
 {
     USART_InitTypeDef USART_InitStructure;
 		  NVIC_InitTypeDef NVIC_InitStructure;
-			/* ADC1  DMA1 Channel Config */
-	DMA_InitTypeDef DMA_InitStructure;
-
-		RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);	//使能DMA传输
 
 		if(_id == 1)
 		{
@@ -52,20 +48,6 @@ void USART::begin(uint32_t BaudRate)
 		}
 		
   
-		DMA_DeInit(DMA1_Channel2);   //将DMA的通道1寄存器重设为缺省值
-		DMA_InitStructure.DMA_PeripheralBaseAddr =  (u32)&USART3->DR;  //DMA外设ADC基地址
-		DMA_InitStructure.DMA_MemoryBaseAddr = (u32)sendBuf;  //DMA内存基地址
-		DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;  //内存作为数据传输的目的地
-		DMA_InitStructure.DMA_BufferSize = 100;  //DMA通道的DMA缓存的大小
-		DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;  //外设地址寄存器不变
-		DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;  //内存地址寄存器递增
-		DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;  //数据宽度为16位
-		DMA_InitStructure.DMA_MemoryDataSize = DMA_PeripheralDataSize_Byte; //数据宽度为16位
-		DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;  //工作在循环缓存模式
-		DMA_InitStructure.DMA_Priority = DMA_Priority_High; //DMA通道 x拥有高优先级 
-		DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;  //DMA通道x没有设置为内存到内存传输
-		DMA_Init(DMA1_Channel2, &DMA_InitStructure);  //根据DMA_InitStruct中指定的参数初始化DMA的通道
-
     USART_InitStructure.USART_BaudRate = BaudRate;
     USART_InitStructure.USART_Parity = USART_Parity_No;
     USART_InitStructure.USART_WordLength = USART_WordLength_8b;
@@ -84,14 +66,8 @@ void USART::begin(uint32_t BaudRate)
 		NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 		NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 		NVIC_Init(&NVIC_InitStructure);
-		
-		NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel2_IRQn;  
-		NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;  
-		NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  
-		NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;  
-		NVIC_Init(&NVIC_InitStructure);  	
-		
-		USART_DMACmd(USART3,USART_DMAReq_Tx,ENABLE);     
+			
+    
     USART_Cmd(_USARTx, ENABLE);
 		
 		if(_id == 1)
@@ -241,22 +217,7 @@ void USART3_IRQHandler(void)
 	}
 	
 }
-void DMA1_Channel4_IRQHandler(void)  
-{  
 
-if(DMA_GetFlagStatus(DMA1_FLAG_TC2) == SET)
-{
-	DMA_ClearFlag(DMA1_FLAG_TC2); 
-  DMA_Cmd(DMA1_Channel2,DISABLE);  
-  uart3.sendOver = 1;  
-}	 
-    //DMA_ClearITPendingBit(DMA1_FLAG_TC4);  
-    //DMA1->IFCR |= DMA1_FLAG_TC4;  
-    //??DMA  
-    //DMA1_Channel4->CCR &= ~(1<<0);  
-  
-
-}  
 	
 }
 
