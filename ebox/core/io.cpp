@@ -1,4 +1,4 @@
-#include "io.h"
+#include "common.h"
 
 
 GPIO::GPIO(GPIO_TypeDef* _port,uint16_t _pin)
@@ -59,5 +59,7 @@ void GPIO::read(uint8_t* val)
 
 uint8_t GPIO::read(void)
 {
-	return  (port->IDR & pin);
+	if(port->IDR & pin)
+		return 1;
+	return  0;
 }

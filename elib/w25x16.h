@@ -42,7 +42,7 @@ This specification is preliminary and is subject to change at any time without n
 class W25X
 {
 	public:
-		W25X(uint8_t cspin)
+		W25X(GPIO* cspin)
 		{
 			cs = cspin;
 		}
@@ -59,7 +59,7 @@ class W25X
 	private:
 			u8 SPI_FLASH_BUF[4096];
 
-		uint8_t cs;
+		GPIO* cs;
 		u8 readSR(void);  
 		void _waitBusy(void);
 		void powerDown(void);	

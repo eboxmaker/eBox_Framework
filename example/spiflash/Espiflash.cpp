@@ -1,11 +1,10 @@
 
 #include "ebox.h"
-#include "uartx.h"
-#include "interrupts.h"
-
 #include "w25x16.h"
 
-W25X flash(0x45);
+GPIO* PE5 = new GPIO(GPIOE,GPIO_Pin_5);
+
+W25X flash(PE5);
 
 void setup()
 {
@@ -26,28 +25,24 @@ int main(void)
 	for(int i=0;i<10;i++)
 
 	 wbuf[i] = i;
-
 	while(1)
 	{
 		flash.readId(&id);
-		uart3.printf("\r\nid = %x\r\n",id);
-		flash.read(buf,1,10);
-		for(int i=0;i<10;i++)
-		uart3.printf("\r\n%x",buf[i]);
-		uart3.printf("\r\n==========");
+		uart3.printf("\r\n==readid=======\r\n");
+		uart3.printf("id = %x",id);
 
+		uart3.printf("\r\n==write&read========\r\n");
 		flash.write(wbuf,0,10);
 		flash.read(buf,0,10);	
 		for(int i=0;i<10;i++)
-		uart3.printf("\r\n%x",buf[i]);
-		uart3.printf("\r\n==========");
+		uart3.printf(" %x",buf[i]);
 		
+		uart3.printf("\r\n==erase&read========\r\n");
 		flash.eraseSector(0);
 		flash.read(buf,1,10);	
 		for(int i=0;i<10;i++)
-		uart3.printf("\r\n%x",buf[i]);
+		uart3.printf(" %x",buf[i]);
 		
-		uart3.printf("\r\n==========");
 		delay_ms(1000);
 	}
 }

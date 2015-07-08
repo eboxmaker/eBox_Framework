@@ -1,5 +1,5 @@
 #include "softspi.h"
-SOFTSPI::SOFTSPI(uint8_t sckPin,uint8_t misoPin,uint8_t mosiPin)
+SOFTSPI::SOFTSPI(GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin)
 {
 	_mosiPin = mosiPin;
 	_misoPin = misoPin;
@@ -13,24 +13,24 @@ SOFTSPI::SOFTSPI(uint8_t sckPin,uint8_t misoPin,uint8_t mosiPin)
 void SOFTSPI::begin(SPICONFIG* spiConfig)
 {
 
-	pinMode(_mosiPin,OUTPUT);
-	pinMode(_misoPin,INPUT);
-	pinMode(_sckPin,OUTPUT);
+	pMode(_sckPin,_OPP);
+	pMode(_misoPin,_INPUT);
+	pMode(_mosiPin,_OPP);
 	
 	config(spiConfig);
 	switch(_mode)
 	{
 		case SPI_MODE0:
-				digitalWrite(_sckPin,0);
+				dgWrite(_sckPin,0);
 				break;
 		case SPI_MODE1:
-				digitalWrite(_sckPin,0);		
+				dgWrite(_sckPin,0);		
 				break;
 		case SPI_MODE2:
-				digitalWrite(_sckPin,1);		
+				dgWrite(_sckPin,1);		
 				break;
 		case SPI_MODE3:
-				digitalWrite(_sckPin,1);		
+				dgWrite(_sckPin,1);		
 				break;			
 	}
 }
@@ -87,18 +87,18 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 				for (i = 0; i < 8; i++)  {
 					if (_bitOrder == SPI_BITODER_LSB)
 					{
-						RcvData |= digitalRead(_misoPin)<<i;
-						digitalWrite(_mosiPin, !!(data & (1 << i)));
+						RcvData |= dgRead(_misoPin)<<i;
+						dgWrite(_mosiPin, !!(data & (1 << i)));
 					}
 					else
 					{				
-						RcvData |= (digitalRead(_misoPin)<<(7-i));
-						digitalWrite(_mosiPin, !!(data & (1 << (7 - i))));
+						RcvData |= (dgRead(_misoPin)<<(7-i));
+						dgWrite(_mosiPin, !!(data & (1 << (7 - i))));
 					}
 					delay_us(_spidelay);
-					digitalWrite(_sckPin,1);
+					dgWrite(_sckPin,1);
 					delay_us(_spidelay);
-					digitalWrite(_sckPin,0);
+					dgWrite(_sckPin,0);
 				}
 				break;
 		case SPI_MODE1:
@@ -109,26 +109,26 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 					///////////////////上升沿输出//////////
 					if (_bitOrder == SPI_BITODER_LSB)
 					{
-						digitalWrite(_mosiPin, !!(data & (1 << i)));
+						dgWrite(_mosiPin, !!(data & (1 << i)));
 					}
 					else
 					{				
-						RcvData |= (digitalRead(_misoPin)<<(7-i));
-						digitalWrite(_mosiPin, !!(data & (1 << (7 - i))));
+						RcvData |= (dgRead(_misoPin)<<(7-i));
+						dgWrite(_mosiPin, !!(data & (1 << (7 - i))));
 					}
 					delay_us(_spidelay);
-					digitalWrite(_sckPin,1);
+					dgWrite(_sckPin,1);
 					/////////////////下降沿采样////////////
 					delay_us(_spidelay);
-					digitalWrite(_sckPin,0);
+					dgWrite(_sckPin,0);
 					if (_bitOrder == LSBFIRST)
 					{
-						digitalWrite(_mosiPin, !!(data & (1 << i)));
+						dgWrite(_mosiPin, !!(data & (1 << i)));
 					}
 					else
 					{				
-						RcvData |= (digitalRead(_misoPin)<<(7-i));
-						digitalWrite(_mosiPin, !!(data & (1 << (7 - i))));
+						RcvData |= (dgRead(_misoPin)<<(7-i));
+						dgWrite(_mosiPin, !!(data & (1 << (7 - i))));
 					}	
 				}
 				break;
@@ -138,20 +138,20 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 			//第一个是下降沿：读取数据；
 			//第二个是上升沿：输出数据；
 				for (i = 0; i < 8; i++)  {
-					digitalWrite(_sckPin,0);
+					dgWrite(_sckPin,0);
 					delay_us(_spidelay);
 					if (_bitOrder == SPI_BITODER_LSB)
 					{
-						RcvData |= digitalRead(_misoPin)<<i;
-						digitalWrite(_mosiPin, !!(data & (1 << i)));
+						RcvData |= dgRead(_misoPin)<<i;
+						dgWrite(_mosiPin, !!(data & (1 << i)));
 					}
 					else
 					{				
-						RcvData |= (digitalRead(_misoPin)<<(7-i));
-						digitalWrite(_mosiPin, !!(data & (1 << (7 - i))));
+						RcvData |= (dgRead(_misoPin)<<(7-i));
+						dgWrite(_mosiPin, !!(data & (1 << (7 - i))));
 					}
 					delay_us(_spidelay);
-					digitalWrite(_sckPin,1);
+					dgWrite(_sckPin,1);
 				}
 				break;
 				
@@ -161,37 +161,41 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 			//第二个是上升沿：读取数据；
 				for (i = 0; i < 8; i++)  {
 					///////////////////下降沿沿输出
-					digitalWrite(_sckPin,0);
+					dgWrite(_sckPin,0);
 					delay_us(_spidelay);
 					if (_bitOrder == SPI_BITODER_LSB)
 					{
-						digitalWrite(_mosiPin, !!(data & (1 << i)));
+						dgWrite(_mosiPin, !!(data & (1 << i)));
 					}
 					else
 					{				
-						RcvData |= (digitalRead(_misoPin)<<(7-i));
-						digitalWrite(_mosiPin, !!(data & (1 << (7 - i))));
+						RcvData |= (dgRead(_misoPin)<<(7-i));
+						dgWrite(_mosiPin, !!(data & (1 << (7 - i))));
 					}
 					/////////////////上升沿采样////////////
-					digitalWrite(_sckPin,1);
+					dgWrite(_sckPin,1);
 					delay_us(_spidelay);
 					if (_bitOrder == LSBFIRST)
 					{
-						digitalWrite(_mosiPin, !!(data & (1 << i)));
+						dgWrite(_mosiPin, !!(data & (1 << i)));
 					}
 					else
 					{				
-						RcvData |= (digitalRead(_misoPin)<<(7-i));
-						digitalWrite(_mosiPin, !!(data & (1 << (7 - i))));
+						RcvData |= (dgRead(_misoPin)<<(7-i));
+						dgWrite(_mosiPin, !!(data & (1 << (7 - i))));
 					}	
 				}
 				break;
 		}
 				return RcvData;
 }
-SOFTSPI spis(0x05,0x06,0x07);
+
+GPIO* PA5 = new GPIO(GPIOA,GPIO_Pin_5);
+GPIO* PA6 = new GPIO(GPIOA,GPIO_Pin_6);
+GPIO* PA7 = new GPIO(GPIOA,GPIO_Pin_7);
 
 
+SOFTSPI sspi(PA5,PA6,PA7);
 
 
 
