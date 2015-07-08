@@ -18,7 +18,7 @@ This specification is preliminary and is subject to change at any time without n
 #include "common.h"
 
 /*
-	1.支持tim2,3,4
+	1.支持tim2,3,4 (5,6,7需要测试)
 	2.提供一个xhz的中断
 */
 

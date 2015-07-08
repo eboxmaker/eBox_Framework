@@ -16,8 +16,7 @@ This specification is preliminary and is subject to change at any time without n
 #ifndef __EBOX_H
 #define __EBOX_H
 
-	 #include "stm32f10x.h"                  // Device header
-	 #include "eboxconfig.h"
+#include "stm32f10x.h"                  // Device header
 
 
 	 

@@ -17,11 +17,12 @@ This specification is preliminary and is subject to change at any time without n
 #define __COMMON_H
 
 #include "stm32f10x.h"                  // Device header
-#include "eboxconfig.h"
 
 #ifdef __cplusplus
 extern "C"{
 #endif
+
+
 	
 #define INPUT 0x0
 #define INPUT_PULLUP 0x2

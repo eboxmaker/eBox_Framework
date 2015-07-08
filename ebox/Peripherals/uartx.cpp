@@ -1,4 +1,7 @@
 #include "uartx.h"
+
+#define USART_NUM 3
+
 class USART uart1(USART1);
 class USART uart2(USART2);
 class USART uart3(USART3);

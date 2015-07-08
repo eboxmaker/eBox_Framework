@@ -1,6 +1,9 @@
 #include "pwm.h"
 
 
+#define PWM_PIN_NUM 20
+
+
 #define TIMxCH1 0x01
 #define TIMxCH2 0x02
 #define TIMxCH3 0x03
@@ -41,7 +44,6 @@ const PIN_TO_TIMx pinTOTimx[]=
 		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH3,0,0x18},
 		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH4,0,0x19},
 		/////一下引脚需要开启ReMaping///////////////////////////
-	#if defined (MCUPIN48) || (defined MCUPIN64) || (defined MCUPIN100) || (defined MCUPIN144)
 
 		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH1,1,0x00},//pa0
 		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH2,1,0x01},//Pa1
@@ -49,7 +51,6 @@ const PIN_TO_TIMx pinTOTimx[]=
 		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH2,1,0x1d},//Pb13
 		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH3,1,0x1a},//pb10
 		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH4,1,0x1b},//PB11
-	#if defined (MCUPIN64) || (defined MCUPIN100) || (defined MCUPIN144)
 		
 		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH1,1,0x10},//pb0
 		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH2,1,0x11},//pb1
@@ -58,16 +59,11 @@ const PIN_TO_TIMx pinTOTimx[]=
 		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH3,1,0x28},
 		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH4,1,0x29},
 		
-	#if defined (MCUPIN100) || (defined MCUPIN144)
 		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH1,1,0x3c},//pd12
 		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH2,1,0x3d},
 		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH3,1,0x3e},
 		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH4,1,0x3f},
 		
-	#endif
-	#endif
-	#endif
-
 };
 /////////////////////////////////////////
 TIM_TypeDef* 	pinToTIMx(uint8_t pin);

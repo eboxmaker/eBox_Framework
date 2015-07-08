@@ -17,6 +17,7 @@ This specification is preliminary and is subject to change at any time without n
 #include "common.h"
 
 //uint16_t ioPinStatu[TOTAL_PIN];//IO口是否使用
+//	#define TOTAL_PIN 48
 
 typedef struct 
 {
