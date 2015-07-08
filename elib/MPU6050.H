@@ -18,8 +18,7 @@ This specification is preliminary and is subject to change at any time without n
 #define __MPU6050_H
 
 #include "ebox.h"
-#include "softi2c.h"
-#include "i2c.h"
+
 
 /* MPU6050 Register Address ------------------------------------------------------------*/
 #define MPU6050_RA_XG_OFFS_TC       0x00 //[7] PWR_MODE, [6:1] XG_OFFS_TC, [0] OTP_BNK_VLD
