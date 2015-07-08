@@ -16,7 +16,7 @@ This specification is preliminary and is subject to change at any time without n
 #ifndef __Button_h
 #define __Button_h
 
-#include "common.h"
+#include "ebox.h"
 
 class Button
 {

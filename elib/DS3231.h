@@ -17,7 +17,7 @@ This specification is preliminary and is subject to change at any time without n
 #define __DS3231_H__
 
 #include "ebox.h"
-#include "softi2c.h"
+
 		
 #define DS3231_WriteAddress 0xD0    //器件写地址 
 #define DS3231_ReadAddress  0xD1    //器件读地址

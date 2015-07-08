@@ -15,7 +15,6 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "lcd1602.h"
 #include "stdio.h"
-#include "lcd1602.h"
 
 #define DATAOUT  GPIOB->ODR             //PD[0..7]--(LCD)D0~D7
 

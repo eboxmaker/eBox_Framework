@@ -5,7 +5,7 @@ version: V1.0
 date   : 2015/7/5
 brief  : This file provides time service , analog,digital,interrupt functions , and so on.
 
-Copyright (c) 2015, eBox by shentqlf@163.com. All Rights Reserved.
+Copyright (c) 2015, eBox by shentq. All Rights Reserved.
 
 Copyright Notice
 No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentqlf@163.com.
