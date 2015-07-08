@@ -17,13 +17,43 @@ This specification is preliminary and is subject to change at any time without n
 #define __COMMON_H
 
 #include "stm32f10x.h"                  // Device header
-
 #ifdef __cplusplus
 extern "C"{
 #endif
 
 
-	
+typedef enum
+{ 
+	_AIN = 0x0,
+  _INPUT = 0x04,
+  _IPD = 0x28,
+  _IPU = 0x48,
+  _OOD = 0x14,
+  _OPP = 0x10,
+  _AF_OD = 0x1C,
+  _AF_PP = 0x18
+}PINMODE;
+
+class GPIO
+{
+	public:
+		GPIO(GPIO_TypeDef* _port,uint16_t _pin);
+		void mode(PINMODE modeVal);
+		void write(uint8_t val);
+		void read(uint8_t* val);	
+		uint8_t read(void);
+	private:
+		GPIO_TypeDef* port;
+		uint16_t pin;
+		uint32_t rcc;
+};
+
+
+
+#define dgWrite(pin,val)	pin->write(val)
+#define dgRead(pin) 			pin->read()
+#define pMode(pin,val)	pin->mode(val)
+
 #define INPUT 0x0
 #define INPUT_PULLUP 0x2
 #define INPUT_PULLDOWN 0x3
@@ -98,6 +128,7 @@ void delayus(uint32_t us);
 void pinMode(uint32_t pin, uint32_t mode);
 void digitalWrite( uint32_t pin, uint32_t ulVal );
 int  digitalRead( uint32_t pin );
+
 
 uint16_t 	analogRead(uint8_t pin);
 uint16_t 	analogReadToVoltage(uint8_t pin); 
