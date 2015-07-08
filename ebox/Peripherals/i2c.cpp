@@ -2,6 +2,8 @@
 
 #define DEBUG 1
 
+#define I2C_NUM 2
+
 void  I2C::i2cBegin()
 {
 	

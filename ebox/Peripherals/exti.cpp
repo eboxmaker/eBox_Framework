@@ -1,6 +1,8 @@
 #include "exti.h"
 
-callbackFun extiCallbackTable[16];
+#define EXTI_LINE_NUM 16
+
+callbackFun extiCallbackTable[EXTI_LINE_NUM];
 
 /////////////////////////////////////////////////
 typedef struct

@@ -1,5 +1,7 @@
 #include "spi.h"
 
+//#define SPI_NUM 3
+
 SPIClass spi1(SPI1);
 SPIClass spi2(SPI2);
 SPIClass spi3(SPI3);

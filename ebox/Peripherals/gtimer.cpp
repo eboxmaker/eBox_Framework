@@ -1,5 +1,6 @@
 #include "gtimer.h"
 
+#define TIM_NUM 7
 
 
 callbackFun gTimxCallbackTable[TIM_NUM +1];
@@ -12,6 +13,7 @@ typedef struct
 	uint32_t irq;
 } TIMx_INFO ;
 
+
 ////////////外设及其附属属性对应表///////////////////////////
 const TIMx_INFO TIMxInfo[]=
 {
@@ -19,10 +21,10 @@ const TIMx_INFO TIMxInfo[]=
 	{2,TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn},
 	{3,TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn},
 	{4,TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn},
-	#if defined (MCUPIN64) || (defined MCUPIN100) || (defined MCUPIN144)
-		{5,TIM5,RCC_APB1Periph_TIM5,NULL},
-		{6,TIM6,RCC_APB1Periph_TIM6,NULL},
-		{7,TIM7,RCC_APB1Periph_TIM7,NULL}
+	#if defined (STM32F10X_HD)
+		{5,TIM5,RCC_APB1Periph_TIM5,TIM5_IRQn},
+		{6,TIM6,RCC_APB1Periph_TIM6,TIM6_IRQn},
+		{7,TIM7,RCC_APB1Periph_TIM7,TIM7_IRQn}
 	#endif
 };
 

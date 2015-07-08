@@ -15,9 +15,9 @@ This specification is preliminary and is subject to change at any time without n
 */
 #include "common.h"
 
+#define ANALOG_PIN_NUM 9
+uint16_t analogPinStatu[ANALOG_PIN_NUM];//是否配置为AIN模式
 
-
-uint16_t analogPinStatu[TOTAL_PIN];//是否配置为AIN模式
 
 typedef struct
 {
@@ -39,14 +39,12 @@ const PIN_TO_ANALOAG pinToAnalog[]=
 		{7,7},
 		{8,0x16},
 		{9,0x17},
-	#if defined (MCUPIN64) || (defined MCUPIN100) || (defined MCUPIN144)
 		{10,0x20},
 		{11,0x21},
 		{12,0x22},
 		{13,0x23},
 		{14,0x24},
 		{15,0x25}
-	#endif
 };
 
 
@@ -156,7 +154,7 @@ uint16_t analogRead(uint8_t pin)
 		analogPinStatu[pin] = 1;
 	}
 	
-	for(i=0;i<16;i++)
+	for(i=0;i<ANALOG_PIN_NUM;i++)
 	{
 		if(pinToAnalog[i].pin == pin)
 		return AD_Value[pinToAnalog[i].analogch];
