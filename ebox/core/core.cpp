@@ -87,11 +87,11 @@ void delayus(uint32_t us)
 							;
 		}
 } 
-
+extern "C"{
 void SysTick_Handler(void)
 {
 
 	TimingMillis++;
 
 }
-
+}
