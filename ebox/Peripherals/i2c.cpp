@@ -10,8 +10,8 @@ void  I2C::i2cBegin()
 		/* 使能与 I2C1 有关的时钟 */
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1,ENABLE);  
 	
-	pinMode(_SDAPin,AF_OD);
-	pinMode(_SCLPin,AF_OD);
+	pMode(_SDAPin,_AF_OD);
+	pMode(_SCLPin,_AF_OD);
 
 
 	  /* I2C 配置 */

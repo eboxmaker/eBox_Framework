@@ -42,7 +42,8 @@ class GPIO
 		void write(uint8_t val);
 		void read(uint8_t* val);	
 		uint8_t read(void);
-	private:
+
+		
 		GPIO_TypeDef* port;
 		uint16_t pin;
 		uint32_t rcc;

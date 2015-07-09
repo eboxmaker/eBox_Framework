@@ -85,7 +85,6 @@ class SOFTSPI
 
 
 };
-extern SOFTSPI sspi;
 
 #endif
 

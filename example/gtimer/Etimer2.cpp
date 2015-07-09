@@ -1,12 +1,8 @@
 
 #include "ebox.h"
-#include "uartx.h"
-#include "gtimer.h"
-#include "interrupts.h"
 
-//如果中断引脚没有外部上拉或者下拉。
-//请设置exti.cpp中的初始化函数将
-//引脚设置内部上拉或者下拉
+
+
 uint32_t xx;
 uint8_t flag;
 
@@ -24,7 +20,7 @@ void t2it()
 void setup()
 {
 	eBoxInit();
-	uart3.begin(115200);
+	uart3.begin(9600);
 	
 	timer2.begin();
 	timer2.interrupt(ENABLE);

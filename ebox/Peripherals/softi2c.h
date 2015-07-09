@@ -32,7 +32,7 @@ class Softi2c
 {
 
   public:
-		Softi2c(uint8_t SDApin, uint8_t SCLpin);
+		Softi2c(GPIO* SDApin, GPIO* SCLpin);
 		int8_t 		setSpeed(uint32_t speed);
 		int8_t		writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);
 		int8_t 		writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
@@ -41,8 +41,8 @@ class Softi2c
 
 
   private:
-		uint8_t _SDApin;
-		uint8_t _SCLpin;
+		GPIO* _SDApin;
+		GPIO* _SCLpin;
 		uint16_t _delayTimes;
 	protected:
 		void 		i2cBegin();

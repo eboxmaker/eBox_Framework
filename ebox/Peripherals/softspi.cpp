@@ -190,12 +190,7 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 				return RcvData;
 }
 
-GPIO* PA5 = new GPIO(GPIOA,GPIO_Pin_5);
-GPIO* PA6 = new GPIO(GPIOA,GPIO_Pin_6);
-GPIO* PA7 = new GPIO(GPIOA,GPIO_Pin_7);
 
-
-SOFTSPI sspi(PA5,PA6,PA7);
 
 
 
