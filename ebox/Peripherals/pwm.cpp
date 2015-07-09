@@ -9,105 +9,35 @@
 #define TIMxCH3 0x03
 #define TIMxCH4 0x04
 
-typedef struct 
+//	PWMpin
+PWM::PWM(GPIO* PWMPin)
 {
-	TIM_TypeDef *TIMx;
-	uint32_t rcc;
-	uint32_t irq;
-	uint8_t ch;
-	uint8_t needremap;
-	uint8_t pin;
-
-}PIN_TO_TIMx;
-/////////PWM pin support////////////////////
-const PIN_TO_TIMx pinTOTimx[]=
-{
-	//{TIMx,rcc,irqch,TIMxCHx,needremap,pin}
-
-//		{TIM1,RCC_APB2Periph_TIM1,TIM1_UP_IRQn,TIMxCH1,0,0x08},//暂时不支持
-//		{TIM1,RCC_APB2Periph_TIM1,TIM1_UP_IRQn,TIMxCH2,0,0x09},//暂时不支持
-//		{TIM1,RCC_APB2Periph_TIM1,TIM1_UP_IRQn,TIMxCH3,0,0x0a},//暂时不支持
-//		{TIM1,RCC_APB2Periph_TIM1,TIM1_UP_IRQn,TIMxCH4,0,0x0b},//暂时不支持
-
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH1,0,0x00},
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH2,0,0x01},
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH3,0,0x02},
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH4,0,0x03},
-		
-		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH1,0,0x06},
-		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH2,0,0x07},
-		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH3,0,0x10},
-		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH4,0,0x11},
-		
-		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH1,0,0x16},
-		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH2,0,0x17},
-		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH3,0,0x18},
-		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH4,0,0x19},
-		/////一下引脚需要开启ReMaping///////////////////////////
-
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH1,1,0x00},//pa0
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH2,1,0x01},//Pa1
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH1,1,0x0f},//pa15
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH2,1,0x1d},//Pb13
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH3,1,0x1a},//pb10
-		{TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn,TIMxCH4,1,0x1b},//PB11
-		
-		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH1,1,0x10},//pb0
-		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH2,1,0x11},//pb1
-		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH1,1,0x26},//pc6
-		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH2,1,0x27},
-		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH3,1,0x28},
-		{TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn,TIMxCH4,1,0x29},
-		
-		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH1,1,0x3c},//pd12
-		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH2,1,0x3d},
-		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH3,1,0x3e},
-		{TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn,TIMxCH4,1,0x3f},
-		
-};
-/////////////////////////////////////////
-TIM_TypeDef* 	pinToTIMx(uint8_t pin);
-uint8_t 			pinToTIM_ch(uint8_t pin);
-uint32_t 			pinToTIM_rcc(uint8_t pin);
-uint32_t 			pinToTIM_irq(uint8_t pin);
-uint8_t 			isPwmPin(uint8_t pin);
-//	PWMpin	: ebox pin
-PWM::PWM(uint8_t PWMpin)
-{
-	if(isPwmPin(PWMpin))
-	{
-		_pin = PWMpin;
+//	if(isPwmPin(PWMpin))
+//	{
+		_PWMPin = PWMPin;
 		_period = PWM_TIM_PERIOD;
 		_prescaler = PWM_TIM_PRESCALER;
 		
-		_TIMx = pinToTIMx(_pin);
-		_rcc = pinToTIM_rcc(_pin);
-		_irq = pinToTIM_irq(_pin);
-		_ch = pinToTIM_ch(_pin);
-		
-		pinMode(_pin,AF_PP);
+		initInfo(_PWMPin);
+
+		pMode(_PWMPin,_AF_PP);
 		baseInit(_period,_prescaler);
 
-	}
+//	}
 }
 //	
-PWM::PWM(uint8_t PWMpin,uint16_t period,uint16_t prescaler)
+PWM::PWM(GPIO*  PWMPin,uint16_t period,uint16_t prescaler)
 {
-	if(isPwmPin(PWMpin))
-	{
-		_pin = PWMpin;
+//	if(isPwmPin(PWMpin))
+//	{
+		_PWMPin = PWMPin;
 		_period = period;
 		_prescaler = prescaler;
+		initInfo(PWMPin);
 		
-		_TIMx = pinToTIMx(_pin);
-		_rcc = pinToTIM_rcc(_pin);
-		_irq = pinToTIM_irq(_pin);
-		_ch = pinToTIM_ch(_pin);
-		
-		pinMode(_pin,AF_PP);
+		pMode(_PWMPin,_AF_PP);
 		baseInit(_period,_prescaler);
-		digitalWrite(_pin,HIGH);
-	}
+//	}
 }
 void PWM::baseInit(uint16_t period,uint16_t prescaler)
 {
@@ -125,7 +55,61 @@ void PWM::baseInit(uint16_t period,uint16_t prescaler)
 
 	TIM_Cmd(_TIMx, ENABLE); //
 
-}		
+}	
+void PWM::initInfo(GPIO* PWMPin)
+{
+	if(PWMPin->port == GPIOA)
+	{
+		switch(PWMPin->pin)
+		{
+			case GPIO_Pin_0:
+				_TIMx = TIM2;_rcc = RCC_APB1Periph_TIM2;_irq = TIM2_IRQn;_ch = TIMxCH1;
+				break;
+			case GPIO_Pin_1:
+				_TIMx = TIM2;_rcc = RCC_APB1Periph_TIM2;_irq = TIM2_IRQn;_ch = TIMxCH2;
+				break;
+			case GPIO_Pin_2:
+				_TIMx = TIM2;_rcc = RCC_APB1Periph_TIM2;_irq = TIM2_IRQn;_ch = TIMxCH3;
+				break;
+			case GPIO_Pin_3:
+				_TIMx = TIM2;_rcc = RCC_APB1Periph_TIM2;_irq = TIM2_IRQn;_ch = TIMxCH4;
+				break;
+			
+			case GPIO_Pin_6:
+				_TIMx = TIM3;_rcc = RCC_APB1Periph_TIM3;_irq = TIM3_IRQn;_ch = TIMxCH1;
+				break;
+			case GPIO_Pin_7:
+				_TIMx = TIM3;_rcc = RCC_APB1Periph_TIM3;_irq = TIM3_IRQn;_ch = TIMxCH2;
+				break;
+			case GPIO_Pin_10:
+				_TIMx = TIM3;_rcc = RCC_APB1Periph_TIM3;_irq = TIM3_IRQn;_ch = TIMxCH3;
+				break;
+			case GPIO_Pin_11:
+				_TIMx = TIM3;_rcc = RCC_APB1Periph_TIM3;_irq = TIM3_IRQn;_ch = TIMxCH4;
+				break;
+		}
+	}
+	if(PWMPin->port == GPIOB)
+	{
+		switch(PWMPin->pin)
+		{
+			case GPIO_Pin_6:
+				_TIMx = TIM4;_rcc = RCC_APB1Periph_TIM4;_irq = TIM4_IRQn;_ch = TIMxCH1;
+				break;
+			case GPIO_Pin_7:
+				_TIMx = TIM4;_rcc = RCC_APB1Periph_TIM4;_irq = TIM4_IRQn;_ch = TIMxCH2;
+				break;
+			case GPIO_Pin_8:
+				_TIMx = TIM4;_rcc = RCC_APB1Periph_TIM4;_irq = TIM4_IRQn;_ch = TIMxCH3;
+				break;
+			case GPIO_Pin_9:
+				_TIMx = TIM4;_rcc = RCC_APB1Periph_TIM4;_irq = TIM4_IRQn;_ch = TIMxCH4;
+				break;
+		}
+	}
+
+}
+
 void PWM::setFrq(uint16_t period,uint16_t prescaler)
 {
 	_period = period;
@@ -176,80 +160,25 @@ void PWM::setDuty(uint16_t duty)
 		
 }
 //duty:0-1000对应0%-100.0%
-void analogWrite(uint8_t PWMpin, uint16_t duty) 
+void analogWrite(GPIO* PWMpin, uint16_t duty) 
 {
-	if(isPwmPin(PWMpin))
-	{
+//	if(isPwmPin(PWMpin))
+//	{
 			PWM p(PWMpin);
 			//p.SetFrq(1000,1);
 			p.setDuty(duty);
 
-	}
-	else
-	{
-	;
-	}
+//	}
+//	else
+//	{
+//	;
+//	}
 }
 
 //////////////////////////////////////////////////////////////
-TIM_TypeDef* pinToTIMx(uint8_t pin)
-{
-	int i;
-	for(i = 0; i<PWM_PIN_NUM; i++)
-	{
-		if(pinTOTimx[i].pin == pin)
-			
-			return pinTOTimx[i].TIMx;
-	}
-	return 0;
-}
-
-uint8_t pinToTIM_ch(uint8_t pin)
-{
-		int i;
-
-	for( i = 0; i<PWM_PIN_NUM; i++)
-	{
-		if(pinTOTimx[i].pin == pin)
-			
-			return pinTOTimx[i].ch;
-	}
-	return 0;
-}
-uint32_t pinToTIM_rcc(uint8_t pin)
-{
-		int i;
-
-	for( i = 0; i<PWM_PIN_NUM; i++)
-	{
-		if(pinTOTimx[i].pin == pin)
-			
-			return pinTOTimx[i].rcc;
-	}
-	return 0;
-}
-uint32_t pinToTIM_irq(uint8_t pin)
-{
-		int i;
-
-	for( i = 0; i<PWM_PIN_NUM; i++)
-	{
-		if(pinTOTimx[i].pin == pin)
-			
-			return pinTOTimx[i].irq;
-	}
-	return 0;
-}
-
 uint8_t isPwmPin(uint8_t pin)
 {
-	int i;
-	for( i = 0; i<PWM_PIN_NUM; i++)
-	{
-		if(pinTOTimx[i].pin == pin)
-			
-			return 1;
-	}
+
 	return 0;
 }
 //uint8_t isPinNeedRemap(uint8_t pin)

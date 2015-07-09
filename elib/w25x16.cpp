@@ -14,14 +14,7 @@ This specification is preliminary and is subject to change at any time without n
 */
 
 #include "w25x16.h"
-#include "softspi.h"
 
-GPIO* PA5 = new GPIO(GPIOA,GPIO_Pin_5);
-GPIO* PA6 = new GPIO(GPIOA,GPIO_Pin_6);
-GPIO* PA7 = new GPIO(GPIOA,GPIO_Pin_7);
-
-
-SOFTSPI sspi(PA5,PA6,PA7);
 
 void W25X::begin()
 {
@@ -30,22 +23,22 @@ void W25X::begin()
 	spiDevW25x16.prescaler = 0;
 	spiDevW25x16.bitOrder = SPI_BITODER_MSB;
 	
-	sspi.begin(&spiDevW25x16);
+	SPIClass::begin(&spiDevW25x16);
 	pMode(cs,_OPP);
 	dgWrite(cs,HIGH);
 }
 void W25X::readId(uint16_t* id)
 {
-	if(spiDevW25x16.devNum != sspi.readConfig())
-		sspi.config(&spiDevW25x16);
+	if(spiDevW25x16.devNum != readConfig())
+		config(&spiDevW25x16);
 
 	dgWrite(cs,LOW);
-	sspi.transfer(0x90);
-	sspi.transfer(0x00);
-	sspi.transfer(0x00);
-	sspi.transfer(0x00);
-	*id |= sspi.transfer(0xff)<<8;
-	*id |= sspi.transfer(0xff);
+	transfer(0x90);
+	transfer(0x00);
+	transfer(0x00);
+	transfer(0x00);
+	*id |= transfer(0xff)<<8;
+	*id |= transfer(0xff);
 	dgWrite(cs,HIGH);
 
 
@@ -63,18 +56,18 @@ void W25X::readId(uint16_t* id)
 void W25X::read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)   
 { 
  	u16 i;   
-	if(spiDevW25x16.devNum != sspi.readConfig())
-		sspi.config(&spiDevW25x16);
+	if(spiDevW25x16.devNum !=  readConfig())
+		config(&spiDevW25x16);
 	
 	dgWrite(cs,LOW);
-	sspi.transfer(W25X_ReadData);         //发送读取命令   
-	sspi.transfer((u8)((ReadAddr)>>16));  //发送24bit地址    
-	sspi.transfer((u8)((ReadAddr)>>8));   
-	sspi.transfer((u8)ReadAddr);   
-//	sspi.transfer(0xff,pBuffer,NumByteToRead);
+	 transfer(W25X_ReadData);         //发送读取命令   
+	 transfer((u8)((ReadAddr)>>16));  //发送24bit地址    
+	 transfer((u8)((ReadAddr)>>8));   
+	 transfer((u8)ReadAddr);   
+//	 transfer(0xff,pBuffer,NumByteToRead);
 	for(i=0;i<NumByteToRead;i++)
 	{ 
-        pBuffer[i]=sspi.transfer(0XFF);   //循环读数  
+        pBuffer[i]= transfer(0XFF);   //循环读数  
     }
 	dgWrite(cs,HIGH);
 }  
@@ -91,19 +84,19 @@ void W25X::read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)
 void W25X::fastRead(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)   
 { 
  	u16 i; 
-	if(spiDevW25x16.devNum != sspi.readConfig())
-		sspi.config(&spiDevW25x16);
+	if(spiDevW25x16.devNum !=  readConfig())
+		 config(&spiDevW25x16);
 	
 	dgWrite(cs,LOW);
-	sspi.transfer(W25X_FastReadData);         //发送读取命令   
-	sspi.transfer((u8)((ReadAddr)>>16));  //发送24bit地址    
-	sspi.transfer((u8)((ReadAddr)>>8));   
-	sspi.transfer((u8)ReadAddr);   
-	sspi.transfer(0xff);   //空字节
-//	sspi.transfer(0xff,pBuffer,NumByteToRead);
+	 transfer(W25X_FastReadData);         //发送读取命令   
+	 transfer((u8)((ReadAddr)>>16));  //发送24bit地址    
+	 transfer((u8)((ReadAddr)>>8));   
+	 transfer((u8)ReadAddr);   
+	 transfer(0xff);   //空字节
+//	 transfer(0xff,pBuffer,NumByteToRead);
 	for(i=0;i<NumByteToRead;i++)
 	{ 
-        pBuffer[i]=sspi.transfer(0XFF);   //循环读数  
+        pBuffer[i]= transfer(0XFF);   //循环读数  
     }
 	dgWrite(cs,HIGH);
 }  
@@ -124,8 +117,8 @@ void W25X::write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
 	u16 secoff;
 	u16 secremain;	   
  	u16 i;    
-	if(spiDevW25x16.devNum != sspi.readConfig())
-		sspi.config(&spiDevW25x16);
+	if(spiDevW25x16.devNum !=  readConfig())
+		 config(&spiDevW25x16);
 
 	secpos=WriteAddr/4096;//扇区地址 0~511 for w25x16
 	secoff=WriteAddr%4096;//在扇区内的偏移
@@ -180,12 +173,12 @@ void W25X::writePage(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
  	u16 i;  
 	writeEnable();                  //SET WEL 
 	dgWrite(cs,LOW);
-	sspi.transfer(W25X_PageProgram);      //发送写页命令   
-	sspi.transfer((u8)((WriteAddr)>>16)); //发送24bit地址    
-	sspi.transfer((u8)((WriteAddr)>>8));   
-	sspi.transfer((u8)WriteAddr);   
-	for(i=0;i<NumByteToWrite;i++)sspi.transfer(pBuffer[i]);//循环写数  
-//	sspi.transfer(pBuffer,NumByteToWrite);
+	 transfer(W25X_PageProgram);      //发送写页命令   
+	 transfer((u8)((WriteAddr)>>16)); //发送24bit地址    
+	 transfer((u8)((WriteAddr)>>8));   
+	 transfer((u8)WriteAddr);   
+	for(i=0;i<NumByteToWrite;i++) transfer(pBuffer[i]);//循环写数  
+//	 transfer(pBuffer,NumByteToWrite);
 	dgWrite(cs,HIGH);
 	_waitBusy();					   //等待写入结束
 } 
@@ -233,10 +226,10 @@ void W25X::eraseSector(u32 Dst_Addr)
 	writeEnable();                  //SET WEL 	 
 	_waitBusy();   
 	dgWrite(cs,LOW);
-	sspi.transfer(W25X_SectorErase);      //发送扇区擦除指令 
-	sspi.transfer((u8)((Dst_Addr)>>16));  //发送24bit地址    
-	sspi.transfer((u8)((Dst_Addr)>>8));   
-	sspi.transfer((u8)Dst_Addr);  
+	 transfer(W25X_SectorErase);      //发送扇区擦除指令 
+	 transfer((u8)((Dst_Addr)>>16));  //发送24bit地址    
+	 transfer((u8)((Dst_Addr)>>8));   
+	 transfer((u8)Dst_Addr);  
 	dgWrite(cs,HIGH);
 	_waitBusy();   				   //等待擦除完成
 
@@ -257,7 +250,7 @@ void W25X::eraseChip(void)
 	writeEnable();                  //SET WEL 
 	_waitBusy();   
 	dgWrite(cs,LOW);
-	sspi.transfer(W25X_ChipErase); 	//发送片擦除命令  
+	 transfer(W25X_ChipErase); 	//发送片擦除命令  
 	dgWrite(cs,HIGH);
 	_waitBusy();   				   				//等待芯片擦除结束
 }   
@@ -276,7 +269,7 @@ void W25X::powerDown(void)
 { 
 	volatile int i;	 	
 	dgWrite(cs,LOW);
-  sspi.transfer(W25X_PowerDown);        //发送掉电命令  
+   transfer(W25X_PowerDown);        //发送掉电命令  
     //等待TPD  
 	for (i=0;i<300;i++);
 	dgWrite(cs,HIGH);
@@ -287,7 +280,7 @@ void W25X::wakeUp(void)
 {  
  	volatile int i;	 	
  	dgWrite(cs,LOW);
- sspi.transfer(W25X_ReleasePowerDown);   //  send W25X_PowerDown command 0xAB    
+  transfer(W25X_ReleasePowerDown);   //  send W25X_PowerDown command 0xAB    
      //等待TRES1
    	for (i=0;i<300;i++);
 	dgWrite(cs,HIGH);
@@ -311,8 +304,8 @@ u8 W25X::readSR(void)
 {  
 	u8 byte=0;   
 	dgWrite(cs,LOW);
-	sspi.transfer(W25X_ReadStatusReg);    //发送读取状态寄存器命令    
-	byte=sspi.transfer(0Xff);               
+	 transfer(W25X_ReadStatusReg);    //发送读取状态寄存器命令    
+	byte= transfer(0Xff);               
 	dgWrite(cs,HIGH);
 	return byte;   
 } 
@@ -327,8 +320,8 @@ u8 W25X::readSR(void)
 void W25X::writeSR(u8 sr)   
 {   
 	dgWrite(cs,LOW);
-	sspi.transfer(W25X_WriteStatusReg);   //发送写取状态寄存器命令    
-	sspi.transfer(sr);               //写入一个字节  
+	 transfer(W25X_WriteStatusReg);   //发送写取状态寄存器命令    
+	 transfer(sr);               //写入一个字节  
 	dgWrite(cs,HIGH);
 }
 
@@ -343,7 +336,7 @@ void W25X::writeSR(u8 sr)
 void W25X::writeEnable(void)   
 {
 	dgWrite(cs,LOW);
-    sspi.transfer(W25X_WriteEnable);      //发送写使能  
+     transfer(W25X_WriteEnable);      //发送写使能  
 	dgWrite(cs,HIGH);
 } 
 /***************************************************************
@@ -356,6 +349,6 @@ void W25X::writeEnable(void)
 void W25X::writeDisable(void)   
 {  
  	dgWrite(cs,LOW);
-   sspi.transfer(W25X_WriteDisable);     //发送写禁止指令    
+    transfer(W25X_WriteDisable);     //发送写禁止指令    
 	dgWrite(cs,HIGH);
 } 			    

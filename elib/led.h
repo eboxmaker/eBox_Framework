@@ -22,7 +22,7 @@ class LED:public _74hc595
 {
 
 	public:
-		LED(uint8_t dataPin, uint8_t sckPin,uint8_t rckPin):_74hc595(dataPin,sckPin,rckPin)
+		LED(GPIO* dataPin, GPIO* sckPin,GPIO* rckPin):_74hc595(dataPin,sckPin,rckPin)
 		{
 			
 		};

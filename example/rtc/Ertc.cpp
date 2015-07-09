@@ -1,46 +1,51 @@
 
 #include "ebox.h"
-#include "uartx.h"
 
-#include "rtc.h"
+USART uart3(USART3,&PB10,&PB11);
 
-uint8_t h,m,s;
-uint32_t counter;
-void rtc_it_sec()
+
+
+uint32_t x;
+uint32_t xx;
+uint8_t flag1;
+uint8_t flag;
+
+TIM timer2(TIM2);
+TIMERONE t1;
+
+void t2it()
 {
-	rtc.getTimeHMS(&h,&m,&s);
-	counter = rtc.getCounter();
-	if(counter == 0x1517f)
-		rtc.setCounter(0);
-	uart3.printf("timeNow = %02d:%02d:%02d !",h,m,s);
-	uart3.printf("  counter = %x \r\n",counter);
+	xx++;
+	if(xx == 1000)
+	{
+		flag = 1;
+		xx = 0;
+	}
 }
-void rtc_it_ow()
+void t1it()
 {
-//	uart3.printf("\r\n over flow\r\n");
-}
-void rtc_it_alr()
-{
-	
-	/*
-	
-	*/
-
-//	uart3.printf("\r\n alr occured\r\n");
+	x++;
+	digitalWrite(7,!digitalRead(7));
+	if(x == 1000)
+	{
+		flag1 = 1;
+		x = 0;
+	}
 }
 void setup()
 {
 	eBoxInit();
 	uart3.begin(115200);
 	
-	rtc.begin();
-	rtc.interrupt(RTC_EVENT_OW | RTC_EVENT_ALR| RTC_EVENT_SEC,ENABLE);
-	rtc.attachInterrupt(RTC_EVENT_OW,rtc_it_ow);
-	rtc.attachInterrupt(RTC_EVENT_ALR,rtc_it_alr);
-	rtc.attachInterrupt(RTC_EVENT_SEC,rtc_it_sec);
-	rtc.setAlarm(23,59,55);
-	rtc.setTimeHMS(23,59,50);
+	timer2.begin();
+	timer2.Interrupt(ENABLE);
+	timer2.attachInterrupt(t2it);
+	timer2.start();
 	
+	t1.begin();
+	t1.interrupt(ENABLE);
+	t1.attachInterrupt(t1it);
+	t1.start();
 	pinMode(7,OUTPUT);
 }
 
@@ -50,7 +55,16 @@ int main(void)
 	setup();
 	while(1)
 	{
-
+		if(flag == 1)
+		{
+			uart3.printf("\r\ntimer2 is triggered 1000 times !",xx);
+			flag = 0;
+		}
+		if(flag1 == 1)
+		{
+			uart3.printf("\r\ntimer1 is triggered 1000 times !",xx);
+			flag1 = 0;
+		}
 	}
 
 

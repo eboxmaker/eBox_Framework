@@ -1,13 +1,8 @@
 
 #include "ebox.h"
-#include "uartx.h"
-#include "gtimer.h"
-#include "interrupts.h"
-#include "timerone.h"
 
-//如果中断引脚没有外部上拉或者下拉。
-//请设置exti.cpp中的初始化函数将
-//引脚设置内部上拉或者下拉
+USART uart3(USART3,&PB10,&PB11);
+
 uint32_t x;
 uint32_t xx;
 uint8_t flag1;
@@ -28,7 +23,6 @@ void t2it()
 void t1it()
 {
 	x++;
-	digitalWrite(7,!digitalRead(7));
 	if(x == 1000)
 	{
 		flag1 = 1;
@@ -41,7 +35,7 @@ void setup()
 	uart3.begin(115200);
 	
 	timer2.begin();
-	timer2.Interrupt(ENABLE);
+	timer2.interrupt(ENABLE);
 	timer2.attachInterrupt(t2it);
 	timer2.start();
 	
@@ -49,7 +43,6 @@ void setup()
 	t1.interrupt(ENABLE);
 	t1.attachInterrupt(t1it);
 	t1.start();
-	pinMode(7,OUTPUT);
 }
 
 

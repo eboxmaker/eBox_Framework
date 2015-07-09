@@ -18,7 +18,7 @@ This specification is preliminary and is subject to change at any time without n
 
 #define DATAOUT  GPIOB->ODR             //PD[0..7]--(LCD)D0~D7
 
-LCD1602::LCD1602(uint8_t LEDPin,uint8_t ENPin,uint8_t RWPin,uint8_t RSPin,uint8_t DB0,uint8_t DB1,uint8_t DB2,uint8_t DB3,uint8_t DB4,uint8_t DB5,uint8_t DB6,uint8_t DB7)
+LCD1602::LCD1602(GPIO* LEDPin,GPIO* ENPin,GPIO* RWPin,GPIO* RSPin,GPIO* DB0,GPIO* DB1,GPIO* DB2,GPIO* DB3,GPIO* DB4,GPIO* DB5,GPIO* DB6,GPIO* DB7)
 {
 		 _LEDPin = LEDPin;
 		 _ENPin	= ENPin;
@@ -32,43 +32,20 @@ LCD1602::LCD1602(uint8_t LEDPin,uint8_t ENPin,uint8_t RWPin,uint8_t RSPin,uint8_
 		 _DB5		= DB5;
 		 _DB6		= DB6;
 		 _DB7		= DB7;
-	pinMode(_LEDPin,OUTPUT);
-	pinMode(_ENPin,OUTPUT);
-	pinMode(_RWPin,OUTPUT);
-	pinMode(_RSPin,OUTPUT);
-	pinMode(_DB0,OUTPUT);
-	pinMode(_DB1,OUTPUT);
-	pinMode(_DB2,OUTPUT);
-	pinMode(_DB3,OUTPUT);
-	pinMode(_DB4,OUTPUT);
-	pinMode(_DB5,OUTPUT);
-	pinMode(_DB6,OUTPUT);
-	pinMode(_DB7,OUTPUT);	
+	pMode(_LEDPin,_OPP);
+	pMode(_ENPin,_OPP);
+	pMode(_RWPin,_OPP);
+	pMode(_RSPin,_OPP);
+	pMode(_DB0,_OPP);
+	pMode(_DB1,_OPP);
+	pMode(_DB2,_OPP);
+	pMode(_DB3,_OPP);
+	pMode(_DB4,_OPP);
+	pMode(_DB5,_OPP);
+	pMode(_DB6,_OPP);
+	pMode(_DB7,_OPP);	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
 	 GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
-	nDelay = 10;
-}
-LCD1602::LCD1602(uint8_t LEDPin,uint8_t ENPin,uint8_t RWPin,uint8_t RSPin,uint8_t DB0,uint8_t DB1,uint8_t DB2,uint8_t DB3)
-{
-		 _LEDPin = LEDPin;
-		 _ENPin	= ENPin;
-		 _RWPin	= RWPin;
-		 _RSPin	= RSPin;
-		 _DB0		= DB0;
-		 _DB1		= DB1;
-		 _DB2		= DB2;
-		 _DB3		= DB3;
-	pinMode(_LEDPin,OUTPUT);
-	pinMode(_ENPin,OUTPUT);
-	pinMode(_RWPin,OUTPUT);
-	pinMode(_RSPin,OUTPUT);
-	pinMode(_DB0,OUTPUT);
-	pinMode(_DB1,OUTPUT);
-	pinMode(_DB2,OUTPUT);
-	pinMode(_DB3,OUTPUT);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
-	 GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
-
 	nDelay = 10;
 }
 
@@ -81,13 +58,13 @@ inline uint8_t LCD1602::bz(void)
 	uint8_t result;
 
 
-	pinMode(_DB7,INPUT);
-	digitalWrite(_RSPin,0);
-	digitalWrite(_RWPin,1);
-	digitalWrite(_ENPin,1);
+	pMode(_DB7,_INPUT);
+	dgWrite(_RSPin,0);
+	dgWrite(_RWPin,1);
+	dgWrite(_ENPin,1);
 	LCDdelay(nDelay);
-	result = digitalRead(_DB7);
-	digitalWrite(_ENPin,0);
+	result = dgRead(_DB7);
+	dgWrite(_ENPin,0);
 
 	return result; 
 
@@ -106,28 +83,28 @@ void LCD1602::wcmd(uint8_t cmd)
 		;
 	}
 
-	pinMode(_DB7,OUTPUT);
-	digitalWrite(_RSPin,0);	   //对同一个寄存器的两次写入，中间延时一会
-	digitalWrite(_RWPin,0);
-	digitalWrite(_ENPin,0);
+	pMode(_DB7,_OPP);
+	dgWrite(_RSPin,0);	   //对同一个寄存器的两次写入，中间延时一会
+	dgWrite(_RWPin,0);
+	dgWrite(_ENPin,0);
 	
-//	digitalWrite(_DB0,cmd&0x01);
-//	digitalWrite(_DB1,cmd&0x02);
-//	digitalWrite(_DB2,cmd&0x04);
-//	digitalWrite(_DB3,cmd&0x08);
-//	digitalWrite(_DB4,cmd&0x10);
-//	digitalWrite(_DB5,cmd&0x20);
-//	digitalWrite(_DB6,cmd&0x40);
-//	digitalWrite(_DB7,cmd&0x80);
+//	dgWrite(_DB0,cmd&0x01);
+//	dgWrite(_DB1,cmd&0x02);
+//	dgWrite(_DB2,cmd&0x04);
+//	dgWrite(_DB3,cmd&0x08);
+//	dgWrite(_DB4,cmd&0x10);
+//	dgWrite(_DB5,cmd&0x20);
+//	dgWrite(_DB6,cmd&0x40);
+//	dgWrite(_DB7,cmd&0x80);
 	
 	DATAOUT &= 0XFF00;
 	DATAOUT |= cmd;
 
 
 	LCDdelay(nDelay);
-	digitalWrite(_ENPin,1);
+	dgWrite(_ENPin,1);
 	LCDdelay(nDelay);
-	digitalWrite(_ENPin,0);
+	dgWrite(_ENPin,0);
 	LCDdelay(nDelay);
 }	
 /*********************************************************************
@@ -143,26 +120,26 @@ void LCD1602::wdat(uint8_t dat)
 		;
 	}
 
-	pinMode(_DB7,OUTPUT);
-	digitalWrite(_RSPin,1);
-	digitalWrite(_RWPin,0);
-	digitalWrite(_ENPin,0);
-//	digitalWrite(_DB0,dat&0x01);
-//	digitalWrite(_DB1,dat&0x02);
-//	digitalWrite(_DB2,dat&0x04);
-//	digitalWrite(_DB3,dat&0x08);
-//	digitalWrite(_DB4,dat&0x10);
-//	digitalWrite(_DB5,dat&0x20);
-//	digitalWrite(_DB6,dat&0x40);
-//	digitalWrite(_DB7,dat&0x80);
+	pMode(_DB7,_OPP);
+	dgWrite(_RSPin,1);
+	dgWrite(_RWPin,0);
+	dgWrite(_ENPin,0);
+//	dgWrite(_DB0,dat&0x01);
+//	dgWrite(_DB1,dat&0x02);
+//	dgWrite(_DB2,dat&0x04);
+//	dgWrite(_DB3,dat&0x08);
+//	dgWrite(_DB4,dat&0x10);
+//	dgWrite(_DB5,dat&0x20);
+//	dgWrite(_DB6,dat&0x40);
+//	dgWrite(_DB7,dat&0x80);
 	
 	DATAOUT &= 0XFF00;
 	DATAOUT |= dat;
 
 	LCDdelay(nDelay);
-	digitalWrite(_ENPin,1);
+	dgWrite(_ENPin,1);
 	LCDdelay(nDelay);
-	digitalWrite(_ENPin,0);
+	dgWrite(_ENPin,0);
 }
 	
 /*********************************************************************
@@ -364,9 +341,9 @@ void LCD1602::FlickerScreen(void)
 void LCD1602::BackLight(u8 i)
 {
 	if(i == 1)
-		digitalWrite(_LEDPin,1);
+		dgWrite(_LEDPin,1);
 	else
-		digitalWrite(_LEDPin,0);
+		dgWrite(_LEDPin,0);
 }
 
 /*********************************************************************
