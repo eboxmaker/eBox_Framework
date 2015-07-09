@@ -62,7 +62,7 @@ This specification is preliminary and is subject to change at any time without n
  {
 	 public:
 			DateTime t;
-			DS3231(uint8_t SDApin,uint8_t SCLpin):Softi2c(SDApin,SCLpin){
+			DS3231(GPIO* SDApin,GPIO* SCLpin):Softi2c(SDApin,SCLpin){
 			// do nothing;
 			};	
 			void begin()

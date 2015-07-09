@@ -57,7 +57,8 @@ class W25X
 
 
 	private:
-			u8 SPI_FLASH_BUF[4096];
+		u8 SPI_FLASH_BUF[4096];
+		SPICONFIG spiDevW25x16;
 
 		GPIO* cs;
 		u8 readSR(void);  

@@ -16,8 +16,12 @@ This specification is preliminary and is subject to change at any time without n
 #include "w25x16.h"
 #include "softspi.h"
 
+GPIO* PA5 = new GPIO(GPIOA,GPIO_Pin_5);
+GPIO* PA6 = new GPIO(GPIOA,GPIO_Pin_6);
+GPIO* PA7 = new GPIO(GPIOA,GPIO_Pin_7);
 
-SPICONFIG spiDevW25x16;
+
+SOFTSPI sspi(PA5,PA6,PA7);
 
 void W25X::begin()
 {
@@ -58,7 +62,10 @@ void W25X::readId(uint16_t* id)
 ***************************************************************/
 void W25X::read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)   
 { 
- 	u16 i;    												    
+ 	u16 i;   
+	if(spiDevW25x16.devNum != sspi.readConfig())
+		sspi.config(&spiDevW25x16);
+	
 	dgWrite(cs,LOW);
 	sspi.transfer(W25X_ReadData);         //发送读取命令   
 	sspi.transfer((u8)((ReadAddr)>>16));  //发送24bit地址    
@@ -83,7 +90,10 @@ void W25X::read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)
 ***************************************************************/
 void W25X::fastRead(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)   
 { 
- 	u16 i;    												    
+ 	u16 i; 
+	if(spiDevW25x16.devNum != sspi.readConfig())
+		sspi.config(&spiDevW25x16);
+	
 	dgWrite(cs,LOW);
 	sspi.transfer(W25X_FastReadData);         //发送读取命令   
 	sspi.transfer((u8)((ReadAddr)>>16));  //发送24bit地址    
@@ -114,7 +124,9 @@ void W25X::write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
 	u16 secoff;
 	u16 secremain;	   
  	u16 i;    
-	
+	if(spiDevW25x16.devNum != sspi.readConfig())
+		sspi.config(&spiDevW25x16);
+
 	secpos=WriteAddr/4096;//扇区地址 0~511 for w25x16
 	secoff=WriteAddr%4096;//在扇区内的偏移
 	secremain=4096-secoff;//扇区剩余空间大小   

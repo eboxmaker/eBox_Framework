@@ -56,10 +56,11 @@ class TIM
 		uint16_t _period;
 		uint16_t _prescaler;
 	
-		uint8_t _id;
 		TIM_TypeDef *_TIMx;
+		uint8_t _id;
 		uint32_t _rcc;
-		uint32_t _irq;
+		uint8_t _irq;
+		void initInfo(TIM_TypeDef* TIMx);
 	
 		void baseInit(uint16_t period,uint16_t prescaler);
 };

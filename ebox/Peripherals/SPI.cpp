@@ -2,45 +2,36 @@
 
 //#define SPI_NUM 3
 
-SPIClass spi1(SPI1);
-SPIClass spi2(SPI2);
-SPIClass spi3(SPI3);
 
-#define SPI1_MOSI_PIN  7
-#define SPI1_MISO_PIN  6
-#define SPI1_SCK_PIN   5
 
-#define SPI2_MOSI_PIN  31
-#define SPI2_MISO_PIN  30
-#define SPI2_SCK_PIN   29
-
-SPIClass::SPIClass(SPI_TypeDef *spi)
+SPIClass::SPIClass(SPI_TypeDef *spi,GPIO* sckPin,GPIO* mosiPin,GPIO* misoPin)
 {
 	_spi = spi;
+	_sckPin = sckPin;
+	_mosiPin = mosiPin;
+	_misoPin = misoPin;
+	
 };
 
 void SPIClass::begin(SPICONFIG* spiConfig)
-{
+{		
 	if(_spi == SPI1)
 	{	
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,ENABLE);
-		
-		pinMode(SPI1_SCK_PIN,AF_PP);
-		pinMode(SPI1_MISO_PIN,AF_PP);
-		pinMode(SPI1_MOSI_PIN,AF_PP);
 	}
 	if(_spi == SPI2)
 	{	
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE);
-		
-		pinMode(SPI2_SCK_PIN,AF_PP);
-		pinMode(SPI2_MISO_PIN,AF_PP);
-		pinMode(SPI2_MOSI_PIN,AF_PP);
 	}
 	if(_spi == SPI3)
 	{	
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,ENABLE);
 	}
+	
+	
+	pMode(_sckPin,_AF_PP);
+	pMode(_mosiPin,_AF_PP);
+	pMode(_misoPin,_AF_PP);
 
 	config(spiConfig);
 }

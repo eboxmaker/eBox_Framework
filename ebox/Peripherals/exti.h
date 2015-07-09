@@ -28,15 +28,16 @@ class EXTIx
 
 
 	public:
-		EXTIx(uint8_t pin,EXTITrigger_TypeDef trigger);
+		EXTIx(GPIO* extiPin,EXTITrigger_TypeDef trigger);
 		void attachInterrupt(void (*callbackFun)(void));
-	
 	private:
-		uint32_t _ExtiLine;
+		GPIO* _extiPin;
 		uint8_t _PortSource;
 		uint8_t _PinSource;
-		uint32_t _irq;
-		uint8_t  _pin;	
+		uint32_t _ExtiLine;
+		uint8_t _irq;
+	
+		void initInfo(GPIO* extiPin);
 };
 
 #endif

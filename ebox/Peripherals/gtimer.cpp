@@ -2,56 +2,24 @@
 
 #define TIM_NUM 7
 
-
 callbackFun gTimxCallbackTable[TIM_NUM +1];
 
-typedef struct 
-{
-	uint8_t id ;
-	TIM_TypeDef *timx;
-	uint32_t rcc;
-	uint32_t irq;
-} TIMx_INFO ;
 
-
-////////////外设及其附属属性对应表///////////////////////////
-const TIMx_INFO TIMxInfo[]=
-{
-	{1,TIM1,RCC_APB2Periph_TIM1,TIM1_UP_IRQn},//暂时不支持
-	{2,TIM2,RCC_APB1Periph_TIM2,TIM2_IRQn},
-	{3,TIM3,RCC_APB1Periph_TIM3,TIM3_IRQn},
-	{4,TIM4,RCC_APB1Periph_TIM4,TIM4_IRQn},
-	#if defined (STM32F10X_HD)
-		{5,TIM5,RCC_APB1Periph_TIM5,TIM5_IRQn},
-		{6,TIM6,RCC_APB1Periph_TIM6,TIM6_IRQn},
-		{7,TIM7,RCC_APB1Periph_TIM7,TIM7_IRQn}
-	#endif
-};
 
 //////////////////////////////////////
-uint32_t TIMxToRCC(TIM_TypeDef* TIMx);
-uint32_t TIMxToIRQ(TIM_TypeDef* TIMx);
-uint8_t TIMxToID(TIM_TypeDef* TIMx);
 
 
 TIM::TIM(TIM_TypeDef* TIMx)
 {
-	_TIMx = TIMx;
 	
-	_id = TIMxToID(_TIMx);
-	_rcc = TIMxToRCC(TIMx);
-	_irq = TIMxToIRQ(TIMx);
+	initInfo(TIMx);
 	_period = PEROID;
 	_prescaler = PRESCALE;
 }
 TIM::TIM(TIM_TypeDef* TIMx,uint32_t period,uint32_t prescaler)
 {
 
-	_TIMx = TIMx;
-	
-	_id = TIMxToID(_TIMx);
-	_rcc = TIMxToRCC(TIMx);
-	_irq = TIMxToIRQ(TIMx);
+	initInfo(TIMx);
 	_period = period;
 	_prescaler = prescaler;
 }
@@ -108,6 +76,26 @@ void TIM::baseInit(uint16_t period,uint16_t prescaler)
 
 
 }
+void TIM::initInfo(TIM_TypeDef* TIMx)
+{
+	switch((uint32_t)TIMx)
+	{
+		case (uint32_t)TIM1:
+			_TIMx = TIM1;_id = 1;_rcc = RCC_APB2Periph_TIM1;_irq = TIM1_UP_IRQn;//暂时不支持
+			break;
+		case (uint32_t)TIM2:
+			_TIMx = TIM2;_id = 2;_rcc = RCC_APB1Periph_TIM2;_irq = TIM2_IRQn;
+			break;
+		case (uint32_t)TIM3:
+			_TIMx = TIM3;_id = 3;_rcc = RCC_APB1Periph_TIM3;_irq = TIM3_IRQn;
+			break;
+		case (uint32_t)TIM4:
+			_TIMx = TIM4;_id = 4;_rcc = RCC_APB1Periph_TIM4;_irq = TIM4_IRQn;
+			break;
+	}
+
+}
+
 void TIM::setReload(uint16_t Autoreload)
 {
 	TIM_SetAutoreload(_TIMx,Autoreload);
@@ -119,57 +107,6 @@ void TIM::clearCount(void)
 void TIM::attachInterrupt(void(*callback)(void))
 {
 		gTimxCallbackTable[_id] = callback;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////
-uint32_t  TIMxToRCC(TIM_TypeDef* TIMx)
-{
-	int i;
-	uint32_t rcc;
-	for(i=0;i<TIM_NUM;i++)
-	{
-		if(TIMxInfo[i].timx == TIMx)
-		{
-					rcc = TIMxInfo[i].rcc;
-			break;
-
-		}
-	
-	}
-	return rcc;
-}
-uint32_t TIMxToIRQ(TIM_TypeDef* TIMx)
-{
-	uint32_t irq;
-	int i;
-	for(i=0;i<TIM_NUM;i++)
-	{
-		if(TIMxInfo[i].timx == TIMx)
-		{
-			irq = TIMxInfo[i].irq;
-			break;
-		}
-	
-	}	
-
-	return irq;
-}
-uint8_t TIMxToID(TIM_TypeDef* TIMx)
-{
-	uint32_t id;
-	int i;
-	for(i=0;i<TIM_NUM;i++)
-	{
-		if(TIMxInfo[i].timx == TIMx)
-		{
-			id = TIMxInfo[i].id;
-			break;
-		}
-	
-	}	
-
-	return id;
 }
 
 
