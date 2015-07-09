@@ -563,9 +563,9 @@
               <FilePath>..\ebox\core\core.cpp</FilePath>
             </File>
             <File>
-              <FileName>io.cpp</FileName>
+              <FileName>digital.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\ebox\core\io.cpp</FilePath>
+              <FilePath>..\ebox\core\digital.cpp</FilePath>
             </File>
             <File>
               <FileName>analog.cpp</FileName>
