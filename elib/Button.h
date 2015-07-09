@@ -22,14 +22,14 @@ class Button
 {
     public:
         Button(void);
-        Button(uint8_t pin, uint8_t puEnable);
+        Button(GPIO* pin, uint8_t puEnable);
 			uint8_t read(void);
 			uint8_t release(void);
 			uint8_t click(void);
 			uint8_t pressedFor(uint32_t ms,uint8_t times);
     
     private:
-        uint8_t _pin;           //arduino pin number
+        GPIO* _pin;           //arduino pin number
         uint8_t _puEnable;      //internal pullup resistor enabled
         uint8_t _state;         //current button state
         uint8_t _lastState;     //previous button state

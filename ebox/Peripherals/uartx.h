@@ -28,7 +28,10 @@ This specification is preliminary and is subject to change at any time without n
 	4.支持强大的printf
 	5.暂时不支持引脚的remap
 */
-//用户配置
+//用户配置//////////////
+//#define USE_UART1
+//#define USE_UART2
+#define USE_UART3
 #define USE_DMA
 #define UART_MAX_SEND_BUF 128 
 
@@ -38,7 +41,7 @@ class USART
 			char 			sendBuf[UART_MAX_SEND_BUF];
 			uint8_t 	state;	 
 	 public:
-			USART(USART_TypeDef * USARTx);
+			USART(USART_TypeDef * USARTx,GPIO* txPin,GPIO* rxPin);
 			void begin(uint32_t BaudRate);
 			void attachInterrupt(void (*callbackFun)(void));
 			void interrupt(FunctionalState enable);
@@ -55,6 +58,8 @@ class USART
 	 	uint8_t _id;
 		uint32_t _rcc;
 		uint32_t _irq;
+		 GPIO* _txPin;
+		 GPIO* _rxPin;
 	  uint8_t _initialized;
 		int 	putChar(char ch);
 		void 	putString(const char *str);
@@ -63,9 +68,7 @@ class USART
  
 };
 
-extern class USART uart1;
-extern class USART uart2;
-extern class USART uart3;
+
 
 
 

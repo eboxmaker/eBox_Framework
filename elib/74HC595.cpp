@@ -15,20 +15,21 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "74hc595.h"
 
-_74hc595::_74hc595(uint8_t dataPin, uint8_t sckPin,uint8_t rckPin)
+_74hc595::_74hc595(GPIO* dataPin, GPIO* sckPin,GPIO* rckPin)
 {
 	_dataPin 	= dataPin;
 	_sckPin 	= sckPin;
 	_rckPin 	= rckPin;
-	 pinMode(_dataPin, OUTPUT);
-	 pinMode(_sckPin, OUTPUT);
-	 pinMode(_rckPin, OUTPUT);
+	
+	_dataPin->mode(_OPP);
+	_sckPin->mode(_OPP);
+	_rckPin->mode(_OPP);
 }
 void _74hc595::rowOut(uint8_t* Data,uint8_t dataLen)
 {
 
-	digitalWrite(_rckPin, LOW);
+	_rckPin->write(LOW);
 	for(int i = 0; i < dataLen; i++)
 	shiftOut(_dataPin,_sckPin,MSBFIRST,Data[i]);
-	digitalWrite(_rckPin, HIGH);
+	_rckPin->write(HIGH);
 }

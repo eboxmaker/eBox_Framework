@@ -563,14 +563,14 @@
               <FilePath>..\ebox\core\core.cpp</FilePath>
             </File>
             <File>
+              <FileName>io.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\core\io.cpp</FilePath>
+            </File>
+            <File>
               <FileName>analog.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\ebox\core\analog.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>digital.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ebox\core\digital.cpp</FilePath>
             </File>
             <File>
               <FileName>uartx.cpp</FileName>
@@ -622,10 +622,25 @@
               <FileType>8</FileType>
               <FilePath>..\ebox\Peripherals\SPI.cpp</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>user</GroupName>
+          <Files>
             <File>
-              <FileName>io.cpp</FileName>
+              <FileName>stm32f10x_it.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\stm32f10x_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>ioconfig.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\ebox\core\io.cpp</FilePath>
+              <FilePath>..\ebox\ioconfig.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>main.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\main.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -671,26 +686,6 @@
               <FileName>w25x16.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\elib\w25x16.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>user</GroupName>
-          <Files>
-            <File>
-              <FileName>stm32f10x_it.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\stm32f10x_it.c</FilePath>
-            </File>
-            <File>
-              <FileName>boardcfg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\boardcfg.h</FilePath>
-            </File>
-            <File>
-              <FileName>main.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\main.cpp</FilePath>
             </File>
           </Files>
         </Group>

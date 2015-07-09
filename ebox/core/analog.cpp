@@ -145,24 +145,24 @@ void Init_ADC1(void)
 	 
 	}
 
-uint16_t analogRead(uint8_t pin)
+uint16_t analogRead(GPIO* pin)
 {
-	int i;
-	if(analogPinStatu[pin] == 0)
-	{
-		pinMode(pin,AIN);
-		analogPinStatu[pin] = 1;
-	}
-	
-	for(i=0;i<ANALOG_PIN_NUM;i++)
-	{
-		if(pinToAnalog[i].pin == pin)
-		return AD_Value[pinToAnalog[i].analogch];
-	}
+//	int i;
+//	if(analogPinStatu[pin] == 0)
+//	{
+//		pMode(pin,_AIN);
+//		analogPinStatu[pin] = 1;
+//	}
+//	
+//	for(i=0;i<ANALOG_PIN_NUM;i++)
+//	{
+//		if(pinToAnalog[i].pin == pin)
+//		return AD_Value[pinToAnalog[i].analogch];
+//	}
 	return 0;
 
 }
-uint16_t analogReadToVoltage(uint8_t pin)   
+uint16_t analogReadToVoltage(GPIO* pin)   
 { 
    return (u16)(analogRead(pin)*3300/4096);   //求的结果扩大了1000倍，方便下面求出小数
 }

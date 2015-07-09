@@ -21,8 +21,8 @@ class LCD1602
 {
 	
 	public:
-		LCD1602(uint8_t LEDPin,uint8_t ENPin,uint8_t RWPin,uint8_t RSPin,uint8_t DB0,uint8_t DB1,uint8_t DB2,uint8_t DB3,uint8_t DB4,uint8_t DB5,uint8_t DB6,uint8_t DB7);
-		LCD1602(uint8_t LEDPin,uint8_t ENPin,uint8_t RWPin,uint8_t RSPin,uint8_t DB0,uint8_t DB1,uint8_t DB2,uint8_t DB3);
+		LCD1602(GPIO* LEDPin,GPIO* ENPin,GPIO* RWPin,GPIO* RSPin,GPIO* DB0,GPIO* DB1,GPIO* DB2,GPIO* DB3,GPIO* DB4,GPIO* DB5,GPIO* DB6,GPIO* DB7);
+		LCD1602(GPIO* LEDPin,GPIO* ENPin,GPIO* RWPin,GPIO* RSPin,GPIO* DB0,GPIO* DB1,GPIO* DB2,GPIO* DB3);
 		void begin(void);
 		void Setpos(uint8_t row,uint8_t col);
 		void DispChar(char ch);
@@ -47,18 +47,18 @@ class LCD1602
 		void DispTimeYMD(uint32_t year,uint8_t month,uint8_t day);
 		void DispDateTime(uint32_t year,uint8_t month,uint8_t day,uint8_t hour,uint8_t min,uint8_t sec);
 	private:
-		uint8_t _LEDPin;
-		uint8_t _ENPin;
-		uint8_t _RWPin;
-		uint8_t _RSPin;
-		uint8_t _DB0;
-		uint8_t _DB1;
-		uint8_t _DB2;
-		uint8_t _DB3;
-		uint8_t _DB4;
-		uint8_t _DB5;
-		uint8_t _DB6;
-		uint8_t _DB7;
+		GPIO* _LEDPin;
+		GPIO* _ENPin;
+		GPIO* _RWPin;
+		GPIO* _RSPin;
+		GPIO* _DB0;
+		GPIO* _DB1;
+		GPIO* _DB2;
+		GPIO* _DB3;
+		GPIO* _DB4;
+		GPIO* _DB5;
+		GPIO* _DB6;
+		GPIO* _DB7;
 	
 		uint16_t nDelay;
 		inline void LCDdelay(uint32_t nCount);

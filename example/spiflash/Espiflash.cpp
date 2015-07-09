@@ -2,18 +2,19 @@
 #include "ebox.h"
 #include "w25x16.h"
 
-GPIO* PE5 = new GPIO(GPIOE,GPIO_Pin_5);
+USART uart3(USART3,&PB10,&PB11);
 
-W25X flash(PE5);
+
+W25X flash(&PE5,SPI1,&PA5,&PA6,&PA7);
+
 
 void setup()
 {
 	eBoxInit();
 	uart3.begin(9600);
-	
 	flash.begin();
-
 }
+
 
 int16_t tmp[7];
 uint16_t id;
@@ -42,6 +43,8 @@ int main(void)
 		flash.read(buf,1,10);	
 		for(int i=0;i<10;i++)
 		uart3.printf(" %x",buf[i]);
+		uart3.printf("\r\n=========================\r\n");
+		uart3.printf("\r\n\r\n");
 		
 		delay_ms(1000);
 	}

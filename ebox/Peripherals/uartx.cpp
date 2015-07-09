@@ -1,18 +1,10 @@
 #include "uartx.h"
 
+
 #define USART_NUM 3
-
-class USART uart1(USART1);
-class USART uart2(USART2);
-class USART uart3(USART3);
-
-#define SEND_MODE_P 	0
-#define SEND_MODE_LN 	1	
 
 #define BUSY 	1
 #define FREE 	0
-
-//uint8_t uart1State,uart2State,uart3State;
 
 callbackFun UARTCallbackTable[USART_NUM];//支持串口的rx中断
 
@@ -31,17 +23,20 @@ const USARTx_INFO USARTxInfo[]=
 	{2,USART2,RCC_APB1Periph_USART2,USART2_IRQn},
 	{3,USART3,RCC_APB1Periph_USART3,USART3_IRQn},
 };
+
 //////////////////////////
 uint32_t  USARTxToRCC(USART_TypeDef* USARTx);
 uint32_t 	USARTxToIRQ(USART_TypeDef* USARTx);
 uint8_t 	USARTxToID(USART_TypeDef* USARTx);
 
-USART::USART(USART_TypeDef * USARTx)
+USART::USART(USART_TypeDef * USARTx,GPIO* txPin,GPIO* rxPin)
 {
 	_USARTx = USARTx;
 	_rcc = USARTxToRCC(_USARTx);
 	_irq = USARTxToIRQ(_USARTx);
 	_id	= USARTxToID(_USARTx);
+	_rxPin = rxPin;
+	_txPin = txPin;
 	state = FREE;
 }
 
@@ -56,28 +51,23 @@ void USART::begin(uint32_t BaudRate)
 	
 	 NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
 
+		pMode(_txPin,_AF_PP);
+		pMode(_rxPin,_INPUT);
 		if(_id == 1)
 		{
 			RCC_APB2PeriphClockCmd(_rcc,ENABLE); //??????
-			pinMode(0x09,AF_PP);
-			pinMode(0x0a,INPUT);
 			
 			_DMA1_Channelx = DMA1_Channel4;
 		}
 		else if(_id == 2)
 		{
 			RCC_APB1PeriphClockCmd(_rcc,ENABLE); //?????
-			pinMode(0x02,AF_PP);
-			pinMode(0x03,INPUT);
-			
 			_DMA1_Channelx = DMA1_Channel7;
 		}
 		else if(_id == 3)
 		{
 
 			RCC_APB1PeriphClockCmd(_rcc,ENABLE); //?????
-			pinMode(0x1a,AF_PP);
-			pinMode(0x1B,INPUT);
 			
 			_DMA1_Channelx = DMA1_Channel2;
 			
@@ -289,7 +279,7 @@ uint8_t USARTxToID(USART_TypeDef* USARTx)
 
 
 extern "C"{
-	
+
 void USART1_IRQHandler(void)
 {
 
@@ -317,28 +307,42 @@ void USART3_IRQHandler(void)
 		USART_ClearITPendingBit(USART3,USART_IT_RXNE);
 	}
 }
-void DMA1_Channel2_IRQHandler(void)  
-{  
 
-  DMA_Cmd(DMA1_Channel2,DISABLE);  
-  uart3.state = FREE;   
-	DMA_ClearFlag(DMA1_FLAG_TC2); 
+#if defined USE_DMA
+	#if defined USE_UART1
+	extern class USART uart1;
+	void DMA1_Channel4_IRQHandler(void)  
+	{  
 
-}  
-void DMA1_Channel4_IRQHandler(void)  
-{  
+		DMA_Cmd(DMA1_Channel4,DISABLE);  
+		uart1.state = FREE;  
+		DMA_ClearFlag(DMA1_FLAG_TC4); 
 
-  DMA_Cmd(DMA1_Channel4,DISABLE);  
-  uart1.state = FREE;  
-	DMA_ClearFlag(DMA1_FLAG_TC4); 
+	}	 
+	#endif
 
-}	 
-void DMA1_Channel7_IRQHandler(void)  
-{  
-  DMA_Cmd(DMA1_Channel7,DISABLE);  
-  uart2.state = FREE;  
-	DMA_ClearFlag(DMA1_FLAG_TC7); 
-}	 
+	#if defined USE_UART2
+	extern class USART uart2;
+	void DMA1_Channel7_IRQHandler(void)  
+	{  
+		DMA_Cmd(DMA1_Channel7,DISABLE);  
+		uart2.state = FREE;  
+		DMA_ClearFlag(DMA1_FLAG_TC7); 
+	}	 
+	#endif
+
+	#if defined USE_UART3
+	extern class USART uart3;
+	void DMA1_Channel2_IRQHandler(void)  
+	{  
+
+		DMA_Cmd(DMA1_Channel2,DISABLE);  
+		uart3.state = FREE;   
+		DMA_ClearFlag(DMA1_FLAG_TC2); 
+
+	}
+	#endif
+#endif 
 
 }
 

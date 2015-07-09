@@ -1,17 +1,21 @@
 
 #include "ebox.h"
-#include "uartx.h"
-#include "interrupts.h"
+#include "ds3231.h"
+
+USART uart3(USART3,&PB10,&PB11);
+
+
+
 
 #include "mpu6050.h"
 
 
-MPU6050 mpu(0x17,0x16);
+MPU6050 mpu(&PB7,&PB6);
 
 void setup()
 {
 	eBoxInit();
-	uart3.begin(115200);
+	uart3.begin(9600);
 
 	mpu.begin();
 	mpu.setSpeed(100000);

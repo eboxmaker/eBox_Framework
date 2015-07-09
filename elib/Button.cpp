@@ -21,16 +21,16 @@ Button::Button(void)
 {
 
 }
-Button::Button(uint8_t pin, uint8_t puEnable)
+Button::Button(GPIO* pin, uint8_t puEnable)
 {
     _pin = pin;
     _puEnable = puEnable;
-    pinMode(_pin, INPUT);
+    _pin->mode(_INPUT);
     if (_puEnable != 0){
-        digitalWrite(_pin, HIGH);       //enable pullup resistor
+        _pin->write(HIGH);       //enable pullup resistor
 		 }
         
-    _state = digitalRead(_pin);
+    _state = _pin->read();
     if (_puEnable == 0){
          _state = !_state;
 	 }
@@ -47,7 +47,7 @@ uint8_t Button::read(void)
     static uint8_t pinVal;
 
 	ms = millis();
-	pinVal = digitalRead(_pin);
+	pinVal = _pin->read();
 	if(_puEnable == 0) pinVal = !pinVal;
 
 	_lastState = _state;

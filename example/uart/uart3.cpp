@@ -1,6 +1,8 @@
+
 #include "ebox.h"
 
-#include "uartx.h"
+USART uart3(USART3,&PB10,&PB11);
+
 
 
 int rcvok;
@@ -21,10 +23,9 @@ void test()
 void setup()
 {
 	eBoxInit();
-	uart3.begin(115200);
+	uart3.begin(9600);
 	uart3.interrupt(ENABLE);
-	uart3.attachInterrupt(test,1);
-	pinMode(7,OUTPUT);
+	uart3.attachInterrupt(test);
 }
 
 float x,y;

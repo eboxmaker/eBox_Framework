@@ -1,12 +1,10 @@
 
 #include "ebox.h"
-#include "boardcfg.h"
-#include "uartx.h"
-#include "interrupts.h"
-
 #include "ds3231.h"
 
-DS3231 ds(DS3231_SDA_PIN,DS3231_SCL_PIN);
+USART uart3(USART3,&PB10,&PB11);
+
+DS3231 ds(&PA5,&PA4);
 
 DateTime t;
 char time[9];
@@ -15,9 +13,9 @@ char date[9];
 void setup()
 {
 	eBoxInit();
-	uart3.begin(115200);
+	uart3.begin(9600);
 	ds.begin();
-	ds.setSpeed(400000);
+	ds.setSpeed(100000);
 	
 	t.year = 15;
 	t.month = 7;

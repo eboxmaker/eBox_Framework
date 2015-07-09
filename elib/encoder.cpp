@@ -19,14 +19,14 @@ This specification is preliminary and is subject to change at any time without n
 #define PULLUP false
 
 
-Encoder::Encoder(uint8_t Apin,uint8_t Bpin)
+Encoder::Encoder(GPIO* Apin,GPIO* Bpin)
 {
 
 	_Apin = Apin;
 	_Bpin = Bpin;
 
-	pinMode(_Apin,INPUT_PULLUP);
-	pinMode(_Bpin,INPUT_PULLUP);
+	_Apin->mode(_IPU);
+	_Bpin->mode(_IPU);
 
 
 }
@@ -34,8 +34,8 @@ int Encoder::ReadEncoder()
 {
 	_alaststate = _astate;
 	_blaststate = _bstate;
-	_astate = digitalRead(_Apin);
-	_bstate = digitalRead(_Bpin);
+	_astate = _Apin->read();
+	_bstate = _Bpin->read();
 
 	if((_astate == 0) && _alaststate && _bstate)
 	{

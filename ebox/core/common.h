@@ -126,16 +126,50 @@ void delay_ms(uint32_t ms);
 void delay_us(uint16_t us);
 void delayus(uint32_t us);
 
-void pinMode(uint32_t pin, uint32_t mode);
-void digitalWrite( uint32_t pin, uint32_t ulVal );
-int  digitalRead( uint32_t pin );
 
 
-uint16_t 	analogRead(uint8_t pin);
-uint16_t 	analogReadToVoltage(uint8_t pin); 
+uint16_t 	analogRead(GPIO* pin);
+uint16_t 	analogReadToVoltage(GPIO* pin); 
 
-void 		shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
-uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
+//void 		shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
+//uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
+void shiftOut(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder, uint8_t val);
+uint8_t shiftIn(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder);
+
+//extern GPIO GPA0;
+//extern GPIO GPA1;
+//extern GPIO GPA2;
+//extern GPIO GPA3;
+//extern GPIO GPA4;
+//extern GPIO GPA5;
+//extern GPIO GPA6;
+//extern GPIO GPA7;
+//extern GPIO GPA8;
+//extern GPIO GPA9;
+//extern GPIO GPA10;
+//extern GPIO GPA11;
+//extern GPIO GPA12;
+//extern GPIO GPA13;
+//extern GPIO GPA14;
+//extern GPIO GPA15;
+
+//extern GPIO GPB0;
+//extern GPIO GPB1;
+//extern GPIO GPB2;
+//extern GPIO GPB3;
+//extern GPIO GPB4;
+//extern GPIO GPB5;
+//extern GPIO GPB6;
+//extern GPIO GPB7;
+//extern GPIO GPB8;
+//extern GPIO GPB9;
+//extern GPIO GPB10;
+//extern GPIO GPB11;
+//extern GPIO GPB12;
+//extern GPIO GPB13;
+//extern GPIO GPB14;
+//extern GPIO GPB15;
+
 
 
 #ifdef __cplusplus

@@ -20,14 +20,14 @@ This specification is preliminary and is subject to change at any time without n
 class Encoder
 {
 	public:
-		Encoder(uint8_t Apin,uint8_t Bpin);
+		Encoder(GPIO* Apin,GPIO* Bpin);
 		int ReadEncoder();
 
 
 	private:
 		
-	uint8_t _Apin;
-	uint8_t	_Bpin;
+	GPIO* _Apin;
+	GPIO*	_Bpin;
 	
 	uint8_t _astate;
 	uint8_t _alaststate;
