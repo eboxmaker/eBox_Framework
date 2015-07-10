@@ -117,6 +117,15 @@ void GPIO::mode(PINMODE modeVal)
 	GPIO_Init(port, &GPIO_InitStructure);   //³õÊ¼»¯GPIOC¶Ë¿Ú
 }
 
+void GPIO::set()
+{
+		port->BSRR = pin;
+}
+void GPIO::reset()
+{
+		port->BRR = pin;
+}
+
 void GPIO::write(uint8_t val)
 {
 	if(val == 0)

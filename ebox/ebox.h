@@ -59,7 +59,6 @@ extern GPIO PB14;
 extern GPIO PB15;
 
 
-extern GPIO PE5;
 
 
 #include "exti.h"

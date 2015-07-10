@@ -17,8 +17,6 @@ This specification is preliminary and is subject to change at any time without n
 #define __W25X16_H
 
 #include "ebox.h"
-#include "softspi.h"
-#include "SPI.h"
 
 
 ////////////////////////////////////////////////////////////////////////////

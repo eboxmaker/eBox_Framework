@@ -39,6 +39,8 @@ class GPIO
 	public:
 		GPIO(GPIO_TypeDef* _port,uint16_t _pin);
 		void mode(PINMODE modeVal);
+		void set();
+		void reset();
 		void write(uint8_t val);
 		void read(uint8_t* val);	
 		uint8_t read(void);
@@ -50,20 +52,11 @@ class GPIO
 };
 
 
-
 #define dgWrite(pin,val)	pin->write(val)
 #define dgRead(pin) 			pin->read()
 #define pMode(pin,val)	pin->mode(val)
 
-#define INPUT 0x0
-#define INPUT_PULLUP 0x2
-#define INPUT_PULLDOWN 0x3
-	
-#define OUTPUT 0x1
-	
-#define AF_PP 0x4
-#define AF_OD 0x5
-#define AIN 0x6
+
 
 #define true 0x1
 #define false 0x0
@@ -77,9 +70,9 @@ class GPIO
 #define LSBFIRST 0
 #define MSBFIRST 1
 
-#define CHANGE 2
-#define FALLING 3
-#define RISING 4
+//#define CHANGE 2
+//#define FALLING 3
+//#define RISING 4
 	 
 
 //spi相关公共宏和声明//////////////////////////////////
@@ -109,7 +102,6 @@ typedef struct
 }SPICONFIG;
 
 
-//interrupts functions are in WInterrupts.c file
 #define Interrupts() 		__enable_irq()
 #define noInterrupts() 	__disable_irq()
 	
@@ -121,18 +113,14 @@ typedef void (*callbackFun)(void);
 void eBoxInit(void);	
 
 uint32_t millis( void ) ;
-
 void delay_ms(uint32_t ms);
 void delay_us(uint16_t us);
 void delayus(uint32_t us);
 
 
-
 uint16_t 	analogRead(GPIO* pin);
 uint16_t 	analogReadToVoltage(GPIO* pin); 
 
-//void 		shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
-//uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
 void shiftOut(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder, uint8_t val);
 uint8_t shiftIn(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder);
 
