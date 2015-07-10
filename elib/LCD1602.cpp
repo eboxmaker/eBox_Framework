@@ -20,33 +20,31 @@ This specification is preliminary and is subject to change at any time without n
 
 LCD1602::LCD1602(GPIO* LEDPin,GPIO* ENPin,GPIO* RWPin,GPIO* RSPin,GPIO* DB0,GPIO* DB1,GPIO* DB2,GPIO* DB3,GPIO* DB4,GPIO* DB5,GPIO* DB6,GPIO* DB7)
 {
-		 _LEDPin = LEDPin;
-		 _ENPin	= ENPin;
-		 _RWPin	= RWPin;
-		 _RSPin	= RSPin;
-		 _DB0		= DB0;
-		 _DB1		= DB1;
-		 _DB2		= DB2;
-		 _DB3		= DB3;
-		 _DB4		= DB4;
-		 _DB5		= DB5;
-		 _DB6		= DB6;
-		 _DB7		= DB7;
-	pMode(_LEDPin,_OPP);
-	pMode(_ENPin,_OPP);
-	pMode(_RWPin,_OPP);
-	pMode(_RSPin,_OPP);
-	pMode(_DB0,_OPP);
-	pMode(_DB1,_OPP);
-	pMode(_DB2,_OPP);
-	pMode(_DB3,_OPP);
-	pMode(_DB4,_OPP);
-	pMode(_DB5,_OPP);
-	pMode(_DB6,_OPP);
-	pMode(_DB7,_OPP);	
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
-	 GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
-	nDelay = 10;
+		 led = LEDPin;
+		 en	= ENPin;
+		 rw	= RWPin;
+		 rs	= RSPin;
+		 d0		= DB0;
+		 d1		= DB1;
+		 d2		= DB2;
+		 d3		= DB3;
+		 d4		= DB4;
+		 d5		= DB5;
+		 d6		= DB6;
+		 d7		= DB7;
+	led->mode(_OPP);
+	en->mode(_OPP);
+	rw->mode(_OPP);
+	rs->mode(_OPP);
+	d0->mode(_OPP);
+	d1->mode(_OPP);
+	d2->mode(_OPP);
+	d3->mode(_OPP);
+	d4->mode(_OPP);
+	d5->mode(_OPP);
+	d6->mode(_OPP);
+	d7->mode(_OPP);
+	nDelay = 1;
 }
 
 inline void LCD1602::LCDdelay(uint32_t nCount)
@@ -58,13 +56,13 @@ inline uint8_t LCD1602::bz(void)
 	uint8_t result;
 
 
-	pMode(_DB7,_INPUT);
-	dgWrite(_RSPin,0);
-	dgWrite(_RWPin,1);
-	dgWrite(_ENPin,1);
+	d7->mode(_INPUT);
+	rs->reset();
+	rw->set();
+	en->set();
 	LCDdelay(nDelay);
-	result = dgRead(_DB7);
-	dgWrite(_ENPin,0);
+	result = d7->read();//
+	en->reset();
 
 	return result; 
 
@@ -83,28 +81,28 @@ void LCD1602::wcmd(uint8_t cmd)
 		;
 	}
 
-	pMode(_DB7,_OPP);
-	dgWrite(_RSPin,0);	   //对同一个寄存器的两次写入，中间延时一会
-	dgWrite(_RWPin,0);
-	dgWrite(_ENPin,0);
+	d7->mode(_OPP);
+	rs->reset();
+	rw->reset();
+	en->reset();
 	
-//	dgWrite(_DB0,cmd&0x01);
-//	dgWrite(_DB1,cmd&0x02);
-//	dgWrite(_DB2,cmd&0x04);
-//	dgWrite(_DB3,cmd&0x08);
-//	dgWrite(_DB4,cmd&0x10);
-//	dgWrite(_DB5,cmd&0x20);
-//	dgWrite(_DB6,cmd&0x40);
-//	dgWrite(_DB7,cmd&0x80);
-	
-	DATAOUT &= 0XFF00;
-	DATAOUT |= cmd;
+	d0->write(cmd&0x01);
+	d1->write(cmd&0x02);
+	d2->write(cmd&0x04);
+	d3->write(cmd&0x08);
+	d4->write(cmd&0x10);
+	d5->write(cmd&0x20);
+	d6->write(cmd&0x40);
+	d7->write(cmd&0x80);
+//如果硬件连接时顺序的建议使用以下方式
+//	DATAOUT &= 0XFF00;
+//	DATAOUT |= cmd;
 
 
 	LCDdelay(nDelay);
-	dgWrite(_ENPin,1);
+	en->set();
 	LCDdelay(nDelay);
-	dgWrite(_ENPin,0);
+	en->reset();
 	LCDdelay(nDelay);
 }	
 /*********************************************************************
@@ -120,26 +118,29 @@ void LCD1602::wdat(uint8_t dat)
 		;
 	}
 
-	pMode(_DB7,_OPP);
-	dgWrite(_RSPin,1);
-	dgWrite(_RWPin,0);
-	dgWrite(_ENPin,0);
-//	dgWrite(_DB0,dat&0x01);
-//	dgWrite(_DB1,dat&0x02);
-//	dgWrite(_DB2,dat&0x04);
-//	dgWrite(_DB3,dat&0x08);
-//	dgWrite(_DB4,dat&0x10);
-//	dgWrite(_DB5,dat&0x20);
-//	dgWrite(_DB6,dat&0x40);
-//	dgWrite(_DB7,dat&0x80);
+	d7->mode(_OPP);
+	rs->set();
+	rw->reset();
+	en->reset();
+
+	d0->write(dat&0x01);
+	d1->write(dat&0x02);
+	d2->write(dat&0x04);
+	d3->write(dat&0x08);
+	d4->write(dat&0x10);
+	d5->write(dat&0x20);
+	d6->write(dat&0x40);
+	d7->write(dat&0x80);
+
 	
-	DATAOUT &= 0XFF00;
-	DATAOUT |= dat;
+//如果硬件连接时顺序的建议使用以下方式
+//	DATAOUT &= 0XFF00;
+//	DATAOUT |= dat;
 
 	LCDdelay(nDelay);
-	dgWrite(_ENPin,1);
+	en->set();
 	LCDdelay(nDelay);
-	dgWrite(_ENPin,0);
+	en->reset();
 }
 	
 /*********************************************************************
@@ -156,13 +157,13 @@ void LCD1602::pos(uint8_t pos)
 }
 
 /*********************************************************************
-*名    称：Setpos()
+*名    称：setPos()
 *功    能：根据习惯设定显示位置
 *入口参数：row:行，row=1表示第一行，row=2表示第二行
 *          col:列，0~15，用于指定显示的列，范围可以是0~40
 *出口参数：无
 *********************************************************************/
-void LCD1602::Setpos(uint8_t row,uint8_t col)
+void LCD1602::setPos(uint8_t row,uint8_t col)
 {
 	if(row==1) wcmd(col | 0x80);
 	else wcmd(col | 0xC0);
@@ -171,7 +172,7 @@ void LCD1602::Setpos(uint8_t row,uint8_t col)
 *功  能：显示一个字符	  
 *入  口：ch：待显示的字符
 *********************************************************************/
-void LCD1602::DispChar(char ch)
+void LCD1602::dispChar(char ch)
 {
 	wdat(ch);
 }
@@ -180,18 +181,18 @@ void LCD1602::DispChar(char ch)
 *入  口：row:行 1或2        col:列，0~15
 *        ch：待显示的字符
 *********************************************************************/
-void LCD1602::Setpos_DispChar(uint8_t row,uint8_t col,char ch)
+void LCD1602::dispChar(uint8_t row,uint8_t col,char ch)
 {
-	Setpos(row,col);
+	setPos(row,col);
 	wdat(ch);
 }
 /*********************************************************************
-*名    称：DispString()
+*名    称：dispString()
 *功    能：使LCD1602显示一个字符串，显示位置需提前设定
 *入口参数：str[]:待显示的字符串
 *出口参数：无
 *********************************************************************/
-void LCD1602::DispString(char str[])
+void LCD1602::dispString(char str[])
 {
     uint8_t i=0;
 	while(str[i] != '\0')
@@ -201,7 +202,7 @@ void LCD1602::DispString(char str[])
 	}
 }
 /*********************************************************************
-*名    称：Setpos_DispString()
+*名    称：setPos_dispString()
 *功    能：使LCD1602从指定位置开始显示一个字符串
 *入口参数：row:显示行，1或2
 *          col:显示列，0~15 （0~40） 
@@ -209,24 +210,40 @@ void LCD1602::DispString(char str[])
 *出口参数：无
 *说    明：指定位置是显示的初始位置，第一个字符显示的位置
 *********************************************************************/
-void LCD1602::Setpos_DispString(uint8_t row,uint8_t col,char str[])
+void LCD1602::dispString(uint8_t row,uint8_t col,char str[])
 {
+	setPos(row,col);
+	dispString(str);
+}
+void LCD1602::printf(const char* fmt,...)
+{
+	char buf[16];
+	u8 i;
+	va_list va_params;   
+	va_start(va_params,fmt);   
+	vsprintf(buf,fmt,va_params);   
+	va_end(va_params); 
+	
+	while(buf[i] != '\0')
+	{
+	   wdat(buf[i++]);
+	}
+}
+void LCD1602::printf(uint8_t row,uint8_t col,const char* fmt,...)
+{
+	char buf[16];
+	u8 i;
+	va_list va_params;   
+	va_start(va_params,fmt);   
+	vsprintf(buf,fmt,va_params);   
+	va_end(va_params); 
+	setPos(row,col);
+	while(buf[i] != '\0')
+	{
+	   wdat(buf[i++]);
+	}
+}
 
-
-	Setpos(row,col);
-	DispString(str);
-}
-void LCD1602::Setpos_Dispnum(uint8_t row,uint8_t col,uint32_t num)
-{
-   Setpos(row,col);	
-   Dispnum(num);
-}
-void LCD1602::Dispnum(uint32_t num)
-{
-	char s[3];
-	sprintf(s,"%05d",num);
-  DispString(s);//?????
-}
 /*********************************************************************
 *名    称：DispDateTime()
 *功    能：显示日历，显示日期与时间
@@ -242,53 +259,53 @@ void LCD1602::Dispnum(uint32_t num)
 *          Time:hh:mm:ss    *
 *********************************************************************/
 
-void LCD1602::DispDateTime(uint32_t year,uint8_t month,uint8_t day,uint8_t hour,uint8_t min,uint8_t sec)
+void LCD1602::dispDateTime(uint32_t year,uint8_t month,uint8_t day,uint8_t hour,uint8_t min,uint8_t sec)
 {
 	char s[8];
-	Setpos(1,0);
-	DispString("Date:");
+	setPos(1,0);
+	dispString("Date:");
 	
 	sprintf(s,"%04d-%02d-%02d",year,month,day);
-	DispString(s);
+	dispString(s);
 	
 
-	Setpos(1,15);
-	DispChar('*'); //第一行结束符显示
-	Setpos(2,0);
-	DispString("Time:  ");
+	setPos(1,15);
+	dispChar('*'); //第一行结束符显示
+	setPos(2,0);
+	dispString("Time:  ");
 
 	sprintf(s,"%02d:%02d:%02d",hour,min,sec);
-	DispString(s);
+	dispString(s);
 
-	Setpos(2,15);
-	DispChar('*'); //第二行结束符显示
+	setPos(2,15);
+	dispChar('*'); //第二行结束符显示
 }
 
-void LCD1602::DispTimeHMS(uint8_t hour,uint8_t min,uint8_t sec)
+void LCD1602::dispTimeHMS(uint8_t hour,uint8_t min,uint8_t sec)
 {
 	char s[8];
 
-	Setpos(2,0);
-	DispString("Time:  ");
+	setPos(2,0);
+	dispString("Time:  ");
 
 	sprintf(s,"%02d:%02d:%02d",hour,min,sec);
-	DispString(s);
+	dispString(s);
 
-	Setpos(2,15);
-	DispChar('*'); //第二行结束符显示
+	setPos(2,15);
+	dispChar('*'); //第二行结束符显示
 }
 //屏幕整体左移一格，用于滚动显示
-void LCD1602::ShiftLeft()
+void LCD1602::shiftLeft()
 {
 	wcmd(0x18);
 }
 //屏幕整体右移一格，用于滚动显示
-void LCD1602::ShiftRight(void)
+void LCD1602::shiftRight(void)
 {
 	wcmd(0x1C);
 }
 //清屏，清除显示
-void LCD1602::Clear(void)
+void LCD1602::clear(void)
 {
 	wcmd(0x01);
 }
@@ -298,12 +315,12 @@ void LCD1602::Return(void)
 	wcmd(0x02);
 }
 //关显示
-void LCD1602::Close(void)
+void LCD1602::close(void)
 {
 	wcmd(0x08);
 }
 //开显示
-void LCD1602::Open(void)
+void LCD1602::open(void)
 {
 	wcmd(0x0C);
 }
@@ -316,34 +333,34 @@ void LCD1602::Open(void)
 *说    明：写命令0x0D不显示光标的闪烁，写命令0x0F是显示光标的闪烁
 *          一旦设定闪烁后，会根据位置变化闪烁，关闪烁写命令0x0C
 *********************************************************************/
-void LCD1602::Flicker(void)
+void LCD1602::flicker(void)
 {
 	wcmd(0x0D);
 }
-void LCD1602::FlickerChar(uint8_t row,uint8_t col)
+void LCD1602::flickerChar(uint8_t row,uint8_t col)
 {
 	wcmd(0x0D);
-	Setpos(row,col);
+	setPos(row,col);
 }
 //关闭字符闪烁
-void LCD1602::CloseFlicker(void)
+void LCD1602::closeFlicker(void)
 {
 	wcmd(0x0C);
 }
 //屏幕秒闪烁一次
-void LCD1602::FlickerScreen(void)
+void LCD1602::flickerScreen(void)
 {
 	wcmd(0x08);//关显示
 	LCDdelay(0x3fffff);
 	wcmd(0x0C);//开显示
 	LCDdelay(0x3fffff);
 }
-void LCD1602::BackLight(u8 i)
+void LCD1602::backLight(u8 i)
 {
 	if(i == 1)
-		dgWrite(_LEDPin,1);
+		dgWrite(led,1);
 	else
-		dgWrite(_LEDPin,0);
+		dgWrite(led,0);
 }
 
 /*********************************************************************
@@ -379,15 +396,15 @@ void LCD1602::begin(void)
 	LCDdelay(100);
 	wcmd(0x0c);  //显示开，关光标;0x08为关显示
 	LCDdelay(100);
-	BackLight(1);
+	backLight(1);
 }
-void LCD1602::TEST(void)
+void LCD1602::test(void)
 {
 	char str[]={"Hello World  !"};
-	Setpos_DispString(1,1,str);
-	FlickerChar(2,3);
-	FlickerScreen();
-	FlickerScreen();
-	FlickerScreen();
+	dispString(1,1,str);
+	flickerChar(2,3);
+	flickerScreen();
+	flickerScreen();
+	flickerScreen();
 }
 
