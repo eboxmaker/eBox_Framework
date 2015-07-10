@@ -54,8 +54,8 @@ class GPIO
 
 //不建议使用
 //#define dgWrite(pin,val)	pin->write(val)
-#define dgRead(pin) 			pin->read()
-#define pMode(pin,val)	pin->mode(val)
+//#define dgRead(pin) 			pin->read()
+//#define pMode(pin,val)	pin->mode(val)
 /////////////////////////////////////////
 
 

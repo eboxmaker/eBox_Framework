@@ -3,11 +3,12 @@
 
 USART uart3(USART3,&PB10,&PB11);
 
-PWM pwm1(&PA0);
+PWM pwm1(&PA7);
 
 void setup()
 {
 	eBoxInit();
+	uart3.begin(9600);
 
 	pwm1.setDuty(500);
 

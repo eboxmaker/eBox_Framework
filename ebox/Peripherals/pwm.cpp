@@ -20,7 +20,7 @@ PWM::PWM(GPIO* PWMPin)
 		
 		initInfo(_PWMPin);
 
-		pMode(_PWMPin,AF_PP);
+		_PWMPin->mode(AF_PP);
 		baseInit(_period,_prescaler);
 
 //	}
@@ -35,7 +35,7 @@ PWM::PWM(GPIO*  PWMPin,uint16_t period,uint16_t prescaler)
 		_prescaler = prescaler;
 		initInfo(PWMPin);
 		
-		pMode(_PWMPin,AF_PP);
+		_PWMPin->mode(AF_PP);
 		baseInit(_period,_prescaler);
 //	}
 }

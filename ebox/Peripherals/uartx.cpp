@@ -51,8 +51,8 @@ void USART::begin(uint32_t BaudRate)
 	
 	 NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
 
-		pMode(_txPin,AF_PP);
-		pMode(_rxPin,INPUT);
+		_txPin->mode(AF_PP);
+		_rxPin->mode(INPUT);
 		if(_id == 1)
 		{
 			RCC_APB2PeriphClockCmd(_rcc,ENABLE); //??????
