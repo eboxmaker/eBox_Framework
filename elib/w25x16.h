@@ -42,7 +42,7 @@ This specification is preliminary and is subject to change at any time without n
 class W25X:public SPIClass
 {
 	public:
-		W25X(GPIO* cspin,SPI_TypeDef *spi,GPIO* sck,GPIO* miso,GPIO* mosi):SPIClass(spi,sck,miso,mosi)
+		W25X(GPIO* cspin,SPI_TypeDef *spi,GPIO* sck,GPIO* miso,GPIO* mosi):SPIClass(SPI1,sck,miso,mosi)
 		{
 			cs = cspin;
 		}

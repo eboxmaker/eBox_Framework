@@ -13,9 +13,9 @@ SOFTSPI::SOFTSPI(GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin)
 void SOFTSPI::begin(SPICONFIG* spiConfig)
 {
 
-	pMode(_sckPin,OUTPUT_PP);
-	pMode(_misoPin,INPUT);
-	pMode(_mosiPin,OUTPUT_PP);
+	_sckPin->mode(OUTPUT_PP);
+	_misoPin->mode(INPUT);
+	_mosiPin->mode(OUTPUT_PP);
 	
 	config(spiConfig);
 	switch(_mode)
@@ -87,12 +87,12 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 				for (i = 0; i < 8; i++)  {
 					if (_bitOrder == SPI_BITODER_LSB)
 					{
-						RcvData |= dgRead(_misoPin)<<i;
+						RcvData |= _misoPin->read()<<i;
 						_mosiPin->write(!!(data & (1 << i)));
 					}
 					else
 					{				
-						RcvData |= (dgRead(_misoPin)<<(7-i));
+						RcvData |= (_misoPin->read()<<(7-i));
 						_mosiPin->write(!!(data & (1 << (7 - i))));
 					}
 					delay_us(_spidelay);
@@ -113,7 +113,7 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 					}
 					else
 					{				
-						RcvData |= (dgRead(_misoPin)<<(7-i));
+						RcvData |= (_misoPin->read()<<(7-i));
 						_mosiPin->write(!!(data & (1 << (7 - i))));
 					}
 					delay_us(_spidelay);
@@ -127,7 +127,7 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 					}
 					else
 					{				
-						RcvData |= (dgRead(_misoPin)<<(7-i));
+						RcvData |= (_misoPin->read()<<(7-i));
 						_mosiPin->write(!!(data & (1 << (7 - i))));
 					}	
 				}
@@ -142,12 +142,12 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 					delay_us(_spidelay);
 					if (_bitOrder == SPI_BITODER_LSB)
 					{
-						RcvData |= dgRead(_misoPin)<<i;
+						RcvData |= _misoPin->read()<<i;
 						_mosiPin->write(!!(data & (1 << i)));
 					}
 					else
 					{				
-						RcvData |= (dgRead(_misoPin)<<(7-i));
+						RcvData |= (_misoPin->read()<<(7-i));
 						_mosiPin->write(!!(data & (1 << (7 - i))));
 					}
 					delay_us(_spidelay);
@@ -169,7 +169,7 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 					}
 					else
 					{				
-						RcvData |= (dgRead(_misoPin)<<(7-i));
+						RcvData |= (_misoPin->read()<<(7-i));
 						_mosiPin->write(!!(data & (1 << (7 - i))));
 					}
 					/////////////////ÉÏÉýÑØ²ÉÑù////////////
@@ -181,7 +181,7 @@ uint8_t SOFTSPI::transfer(uint8_t data)
 					}
 					else
 					{				
-						RcvData |= (dgRead(_misoPin)<<(7-i));
+						RcvData |= (_misoPin->read()<<(7-i));
 						_mosiPin->write(!!(data & (1 << (7 - i))));
 					}	
 				}

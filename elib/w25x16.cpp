@@ -24,7 +24,7 @@ void W25X::begin()
 	spiDevW25x16.bitOrder = SPI_BITODER_MSB;
 	
 	SPIClass::begin(&spiDevW25x16);
-	pMode(cs,OUTPUT_PP);
+	cs->mode(OUTPUT_PP);
 	cs->set();
 }
 void W25X::readId(uint16_t* id)

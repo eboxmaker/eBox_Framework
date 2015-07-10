@@ -20,7 +20,7 @@ EXTIx::EXTIx(GPIO* extiPin, EXTITrigger_TypeDef trigger)
 //	_ExtiLine		= pinToExti[_pin].extiLine;
 //	_irq				= pinToExti[_pin].irqch;
 
-	pMode(extiPin,INPUT);
+	extiPin->mode(INPUT);
 	initInfo(extiPin);
 
 	

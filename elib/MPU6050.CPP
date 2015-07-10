@@ -19,19 +19,12 @@ This specification is preliminary and is subject to change at any time without n
 
 void MPU6050::begin()
 {
-	uint8_t table[] = {0x00,0x07,0x06,0x18,0x01};
 	i2cBegin();
-//	writeByte(SlaveAddress,PWR_MGMT_1,0);
-//	writeByte(SlaveAddress,SMPLRT_DIV,0x07);
-//	writeByte(SlaveAddress,CONFIG,0x06);
-//	writeByte(SlaveAddress,GYRO_CONFIG,0x18);
-//	writeByte(SlaveAddress,ACCEL_CONFIG,0x01);
-	writeByte(SlaveAddress,PWR_MGMT_1,&table[0],1);
-	writeByte(SlaveAddress,SMPLRT_DIV,&table[1],1);
-	writeByte(SlaveAddress,CONFIG,&table[2],1);
-	writeByte(SlaveAddress,GYRO_CONFIG,&table[3],1);
-	writeByte(SlaveAddress,ACCEL_CONFIG,&table[4],1);
-
+	writeByte(SlaveAddress,PWR_MGMT_1,0);
+	writeByte(SlaveAddress,SMPLRT_DIV,0x07);
+	writeByte(SlaveAddress,CONFIG,0x06);
+	writeByte(SlaveAddress,GYRO_CONFIG,0x18);
+	writeByte(SlaveAddress,ACCEL_CONFIG,0x01);
 }
 void MPU6050::getID(uint8_t* id)
 {
