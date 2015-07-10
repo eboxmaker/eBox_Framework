@@ -25,8 +25,8 @@ Encoder::Encoder(GPIO* Apin,GPIO* Bpin)
 	_Apin = Apin;
 	_Bpin = Bpin;
 
-	_Apin->mode(_IPU);
-	_Bpin->mode(_IPU);
+	_Apin->mode(INPUT_PU);
+	_Bpin->mode(INPUT_PU);
 
 
 }

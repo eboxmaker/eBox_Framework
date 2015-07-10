@@ -37,8 +37,8 @@ const PIN_TO_ANALOAG pinToAnalog[]=
 		{5,5},
 		{6,6},
 		{7,7},
-		{8,0x16},
-		{9,0x17},
+		{8,0x10},
+		{9,0x11},
 		{10,0x20},
 		{11,0x21},
 		{12,0x22},
@@ -147,18 +147,54 @@ void Init_ADC1(void)
 
 uint16_t analogRead(GPIO* pin)
 {
-//	int i;
-//	if(analogPinStatu[pin] == 0)
-//	{
-//		pMode(pin,_AIN);
-//		analogPinStatu[pin] = 1;
-//	}
-//	
-//	for(i=0;i<ANALOG_PIN_NUM;i++)
-//	{
-//		if(pinToAnalog[i].pin == pin)
-//		return AD_Value[pinToAnalog[i].analogch];
-//	}
+	switch((uint32_t)pin->port)
+	{
+		case  (uint32_t)GPIOA:
+			switch(pin->pin)
+			{
+				case GPIO_Pin_0:
+					return AD_Value[0];
+				case GPIO_Pin_1:
+					return AD_Value[1];
+				case GPIO_Pin_2:
+					return AD_Value[2];
+				case GPIO_Pin_3:
+					return AD_Value[3];
+				case GPIO_Pin_4:
+					return AD_Value[4];
+				case GPIO_Pin_5:
+					return AD_Value[5];
+				case GPIO_Pin_6:
+					return AD_Value[6];
+				case GPIO_Pin_7:
+					return AD_Value[7];
+			}
+		case (uint32_t)GPIOB:
+			switch(pin->pin)
+			{
+				case GPIO_Pin_0:
+					return AD_Value[8];
+				case GPIO_Pin_1:
+					return AD_Value[9];
+			}
+		case (uint32_t)GPIOC:
+			switch(pin->pin)
+			{
+				case GPIO_Pin_0:
+					return AD_Value[10];
+				case GPIO_Pin_1:
+					return AD_Value[11];
+				case GPIO_Pin_2:
+					return AD_Value[12];
+				case GPIO_Pin_3:
+					return AD_Value[13];
+				case GPIO_Pin_4:
+					return AD_Value[14];
+				case GPIO_Pin_5:
+					return AD_Value[15];
+			}
+	}		
+
 	return 0;
 
 }

@@ -29,9 +29,9 @@ void SPIClass::begin(SPICONFIG* spiConfig)
 	}
 	
 	
-	pMode(_sckPin,_AF_PP);
-	pMode(_mosiPin,_AF_PP);
-	pMode(_misoPin,_AF_PP);
+	pMode(_sckPin,AF_PP);
+	pMode(_mosiPin,AF_PP);
+	pMode(_misoPin,AF_PP);
 
 	config(spiConfig);
 }

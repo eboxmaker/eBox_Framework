@@ -25,7 +25,7 @@ Button::Button(GPIO* pin, uint8_t puEnable)
 {
     _pin = pin;
     _puEnable = puEnable;
-    _pin->mode(_INPUT);
+    _pin->mode(INPUT);
     if (_puEnable != 0){
         _pin->write(HIGH);       //enable pullup resistor
 		 }

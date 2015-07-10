@@ -21,9 +21,9 @@ _74hc595::_74hc595(GPIO* dataPin, GPIO* sckPin,GPIO* rckPin)
 	_sckPin 	= sckPin;
 	_rckPin 	= rckPin;
 	
-	_dataPin->mode(_OPP);
-	_sckPin->mode(_OPP);
-	_rckPin->mode(_OPP);
+	_dataPin->mode(OUTPUT_PP);
+	_sckPin->mode(OUTPUT_PP);
+	_rckPin->mode(OUTPUT_PP);
 }
 void _74hc595::rowOut(uint8_t* Data,uint8_t dataLen)
 {

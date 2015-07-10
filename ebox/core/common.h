@@ -24,14 +24,14 @@ extern "C"{
 
 typedef enum
 { 
-	_AIN = 0x0,
-  _INPUT = 0x04,
-  _IPD = 0x28,
-  _IPU = 0x48,
-  _OOD = 0x14,
-  _OPP = 0x10,
-  _AF_OD = 0x1C,
-  _AF_PP = 0x18
+	AIN = 0x0,
+  INPUT = 0x04,
+  INPUT_PD = 0x28,
+  INPUT_PU = 0x48,
+  OUTPUT_OD = 0x14,
+  OUTPUT_PP = 0x10,
+  AF_OD = 0x1C,
+  AF_PP = 0x18
 }PINMODE;
 
 class GPIO
@@ -44,18 +44,19 @@ class GPIO
 		void write(uint8_t val);
 		void read(uint8_t* val);	
 		uint8_t read(void);
-
-		
+	
 		GPIO_TypeDef* port;
 		uint16_t pin;
 		uint32_t rcc;
+	
 };
 
 
-#define dgWrite(pin,val)	pin->write(val)
+//不建议使用
+//#define dgWrite(pin,val)	pin->write(val)
 #define dgRead(pin) 			pin->read()
 #define pMode(pin,val)	pin->mode(val)
-
+/////////////////////////////////////////
 
 
 #define true 0x1
