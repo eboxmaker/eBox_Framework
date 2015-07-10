@@ -24,22 +24,22 @@ void W25X::begin()
 	spiDevW25x16.bitOrder = SPI_BITODER_MSB;
 	
 	SPIClass::begin(&spiDevW25x16);
-	pMode(cs,_OPP);
-	dgWrite(cs,HIGH);
+	pMode(cs,OUTPUT_PP);
+	cs->set();
 }
 void W25X::readId(uint16_t* id)
 {
 	if(spiDevW25x16.devNum != readConfig())
 		config(&spiDevW25x16);
 
-	dgWrite(cs,LOW);
+	cs->reset();
 	transfer(0x90);
 	transfer(0x00);
 	transfer(0x00);
 	transfer(0x00);
 	*id |= transfer(0xff)<<8;
 	*id |= transfer(0xff);
-	dgWrite(cs,HIGH);
+	cs->set();
 
 
 }
@@ -59,7 +59,7 @@ void W25X::read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)
 	if(spiDevW25x16.devNum !=  readConfig())
 		config(&spiDevW25x16);
 	
-	dgWrite(cs,LOW);
+	cs->reset();
 	 transfer(W25X_ReadData);         //发送读取命令   
 	 transfer((u8)((ReadAddr)>>16));  //发送24bit地址    
 	 transfer((u8)((ReadAddr)>>8));   
@@ -69,7 +69,7 @@ void W25X::read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)
 	{ 
         pBuffer[i]= transfer(0XFF);   //循环读数  
     }
-	dgWrite(cs,HIGH);
+	cs->set();
 }  
 /***************************************************************
 函数名称 :  void SPI_Flash_Read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)   
@@ -87,7 +87,7 @@ void W25X::fastRead(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)
 	if(spiDevW25x16.devNum !=  readConfig())
 		 config(&spiDevW25x16);
 	
-	dgWrite(cs,LOW);
+	cs->reset();
 	 transfer(W25X_FastReadData);         //发送读取命令   
 	 transfer((u8)((ReadAddr)>>16));  //发送24bit地址    
 	 transfer((u8)((ReadAddr)>>8));   
@@ -98,7 +98,7 @@ void W25X::fastRead(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)
 	{ 
         pBuffer[i]= transfer(0XFF);   //循环读数  
     }
-	dgWrite(cs,HIGH);
+	cs->set();
 }  
 /***************************************************************
 函数名称 : void SPI_Flash_Write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)     
@@ -172,14 +172,14 @@ void W25X::writePage(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
 {
  	u16 i;  
 	writeEnable();                  //SET WEL 
-	dgWrite(cs,LOW);
+	cs->reset();
 	 transfer(W25X_PageProgram);      //发送写页命令   
 	 transfer((u8)((WriteAddr)>>16)); //发送24bit地址    
 	 transfer((u8)((WriteAddr)>>8));   
 	 transfer((u8)WriteAddr);   
 	for(i=0;i<NumByteToWrite;i++) transfer(pBuffer[i]);//循环写数  
 //	 transfer(pBuffer,NumByteToWrite);
-	dgWrite(cs,HIGH);
+	cs->set();
 	_waitBusy();					   //等待写入结束
 } 
 /***************************************************************
@@ -225,12 +225,12 @@ void W25X::eraseSector(u32 Dst_Addr)
 	Dst_Addr*=4096;
 	writeEnable();                  //SET WEL 	 
 	_waitBusy();   
-	dgWrite(cs,LOW);
+	cs->reset();
 	 transfer(W25X_SectorErase);      //发送扇区擦除指令 
 	 transfer((u8)((Dst_Addr)>>16));  //发送24bit地址    
 	 transfer((u8)((Dst_Addr)>>8));   
 	 transfer((u8)Dst_Addr);  
-	dgWrite(cs,HIGH);
+	cs->set();
 	_waitBusy();   				   //等待擦除完成
 
 } 
@@ -249,9 +249,9 @@ void W25X::eraseChip(void)
 {                                             
 	writeEnable();                  //SET WEL 
 	_waitBusy();   
-	dgWrite(cs,LOW);
+	cs->reset();
 	 transfer(W25X_ChipErase); 	//发送片擦除命令  
-	dgWrite(cs,HIGH);
+	cs->set();
 	_waitBusy();   				   				//等待芯片擦除结束
 }   
 
@@ -268,22 +268,22 @@ void W25X::_waitBusy(void)
 void W25X::powerDown(void)   
 { 
 	volatile int i;	 	
-	dgWrite(cs,LOW);
+	cs->reset();
    transfer(W25X_PowerDown);        //发送掉电命令  
     //等待TPD  
 	for (i=0;i<300;i++);
-	dgWrite(cs,HIGH);
+	cs->set();
 
 }   
 //唤醒
 void W25X::wakeUp(void)   
 {  
  	volatile int i;	 	
- 	dgWrite(cs,LOW);
+ 	cs->reset();
   transfer(W25X_ReleasePowerDown);   //  send W25X_PowerDown command 0xAB    
      //等待TRES1
    	for (i=0;i<300;i++);
-	dgWrite(cs,HIGH);
+	cs->set();
 }  
 /***************************************************************
 函数名称 :  u8 SPI_Flash_ReadSR(void)   
@@ -303,10 +303,10 @@ void W25X::wakeUp(void)
 u8 W25X::readSR(void)   
 {  
 	u8 byte=0;   
-	dgWrite(cs,LOW);
+	cs->reset();
 	 transfer(W25X_ReadStatusReg);    //发送读取状态寄存器命令    
 	byte= transfer(0Xff);               
-	dgWrite(cs,HIGH);
+	cs->set();
 	return byte;   
 } 
 
@@ -319,10 +319,10 @@ u8 W25X::readSR(void)
 ***************************************************************/
 void W25X::writeSR(u8 sr)   
 {   
-	dgWrite(cs,LOW);
+	cs->reset();
 	 transfer(W25X_WriteStatusReg);   //发送写取状态寄存器命令    
 	 transfer(sr);               //写入一个字节  
-	dgWrite(cs,HIGH);
+	cs->set();
 }
 
    
@@ -335,9 +335,9 @@ void W25X::writeSR(u8 sr)
 ***************************************************************/
 void W25X::writeEnable(void)   
 {
-	dgWrite(cs,LOW);
+	cs->reset();
      transfer(W25X_WriteEnable);      //发送写使能  
-	dgWrite(cs,HIGH);
+	cs->set();
 } 
 /***************************************************************
 函数名称 :  void SPI_FLASH_Write_Disable(void)   
@@ -348,7 +348,7 @@ void W25X::writeEnable(void)
 ***************************************************************/
 void W25X::writeDisable(void)   
 {  
- 	dgWrite(cs,LOW);
+ 	cs->reset();
     transfer(W25X_WriteDisable);     //发送写禁止指令    
-	dgWrite(cs,HIGH);
+	cs->set();
 } 			    

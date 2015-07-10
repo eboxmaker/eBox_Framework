@@ -32,18 +32,18 @@ LCD1602::LCD1602(GPIO* LEDPin,GPIO* ENPin,GPIO* RWPin,GPIO* RSPin,GPIO* DB0,GPIO
 		 d5		= DB5;
 		 d6		= DB6;
 		 d7		= DB7;
-	led->mode(_OPP);
-	en->mode(_OPP);
-	rw->mode(_OPP);
-	rs->mode(_OPP);
-	d0->mode(_OPP);
-	d1->mode(_OPP);
-	d2->mode(_OPP);
-	d3->mode(_OPP);
-	d4->mode(_OPP);
-	d5->mode(_OPP);
-	d6->mode(_OPP);
-	d7->mode(_OPP);
+	led->mode(OUTPUT_PP);
+	en->mode(OUTPUT_PP);
+	rw->mode(OUTPUT_PP);
+	rs->mode(OUTPUT_PP);
+	d0->mode(OUTPUT_PP);
+	d1->mode(OUTPUT_PP);
+	d2->mode(OUTPUT_PP);
+	d3->mode(OUTPUT_PP);
+	d4->mode(OUTPUT_PP);
+	d5->mode(OUTPUT_PP);
+	d6->mode(OUTPUT_PP);
+	d7->mode(OUTPUT_PP);
 	nDelay = 1;
 }
 
@@ -56,7 +56,7 @@ inline uint8_t LCD1602::bz(void)
 	uint8_t result;
 
 
-	d7->mode(_INPUT);
+	d7->mode(INPUT);
 	rs->reset();
 	rw->set();
 	en->set();
@@ -81,7 +81,7 @@ void LCD1602::wcmd(uint8_t cmd)
 		;
 	}
 
-	d7->mode(_OPP);
+	d7->mode(OUTPUT_PP);
 	rs->reset();
 	rw->reset();
 	en->reset();
@@ -118,7 +118,7 @@ void LCD1602::wdat(uint8_t dat)
 		;
 	}
 
-	d7->mode(_OPP);
+	d7->mode(OUTPUT_PP);
 	rs->set();
 	rw->reset();
 	en->reset();
@@ -358,9 +358,9 @@ void LCD1602::flickerScreen(void)
 void LCD1602::backLight(u8 i)
 {
 	if(i == 1)
-		dgWrite(led,1);
+		led->set();
 	else
-		dgWrite(led,0);
+		led->reset();
 }
 
 /*********************************************************************
