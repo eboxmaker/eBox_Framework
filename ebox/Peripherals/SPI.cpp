@@ -7,9 +7,9 @@
 SPIClass::SPIClass(SPI_TypeDef *spi,GPIO* sckPin,GPIO* mosiPin,GPIO* misoPin)
 {
 	_spi = spi;
-	_sckPin = sckPin;
-	_mosiPin = mosiPin;
-	_misoPin = misoPin;
+	sckPin->mode(AF_PP);
+	mosiPin->mode(AF_PP);
+	misoPin->mode(AF_PP);
 	
 };
 
@@ -27,17 +27,13 @@ void SPIClass::begin(SPICONFIG* spiConfig)
 	{	
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,ENABLE);
 	}
-	
-	
-	_sckPin->mode(AF_PP);
-	_mosiPin->mode(AF_PP);
-	_misoPin->mode(AF_PP);
-
 
 	config(spiConfig);
 }
 void SPIClass::config(SPICONFIG* spiConfig)
 {
+	SPI_InitTypeDef SPI_InitStructure;
+
 	currentDevNum = spiConfig->devNum;
 	SPI_Cmd(_spi,DISABLE);
 	

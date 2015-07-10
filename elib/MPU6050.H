@@ -78,7 +78,7 @@ This specification is preliminary and is subject to change at any time without n
 class MPU6050 : public I2C
 {
 	public:
-		 MPU6050(GPIO* SDApin,GPIO* SCLpin):I2C(SDApin,SCLpin){
+		 MPU6050(GPIO* SDApin,GPIO* SCLpin):I2C(I2C1,SDApin,SCLpin){
 		 // do nothing;
 		 };	
 		void 			begin();

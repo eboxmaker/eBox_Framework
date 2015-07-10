@@ -1,43 +1,20 @@
 #include "uartx.h"
 
 
-#define USART_NUM 3
+
 
 #define BUSY 	1
 #define FREE 	0
 
-callbackFun UARTCallbackTable[USART_NUM];//支持串口的rx中断
 
-typedef struct 
-{
-	uint8_t id ;
-	USART_TypeDef *usart;
-	uint32_t rcc;
-	uint32_t irq;
-} USARTx_INFO ;
+callbackFun UARTCallbackTable[3];//支持串口的rx中断
 
-////////////////////////////////////////////////////////////
-const USARTx_INFO USARTxInfo[]=
-{
-	{1,USART1,RCC_APB2Periph_USART1,USART1_IRQn},//暂时不支持
-	{2,USART2,RCC_APB1Periph_USART2,USART2_IRQn},
-	{3,USART3,RCC_APB1Periph_USART3,USART3_IRQn},
-};
-
-//////////////////////////
-uint32_t  USARTxToRCC(USART_TypeDef* USARTx);
-uint32_t 	USARTxToIRQ(USART_TypeDef* USARTx);
-uint8_t 	USARTxToID(USART_TypeDef* USARTx);
 
 USART::USART(USART_TypeDef * USARTx,GPIO* txPin,GPIO* rxPin)
 {
 	_USARTx = USARTx;
-	_rcc = USARTxToRCC(_USARTx);
-	_irq = USARTxToIRQ(_USARTx);
-	_id	= USARTxToID(_USARTx);
-	_rxPin = rxPin;
-	_txPin = txPin;
-	state = FREE;
+	txPin->mode(AF_PP);
+	rxPin->mode(INPUT);
 }
 
 
@@ -45,33 +22,48 @@ void USART::begin(uint32_t BaudRate)
 {
    USART_InitTypeDef USART_InitStructure;
 	 NVIC_InitTypeDef NVIC_InitStructure;
-			/* ADC1  DMA1 Channel Config */
 	 DMA_InitTypeDef DMA_InitStructure;
 
 	
-	 NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
+		switch((uint32_t)_USARTx)
+		{
+			case (uint32_t)USART1:
+				RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);
+				_DMA1_Channelx = DMA1_Channel4;
+			
+				NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
+				NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+				NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+				NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+				NVIC_Init(&NVIC_InitStructure);
 
-		_txPin->mode(AF_PP);
-		_rxPin->mode(INPUT);
-		if(_id == 1)
-		{
-			RCC_APB2PeriphClockCmd(_rcc,ENABLE); //??????
-			
-			_DMA1_Channelx = DMA1_Channel4;
-		}
-		else if(_id == 2)
-		{
-			RCC_APB1PeriphClockCmd(_rcc,ENABLE); //?????
-			_DMA1_Channelx = DMA1_Channel7;
-		}
-		else if(_id == 3)
-		{
+				break;
 
-			RCC_APB1PeriphClockCmd(_rcc,ENABLE); //?????
+			case (uint32_t)USART2:
+				RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,ENABLE);
+				_DMA1_Channelx = DMA1_Channel7;
 			
-			_DMA1_Channelx = DMA1_Channel2;
+				NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
+				NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+				NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+				NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+				NVIC_Init(&NVIC_InitStructure);
+
+				break;
+
+			case (uint32_t)USART3:
+				RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
+				_DMA1_Channelx = DMA1_Channel2;
 			
+				NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
+				NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+				NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+				NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+				NVIC_Init(&NVIC_InitStructure);
+
+				break;
 		}
+
 		#if defined USE_DMA
 			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);	//使能DMA传输
 		
@@ -88,38 +80,35 @@ void USART::begin(uint32_t BaudRate)
 			DMA_InitStructure.DMA_Priority = DMA_Priority_High; //
 			DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;  //DMA通道x没有设置为内存到内存传输
 			DMA_Init(_DMA1_Channelx, &DMA_InitStructure);  //
-			if(_id == 1)
+			switch((uint32_t)_USARTx)
 			{
+				case (uint32_t)USART1:
 					
-				NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel4_IRQn;  
-				NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;  
-				NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  
-				NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;  
-				NVIC_Init(&NVIC_InitStructure);  	
-
-			 DMA_ITConfig(DMA1_Channel4,DMA_IT_TC,ENABLE);  
-			}
-			else if(_id == 2)
-			{
-							
-				NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel7_IRQn;  
-				NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;  
-				NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  
-				NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;  
-				NVIC_Init(&NVIC_InitStructure);  	
-			
-
-			 DMA_ITConfig(DMA1_Channel7,DMA_IT_TC,ENABLE);  
-			}
-			else if(_id == 3)
-			{
-				NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel2_IRQn;  
-				NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;  
-				NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  
-				NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;  
-				NVIC_Init(&NVIC_InitStructure);  	
-
-				 DMA_ITConfig(DMA1_Channel2,DMA_IT_TC,ENABLE);  
+					NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel4_IRQn;  
+					NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;  
+					NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  
+					NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;  
+					NVIC_Init(&NVIC_InitStructure);  	
+				  DMA_ITConfig(DMA1_Channel4,DMA_IT_TC,ENABLE);  
+					break;
+				case (uint32_t)USART2:
+					
+					NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel7_IRQn;  
+					NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;  
+					NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  
+					NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;  
+					NVIC_Init(&NVIC_InitStructure);  	
+				  DMA_ITConfig(DMA1_Channel7,DMA_IT_TC,ENABLE);  
+					break;
+				case (uint32_t)USART3:
+					
+					NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel2_IRQn;  
+					NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;  
+					NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  
+					NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;  
+					NVIC_Init(&NVIC_InitStructure);  	
+				  DMA_ITConfig(DMA1_Channel2,DMA_IT_TC,ENABLE);  
+					break;
 			}
 		#endif
 
@@ -132,30 +121,15 @@ void USART::begin(uint32_t BaudRate)
     USART_Init(_USARTx, &USART_InitStructure);
 	
 		
-		NVIC_InitStructure.NVIC_IRQChannel = _irq;
-		NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-		NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-		NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-		NVIC_Init(&NVIC_InitStructure);
+//		NVIC_InitStructure.NVIC_IRQChannel = _irq;
+//		NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+//		NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+//		NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+//		NVIC_Init(&NVIC_InitStructure);
 		
 		
-		USART_DMACmd(_USARTx,USART_DMAReq_Tx,ENABLE);     
+		USART_DMACmd(_USARTx,USART_DMAReq_Tx,ENABLE);    
     USART_Cmd(_USARTx, ENABLE);
-		
-		if(_id == 1)
-		{
-			printf(" \r\nusart1 ok!\r\n");
-		}
-		else if(_id == 2)
-		{
-			printf(" \r\nusart2 ok!\r\n");
-		
-		}
-		else if(_id == 3)
-		{
-			printf(" \r\nusart3 ok!\r\n");
-		
-		}
 }
 void USART::interrupt(FunctionalState x)
 {
@@ -163,7 +137,15 @@ void USART::interrupt(FunctionalState x)
 }
 void USART::attachInterrupt(void (*callbackFun)(void))
 {
-		UARTCallbackTable[_id - 1] = callbackFun;//注册rx中断函数
+	switch((uint32_t)_USARTx)
+	{
+		case (uint32_t)USART1:
+			UARTCallbackTable[0] = callbackFun;break;
+		case (uint32_t)USART2:
+			UARTCallbackTable[1] = callbackFun;break;
+		case (uint32_t)USART3:
+			UARTCallbackTable[2] = callbackFun;break;
+	}
 }
 
 int USART::putChar(char ch)
@@ -195,12 +177,12 @@ void USART::printfln(const char *str,uint16_t length)
 		uint16_t i = 0;
 		uint16_t tmpln;
 		tmpln = length;
-		while(state);
+
+		while(USART_GetFlagStatus(_USARTx, USART_FLAG_TC) == RESET);
 		while(tmpln--)
 		{
 			sendBuf[i++] = *str++;
 		};
-		state = BUSY;
 		DMA_SetCurrDataCounter(_DMA1_Channelx,length);  
 		DMA_Cmd(_DMA1_Channelx,ENABLE); 
 	#else
@@ -210,70 +192,19 @@ void USART::printfln(const char *str,uint16_t length)
 void USART::printf(const char* fmt,...)
 {
 	 __IO uint16_t length = 0;
-	while(state);
+	while(USART_GetFlagStatus(_USARTx, USART_FLAG_TC) == RESET);
 	va_list va_params;   
 	va_start(va_params,fmt);   
 	length = vsprintf(sendBuf,fmt,va_params);   
 	va_end(va_params); 
   
 	#if defined USE_DMA
-		state = BUSY;
 		DMA_SetCurrDataCounter(_DMA1_Channelx,length);  
 		DMA_Cmd(_DMA1_Channelx,ENABLE);  
 	#else
 		putString(sendBuf);
 	#endif
 	
-}
-
-////////////////////////////////////////////////////
-uint32_t  USARTxToRCC(USART_TypeDef* USARTx)
-{
-	int i;
-	uint32_t rcc;
-	for(i=0;i<USART_NUM;i++)
-	{
-		if(USARTxInfo[i].usart == USARTx)
-		{
-					rcc = USARTxInfo[i].rcc;
-			break;
-
-		}
-	
-	}
-	return rcc;
-}
-uint32_t USARTxToIRQ(USART_TypeDef* USARTx)
-{
-	uint32_t irq;
-	int i;
-	for(i=0;i<USART_NUM;i++)
-	{
-		if(USARTxInfo[i].usart == USARTx)
-		{
-			irq = USARTxInfo[i].irq;
-			break;
-		}
-	
-	}	
-
-	return irq;
-}
-uint8_t USARTxToID(USART_TypeDef* USARTx)
-{
-	uint32_t id;
-	int i;
-	for(i=0;i<USART_NUM;i++)
-	{
-		if(USARTxInfo[i].usart == USARTx)
-		{
-			id = USARTxInfo[i].id;
-			break;
-		}
-	
-	}	
-
-	return id;
 }
 
 
@@ -308,42 +239,23 @@ void USART3_IRQHandler(void)
 	}
 }
 
-#if defined USE_DMA
-	#if defined USE_UART1
-	extern class USART uart1;
-	void DMA1_Channel4_IRQHandler(void)  
+void DMA1_Channel4_IRQHandler(void)  
 	{  
 
 		DMA_Cmd(DMA1_Channel4,DISABLE);  
-		uart1.state = FREE;  
 		DMA_ClearFlag(DMA1_FLAG_TC4); 
 
 	}	 
-	#endif
-
-	#if defined USE_UART2
-	extern class USART uart2;
 	void DMA1_Channel7_IRQHandler(void)  
 	{  
 		DMA_Cmd(DMA1_Channel7,DISABLE);  
-		uart2.state = FREE;  
 		DMA_ClearFlag(DMA1_FLAG_TC7); 
 	}	 
-	#endif
-
-	#if defined USE_UART3
-	extern class USART uart3;
 	void DMA1_Channel2_IRQHandler(void)  
 	{  
-
 		DMA_Cmd(DMA1_Channel2,DISABLE);  
-		uart3.state = FREE;   
 		DMA_ClearFlag(DMA1_FLAG_TC2); 
-
 	}
-	#endif
-#endif 
-
 }
 
 
