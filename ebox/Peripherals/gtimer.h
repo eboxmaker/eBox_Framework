@@ -32,17 +32,11 @@ This specification is preliminary and is subject to change at any time without n
 
 class TIM
 {
-	protected:
-		
-
-	
 	public:
-
-
 		TIM(TIM_TypeDef* TIMx);
-		TIM(TIM_TypeDef* TIMx,uint32_t period,uint32_t prescaler);
-	
-		void begin(void);
+		void config(uint16_t period,uint16_t prescaler);
+
+		void begin(uint32_t period,uint32_t prescaler);
 		void attachInterrupt(void(*callback)(void));
 		void interrupt(FunctionalState x);
 		void start(void);
@@ -52,16 +46,7 @@ class TIM
 		void clearCount(void);
 		
 	private:
-
-		uint16_t _period;
-		uint16_t _prescaler;
-	
 		TIM_TypeDef *_TIMx;
-		uint8_t _id;
-		uint32_t _rcc;
-		uint8_t _irq;
-		void initInfo(TIM_TypeDef* TIMx);
 	
-		void baseInit(uint16_t period,uint16_t prescaler);
 };
 #endif

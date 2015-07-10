@@ -66,11 +66,7 @@ class	SPIClass
 		void transfer(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln);
 		
 	private:
-		GPIO* _sckPin;
-		GPIO* _mosiPin;
-		GPIO* _misoPin;
 		SPI_TypeDef *_spi;
-		SPI_InitTypeDef SPI_InitStructure;
 
 		uint8_t currentDevNum;
 };

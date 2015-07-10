@@ -22,6 +22,25 @@ extern "C"{
 #endif
 
 
+
+/////////////////////////////////////////
+
+
+#define true 0x1
+#define false 0x0
+ 
+#define HIGH 0x1
+#define LOW  0x0
+
+#define NVIC_GROUP_CONFIG NVIC_PriorityGroup_2   /*!< 2 bits for pre-emption priority
+                                                 2 bits for subpriority */
+
+#define LSBFIRST 0
+#define MSBFIRST 1
+
+//#define CHANGE 2
+//#define FALLING 3
+//#define RISING 4
 typedef enum
 { 
 	AIN = 0x0,
@@ -51,30 +70,7 @@ class GPIO
 	
 };
 
-
-//不建议使用
-//#define dgWrite(pin,val)	pin->write(val)
-//#define dgRead(pin) 			pin->read()
-//#define pMode(pin,val)	pin->mode(val)
-/////////////////////////////////////////
-
-
-#define true 0x1
-#define false 0x0
  
-#define HIGH 0x1
-#define LOW  0x0
-
-#define NVIC_GROUP_CONFIG NVIC_PriorityGroup_2   /*!< 2 bits for pre-emption priority
-                                                 2 bits for subpriority */
-
-#define LSBFIRST 0
-#define MSBFIRST 1
-
-//#define CHANGE 2
-//#define FALLING 3
-//#define RISING 4
-	 
 
 //spi相关公共宏和声明//////////////////////////////////
 #define SPI_MODE0 0x02
@@ -118,6 +114,10 @@ void delay_ms(uint32_t ms);
 void delay_us(uint16_t us);
 void delayus(uint32_t us);
 
+//不建议使用
+#define digitalWrite(pin,val)	pin->write(val)
+#define digitalRead(pin) 			pin->read()
+#define pinMode(pin,val)			pin->mode(val)
 
 uint16_t 	analogRead(GPIO* pin);
 uint16_t 	analogReadToVoltage(GPIO* pin); 

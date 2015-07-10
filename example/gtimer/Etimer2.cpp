@@ -2,11 +2,14 @@
 #include "ebox.h"
 
 
+USART uart3(USART3,&PB10,&PB11);
+
 
 uint32_t xx;
 uint8_t flag;
 
 TIM timer2(TIM2);
+
 
 void t2it()
 {
@@ -22,7 +25,7 @@ void setup()
 	eBoxInit();
 	uart3.begin(9600);
 	
-	timer2.begin();
+	timer2.begin(1000,72);
 	timer2.interrupt(ENABLE);
 	timer2.attachInterrupt(t2it);
 	timer2.start();
@@ -44,6 +47,10 @@ int main(void)
 
 
 }
+
+
+
+
 
 
 

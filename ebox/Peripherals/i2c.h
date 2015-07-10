@@ -28,11 +28,7 @@ class I2C
 {
 
 	public:
-		I2C(GPIO* SDAPin,GPIO* SCLPin)
-		{
-			_SDAPin = SDAPin;
-			_SCLPin = SCLPin;
-		}
+		I2C(I2C_TypeDef* I2Cx,GPIO* SDAPin,GPIO* SCLPin);
 		void i2cBegin();
 		void setSpeed(uint32_t speed);
 	
@@ -42,10 +38,7 @@ class I2C
 		int8_t readByte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
 
 	private:
-		GPIO* _SDAPin;
-		GPIO* _SCLPin;
-		I2C_InitTypeDef I2C_InitStructure; 
-	
+		I2C_TypeDef* _I2Cx;
 		int8_t start();
 		int8_t stop();
 		int8_t sendNoAck();

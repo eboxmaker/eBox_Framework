@@ -15,37 +15,6 @@ This specification is preliminary and is subject to change at any time without n
 */
 #include "common.h"
 
-#define ANALOG_PIN_NUM 9
-uint16_t analogPinStatu[ANALOG_PIN_NUM];//是否配置为AIN模式
-
-
-typedef struct
-{
-	uint8_t pin;
-	u16 analogch;
-}PIN_TO_ANALOAG;
-
-/////////////////////////////////////////////
-const PIN_TO_ANALOAG pinToAnalog[]=
-{
-	//{CH,APin}
-		{0,0},
-		{1,1},
-		{2,2},
-		{3,3},
-		{4,4},
-		{5,5},
-		{6,6},
-		{7,7},
-		{8,0x10},
-		{9,0x11},
-		{10,0x20},
-		{11,0x21},
-		{12,0x22},
-		{13,0x23},
-		{14,0x24},
-		{15,0x25}
-};
 
 
 //默认开启16通道 采用DMA+ADC连续转换模式。提供AD采集服务

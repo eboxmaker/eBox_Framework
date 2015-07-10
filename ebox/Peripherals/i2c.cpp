@@ -3,17 +3,19 @@
 #define DEBUG 1
 
 #define I2C_NUM 2
-
+I2C::I2C(I2C_TypeDef* I2Cx,GPIO* SDAPin,GPIO* SCLPin)
+{
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1,ENABLE);  //如果外部引脚没有上拉，必须加这一句
+	SDAPin->mode(AF_OD);
+	SCLPin->mode(AF_OD);
+}
 void  I2C::i2cBegin()
 {
-	
-		/* 使能与 I2C1 有关的时钟 */
+	I2C_InitTypeDef I2C_InitStructure; 
+
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1,ENABLE);  
 	
-	_SDAPin->mode(AF_OD);
-	_SCLPin->mode(AF_OD);
-
-
+	
 	  /* I2C 配置 */
 	I2C_InitStructure.I2C_Mode = I2C_Mode_I2C ; 
 	//I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2; 
@@ -32,6 +34,17 @@ void  I2C::i2cBegin()
 
 void I2C::setSpeed(uint32_t speed)
 {
+	I2C_InitTypeDef I2C_InitStructure; 
+	
+	  /* I2C 配置 */
+	I2C_InitStructure.I2C_Mode = I2C_Mode_I2C ; 
+	//I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2; 
+	//I2C_InitStructure.I2C_OwnAddress1 = SlaveAddress; 
+	I2C_InitStructure.I2C_Ack = I2C_Ack_Enable; 
+	I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit; 
+	I2C_InitStructure.I2C_ClockSpeed = I2C_SPEED; 
+
+
 	I2C_InitStructure.I2C_ClockSpeed = speed; 
 	I2C_Init(I2C1, &I2C_InitStructure);	   
 	/* 使能 I2C1 */

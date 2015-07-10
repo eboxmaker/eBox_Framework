@@ -25,6 +25,9 @@ void eBoxInit(void)
 	SysTick_Config(9000);//  每隔 (nhz/9,000,000)s产生一次中断
 	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);//9Mhz的systemticks clock；
 	Init_ADC1();
+	
+	NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
+
 	//将pb4默认设置为IO口，仅用jtag
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
 	 GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
