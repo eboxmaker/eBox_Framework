@@ -369,7 +369,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F10X_HD,HSE_VALUE=8000000</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\Project;..\ebox;..\ebox\core;..\ebox\Peripherals;..\elib</IncludePath>
+              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\Project;..\ebox;..\ebox\core;..\ebox\Peripherals;..\edriver</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -625,6 +625,51 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>edriver</GroupName>
+          <Files>
+            <File>
+              <FileName>74HC595.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\74HC595.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Button.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\Button.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>DS3231.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\DS3231.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>encoder.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\encoder.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>LCD1602.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\LCD1602.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>LED.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\LED.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>MPU6050.CPP</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\MPU6050.CPP</FilePath>
+            </File>
+            <File>
+              <FileName>w25x16.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\w25x16.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>user</GroupName>
           <Files>
             <File>
@@ -641,51 +686,6 @@
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\main.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>edriver</GroupName>
-          <Files>
-            <File>
-              <FileName>74HC595.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\elib\74HC595.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Button.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\elib\Button.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>DS3231.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\elib\DS3231.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>encoder.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\elib\encoder.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>LCD1602.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\elib\LCD1602.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>LED.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\elib\LED.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>MPU6050.CPP</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\elib\MPU6050.CPP</FilePath>
-            </File>
-            <File>
-              <FileName>w25x16.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\elib\w25x16.cpp</FilePath>
             </File>
           </Files>
         </Group>

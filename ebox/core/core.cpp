@@ -58,7 +58,8 @@ void delay_us(uint16_t us)
 {		 
 	uint32_t systick = SysTick->VAL;
 	uint16_t count = (us)*9;
-		if(count == 0)return;
+	if(count == 0)return;
+	if(count>8999)count =8999;
 	noInterrupts();
 	if(systick < count)
 	{
@@ -74,6 +75,7 @@ void delay_us(uint16_t us)
 		{
 			;
 		}
+		TimingMillis++;//½ÃÕýºÁÃë¼ÆÊý
 	}
 	else
 	{

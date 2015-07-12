@@ -102,10 +102,7 @@ typedef struct
 #define Interrupts() 		__enable_irq()
 #define noInterrupts() 	__disable_irq()
 	
-typedef void (*callbackFun)(void);
-
-
-	 
+typedef void (*callbackFun)(void);	 
 	 
 void eBoxInit(void);	
 

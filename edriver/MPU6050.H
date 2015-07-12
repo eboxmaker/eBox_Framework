@@ -75,10 +75,10 @@ This specification is preliminary and is subject to change at any time without n
 #define	SlaveAddress	0xD0	//IIC写入时的地址字节数据
 
 
-class MPU6050 : public I2C
+class MPU6050 : public Softi2c
 {
 	public:
-		 MPU6050(GPIO* SDApin,GPIO* SCLpin):I2C(I2C1,SDApin,SCLpin){
+		 MPU6050(GPIO* SDApin,GPIO* SCLpin):Softi2c(SDApin,SCLpin){
 		 // do nothing;
 		 };	
 		void 			begin();

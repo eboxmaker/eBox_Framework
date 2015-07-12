@@ -36,26 +36,26 @@ int8_t Softi2c::setSpeed(uint32_t speed)
 void Softi2c::start()
 {
 	_SDApin->mode(OUTPUT_PP);
-	_SDApin->set();;
-	_SCLpin->set();;delay_us(_delayTimes);
-	_SDApin->reset();;delay_us(_delayTimes);
-	_SCLpin->reset();;
+	_SDApin->set();
+	_SCLpin->set();delay_us(_delayTimes);
+	_SDApin->reset();delay_us(_delayTimes);
+	_SCLpin->reset();
 
 }
 
 void Softi2c::stop()
 {
 	_SDApin->mode(OUTPUT_PP);
-	_SCLpin->reset();;
-	_SDApin->reset();;delay_us(_delayTimes);
-	_SCLpin->set();;delay_us(_delayTimes);
-	_SDApin->set();;
+	_SCLpin->reset();
+	_SDApin->reset();delay_us(_delayTimes);
+	_SCLpin->set();delay_us(_delayTimes);
+	_SDApin->set();
 }
 int8_t Softi2c::waitAck()
 {
 	uint8_t cErrTime = 5;
 	_SDApin->mode(INPUT_PU);
-	_SCLpin->set();;delay_us(_delayTimes);
+	_SCLpin->set();delay_us(_delayTimes);
 	while(_SDApin->read())
 	{
 		cErrTime--;
@@ -69,23 +69,23 @@ int8_t Softi2c::waitAck()
 		}
 	
 	}
-	_SCLpin->reset();;delay_us(_delayTimes);
+	_SCLpin->reset();delay_us(_delayTimes);
 	return 0;
 }
 void Softi2c::sendAck()
 {
 	_SDApin->mode(OUTPUT_PP);
-	_SDApin->reset();;delay_us(_delayTimes);
-	_SCLpin->set();;delay_us(_delayTimes);
-	_SCLpin->reset();;delay_us(_delayTimes);
+	_SDApin->reset();delay_us(_delayTimes);
+	_SCLpin->set();delay_us(_delayTimes);
+	_SCLpin->reset();delay_us(_delayTimes);
 
 }
 void Softi2c::sendNoAck()	
 {
 	_SDApin->mode(OUTPUT_PP);
-	_SDApin->set();;delay_us(_delayTimes);
-	_SCLpin->set();;delay_us(_delayTimes);
-	_SCLpin->reset();;delay_us(_delayTimes);
+	_SDApin->set();delay_us(_delayTimes);
+	_SCLpin->set();delay_us(_delayTimes);
+	_SCLpin->reset();delay_us(_delayTimes);
 
 }
 void Softi2c::sendByte(uint8_t byte)
@@ -95,11 +95,11 @@ void Softi2c::sendByte(uint8_t byte)
 	_SDApin->mode(OUTPUT_PP);
 	while( ii-- )
 	{
-		_SCLpin->reset();;
+		_SCLpin->reset();
 		_SDApin->write(byte & 0x80);delay_us(_delayTimes);
 		byte += byte;//<<1
-		_SCLpin->set();;delay_us(_delayTimes);
-		_SCLpin->reset();;delay_us(_delayTimes);
+		_SCLpin->set();delay_us(_delayTimes);
+		_SCLpin->reset();delay_us(_delayTimes);
 	}
 
 }
@@ -111,11 +111,11 @@ uint8_t Softi2c::receiveByte(void)
 	while(i--)
 	{
 		byte += byte;
-		_SCLpin->reset();;delay_us(_delayTimes);
-		_SCLpin->set();;delay_us(_delayTimes);
+		_SCLpin->reset();delay_us(_delayTimes);
+		_SCLpin->set();delay_us(_delayTimes);
 		byte |= _SDApin->read();
 	}
-	_SCLpin->reset();;delay_us(_delayTimes);
+	_SCLpin->reset();delay_us(_delayTimes);
 
 	return byte;
 }
