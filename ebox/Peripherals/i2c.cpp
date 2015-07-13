@@ -9,7 +9,7 @@ I2C::I2C(I2C_TypeDef* I2Cx,GPIO* SDAPin,GPIO* SCLPin)
 	SDAPin->mode(AF_OD);
 	SCLPin->mode(AF_OD);
 }
-void  I2C::i2cBegin()
+void  I2C::i2cBegin(uint32_t speed)
 {
 	I2C_InitTypeDef I2C_InitStructure; 
 
@@ -22,7 +22,7 @@ void  I2C::i2cBegin()
 	//I2C_InitStructure.I2C_OwnAddress1 = SlaveAddress; 
 	I2C_InitStructure.I2C_Ack = I2C_Ack_Enable; 
 	I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit; 
-	I2C_InitStructure.I2C_ClockSpeed = I2C_SPEED; 
+	I2C_InitStructure.I2C_ClockSpeed = speed; 
 
 	/* I2C1 ≥ı ºªØ */
 	I2C_Init(I2C1, &I2C_InitStructure);	   
@@ -42,8 +42,6 @@ void I2C::setSpeed(uint32_t speed)
 	//I2C_InitStructure.I2C_OwnAddress1 = SlaveAddress; 
 	I2C_InitStructure.I2C_Ack = I2C_Ack_Enable; 
 	I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit; 
-	I2C_InitStructure.I2C_ClockSpeed = I2C_SPEED; 
-
 
 	I2C_InitStructure.I2C_ClockSpeed = speed; 
 	I2C_Init(I2C1, &I2C_InitStructure);	   

@@ -65,9 +65,9 @@ This specification is preliminary and is subject to change at any time without n
 			DS3231(GPIO* SDApin,GPIO* SCLpin):Softi2c(SDApin,SCLpin){
 			// do nothing;
 			};	
-			void begin()
+			void begin(uint32_t speed)
 			{
-				i2cBegin();
+				i2cBegin(speed);
 			};
 			void getDateTime(DateTime *t);
 			void getTime(char* buf);

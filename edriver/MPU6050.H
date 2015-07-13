@@ -81,7 +81,7 @@ class MPU6050 : public Softi2c
 		 MPU6050(GPIO* SDApin,GPIO* SCLpin):Softi2c(SDApin,SCLpin){
 		 // do nothing;
 		 };	
-		void 			begin();
+		void 			begin(uint32_t speed);
 		int16_t 	getData(uint8_t regAddress);
 		int8_t 		getData(uint8_t regAddress,int16_t* buf,uint8_t numToRead);
 		void 			getID(uint8_t* id);

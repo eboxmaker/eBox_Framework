@@ -41,11 +41,11 @@ class Softi2c
 
 
   private:
-		GPIO* _SDApin;
-		GPIO* _SCLpin;
+		GPIO* sdaPin;
+		GPIO* sclPin;
 		uint16_t _delayTimes;
 	protected:
-		void 		i2cBegin();
+		void 		i2cBegin(uint32_t speed);
 		void 		start();
 		void 		stop();
 		int8_t	waitAck();

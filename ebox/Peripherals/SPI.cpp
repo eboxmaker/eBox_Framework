@@ -4,9 +4,9 @@
 
 
 
-SPIClass::SPIClass(SPI_TypeDef *spi,GPIO* sckPin,GPIO* mosiPin,GPIO* misoPin)
+SPIClass::SPIClass(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* mosiPin,GPIO* misoPin)
 {
-	_spi = spi;
+	spi = SPIx;
 	sckPin->mode(AF_PP);
 	mosiPin->mode(AF_PP);
 	misoPin->mode(AF_PP);
@@ -15,15 +15,15 @@ SPIClass::SPIClass(SPI_TypeDef *spi,GPIO* sckPin,GPIO* mosiPin,GPIO* misoPin)
 
 void SPIClass::begin(SPICONFIG* spiConfig)
 {		
-	if(_spi == SPI1)
+	if(spi == SPI1)
 	{	
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,ENABLE);
 	}
-	if(_spi == SPI2)
+	if(spi == SPI2)
 	{	
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE);
 	}
-	if(_spi == SPI3)
+	if(spi == SPI3)
 	{	
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,ENABLE);
 	}
@@ -35,9 +35,9 @@ void SPIClass::config(SPICONFIG* spiConfig)
 	SPI_InitTypeDef SPI_InitStructure;
 
 	currentDevNum = spiConfig->devNum;
-	SPI_Cmd(_spi,DISABLE);
+	SPI_Cmd(spi,DISABLE);
 	
-	SPI_I2S_DeInit(_spi);
+	SPI_I2S_DeInit(spi);
 	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex; //全双工
 	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b; //8位数据模式
 	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft; //NSS软件管理
@@ -63,8 +63,8 @@ void SPIClass::config(SPICONFIG* spiConfig)
 	}
 	SPI_InitStructure.SPI_BaudRatePrescaler = spiConfig->prescaler;
 	SPI_InitStructure.SPI_FirstBit = spiConfig->bitOrder; 
-	SPI_Init(_spi,&SPI_InitStructure);
-	SPI_Cmd(_spi,ENABLE);
+	SPI_Init(spi,&SPI_InitStructure);
+	SPI_Cmd(spi,ENABLE);
 
 }
 
@@ -75,12 +75,12 @@ uint8_t SPIClass::readConfig(void)
 
 uint8_t SPIClass::transfer(uint8_t data) 
 {
-	while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+	while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
 	;
-	_spi->DR = data;
-	while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+	spi->DR = data;
+	while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
 	;
-	return (_spi->DR);
+	return (spi->DR);
 }
 
 void SPIClass::transfer(uint8_t *data,uint16_t dataln) 
@@ -90,12 +90,12 @@ void SPIClass::transfer(uint8_t *data,uint16_t dataln)
 		return;
 	while(dataln--)
 	{
-		while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+		while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
 			;
-		_spi->DR = *data++;
-		while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+		spi->DR = *data++;
+		while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
 			;
-		dummyByte = _spi->DR;
+		dummyByte = spi->DR;
 	}
 }
 
@@ -106,12 +106,12 @@ void SPIClass::transfer(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln)
 		return;
 	while(dataln--)
 	{
-		while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+		while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
 			;
-		_spi->DR = dummyByte;
-		while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+		spi->DR = dummyByte;
+		while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
 			;
-		*rcvdata++ = _spi->DR;
+		*rcvdata++ = spi->DR;
 	}
 }
 

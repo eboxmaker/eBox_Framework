@@ -14,8 +14,7 @@ void setup()
 {
 	eBoxInit();
 	uart3.begin(9600);
-	ds.begin();
-	ds.setSpeed(100000);
+	ds.begin(100000);
 	
 	t.year = 15;
 	t.month = 7;
