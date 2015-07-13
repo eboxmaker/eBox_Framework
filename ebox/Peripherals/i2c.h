@@ -29,7 +29,7 @@ class I2C
 
 	public:
 		I2C(I2C_TypeDef* I2Cx,GPIO* SDAPin,GPIO* SCLPin);
-		void i2cBegin();
+		void i2cBegin(uint32_t speed);
 		void setSpeed(uint32_t speed);
 	
 		int8_t writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);

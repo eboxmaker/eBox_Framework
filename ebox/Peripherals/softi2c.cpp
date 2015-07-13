@@ -1,15 +1,15 @@
 #include "softi2c.h"
 
-Softi2c::Softi2c(GPIO* SDApin, GPIO* SCLpin)
+Softi2c::Softi2c(GPIO* SDAPin, GPIO* SCLPin)
 {
-	_SDApin = SDApin;
-	_SCLpin = SCLpin;
+	sdaPin = SDAPin;
+	sclPin = SCLPin;
 }	
-void Softi2c::i2cBegin()
+void Softi2c::i2cBegin(uint32_t speed)
 {
-	setSpeed(SOFT_I2C_SPEED);
-	_SDApin->mode(OUTPUT_PP);
-	_SCLpin->mode(OUTPUT_PP);
+	setSpeed(speed);
+	sdaPin->mode(OUTPUT_PP);
+	sclPin->mode(OUTPUT_PP);
 }
 int8_t Softi2c::setSpeed(uint32_t speed)
 {
@@ -22,10 +22,10 @@ int8_t Softi2c::setSpeed(uint32_t speed)
 			_delayTimes = 2;
 			break;
 		case 200000:
-			_delayTimes = 3;
+			_delayTimes = 4;
 			break;
 		case 100000:
-			_delayTimes = 4;
+			_delayTimes = 8;
 			break;
 		default:
 			_delayTimes = speed;
@@ -35,71 +35,71 @@ int8_t Softi2c::setSpeed(uint32_t speed)
 }
 void Softi2c::start()
 {
-	_SDApin->mode(OUTPUT_PP);
-	_SDApin->set();
-	_SCLpin->set();delay_us(_delayTimes);
-	_SDApin->reset();delay_us(_delayTimes);
-	_SCLpin->reset();
+	sdaPin->mode(OUTPUT_PP);
+	sdaPin->set();
+	sclPin->set();delay_us(_delayTimes);
+	sdaPin->reset();delay_us(_delayTimes);
+	sclPin->reset();
 
 }
 
 void Softi2c::stop()
 {
-	_SDApin->mode(OUTPUT_PP);
-	_SCLpin->reset();
-	_SDApin->reset();delay_us(_delayTimes);
-	_SCLpin->set();delay_us(_delayTimes);
-	_SDApin->set();
+	sdaPin->mode(OUTPUT_PP);
+	sclPin->reset();
+	sdaPin->reset();delay_us(_delayTimes);
+	sclPin->set();delay_us(_delayTimes);
+	sdaPin->set();
 }
 int8_t Softi2c::waitAck()
 {
 	uint8_t cErrTime = 5;
-	_SDApin->mode(INPUT_PU);
-	_SCLpin->set();delay_us(_delayTimes);
-	while(_SDApin->read())
+	sdaPin->mode(INPUT_PU);
+	sclPin->set();delay_us(_delayTimes);
+	while(sdaPin->read())
 	{
 		cErrTime--;
 		delay_us(_delayTimes);
 		if(cErrTime == 0)
 		{
-			_SDApin->mode(OUTPUT_PP);
+			sdaPin->mode(OUTPUT_PP);
 			stop();
 			return -1;
 		
 		}
 	
 	}
-	_SCLpin->reset();delay_us(_delayTimes);
+	sclPin->reset();delay_us(_delayTimes);
 	return 0;
 }
 void Softi2c::sendAck()
 {
-	_SDApin->mode(OUTPUT_PP);
-	_SDApin->reset();delay_us(_delayTimes);
-	_SCLpin->set();delay_us(_delayTimes);
-	_SCLpin->reset();delay_us(_delayTimes);
+	sdaPin->mode(OUTPUT_PP);
+	sdaPin->reset();delay_us(_delayTimes);
+	sclPin->set();delay_us(_delayTimes);
+	sclPin->reset();delay_us(_delayTimes);
 
 }
 void Softi2c::sendNoAck()	
 {
-	_SDApin->mode(OUTPUT_PP);
-	_SDApin->set();delay_us(_delayTimes);
-	_SCLpin->set();delay_us(_delayTimes);
-	_SCLpin->reset();delay_us(_delayTimes);
+	sdaPin->mode(OUTPUT_PP);
+	sdaPin->set();delay_us(_delayTimes);
+	sclPin->set();delay_us(_delayTimes);
+	sclPin->reset();delay_us(_delayTimes);
 
 }
 void Softi2c::sendByte(uint8_t byte)
 {
 
 	uint8_t ii = 8;
-	_SDApin->mode(OUTPUT_PP);
+	sdaPin->mode(OUTPUT_PP);
 	while( ii-- )
 	{
-		_SCLpin->reset();
-		_SDApin->write(byte & 0x80);delay_us(_delayTimes);
+		sclPin->reset();
+		sdaPin->write(byte & 0x80);delay_us(_delayTimes);
 		byte += byte;//<<1
-		_SCLpin->set();delay_us(_delayTimes);
-		_SCLpin->reset();delay_us(_delayTimes);
+		sclPin->set();delay_us(_delayTimes);
+		sclPin->reset();delay_us(_delayTimes);
 	}
 
 }
@@ -107,15 +107,15 @@ uint8_t Softi2c::receiveByte(void)
 {
 	uint8_t i = 8;
 	uint8_t byte = 0;
-	_SDApin->mode(INPUT_PU);
+	sdaPin->mode(INPUT_PU);
 	while(i--)
 	{
 		byte += byte;
-		_SCLpin->reset();delay_us(_delayTimes);
-		_SCLpin->set();delay_us(_delayTimes);
-		byte |= _SDApin->read();
+		sclPin->reset();delay_us(_delayTimes);
+		sclPin->set();delay_us(_delayTimes);
+		byte |= sdaPin->read();
 	}
-	_SCLpin->reset();delay_us(_delayTimes);
+	sclPin->reset();delay_us(_delayTimes);
 
 	return byte;
 }

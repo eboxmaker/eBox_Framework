@@ -17,9 +17,9 @@ This specification is preliminary and is subject to change at any time without n
 
 
 
-void MPU6050::begin()
+void MPU6050::begin(uint32_t speed)
 {
-	i2cBegin();
+	i2cBegin(speed);
 	writeByte(SlaveAddress,PWR_MGMT_1,0);
 	writeByte(SlaveAddress,SMPLRT_DIV,0x07);
 	writeByte(SlaveAddress,CONFIG,0x06);

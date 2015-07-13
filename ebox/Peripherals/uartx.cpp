@@ -3,10 +3,6 @@
 
 
 
-#define BUSY 	1
-#define FREE 	0
-
-
 callbackFun UARTCallbackTable[3];//支持串口的rx中断
 
 

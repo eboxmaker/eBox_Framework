@@ -1,9 +1,7 @@
 
 #include "ebox.h"
-#include "ds3231.h"
 
 USART uart3(USART3,&PB10,&PB11);
-
 
 
 
@@ -17,9 +15,9 @@ void setup()
 	eBoxInit();
 	uart3.begin(9600);
 
-	mpu.begin();
-	mpu.setSpeed(100000);
+	mpu.begin(100000);
 
+	
 }
 
 int16_t tmp[7];

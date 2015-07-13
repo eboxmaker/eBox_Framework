@@ -55,7 +55,7 @@ This specification is preliminary and is subject to change at any time without n
 class	SPIClass 
 {
 	public:
-		SPIClass(SPI_TypeDef *spi,GPIO* sckPin,GPIO* mosiPin,GPIO* misoPin);
+		SPIClass(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* mosiPin,GPIO* misoPin);
 	
 		void begin (SPICONFIG* spiConfig);
 		void config(SPICONFIG* spiConfig);
@@ -66,7 +66,7 @@ class	SPIClass
 		void transfer(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln);
 		
 	private:
-		SPI_TypeDef *_spi;
+		SPI_TypeDef *spi;
 
 		uint8_t currentDevNum;
 };

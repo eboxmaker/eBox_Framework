@@ -1,8 +1,8 @@
 
 #include "ebox.h"
 
-#define MCU_PIN_144
-
+#define MCU_PIN_48
+#if defined (MCU_PIN_48)||defined (MCU_PIN_64)||defined (MCU_PIN_100) || defined ( MCU_PIN_144)
 GPIO PA0(GPIOA,GPIO_Pin_0);
 GPIO PA1(GPIOA,GPIO_Pin_1);
 GPIO PA2(GPIOA,GPIO_Pin_2);
@@ -46,7 +46,8 @@ GPIO PD1(GPIOD,GPIO_Pin_1);
 
 //GPIO PE5(GPIOE,GPIO_Pin_5);
 
-#if defined MCU_PIN_64
+#endif
+#if defined (MCU_PIN_64)||defined (MCU_PIN_100) || defined ( MCU_PIN_144)
 
 GPIO PC0(GPIOC,GPIO_Pin_0);
 GPIO PC1(GPIOC,GPIO_Pin_1);
