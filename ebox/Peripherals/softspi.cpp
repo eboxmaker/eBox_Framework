@@ -1,4 +1,6 @@
 #include "softspi.h"
+uint8_t SOFTSPI::currentDevNum = 0;
+
 SOFTSPI::SOFTSPI(GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin)
 {
 	_mosiPin = mosiPin;

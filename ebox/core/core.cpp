@@ -18,7 +18,7 @@ This specification is preliminary and is subject to change at any time without n
 
 void 	Init_ADC1(void);
 
- __IO uint32_t TimingMillis;
+ __IO uint32_t millisSeconds;
 
 void eBoxInit(void)
 {
@@ -35,7 +35,7 @@ void eBoxInit(void)
 }
 uint32_t millis( void )
 {
-  return TimingMillis;
+  return millisSeconds;
 }
 
 void delay_ms(uint32_t ms)
@@ -75,7 +75,7 @@ void delay_us(uint16_t us)
 		{
 			;
 		}
-		TimingMillis++;//矫正毫秒计数
+		millisSeconds++;//矫正毫秒计数
 	}
 	else
 	{
@@ -100,7 +100,7 @@ extern "C"{
 void SysTick_Handler(void)
 {
 
-	TimingMillis++;
+	millisSeconds++;
 
 }
 }

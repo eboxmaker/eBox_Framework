@@ -1,48 +1,53 @@
 
 #include "ebox.h"
-#include "ds3231.h"
+#include "w25x16.h"
 
-USART uart3(USART3,&PB10,&PB11);
+USART uart3(USART3,PB10,PB11);
 
-DS3231 ds(&PA5,&PA4);
 
-DateTime t;
-char time[9];
-char date[9];
+W25X flash(&GPE5,SPI1,PA5,PA6,PA7);
+
 
 void setup()
 {
 	eBoxInit();
 	uart3.begin(9600);
-	ds.begin(100000);
-	
-	t.year = 15;
-	t.month = 7;
-	t.date = 3;
-	t.hour = 23;
-	t.min = 59;
-	t.sec = 55;
+	flash.begin();
 }
+
+
+int16_t tmp[7];
+uint16_t id;
+uint8_t buf[10];
+uint8_t wbuf[10];
 int main(void)
 {
 	setup();
-	ds.setTime(&t);
-	while(1)
-	{	
-		ds.getDateTime(&t);
-		ds.getTime(time);
-		ds.getDate(date);
-		uart3.printf("=======\r\n");
-		uart3.printf("%02d-%02d-%02d %02d:%02d:%02d\r\n",t.year,t.month,t.date,t.hour,t.min,t.sec);
+	for(int i=0;i<10;i++)
 
-		uart3.printf(date);
-		uart3.printf(" ");
-		uart3.printf(time);
-		uart3.printf("\r\n");
+	 wbuf[i] = i;
+	while(1)
+	{
+		flash.readId(&id);
+		uart3.printf("\r\n==readid=======\r\n");
+		uart3.printf("id = %x",id);
+
+		uart3.printf("\r\n==write&read========\r\n");
+		flash.write(wbuf,0,10);
+		flash.read(buf,0,10);	
+		for(int i=0;i<10;i++)
+		uart3.printf(" %x",buf[i]);
+		
+		uart3.printf("\r\n==erase&read========\r\n");
+		flash.eraseSector(0);
+		flash.read(buf,1,10);	
+		for(int i=0;i<10;i++)
+		uart3.printf(" %x",buf[i]);
+		uart3.printf("\r\n=========================\r\n");
+		uart3.printf("\r\n\r\n");
+		
 		delay_ms(1000);
 	}
-
-
 }
 
 

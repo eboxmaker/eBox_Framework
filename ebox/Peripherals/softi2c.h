@@ -30,7 +30,6 @@ This specification is preliminary and is subject to change at any time without n
 
 class Softi2c 
 {
-
   public:
 		Softi2c(GPIO* SDApin, GPIO* SCLpin);
 		int8_t 		setSpeed(uint32_t speed);
@@ -53,7 +52,6 @@ class Softi2c
 		void 		sendNoAck();
 		void 		sendByte(uint8_t Byte);
 		uint8_t receiveByte();
-	  
 };
 
 

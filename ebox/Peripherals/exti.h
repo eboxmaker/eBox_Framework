@@ -25,8 +25,6 @@ This specification is preliminary and is subject to change at any time without n
 //	EXTI_Trigger_Rising_Falling 
 class EXTIx
 {
-
-
 	public:
 		EXTIx(GPIO* extiPin,EXTITrigger_TypeDef trigger);
 		void attachInterrupt(void (*callbackFun)(void));
