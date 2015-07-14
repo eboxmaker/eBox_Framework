@@ -1,25 +1,27 @@
 
 #include "ebox.h"
+#include "lcd1602.h"
+USART uart3(USART3,PB10,PB11);
 
-USART uart3(USART3,&PB10,&PB11);
+LCD1602 lcd(PB12,PB13,PB14,PB15,PB0,PB1,PB2,PB3,PB4,PB5,PB6,PB7);
 
 void setup()
 {
 	eBoxInit();
 	uart3.begin(9600);
+	lcd.begin();
 
-	PA7.mode(_AIN);
 }
 
-int16_t x;
+int8_t x;
 int main(void)
 {
 	setup();
 	while(1)
 	{
-		x = analogRead(&PA7);
-		uart3.printf(2,0,"test = %05d",x);
-		delay_ms(1000);
+		x++;
+		lcd.printf(2,0,"test = %05d",x);
+		delay_ms(500);
 	}
 
 

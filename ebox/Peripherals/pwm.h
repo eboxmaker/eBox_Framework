@@ -63,6 +63,6 @@ class PWM
 		void baseInit(uint16_t period,uint16_t prescaler);
 	
 };
-void analogWrite(uint8_t pin, uint16_t duty);
+void analogWrite(GPIO* pin, uint16_t duty);
 
 #endif

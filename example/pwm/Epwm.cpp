@@ -1,9 +1,9 @@
 
 #include "ebox.h"
 
-USART uart3(USART3,&PB10,&PB11);
+USART uart3(USART3,PB10,PB11);
 
-PWM pwm1(&PA7);
+PWM pwm1(PA7);
 
 void setup()
 {

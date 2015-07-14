@@ -35,6 +35,7 @@ extern "C"{
 #define LSBFIRST 0
 #define MSBFIRST 1
 
+#define PI 3.1415926535898
 //#define CHANGE 2
 //#define FALLING 3
 //#define RISING 4
@@ -113,7 +114,7 @@ class GPIO
 #define digitalRead(pin) 			pin->read()
 #define pinMode(pin,val)			pin->mode(val)
 
-	
+uint16_t analogRead(GPIO* pin);	
 uint16_t 	analogReadToVoltage(GPIO* pin); 
 
 void shiftOut(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder, uint8_t val);

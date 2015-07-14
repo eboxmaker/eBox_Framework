@@ -2,9 +2,9 @@
 #include "ebox.h"
 #include "ds3231.h"
 
-USART uart3(USART3,&PB10,&PB11);
+USART uart3(USART3,PB10,PB11);
 
-DS3231 ds(&PA5,&PA4);
+DS3231 ds(PA5,PA4);
 
 DateTime t;
 char time[9];

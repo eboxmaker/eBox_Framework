@@ -1,21 +1,21 @@
 
 #include "ebox.h"
 
-USART uart3(USART3,&PB10,&PB11);
+USART uart3(USART3,PB10,PB11);
 
 
 
 #include "mpu6050.h"
 
 
-MPU6050 mpu(&PB7,&PB6);
+MPU6050 mpu(PB7,PB6);
 
 void setup()
 {
 	eBoxInit();
 	uart3.begin(9600);
 
-	mpu.begin(100000);
+	mpu.begin(400000);
 
 	
 }

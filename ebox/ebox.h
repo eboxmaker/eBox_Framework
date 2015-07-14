@@ -21,41 +21,6 @@ This specification is preliminary and is subject to change at any time without n
 	 
 #include "common.h"
 
-#define PA0 (GPIO*)&GPA0
-#define PA1 (GPIO*)&GPA1
-#define PA2 (GPIO*)&GPA2
-#define PA3 (GPIO*)&GPA3
-#define PA4 (GPIO*)&GPA4
-#define PA5 (GPIO*)&GPA5
-#define PA6 (GPIO*)&GPA6
-#define PA7 (GPIO*)&GPA7
-#define PA8 (GPIO*)&GPA8
-#define PA9 (GPIO*)&GPA9
-#define PA10 (GPIO*)&GPA10
-#define PA11 (GPIO*)&GPA11
-#define PA12 (GPIO*)&GPA12
-#define PA13 (GPIO*)&GPA13
-#define PA14 (GPIO*)&GPA14
-#define PA15 (GPIO*)&GPA15
-
-#define PB0 (GPIO*)&GPB0
-#define PB1 (GPIO*)&GPB1
-#define PB2 (GPIO*)&GPB2
-#define PB3 (GPIO*)&GPB3
-#define PB4 (GPIO*)&GPB4
-#define PB5 (GPIO*)&GPB5
-#define PB6 (GPIO*)&GPB6
-#define PB7 (GPIO*)&GPB7
-#define PB8 (GPIO*)&GPB8
-#define PB9 (GPIO*)&GPB9
-#define PB10 (GPIO*)&GPB10
-#define PB11 (GPIO*)&GPB11
-#define PB12 (GPIO*)&GPB12
-#define PB13 (GPIO*)&GPB13
-#define PB14 (GPIO*)&GPB14
-#define PB15 (GPIO*)&GPB15
-
-#define PE5 (GPIO*)&GPE5
 
 
 
@@ -96,6 +61,41 @@ extern GPIO GPB15;
 
 extern GPIO GPE5;
 
+#define PA0 ((GPIO*)&GPA0
+#define PA1 ((GPIO*)&GPA1)
+#define PA2 ((GPIO*)&GPA2)
+#define PA3 ((GPIO*)&GPA3)
+#define PA4 ((GPIO*)&GPA4)
+#define PA5 ((GPIO*)&GPA5)
+#define PA6 ((GPIO*)&GPA6)
+#define PA7 ((GPIO*)&GPA7)
+#define PA8 ((GPIO*)&GPA8)
+#define PA9 ((GPIO*)&GPA9)
+#define PA10 ((GPIO*)&GPA10
+#define PA11 ((GPIO*)&GPA11)
+#define PA12 ((GPIO*)&GPA12)
+#define PA13 ((GPIO*)&GPA13)
+#define PA14 ((GPIO*)&GPA14)
+#define PA15 ((GPIO*)&GPA15)
+
+#define PB0 ((GPIO*)&GPB0)
+#define PB1 ((GPIO*)&GPB1)
+#define PB2 ((GPIO*)&GPB2)
+#define PB3 ((GPIO*)&GPB3)
+#define PB4 ((GPIO*)&GPB4)
+#define PB5 ((GPIO*)&GPB5)
+#define PB6 ((GPIO*)&GPB6)
+#define PB7 ((GPIO*)&GPB7)
+#define PB8 ((GPIO*)&GPB8)
+#define PB9 ((GPIO*)&GPB9)
+#define PB10 ((GPIO*)&GPB10)
+#define PB11 ((GPIO*)&GPB11)
+#define PB12 ((GPIO*)&GPB12)
+#define PB13 ((GPIO*)&GPB13)
+#define PB14 ((GPIO*)&GPB14)
+#define PB15 ((GPIO*)&GPB15)
+
+#define PE5 (GPIO*)&GPE5
 
 
 

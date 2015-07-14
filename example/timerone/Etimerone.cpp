@@ -1,7 +1,7 @@
 
 #include "ebox.h"
 
-USART uart3(USART3,&PB10,&PB11);
+USART uart3(USART3,PB10,PB11);
 
 uint32_t x;
 uint32_t xx;
@@ -32,14 +32,14 @@ void t1it()
 void setup()
 {
 	eBoxInit();
-	uart3.begin(115200);
+	uart3.begin(9600);
 	
-	timer2.begin();
+	timer2.begin(1000,72);
 	timer2.interrupt(ENABLE);
 	timer2.attachInterrupt(t2it);
 	timer2.start();
 	
-	t1.begin();
+	t1.begin(500,72);
 	t1.interrupt(ENABLE);
 	t1.attachInterrupt(t1it);
 	t1.start();

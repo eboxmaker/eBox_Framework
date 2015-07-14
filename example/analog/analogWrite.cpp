@@ -1,15 +1,8 @@
 #include "ebox.h"
 
-#include "boardcfg.h"
 #include "math.h"
-#include "pwm.h"
 
 
-//PWM p(7);
-/*
-analog pin table
-0,1,2,3,6,7,16,17,22,23,24,25,26,27
-*/
 	
 void setup()
 {
@@ -30,13 +23,9 @@ int main(void)
 		if(x >= PI)x=0;
 		y = 2000 - (sin(x)+1)*1000;
 		
-		analogWrite(7,y);
+		analogWrite(PA7,y);
 		delay_ms(50);
 	}
 
 
 }
-
-
-
-

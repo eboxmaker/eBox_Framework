@@ -20,14 +20,13 @@ callbackFun timOneCallbackTable[1];
 TIMERONE::TIMERONE()
 {
 
-	_period = PEROID;
-	_prescaler = PRESCALE;
+
 }
-void TIMERONE::begin(void)
+void TIMERONE::begin(uint32_t period,uint32_t prescaler)
 {
 	NVIC_InitTypeDef NVIC_InitStructure;
 	
-	baseInit(_period,_prescaler);
+	baseInit(period,prescaler);
 	
 	NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;//
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;// 
@@ -57,8 +56,6 @@ void TIMERONE::stop(void)
 }
 void TIMERONE::baseInit(uint16_t period,uint16_t prescaler)
 {
-	_period = period;
-	_prescaler = prescaler;
 	
  TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	

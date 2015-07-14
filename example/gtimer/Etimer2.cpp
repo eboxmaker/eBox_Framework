@@ -2,7 +2,7 @@
 #include "ebox.h"
 
 
-USART uart3(USART3,&PB10,&PB11);
+USART uart3(USART3,PB10,PB11);
 
 
 uint32_t xx;

@@ -25,6 +25,11 @@ void MPU6050::begin(uint32_t speed)
 	writeByte(SlaveAddress,CONFIG,0x06);
 	writeByte(SlaveAddress,GYRO_CONFIG,0x18);
 	writeByte(SlaveAddress,ACCEL_CONFIG,0x01);
+	writeByte(SlaveAddress,PWR_MGMT_1,0);
+	writeByte(SlaveAddress,SMPLRT_DIV,0x07);
+	writeByte(SlaveAddress,CONFIG,0x06);
+	writeByte(SlaveAddress,GYRO_CONFIG,0x18);
+	writeByte(SlaveAddress,ACCEL_CONFIG,0x01);
 }
 void MPU6050::getID(uint8_t* id)
 {
