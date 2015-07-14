@@ -47,8 +47,6 @@ class I2C
 		int8_t sendByte(uint8_t regData);
 		int8_t send7BitsAddress(uint8_t address);
 		int8_t receiveByte(uint8_t* data);
-
-	
 };
 
 #endif

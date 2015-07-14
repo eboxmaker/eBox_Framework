@@ -578,9 +578,34 @@
               <FilePath>..\ebox\Peripherals\uartx.cpp</FilePath>
             </File>
             <File>
+              <FileName>i2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\Peripherals\i2c.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>softi2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\Peripherals\softi2c.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SPI.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\Peripherals\SPI.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>softspi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\Peripherals\softspi.cpp</FilePath>
+            </File>
+            <File>
               <FileName>exti.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\ebox\Peripherals\exti.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>pwm.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\Peripherals\pwm.cpp</FilePath>
             </File>
             <File>
               <FileName>gtimer.cpp</FileName>
@@ -593,34 +618,9 @@
               <FilePath>..\ebox\Peripherals\timerOne.cpp</FilePath>
             </File>
             <File>
-              <FileName>pwm.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ebox\Peripherals\pwm.cpp</FilePath>
-            </File>
-            <File>
               <FileName>rtc.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\ebox\Peripherals\rtc.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>i2c.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ebox\Peripherals\i2c.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>softi2c.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ebox\Peripherals\softi2c.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>softspi.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ebox\Peripherals\softspi.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>SPI.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ebox\Peripherals\SPI.cpp</FilePath>
             </File>
           </Files>
         </Group>

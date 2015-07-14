@@ -75,15 +75,12 @@ class SOFTSPI
 		GPIO* 	_sckPin;
 		GPIO*		_mosiPin;
 		GPIO*		_misoPin;
-		
-	
+			
 		uint8_t _mode;	
 		uint8_t _bitOrder;
 		uint8_t _spidelay;
 	
-		uint8_t currentDevNum;
-
-
+		static uint8_t currentDevNum;
 };
 
 #endif

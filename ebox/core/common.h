@@ -32,8 +32,6 @@ extern "C"{
 #define HIGH 0x1
 #define LOW  0x0
 
-#define NVIC_GROUP_CONFIG NVIC_PriorityGroup_2   /*!< 2 bits for pre-emption priority
-                                                 2 bits for subpriority */
 
 #define LSBFIRST 0
 #define MSBFIRST 1
@@ -53,24 +51,6 @@ typedef enum
   AF_PP = 0x18
 }PINMODE;
 
-class GPIO
-{
-	public:
-		GPIO(GPIO_TypeDef* _port,uint16_t _pin);
-		void mode(PINMODE modeVal);
-		void set();
-		void reset();
-		void write(uint8_t val);
-		void read(uint8_t* val);	
-		uint8_t read(void);
-	
-		GPIO_TypeDef* port;
-		uint16_t pin;
-		uint32_t rcc;
-	
-};
-
- 
 
 //spi相关公共宏和声明//////////////////////////////////
 #define SPI_MODE0 0x02
@@ -98,6 +78,9 @@ typedef struct
 	uint16_t bitOrder;
 }SPICONFIG;
 
+//以后NVIC_PriorityGroupConfig()函数不需要再被调用。更不能再以非NVIC_GROUP_CONFIG值填充调用
+#define NVIC_GROUP_CONFIG NVIC_PriorityGroup_2   /*!< 2 bits for pre-emption priority
+																									 2 bits for subpriority */
 
 #define Interrupts() 		__enable_irq()
 #define noInterrupts() 	__disable_irq()
@@ -111,12 +94,27 @@ void delay_ms(uint32_t ms);
 void delay_us(uint16_t us);
 void delayus(uint32_t us);
 
-//不建议使用
+class GPIO
+{
+	public:
+		GPIO(GPIO_TypeDef* _port,uint16_t _pin);
+		void mode(PINMODE modeVal);
+		void set();
+		void reset();
+		void write(uint8_t val);
+		void read(uint8_t* val);	
+		uint8_t read(void);
+	
+		GPIO_TypeDef* port;
+		uint16_t pin;
+	
+};
+//对io速度要求较高的地方不建议使用
 #define digitalWrite(pin,val)	pin->write(val)
 #define digitalRead(pin) 			pin->read()
 #define pinMode(pin,val)			pin->mode(val)
 
-uint16_t 	analogRead(GPIO* pin);
+	
 uint16_t 	analogReadToVoltage(GPIO* pin); 
 
 void shiftOut(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder, uint8_t val);

@@ -8,27 +8,27 @@ GPIO::GPIO(GPIO_TypeDef* _port,uint16_t _pin)
 	switch((uint32_t)port)
 	{
 		case (uint32_t)GPIOA:
-			rcc = RCC_APB2Periph_GPIOA;
+			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
 			break;
 
 		case (uint32_t)GPIOB:
-			rcc = RCC_APB2Periph_GPIOB;
+			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
 			break;
 
 		case (uint32_t)GPIOC:
-			rcc = RCC_APB2Periph_GPIOC;
+			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC,ENABLE);
 			break;
 
 		case (uint32_t)GPIOD:
-			rcc = RCC_APB2Periph_GPIOD;
+			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD,ENABLE);
 			break;
 
 		case (uint32_t)GPIOE:
-			rcc = RCC_APB2Periph_GPIOE;
+			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE,ENABLE);
 			break;
 		
 		case (uint32_t)GPIOF:
-			rcc = RCC_APB2Periph_GPIOF;
+			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOF,ENABLE);
 			break;
 	}
 }
@@ -39,8 +39,7 @@ void GPIO::mode(PINMODE modeVal)
 
 	if(modeVal == AF_OD || modeVal == AF_PP)
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
-
-	RCC_APB2PeriphClockCmd(rcc,ENABLE);
+	
 	GPIO_InitStructure.GPIO_Pin = pin;
 	GPIO_InitStructure.GPIO_Mode = (GPIOMode_TypeDef)modeVal;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;

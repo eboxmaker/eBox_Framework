@@ -1,10 +1,9 @@
 #include "spi.h"
 
 //#define SPI_NUM 3
+uint8_t SPIClass::currentDevNum = 0;
 
-
-
-SPIClass::SPIClass(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* mosiPin,GPIO* misoPin)
+SPIClass::SPIClass(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin)
 {
 	spi = SPIx;
 	sckPin->mode(AF_PP);

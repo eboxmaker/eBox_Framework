@@ -40,8 +40,6 @@ This specification is preliminary and is subject to change at any time without n
 
 class RTC_CLASS
 {
-
-
 	public:
 		uint8_t sec;
 		uint8_t min;
