@@ -2,10 +2,10 @@
 #include "ebox.h"
 #include "w25x16.h"
 
-USART uart3(USART3,&PB10,&PB11);
+USART uart3(USART3,PB10,PB11);
 
 
-W25X flash(&PE5,SPI1,&PA5,&PA6,&PA7);
+W25X flash(PE5,SPI1,PA5,PA6,PA7);
 
 
 void setup()

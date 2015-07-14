@@ -32,14 +32,12 @@ class TIMERONE
 {
 
 	private:
-		uint16_t _period;
-		uint16_t _prescaler;
 		void baseInit(uint16_t period,uint16_t prescaler);
 	
 
 	public:
 		TIMERONE();
-		void begin();
+		void begin(uint32_t period,uint32_t prescaler);
 		void start();
 		void attachInterrupt(void(*callback)(void));
 		void interrupt(FunctionalState x);
