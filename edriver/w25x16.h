@@ -39,10 +39,10 @@ This specification is preliminary and is subject to change at any time without n
 #define W25X_DeviceID			0xAB 
 #define W25X_ManufactDeviceID	0x90 
 #define W25X_JedecDeviceID		0x9F 
-class W25X:public SPIClass
+class W25X:public SPIClASS
 {
 	public:
-		W25X(GPIO* cspin,SPI_TypeDef *spi,GPIO* sck,GPIO* miso,GPIO* mosi):SPIClass(SPI1,sck,miso,mosi)
+		W25X(GPIO* cspin,SPI_TypeDef *spi,GPIO* sck,GPIO* miso,GPIO* mosi):SPIClASS(SPI1,sck,miso,mosi)
 		{
 			cs = cspin;
 		}

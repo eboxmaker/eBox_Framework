@@ -38,7 +38,7 @@ This specification is preliminary and is subject to change at any time without n
 #define RTC_CLOCK_SOURCE RTC_CLOCK_LSI
 //#define RTC_CLOCK_SOURCE RTC_CLOCK_LSE
 
-class RTC_CLASS
+class RTCCLASS
 {
 	public:
 		uint8_t sec;
@@ -54,9 +54,9 @@ class RTC_CLASS
 		void setAlarm(uint32_t count);
 		uint32_t getCounter();
 	
-		void setAlarm(uint8_t h,uint8_t m,uint8_t s);
-		void getTimeHMS(uint8_t* h,uint8_t* m,uint8_t* s);
 		void setTimeHMS(uint8_t h,uint8_t m,uint8_t s);
+		void setAlarm  (uint8_t h,uint8_t m,uint8_t s);
+		void getTimeHMS(uint8_t* h,uint8_t* m,uint8_t* s);
 		
 	
 	private:
@@ -65,6 +65,6 @@ class RTC_CLASS
 		void setConfigFlag(uint16_t configFlag);
 };
 
-extern RTC_CLASS 	rtc;
+extern RTCCLASS 	rtc;
 #endif
 

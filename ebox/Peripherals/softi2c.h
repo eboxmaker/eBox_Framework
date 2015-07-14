@@ -12,8 +12,8 @@ No part of this software may be used for any commercial activities by any form o
 Disclaimer
 This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
 */
-#ifndef __SOFTI2c_H
-#define __SOFTI2c_H
+#ifndef __SOFTI2C_H
+#define __SOFTI2C_H
 
 #include "common.h"
 
@@ -28,10 +28,10 @@ This specification is preliminary and is subject to change at any time without n
 //Ä¬ÈÏ²ÎÊý
 #define SOFT_I2C_SPEED 100000
 
-class Softi2c 
+class SOFTI2C 
 {
   public:
-		Softi2c(GPIO* SDApin, GPIO* SCLpin);
+		SOFTI2C(GPIO* SDApin, GPIO* SCLpin);
 		int8_t 		setSpeed(uint32_t speed);
 		int8_t		writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);
 		int8_t 		writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);

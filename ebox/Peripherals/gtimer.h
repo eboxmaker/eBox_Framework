@@ -34,13 +34,13 @@ class TIM
 {
 	public:
 		TIM(TIM_TypeDef* TIMx);
-		void config(uint16_t period,uint16_t prescaler);
 
 		void begin(uint32_t period,uint32_t prescaler);
+		void config(uint16_t period,uint16_t prescaler);
 		void attachInterrupt(void(*callback)(void));
-		void interrupt(FunctionalState x);
-		void start(void);
+		void interrupt(FunctionalState enable);
 	
+		void start(void);
 		void stop(void);
 		void setReload(uint16_t Autoreload);
 		void clearCount(void);

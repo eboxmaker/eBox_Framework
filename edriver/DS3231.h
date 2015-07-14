@@ -58,11 +58,11 @@ This specification is preliminary and is subject to change at any time without n
  
  }DateTime;
 
- class DS3231:public Softi2c
+ class DS3231:public SOFTI2C
  {
 	 public:
 			DateTime t;
-			DS3231(GPIO* SDApin,GPIO* SCLpin):Softi2c(SDApin,SCLpin){
+			DS3231(GPIO* SDApin,GPIO* SCLpin):SOFTI2C(SDApin,SCLpin){
 			// do nothing;
 			};	
 			void begin(uint32_t speed)

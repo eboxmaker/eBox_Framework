@@ -1,9 +1,24 @@
+/*
+file   : spi.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
+
+Copyright (c) 2015, eBox by shentq. All Rights Reserved.
+
+Copyright Notice
+No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentq.
+
+Disclaimer
+This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
+*/
+
 #include "spi.h"
 
 //#define SPI_NUM 3
-uint8_t SPIClass::currentDevNum = 0;
+uint8_t SPIClASS::currentDevNum = 0;
 
-SPIClass::SPIClass(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin)
+SPIClASS::SPIClASS(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin)
 {
 	spi = SPIx;
 	sckPin->mode(AF_PP);
@@ -12,7 +27,7 @@ SPIClass::SPIClass(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin)
 	
 };
 
-void SPIClass::begin(SPICONFIG* spiConfig)
+void SPIClASS::begin(SPICONFIG* spiConfig)
 {		
 	if(spi == SPI1)
 	{	
@@ -29,7 +44,7 @@ void SPIClass::begin(SPICONFIG* spiConfig)
 
 	config(spiConfig);
 }
-void SPIClass::config(SPICONFIG* spiConfig)
+void SPIClASS::config(SPICONFIG* spiConfig)
 {
 	SPI_InitTypeDef SPI_InitStructure;
 
@@ -67,12 +82,12 @@ void SPIClass::config(SPICONFIG* spiConfig)
 
 }
 
-uint8_t SPIClass::readConfig(void)
+uint8_t SPIClASS::readConfig(void)
 {
 	return currentDevNum; 
 }
 
-uint8_t SPIClass::transfer(uint8_t data) 
+uint8_t SPIClASS::transfer(uint8_t data) 
 {
 	while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
 	;
@@ -82,7 +97,7 @@ uint8_t SPIClass::transfer(uint8_t data)
 	return (spi->DR);
 }
 
-void SPIClass::transfer(uint8_t *data,uint16_t dataln) 
+void SPIClASS::transfer(uint8_t *data,uint16_t dataln) 
 {
 	__IO uint8_t dummyByte;
 	if(dataln == 0)
@@ -99,7 +114,7 @@ void SPIClass::transfer(uint8_t *data,uint16_t dataln)
 }
 
 
-void SPIClass::transfer(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln) 
+void SPIClASS::transfer(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln) 
 {
 	if(dataln == 0)
 		return;

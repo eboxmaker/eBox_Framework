@@ -1,5 +1,5 @@
 /*
-file   : w25x16.c
+file   : w25x16.cpp
 author : shentq
 version: V1.0
 date   : 2015/7/5
@@ -23,7 +23,7 @@ void W25X::begin()
 	spiDevW25x16.prescaler = 0;
 	spiDevW25x16.bitOrder = SPI_BITODER_MSB;
 	
-	SPIClass::begin(&spiDevW25x16);
+	SPIClASS::begin(&spiDevW25x16);
 	cs->mode(OUTPUT_PP);
 	cs->set();
 }

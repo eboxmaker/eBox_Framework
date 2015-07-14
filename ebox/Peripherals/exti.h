@@ -20,6 +20,7 @@ This specification is preliminary and is subject to change at any time without n
 	*注意：stm32一个中断线EXTI_Linex只能连接到一个port的GPIO_Pin_x，即设置PA0为中断源之后就不能设置PB0，PC0等为中断源
 */
 
+//EXTITrigger_TypeDef类型值
 //	EXTI_Trigger_Rising 
 //	EXTI_Trigger_Falling  
 //	EXTI_Trigger_Rising_Falling 

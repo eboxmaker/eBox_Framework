@@ -1,17 +1,32 @@
+/*
+file   : softi2c.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
+
+Copyright (c) 2015, eBox by shentq. All Rights Reserved.
+
+Copyright Notice
+No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentq.
+
+Disclaimer
+This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
+*/
+
 #include "softi2c.h"
 
-Softi2c::Softi2c(GPIO* SDAPin, GPIO* SCLPin)
+SOFTI2C::SOFTI2C(GPIO* SDAPin, GPIO* SCLPin)
 {
 	sdaPin = SDAPin;
 	sclPin = SCLPin;
 }	
-void Softi2c::i2cBegin(uint32_t speed)
+void SOFTI2C::i2cBegin(uint32_t speed)
 {
 	setSpeed(speed);
 	sdaPin->mode(OUTPUT_PP);
 	sclPin->mode(OUTPUT_PP);
 }
-int8_t Softi2c::setSpeed(uint32_t speed)
+int8_t SOFTI2C::setSpeed(uint32_t speed)
 {
 	switch(speed)
 	{
@@ -33,7 +48,7 @@ int8_t Softi2c::setSpeed(uint32_t speed)
 	}
 	return 0;
 }
-void Softi2c::start()
+void SOFTI2C::start()
 {
 	sdaPin->mode(OUTPUT_PP);
 	sdaPin->set();
@@ -43,7 +58,7 @@ void Softi2c::start()
 
 }
 
-void Softi2c::stop()
+void SOFTI2C::stop()
 {
 	sdaPin->mode(OUTPUT_PP);
 	sclPin->reset();
@@ -51,7 +66,7 @@ void Softi2c::stop()
 	sclPin->set();delay_us(_delayTimes);
 	sdaPin->set();
 }
-int8_t Softi2c::waitAck()
+int8_t SOFTI2C::waitAck()
 {
 	uint8_t cErrTime = 5;
 	sdaPin->mode(INPUT_PU);
@@ -72,7 +87,7 @@ int8_t Softi2c::waitAck()
 	sclPin->reset();delay_us(_delayTimes);
 	return 0;
 }
-void Softi2c::sendAck()
+void SOFTI2C::sendAck()
 {
 	sdaPin->mode(OUTPUT_PP);
 	sdaPin->reset();delay_us(_delayTimes);
@@ -80,7 +95,7 @@ void Softi2c::sendAck()
 	sclPin->reset();delay_us(_delayTimes);
 
 }
-void Softi2c::sendNoAck()	
+void SOFTI2C::sendNoAck()	
 {
 	sdaPin->mode(OUTPUT_PP);
 	sdaPin->set();delay_us(_delayTimes);
@@ -88,7 +103,7 @@ void Softi2c::sendNoAck()
 	sclPin->reset();delay_us(_delayTimes);
 
 }
-void Softi2c::sendByte(uint8_t byte)
+void SOFTI2C::sendByte(uint8_t byte)
 {
 
 	uint8_t ii = 8;
@@ -103,7 +118,7 @@ void Softi2c::sendByte(uint8_t byte)
 	}
 
 }
-uint8_t Softi2c::receiveByte(void)
+uint8_t SOFTI2C::receiveByte(void)
 {
 	uint8_t i = 8;
 	uint8_t byte = 0;
@@ -119,7 +134,7 @@ uint8_t Softi2c::receiveByte(void)
 
 	return byte;
 }
-int8_t Softi2c::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
+int8_t SOFTI2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
 {
 		start();
 		sendByte(slaveAddress);
@@ -139,7 +154,7 @@ int8_t Softi2c::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
     delay_us(10);      
     return 0;
 }
-int8_t Softi2c::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
+int8_t SOFTI2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
 {
 		start();
 		sendByte(slaveAddress);
@@ -162,7 +177,7 @@ int8_t Softi2c::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,
     delay_us(10);      
     return 0;
 }
-int8_t 	Softi2c::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
+int8_t 	SOFTI2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
 {
 
 	int i = 0;
@@ -186,7 +201,7 @@ int8_t 	Softi2c::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
 
 	return i;
 }
-int8_t 	Softi2c::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
+int8_t 	SOFTI2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
 {
 
 	int i = 0;
