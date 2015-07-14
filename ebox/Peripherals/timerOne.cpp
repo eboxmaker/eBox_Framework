@@ -1,3 +1,17 @@
+/*
+file   : timerone.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
+
+Copyright (c) 2015, eBox by shentq. All Rights Reserved.
+
+Copyright Notice
+No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentq.
+
+Disclaimer
+This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
+*/
 #include "timerone.h"
 
 
@@ -15,7 +29,6 @@ void TIMERONE::begin(void)
 	
 	baseInit(_period,_prescaler);
 	
-	NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);  //使用全局控制值
 	NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;//
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;// 
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;// 
@@ -26,10 +39,10 @@ void TIMERONE::begin(void)
 	interrupt(DISABLE);
 	stop();
 }
-void TIMERONE::interrupt(FunctionalState x)
+void TIMERONE::interrupt(FunctionalState enable)
 {
  TIM_ClearITPendingBit(TIM1 , TIM_FLAG_Update);
- TIM_ITConfig(TIM1,TIM_IT_Update,x);
+ TIM_ITConfig(TIM1,TIM_IT_Update,enable);
 
 }
 

@@ -42,7 +42,6 @@ class PWM
 	public:
 		PWM(GPIO*  PWMPin);
 		PWM(GPIO*  PWMPin,uint16_t period,uint16_t prescaler);
-		void baseInit(uint16_t period,uint16_t prescaler);
 		void setFrq(uint16_t period,uint16_t prescaler);
 		void setDuty(uint16_t duty);
 
@@ -60,7 +59,8 @@ class PWM
 		GPIO* 				_PWMPin;
 
 		uint8_t 			_needremap;
-	void initInfo(GPIO* PWMPin);
+	  void initInfo(GPIO* PWMPin);
+		void baseInit(uint16_t period,uint16_t prescaler);
 	
 };
 void analogWrite(uint8_t pin, uint16_t duty);

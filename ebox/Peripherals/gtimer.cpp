@@ -1,3 +1,17 @@
+/*
+file   : gtimer.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
+
+Copyright (c) 2015, eBox by shentq. All Rights Reserved.
+
+Copyright Notice
+No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentq.
+
+Disclaimer
+This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
+*/
 #include "gtimer.h"
 
 //#define TIM_NUM 7
@@ -16,10 +30,10 @@ void TIM::begin(uint32_t period,uint32_t prescaler)
 {
 	config(period,prescaler);
 }
-void TIM::interrupt(FunctionalState x)
+void TIM::interrupt(FunctionalState enable)
 {
  TIM_ClearITPendingBit(_TIMx , TIM_FLAG_Update);//必须加，否则开启中断会立即产生一次中断
- TIM_ITConfig(_TIMx,TIM_IT_Update,x);
+ TIM_ITConfig(_TIMx,TIM_IT_Update,enable);
 }
 
 void TIM::start(void)

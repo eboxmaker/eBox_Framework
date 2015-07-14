@@ -1,9 +1,23 @@
+/*
+file   : rtc.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
+
+Copyright (c) 2015, eBox by shentq. All Rights Reserved.
+
+Copyright Notice
+No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentq.
+
+Disclaimer
+This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
+*/
 #include "rtc.h"
 
-RTC_CLASS 	rtc;
+RTCCLASS 	rtc;
 callbackFun rtcCallbackTable[3];//
 
-void RTC_CLASS::begin()
+void RTCCLASS::begin()
 {
 //	if(isConfig() == 0)
 //	{
@@ -29,7 +43,7 @@ void RTC_CLASS::begin()
 //		RTC_WaitForLastTask();			
 //	}
 }
-void RTC_CLASS::config(void)
+void RTCCLASS::config(void)
 {
 	
 	/* Enable PWR and BKP clocks */
@@ -90,18 +104,18 @@ void RTC_CLASS::config(void)
 	RTC_WaitForLastTask();
 
 }
-uint8_t RTC_CLASS::isConfig(uint16_t configFlag)
+uint8_t RTCCLASS::isConfig(uint16_t configFlag)
 {
 	uint8_t flag = 0;
 	if(BKP_ReadBackupRegister(BKP_DR1) == configFlag)
 		flag = 1;
 	return flag;
 }
-void RTC_CLASS::setConfigFlag(uint16_t configFlag)
+void RTCCLASS::setConfigFlag(uint16_t configFlag)
 {
 		BKP_WriteBackupRegister(BKP_DR1, configFlag);
 }
-void RTC_CLASS::setCounter(uint32_t count)
+void RTCCLASS::setCounter(uint32_t count)
 {
 	/* Wait until last write operation on RTC registers has finished */
 	RTC_WaitForLastTask();
@@ -111,7 +125,7 @@ void RTC_CLASS::setCounter(uint32_t count)
 	/* Wait until last write operation on RTC registers has finished */
 	RTC_WaitForLastTask();
 }	
-void RTC_CLASS::setAlarm(uint32_t count)
+void RTCCLASS::setAlarm(uint32_t count)
 {
 	/* Wait until last write operation on RTC registers has finished */
 	RTC_WaitForLastTask();
@@ -123,13 +137,13 @@ void RTC_CLASS::setAlarm(uint32_t count)
 }	
 	
 
-void RTC_CLASS::interrupt(uint32_t bits,FunctionalState x)
+void RTCCLASS::interrupt(uint32_t bits,FunctionalState x)
 {
 	
 	NVIC_InitTypeDef NVIC_InitStructure;
 	
 	/* Configure one bit for preemption priority */
-	NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
+//	NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
 	
 	/* Enable the RTC Interrupt */
 	NVIC_InitStructure.NVIC_IRQChannel = RTC_IRQn;
@@ -145,7 +159,7 @@ void RTC_CLASS::interrupt(uint32_t bits,FunctionalState x)
 	RTC_ITConfig(bits, x);
 	
 }
-void RTC_CLASS::attachInterrupt(uint16_t event, void (*callbackFun)(void))
+void RTCCLASS::attachInterrupt(uint16_t event, void (*callbackFun)(void))
 {
 	switch(event)
 	{
@@ -161,18 +175,25 @@ void RTC_CLASS::attachInterrupt(uint16_t event, void (*callbackFun)(void))
 	}
 }
 
-uint32_t RTC_CLASS::getCounter()
+uint32_t RTCCLASS::getCounter()
 {
 	return RTC_GetCounter();
 };
-void RTC_CLASS::setAlarm(uint8_t h,uint8_t m,uint8_t s)
+
+void RTCCLASS::setTimeHMS(uint8_t h,uint8_t m,uint8_t s)
+{
+	uint32_t tmp = 0;
+	tmp = h*3600 + m*60 + s;
+	setCounter(tmp);
+}
+void RTCCLASS::setAlarm(uint8_t h,uint8_t m,uint8_t s)
 {
 	uint32_t tmp = 0;
 	tmp = h*3600 + m*60 + s;
 	setAlarm(tmp);
 };
 
-void RTC_CLASS::getTimeHMS(uint8_t* h,uint8_t* m,uint8_t* s)
+void RTCCLASS::getTimeHMS(uint8_t* h,uint8_t* m,uint8_t* s)
 {
 	uint32_t tmp = 0;
 	tmp = getCounter() % 0x15180;
@@ -181,12 +202,6 @@ void RTC_CLASS::getTimeHMS(uint8_t* h,uint8_t* m,uint8_t* s)
 	*s = (tmp % 3600) %60;
 };
 extern "C"{
-	void RTC_CLASS::setTimeHMS(uint8_t h,uint8_t m,uint8_t s)
-	{
-		uint32_t tmp = 0;
-		tmp = h*3600 + m*60 + s;
-		setCounter(tmp);
-	}
 	void RTC_IRQHandler(void)
 	{
 		if (RTC_GetITStatus(RTC_IT_OW) != RESET)
@@ -201,6 +216,11 @@ extern "C"{
 		}	
 		if (RTC_GetITStatus(RTC_IT_SEC) != RESET)
 		{	
+			uint32_t tmp = 0;
+			tmp = RTC_GetCounter() % 0x15180;
+			rtc.hour = (tmp / 3600);
+			rtc.min = (tmp % 3600)/60;
+			rtc.sec = (tmp % 3600) %60;
 
 			rtcCallbackTable[2]();
 			RTC_ClearITPendingBit(RTC_IT_SEC);

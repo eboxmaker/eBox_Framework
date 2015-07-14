@@ -1,5 +1,5 @@
 /*
-file   : encoder.c
+file   : encoder.cpp
 author : shentq
 version: V1.0
 date   : 2015/7/5

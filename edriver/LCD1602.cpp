@@ -1,5 +1,5 @@
 /*
-file   : lcd1602.c
+file   : lcd1602.cpp
 author : shentq
 version: V1.0
 date   : 2015/7/5

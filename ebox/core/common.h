@@ -3,7 +3,6 @@ file   : common.h
 author : shentq
 version: V1.0
 date   : 2015/7/5
-brief  : This file provides time service , analog,digital and so on.
 
 Copyright (c) 2015, eBox by shentq. All Rights Reserved.
 

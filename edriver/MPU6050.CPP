@@ -1,5 +1,5 @@
 /*
-file   : mpu6050.c
+file   : mpu6050.cpp
 author : shentq
 version: V1.0
 date   : 2015/7/5

@@ -1,5 +1,5 @@
 /*
-file   : led.c
+file   : led.cpp
 author : shentq
 version: V1.0
 date   : 2015/7/5

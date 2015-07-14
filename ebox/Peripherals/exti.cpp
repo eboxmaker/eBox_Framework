@@ -1,3 +1,18 @@
+/*
+file   : exti.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
+
+Copyright (c) 2015, eBox by shentq. All Rights Reserved.
+
+Copyright Notice
+No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentq.
+
+Disclaimer
+This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
+*/
+
 #include "exti.h"
 
 #define EXTI_LINE_NUM 16

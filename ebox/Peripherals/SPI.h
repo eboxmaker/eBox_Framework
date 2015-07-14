@@ -52,10 +52,10 @@ This specification is preliminary and is subject to change at any time without n
 */
 //默认配置 空，只依靠结构体SPICONFIG来初始化
 
-class	SPIClass 
+class	SPIClASS 
 {
 	public:
-		SPIClass(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin);
+		SPIClASS(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin);
 	
 		void begin (SPICONFIG* spiConfig);
 		void config(SPICONFIG* spiConfig);
