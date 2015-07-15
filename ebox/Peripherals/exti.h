@@ -27,16 +27,15 @@ This specification is preliminary and is subject to change at any time without n
 class EXTIx
 {
 	public:
-		EXTIx(GPIO* extiPin,EXTITrigger_TypeDef trigger);
+		EXTIx(GPIO* EXTIPin,EXTITrigger_TypeDef trigger);
 		void attachInterrupt(void (*callbackFun)(void));
 	private:
-		GPIO* _extiPin;
-		uint8_t _PortSource;
-		uint8_t _PinSource;
-		uint32_t _ExtiLine;
-		uint8_t _irq;
+		uint8_t PortSource;
+		uint8_t PinSource;
+		uint32_t ExtiLine;
+		uint8_t irq;
 	
-		void initInfo(GPIO* extiPin);
+		void initInfo(GPIO* EXTIPin);
 };
 
 #endif

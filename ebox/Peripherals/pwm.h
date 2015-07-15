@@ -41,28 +41,27 @@ class PWM
 {	
 	public:
 		PWM(GPIO*  PWMPin);
-		PWM(GPIO*  PWMPin,uint16_t period,uint16_t prescaler);
-		void setFrq(uint16_t period,uint16_t prescaler);
-		void setDuty(uint16_t duty);
+		PWM(GPIO*  PWMPin,uint16_t Period,uint16_t Prescaler);
+		void setFrq(uint16_t Period,uint16_t Prescaler);
+		void setDuty(uint16_t Duty);
 
 	private:
-		TIM_TypeDef* 	_TIMx;
-		uint32_t 			_rcc;
-		uint8_t 			_ch;
-		uint32_t			_irq;
+		TIM_TypeDef* 	TIMx;
+		uint32_t 			rcc;
+		uint8_t 			ch;
+		uint32_t			irq;
 	
-		uint16_t 			_period;
-		uint16_t 			_prescaler;
-	  uint16_t 			_duty;
+		uint16_t 			period;
+		uint16_t 			prescaler;
+	  uint16_t 			duty;
 	
 
-		GPIO* 				_PWMPin;
+		GPIO* 				pwmPin;
 
-		uint8_t 			_needremap;
 	  void initInfo(GPIO* PWMPin);
-		void baseInit(uint16_t period,uint16_t prescaler);
+		void baseInit(uint16_t Period,uint16_t Prescaler);
 	
 };
-void analogWrite(GPIO* pin, uint16_t duty);
+void analogWrite(GPIO* pin, uint16_t Duty);
 
 #endif
