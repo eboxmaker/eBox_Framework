@@ -51,8 +51,6 @@ class USART
 		USART_TypeDef* 				_USARTx;
 	  DMA_Channel_TypeDef*	_DMA1_Channelx;
 		char 									sendBuf[UART_MAX_SEND_BUF];
-
- 
 };
 
 

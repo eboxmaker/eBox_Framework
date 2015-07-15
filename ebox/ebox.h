@@ -26,15 +26,13 @@ This specification is preliminary and is subject to change at any time without n
 #include "gtimer.h"
 #include "pwm.h"
 #include "i2c.h"
-#include "softi2c.h"
 #include "spi.h"
-#include "softspi.h"
 #include "uartx.h"
 #include "timerone.h"
 #include "rtc.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-//声明所有引脚
+//创建所有引脚对象和宏定义其指针
 #define PA0 ((GPIO*)&GPA0)
 #define PA1 ((GPIO*)&GPA1)
 #define PA2 ((GPIO*)&GPA2)
