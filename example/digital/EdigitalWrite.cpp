@@ -16,7 +16,7 @@ int main(void)
 	while(1)
 	{
 		PA7->set();
-//		PA7->reset();
+		PA7->reset();
 //		digitalWrite(PA7,1);
 //		digitalWrite(PA7,0);
 }

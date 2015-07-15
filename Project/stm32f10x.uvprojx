@@ -678,11 +678,6 @@
               <FilePath>.\stm32f10x_it.c</FilePath>
             </File>
             <File>
-              <FileName>ioconfig.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ebox\ioconfig.cpp</FilePath>
-            </File>
-            <File>
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\main.cpp</FilePath>
