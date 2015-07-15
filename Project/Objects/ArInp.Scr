@@ -1,4 +1,4 @@
---create .\Objects\ebox.lib
+--create .\Objects\ebox_V1_0.lib
 .\objects\core.o
 .\objects\digital.o
 .\objects\analog.o
