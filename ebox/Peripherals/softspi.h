@@ -63,7 +63,7 @@ This specification is preliminary and is subject to change at any time without n
 class SOFTSPI
 {
 	public:
-		SOFTSPI(GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin);
+		SOFTSPI(GPIO* SCKPin,GPIO* MISOPin,GPIO* MOSIPin);
 	
 		void 		begin(SPICONFIG* spiConfig);
 	  void 		config(SPICONFIG* spiConfig);
@@ -72,13 +72,13 @@ class SOFTSPI
 		uint8_t transfer(uint8_t data);
 
 	private:
-		GPIO* 	_sckPin;
-		GPIO*		_mosiPin;
-		GPIO*		_misoPin;
+		GPIO* 	sckPin;
+		GPIO*		mosiPin;
+		GPIO*		misoPin;
 			
-		uint8_t _mode;	
-		uint8_t _bitOrder;
-		uint8_t _spidelay;
+		uint8_t mode;	
+		uint8_t bitOrder;
+		uint8_t spidelay;
 	
 		static uint8_t currentDevNum;
 };
