@@ -52,31 +52,6 @@ typedef enum
 }PINMODE;
 
 
-//spi相关公共宏和声明//////////////////////////////////
-#define SPI_MODE0 0x02
-#define SPI_MODE1 0x00
-#define SPI_MODE2 0x03
-#define SPI_MODE3 0x01
-
-#define SPI_CLOCK_DIV2     SPI_BaudRatePrescaler_2  
-#define SPI_CLOCK_DIV4     SPI_BaudRatePrescaler_4  
-#define SPI_CLOCK_DIV8     SPI_BaudRatePrescaler_8  
-#define SPI_CLOCK_DIV16    SPI_BaudRatePrescaler_16 
-#define SPI_CLOCK_DIV32    SPI_BaudRatePrescaler_32 
-#define SPI_CLOCK_DIV64    SPI_BaudRatePrescaler_64 
-#define SPI_CLOCK_DIV128   SPI_BaudRatePrescaler_128
-#define SPI_CLOCK_DIV256   SPI_BaudRatePrescaler_256
-
-#define SPI_BITODER_MSB		SPI_FirstBit_MSB                
-#define SPI_BITODER_LSB		SPI_FirstBit_LSB     
-           
-typedef struct
-{
-	uint8_t devNum;
-	uint8_t mode;
-	uint16_t prescaler;
-	uint16_t bitOrder;
-}SPICONFIG;
 
 //以后NVIC_PriorityGroupConfig()函数不需要再被调用。更不能再以非NVIC_GROUP_CONFIG值填充调用
 #define NVIC_GROUP_CONFIG NVIC_PriorityGroup_2   /*!< 2 bits for pre-emption priority

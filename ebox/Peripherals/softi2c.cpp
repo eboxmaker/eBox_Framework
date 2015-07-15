@@ -13,7 +13,7 @@ Disclaimer
 This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
 */
 
-#include "softi2c.h"
+#include "i2c.h"
 
 SOFTI2C::SOFTI2C(GPIO* SDAPin, GPIO* SCLPin)
 {

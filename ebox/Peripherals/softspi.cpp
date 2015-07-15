@@ -13,7 +13,7 @@ Disclaimer
 This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
 */
 
-#include "softspi.h"
+#include "spi.h"
 uint8_t SOFTSPI::currentDevNum = 0;
 
 SOFTSPI::SOFTSPI(GPIO* SCKPin,GPIO* MISOPin,GPIO* MOSIPin)

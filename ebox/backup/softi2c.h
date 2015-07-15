@@ -26,7 +26,6 @@ This specification is preliminary and is subject to change at any time without n
 */
 
 //Ä¬ÈÏ²ÎÊý
-#define SOFT_I2C_SPEED 100000
 
 class SOFTI2C 
 {

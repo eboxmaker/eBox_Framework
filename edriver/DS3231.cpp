@@ -53,7 +53,6 @@ void	DS3231::getDateTime(DateTime *t)
 	t->min			=BcdToDec(buf[1]);
 	t->sec	    =BcdToDec(buf[0]);	
 }
-#include "softi2c.h"
 void DS3231::getDate(char* buf)
 {		
 	uint8_t tmpbuf[3];
