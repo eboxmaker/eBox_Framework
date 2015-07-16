@@ -54,6 +54,10 @@ void TIM::config(uint16_t period,uint16_t prescaler)
 	TIM_DeInit(_TIMx);
 	switch((uint32_t)_TIMx)
 	{
+		case (uint32_t)TIM1:
+			RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
+			NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
+			break;
 		case (uint32_t)TIM2:
 			RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 			NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
@@ -116,6 +120,7 @@ extern "C"{
 		TIM_ClearITPendingBit(TIM2 , TIM_FLAG_Update);
 			gTimxCallbackTable[0]();
 	 }
+	 
 	}
 	void TIM3_IRQHandler(void)
 	{
