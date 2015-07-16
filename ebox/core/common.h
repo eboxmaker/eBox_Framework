@@ -36,9 +36,7 @@ extern "C"{
 #define MSBFIRST 1
 
 #define PI 3.1415926535898
-//#define CHANGE 2
-//#define FALLING 3
-//#define RISING 4
+
 typedef enum
 { 
 	AIN = 0x0,
@@ -50,8 +48,6 @@ typedef enum
   AF_OD = 0x1C,
   AF_PP = 0x18
 }PINMODE;
-
-
 
 //以后NVIC_PriorityGroupConfig()函数不需要再被调用。更不能再以非NVIC_GROUP_CONFIG值填充调用
 #define NVIC_GROUP_CONFIG NVIC_PriorityGroup_2   /*!< 2 bits for pre-emption priority

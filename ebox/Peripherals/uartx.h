@@ -36,9 +36,11 @@ class USART
 {
 	 public:
 			USART(USART_TypeDef * USARTx,GPIO* txPin,GPIO* rxPin);
+	 
 			void begin(uint32_t BaudRate);
 			void attachInterrupt(void (*callbackFun)(void));
 			void interrupt(FunctionalState enable);
+			uint16_t receiveData();
 	 
 			int 	putChar(char ch);
 			void 	putString(const char *str);

@@ -158,6 +158,10 @@ void USART::attachInterrupt(void (*callbackFun)(void))
 			UARTCallbackTable[2] = callbackFun;break;
 	}
 }
+uint16_t USART::receiveData()
+{
+	return (uint16_t)(_USARTx->DR & (uint16_t)0x01FF);
+}
 
 int USART::putChar(char ch)
 {
