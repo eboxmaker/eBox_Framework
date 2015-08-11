@@ -729,6 +729,11 @@
               <FileType>8</FileType>
               <FilePath>..\edriver\w25x16.cpp</FilePath>
             </File>
+            <File>
+              <FileName>w5500.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\w5500.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
