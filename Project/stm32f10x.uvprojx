@@ -369,7 +369,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F10X_HD,HSE_VALUE=8000000</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\edriver;..\user</IncludePath>
+              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\edriver;..\network;..\user</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -733,6 +733,21 @@
               <FileName>w5500.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\edriver\w5500.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>network</GroupName>
+          <Files>
+            <File>
+              <FileName>socket.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\network\socket.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>udp.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\network\udp.cpp</FilePath>
             </File>
           </Files>
         </Group>

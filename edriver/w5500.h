@@ -2,6 +2,15 @@
 #define __W5500_H
 #include "ebox.h"
 
+typedef int int16;
+
+#define	MAX_SOCK_NUM		8	/**< Maxmium number of socket  */
+
+static u8 I_STATUS[MAX_SOCK_NUM];
+static u16 SSIZE[MAX_SOCK_NUM]; /**< Max Tx buffer size by each channel */
+static u16 RSIZE[MAX_SOCK_NUM]; /**< Max Rx buffer size by each channel */
+
+
 class W5500:public SPIClASS
 {
 	public:
@@ -11,9 +20,13 @@ class W5500:public SPIClASS
 		  rstPin = rstpin;
 			intPin = intpin;
 		}
-		void begin();
+		void begin(u8* mac,u8* ip,u8* subnet,u8* gateway);
 		void reset();
-		
+
+		u8 getISR(u8 s);
+		void putISR(u8 s, u8 val);
+		u16 getRxMAX(u8 s);
+		u16 getTxMAX(u8 s);	
 		void setSHAR(u8* addr );//mac
 		void setSIPR(u8* addr );//ip
 		void setSUBR(u8* addr );//mask
@@ -24,6 +37,11 @@ class W5500:public SPIClASS
 		void getSUBR(u8 * addr);//mask
 		void getGWIP(u8 * addr);//gateway
 		void getGAR(u8 * addr);//gateway
+		
+		void getMAC(u8 * addr );//mac
+		void getIP(u8 * addr);//ip
+		void getSubnet(u8 * addr);//mask
+		void getGateway(u8 * addr);//gateway
 		
 		void setMR(u8 val);
 		u8   getIR( void );
@@ -41,15 +59,18 @@ class W5500:public SPIClASS
 		void recv_data_processing(u8 s, u8 *data, u16 len);
 		void setSn_IR(u8 s, u8 val);
 
+		void write(u32 addrbsb, u8 data);
+		u8   read(u32 addrbsb);
+		u16  write(u32 addrbsb,u8* buf, u16 len);
+		u16  read(u32 addrbsb,u8* buf, u16 len);
+		void sysinit( u8 * tx_size, u8 * rx_size  );
 	private:
 		GPIO* cs;
 		GPIO* rstPin;
 		GPIO* intPin;
 		SPICONFIG spiDevW5500;
-	void write(u32 addrbsb, u8 data);
-	u8   read(u32 addrbsb);
-	u16 write(u32 addrbsb,u8* buf, u16 len);
-	u16 read(u32 addrbsb,u8* buf, u16 len);
+	
+
 
 	
 
