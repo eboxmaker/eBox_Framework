@@ -2,15 +2,18 @@
 
 static uint16 local_port;
 
-extern W5500 w5500;
 
-W5500* eth = &w5500;
+W5500* eth;
 
+void attachEthToSocket(W5500* e)
+{
+	eth = e;
+}
 /**
 @brief   This Socket function initialize the channel in perticular mode, and set the port and wait for W5200 done it.
 @return  0 for sucess else -1.
 */
-uint8 socket(SOCKET s, uint8 protocol, uint16 port, uint8 flag)
+uint8 _socket(SOCKET s, uint8 protocol, uint16 port, uint8 flag)
 {
    uint8 ret;
    if (
@@ -21,7 +24,7 @@ uint8 socket(SOCKET s, uint8 protocol, uint16 port, uint8 flag)
         ((protocol&0x0F) == Sn_MR_PPPOE)
       )
    {
-      close(s);
+      _close(s);
       eth->write(Sn_MR(s) ,protocol | flag);
       if (port != 0) {
          eth->write( Sn_PORT0(s) ,(uint8)((port & 0xff00) >> 8));
@@ -49,7 +52,7 @@ uint8 socket(SOCKET s, uint8 protocol, uint16 port, uint8 flag)
 /**
 @brief   This function close the socket and parameter is "s" which represent the socket number
 */
-void close(SOCKET s)
+void _close(SOCKET s)
 {
 
 	
@@ -66,7 +69,7 @@ void close(SOCKET s)
 @brief   This function established  the connection for the channel in passive (server) mode. This function waits for the request from the peer.
 @return  1 for success else 0.
 */
-uint8 listen(SOCKET s)
+uint8 _listen(SOCKET s)
 {
    uint8 ret;
    if (eth->read( Sn_SR(s) ) == SOCK_INIT)
@@ -88,9 +91,9 @@ uint8 listen(SOCKET s)
 @brief   This function established  the connection for the channel in Active (client) mode.
       This function waits for the untill the connection is established.
 
-@return  1 for success else 0.
+@return  0 for success else 255.
 */
-uint8 connect(SOCKET s, uint8 * addr, uint16 port)
+uint8 _connect(SOCKET s, uint8 * addr, uint16 port)
 {
     uint8 ret;
     if
@@ -100,11 +103,11 @@ uint8 connect(SOCKET s, uint8 * addr, uint16 port)
             (port == 0x00)
         )
     {
-      ret = 0;
+      ret = 255;
     }
     else
     {
-        ret = 1;
+        ret = 0;
         // set destination IP
         eth->write( Sn_DIPR0(s), addr[0]);
         eth->write( Sn_DIPR1(s), addr[1]);
@@ -120,12 +123,17 @@ uint8 connect(SOCKET s, uint8 * addr, uint16 port)
         {
             if(eth->read(Sn_SR(s)) == SOCK_ESTABLISHED)
             {
+							  ret = 0;
                 break;
             }
+						else
+						{
+							ret = eth->read(Sn_SR(s));
+						}
             if (eth->getSn_IR(s) & Sn_IR_TIMEOUT)
             {
                 eth->write(Sn_IR(s), (Sn_IR_TIMEOUT));  // clear TIMEOUT Interrupt
-                ret = 0;
+                ret = 2;
                 break;
             }
         }
@@ -140,7 +148,7 @@ uint8 connect(SOCKET s, uint8 * addr, uint16 port)
 @brief   This function used for disconnect the socket and parameter is "s" which represent the socket number
 @return  1 for success else 0.
 */
-void disconnect(SOCKET s)
+void _disconnect(SOCKET s)
 {
    eth->write( Sn_CR(s) ,Sn_CR_DISCON);
 
@@ -153,7 +161,7 @@ void disconnect(SOCKET s)
 @brief   This function used to send the data in TCP mode
 @return  1 for success else 0.
 */
-uint16 send(SOCKET s, const uint8 * buf, uint16 len)
+uint16 _send(SOCKET s, const uint8 * buf, uint16 len)
 {
   uint8 status=0;
   uint16 ret=0;
@@ -188,7 +196,7 @@ uint16 send(SOCKET s, const uint8 * buf, uint16 len)
     if ((status != SOCK_ESTABLISHED) && (status != SOCK_CLOSE_WAIT) )
     {
 //      printf("SEND_OK Problem!!\r\n");
-      close(s);
+      _close(s);
       return 0;
     }
   }
@@ -208,7 +216,7 @@ uint16 send(SOCKET s, const uint8 * buf, uint16 len)
 
 @return  received data size for success else -1.
 */
-uint16 recv(SOCKET s, uint8 * buf, uint16 len)
+uint16 _recv(SOCKET s, uint8 * buf, uint16 len)
 {
    uint16 ret=0;
    if ( len > 0 )
@@ -228,7 +236,7 @@ uint16 recv(SOCKET s, uint8 * buf, uint16 len)
 
 @return  This function return send data size for success else -1.
 */
-uint16 sendto(SOCKET s, const uint8 * buf, uint16 len, uint8 * addr, uint16 port)
+uint16 _sendto(SOCKET s, const uint8 * buf, uint16 len, uint8 * addr, uint16 port)
 {
    uint16 ret=0;
 
@@ -276,7 +284,7 @@ uint16 sendto(SOCKET s, const uint8 * buf, uint16 len, uint8 * addr, uint16 port
 
 @return  This function return received data size for success else -1.
 */
-uint16 recvfrom(SOCKET s, uint8 * buf, uint16 len, uint8 * addr, uint16 *port)
+uint16 _recvfrom(SOCKET s, uint8 * buf, uint16 len, uint8 * addr, uint16 *port)
 {
    uint8 head[8];
    uint16 data_len=0;

@@ -23,10 +23,11 @@ UDPCLIENT udpc;
 void setup()
 {
 	eBoxInit();
-	uart1.begin(115200);
+	uart1.begin(9600);
 	
 	w5500.begin(mac,lip,sub,gw);
 
+	attachEth(&w5500);
 	
   w5500.getMAC (ip);
   uart1.printf("mac : %02x.%02x.%02x.%02x.%02x.%02x\r\n", ip[0],ip[1],ip[2],ip[3],ip[4],ip[5]);

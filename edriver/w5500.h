@@ -19,6 +19,8 @@ class W5500:public SPIClASS
 			cs = cspin;
 		  rstPin = rstpin;
 			intPin = intpin;
+			
+
 		}
 		void begin(u8* mac,u8* ip,u8* subnet,u8* gateway);
 		void reset();
@@ -27,6 +29,8 @@ class W5500:public SPIClASS
 		void putISR(u8 s, u8 val);
 		u16 getRxMAX(u8 s);
 		u16 getTxMAX(u8 s);	
+		
+//通用寄存器
 		void setSHAR(u8* addr );//mac
 		void setSIPR(u8* addr );//ip
 		void setSUBR(u8* addr );//mask
@@ -42,39 +46,66 @@ class W5500:public SPIClASS
 		void getIP(u8 * addr);//ip
 		void getSubnet(u8 * addr);//mask
 		void getGateway(u8 * addr);//gateway
-		
+
 		void setMR(u8 val);
-		u8   getIR( void );
+		
 		void setRTR(u16 timeout);
 		void setRCR(u8 retry);
-		void clearIR(u8 mask);
+		
+		//中断屏蔽寄存器
+		void setIMR(u8 val);
+		void setSIMR(u8 val);
+		//清除中断标志位
+		void setIR(u8 mask);
+		void setSIR(u8 mask);
+		//获取中断状态寄存器
+		u8   getIR( void );
+		u8   getSIR( void );
+
+//socket寄存器
+		//中断屏蔽寄存器
+		void setSn_IMR(u8 s,u8 mask);
+		u8   getSn_IMR(u8 s);
+		//获取中断状态寄存器
+		u8   getSn_IR(u8 s);
+		//清除中断标志位
+		void setSn_IR(u8 s, u8 val);
 		
 		void setSn_MSS(u8 s, u16 Sn_MSSR);
 		void setSn_TTL(u8 s, u8 ttl);
-		u8   getSn_IR(u8 s);
 		u8   getSn_SR(u8 s);
 		u16  getSn_TX_FSR(u8 s);
 		u16  getSn_RX_RSR(u8 s);
 		void send_data_processing(u8 s, u8 *data, u16 len);
 		void recv_data_processing(u8 s, u8 *data, u16 len);
-		void setSn_IR(u8 s, u8 val);
 
 		void write(u32 addrbsb, u8 data);
 		u8   read(u32 addrbsb);
 		u16  write(u32 addrbsb,u8* buf, u16 len);
 		u16  read(u32 addrbsb,u8* buf, u16 len);
 		void sysinit( u8 * tx_size, u8 * rx_size  );
+		
+		void attchInterruputEvent(void (*callbackFun)(void))
+		{
+			EXTIx ex(PA3,EXTI_Trigger_Falling);
+			ex.attachInterrupt(callbackFun);
+		}
 	private:
 		GPIO* cs;
 		GPIO* rstPin;
 		GPIO* intPin;
 		SPICONFIG spiDevW5500;
 	
-
-
-	
-
 };
+#define SOCKET0 0
+#define SOCKET1 1
+#define SOCKET2 2
+#define SOCKET3 3
+#define SOCKET4 4
+#define SOCKET5 5
+#define SOCKET6 6
+#define SOCKET7 7
+
 #define MR                          (0x000000)
 
 /**
@@ -308,6 +339,16 @@ class W5500:public SPIClASS
 #define IR_UNREACH                   0x40 /**< get the destination unreachable message in UDP sending */
 #define IR_PPPoE                     0x20 /**< get the PPPoE close message */
 #define IR_MAGIC                     0x10 /**< get the magic packet interrupt */
+/* SIR register values */
+#define SIR_0                  0x01 /**< check ip confict */
+#define SIR_1                  0x02 /**< check ip confict */
+#define SIR_2                  0x04 /**< check ip confict */
+#define SIR_3                  0x08 /**< check ip confict */
+#define SIR_4                  0x10 /**< check ip confict */
+#define SIR_5                  0x20 /**< check ip confict */
+#define SIR_6                  0x40 /**< check ip confict */
+#define SIR_7                  0x80 /**< check ip confict */
+
 
 /* Sn_MR values */
 #define Sn_MR_CLOSE                  0x00     /**< unused socket */
