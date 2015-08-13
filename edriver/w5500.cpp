@@ -13,6 +13,12 @@ void W5500::begin(u8* mac,u8* ip,u8* subnet,u8* gateway)
 	SPIClASS::begin(&spiDevW5500);
 	cs->mode(OUTPUT_PP);
 	cs->set();
+
+	//中断屏蔽寄存器
+	//setIMR(0XF0);
+//	setSIMR(0XFF);//允许所有socket产生中断。
+//	setSn_IMR(0,0x04);//允许接收中断
+	
 	reset();
 	
 	setSHAR(mac);/*配置Mac地址*/
@@ -28,8 +34,10 @@ void W5500::begin(u8* mac,u8* ip,u8* subnet,u8* gateway)
 void W5500::reset()
 {
 	rstPin->reset();
-	delay_ms(5);
+	delay_ms(1);
 	rstPin->set();
+	delay_ms(500);
+
 }
 
 void W5500::write(u32 addrbsb, u8 data)
@@ -67,17 +75,18 @@ u16 W5500::write(u32 addrbsb,u8* buf, u16 len)
 {
 	if(spiDevW5500.devNum != readConfig())
 		config(&spiDevW5500);
-   u16 idx = 0;
 
 //   IINCHIP_ISR_DISABLE();
    cs->reset();                               // CS=0, SPI start
    transfer( (addrbsb & 0x00FF0000)>>16);// Address byte 1
    transfer( (addrbsb & 0x0000FF00)>> 8);// Address byte 2
    transfer( (addrbsb & 0x000000F8) + 4);    // Data write command and Write data length 1
-   for(idx = 0; idx < len; idx++)                // Write data in loop
-   {
-     transfer(buf[idx]);
-   }
+//   u16 idx = 0;
+//   for(idx = 0; idx < len; idx++)                // Write data in loop
+//   {
+//     transfer(buf[idx]);
+//   }
+	 transfer(buf,len);
    cs->set();                                 // CS=1, SPI end
 //   IINCHIP_ISR_ENABLE();                         // Interrupt Service Routine Enable    
 
@@ -88,16 +97,17 @@ u16 W5500::read(u32 addrbsb,u8* buf, u16 len)
 {
 	if(spiDevW5500.devNum != readConfig())
 		config(&spiDevW5500);
-  u16 idx = 0;
 //  IINCHIP_ISR_DISABLE();
    cs->reset();                               // CS=0, SPI start
   transfer( (addrbsb & 0x00FF0000)>>16);// Address byte 1
   transfer( (addrbsb & 0x0000FF00)>> 8);// Address byte 2
   transfer( (addrbsb & 0x000000F8));    // Data write command and Write data length 1
-  for(idx = 0; idx < len; idx++)                    // Write data in loop
-  {
-    buf[idx] = transfer(0x00);
-  }
+//  u16 idx = 0;
+//  for(idx = 0; idx < len; idx++)                    // Write data in loop
+//  {
+//    buf[idx] = transfer(0x00);
+//  }
+	transfer(0x00,buf,len);
    cs->set();                                 // CS=1, SPI end
 //  IINCHIP_ISR_ENABLE();                             // Interrupt Service Routine Enable
   
@@ -130,7 +140,7 @@ void W5500::sysinit( u8 * tx_size, u8 * rx_size  )
   int16 i;
   int16 ssum,rsum;
 #ifdef __DEF_IINCHIP_DBG__
-  printf("sysinit()\r\n");
+//  printf("sysinit()\r\n");
 #endif
   ssum = 0;
   rsum = 0;
@@ -141,8 +151,8 @@ void W5500::sysinit( u8 * tx_size, u8 * rx_size  )
           write( (Sn_RXMEM_SIZE(i)), rx_size[i]);
           
 #ifdef __DEF_IINCHIP_DBG__
-         printf("tx_size[%d]: %d, Sn_TXMEM_SIZE = %d\r\n",i, tx_size[i], IINCHIP_READ(Sn_TXMEM_SIZE(i)));
-         printf("rx_size[%d]: %d, Sn_RXMEM_SIZE = %d\r\n",i, rx_size[i], IINCHIP_READ(Sn_RXMEM_SIZE(i)));
+//         printf("tx_size[%d]: %d, Sn_TXMEM_SIZE = %d\r\n",i, tx_size[i], IINCHIP_READ(Sn_TXMEM_SIZE(i)));
+//         printf("rx_size[%d]: %d, Sn_RXMEM_SIZE = %d\r\n",i, rx_size[i], IINCHIP_READ(Sn_RXMEM_SIZE(i)));
 #endif
     SSIZE[i] = (int16)(0);
     RSIZE[i] = (int16)(0);
@@ -306,12 +316,26 @@ void W5500::setMR(u8 val)
 {
   write(MR,val);
 }
+void W5500::setIMR(u8 val)
+{
+	  write(IMR,val);
+}
+void W5500::setSIMR(u8 val)
+{
+	  write(SIMR,val);
+
+}
+
 /**
 @brief  This function gets Interrupt register in common register.
  */
 u8 W5500::getIR( void )
 {
    return read(IR);
+}
+u8 W5500::getSIR( void )
+{
+   return read(SIR);
 }
 
 /**
@@ -343,10 +367,26 @@ void W5500::setRCR(u8 retry)
 If any bit in IMR is set as '0' then there is not interrupt signal though the bit is
 set in IR register.
 */
-void W5500::clearIR(u8 mask)
+void W5500::setIR(u8 val)
 {
-  write(IR, ~mask | getIR() ); // must be setted 0x10.
+  write(IR, val ); // must be setted 0x10.
 }
+void W5500::setSIR(u8 val)
+{
+  write(SIR, val ); // must be setted 0x10.
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+void W5500::setSn_IMR(u8 s,u8 mask)
+{
+  write( Sn_IMR(s), mask);
+}
+u8 W5500::getSn_IMR(u8 s)
+{
+  return read(Sn_IMR(s));
+}
+
 /**
 @brief  This sets the maximum segment size of TCP in Active Mode), while in Passive Mode this is set by peer
 */
@@ -463,7 +503,7 @@ void W5500::recv_data_processing(u8 s, u8 *data, u16 len)
   
   if(len == 0)
   {
-    printf("CH: %d Unexpected2 length 0\r\n", s);
+//    printf("CH: %d Unexpected2 length 0\r\n", s);
     return;
   }
 
