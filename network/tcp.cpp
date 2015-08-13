@@ -48,31 +48,50 @@ u8 TCPCLIENT::connect(u8* IP,uint16 Port)
 	}
 	return ret;
 }
-u16 TCPCLIENT::process()
+u16 TCPCLIENT::recv(u8* buf)
 {
-	u16 len;
+	u16 len = 0;
 
 	if(eth->getSn_IR(s) & Sn_IR_RECV)
 	{
 		eth->setSn_IR(s, Sn_IR_RECV);/*Sn_IR的第0位置1*/
+		len=eth->getSn_RX_RSR(s);/*len为已接收数据的大小*/
+		if(len>0)
+		{
+			_recv(s,buf,len);/*W5500接收来自Sever的数据*/
+				recvFlag = 1;
+		}	
 	}
-	len=eth->getSn_RX_RSR(0);/*len为已接收数据的大小*/
-	if(len>0)
-	{
-		_recv(0,buf,len);/*W5500接收来自Sever的数据*/
-		_send(0,buf,len);/*W5500向Server发送数据*/
-	}
+
 		return len;
 }
-u16 TCPCLIENT::interruptRecv()
+u16 TCPCLIENT::interruptRecv(u8* buf)
 {
 	u16 len;
-	len=eth->getSn_RX_RSR(0);/*len为已接收数据的大小*/
-	if(len>0)
+	u8 tmp2,tmp3;
+
+	tmp2 = eth->getSIR();
+	tmp3 = eth->getSn_IR(s);
+	#if 0
+	uart1.printf("SIr:0x%02x",tmp2);
+	uart1.printf("Sn_Ir:0x%02x",tmp3);
+	#endif
+	if(tmp2&(1<<s))
 	{
-		_recv(0,buf,len);/*W5500接收来自Sever的数据*/
+		eth->setSIR(1<<s);/*SIR的第0位置1*/
 	}
-	recvFlag = 0;
+	
+	if(tmp3&Sn_IR_RECV)
+	{
+		eth->setSn_IR(s, Sn_IR_RECV);/*Sn_IR的第2位置1*/
+		
+		len=eth->getSn_RX_RSR(s);/*len为已接收数据的大小*/
+		if(len>0)
+		{
+			_recv(s,buf,len);/*W5500接收来自Sever的数据*/
+			recvFlag = 1;
+		}
+	}
 	
 	return len;
 }

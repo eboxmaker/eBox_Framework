@@ -12,19 +12,27 @@ USART uart1(USART1,PA9,PA10);
   u8 rip[4]={192,168,1,102};/*定义lp变量*/
   u8 ip[6];
 	
+	u8 recvBuf[2048];
 W5500 w5500(PA4,SPI1,PA5,PA6,PA7,PA2,PA3);
 	
-UDPCLIENT udpc;
+UDP udpc;
 
-	u8 recvBuf[2048];
-u8 count;
+u16 len;
+	
+	
+void ethEvent()
+{
 
+	len = udpc.interruptRecv(recvBuf);
+
+}
 void setup()
 {
 	eBoxInit();
 	uart1.begin(9600);
 
 	w5500.begin(mac,lip,sub,gw);
+	w5500.attchInterruputEvent(ethEvent);
 	attachEthToSocket(&w5500);
 	
   w5500.getMAC (ip);
@@ -37,18 +45,18 @@ void setup()
   uart1.printf("GW : %d.%d.%d.%d\r\n", ip[0],ip[1],ip[2],ip[3]);
   uart1.printf("Network is ready.\r\n");
 	
-	udpc.begin(SOCKET0,30000);
+	udpc.begin(SOCKET6,30000);
 	
 
 }
-u16 len;
 int main(void)
 {
 	setup();
+
 	while(1)
 	{
-		len = udpc.recv(recvBuf);
-		if(len > 0)
+		
+		if(udpc.recvFlag == 1)
 		{
 			uart1.printf("\r\n============================");		
 			uart1.printf("\r\n本地端口:%d",udpc.localPort );
@@ -56,9 +64,12 @@ int main(void)
 			uart1.printf("\r\n数据长度:%d",len);		
 			uart1.printf("\r\n数据内容:");		
 			uart1.printf((const char *)recvBuf);
+			udpc.sendto(udpc.remoteIP,udpc.remotePort,recvBuf,100);
 			udpc.recvFlag = 0;
-		  udpc.sendto(rip,8080,recvBuf,60);
+
 		}
+//		udpc.sendto(rip,8080,data,60);
+//		delay_ms(500);
 
 
 

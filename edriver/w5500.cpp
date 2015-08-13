@@ -16,8 +16,8 @@ void W5500::begin(u8* mac,u8* ip,u8* subnet,u8* gateway)
 
 	//中断屏蔽寄存器
 	//setIMR(0XF0);
-//	setSIMR(0XFF);//允许所有socket产生中断。
-//	setSn_IMR(0,0x04);//允许接收中断
+	setSIMR(0XFF);//允许所有socket产生中断。
+	setSn_IMR(0,0x04);//允许接收中断
 	
 	reset();
 	
@@ -444,7 +444,7 @@ u16 W5500::getSn_TX_FSR(u8 s)
 
 This gives size of received data in receive buffer.
 */
-u16 W5500::getSn_RX_RSR(u8 s)
+u16 W5500::getSn_RX_RSR(SOCKET s)
 {
   u16 val=0,val1=0;
   do

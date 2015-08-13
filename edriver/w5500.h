@@ -2,14 +2,17 @@
 #define __W5500_H
 #include "ebox.h"
 
-typedef int int16;
+typedef unsigned char uint8;
+typedef unsigned short uint16;
+typedef int 					int16;
+typedef unsigned long uint32;
+typedef uint8 			SOCKET;
 
 #define	MAX_SOCK_NUM		8	/**< Maxmium number of socket  */
 
 static u8 I_STATUS[MAX_SOCK_NUM];
 static u16 SSIZE[MAX_SOCK_NUM]; /**< Max Tx buffer size by each channel */
 static u16 RSIZE[MAX_SOCK_NUM]; /**< Max Rx buffer size by each channel */
-
 
 class W5500:public SPIClASS
 {
