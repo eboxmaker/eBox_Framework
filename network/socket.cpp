@@ -16,6 +16,7 @@ void attachEthToSocket(W5500* e)
 uint8 _socket(SOCKET s, uint8 protocol, uint16 port, uint8 flag)
 {
    uint8 ret;
+	u16 i;
    if (
         ((protocol&0x0F) == Sn_MR_TCP)    ||
         ((protocol&0x0F) == Sn_MR_UDP)    ||
@@ -38,9 +39,16 @@ uint8 _socket(SOCKET s, uint8 protocol, uint16 port, uint8 flag)
 
       /* wait to process the command... */
       while( eth->read(Sn_CR(s)) )
+			{
+				if(i++>0xfff0)
+				{
+					ret = 0xff;
+					break;
+				}
+			}
          ;
       /* ------- */
-      ret = 0;
+    
    }
    else
    {
