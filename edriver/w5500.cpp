@@ -13,13 +13,22 @@ void W5500::begin(u8* mac,u8* ip,u8* subnet,u8* gateway)
 	SPIClASS::begin(&spiDevW5500);
 	cs->mode(OUTPUT_PP);
 	cs->set();
+	rstPin->mode(OUTPUT_PP);
+	rstPin->set();
 
+	reset();
 	//中断屏蔽寄存器
 	//setIMR(0XF0);
 	setSIMR(0XFF);//允许所有socket产生中断。
 	setSn_IMR(0,0x04);//允许接收中断
+	setSn_IMR(1,0x04);//允许接收中断
+	setSn_IMR(2,0x04);//允许接收中断
+	setSn_IMR(3,0x04);//允许接收中断
+	setSn_IMR(4,0x04);//允许接收中断
+	setSn_IMR(5,0x04);//允许接收中断
+	setSn_IMR(6,0x04);//允许接收中断
+	setSn_IMR(7,0x04);//允许接收中断
 	
-	reset();
 	
 	setSHAR(mac);/*配置Mac地址*/
 	setSIPR(ip);/*配置Ip地址*/
