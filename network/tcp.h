@@ -8,7 +8,7 @@ class TCPCLIENT
 		u8 begin(SOCKET ps,uint16 port);
 		u8 connect(u8* IP,uint16 Port);
 		u16 recv(u8* buf);
-		u16 interruptRecv(u8* buf);
+//		u16 interruptRecv(u8* buf);
 	  u16 send(u8* buf,u16 len);
 
 	  u8 recvFlag;

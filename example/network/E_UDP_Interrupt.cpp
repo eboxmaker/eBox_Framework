@@ -15,7 +15,7 @@ USART uart1(USART1,PA9,PA10);
 	u8 recvBuf[2048];
 W5500 w5500(PA4,SPI1,PA5,PA6,PA7,PA2,PA3);
 	
-UDP udpc;
+UDP udp;
 
 u16 len;
 	
@@ -23,7 +23,9 @@ u16 len;
 void ethEvent()
 {
 
-	len = udpc.interruptRecv(recvBuf);
+	uart1.printf("\r\n==========");
+	uart1.printf("\r\n接收中断！");
+	udp.recvFlag = 1;
 
 }
 void setup()
@@ -45,7 +47,8 @@ void setup()
   uart1.printf("GW : %d.%d.%d.%d\r\n", ip[0],ip[1],ip[2],ip[3]);
   uart1.printf("Network is ready.\r\n");
 	
-	udpc.begin(SOCKET6,30000);
+	if(udp.begin(0,30000) == 0)
+		uart1.printf("\r\nudp1 server creat ok! listen on 30000");
 	
 
 }
@@ -56,19 +59,17 @@ int main(void)
 	while(1)
 	{
 		
-		if(udpc.recvFlag == 1)
+		if(udp.recv(recvBuf))
 		{
 			uart1.printf("\r\n============================");		
-			uart1.printf("\r\n本地端口:%d",udpc.localPort );
-			uart1.printf("\r\n消息来源:%d.%d.%d.%d:%d", udpc.remoteIP[0],udpc.remoteIP[1],udpc.remoteIP[2],udpc.remoteIP[3],udpc.remotePort);
+			uart1.printf("\r\n本地端口:%d",udp.localPort );
+			uart1.printf("\r\n消息来源:%d.%d.%d.%d:%d", udp.remoteIP[0],udp.remoteIP[1],udp.remoteIP[2],udp.remoteIP[3],udp.remotePort);
 			uart1.printf("\r\n数据长度:%d",len);		
 			uart1.printf("\r\n数据内容:");		
 			uart1.printf((const char *)recvBuf);
-			udpc.sendto(udpc.remoteIP,udpc.remotePort,recvBuf,100);
-			udpc.recvFlag = 0;
-
+			udp.sendto(udp.remoteIP,udp.remotePort,recvBuf,100);
 		}
-//		udpc.sendto(rip,8080,data,60);
+//		udp.sendto(rip,8080,data,60);
 //		delay_ms(500);
 
 
