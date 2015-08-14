@@ -13,10 +13,10 @@ void attachEthToSocket(W5500* e)
 @brief   This Socket function initialize the channel in perticular mode, and set the port and wait for W5200 done it.
 @return  0 for sucess else -1.
 */
-uint8 _socket(SOCKET s, uint8 protocol, uint16 port, uint8 flag)
+int _socket(SOCKET s, uint8 protocol, uint16 port, uint8 flag)
 {
-   uint8 ret;
-	u16 i;
+   int ret = 0;
+	 u16 i;
    if (
         ((protocol&0x0F) == Sn_MR_TCP)    ||
         ((protocol&0x0F) == Sn_MR_UDP)    ||
@@ -42,7 +42,7 @@ uint8 _socket(SOCKET s, uint8 protocol, uint16 port, uint8 flag)
 			{
 				if(i++>0xfff0)
 				{
-					ret = 0xff;
+					ret = -1;
 					break;
 				}
 			}
@@ -52,7 +52,7 @@ uint8 _socket(SOCKET s, uint8 protocol, uint16 port, uint8 flag)
    }
    else
    {
-      ret = 0xff;
+      ret = -2;
    }
    return ret;
 }
@@ -101,9 +101,9 @@ uint8 _listen(SOCKET s)
 
 @return  0 for success else 255.
 */
-uint8 _connect(SOCKET s, uint8 * addr, uint16 port)
+int _connect(SOCKET s, uint8 * addr, uint16 port)
 {
-    uint8 ret;
+    int ret = 0;
     if
         (
             ((addr[0] == 0xFF) && (addr[1] == 0xFF) && (addr[2] == 0xFF) && (addr[3] == 0xFF)) ||
@@ -111,11 +111,10 @@ uint8 _connect(SOCKET s, uint8 * addr, uint16 port)
             (port == 0x00)
         )
     {
-      ret = 255;
+      ret = -1;
     }
     else
     {
-        ret = 0;
         // set destination IP
         eth->write( Sn_DIPR0(s), addr[0]);
         eth->write( Sn_DIPR1(s), addr[1]);
@@ -130,18 +129,13 @@ uint8 _connect(SOCKET s, uint8 * addr, uint16 port)
         while ( eth->read(Sn_SR(s)) != SOCK_SYNSENT )
         {
             if(eth->read(Sn_SR(s)) == SOCK_ESTABLISHED)
-            {
-							  ret = 0;
-                break;
+            {			
+                 break;	 
             }
-						else
-						{
-							ret = eth->read(Sn_SR(s));
-						}
             if (eth->getSn_IR(s) & Sn_IR_TIMEOUT)
             {
                 eth->write(Sn_IR(s), (Sn_IR_TIMEOUT));  // clear TIMEOUT Interrupt
-                ret = 2;
+                ret = -2;
                 break;
             }
         }
