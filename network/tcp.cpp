@@ -2,33 +2,33 @@
 #include "ebox.h"
 extern USART uart1;
 
-u8 TCPCLIENT::begin(SOCKET ps,uint16 port)
+int TCPCLIENT::begin(SOCKET ps,uint16 port)
 {
-	u8 ret = 0;
+	int ret = 0;
 	s = ps;
 	localPort = port;
 	
 	return ret;
 }
-u8 TCPCLIENT::connect(u8* IP,uint16 Port)
+int TCPCLIENT::connect(u8* IP,uint16 Port)
 {
-	u8 ret = 0;
-	u8 i = 50;
+	int ret = 0;
+	u8 i = 20;
 	u8 tmp;
 	remoteIP[0] = IP[0];
 	remoteIP[1] = IP[1];
 	remoteIP[2] = IP[2];
 	remoteIP[3] = IP[3];
 	remotePort = Port;
-	while(i--)
+	uart1.printf("\r\nremote server:%d.%d.%d.%d:%d",remoteIP[0],remoteIP[1],remoteIP[2],remoteIP[3],remotePort);
+	while(--i)
 	{
 	 tmp =eth->getSn_SR(s);
 	 switch(tmp)/*获取socket0的状态*/
     {
 		 case SOCK_INIT:
 			 ret = _connect(s, remoteIP ,remotePort);/*在TCP模式下向服务器发送连接请求*/ 
-		   uart1.printf("\r\nserver:%d.%d.%d.%d:%d",remoteIP[0],remoteIP[1],remoteIP[2],remoteIP[3],remotePort);
-		 	 uart1.printf("\r\nconnnect() return = 0x%x",ret);
+		 	 uart1.printf("\r\nconnnect() return = %d",ret);
 		 	 uart1.printf("\r\nconnecting to server...");
 		 break;
 		 case SOCK_ESTABLISHED:
@@ -44,8 +44,10 @@ u8 TCPCLIENT::connect(u8* IP,uint16 Port)
 		 	uart1.printf("\r\n_socket() return = %d",ret);
 		 break;
 		}
-		delay_ms(1000);
+		delay_ms(500);
 	}
+	if(i == 0)
+		ret = -1;
 	return ret;
 }
 u16 TCPCLIENT::recv(u8* buf)

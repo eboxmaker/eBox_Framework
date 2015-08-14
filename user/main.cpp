@@ -18,7 +18,7 @@ W5500 w5500(PA4,SPI1,PA5,PA6,PA7,PA2,PA3);
 	
 TCPCLIENT tcp;
 
-
+int ret;
 
 void setup()
 {
@@ -40,8 +40,13 @@ void setup()
   uart1.printf("GW : %d.%d.%d.%d\r\n", ip[0],ip[1],ip[2],ip[3]);
   uart1.printf("Network is ready.\r\n");
 	
-	tcp.begin(SOCKET7,3000);	
-	tcp.connect(rip,8080);
+	tcp.begin(SOCKET7,3000);
+  ret = tcp.connect(rip,8080);
+	if(ret == 0)
+		uart1.printf("\r\nconnect success !");
+	else
+		uart1.printf("\r\nconnect fail ! err code :%d",ret);
+		
 
 
 }
