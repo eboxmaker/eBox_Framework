@@ -90,7 +90,7 @@ class W5500:public SPIClASS
 		
 		void attchInterruputEvent(void (*callbackFun)(void))
 		{
-			EXTIx ex(PA3,EXTI_Trigger_Falling);
+			EXTIx ex(intPin,EXTI_Trigger_Falling);
 			ex.attachInterrupt(callbackFun);
 		}
 	private:
