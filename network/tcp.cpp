@@ -101,3 +101,95 @@ u16 TCPCLIENT::send(u8* buf,u16 len)
 {
 	return _send(s,buf,len);
 }
+
+int TCPSERVER::begin(SOCKET ps,uint16 port)
+{
+	int ret = 0;
+	u8 tmp;
+	u8 i = 20;
+	
+	s = ps;
+	localPort = port;
+  uart1.printf("\r\ncreat TCP server !");
+
+	while(--i)
+	{
+	 tmp =eth->getSn_SR(s);
+	 switch(tmp)/*获取socket0的状态*/
+   {
+         case SOCK_INIT:/*socket初始化完成*/
+           ret = _listen(s);/*在TCP模式下向服务器发送连接请求*/
+					 if(ret == 0)
+					 {
+						 uart1.printf("\r\nlisten on port:%d,socket:%d",localPort,s);
+						 uart1.printf("\r\nwait one connection !");
+						 return ret;
+					 }
+					 else
+						 uart1.printf("\r\nerr code:%d",ret);
+						 
+           break;
+         case SOCK_CLOSED:/*socket关闭*/
+           ret = _socket(s,Sn_MR_TCP,localPort,Sn_MR_ND);/*打开socket的一个端口*/
+				   if(ret == 0)
+						 uart1.printf("\r\nopen port:%d success !",localPort);
+           break;
+				 default :
+					 uart1.printf("\r\nerr code:%d",tmp);
+					 break;
+
+	 }
+ }
+	return ret;
+}
+u16 TCPSERVER::recv(u8* buf)
+{
+	u16 len = 0;
+	u8 tmp;
+	
+	 tmp = eth->getSn_SR(s);
+	 switch(tmp)/*获取socket0的状态*/
+	 {
+      case SOCK_ESTABLISHED:/*socket连接建立*/
+				 if(eth->getSn_IR(s) & Sn_IR_CON)
+				 {
+						eth->setSn_IR(s, Sn_IR_CON);/*Sn_IR的第0位置1*/
+					  eth->getSn_DIPR(s,remoteIP);
+						remotePort = eth->getSn_DPORT(s);
+						uart1.printf("\r\none tcp client connected !");
+						uart1.printf("\r\nclient info:%d.%d.%d.%d:%d !",remoteIP[0],remoteIP[1],remoteIP[2],remoteIP[3],remotePort);
+				 }
+
+				len = eth->getSn_RX_RSR(s);/*len为已接收数据的大小*/
+				if(len>0)
+				{
+					len = _recv(s,buf,len);/*W5200接收来自Sever的数据*/
+				}
+				break;
+			case SOCK_LISTEN:
+				break;
+			case SOCK_CLOSE_WAIT:
+				uart1.printf("\r\n链接请求关闭");
+				close();
+				break;
+			case SOCK_CLOSED:
+				//uart1.printf("\r\ntmp = %x",tmp);
+				uart1.printf("\r\n链接已经关闭,开始重新打开服务器！");
+				begin(s,localPort);
+				break;
+			
+			default:
+			  break;
+
+	 }
+		return len;
+}
+void TCPSERVER::close()
+{
+	 _close(s);
+}
+u16 TCPSERVER::send(u8* buf,u16 len)
+{
+	return _send(s,buf,len);/*W5200向Server发送数据*/
+}
+
