@@ -426,6 +426,19 @@ u8  W5500::getSn_SR(u8 s)
 {
    return read(Sn_SR(s));
 }
+void W5500::getSn_DIPR(u8 s,u8* ip)
+{
+	ip[0] = read(Sn_DIPR0(s));
+	ip[1] = read(Sn_DIPR1(s));
+	ip[2] = read(Sn_DIPR2(s));
+	ip[3] = read(Sn_DIPR3(s));
+}
+u16 W5500::getSn_DPORT(u8 s)
+{
+	u16 tmp;
+	tmp = (read(Sn_DPORT0(s))<<8) + read(Sn_DPORT1(s));
+	return tmp;
+}
 
 /**
 @brief  get socket TX free buf size

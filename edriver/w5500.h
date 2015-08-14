@@ -76,9 +76,17 @@ class W5500:public SPIClASS
 		
 		void setSn_MSS(u8 s, u16 Sn_MSSR);
 		void setSn_TTL(u8 s, u8 ttl);
+		
+		//获取远端IP和端口
+		void getSn_DIPR(u8 s,u8* ip);
+		u16 getSn_DPORT(u8 s);
+		
 		u8   getSn_SR(u8 s);
 		u16  getSn_TX_FSR(u8 s);
 		u16  getSn_RX_RSR(u8 s);
+		
+		
+		
 		void send_data_processing(u8 s, u8 *data, u16 len);
 		void recv_data_processing(u8 s, u8 *data, u16 len);
 
@@ -239,6 +247,8 @@ class W5500:public SPIClASS
  @brief channel status register
  */
 #define Sn_SR(ch)                       (0x000308 + (ch<<5))
+
+
 /**
  @brief source port register
  */

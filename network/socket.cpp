@@ -75,9 +75,9 @@ void _close(SOCKET s)
 }
 /**
 @brief   This function established  the connection for the channel in passive (server) mode. This function waits for the request from the peer.
-@return  1 for success else 0.
+@return  0 for success else -1.
 */
-uint8 _listen(SOCKET s)
+int _listen(SOCKET s)
 {
    uint8 ret;
    if (eth->read( Sn_SR(s) ) == SOCK_INIT)
@@ -87,11 +87,11 @@ uint8 _listen(SOCKET s)
       while( eth->read(Sn_CR(s) ) )
          ;
       /* ------- */
-      ret = 1;
+      ret = 0;
    }
    else
    {
-      ret = 0;
+      ret = -1;
    }
    return ret;
 }

@@ -21,11 +21,6 @@ TCPSERVER tcpServer;
 int ret;
 
 
-void debug(const char* fmt,...)
-{
-	uart1.printf(fmt);
-}
-
 void setup()
 {
 	eBoxInit();
