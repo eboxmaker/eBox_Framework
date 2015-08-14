@@ -12,12 +12,12 @@ USART uart1(USART1,PA9,PA10);
   u8 rip[4]={192,168,1,102};/*定义lp变量*/
 	u8 buf[1024];
   u8 ip[6];
+	u16 len;
 
 W5500 w5500(PA4,SPI1,PA5,PA6,PA7,PA2,PA3);
 	
 TCPCLIENT tcp;
 
-	u16 len;
 
 
 void setup()
@@ -41,7 +41,7 @@ void setup()
   uart1.printf("Network is ready.\r\n");
 	
 	tcp.begin(SOCKET7,3000);	
-	tcp.connect(rip,60000);
+	tcp.connect(rip,8080);
 
 
 }
@@ -53,8 +53,7 @@ int main(void)
 	{
 		
 		len = tcp.recv(buf);
-		delay_ms(10);
-		if(tcp.recvFlag == 1)
+		if(len > 0)
 		{
 			uart1.printf("\r\n============================");		
 			uart1.printf("\r\n本地端口:%d",tcp.localPort );
@@ -63,7 +62,6 @@ int main(void)
 			uart1.printf("\r\n数据内容:");		
 			uart1.printf((const char *)buf);
 			tcp.send(buf,len);
-			tcp.recvFlag = 0;
 		}
 
 
