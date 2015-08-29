@@ -21,10 +21,6 @@ TCPSERVER tcpServer;
 int ret;
 
 
-void debug(const char* fmt,...)
-{
-	uart1.printf(fmt);
-}
 
 void setup()
 {
@@ -47,8 +43,6 @@ void setup()
   uart1.printf("Network is ready.\r\n");
 	
 	ret = tcpServer.begin(SOCKET0,30000);
-//	if(ret == 0)
-//		uart1.printf("\r\n success !");
 
 }
 int main(void)
