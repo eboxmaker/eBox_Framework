@@ -79,7 +79,7 @@ void _close(SOCKET s)
 */
 int _listen(SOCKET s)
 {
-   uint8 ret;
+   int ret = 0;
    if (eth->read( Sn_SR(s) ) == SOCK_INIT)
    {
       eth->write( Sn_CR(s) ,Sn_CR_LISTEN);

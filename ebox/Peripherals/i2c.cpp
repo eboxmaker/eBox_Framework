@@ -17,7 +17,7 @@ This specification is preliminary and is subject to change at any time without n
 
 #define DEBUG 1
 
-#define I2C_NUM 2
+//#define I2C_NUM 2
 I2C::I2C(I2C_TypeDef* I2Cx,GPIO* SDAPin,GPIO* SCLPin)
 {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1,ENABLE);  //如果外部引脚没有上拉，必须加这一句

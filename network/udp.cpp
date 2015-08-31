@@ -9,12 +9,16 @@ u8 UDP::begin(SOCKET ps,uint16 port)
 	return ret;
 
 }
-u8 UDP::sendto(u8* rIP,u16 rPort,u8* buf,u16 len)
+u16 UDP::send(UDPMessage *msg)
+{
+	return _sendto(s, msg->buf,msg->len, msg->rIP, msg->rPort);
+}
+u16 UDP::sendto(u8* rIP,u16 rPort,u8* buf,u16 len)
 {
 	len = _sendto(s, buf,len, rIP, rPort);
 	return len;
 }
-u8 UDP::recv(u8* buf)
+u16 UDP::recv(u8* buf)
 {
 	u16 len = 0;
 //		eth->setSIR(1<<s);/*SIRµÄµÚsÎ»ÖÃ1*/
