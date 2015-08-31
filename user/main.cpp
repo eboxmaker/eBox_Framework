@@ -79,8 +79,6 @@ int main(void)
 			uart1.printf((const char *)buf);		
 			udp2.sendto(udp2.remoteIP,udp2.remotePort,buf,100);
 		}
-
-	
 	}
 
 
