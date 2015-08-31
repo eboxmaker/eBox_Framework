@@ -1,6 +1,6 @@
 #include "tcp.h"
 #include "ebox.h"
-extern USART uart1;
+
 
 int TCPCLIENT::begin(SOCKET ps,uint16 port)
 {
@@ -20,7 +20,7 @@ int TCPCLIENT::connect(u8* IP,uint16 Port)
 	remoteIP[2] = IP[2];
 	remoteIP[3] = IP[3];
 	remotePort = Port;
-	uart1.printf("\r\nremote server:%d.%d.%d.%d:%d",remoteIP[0],remoteIP[1],remoteIP[2],remoteIP[3],remotePort);
+	DBG("\r\nremote server:%d.%d.%d.%d:%d",remoteIP[0],remoteIP[1],remoteIP[2],remoteIP[3],remotePort);
 	while(--i)
 	{
 	 tmp =eth->getSn_SR(s);
@@ -28,20 +28,20 @@ int TCPCLIENT::connect(u8* IP,uint16 Port)
     {
 		 case SOCK_INIT:
 			 ret = _connect(s, remoteIP ,remotePort);/*在TCP模式下向服务器发送连接请求*/ 
-		 	 uart1.printf("\r\nconnnect() return = %d",ret);
-		 	 uart1.printf("\r\nconnecting to server...");
+		 	 DBG("\r\nconnnect() return = %d",ret);
+		 	 DBG("\r\nconnecting to server...");
 		 break;
 		 case SOCK_ESTABLISHED:
 			   if(eth->getSn_IR(s) & Sn_IR_CON)
          {
             eth->setSn_IR(s, Sn_IR_CON);/*Sn_IR的第0位置1*/
          }
-				 uart1.printf("\r\nconnected !");
+				 DBG("\r\nconnected !");
 		 return ret;
 		 case SOCK_CLOSED:
 			ret = _socket(s,Sn_MR_TCP,localPort,Sn_MR_ND);/*打开socket的一个端口*/
-		  uart1.printf("\r\nopen local port:%d,use %d socket",localPort,s);
-		 	uart1.printf("\r\n_socket() return = %d",ret);
+		  DBG("\r\nopen local port:%d,use %d socket",localPort,s);
+		 	DBG("\r\n_socket() return = %d",ret);
 		 break;
 		}
 		delay_ms(500);
@@ -75,8 +75,8 @@ u16 TCPCLIENT::recv(u8* buf)
 //	tmp2 = eth->getSIR();
 //	tmp3 = eth->getSn_IR(s);
 //	#if 0
-//	uart1.printf("SIr:0x%02x",tmp2);
-//	uart1.printf("Sn_Ir:0x%02x",tmp3);
+//	DBG("SIr:0x%02x",tmp2);
+//	DBG("Sn_Ir:0x%02x",tmp3);
 //	#endif
 //	if(tmp2&(1<<s))
 //	{
@@ -110,7 +110,7 @@ int TCPSERVER::begin(SOCKET ps,uint16 port)
 	
 	s = ps;
 	localPort = port;
-  uart1.printf("\r\ncreat TCP server !");
+  DBG("\r\ncreat TCP server !");
 
 	while(--i)
 	{
@@ -121,21 +121,21 @@ int TCPSERVER::begin(SOCKET ps,uint16 port)
            ret = _listen(s);/*在TCP模式下向服务器发送连接请求*/
 					 if(ret == 0)
 					 {
-						 uart1.printf("\r\nlisten on port:%d,socket:%d",localPort,s);
-						 uart1.printf("\r\nwait one connection !");
+						 DBG("\r\nlisten on port:%d,socket:%d",localPort,s);
+						 DBG("\r\nwait one connection !");
 						 return ret;
 					 }
 					 else
-						 uart1.printf("\r\nerr code:%d",ret);
+						 DBG("\r\nerr code:%d",ret);
 						 
            break;
          case SOCK_CLOSED:/*socket关闭*/
            ret = _socket(s,Sn_MR_TCP,localPort,Sn_MR_ND);/*打开socket的一个端口*/
 				   if(ret == 0)
-						 uart1.printf("\r\nopen port:%d success !",localPort);
+						 DBG("\r\nopen port:%d success !",localPort);
            break;
 				 default :
-					 uart1.printf("\r\nerr code:%d",tmp);
+					 DBG("\r\nerr code:%d",tmp);
 					 break;
 
 	 }
@@ -156,8 +156,8 @@ u16 TCPSERVER::recv(u8* buf)
 						eth->setSn_IR(s, Sn_IR_CON);/*Sn_IR的第0位置1*/
 					  eth->getSn_DIPR(s,remoteIP);
 						remotePort = eth->getSn_DPORT(s);
-						uart1.printf("\r\none tcp client connected !");
-						uart1.printf("\r\nclient info:%d.%d.%d.%d:%d !",remoteIP[0],remoteIP[1],remoteIP[2],remoteIP[3],remotePort);
+						DBG("\r\none tcp client connected !");
+						DBG("\r\nclient info:%d.%d.%d.%d:%d !",remoteIP[0],remoteIP[1],remoteIP[2],remoteIP[3],remotePort);
 				 }
 
 				len = eth->getSn_RX_RSR(s);/*len为已接收数据的大小*/
@@ -169,12 +169,12 @@ u16 TCPSERVER::recv(u8* buf)
 			case SOCK_LISTEN:
 				break;
 			case SOCK_CLOSE_WAIT:
-				uart1.printf("\r\n链接请求关闭");
+				DBG("\r\n链接请求关闭");
 				close();
 				break;
 			case SOCK_CLOSED:
-				//uart1.printf("\r\ntmp = %x",tmp);
-				uart1.printf("\r\n链接已经关闭,开始重新打开服务器！");
+				//DBG("\r\ntmp = %x",tmp);
+				DBG("\r\n链接已经关闭,开始重新打开服务器！");
 				begin(s,localPort);
 				break;
 			

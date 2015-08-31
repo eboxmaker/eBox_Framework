@@ -22,6 +22,7 @@ This specification is preliminary and is subject to change at any time without n
 #include "common.h"
 
 
+
 #include "exti.h"
 #include "gtimer.h"
 #include "pwm.h"
@@ -30,6 +31,10 @@ This specification is preliminary and is subject to change at any time without n
 #include "uartx.h"
 #include "timerone.h"
 #include "rtc.h"
+
+////////////////////////////////////////////////////////////////////////
+extern USART uart1;//根据不同的串口名称此处需要做相应的修改
+#define DBG(...) uart1.printf(__VA_ARGS__)
 
 ////////////////////////////////////////////////////////////////////////////////
 //创建所有引脚对象和宏定义其指针
