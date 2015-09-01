@@ -52,3 +52,9 @@ void _74hc595::rowOut(uint8_t* Data,uint8_t dataLen,uint8_t bitOder)
 	shiftOut(_dataPin,_sckPin,bitOder,Data[i]);
   _rckPin->write(HIGH);
 }
+void _74hc595::rowOut(uint8_t data,uint8_t bitOder)
+{
+	_rckPin->write(LOW);
+	shiftOut(_dataPin,_sckPin,bitOder,data);
+  _rckPin->write(HIGH);
+}

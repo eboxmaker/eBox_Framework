@@ -24,8 +24,9 @@ class _74hc595
         _74hc595(GPIO* dataPin, GPIO* sckPin,GPIO* rckPin);
 				void rowData(uint8_t* Data,uint8_t dataLen,uint8_t bitOder);
 				void rowData(uint8_t data,uint8_t bitOder);
-				void rowOut(uint8_t* Data,uint8_t dataLen,uint8_t bitOder);
 				void Out();
+				void rowOut(uint8_t* Data,uint8_t dataLen,uint8_t bitOder);
+				void rowOut(uint8_t data,uint8_t bitOder);
 
     
     private:
