@@ -32,10 +32,15 @@ This specification is preliminary and is subject to change at any time without n
 #include "timerone.h"
 #include "rtc.h"
 
-////////////////////////////////////////////////////////////////////////
+#include "stdio.h"
+////////系统debug支持////////////////////////////////////////////////////////////////
+//#define EBOX_DEBUG
 extern USART uart1;//根据不同的串口名称此处需要做相应的修改
-#define DBG(...) uart1.printf(__VA_ARGS__)
-
+#ifdef EBOX_DEBUG
+	#define DBG(...) uart1.printf(__VA_ARGS__)
+#else
+	#define  DBG(...) 
+#endif
 ////////////////////////////////////////////////////////////////////////////////
 //创建所有引脚对象和宏定义其指针
 #define PA0 ((GPIO*)&GPA0)
