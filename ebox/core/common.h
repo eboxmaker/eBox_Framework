@@ -91,6 +91,7 @@ uint16_t 	analogReadToVoltage(GPIO* pin);
 
 void shiftOut(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder, uint8_t val);
 uint8_t shiftIn(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder);
+void xx(const char* fmt,...);
 
 
 #ifdef __cplusplus
