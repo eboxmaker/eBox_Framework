@@ -214,8 +214,11 @@ void USART::printf(const char* fmt,...)
 	va_end(va_params); 
   
 	#if defined USE_DMA
+	if(length != 0)
+	{
 		DMA_SetCurrDataCounter(_DMA1_Channelx,length);  
 		DMA_Cmd(_DMA1_Channelx,ENABLE);  
+	}
 	#else
 		putString(sendBuf);
 	#endif
