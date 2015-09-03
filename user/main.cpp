@@ -115,7 +115,7 @@ int main(void)
 		
 		PB8->write(!PB8->read());
 //		uart1.printf("\r\nrunning£¡");
-		delay_us(1000);
+		delay_us(10);
 	}
 
 

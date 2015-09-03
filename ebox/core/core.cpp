@@ -19,7 +19,7 @@ This specification is preliminary and is subject to change at any time without n
 void 	Init_ADC1(void);
 
  __IO uint32_t millisSeconds;
-#define SysTickOverFlowValue 900
+#define SysTickOverFlowValue 9000
 
 void eBoxInit(void)
 {
@@ -41,7 +41,7 @@ uint32_t millis( void )
 
 void delay_ms(uint32_t ms)
 {	 	
-	uint32_t end = millis() + ms;
+	uint32_t end = millis() + ms*(9000/SysTickOverFlowValue);
   uint32_t systick = SysTick->VAL;
 
 	while (millis() < end) {
