@@ -525,6 +525,9 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrorStatus;
 
 //typedef enum {TRUE = 0,  FALSE= !TRUE} bool;
 
+#ifndef __cplusplus
+typedef enum {TRUE = 0, FALSE = !TRUE} bool;
+#endif
 
 /*!< STM32F10x Standard Peripheral Library old definitions (maintained for legacy purpose) */
 #define HSEStartUp_TimeOut   HSE_STARTUP_TIMEOUT

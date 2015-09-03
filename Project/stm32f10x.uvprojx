@@ -369,7 +369,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F10X_HD,HSE_VALUE=8000000</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\edriver;..\network;..\user</IncludePath>
+              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\edriver;..\network;..\fat;..\user</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -672,6 +672,11 @@
               <FileType>8</FileType>
               <FilePath>..\edriver\w5500.cpp</FilePath>
             </File>
+            <File>
+              <FileName>mmc_sd.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\mmc_sd.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -691,6 +696,26 @@
               <FileName>tcp.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\network\tcp.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>fat</GroupName>
+          <Files>
+            <File>
+              <FileName>wrapperdiskio.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\fat\wrapperdiskio.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fat\diskio.c</FilePath>
+            </File>
+            <File>
+              <FileName>ff.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fat\ff.c</FilePath>
             </File>
           </Files>
         </Group>

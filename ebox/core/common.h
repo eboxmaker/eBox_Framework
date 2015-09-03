@@ -14,16 +14,18 @@ This specification is preliminary and is subject to change at any time without n
 */
 #ifndef __COMMON_H
 #define __COMMON_H
-
-#include "stm32f10x.h"                  // Device header
 #ifdef __cplusplus
 extern "C"{
 #endif
+	
+#include "stm32f10x.h"                  // Device header
 
 
 
 /////////////////////////////////////////
 
+	
+	
 
 #define true 0x1
 #define false 0x0

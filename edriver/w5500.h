@@ -17,7 +17,7 @@ static u16 RSIZE[MAX_SOCK_NUM]; /**< Max Rx buffer size by each channel */
 class W5500:public SPIClASS
 {
 	public:
-		W5500(GPIO* cspin,SPI_TypeDef *spi,GPIO* sck,GPIO* miso,GPIO* mosi,GPIO* rstpin,GPIO* intpin):SPIClASS(SPI1,sck,miso,mosi)
+		W5500(GPIO* cspin,SPI_TypeDef *spi,GPIO* sck,GPIO* miso,GPIO* mosi,GPIO* rstpin,GPIO* intpin):SPIClASS(spi,sck,miso,mosi)
 		{
 			cs = cspin;
 		  rstPin = rstpin;
