@@ -19,10 +19,11 @@ This specification is preliminary and is subject to change at any time without n
 void 	Init_ADC1(void);
 
  __IO uint32_t millisSeconds;
+#define SysTickOverFlowValue 900
 
 void eBoxInit(void)
 {
-	SysTick_Config(9000);//  每隔 (nhz/9,000,000)s产生一次中断
+	SysTick_Config(SysTickOverFlowValue);//  每隔 (nhz/9,000,000)s产生一次中断
 	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);//9Mhz的systemticks clock；
 	Init_ADC1();
 	
@@ -52,18 +53,18 @@ void delay_ms(uint32_t ms)
 		}
 }   
 
-
-    								   
 void delay_us(uint16_t us)
 {		 
 	uint32_t systick = SysTick->VAL;
-	uint16_t count = (us)*9;
+	uint16_t count;
 	if(count == 0)return;
-	if(count>8999)count =8999;
+	
+	count = us * 9;
+	if(count>SysTickOverFlowValue - 5)count = SysTickOverFlowValue-5;
 	noInterrupts();
 	if(systick < count)
 	{
-		count  = (8995  + systick - count);///
+		count  = ((SysTickOverFlowValue-5)  + systick - count);///
 		while(SysTick->VAL <= count)
 		{
 			;
@@ -89,6 +90,10 @@ void delay_us(uint16_t us)
 	}
 	Interrupts();
 }
+
+    								   
+
+
 void delayus(uint32_t us)
 {	 		
 	int i;
