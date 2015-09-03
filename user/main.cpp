@@ -109,11 +109,13 @@ int main(void)
 {
 	setup();
 	fileOpt();
+	PB8->mode(OUTPUT_PP);
 	while(1)
 	{
 		
-	uart1.printf("\r\nrunning£¡");
-		delay_ms(1000);
+		PB8->write(!PB8->read());
+//		uart1.printf("\r\nrunning£¡");
+		delay_us(1000);
 	}
 
 
