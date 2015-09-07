@@ -28,6 +28,7 @@ uint16_t FLASHCLASS::Flash_Write_Without_check(uint32_t iAddress, uint8_t *buf, 
   * @retval if success return the number to write, -1 if error
   *  
   */
+
 int FLASHCLASS::write(uint32_t iAddress, uint8_t *buf, uint32_t iNbrToWrite) {
                 /* Unlock the Flash Bank1 Program Erase controller */
         uint32_t secpos;
