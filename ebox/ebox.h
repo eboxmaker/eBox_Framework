@@ -33,6 +33,11 @@ This specification is preliminary and is subject to change at any time without n
 #include "rtc.h"
 
 #include "stdio.h"
+
+
+////////操作系统支持////////////////////////////////////////////////////////////////
+#define USE_OS 0
+
 ////////系统debug支持////////////////////////////////////////////////////////////////
 #define EBOX_DEBUG
 extern USART uart1;//根据不同的串口名称此处需要做相应的修改
