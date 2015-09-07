@@ -36,12 +36,11 @@ int main(void)
 
 		PB8->write(!PB8->read());
 		uart1.printf("running£¡\r\n");
-	for(int i=0;i<10;i++)
-		uart1.printf("%d",rbuf[i]);
+		for(int i=0;i<10;i++)
+			uart1.printf("%d",rbuf[i]);
 		uart1.printf("\r\n");
 		delay_ms(500);
 	}
-
 
 }
 
