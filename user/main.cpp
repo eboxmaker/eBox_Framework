@@ -31,8 +31,8 @@ int main(void)
 		
 		
 		wbuf[0]=(i++)%10;
-		flash.Flash_Write(0x08004000,wbuf,10);
-		flash.Flash_Read(0x08004000,rbuf,10);
+		flash.write(0x08004000,wbuf,10);
+		flash.read(0x08004000,rbuf,10);
 
 		PB8->write(!PB8->read());
 		uart1.printf("running£¡\r\n");

@@ -23,8 +23,8 @@
 class FLASHCLASS
 {
 	public:
-	int Flash_Read(uint32_t iAddress, uint8_t *buf, int32_t iNbrToRead) ;
-	int Flash_Write(uint32_t iAddress, uint8_t *buf, uint32_t iNbrToWrite);
+	int read(uint32_t iAddress, uint8_t *buf, int32_t iNbrToRead) ;
+	int write(uint32_t iAddress, uint8_t *buf, uint32_t iNbrToWrite);
 
 	private:
 		uint16_t Flash_Write_Without_check(uint32_t iAddress, uint8_t *buf, uint16_t iNumByteToWrite);
