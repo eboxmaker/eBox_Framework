@@ -29,7 +29,7 @@ void eBoxInit(void)
 	
 	NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
 
-	//将pb4默认设置为IO口，仅用jtag
+	//将pb4默认设置为IO口，禁用jtag
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
 	 GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
 
@@ -60,7 +60,7 @@ void delay_us(uint16_t us)
 	if(count == 0)return;
 	
 	count = us * 9;
-	if(count>SysTickOverFlowValue - 5)count = SysTickOverFlowValue-5;
+	if(count>SysTickOverFlowValue - 1)count = SysTickOverFlowValue-1;
 	noInterrupts();
 	if(systick < count)
 	{
