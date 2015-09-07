@@ -28,14 +28,14 @@ uint16_t FLASHCLASS::Flash_Write_Without_check(uint32_t iAddress, uint8_t *buf, 
   * @retval if success return the number to write, -1 if error
   *  
   */
-        uint8_t tmp[FLASH_PAGE_SIZE];
-int FLASHCLASS::Flash_Write(uint32_t iAddress, uint8_t *buf, uint32_t iNbrToWrite) {
+int FLASHCLASS::write(uint32_t iAddress, uint8_t *buf, uint32_t iNbrToWrite) {
                 /* Unlock the Flash Bank1 Program Erase controller */
         uint32_t secpos;
         uint32_t iNumByteToWrite = iNbrToWrite;
 				uint16_t secoff;
 				uint16_t secremain;  
 				uint16_t i = 0;    
+        static uint8_t tmp[FLASH_PAGE_SIZE];
         volatile FLASH_Status FLASHStatus = FLASH_COMPLETE;
         
         FLASH_UnlockBank1();
@@ -46,7 +46,7 @@ int FLASHCLASS::Flash_Write(uint32_t iAddress, uint8_t *buf, uint32_t iNbrToWrit
         if(iNumByteToWrite<=secremain) secremain = iNumByteToWrite;//不大于4096个字节
         
         while( 1 ) {
-            Flash_Read(secpos, tmp, FLASH_PAGE_SIZE);   //读出整个扇区
+            read(secpos, tmp, FLASH_PAGE_SIZE);   //读出整个扇区
             for(i=0;i<secremain;i++) {       //校验数据
 						 if(tmp[secoff+i]!=0XFF)break;       //需要擦除 
 						}
@@ -94,7 +94,7 @@ int FLASHCLASS::Flash_Write(uint32_t iAddress, uint8_t *buf, uint32_t iNbrToWrit
   * @retval if success return the number to write, without error
   *  
   */
-int FLASHCLASS::Flash_Read(uint32_t iAddress, uint8_t *buf, int32_t iNbrToRead) {
+int FLASHCLASS::read(uint32_t iAddress, uint8_t *buf, int32_t iNbrToRead) {
         int i = 0;
         while(i < iNbrToRead ) {
            *(buf + i) = *(__IO uint8_t*) iAddress++;
