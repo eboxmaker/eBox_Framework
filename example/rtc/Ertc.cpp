@@ -1,18 +1,18 @@
 
 #include "ebox.h"
 
-USART uart3(USART3,PB10,PB11);
+USART uart1(USART1,PA9,PA10);
 
 void rtcsecit()
 {
-	uart3.printf("%02d:%02d:%02d:\r\n",rtc.hour,rtc.min,rtc.sec);
+	uart1.printf("%02d:%02d:%02d:\r\n",rtc.hour,rtc.min,rtc.sec);
 }
 
 
 void setup()
 {
 	eBoxInit();
-	uart3.begin(9600);
+	uart1.begin(9600);
 	rtc.begin();
 	rtc.attachInterrupt(RTC_EVENT_SEC,rtcsecit);
 	rtc.interrupt(RTC_EVENT_SEC,ENABLE);

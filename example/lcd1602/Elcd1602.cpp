@@ -1,14 +1,14 @@
 
 #include "ebox.h"
 #include "lcd1602.h"
-USART uart3(USART3,PB10,PB11);
+USART uart1(USART1,PA9,PA10);
 
 LCD1602 lcd(PB12,PB13,PB14,PB15,PB0,PB1,PB2,PB3,PB4,PB5,PB6,PB7);
 
 void setup()
 {
 	eBoxInit();
-	uart3.begin(9600);
+	uart1.begin(9600);
 	lcd.begin();
 
 }

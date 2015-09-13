@@ -1,21 +1,21 @@
 
 #include "ebox.h"
 
-USART uart3(USART3,PB10,PB11);
+USART uart1(USART1,PA9,PA10);
 
 uint32_t xx;
 
-EXTIx ex(PA7,EXTI_Trigger_Falling);
+EXTIx ex(PA8,EXTI_Trigger_Falling);
 
 void exit()
 {
 	xx++;
-	uart3.printf("\r\nxx = %d",xx);
+	uart1.printf("\r\nxx = %d",xx);
 }
 void setup()
 {
 	eBoxInit();
-	uart3.begin(9600);
+	uart1.begin(9600);
 	ex.attachInterrupt(exit);
 }
 

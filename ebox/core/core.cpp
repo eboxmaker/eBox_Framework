@@ -123,10 +123,6 @@ void delayus(uint32_t us)
 							;
 		}
 } 
-void xx(const char* fmt,...)
-{
-while(1);
-}
 
 #if USE_OS
 

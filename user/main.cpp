@@ -1,48 +1,33 @@
 
 #include "ebox.h"
-#include "button.h"
 
 USART uart1(USART1,PA9,PA10);
 
-Button btn(PA8,1);
+void rtcsecit()
+{
+	uart1.printf("%02d:%02d:%02d:\r\n",rtc.hour,rtc.min,rtc.sec);
+}
+
 
 void setup()
 {
 	eBoxInit();
 	uart1.begin(9600);
-   btn.begin();
+	rtc.begin();
+	rtc.attachInterrupt(RTC_EVENT_SEC,rtcsecit);
+	rtc.interrupt(RTC_EVENT_SEC,ENABLE);
 }
-
 
 
 int main(void)
 {
 	setup();
-	PB8->mode(OUTPUT_PP);
-	PB9->mode(OUTPUT_PP);
-	PB10->mode(OUTPUT_PP);
 
-	
 	while(1)
 	{
-		btn.loop();
-		if(btn.click())
-		{
-			PB8->write(!PB8->read());
-			uart1.printf("\r\nclick event!");
-		}
-		if(btn.release())
-		{
-			PB9->write(!PB9->read());
-			uart1.printf("\r\nrelease event!");
-		}
-		if(btn.pressedFor(2000,2))
-		{
-			PB10->write(!PB10->read());
-			uart1.printf("\r\nlong press event!");
-		}
+		
+		delay_ms(1000);
 	}
-
 }
 
 
