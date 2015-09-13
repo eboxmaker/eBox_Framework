@@ -21,40 +21,31 @@ _74hc595::_74hc595(GPIO* dataPin, GPIO* sckPin,GPIO* rckPin)
 	_sckPin 	= sckPin;
 	_rckPin 	= rckPin;
 	
+
+}
+void _74hc595::begin()
+{
 	_dataPin->mode(OUTPUT_PP);
 	_sckPin->mode(OUTPUT_PP);
 	_rckPin->mode(OUTPUT_PP);
 }
-
-void _74hc595::rowData(uint8_t* Data,uint8_t dataLen,uint8_t bitOder)
+void _74hc595::write(uint8_t* Data,uint8_t dataLen,uint8_t bitOder)
 {
 	_rckPin->write(LOW);
 	for(int i = 0; i < dataLen; i++)
 	shiftOut(_dataPin,_sckPin,bitOder,Data[i]);
-}
 
-void _74hc595::rowData(uint8_t data,uint8_t bitOder)
+}
+void _74hc595::write(uint8_t data,uint8_t bitOder)
 {
 	_rckPin->write(LOW);
 	shiftOut(_dataPin,_sckPin,bitOder,data);
-}
 
-void _74hc595::Out()
+}
+void _74hc595::update()
 {
   _rckPin->write(HIGH);
+
 }
 
 
-void _74hc595::rowOut(uint8_t* Data,uint8_t dataLen,uint8_t bitOder)
-{
-	_rckPin->write(LOW);
-	for(int i = 0; i < dataLen; i++)
-	shiftOut(_dataPin,_sckPin,bitOder,Data[i]);
-  _rckPin->write(HIGH);
-}
-void _74hc595::rowOut(uint8_t data,uint8_t bitOder)
-{
-	_rckPin->write(LOW);
-	shiftOut(_dataPin,_sckPin,bitOder,data);
-  _rckPin->write(HIGH);
-}

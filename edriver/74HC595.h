@@ -13,21 +13,20 @@ Disclaimer
 This specification is preliminary and is subject to change at any time without notice. shentqlf@163.com assumes no responsibility for any errors contained herein.
 */
 
-#ifndef __BUTTON_H
-#define __BUTTON_H
+#ifndef  __74HC595_H
+#define  __74HC595_H
 
 #include "ebox.h" 
 
 class _74hc595
 {
     public:
-        _74hc595(GPIO* dataPin, GPIO* sckPin,GPIO* rckPin);
-				void rowData(uint8_t* Data,uint8_t dataLen,uint8_t bitOder);
-				void rowData(uint8_t data,uint8_t bitOder);
-				void Out();
-				void rowOut(uint8_t* Data,uint8_t dataLen,uint8_t bitOder);
-				void rowOut(uint8_t data,uint8_t bitOder);
-
+        
+			_74hc595(GPIO* dataPin, GPIO* sckPin,GPIO* rckPin);
+			void begin();
+			void write(uint8_t* Data,uint8_t dataLen,uint8_t bitOder);
+			void write(uint8_t data,uint8_t bitOder);
+			void update();
     
     private:
 			GPIO* _dataPin;
