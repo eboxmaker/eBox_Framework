@@ -32,18 +32,7 @@ LCD1602::LCD1602(GPIO* LEDPin,GPIO* ENPin,GPIO* RWPin,GPIO* RSPin,GPIO* DB0,GPIO
 		 d5		= DB5;
 		 d6		= DB6;
 		 d7		= DB7;
-	led->mode(OUTPUT_PP);
-	en->mode(OUTPUT_PP);
-	rw->mode(OUTPUT_PP);
-	rs->mode(OUTPUT_PP);
-	d0->mode(OUTPUT_PP);
-	d1->mode(OUTPUT_PP);
-	d2->mode(OUTPUT_PP);
-	d3->mode(OUTPUT_PP);
-	d4->mode(OUTPUT_PP);
-	d5->mode(OUTPUT_PP);
-	d6->mode(OUTPUT_PP);
-	d7->mode(OUTPUT_PP);
+
 	nDelay = 1;
 }
 
@@ -382,6 +371,19 @@ void LCD1602::backLight(u8 i)
 *********************************************************************/
 void LCD1602::begin(void)
 {   
+	led->mode(OUTPUT_PP);
+	en->mode(OUTPUT_PP);
+	rw->mode(OUTPUT_PP);
+	rs->mode(OUTPUT_PP);
+	d0->mode(OUTPUT_PP);
+	d1->mode(OUTPUT_PP);
+	d2->mode(OUTPUT_PP);
+	d3->mode(OUTPUT_PP);
+	d4->mode(OUTPUT_PP);
+	d5->mode(OUTPUT_PP);
+	d6->mode(OUTPUT_PP);
+	d7->mode(OUTPUT_PP);
+
 	wcmd(0x38);  //16*2显示，5*7点阵，8位数据
 	LCDdelay(100);
 	wcmd(0x38);  //16*2显示，5*7点阵，8位数据
