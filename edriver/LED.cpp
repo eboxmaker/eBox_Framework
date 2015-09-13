@@ -17,6 +17,10 @@ This specification is preliminary and is subject to change at any time without n
 
 uint8_t _LEDNum[]   ={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0x88,0x83,0xc6,0xa1,0x86,0x8e,0xff}; //共阳极
 uint8_t _LEDNum2[]  ={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0x88,0x83,0xc6,0xa1,0x86,0x8e,0xff};//共阴极
+void LED::begin()
+{
+	_74hc595::begin();
+}
 
 void LED::ShowTimeHMS(uint8_t hour,uint8_t min,uint8_t sec)
 {
@@ -31,7 +35,8 @@ void LED::ShowTimeHMS(uint8_t hour,uint8_t min,uint8_t sec)
 		_LEDBuf[i++] = _LEDNum[hour%10];
 		_LEDBuf[i++] = _LEDNum[hour/10];
 
-		rowOut(_LEDBuf,8,MSBFIRST);
+		write(_LEDBuf,8,MSBFIRST);
+		update();
 }
 void LED::ShowDateTime(uint16_t year,uint8_t month,uint8_t date)
 {
@@ -47,5 +52,6 @@ void LED::ShowDateTime(uint16_t year,uint8_t month,uint8_t date)
 		_LEDBuf[i++] = _LEDNum[year/1000];
 
 
-		rowOut(_LEDBuf,8,MSBFIRST);
+		write(_LEDBuf,8,MSBFIRST);
+	  update();
 }
