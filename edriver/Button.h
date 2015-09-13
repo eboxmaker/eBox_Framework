@@ -21,24 +21,24 @@ This specification is preliminary and is subject to change at any time without n
 class Button
 {
     public:
-        Button(void);
-        Button(GPIO* pin, uint8_t puEnable);
-			uint8_t read(void);
+      Button(GPIO* pin, uint8_t puEnable);
+			void begin();
+			uint8_t loop(void);
 			uint8_t release(void);
 			uint8_t click(void);
 			uint8_t pressedFor(uint32_t ms,uint8_t times);
     
     private:
         GPIO* _pin;           //arduino pin number
-        uint8_t _puEnable;      //internal pullup resistor enabled
+        uint8_t _pullUpEnable;      //internal pullup resistor enabled
         uint8_t _state;         //current button state
         uint8_t _lastState;     //previous button state
         uint8_t _changed;       //state changed since last read
         uint8_t _longpressflag;
-		uint8_t _longpresstimes;
+				uint8_t _longpresstimes;
         uint32_t _time;         //time of current state (all times are in ms)
         uint32_t _lastChange;   //time of last state change
-        uint32_t _dbTime;       //debounce time
+        //uint32_t _dbTime;       //debounce time
         
 };
 #endif

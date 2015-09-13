@@ -1,45 +1,46 @@
 
 #include "ebox.h"
-#include "dataflash.h"
-
+#include "button.h"
 
 USART uart1(USART1,PA9,PA10);
 
-FLASHCLASS flash;
+Button btn(PA8,1);
 
 void setup()
 {
 	eBoxInit();
 	uart1.begin(9600);
-
-   
+   btn.begin();
 }
 
-static u8 rbuf[10];
-static u8 wbuf[10];
-int i,j;
+
 
 int main(void)
 {
 	setup();
 	PB8->mode(OUTPUT_PP);
-	for(i=0;i<10;i++)
-		wbuf[i]=i;
+	PB9->mode(OUTPUT_PP);
+	PB10->mode(OUTPUT_PP);
+
 	
 	while(1)
 	{
-		
-		
-		wbuf[0]=(i++)%10;
-		flash.write(0x08004000,wbuf,10);
-		flash.read(0x08004000,rbuf,10);
-
-		PB8->write(!PB8->read());
-		uart1.printf("running£¡\r\n");
-		for(int i=0;i<10;i++)
-			uart1.printf("%d",rbuf[i]);
-		uart1.printf("\r\n");
-		delay_ms(500);
+		btn.loop();
+		if(btn.click())
+		{
+			PB8->write(!PB8->read());
+			uart1.printf("\r\nclick event!");
+		}
+		if(btn.release())
+		{
+			PB9->write(!PB9->read());
+			uart1.printf("\r\nrelease event!");
+		}
+		if(btn.pressedFor(2000,2))
+		{
+			PB10->write(!PB10->read());
+			uart1.printf("\r\nlong press event!");
+		}
 	}
 
 }

@@ -14,9 +14,9 @@ This specification is preliminary and is subject to change at any time without n
 */
 
 #include "encoder.h"
-#include "button.h"
 
-#define PULLUP false
+
+
 
 
 Encoder::Encoder(GPIO* Apin,GPIO* Bpin)

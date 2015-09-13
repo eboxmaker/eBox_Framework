@@ -622,6 +622,11 @@
               <FileType>8</FileType>
               <FilePath>..\ebox\Peripherals\rtc.cpp</FilePath>
             </File>
+            <File>
+              <FileName>dataflash.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\Peripherals\dataflash.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -676,11 +681,6 @@
               <FileName>mmc_sd.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\edriver\mmc_sd.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>dataflash.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\edriver\dataflash.cpp</FilePath>
             </File>
           </Files>
         </Group>

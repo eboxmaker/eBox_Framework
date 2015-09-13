@@ -17,21 +17,21 @@ This specification is preliminary and is subject to change at any time without n
 /*----------------------------------------------------------------------*
 
  *----------------------------------------------------------------------*/
-Button::Button(void)
-{
-
-}
-Button::Button(GPIO* pin, uint8_t puEnable)
+Button::Button(GPIO* pin, uint8_t pullUpEnable)
 {
     _pin = pin;
-    _puEnable = puEnable;
+    _pullUpEnable = pullUpEnable;
+}
+
+void Button::begin()
+{
     _pin->mode(INPUT);
-    if (_puEnable != 0){
+    if (_pullUpEnable != 0){
         _pin->write(HIGH);       //enable pullup resistor
 		 }
         
     _state = _pin->read();
-    if (_puEnable == 0){
+    if (_pullUpEnable == 0){
          _state = !_state;
 	 }
 
@@ -40,15 +40,14 @@ Button::Button(GPIO* pin, uint8_t puEnable)
     _changed = 0;
     _lastChange = _time;
 }
-
-uint8_t Button::read(void)
+uint8_t Button::loop(void)
 {
     static uint32_t ms;
     static uint8_t pinVal;
 
 	ms = millis();
 	pinVal = _pin->read();
-	if(_puEnable == 0) pinVal = !pinVal;
+	if(_pullUpEnable == 0) pinVal = !pinVal;
 
 	_lastState = _state;
 	_state = pinVal;
