@@ -1,14 +1,14 @@
 
 #include "ebox.h"
 
-USART uart3(USART3,PB10,PB11);
+USART uart1(USART1,PA9,PA10);
 
 PWM pwm1(PA7);
 
 void setup()
 {
 	eBoxInit();
-	uart3.begin(9600);
+	uart1.begin(9600);
 
 	pwm1.setDuty(500);
 
@@ -20,7 +20,7 @@ int main(void)
 	
 	while(1)
 	{
-		uart3.printf("\r\nruning !");
+		uart1.printf("\r\nruning !");
 		delay_ms(1000);
 	}
 
