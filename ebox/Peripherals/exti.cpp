@@ -28,16 +28,16 @@ callbackFun extiCallbackTable[EXTI_LINE_NUM];
 EXTIx::EXTIx(GPIO* EXTIPin, EXTITrigger_TypeDef trigger)
 {
 
+
+	extiPin = EXTIPin;
+	_trigger = trigger;
 	
-//	_pin = pin;
-//	_PortSource = pinToExti[_pin].portSource;
-//	_PinSource  = pinToExti[_pin].pinSource;
-//	_ExtiLine		= pinToExti[_pin].extiLine;
-//	_irq				= pinToExti[_pin].irqch;
-
-	EXTIPin->mode(INPUT);
-	initInfo(EXTIPin);
-
+}
+void EXTIx::begin()
+{
+	initInfo(extiPin);
+	
+	extiPin->mode(INPUT);
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
 	
@@ -46,23 +46,27 @@ EXTIx::EXTIx(GPIO* EXTIPin, EXTITrigger_TypeDef trigger)
 	GPIO_EXTILineConfig(PortSource, PinSource); 
   EXTI_InitStructure.EXTI_Line = ExtiLine;
   EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-  EXTI_InitStructure.EXTI_Trigger = trigger; //下降沿中断
+  EXTI_InitStructure.EXTI_Trigger = _trigger; //下降沿中断
   EXTI_InitStructure.EXTI_LineCmd = ENABLE;
   EXTI_Init(&EXTI_InitStructure); 
-	
-	
+
+}
+void EXTIx::interrupt(FunctionalState x)
+{
 	 NVIC_InitTypeDef NVIC_InitStructure;
   
   /* Configure one bit for preemption priority */
-  NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);//使用全局控制值
+//  NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);//使用全局控制值
   
   /* 配置P[A|B|C|D|E]0为中断源 */
   NVIC_InitStructure.NVIC_IRQChannel = irq;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = x;
   NVIC_Init(&NVIC_InitStructure);
+
 }
+
 void EXTIx::initInfo(GPIO* EXTIPin)
 {
 	switch((uint32_t)EXTIPin->port)
