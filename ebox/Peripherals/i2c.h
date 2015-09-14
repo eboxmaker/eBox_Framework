@@ -47,6 +47,8 @@ class I2C
 
 	private:
 		I2C_TypeDef* _I2Cx;
+		GPIO* _SDAPin;
+		GPIO* _SCLPin;
 		uint32_t _speed;
 };
 
