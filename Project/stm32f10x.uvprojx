@@ -623,9 +623,9 @@
               <FilePath>..\ebox\Peripherals\rtc.cpp</FilePath>
             </File>
             <File>
-              <FileName>dataflash.cpp</FileName>
+              <FileName>iflash.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\ebox\Peripherals\dataflash.cpp</FilePath>
+              <FilePath>..\ebox\Peripherals\iflash.cpp</FilePath>
             </File>
           </Files>
         </Group>

@@ -29,7 +29,7 @@ This specification is preliminary and is subject to change at any time without n
 	5.暂时不支持引脚的remap
 */
 //用户配置//////////////
-#define USE_DMA
+#define USE_DMA 1
 #define UART_MAX_SEND_BUF 128 
 
 class USART

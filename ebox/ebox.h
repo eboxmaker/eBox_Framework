@@ -28,7 +28,7 @@ This specification is preliminary and is subject to change at any time without n
 #include "pwm.h"
 #include "i2c.h"
 #include "spi.h"
-#include "uartx.h"
+#include "uart.h"
 #include "timerone.h"
 #include "rtc.h"
 
