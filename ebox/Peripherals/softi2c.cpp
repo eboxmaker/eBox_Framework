@@ -28,7 +28,8 @@ void SOFTI2C::i2cBegin(uint32_t speed)
 }
 int8_t SOFTI2C::setSpeed(uint32_t speed)
 {
-	switch(speed)
+	_speed = speed;
+	switch(_speed)
 	{
 		case 400000:
 			_delayTimes = 1;
@@ -43,10 +44,14 @@ int8_t SOFTI2C::setSpeed(uint32_t speed)
 			_delayTimes = 8;
 			break;
 		default:
-			_delayTimes = speed;
+			_delayTimes = _speed;
 			break;
 	}
 	return 0;
+}
+uint32_t SOFTI2C::readConfig()
+{
+	return _speed;
 }
 void SOFTI2C::start()
 {
