@@ -1,5 +1,5 @@
-#ifndef   __DATAFLASH_H__
-#define   __DATAFLASH_H__
+#ifndef   __IFLASH_H__
+#define   __IFLASH_H__
 
 #ifdef __cplusplus
  extern "C" {

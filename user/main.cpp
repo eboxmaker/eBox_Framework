@@ -2,10 +2,11 @@
 #include "ebox.h"
 
 USART uart1(USART1,PA9,PA10);
+USART uart3(USART3,PB10,PB11);
 
 void rtcsecit()
 {
-	uart1.printf("%02d:%02d:%02d:\r\n",rtc.hour,rtc.min,rtc.sec);
+//	uart3.printf("%02d:%02d:%02d:\r\n",rtc.hour,rtc.min,rtc.sec);
 }
 
 
@@ -25,6 +26,12 @@ int main(void)
 
 	while(1)
 	{
+		uart1.putString("123\r\n",5);
+		uart1.putString("123\r\n",5);
+		uart1.printf("====\r\n");
+		uart1.printf("====\r\n");
+		uart1.printfln("----\r\n",6);
+		uart1.printfln("----\r\n",6);
 		
 		delay_ms(1000);
 	}
