@@ -49,6 +49,8 @@ void SPIClASS::config(SPICONFIG* spiConfig)
 	SPI_InitTypeDef SPI_InitStructure;
 
 	currentDevNum = spiConfig->devNum;
+	
+	
 	SPI_Cmd(spi,DISABLE);
 	
 	SPI_I2S_DeInit(spi);
