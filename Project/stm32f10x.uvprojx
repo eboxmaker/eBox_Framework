@@ -573,9 +573,9 @@
               <FilePath>..\ebox\core\analog.cpp</FilePath>
             </File>
             <File>
-              <FileName>uartx.cpp</FileName>
+              <FileName>uart.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\ebox\Peripherals\uartx.cpp</FilePath>
+              <FilePath>..\ebox\Peripherals\uart.cpp</FilePath>
             </File>
             <File>
               <FileName>i2c.cpp</FileName>

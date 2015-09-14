@@ -48,6 +48,7 @@ class USART
 
 			void printf(const char* fmt,...);		
 			void printfln(const char *str,uint16_t length);
+			void waitBusy();
 	 
 	 private:
 		USART_TypeDef* 				_USARTx;

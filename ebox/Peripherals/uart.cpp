@@ -243,6 +243,10 @@ void USART::printf(const char* fmt,...)
 	
 }
 
+void USART::waitBusy()
+{
+	while(USART_GetFlagStatus(_USARTx, USART_FLAG_TC) == RESET);
+}
 
 
 extern "C"{

@@ -671,8 +671,8 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ebox\Peripherals\uartx.cpp</PathWithFileName>
-      <FilenameWithoutPath>uartx.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\ebox\Peripherals\uart.cpp</PathWithFileName>
+      <FilenameWithoutPath>uart.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
