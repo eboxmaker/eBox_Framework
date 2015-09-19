@@ -4,7 +4,7 @@ author : shentq
 version: V1.0
 date   : 2015/7/5
 
-Copyright (c) 2015, eBox by shentq. All Rights Reserved.
+Copyright 2015 shentq. All Rights Reserved.
 
 Copyright Notice
 No GPArt of this software may be used for any commercial activities by any form or means, without the prior written consent of shentqlf@163.com.
@@ -31,6 +31,7 @@ This specification is preliminary and is subject to change at any time without n
 #include "uart.h"
 #include "timerone.h"
 #include "rtc.h"
+#include "iflash.h"
 
 #include "stdio.h"
 

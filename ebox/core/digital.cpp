@@ -5,7 +5,7 @@ version: V1.0
 date   : 2015/7/5
 brief  : analog read function
 
-Copyright (c) 2015, eBox by shentq. All Rights Reserved.
+Copyright 2015 shentq. All Rights Reserved.
 
 Copyright Notice
 No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentq.
