@@ -633,6 +633,11 @@
           <GroupName>edriver</GroupName>
           <Files>
             <File>
+              <FileName>gpio.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\gpio.cpp</FilePath>
+            </File>
+            <File>
               <FileName>74HC595.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\edriver\74HC595.cpp</FilePath>
@@ -727,16 +732,6 @@
         <Group>
           <GroupName>user</GroupName>
           <Files>
-            <File>
-              <FileName>ioconfig.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ebox\ioconfig.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_it.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\stm32f10x_it.c</FilePath>
-            </File>
             <File>
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
