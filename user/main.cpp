@@ -3,95 +3,51 @@
 #include "mmc_sd.h"
 #include "ff.h"
 
-
-
 extern void attachSDCardToFat(SD* sd);
 
 USART uart1(USART1,PA9,PA10);
 
 static FATFS fs;            // Work area (file system object) for logical drive
 FATFS *fss;
-DIR DirObject;       //目录结构
-FIL fsrc;            // 文件结构
-
 FRESULT res;
-u8 ret;
+DIR DirObject;       //目录结构
+DWORD free_clust;//空簇，空扇区大小
+
 	
 SD sd(PB12,SPI2,PB13,PB14,PB15);
 
-u8 buf[100];
-u8 readBuf[6] ;
-u32 bw=0;
-u32 br=0;
 
-void fileOpt()
+u8 ret;
+
+u8 buf[1024];
+u32 rl;
+float x;
+void getSDCardInfo()
 {
-	for(int i=0;i<100;i++)
-		buf[i] = '1';
-	res = f_open(&fsrc,"0:12345.txt",FA_WRITE | FA_READ);//没有这个文件则创建该文件
+	ret = sd.getCID(buf);
+	uart1.printf("\r\n========================");
+	uart1.printf("\r\nget CID Info,ret = %d",ret);
 	uart1.printf("\r\n");
+	uart1.printf((const char*)buf);
 
+	rl = sd.getCapacity();
+	uart1.printf("\r\n========================");
+	uart1.printf("\r\n容量 = %d",rl/1024/1024);	
+
+	
+	res=f_getfree("/",&free_clust,&fss);
 	if(res==FR_OK)
 	{
-		uart1.printf("创建文件或打开文件成功  O(∩_∩)O\r\n");
-		uart1.printf("该文件属性:%d\r\n",fsrc.flag);
-		uart1.printf("该文件大小：%d\r\n",fsrc.fsize);
-		uart1.printf("该文件读写开始处：%d\r\n",fsrc.fptr);
-//		uart1.printf("该文件开始簇号:%d\r\n",fsrc.org_clust);
-//		uart1.printf("该文件当前簇号：%d\r\n",fsrc.curr_clust);
-		uart1.printf("该文件当前扇区号:%d\r\n",fsrc.dsect);
-
-		f_lseek(&fsrc,0);
-		do
-		{ 
-		 res = f_write(&fsrc, buf, sizeof(buf),&bw); 
-		if(res) 
-			 { 
-				 uart1.printf("write error : %d\r\n",res); 
-				 break; 
-			 }  
-		uart1.printf("write ok!\r\n"); 
-		}  
-			while (bw < sizeof(buf));  //  判断是否写完(bw > 100，表示写入完成)
+		uart1.printf("\r\n该分区空闲扇区数为：%d",(fss->free_clust)*(fss->csize));
+		uart1.printf("\r\n该分区大小为：%dM",(fss->free_clust)*(fss->csize)/2048);
+		uart1.printf("\r\n该分区空簇数为：%d",free_clust);
+		uart1.printf("\r\n该分区空扇区数为：%d",free_clust*(fss->csize));
 	}
-	else if(res==FR_EXIST)
-		uart1.printf("该文件已存在\r\n");
 	else
-		uart1.printf("创建文件或打开文件失败~~~~(>_<)~~~~ %d\r\n",res);
-	f_close(&fsrc);//关闭文件
-	
-	/////////////////////////////////////////////////////////////////////////////////////
-	u32 readsize;
-	u32 buflen;
-	buflen = sizeof(readBuf);
-	res = f_open(&fsrc,"0:12345.txt", FA_READ);//没有这个文件则创建该文件
-	if(res==FR_OK)
-	{
-		uart1.printf("该文件大小：%d\r\n",fsrc.fsize);	
-	}
-	readsize = 0;
-	do
-	{
-		res=f_read(&fsrc,readBuf,buflen,&br);
-		if(res==FR_OK)
-		{
-//			 uart1.printf("成功读取数据：%dBytes\r\n",br);
-//			 uart1.printf("data:%s\r\n",readBuf);
-			 uart1.printfln((const char*)readBuf,sizeof(readBuf));
-		}
-		else				
-			{uart1.printf("读取数据失败！\r\n");}
-		readsize+=buflen;
-		f_lseek(&fsrc,readsize);
-	
-	}while(br==buflen);
-	uart1.printf("文件读取到末尾！\r\n");
-  f_close(&fsrc);//关闭文件
-	f_mount(&fs,"0:",0);
-
+		uart1.printf("\r\n获取分区空簇失败,res = %d",res);
+	uart1.printf("\r\n OVER !");
 
 	
-
 }
 void setup()
 {
@@ -101,20 +57,19 @@ void setup()
 	if(!ret)
 		uart1.printf("\r\nsdcard init ok!");
 	attachSDCardToFat(&sd);
-
+	
 	res = f_mount(&fs,"0:",1);
-uart1.printf("res = %d",res);
+	uart1.printf("\r\nres = %d",res);
    
 }
 u32 count;
 int main(void)
 {
 	setup();
-	fileOpt();
+	getSDCardInfo();
 	while(1)
 	{
 		
-	uart1.printf("\r\nrunning！");
 		delay_ms(1000);
 	}
 

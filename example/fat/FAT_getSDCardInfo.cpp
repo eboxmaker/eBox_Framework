@@ -1,10 +1,8 @@
 
 #include "ebox.h"
-#include "w5500.h"
 #include "mmc_sd.h"
 #include "ff.h"
-#include "wrapperdiskio.h"
-#include "udp.h"
+
 extern void attachSDCardToFat(SD* sd);
 
 USART uart1(USART1,PA9,PA10);
@@ -18,7 +16,6 @@ DWORD free_clust;//空簇，空扇区大小
 	
 SD sd(PB12,SPI2,PB13,PB14,PB15);
 
-UDP udp1;
 
 u8 ret;
 
@@ -39,11 +36,10 @@ void getSDCardInfo()
 
 	
 	res=f_getfree("/",&free_clust,&fss);
-	uart1.printf("\r\n该分区所有扇区数为：%d",(fss->max_clust-2)*(fss->csize));
 	if(res==FR_OK)
 	{
-		uart1.printf("\r\n该分区所有扇区数为：%d",(fss->max_clust-2)*(fss->csize));
-		uart1.printf("\r\n该分区大小为：%dM",(fss->max_clust-2)*(fss->csize)/2048);
+		uart1.printf("\r\n该分区空闲扇区数为：%d",(fss->free_clust)*(fss->csize));
+		uart1.printf("\r\n该分区大小为：%dM",(fss->free_clust)*(fss->csize)/2048);
 		uart1.printf("\r\n该分区空簇数为：%d",free_clust);
 		uart1.printf("\r\n该分区空扇区数为：%d",free_clust*(fss->csize));
 	}
@@ -62,7 +58,8 @@ void setup()
 		uart1.printf("\r\nsdcard init ok!");
 	attachSDCardToFat(&sd);
 	
-	f_mount(0, &fs);
+	res = f_mount(&fs,"0:",1);
+	uart1.printf("\r\nres = %d",res);
    
 }
 u32 count;
