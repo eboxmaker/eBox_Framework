@@ -1,24 +1,22 @@
-/*-----------------------------------------------------------------------
-/  Low level disk interface modlue include file  R0.07   (C)ChaN, 2009
+/*-----------------------------------------------------------------------/
+/  Low level disk interface modlue include file   (C)ChaN, 2014          /
 /-----------------------------------------------------------------------*/
-#ifdef __cplusplus
-extern "C"{
-#endif
-#ifndef _DISKIO
 
-#define _READONLY	0	/* 1: Read-only mode */
-#define _USE_IOCTL	1
+#ifndef _DISKIO_DEFINED
+#define _DISKIO_DEFINED
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define _USE_WRITE	1	/* 1: Enable disk_write function */
+#define _USE_IOCTL	1	/* 1: Enable disk_ioctl fucntion */
 
 #include "integer.h"
-#include "stm32f10x.h"
 
-
-#ifndef __cplusplus
-typedef enum {TRUE = 0, FALSE = !TRUE} bool;
-#endif
 
 /* Status of Disk Functions */
-typedef BYTE  DSTATUS;
+typedef BYTE	DSTATUS;
 
 /* Results of Disk Functions */
 typedef enum {
@@ -34,35 +32,12 @@ typedef enum {
 /* Prototypes for disk control functions */
 
 
-bool assign_drives (int argc, char *argv[]);
-DSTATUS disk_initialize (BYTE);
-DSTATUS disk_status (BYTE);
-DRESULT disk_read (BYTE, BYTE*, DWORD, BYTE);
-#if	_READONLY == 0
-DRESULT disk_write (BYTE, const BYTE*, DWORD, BYTE);
-#endif
-DRESULT disk_ioctl (BYTE, BYTE, void*);
+DSTATUS disk_initialize (BYTE pdrv);
+DSTATUS disk_status (BYTE pdrv);
+DRESULT disk_read (BYTE pdrv, BYTE* buff, DWORD sector, UINT count);
+DRESULT disk_write (BYTE pdrv, const BYTE* buff, DWORD sector, UINT count);
+DRESULT disk_ioctl (BYTE pdrv, BYTE cmd, void* buff);
 
-/*----------Low Layer I/O-------------*/
-DSTATUS USB_disk_initialize(void);
-DSTATUS ATA_disk_initialize(void);
-DSTATUS SD_disk_initialize(void);
-
-DSTATUS ATA_disk_status(void);
-DSTATUS SD_disk_status(void);
-DSTATUS USB_disk_status(void);
-
-DRESULT ATA_disk_read(u32 sector, u8 *buff, u8 count);
-DRESULT MMC_disk_read(u32 sector, u8 *buff, u8 count);
-DRESULT USB_disk_read(u32 sector, u8 *buff, u8 count);
-
-DRESULT ATA_disk_write(u32 sector, const u8 *buff, u8 count);
-DRESULT MMC_disk_write(u32 sector, const u8 *buff, u8 count);
-DRESULT USB_disk_write(u32 sector, const u8 *buff, u8 count);
-
-DRESULT ATA_disk_ioctl(BYTE ctrl, void *buff);
-DRESULT MMC_disk_ioctl(BYTE ctrl, void *buff);
-DRESULT USB_disk_ioctl(BYTE ctrl, void *buff);
 
 /* Disk Status Bits (DSTATUS) */
 
@@ -71,30 +46,35 @@ DRESULT USB_disk_ioctl(BYTE ctrl, void *buff);
 #define STA_PROTECT		0x04	/* Write protected */
 
 
-/* Command code for disk_ioctrl() */
+/* Command code for disk_ioctrl fucntion */
 
-/* Generic command */
-#define CTRL_SYNC		0	/* Mandatory for write functions */
-#define GET_SECTOR_COUNT	1	/* Mandatory for only f_mkfs() */
-#define GET_SECTOR_SIZE		2
-#define GET_BLOCK_SIZE		3	/* Mandatory for only f_mkfs() */
-#define CTRL_POWER		4
-#define CTRL_LOCK		5
-#define CTRL_EJECT		6
-/* MMC/SDC command */
-#define MMC_GET_TYPE		10
-#define MMC_GET_CSD		11
-#define MMC_GET_CID	        12
-#define MMC_GET_OCR		13
-#define MMC_GET_SDSTAT		14
-/* ATA/CF command */
-#define ATA_GET_REV		20
-#define ATA_GET_MODEL		21
-#define ATA_GET_SN		22
+/* Generic command (Used by FatFs) */
+#define CTRL_SYNC			0	/* Complete pending write process (needed at _FS_READONLY == 0) */
+#define GET_SECTOR_COUNT	1	/* Get media size (needed at _USE_MKFS == 1) */
+#define GET_SECTOR_SIZE		2	/* Get sector size (needed at _MAX_SS != _MIN_SS) */
+#define GET_BLOCK_SIZE		3	/* Get erase block size (needed at _USE_MKFS == 1) */
+#define CTRL_TRIM			4	/* Inform device that the data on the block of sectors is no longer used (needed at _USE_TRIM == 1) */
 
+/* Generic command (Not used by FatFs) */
+#define CTRL_POWER			5	/* Get/Set power status */
+#define CTRL_LOCK			6	/* Lock/Unlock media removal */
+#define CTRL_EJECT			7	/* Eject media */
+#define CTRL_FORMAT			8	/* Create physical format on the media */
 
-#define _DISKIO
-#endif
+/* MMC/SDC specific ioctl command */
+#define MMC_GET_TYPE		10	/* Get card type */
+#define MMC_GET_CSD			11	/* Get CSD */
+#define MMC_GET_CID			12	/* Get CID */
+#define MMC_GET_OCR			13	/* Get OCR */
+#define MMC_GET_SDSTAT		14	/* Get SD status */
+
+/* ATA/CF specific ioctl command */
+#define ATA_GET_REV			20	/* Get F/W revision */
+#define ATA_GET_MODEL		21	/* Get model name */
+#define ATA_GET_SN			22	/* Get serial number */
+
 #ifdef __cplusplus
 }
+#endif
+
 #endif

@@ -3,23 +3,31 @@
 #include "wrapperdiskio.h"
 SD* sdCard;
 
+int	MMC_disk_status(void)
+{
+	return 0;
+};
+
 void attachSDCardToFat(SD* sd)
 {
 	sdCard = sd;
 }
 
-u8 SD_Init(void)
+u8 MMC_disk_initialize(void)
 {
 	return(sdCard->init());
 }
 
-u8 SD_ReadMultiBlock(u32 sector, u8 *buffer, u8 count)
+
+u8 MMC_disk_read( u8 *buffer, u32 sector, u8 count)
 {
 	return(sdCard->readMultiBlock(sector,buffer,count));
 }
-u8 SD_WriteMultiBlock(u32 sector,  const u8 *data, u8 count)
+
+u8 MMC_disk_write( const u8 *data, u32 sector, u8 count)
 {
 	return(sdCard->writeMultiBlock(sector,data,count));
 }
+
 
 
