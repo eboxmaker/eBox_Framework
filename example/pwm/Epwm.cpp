@@ -9,9 +9,7 @@ void setup()
 {
 	eBoxInit();
 	uart1.begin(9600);
-
 	pwm1.setDuty(500);
-
 }
 
 int main(void)
@@ -23,8 +21,6 @@ int main(void)
 		uart1.printf("\r\nruning !");
 		delay_ms(1000);
 	}
-
-
 }
 
 

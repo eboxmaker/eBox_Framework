@@ -36,7 +36,7 @@ int main(void)
 			PB9->write(!PB9->read());
 			uart1.printf("\r\nrelease event!");
 		}
-		if(btn.pressedFor(2000,2))
+		if(btn.pressedFor(2000,5))//长按两秒，执行5次
 		{
 			PB10->write(!PB10->read());
 			uart1.printf("\r\nlong press event!");
