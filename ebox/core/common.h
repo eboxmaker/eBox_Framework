@@ -88,11 +88,11 @@ class GPIO
 #define digitalRead(pin) 			pin->read()
 #define pinMode(pin,val)			pin->mode(val)
 
-uint16_t analogRead(GPIO* pin);	
-uint16_t 	analogReadToVoltage(GPIO* pin); 
+uint16_t	analogRead(GPIO* pin);	
+uint16_t	analogReadToVoltage(GPIO* pin); 
 
-void shiftOut(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder, uint8_t val);
-uint8_t shiftIn(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder);
+void			shiftOut(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder, uint8_t val);
+uint8_t		shiftIn(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder);
 
 
 #ifdef __cplusplus
