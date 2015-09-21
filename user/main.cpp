@@ -1,53 +1,120 @@
 
 #include "ebox.h"
+#include "mmc_sd.h"
+#include "ff.h"
+
+
+
+extern void attachSDCardToFat(SD* sd);
 
 USART uart1(USART1,PA9,PA10);
 
+static FATFS fs;            // Work area (file system object) for logical drive
+FATFS *fss;
+DIR DirObject;       //目录结构
+FIL fsrc;            // 文件结构
+
+FRESULT res;
+u8 ret;
+	
+SD sd(PB12,SPI2,PB13,PB14,PB15);
+
+u8 buf[100];
+u8 readBuf[6] ;
+u32 bw=0;
+u32 br=0;
+
+void fileOpt()
+{
+	for(int i=0;i<100;i++)
+		buf[i] = '1';
+	res = f_open(&fsrc,"0:12345.txt",FA_WRITE | FA_READ);//没有这个文件则创建该文件
+	uart1.printf("\r\n");
+
+	if(res==FR_OK)
+	{
+		uart1.printf("创建文件或打开文件成功  O(∩_∩)O\r\n");
+		uart1.printf("该文件属性:%d\r\n",fsrc.flag);
+		uart1.printf("该文件大小：%d\r\n",fsrc.fsize);
+		uart1.printf("该文件读写开始处：%d\r\n",fsrc.fptr);
+//		uart1.printf("该文件开始簇号:%d\r\n",fsrc.org_clust);
+//		uart1.printf("该文件当前簇号：%d\r\n",fsrc.curr_clust);
+		uart1.printf("该文件当前扇区号:%d\r\n",fsrc.dsect);
+
+		f_lseek(&fsrc,0);
+		do
+		{ 
+		 res = f_write(&fsrc, buf, sizeof(buf),&bw); 
+		if(res) 
+			 { 
+				 uart1.printf("write error : %d\r\n",res); 
+				 break; 
+			 }  
+		uart1.printf("write ok!\r\n"); 
+		}  
+			while (bw < sizeof(buf));  //  判断是否写完(bw > 100，表示写入完成)
+	}
+	else if(res==FR_EXIST)
+		uart1.printf("该文件已存在\r\n");
+	else
+		uart1.printf("创建文件或打开文件失败~~~~(>_<)~~~~ %d\r\n",res);
+	f_close(&fsrc);//关闭文件
+	
+	/////////////////////////////////////////////////////////////////////////////////////
+	u32 readsize;
+	u32 buflen;
+	buflen = sizeof(readBuf);
+	res = f_open(&fsrc,"0:12345.txt", FA_READ);//没有这个文件则创建该文件
+	if(res==FR_OK)
+	{
+		uart1.printf("该文件大小：%d\r\n",fsrc.fsize);	
+	}
+	readsize = 0;
+	do
+	{
+		res=f_read(&fsrc,readBuf,buflen,&br);
+		if(res==FR_OK)
+		{
+//			 uart1.printf("成功读取数据：%dBytes\r\n",br);
+//			 uart1.printf("data:%s\r\n",readBuf);
+			 uart1.printfln((const char*)readBuf,sizeof(readBuf));
+		}
+		else				
+			{uart1.printf("读取数据失败！\r\n");}
+		readsize+=buflen;
+		f_lseek(&fsrc,readsize);
+	
+	}while(br==buflen);
+	uart1.printf("文件读取到末尾！\r\n");
+  f_close(&fsrc);//关闭文件
+	f_mount(&fs,"0:",0);
 
 
-#include "mpu6050.h"
+	
 
-
-MPU6050 mpu(PB10,PB11);
-
+}
 void setup()
 {
 	eBoxInit();
 	uart1.begin(9600);
+	ret = sd.begin();
+	if(!ret)
+		uart1.printf("\r\nsdcard init ok!");
+	attachSDCardToFat(&sd);
 
-	mpu.begin(700000);
-
-	
+	res = f_mount(&fs,"0:",1);
+uart1.printf("res = %d",res);
+   
 }
-
-int16_t tmp[7];
-int16_t x,y,z;
-uint8_t id;
+u32 count;
 int main(void)
 {
 	setup();
-	
+	fileOpt();
 	while(1)
 	{
-	  mpu.getID(&id);
-		mpu.getData(ACCEL_XOUT_H,tmp,7);
-		x = mpu.getData(ACCEL_XOUT_H);
-		y = mpu.getData(ACCEL_YOUT_H);
-		z = mpu.getData(ACCEL_ZOUT_H);
-		delay_ms(10);
-		uart1.printf("\r\nid = %d",id);
-		uart1.printf("\r\naccx = %d",tmp[0]);
-		uart1.printf("\r\naccy = %d",tmp[1]);
-		uart1.printf("\r\naccz = %d",tmp[2]);
-		uart1.printf("\r\ntemp = %d",tmp[3]);
-		uart1.printf("\r\ngyrox = %d",tmp[4]);
-		uart1.printf("\r\ngyroy = %d",tmp[5]);
-		uart1.printf("\r\ngyroz = %d",tmp[6]);
-		uart1.printf("\r\n==========");
-		uart1.printf("\r\nX = %d",x);
-		uart1.printf("\r\nY = %d",y);
-		uart1.printf("\r\nZ = %d",z);
-		uart1.printf("\r\n==========");
+		
+	uart1.printf("\r\nrunning！");
 		delay_ms(1000);
 	}
 

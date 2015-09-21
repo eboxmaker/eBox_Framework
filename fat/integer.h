@@ -2,36 +2,32 @@
 /* Integer type definitions for FatFs module */
 /*-------------------------------------------*/
 
-#ifndef _INTEGER
+#ifndef _FF_INTEGER
+#define _FF_INTEGER
 
-#if 0
+#ifdef _WIN32	/* Development platform */
+
 #include <windows.h>
-#else
+#include <tchar.h>
 
-/* These types must be 16-bit, 32-bit or larger integer */
-typedef int				INT;
-typedef unsigned int	UINT;
+#else			/* Embedded platform */
 
-/* These types must be 8-bit integer */
-typedef signed char		CHAR;
-typedef unsigned char	UCHAR;
+/* This type MUST be 8-bit */
 typedef unsigned char	BYTE;
 
-/* These types must be 16-bit integer */
+/* These types MUST be 16-bit */
 typedef short			SHORT;
-typedef unsigned short	USHORT;
 typedef unsigned short	WORD;
 typedef unsigned short	WCHAR;
 
-/* These types must be 32-bit integer */
-typedef long			LONG;
-typedef unsigned long	ULONG;
-typedef unsigned long	DWORD;
+/* These types MUST be 16-bit or 32-bit */
+typedef int				INT;
+typedef unsigned int	UINT;
 
-/* Boolean type */
-//typedef enum { FALSE = 0, TRUE } BOOL;
+/* These types MUST be 32-bit */
+typedef long			LONG;
+typedef unsigned long	DWORD;
 
 #endif
 
-#define _INTEGER
 #endif

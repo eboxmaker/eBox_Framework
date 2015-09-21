@@ -1,199 +1,243 @@
 /*-----------------------------------------------------------------------*/
-/* Low level disk I/O module skeleton for FatFs     (C)ChaN, 2007        */
+/* Low level disk I/O module skeleton for FatFs     (C)ChaN, 2014        */
 /*-----------------------------------------------------------------------*/
-/* This is a stub disk I/O module that acts as front end of the existing */
-/* disk I/O modules and attach it to FatFs module with common interface. */
+/* If a working storage control module is available, it should be        */
+/* attached to the FatFs via a glue function rather than modifying it.   */
+/* This is an example of glue functions to attach various exsisting      */
+/* storage control modules to the FatFs module with a defined API.       */
 /*-----------------------------------------------------------------------*/
 
-#include "diskio.h"
+#include "diskio.h"		/* FatFs lower layer API */
 #include "stm32f10x.h"
 #include "wrapperdiskio.h"
 
-//extern u8 SD_Init();
 
-/*-----------------------------------------------------------------------*/
-/* Correspondence between physical drive number and physical drive.      */
+/* Definitions of physical drive number for each drive */
+//#define ATA		0	/* Example: Map ATA harddisk to physical drive 0 */
+//#define MMC		1	/* Example: Map MMC/SD card to physical drive 1 */
+//#define USB		2	/* Example: Map USB MSD to physical drive 2 */
 
-#define MMC		0
-#define ATA		1
-#define USB		2
-
-
-
-
-/*-----------------------------------------------------------------------*/
-/* 存储器初始化                                                    */
-
-DSTATUS disk_initialize (
-	                  BYTE drv  /* Physical drive nmuber (0..) */
-                        )
-{
-  DSTATUS result;
-  switch (drv) 
-  {
-    case ATA :result = ATA_disk_initialize();return result;
-    case MMC :result = SD_disk_initialize();return result;
-    case USB :result = USB_disk_initialize();return result;
-  }
-  return STA_NOINIT;
-}
-
+#define MMC		0	/* Example: Map MMC/SD card to physical drive 1 */
+//#define ATA		1	/* Example: Map ATA harddisk to physical drive 0 */
+//#define USB		2	/* Example: Map USB MSD to physical drive 2 */
 
 
 /*-----------------------------------------------------------------------*/
-/* 存储器状态                                                    */
+/* Get Drive Status                                                      */
+/*-----------------------------------------------------------------------*/
 
 DSTATUS disk_status (
-	              BYTE drv		/* Physical drive nmuber (0..) */
-                    )
-{
-  DSTATUS result;
-   
-  switch (drv) 
-  {
-    case ATA :result = ATA_disk_status();return result;
-    case MMC :result = SD_disk_status();return result;
-    case USB :result = USB_disk_status();return result;
-  }
-  return STA_NOINIT;
-}
-
-
-
-/*-------------------------------------*/
-/* 读扇区（或多个扇区）数据 */
-
-DRESULT disk_read (
-	            BYTE drv,	/* Physical drive nmuber (0..) */
-	            BYTE *buff,	/* Data buffer to store read data */
-	            DWORD sector,	/* Sector address (LBA) */
-	            BYTE count	/* Number of sectors to read (1..255) */
-                  )
-{
-  DRESULT result;
-
-  switch (drv)
-  {
-    case ATA :result = ATA_disk_read(sector,  buff,  count);return result;
-    case MMC :result = MMC_disk_read(sector,  buff,  count);return result;
-    case USB :result = USB_disk_read(sector,  buff,  count);return result;
-  }
-  return RES_PARERR;
-}
-
-
-
-/*--------------------------------------------*/
-/* 读扇区（或多个扇区）数据 */
-
-#if _READONLY == 0
-DRESULT disk_write (
-	BYTE drv,		/* Physical drive nmuber (0..) */
-	const BYTE *buff,	/* Data to be written */
-	DWORD sector,		/* Sector address (LBA) */
-	BYTE count		/* Number of sectors to write (1..255) */
+	BYTE pdrv		/* Physical drive nmuber to identify the drive */
 )
 {
-  DRESULT result;
-  switch (drv) 
-  {
-    case ATA :result = ATA_disk_write(sector, buff, count);return result;
-    case MMC :result = MMC_disk_write(sector, buff, count);return result;
-    case USB :result = USB_disk_write(sector, buff, count);return result;
-  }
-  return RES_PARERR;
-}
-#endif /* _READONLY */
+	DSTATUS stat;
+	int result;
 
+	switch (pdrv) {
+//	case ATA :
+////		result = ATA_disk_status();
+
+//		// translate the reslut code here
+
+//		return stat;
+
+	case MMC :
+		result = MMC_disk_status();
+
+		// translate the reslut code here
+
+		return stat;
+
+//	case USB :
+////		result = USB_disk_status();
+
+//		// translate the reslut code here
+
+//		return stat;
+	}
+	return STA_NOINIT;
+}
+
+
+
+/*-----------------------------------------------------------------------*/
+/* Inidialize a Drive                                                    */
+/*-----------------------------------------------------------------------*/
+
+DSTATUS disk_initialize (
+	BYTE pdrv				/* Physical drive nmuber to identify the drive */
+)
+{
+	DSTATUS stat;
+	int result;
+
+	switch (pdrv) {
+//	case ATA :
+////		result = ATA_disk_initialize();
+
+//		// translate the reslut code here
+
+//		return stat;
+
+	case MMC :
+		result = MMC_disk_initialize();
+
+		// translate the reslut code here
+//		stat = result;
+		return stat;
+
+//	case USB :
+////		result = USB_disk_initialize();
+
+//		// translate the reslut code here
+
+//		return stat;
+	}
+	return STA_NOINIT;
+}
+
+
+
+/*-----------------------------------------------------------------------*/
+/* Read Sector(s)                                                        */
+/*-----------------------------------------------------------------------*/
+
+DRESULT disk_read (
+	BYTE pdrv,		/* Physical drive nmuber to identify the drive */
+	BYTE *buff,		/* Data buffer to store read data */
+	DWORD sector,	/* Sector address in LBA */
+	UINT count		/* Number of sectors to read */
+)
+{
+	DRESULT res;
+	int result;
+
+	switch (pdrv) {
+//	case ATA :
+//		// translate the arguments here
+
+////		result = ATA_disk_read(buff, sector, count);
+
+//		// translate the reslut code here
+
+//		return res;
+
+	case MMC :
+		// translate the arguments here
+
+		result = MMC_disk_read(buff, sector, count);
+
+		// translate the reslut code here
+
+		return res;
+
+//	case USB :
+//		// translate the arguments here
+
+////		result = USB_disk_read(buff, sector, count);
+
+//		// translate the reslut code here
+
+//		return res;
+	}
+
+	return RES_PARERR;
+}
+
+
+
+/*-----------------------------------------------------------------------*/
+/* Write Sector(s)                                                       */
+/*-----------------------------------------------------------------------*/
+
+#if _USE_WRITE
+DRESULT disk_write (
+	BYTE pdrv,			/* Physical drive nmuber to identify the drive */
+	const BYTE *buff,	/* Data to be written */
+	DWORD sector,		/* Sector address in LBA */
+	UINT count			/* Number of sectors to write */
+)
+{
+	DRESULT res;
+	int result;
+
+	switch (pdrv) {
+//	case ATA :
+//		// translate the arguments here
+
+////		result = ATA_disk_write(buff, sector, count);
+
+//		// translate the reslut code here
+
+//		return res;
+
+	case MMC :
+		// translate the arguments here
+
+		result = MMC_disk_write(buff, sector, count);
+
+		// translate the reslut code here
+
+		return res;
+
+//	case USB :
+//		// translate the arguments here
+
+//////		result = USB_disk_write(buff, sector, count);
+
+//		// translate the reslut code here
+
+//		return res;
+	}
+
+	return RES_PARERR;
+}
+#endif
 
 
 /*-----------------------------------------------------------------------*/
 /* Miscellaneous Functions                                               */
+/*-----------------------------------------------------------------------*/
 
+#if _USE_IOCTL
 DRESULT disk_ioctl (
-	              BYTE drv,		/* Physical drive nmuber (0..) */
-	              BYTE ctrl,	/* Control code */
-	              void *buff	/* Buffer to send/receive control data */
-                    )
+	BYTE pdrv,		/* Physical drive nmuber (0..) */
+	BYTE cmd,		/* Control code */
+	void *buff		/* Buffer to send/receive control data */
+)
 {
-  DRESULT result;
-  switch (drv) 
-  {
-    case ATA :result = ATA_disk_ioctl(ctrl, buff);return result;
-    case MMC :result = MMC_disk_ioctl(ctrl, buff);return result;
-    case USB :result = USB_disk_ioctl(ctrl, buff);return result;
-  }
-  return RES_PARERR;
-}
+	DRESULT res;
+	int result;
 
-DSTATUS ATA_disk_initialize(void)
-{
-  return STA_NOINIT;
-}
+	switch (pdrv) {
+//	case ATA :
 
-DSTATUS SD_disk_initialize(void)
-{
-  return(SD_Init());
-}
+//		// Process of the command for the ATA drive
 
-DSTATUS USB_disk_initialize(void)
-{
-  return STA_NOINIT;
-}
+//		return res;
 
-DSTATUS ATA_disk_status(void)//默认状态正常
+	case MMC :
+
+		// Process of the command for the MMC/SD card
+
+		return res;
+
+//	case USB :
+
+//		// Process of the command the USB drive
+
+//		return res;
+	}
+
+	return RES_PARERR;
+}
+#endif
+/*--------------------------------------------------------------------------
+
+   Private Functions
+
+---------------------------------------------------------------------------*/
+DWORD get_fattime (void)
 {
   return 0;
 }
-
-DSTATUS SD_disk_status(void)//默认状态正常
-{
-  return 0;
-}
-
-DSTATUS USB_disk_status(void)//默认状态正常
-{
-  return 0;
-}
-
-DRESULT ATA_disk_read(u32 sector, u8 *buff, u8 count)
-{
-  return RES_OK;
-}
-
-DRESULT MMC_disk_read(u32 sector, u8 *buff, u8 count)
-{
-  return ((DRESULT)(SD_ReadMultiBlock(sector,buff,count)));
-}
-DRESULT USB_disk_read(u32 sector, u8 *buff, u8 count)
-{
-  return RES_OK;
-}
-
-DRESULT ATA_disk_write(u32 sector, const u8 *buff, u8 count)
-{
-  return RES_OK;
-}
-DRESULT MMC_disk_write(u32 sector, const u8 *buff, u8 count)
-{
-  return ((DRESULT)(SD_WriteMultiBlock(sector,buff,count)));
-}
-
-DRESULT USB_disk_write(u32 sector, const u8 *buff, u8 count)
-{
-  return RES_OK;
-}
-
-DRESULT ATA_disk_ioctl(BYTE ctrl, void *buff)
-{
-  return RES_OK;
-}
-DRESULT MMC_disk_ioctl(BYTE ctrl, void *buff)
-{
-  return RES_OK;
-}
-DRESULT USB_disk_ioctl(BYTE ctrl, void *buff)
-{
-  return RES_OK;
-}
-
