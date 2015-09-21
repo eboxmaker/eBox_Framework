@@ -7,9 +7,7 @@ USART uart1(USART1,PA9,PA10);
 
 uint32_t xx;
 uint8_t flag;
-
 TIM timer2(TIM2);
-
 
 void t2it()
 {
@@ -29,7 +27,6 @@ void setup()
 	timer2.interrupt(ENABLE);
 	timer2.attachInterrupt(t2it);
 	timer2.start();
-	
 }
 
 
