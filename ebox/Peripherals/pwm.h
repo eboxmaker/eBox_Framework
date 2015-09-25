@@ -43,6 +43,7 @@ class PWM
 		PWM(GPIO*  PWMPin);
 		PWM(GPIO*  PWMPin,uint16_t Period,uint16_t Prescaler);
 		void setFrq(uint16_t Period,uint16_t Prescaler);
+		void setFrq(uint32_t Frq);
 		void setDuty(uint16_t Duty);
 
 	private:
@@ -54,6 +55,8 @@ class PWM
 		uint16_t 			period;
 		uint16_t 			prescaler;
 	  uint16_t 			duty;
+		uint32_t 			frq;
+	uint32_t 	p;
 	
 
 		GPIO* 				pwmPin;

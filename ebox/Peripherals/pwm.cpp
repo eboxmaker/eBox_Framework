@@ -132,7 +132,26 @@ void PWM::setFrq(uint16_t Period,uint16_t Prescaler)
 	setDuty(duty);
 
 }
+//pwm的频率 = 72M/72/1000;
+//
+void PWM::setFrq(uint32_t Frq)
+{
+	uint32_t _period  =0;
+	uint32_t _prescaler = 1;
+	
+	for(;_prescaler <= 72;_prescaler++)
+	{
+		_period = 72000000/_prescaler/Frq;
+		if((0xffff>=_period)&&(_period>=1000))break;
+	}
 
+
+	period = _period;
+	prescaler = _prescaler;
+	baseInit(period,prescaler);
+	setDuty(duty);
+
+}
 
 //duty:0-1000对应0%-100.0%
 void PWM::setDuty(uint16_t Duty)
@@ -148,7 +167,7 @@ void PWM::setDuty(uint16_t Duty)
 			percent = duty/1000.0;
 			
 		  pulse = (uint16_t) (( percent * period ));
-			
+			p = pulse;
 			TIM_OCInitTypeDef  TIM_OCInitStructure;
 			
 			TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
