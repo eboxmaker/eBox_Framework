@@ -3,6 +3,7 @@
 #include "math.h"
 
 
+//STM32 RUN IN eBox
 	
 void setup()
 {
@@ -24,7 +25,7 @@ int main(void)
 		y = 2000 - (sin(x)+1)*1000;
 		
 		analogWrite(PA7,y);
-		delay_ms(50);
+		delay_ms(10);
 	}
 
 
