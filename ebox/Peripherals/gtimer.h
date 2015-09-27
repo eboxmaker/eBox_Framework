@@ -26,8 +26,7 @@ This specification is preliminary and is subject to change at any time without n
 //默认配置为预分频72分频
 //默认配置为溢出值 1000
 //默认配置：1ms中断一次
-#define PRESCALE 72
-#define PEROID	1000
+
 
 
 class TIM
@@ -35,8 +34,7 @@ class TIM
 	public:
 		TIM(TIM_TypeDef* TIMx);
 
-		void begin(uint32_t period,uint32_t prescaler);
-		void config(uint16_t period,uint16_t prescaler);
+		void begin(uint32_t Frq);
 		void attachInterrupt(void(*callback)(void));
 		void interrupt(FunctionalState enable);
 	
@@ -46,6 +44,7 @@ class TIM
 		void clearCount(void);
 		
 	private:
+		void baseInit(uint16_t period,uint16_t prescaler);
 		TIM_TypeDef *_TIMx;
 	
 };
