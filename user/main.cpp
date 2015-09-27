@@ -37,15 +37,15 @@ void setup()
 {
 	eBoxInit();
 	uart1.begin(9600);
-		PB8->mode(OUTPUT_PP);
-		PB9->mode(OUTPUT_PP);
+	PB8->mode(OUTPUT_PP);
+	PB9->mode(OUTPUT_PP);
 
 	timer2.begin(1000);
 	timer2.interrupt(ENABLE);
 	timer2.attachInterrupt(t2it);
 	timer2.start();
 	
-	t1.begin(10000);
+	t1.begin(1000);
 	t1.interrupt(ENABLE);
 	t1.attachInterrupt(t1it);
 	t1.start();
