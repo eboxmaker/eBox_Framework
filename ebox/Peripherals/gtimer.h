@@ -19,13 +19,9 @@ This specification is preliminary and is subject to change at any time without n
 
 /*
 	1.支持tim2,3,4 (5,6,7需要测试)
-	2.提供一个xhz的中断
+	2.提供一个1-720Khz的定时中断
 */
 
-
-//默认配置为预分频72分频
-//默认配置为溢出值 1000
-//默认配置：1ms中断一次
 
 
 

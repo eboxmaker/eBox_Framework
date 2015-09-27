@@ -18,15 +18,10 @@ This specification is preliminary and is subject to change at any time without n
 #include "common.h"
 
 /*
-	1.提供一个xhz的中断
+	1.提供一个1-720Khz的定时中断
 
 */
 
-//默认配置为预分频72分频
-//默认配置为溢出值 1000
-//默认配置：1ms中断一次
-#define PRESCALE 72
-#define PEROID	1000
 
 class TIMERONE
 {
