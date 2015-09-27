@@ -16,14 +16,16 @@ void t2it()
 	{
 		flag = 1;
 		xx = 0;
+		PB8->write(!PB8->read());
 	}
 }
 void setup()
 {
 	eBoxInit();
 	uart1.begin(9600);
+	PB8->mode(OUTPUT_PP);
 	
-	timer2.begin(1000,72);
+	timer2.begin(1000);
 	timer2.interrupt(ENABLE);
 	timer2.attachInterrupt(t2it);
 	timer2.start();

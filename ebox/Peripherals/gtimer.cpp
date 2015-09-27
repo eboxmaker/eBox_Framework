@@ -26,9 +26,18 @@ TIM::TIM(TIM_TypeDef* TIMx)
 	_TIMx = TIMx;
 }
 
-void TIM::begin(uint32_t period,uint32_t prescaler)
+void TIM::begin(uint32_t Frq)
 {
-	config(period,prescaler);
+	uint32_t _period  =0;
+	uint32_t _prescaler = 1;
+	if(Frq>=720000)Frq = 720000;
+	for(;_prescaler <= 0xffff;_prescaler++)
+	{
+		_period = 72000000/_prescaler/Frq;
+		if((0xffff>=_period)&&(_period>=1000))break;
+	}
+
+	baseInit(_period,_prescaler);
 }
 void TIM::interrupt(FunctionalState enable)
 {
@@ -45,7 +54,7 @@ void TIM::stop(void)
 {
 	 TIM_Cmd(_TIMx, DISABLE); //????
 }
-void TIM::config(uint16_t period,uint16_t prescaler)
+void TIM::baseInit(uint16_t period,uint16_t prescaler)
 {
 	NVIC_InitTypeDef NVIC_InitStructure;
 	

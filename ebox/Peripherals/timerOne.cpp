@@ -22,11 +22,21 @@ TIMERONE::TIMERONE()
 
 
 }
-void TIMERONE::begin(uint32_t period,uint32_t prescaler)
+void TIMERONE::begin(uint32_t Frq)
 {
 	NVIC_InitTypeDef NVIC_InitStructure;
+	uint32_t _period  =0;
+	uint32_t _prescaler = 1;
 	
-	baseInit(period,prescaler);
+	
+	if(Frq>=720000)Frq = 720000;
+	for(;_prescaler <= 0xffff;_prescaler++)
+	{
+		_period = 72000000/_prescaler/Frq;
+		if((0xffff>=_period)&&(_period>=1000))break;
+	}
+
+	baseInit(_period,_prescaler);
 	
 	NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;//
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;// 

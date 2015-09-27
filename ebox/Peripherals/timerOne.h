@@ -30,20 +30,18 @@ This specification is preliminary and is subject to change at any time without n
 
 class TIMERONE
 {
-
-	private:
-		void baseInit(uint16_t period,uint16_t prescaler);
-	
-
 	public:
 		TIMERONE();
-		void begin(uint32_t period,uint32_t prescaler);
-		void start();
+		void begin(uint32_t Frq);
 		void attachInterrupt(void(*callback)(void));
 		void interrupt(FunctionalState x);
 	
+		void start();
 		void stop();
 		void setReload(uint16_t Autoreload);
 		void clearCount(void);
+	
+	private:
+		void baseInit(uint16_t period,uint16_t prescaler);
 };
 #endif

@@ -1,7 +1,7 @@
 
 #include "ebox.h"
 
-USART uart3(USART3,PB10,PB11);
+USART uart1(USART1,PA9,PA10);
 
 uint32_t x;
 uint32_t xx;
@@ -18,6 +18,8 @@ void t2it()
 	{
 		flag = 1;
 		xx = 0;
+				PB9->write(!PB9->read());
+
 	}
 }
 void t1it()
@@ -27,19 +29,23 @@ void t1it()
 	{
 		flag1 = 1;
 		x = 0;
+				PB8->write(!PB8->read());
+
 	}
 }
 void setup()
 {
 	eBoxInit();
-	uart3.begin(9600);
-	
-	timer2.begin(1000,72);
+	uart1.begin(9600);
+		PB8->mode(OUTPUT_PP);
+		PB9->mode(OUTPUT_PP);
+
+	timer2.begin(1000);
 	timer2.interrupt(ENABLE);
 	timer2.attachInterrupt(t2it);
 	timer2.start();
 	
-	t1.begin(500,72);
+	t1.begin(10000);
 	t1.interrupt(ENABLE);
 	t1.attachInterrupt(t1it);
 	t1.start();
@@ -53,12 +59,12 @@ int main(void)
 	{
 		if(flag == 1)
 		{
-			uart3.printf("\r\ntimer2 is triggered 1000 times !",xx);
+			uart1.printf("\r\ntimer2 is triggered 1000 times !",xx);
 			flag = 0;
 		}
 		if(flag1 == 1)
 		{
-			uart3.printf("\r\ntimer1 is triggered 1000 times !",xx);
+			uart1.printf("\r\ntimer1 is triggered 1000 times !",xx);
 			flag1 = 0;
 		}
 	}
