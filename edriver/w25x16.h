@@ -39,12 +39,13 @@ This specification is preliminary and is subject to change at any time without n
 #define W25X_DeviceID			0xAB 
 #define W25X_ManufactDeviceID	0x90 
 #define W25X_JedecDeviceID		0x9F 
-class W25X:public SPIClASS
+class W25X
 {
 	public:
-		W25X(GPIO* cspin,SPI_TypeDef *spi,GPIO* sck,GPIO* miso,GPIO* mosi):SPIClASS(SPI1,sck,miso,mosi)
+		W25X(GPIO* cspin,SOFTSPI* pSPI)
 		{
 			cs = cspin;
+			spi = pSPI;
 		}
 		void begin();
 		void readId(uint16_t* id);
@@ -59,8 +60,9 @@ class W25X:public SPIClASS
 	private:
 		u8 SPI_FLASH_BUF[4096];
 		SPICONFIG spiDevW25x16;
-
+		SOFTSPI* spi;
 		GPIO* cs;
+
 		u8 readSR(void);  
 		void _waitBusy(void);
 		void powerDown(void);	

@@ -62,16 +62,12 @@ class	SPIClASS
 		void config(SPICONFIG* spiConfig);
 		uint8_t readConfig(void);
 		
-		uint8_t transfer(uint8_t data);
-		void transfer(uint8_t *data,uint16_t dataln);
-		void transfer(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln);
-		
 		int8_t  write(uint8_t data);
-		int8_t  read(uint8_t* data);
+		int8_t  write(uint8_t *data,uint16_t dataln);
+	
 		uint8_t read();
-
-		int8_t write(uint8_t *data,uint16_t dataln);
-		int8_t read(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln);
+		int8_t  read(uint8_t* data);
+		int8_t  read(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln);
 
 	private:
 		static uint8_t currentDevNum;
@@ -92,9 +88,13 @@ class SOFTSPI
 		void 		begin(SPICONFIG* spiConfig);
 	  void 		config(SPICONFIG* spiConfig);
 		uint8_t readConfig(void);
+		
+		int8_t  write(uint8_t data);
+		int8_t  write(uint8_t *data,uint16_t dataln);
 	
-		uint8_t transfer(uint8_t data);
-
+		uint8_t read();
+		int8_t  read(uint8_t* data);
+		int8_t  read(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln);
 	private:
 		GPIO* 	sckPin;
 		GPIO*		mosiPin;
@@ -103,6 +103,13 @@ class SOFTSPI
 		uint8_t mode;	
 		uint8_t bitOrder;
 		uint8_t spidelay;
+	
+		uint8_t transfer0(uint8_t data);
+		uint8_t transfer1(uint8_t data);
+		uint8_t transfer2(uint8_t data);
+		uint8_t transfer3(uint8_t data);
+		uint8_t transfer(uint8_t data);
+
 	
 		static uint8_t currentDevNum;
 };
