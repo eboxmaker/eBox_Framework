@@ -26,16 +26,17 @@ class I2C
 {
 
 	public:
-		I2C(I2C_TypeDef* I2Cx,GPIO* SDAPin,GPIO* SCLPin);
+		I2C(I2C_TypeDef* I2Cx,GPIO* SCLPin,GPIO* SDAPin);
 		void			begin(uint32_t speed);
 		void 			setSpeed(uint32_t speed);
 		uint32_t	readConfig();
 
 		int8_t	writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);
-		int8_t	writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
+		int8_t	writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToWrite);
 		int8_t	readByte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data);
 		int8_t	readByte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
-	protected:
+	  int8_t	waitBusy(uint8_t slaveAddress);
+	public:
 		int8_t start();
 		int8_t stop();
 		int8_t sendNoAck();
@@ -65,14 +66,15 @@ class I2C
 class SOFTI2C 
 {
   public:
-		SOFTI2C(GPIO* SDApin, GPIO* SCLpin);
+		SOFTI2C(GPIO* SCLpin, GPIO* SDApin);
 		void 		  begin(uint32_t speed);
 		int8_t 		setSpeed(uint32_t speed);
 		uint32_t	readConfig();
 		int8_t		writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);
-		int8_t 		writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
+		int8_t 		writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToWrite);
 		int8_t 		readByte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data);
 		int8_t 		readByte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
+	  int8_t		waitBusy(uint8_t slaveAddress);
 
 
   private:
@@ -84,9 +86,9 @@ class SOFTI2C
 		void 		start();
 		void 		stop();
 		int8_t	waitAck();
-		void 		sendAck();
-		void 		sendNoAck();
-		void 		sendByte(uint8_t Byte);
+		int8_t 		sendAck();
+		int8_t 		sendNoAck();
+		int8_t 		sendByte(uint8_t Byte);
 		uint8_t receiveByte();
 };
 

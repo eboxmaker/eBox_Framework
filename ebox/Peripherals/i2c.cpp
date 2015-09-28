@@ -16,11 +16,11 @@ This specification is preliminary and is subject to change at any time without n
 #include "i2c.h"
 
 
-I2C::I2C(I2C_TypeDef* I2Cx,GPIO* SDAPin,GPIO* SCLPin)
+I2C::I2C(I2C_TypeDef* I2Cx,GPIO* SCLPin,GPIO* SDAPin)
 {
 	_I2Cx = I2Cx;
-	_SDAPin = SDAPin;
 	_SCLPin = SCLPin;
+	_SDAPin = SDAPin;
 	
 }
 void  I2C::begin(uint32_t speed)
@@ -135,7 +135,7 @@ int8_t I2C::sendByte(uint8_t data)
 int8_t I2C::send7BitsAddress(uint8_t slaveAddress)
 {
 	uint16_t times = 1000;
-	int8_t err;
+	int8_t err = 0;
 	if(slaveAddress&0x01)
 	{
 		I2C_Send7bitAddress(_I2Cx,slaveAddress,I2C_Direction_Receiver);
@@ -168,7 +168,7 @@ int8_t I2C::send7BitsAddress(uint8_t slaveAddress)
 int8_t I2C::receiveByte(uint8_t* data)
 {	
 	uint16_t times = 1000;
-	int8_t err;
+	int8_t err = 0;
 	while(!I2C_CheckEvent(_I2Cx,I2C_EVENT_MASTER_BYTE_RECEIVED))
 	{
 		times--;
@@ -185,7 +185,7 @@ int8_t I2C::receiveByte(uint8_t* data)
 
 int8_t I2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
 {
-	uint16_t err;
+	uint16_t err = 0;
 
 	start();
 	send7BitsAddress(slaveAddress);
@@ -198,7 +198,7 @@ int8_t I2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
 }
 int8_t I2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
 {
-	uint16_t err;
+	uint16_t err = 0;
 
 	start();
 	send7BitsAddress(slaveAddress);
@@ -230,7 +230,7 @@ int8_t I2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
 
 int8_t I2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
 {
-	uint8_t i;
+	uint8_t i = 0;
 	start();
 	send7BitsAddress(slaveAddress);
 	I2C_Cmd(_I2Cx,ENABLE);
@@ -255,3 +255,21 @@ int8_t I2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint1
 	return i;
 }
 
+int8_t I2C::waitBusy(uint8_t slaveAddress)
+{
+	int8_t ret;
+	uint8_t i = 0;
+	do
+	{
+		start();
+		ret = send7BitsAddress(slaveAddress);
+		sendAck();
+		sendByte(slaveAddress);
+		stop();
+		if(i++==100)
+		{
+			return -1;
+		}
+	}while(ret != 0);//如果返回值不是0，继续等待
+	return 0;
+}
