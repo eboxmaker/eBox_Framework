@@ -48,9 +48,9 @@ This specification is preliminary and is subject to change at any time without n
 ////////////////////////////////////////////////////////////////////////////////
 //创建所有引脚对象和宏定义其指针
 
-
+extern SPIClASS spi1;	
 extern SPIClASS spi2;
-
+extern SOFTSPI sspi;
 
 extern GPIO PA0;
 extern GPIO PA1;

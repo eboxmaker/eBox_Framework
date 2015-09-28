@@ -89,50 +89,10 @@ uint8_t SPIClASS::readConfig(void)
 	return currentDevNum; 
 }
 
-uint8_t SPIClASS::transfer(uint8_t data) 
-{
-	while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
-	;
-	spi->DR = data;
-	while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
-	;
-	return (spi->DR);
-}
 
-void SPIClASS::transfer(uint8_t *data,uint16_t dataln) 
-{
-	__IO uint8_t dummyByte;
-	if(dataln == 0)
-		return;
-	while(dataln--)
-	{
-		while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
-			;
-		spi->DR = *data++;
-		while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
-			;
-		dummyByte = spi->DR;
-	}
-}
-
-
-void SPIClASS::transfer(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln) 
-{
-	if(dataln == 0)
-		return;
-	while(dataln--)
-	{
-		while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
-			;
-		spi->DR = dummyByte;
-		while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
-			;
-		*rcvdata++ = spi->DR;
-	}
-}
 int8_t SPIClASS::write(uint8_t data)
 {
-  uint8_t dummyByte;
+  __IO uint8_t dummyByte;
 	while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
 	;
 	spi->DR = data;

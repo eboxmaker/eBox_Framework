@@ -1,94 +1,53 @@
-/*
-file   : *.cpp
-author : shentq
-version: V1.0
-date   : 2015/7/5
 
-Copyright 2015 shentq. All Rights Reserved.
-*/
-
-//STM32 RUN IN eBox
-
-
-/*
-一个简单的命令帧接收示例
-*/
 #include "ebox.h"
+#include "w25x16.h"
 
 USART uart3(USART3,&PB10,&PB11);
 
 
-
-#define  HEAD '$' 
-#define  END '!' 
-
-#define  NEEDHEAD 0 
-#define  NEEDDATA 1 
-#define  DATAEND 2 
-
-uint8_t state = NEEDHEAD;
-
-char rcv[100];
-int i;
-void test()
-{
-	uint8_t c;
-	c = uart3.receiveData();
-	switch(state)
-	{
-		case NEEDHEAD:
-			if(c == HEAD)
-			{
-				i = 0;
-				rcv[i++] = c;
-				state = NEEDDATA;
-			}
-			break;
-		case NEEDDATA:
-			if(c == END)
-			{
-				rcv[i] = c;
-				state = DATAEND;			
-			}
-			else
-			{
-				rcv[i++] = c;
-			}		
-			break;
-	}
+W25X flash(&PE5,&sspi);
 
 
-}
-	
 void setup()
 {
 	eBoxInit();
 	uart3.begin(9600);
-	uart3.interrupt(ENABLE);
-	uart3.attachInterrupt(test);
+	flash.begin();
 }
 
-float x,y;
+
+int16_t tmp[7];
+uint16_t id;
+uint8_t buf[10];
+uint8_t wbuf[10];
 int main(void)
 {
-
 	setup();
-	uart3.printf("uart is ok !\r\n");
+	for(int i=0;i<10;i++)
 
+	 wbuf[i] = i;
 	while(1)
-	{		 	
-		if(state == DATAEND)
-		{
+	{
+		flash.readId(&id);
+		uart3.printf("\r\n==readid=======\r\n");
+		uart3.printf("id = %x",id);
+
+		uart3.printf("\r\n==write&read========\r\n");
+		flash.write(wbuf,0,10);
+		flash.read(buf,0,10);	
+		for(int i=0;i<10;i++)
+		uart3.printf(" %x",buf[i]);
 		
-			uart3.printf(rcv);
-			for(int i = 0; i < 100; i ++)
-				rcv[i] = 0;
-			state = NEEDHEAD;
-		}
-
+		uart3.printf("\r\n==erase&read========\r\n");
+		flash.eraseSector(0);
+		flash.read(buf,1,10);	
+		for(int i=0;i<10;i++)
+		uart3.printf(" %x",buf[i]);
+		uart3.printf("\r\n=========================\r\n");
+		uart3.printf("\r\n\r\n");
+		
+		delay_ms(1000);
 	}
-
-
 }
 
 
