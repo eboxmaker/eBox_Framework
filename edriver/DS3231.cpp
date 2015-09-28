@@ -72,7 +72,7 @@ void DS3231::getTime(char* buf)
 {
 	uint8_t tmpbuf[3];
 
-	i2c->readByte(DS3231_WriteAddress,DS3231_SECOND,tmpbuf,3);		//Ãë
+	i2c->readByte(DS3231_WriteAddress,DS3231_SECOND,tmpbuf,3);		
 
 	buf[0] =char( (tmpbuf[2]>>4) + 0x30);
 	buf[1] =char( (tmpbuf[2]&0x0f) + 0x30);
