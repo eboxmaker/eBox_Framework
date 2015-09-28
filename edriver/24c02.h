@@ -16,7 +16,7 @@
 class EEPROM
 {
 	public:
-		EEPROM(I2C* pI2C)
+		EEPROM(SOFTI2C* pI2C)
 		{
 		i2c = pI2C;
 		}
@@ -34,7 +34,7 @@ class EEPROM
 
 		
 	private:
-		I2C* i2c;
+		SOFTI2C* i2c;
 		uint8_t slaveAddr;
 		
 

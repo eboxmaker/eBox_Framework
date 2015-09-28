@@ -9,13 +9,13 @@ int8_t EEPROM::byteWrite(uint16_t byteAddr,uint8_t* buf,uint16_t numToWrite)
 {
 	int8_t ret = 0;
 
-//	for(uint16_t i = 0; i < numToWrite; i++)
-//	{
-//			byteWrite(byteAddr++,buf[i]);
-//		 // ret = i2c->waitBusy(SLAVE_ADDR);//如果有错误再加此句
-//	
-//	}
-	i2c->writeByte(SLAVE_ADDR,byteAddr,buf,numToWrite);//部分器件个别的位置相应比较慢
+	for(uint16_t i = 0; i < numToWrite; i++)
+	{
+			byteWrite(byteAddr++,buf[i]);
+		  //ret = i2c->waitBusy(SLAVE_ADDR);//如果有错误再加此句
+	
+	}
+//	i2c->writeByte(SLAVE_ADDR,byteAddr,buf,numToWrite);//部分器件个别的位置相应比较慢
 	return ret;
 }
 

@@ -126,6 +126,13 @@ int8_t SOFTI2C::sendByte(uint8_t byte)
 	ret = waitAck();
   return ret;
 }
+int8_t	SOFTI2C::send7BitsAddress(uint8_t slaveAddress)
+{
+	int8_t ret = 0;
+	sendByte(slaveAddress);
+	return ret;
+}
+
 uint8_t SOFTI2C::receiveByte(void)
 {
 	uint8_t i = 8;
@@ -147,7 +154,7 @@ int8_t SOFTI2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
 	int8_t ret = 0;
 		start();
 	
-    if (sendByte(slaveAddress) == -1)
+    if (send7BitsAddress(slaveAddress) == -1)
         ret = -1;
 		
     if (sendByte(regAddress) == -1)
@@ -166,7 +173,7 @@ int8_t SOFTI2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,
 	int8_t ret = 0;
 		start();
 
-    if (sendByte(slaveAddress) == -1)
+    if (send7BitsAddress(slaveAddress) == -1)
         ret = -1;
 		
     if (sendByte(regAddress) == -1)
@@ -190,7 +197,7 @@ int8_t 	SOFTI2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
 	int8_t ret = 0;
 		start();
 
-    if (sendByte(slaveAddress) == -1)
+    if (send7BitsAddress(slaveAddress) == -1)
         ret = -1;
 
 
@@ -215,7 +222,7 @@ int8_t 	SOFTI2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,
 	
 		start();
 
-    if (sendByte(slaveAddress) == -1)
+    if (send7BitsAddress(slaveAddress) == -1)
         ret = -1;
 
 
@@ -223,7 +230,7 @@ int8_t 	SOFTI2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,
         ret = -2;
 
 		start();
-    if (sendByte(slaveAddress + 1) == -1)
+    if (send7BitsAddress(slaveAddress + 1) == -1)
         ret = -3;
 		
 		while(numToRead)
@@ -250,7 +257,7 @@ int8_t SOFTI2C::waitBusy(uint8_t slaveAddress)
 	do
 	{
 		start();
-		ret = sendByte(slaveAddress);
+		ret = send7BitsAddress(slaveAddress);
 		sendAck();
 		sendByte(slaveAddress);
 		stop();
