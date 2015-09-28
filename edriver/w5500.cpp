@@ -20,12 +20,13 @@ void W5500::begin(u8* mac,u8* ip,u8* subnet,u8* gateway)
 	u8 txsize[MAX_SOCK_NUM] = {2,2,2,2,2,2,2,2};
   u8 rxsize[MAX_SOCK_NUM] = {2,2,2,2,2,2,2,2};
 	
+
 	spiDevW5500.devNum = 2;
 	spiDevW5500.mode = SPI_MODE0;
 	spiDevW5500.prescaler = SPI_CLOCK_DIV2;
 	spiDevW5500.bitOrder = SPI_BITODER_MSB;
 	
-	SPIClASS::begin(&spiDevW5500);
+	spi->begin(&spiDevW5500);
 	cs->mode(OUTPUT_PP);
 	cs->set();
 	rstPin->mode(OUTPUT_PP);
@@ -66,14 +67,14 @@ void W5500::reset()
 
 void W5500::write(u32 addrbsb, u8 data)
 {
-	if(spiDevW5500.devNum != readConfig())
-		config(&spiDevW5500);
+	if(spiDevW5500.devNum != spi->readConfig())
+		spi->config(&spiDevW5500);
 //	  IINCHIP_ISR_DISABLE();                        // Interrupt Service Routine Disable
    cs->reset();                              // CS=0, SPI start
-   transfer( (addrbsb & 0x00FF0000)>>16);// Address byte 1
-   transfer( (addrbsb & 0x0000FF00)>> 8);// Address byte 2
-   transfer( (addrbsb & 0x000000F8) + 4);    // Data write command and Write data length 1
-   transfer(data);                    // Data write (write 1byte data)
+	 spi->write( (addrbsb & 0x00FF0000)>>16);// Address byte 1
+   spi->write( (addrbsb & 0x0000FF00)>> 8);// Address byte 2
+   spi->write( (addrbsb & 0x000000F8) + 4);    // Data write command and Write data length 1
+   spi->write(data);                    // Data write (write 1byte data)
    cs->set();                                 // CS=1,  SPI end
 //   IINCHIP_ISR_ENABLE();                         // Interrupt Service Routine Enable
 
@@ -81,15 +82,15 @@ void W5500::write(u32 addrbsb, u8 data)
 }
 u8  W5500::read(u32 addrbsb)
 {
-	if(spiDevW5500.devNum != readConfig())
-		config(&spiDevW5500);
+	if(spiDevW5500.devNum != spi->readConfig())
+		spi->config(&spiDevW5500);
    u8 data = 0;
 //   IINCHIP_ISR_DISABLE();                        // Interrupt Service Routine Disable
    cs->reset();                          // CS=0, SPI start
-   transfer( (addrbsb & 0x00FF0000)>>16);// Address byte 1
-   transfer( (addrbsb & 0x0000FF00)>> 8);// Address byte 2
-   transfer( (addrbsb & 0x000000F8))    ;// Data read command and Read data length 1
-   data = transfer(0x00);                // Data read (read 1byte data)
+   spi->write( (addrbsb & 0x00FF0000)>>16);// Address byte 1
+   spi->write( (addrbsb & 0x0000FF00)>> 8);// Address byte 2
+   spi->write( (addrbsb & 0x000000F8))    ;// Data read command and Read data length 1
+   spi->read(&data);                // Data read (read 1byte data)
    cs->set();                            // CS=1,  SPI end
 //   IINCHIP_ISR_ENABLE();               // Interrupt Service Routine Enable
    return data;    
@@ -97,20 +98,15 @@ u8  W5500::read(u32 addrbsb)
 }
 u16 W5500::write(u32 addrbsb,u8* buf, u16 len)
 {
-	if(spiDevW5500.devNum != readConfig())
-		config(&spiDevW5500);
+	if(spiDevW5500.devNum != spi->readConfig())
+		spi->config(&spiDevW5500);
 
 //   IINCHIP_ISR_DISABLE();
    cs->reset();                               // CS=0, SPI start
-   transfer( (addrbsb & 0x00FF0000)>>16);// Address byte 1
-   transfer( (addrbsb & 0x0000FF00)>> 8);// Address byte 2
-   transfer( (addrbsb & 0x000000F8) + 4);    // Data write command and Write data length 1
-//   u16 idx = 0;
-//   for(idx = 0; idx < len; idx++)                // Write data in loop
-//   {
-//     transfer(buf[idx]);
-//   }
-	 transfer(buf,len);
+   spi->write( (addrbsb & 0x00FF0000)>>16);// Address byte 1
+   spi->write( (addrbsb & 0x0000FF00)>> 8);// Address byte 2
+   spi->write( (addrbsb & 0x000000F8) + 4);    // Data write command and Write data length 1
+	 spi->write(buf,len);
    cs->set();                                 // CS=1, SPI end
 //   IINCHIP_ISR_ENABLE();                         // Interrupt Service Routine Enable    
 
@@ -119,19 +115,14 @@ u16 W5500::write(u32 addrbsb,u8* buf, u16 len)
 }
 u16 W5500::read(u32 addrbsb,u8* buf, u16 len)
 {
-	if(spiDevW5500.devNum != readConfig())
-		config(&spiDevW5500);
+	if(spiDevW5500.devNum != spi->readConfig())
+		spi->config(&spiDevW5500);
 //  IINCHIP_ISR_DISABLE();
    cs->reset();                               // CS=0, SPI start
-  transfer( (addrbsb & 0x00FF0000)>>16);// Address byte 1
-  transfer( (addrbsb & 0x0000FF00)>> 8);// Address byte 2
-  transfer( (addrbsb & 0x000000F8));    // Data write command and Write data length 1
-//  u16 idx = 0;
-//  for(idx = 0; idx < len; idx++)                    // Write data in loop
-//  {
-//    buf[idx] = transfer(0x00);
-//  }
-	transfer(0x00,buf,len);
+  spi->write( (addrbsb & 0x00FF0000)>>16);// Address byte 1
+  spi->write( (addrbsb & 0x0000FF00)>> 8);// Address byte 2
+  spi->write( (addrbsb & 0x000000F8));    // Data write command and Write data length 1
+	spi->read(0x00,buf,len);
    cs->set();                                 // CS=1, SPI end
 //  IINCHIP_ISR_ENABLE();                             // Interrupt Service Routine Enable
   

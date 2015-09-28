@@ -1,9 +1,21 @@
 /*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
+
+Copyright 2015 shentq. All Rights Reserved.
+*/
+
+//STM32 RUN IN eBox
+
+
+/*
 一个简单的命令帧接收示例
 */
 #include "ebox.h"
 
-USART uart3(USART3,PB10,PB11);
+USART uart3(USART3,&PB10,&PB11);
 
 
 

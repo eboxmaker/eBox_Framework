@@ -130,6 +130,70 @@ void SPIClASS::transfer(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln)
 		*rcvdata++ = spi->DR;
 	}
 }
+int8_t SPIClASS::write(uint8_t data)
+{
+  uint8_t dummyByte;
+	while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+	;
+	spi->DR = data;
+	while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+	;
+	dummyByte = spi->DR;
+
+	return 0;
+}
+int8_t SPIClASS::read(uint8_t* data)
+{
+	while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+	;
+	spi->DR = 0xff;
+	while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+	;
+	*data = spi->DR;
+	
+	return 0;
+}
+uint8_t SPIClASS::read()
+{
+	while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+	;
+	spi->DR = 0xff;
+	while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+	;
+	return(spi->DR);
+	
+}
+int8_t SPIClASS::write(uint8_t *data,uint16_t dataln)
+{
+	__IO uint8_t dummyByte;
+	if(dataln == 0)
+		return -1;
+	while(dataln--)
+	{
+		while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+			;
+		spi->DR = *data++;
+		while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+			;
+		dummyByte = spi->DR;
+	}
+	return 0;
+}
+int8_t SPIClASS::read(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln)
+{
+	if(dataln == 0)
+		return -1;
+	while(dataln--)
+	{
+		while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+			;
+		spi->DR = dummyByte;
+		while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+			;
+		*rcvdata++ = spi->DR;
+	}
+	return 0;
+}
 
 
 

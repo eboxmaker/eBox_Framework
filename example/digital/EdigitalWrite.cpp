@@ -1,22 +1,28 @@
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
 
+Copyright 2015 shentq. All Rights Reserved.
+*/
+
+//STM32 RUN IN eBox
 #include "ebox.h"
-
 void setup()
 {
 	eBoxInit();
-	PA7->mode(OUTPUT_PP);
+	PB8.mode(OUTPUT_PP);
 }
 int main(void)
 {
 	setup();
 	while(1)
 	{
-		PA7->set();
-		PA7->reset();
+		PB8.set();
+		PB8.reset();
 	}
 
 }
-
-
 
 

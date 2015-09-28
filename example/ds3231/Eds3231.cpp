@@ -1,10 +1,19 @@
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
 
+Copyright 2015 shentq. All Rights Reserved.
+*/
+
+//STM32 RUN IN eBox
 #include "ebox.h"
 #include "ds3231.h"
 
-USART uart1(USART1,PA9,PA10);
+USART uart1(USART1,&PA9,&PA10);
 
-DS3231 ds(PA5,PA4);
+DS3231 ds(&PA5,&PA4);
 
 DateTime t;
 char time[9];
