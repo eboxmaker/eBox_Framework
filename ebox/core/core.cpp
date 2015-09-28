@@ -23,6 +23,7 @@ void 	Init_ADC1(void);
  
 #if USE_OS 
 	#include "cpu.h"
+	#include "os.h"
 	#define SysTickOverFlowValue (9000000/OS_TICKS_PER_SEC)//SysTickOverFlowValue取值范围（100-9000），主频为72Mhz的情况下
 
 	void eBoxInit(void)
@@ -63,16 +64,21 @@ uint32_t millis( void )
 
 void delay_ms(uint32_t ms)
 {	 	
-	uint32_t end = millis() + ms*(9000/SysTickOverFlowValue);
-  uint32_t systick = SysTick->VAL;
+	#if USE_OS 
+		OS_TimeDelay(ms);
+	#else
+		uint32_t end = millis() + ms*(9000/SysTickOverFlowValue);
+		uint32_t systick = SysTick->VAL;
 
-	while (millis() < end) {
-		;
-		}
-	while(SysTick->VAL > systick)
-		{
+		while (millis() < end) {
 			;
-		}
+			}
+		while(SysTick->VAL > systick)
+			{
+				;
+			}
+
+	#endif
 }   
 
 void delay_us(uint16_t us)

@@ -35,7 +35,7 @@ int main(void)
 		{
 			buf[i] = i%256;
 		}	
-		for(uint16_t i =0;i<32;i++)
+		for(uint16_t i =0;i<16;i++)
 		{		
 			for(uint16_t j =0;j<16;j++)
 			{
@@ -45,12 +45,12 @@ int main(void)
 			uart1.printf("\r\n ");	
 		}
 			ee.byteWrite(0,buf,512);
-			data = ee.byteRead(0,rbuf,512);
 		
 		
 		uart1.printf("\r\n===rbuf===\r\n");
 
-		for(uint16_t i =0;i<32;i++)
+			data = ee.byteRead(0,rbuf,512);
+		for(uint16_t i =0;i<16;i++)
 		{		
 			for(uint16_t j =0;j<16;j++)
 			{
@@ -66,8 +66,8 @@ int main(void)
 //uart1.printf("\r\n data = %02x\r\n",data);
 	while(1)
 	{
-	uart1.printf("\r\nruning!");
-		delay_ms(1000);
+
+		delay_ms(10000);
 	}
 
 
