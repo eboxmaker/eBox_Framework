@@ -1,7 +1,19 @@
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
+
+Copyright 2015 shentq. All Rights Reserved.
+*/
+
+//STM32 RUN IN eBox
+
+
 
 #include "ebox.h"
 
-USART uart1(USART1,PA9,PA10);
+USART uart1(USART1,&PA9,&PA10);
 
 uint32_t x;
 uint32_t xx;
@@ -18,7 +30,7 @@ void t2it()
 	{
 		flag = 1;
 		xx = 0;
-				PB9->write(!PB9->read());
+				PB9.write(!PB9.read());
 
 	}
 }
@@ -29,7 +41,7 @@ void t1it()
 	{
 		flag1 = 1;
 		x = 0;
-				PB8->write(!PB8->read());
+				PB8.write(!PB8.read());
 
 	}
 }
@@ -37,8 +49,8 @@ void setup()
 {
 	eBoxInit();
 	uart1.begin(9600);
-		PB8->mode(OUTPUT_PP);
-		PB9->mode(OUTPUT_PP);
+		PB8.mode(OUTPUT_PP);
+		PB9.mode(OUTPUT_PP);
 
 	timer2.begin(1000);
 	timer2.interrupt(ENABLE);

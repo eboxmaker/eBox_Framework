@@ -633,9 +633,9 @@
           <GroupName>edriver</GroupName>
           <Files>
             <File>
-              <FileName>gpio.cpp</FileName>
+              <FileName>object.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\edriver\gpio.cpp</FilePath>
+              <FilePath>..\edriver\object.cpp</FilePath>
             </File>
             <File>
               <FileName>74HC595.cpp</FileName>

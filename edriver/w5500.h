@@ -29,15 +29,15 @@ static u8 I_STATUS[MAX_SOCK_NUM];
 static u16 SSIZE[MAX_SOCK_NUM]; /**< Max Tx buffer size by each channel */
 static u16 RSIZE[MAX_SOCK_NUM]; /**< Max Rx buffer size by each channel */
 
-class W5500:public SPIClASS
+class W5500
 {
 	public:
-		W5500(GPIO* cspin,SPI_TypeDef *spi,GPIO* sck,GPIO* miso,GPIO* mosi,GPIO* rstpin,GPIO* intpin):SPIClASS(spi,sck,miso,mosi)
+		W5500(GPIO* cspin,GPIO* rstpin,GPIO* intpin,SPIClASS* pSPI)
 		{
 			cs = cspin;
 		  rstPin = rstpin;
 			intPin = intpin;
-			
+			spi = pSPI;
 
 		}
 		void begin(u8* mac,u8* ip,u8* subnet,u8* gateway);
@@ -121,6 +121,7 @@ class W5500:public SPIClASS
 		GPIO* rstPin;
 		GPIO* intPin;
 		SPICONFIG spiDevW5500;
+		SPIClASS* spi;
 	
 };
 #define SOCKET0 0

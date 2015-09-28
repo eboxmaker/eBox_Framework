@@ -1,10 +1,19 @@
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
 
+Copyright 2015 shentq. All Rights Reserved.
+*/
+
+//STM32 RUN IN eBox
 #include "ebox.h"
 #include "button.h"
 
-USART uart1(USART1,PA9,PA10);
+USART uart1(USART1,&PA9,&PA10);
 
-Button btn(PA8,1);
+Button btn(&PA8,1);
 
 void setup()
 {
@@ -18,9 +27,9 @@ void setup()
 int main(void)
 {
 	setup();
-	PB8->mode(OUTPUT_PP);
-	PB9->mode(OUTPUT_PP);
-	PB10->mode(OUTPUT_PP);
+	PB8.mode(OUTPUT_PP);
+	PB9.mode(OUTPUT_PP);
+	PB10.mode(OUTPUT_PP);
 
 	
 	while(1)
@@ -28,17 +37,17 @@ int main(void)
 		btn.loop();
 		if(btn.click())
 		{
-			PB8->write(!PB8->read());
+			PB8.write(!PB8.read());
 			uart1.printf("\r\nclick event!");
 		}
 		if(btn.release())
 		{
-			PB9->write(!PB9->read());
+			PB9.write(!PB9.read());
 			uart1.printf("\r\nrelease event!");
 		}
 		if(btn.pressedFor(2000,5))//长按两秒，执行5次
 		{
-			PB10->write(!PB10->read());
+			PB10.write(!PB10.read());
 			uart1.printf("\r\nlong press event!");
 		}
 	}

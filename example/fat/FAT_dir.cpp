@@ -1,11 +1,20 @@
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
 
+Copyright 2015 shentq. All Rights Reserved.
+*/
+
+//STM32 RUN IN eBox
 #include "ebox.h"
 #include "mmc_sd.h"
 #include "ff.h"
 
 extern void attachSDCardToFat(SD* sd);
 
-USART uart1(USART1,PA9,PA10);
+USART uart1(USART1,&PA9,&PA10);
 
 static FATFS fs;            // Work area (file system object) for logical drive
 FATFS *fss;
@@ -13,7 +22,7 @@ DIR DirObject;       //Ŀ¼�ṹ
 FRESULT res;
 u8 ret;
 	
-SD sd(PB12,SPI2,PB13,PB14,PB15);
+SD sd(&PB12,&spi2);
 
 void dirOpt()
 {

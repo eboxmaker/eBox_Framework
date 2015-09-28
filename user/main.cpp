@@ -1,72 +1,91 @@
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
 
+Copyright 2015 shentq. All Rights Reserved.
+*/
+
+//STM32 RUN IN eBox
+
+
+/*
+一个简单的命令帧接收示例
+*/
 #include "ebox.h"
 
-USART uart1(USART1,PA9,PA10);
+USART uart3(USART3,&PB10,&PB11);
 
-uint32_t x;
-uint32_t xx;
-uint8_t flag1;
-uint8_t flag;
 
-TIM timer2(TIM2);
-TIMERONE t1;
 
-void t2it()
+#define  HEAD '$' 
+#define  END '!' 
+
+#define  NEEDHEAD 0 
+#define  NEEDDATA 1 
+#define  DATAEND 2 
+
+uint8_t state = NEEDHEAD;
+
+char rcv[100];
+int i;
+void test()
 {
-	xx++;
-	if(xx == 1000)
+	uint8_t c;
+	c = uart3.receiveData();
+	switch(state)
 	{
-		flag = 1;
-		xx = 0;
-				PB9->write(!PB9->read());
-
+		case NEEDHEAD:
+			if(c == HEAD)
+			{
+				i = 0;
+				rcv[i++] = c;
+				state = NEEDDATA;
+			}
+			break;
+		case NEEDDATA:
+			if(c == END)
+			{
+				rcv[i] = c;
+				state = DATAEND;			
+			}
+			else
+			{
+				rcv[i++] = c;
+			}		
+			break;
 	}
-}
-void t1it()
-{
-	x++;
-	if(x == 1000)
-	{
-		flag1 = 1;
-		x = 0;
-				PB8->write(!PB8->read());
 
-	}
+
 }
+	
 void setup()
 {
 	eBoxInit();
-	uart1.begin(9600);
-	PB8->mode(OUTPUT_PP);
-	PB9->mode(OUTPUT_PP);
-
-	timer2.begin(1000);
-	timer2.interrupt(ENABLE);
-	timer2.attachInterrupt(t2it);
-	timer2.start();
-	
-	t1.begin(1000);
-	t1.interrupt(ENABLE);
-	t1.attachInterrupt(t1it);
-	t1.start();
+	uart3.begin(9600);
+	uart3.interrupt(ENABLE);
+	uart3.attachInterrupt(test);
 }
 
-
+float x,y;
 int main(void)
 {
+
 	setup();
+	uart3.printf("uart is ok !\r\n");
+
 	while(1)
-	{
-		if(flag == 1)
+	{		 	
+		if(state == DATAEND)
 		{
-			uart1.printf("\r\ntimer2 is triggered 1000 times !",xx);
-			flag = 0;
+		
+			uart3.printf(rcv);
+			for(int i = 0; i < 100; i ++)
+				rcv[i] = 0;
+			state = NEEDHEAD;
 		}
-		if(flag1 == 1)
-		{
-			uart1.printf("\r\ntimer1 is triggered 1000 times !",xx);
-			flag1 = 0;
-		}
+
 	}
 
 
