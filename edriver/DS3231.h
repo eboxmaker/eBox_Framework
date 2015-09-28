@@ -58,16 +58,17 @@ This specification is preliminary and is subject to change at any time without n
  
  }DateTime;
 
- class DS3231:public SOFTI2C
+ class DS3231
  {
 	 public:
 			DateTime t;
-			DS3231(GPIO* SDApin,GPIO* SCLpin):SOFTI2C(SDApin,SCLpin){
-			// do nothing;
+			DS3231(SOFTI2C* pSI2c)
+			{
+				i2c = pSI2c;
 			};	
 			void begin(uint32_t speed)
 			{
-				i2cBegin(speed);
+				i2c->begin(speed);
 			};
 			void getDateTime(DateTime *t);
 			void getTime(char* buf);
@@ -75,6 +76,7 @@ This specification is preliminary and is subject to change at any time without n
 			void setTime(DateTime *t);
  
 	 private:
+		 SOFTI2C* i2c;
 			uint8_t BcdToDec(uint8_t BCDCode);
 			uint8_t DecToBcd(uint8_t Dec);
  };

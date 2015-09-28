@@ -27,7 +27,8 @@ class I2C
 
 	public:
 		I2C(I2C_TypeDef* I2Cx,GPIO* SDAPin,GPIO* SCLPin);
-		void 		setSpeed(uint32_t speed);
+		void			begin(uint32_t speed);
+		void 			setSpeed(uint32_t speed);
 		uint32_t	readConfig();
 
 		int8_t	writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);
@@ -35,7 +36,6 @@ class I2C
 		int8_t	readByte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data);
 		int8_t	readByte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
 	protected:
-		void   i2cBegin(uint32_t speed);
 		int8_t start();
 		int8_t stop();
 		int8_t sendNoAck();
@@ -66,6 +66,7 @@ class SOFTI2C
 {
   public:
 		SOFTI2C(GPIO* SDApin, GPIO* SCLpin);
+		void 		  begin(uint32_t speed);
 		int8_t 		setSpeed(uint32_t speed);
 		uint32_t	readConfig();
 		int8_t		writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);
@@ -80,7 +81,6 @@ class SOFTI2C
 		uint32_t _speed;
 		uint16_t _delayTimes;
 	protected:
-		void 		i2cBegin(uint32_t speed);
 		void 		start();
 		void 		stop();
 		int8_t	waitAck();

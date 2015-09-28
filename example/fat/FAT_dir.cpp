@@ -14,7 +14,6 @@ Copyright 2015 shentq. All Rights Reserved.
 
 extern void attachSDCardToFat(SD* sd);
 
-USART uart1(USART1,&PA9,&PA10);
 
 static FATFS fs;            // Work area (file system object) for logical drive
 FATFS *fss;

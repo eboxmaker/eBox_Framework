@@ -15,9 +15,7 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "i2c.h"
 
-#define DEBUG 1
 
-//#define I2C_NUM 2
 I2C::I2C(I2C_TypeDef* I2Cx,GPIO* SDAPin,GPIO* SCLPin)
 {
 	_I2Cx = I2Cx;
@@ -25,7 +23,7 @@ I2C::I2C(I2C_TypeDef* I2Cx,GPIO* SDAPin,GPIO* SCLPin)
 	_SCLPin = SCLPin;
 	
 }
-void  I2C::i2cBegin(uint32_t speed)
+void  I2C::begin(uint32_t speed)
 {
 	_speed = speed;
 	I2C_InitTypeDef I2C_InitStructure; 
@@ -93,9 +91,6 @@ int8_t I2C::start()
 		if(times == 0)
 		{
 			err = -1;
-			#if  DEBUG
-				//uart3.printf("err = %d",err);
-			#endif
 			break;
 		}
 	}

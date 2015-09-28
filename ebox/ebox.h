@@ -38,19 +38,26 @@ This specification is preliminary and is subject to change at any time without n
 #define USE_OS 0
 
 ////////系统debug支持////////////////////////////////////////////////////////////////
-//#define EBOX_DEBUG
-//extern USART uart1;//根据不同的串口名称此处需要做相应的修改
-#ifdef EBOX_DEBUG
+#define EBOX_DEBUG 0
+#if EBOX_DEBUG
+  extern USART uart1;//根据不同的串口名称此处需要做相应的修改
 	#define DBG(...) uart1.printf(__VA_ARGS__)
 #else
 	#define  DBG(...) 
 #endif
 ////////////////////////////////////////////////////////////////////////////////
 //创建所有引脚对象和宏定义其指针
+extern USART uart1;
+extern USART uart2;
+extern USART uart3;
 
 extern SPIClASS spi1;	
 extern SPIClASS spi2;
 extern SOFTSPI sspi;
+extern I2C i2c1;
+extern I2C i2c2;
+extern SOFTI2C si2c;
+
 
 extern GPIO PA0;
 extern GPIO PA1;

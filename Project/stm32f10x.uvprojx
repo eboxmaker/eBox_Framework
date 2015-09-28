@@ -627,16 +627,16 @@
               <FileType>8</FileType>
               <FilePath>..\ebox\Peripherals\iflash.cpp</FilePath>
             </File>
+            <File>
+              <FileName>object.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\object.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>edriver</GroupName>
           <Files>
-            <File>
-              <FileName>object.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\edriver\object.cpp</FilePath>
-            </File>
             <File>
               <FileName>74HC595.cpp</FileName>
               <FileType>8</FileType>

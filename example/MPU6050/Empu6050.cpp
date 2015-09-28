@@ -1,7 +1,6 @@
 
 #include "ebox.h"
 
-USART uart1(USART1,PA9,PA10);
 
 
 
