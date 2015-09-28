@@ -75,11 +75,12 @@ This specification is preliminary and is subject to change at any time without n
 #define	SlaveAddress	0xD0	//IIC写入时的地址字节数据
 
 
-class MPU6050 : public I2C
+class MPU6050
 {
 	public:
-		 MPU6050(GPIO* SDApin,GPIO* SCLpin):I2C(I2C2,SDApin,SCLpin){
-		 // do nothing;
+		 MPU6050(I2C* pI2C)
+	  {
+		 i2c = pI2C;
 		 };	
 		void 			begin(uint32_t speed);
 		int16_t 	getData(uint8_t regAddress);
@@ -87,6 +88,7 @@ class MPU6050 : public I2C
 		void 			getID(uint8_t* id);
 
 	private:
+		I2C* i2c;
 		
 	
 };

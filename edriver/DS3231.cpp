@@ -17,7 +17,6 @@ This specification is preliminary and is subject to change at any time without n
 #include "DS3231.h"
 	
 
-
 uint8_t DS3231::BcdToDec(uint8_t BCDCode)
 {
 	u8 temp,Dec;
@@ -40,7 +39,7 @@ void	DS3231::getDateTime(DateTime *t)
 {
 	uint8_t buf[8];
 
-	readByte(DS3231_WriteAddress,DS3231_SECOND,buf,7);
+	i2c->readByte(DS3231_WriteAddress,DS3231_SECOND,buf,7);
 
 
 //	timer.w_year,timer.w_month,timer.w_date,timer.hour,timer.min,timer.sec
@@ -57,7 +56,7 @@ void DS3231::getDate(char* buf)
 {		
 	uint8_t tmpbuf[3];
 
-	readByte(DS3231_WriteAddress,DS3231_DAY,tmpbuf,3);				//日期
+	i2c->readByte(DS3231_WriteAddress,DS3231_DAY,tmpbuf,3);				//日期
 
 	buf[0] =char( (tmpbuf[2]>>4) + 0x30);
 	buf[1] =char( (tmpbuf[2]&0x0f) + 0x30);
@@ -73,7 +72,7 @@ void DS3231::getTime(char* buf)
 {
 	uint8_t tmpbuf[3];
 
-	readByte(DS3231_WriteAddress,DS3231_SECOND,tmpbuf,3);		//秒
+	i2c->readByte(DS3231_WriteAddress,DS3231_SECOND,tmpbuf,3);		//秒
 
 	buf[0] =char( (tmpbuf[2]>>4) + 0x30);
 	buf[1] =char( (tmpbuf[2]&0x0f) + 0x30);
@@ -99,12 +98,12 @@ void	DS3231::setTime(DateTime *t)
 		tBCD.sec = DecToBcd(t->sec);
 	
 
-    writeByte(DS3231_WriteAddress,DS3231_WEEK,tBCD.week);   //修改周
-		writeByte(DS3231_WriteAddress,DS3231_YEAR,tBCD.year);   //修改年
-    writeByte(DS3231_WriteAddress,DS3231_MONTH,tBCD.month);  //修改月
-    writeByte(DS3231_WriteAddress,DS3231_DAY,tBCD.date);    //修改日
-    writeByte(DS3231_WriteAddress,DS3231_HOUR,tBCD.hour);   //修改时
-    writeByte(DS3231_WriteAddress,DS3231_MINUTE,tBCD.min); //修改分
-    writeByte(DS3231_WriteAddress,DS3231_SECOND,tBCD.sec ); //修改秒
+    i2c->writeByte(DS3231_WriteAddress,DS3231_WEEK,tBCD.week);   //修改周
+		i2c->writeByte(DS3231_WriteAddress,DS3231_YEAR,tBCD.year);   //修改年
+    i2c->writeByte(DS3231_WriteAddress,DS3231_MONTH,tBCD.month);  //修改月
+    i2c->writeByte(DS3231_WriteAddress,DS3231_DAY,tBCD.date);    //修改日
+    i2c->writeByte(DS3231_WriteAddress,DS3231_HOUR,tBCD.hour);   //修改时
+    i2c->writeByte(DS3231_WriteAddress,DS3231_MINUTE,tBCD.min); //修改分
+    i2c->writeByte(DS3231_WriteAddress,DS3231_SECOND,tBCD.sec ); //修改秒
 }
 	

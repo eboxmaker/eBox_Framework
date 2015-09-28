@@ -14,7 +14,6 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "w5500.h"
 #include "socket.h"
 #include "udp.h"
-USART uart1(USART1,&PA9,&PA10);
 
   u8 mac[6]={0x00,0x08,0xdc,0x11,0x11,0x11};/*定义Mac变量*/
   u8 lip[4]={192,168,1,111};/*定义lp变量*/

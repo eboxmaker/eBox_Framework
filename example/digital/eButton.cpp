@@ -11,7 +11,6 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 #include "button.h"
 
-USART uart1(USART1,&PA9,&PA10);
 
 Button btn(&PA8,1);
 

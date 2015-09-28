@@ -12,7 +12,6 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 
 
-USART uart1(USART1,&PA9,&PA10);
 
 
 uint32_t xx;

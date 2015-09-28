@@ -20,7 +20,7 @@ SOFTI2C::SOFTI2C(GPIO* SDAPin, GPIO* SCLPin)
 	sdaPin = SDAPin;
 	sclPin = SCLPin;
 }	
-void SOFTI2C::i2cBegin(uint32_t speed)
+void SOFTI2C::begin(uint32_t speed)
 {
 	setSpeed(speed);
 	sdaPin->mode(OUTPUT_PP);

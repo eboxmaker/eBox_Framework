@@ -10,7 +10,6 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 #include "ebox.h"
 
-USART uart1(USART1,&PA9,&PA10);
 
 uint32_t xx;
 

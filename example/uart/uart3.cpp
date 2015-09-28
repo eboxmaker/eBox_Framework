@@ -15,8 +15,6 @@ Copyright 2015 shentq. All Rights Reserved.
 */
 #include "ebox.h"
 
-USART uart3(USART3,&PB10,&PB11);
-
 
 
 #define  HEAD '$' 
