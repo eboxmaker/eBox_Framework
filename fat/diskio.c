@@ -237,8 +237,7 @@ DRESULT disk_ioctl (
    Private Functions
 
 ---------------------------------------------------------------------------*/
-
 DWORD get_fattime (void)
 {
-  return getSysTime();
+  return 0;
 }

@@ -18,18 +18,18 @@ This specification is preliminary and is subject to change at any time without n
 
 void W25X::begin()
 {
-	spiDevW25x16.devNum = 1;
-	spiDevW25x16.mode = SPI_MODE0;
-	spiDevW25x16.prescaler = 0;
-	spiDevW25x16.bitOrder = SPI_BITODER_MSB;
+	spi_dev_w25x16.devNum = 1;
+	spi_dev_w25x16.mode = SPI_MODE0;
+	spi_dev_w25x16.prescaler = 0;
+	spi_dev_w25x16.bit_order = SPI_BITODER_MSB;
 	
-	spi->begin(&spiDevW25x16);
+	spi->begin(&spi_dev_w25x16);
 	cs->mode(OUTPUT_PP);
 	cs->set();
 }
-void W25X::readId(uint16_t* id)
+void W25X::read_id(uint16_t* id)
 {
-	spi->getSpiRight(&spiDevW25x16);
+	spi->get_spi_right(&spi_dev_w25x16);
 
 	cs->reset();
 	spi->write(0x90);
@@ -39,7 +39,7 @@ void W25X::readId(uint16_t* id)
 	*id |= spi->read()<<8;
 	*id |= spi->read();
 	cs->set();
-	spi->releaseSpiRight();
+	spi->release_spi_right();
 
 
 }
@@ -55,7 +55,7 @@ void W25X::readId(uint16_t* id)
 ***************************************************************/
 void W25X::read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)   
 { 
-	spi->getSpiRight(&spiDevW25x16);
+	spi->get_spi_right(&spi_dev_w25x16);
 	cs->reset();
 	 spi->write(W25X_ReadData);         //发送读取命令   
 	 spi->write((u8)((ReadAddr)>>16));  //发送24bit地址    
@@ -63,7 +63,7 @@ void W25X::read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)
 	 spi->write((u8)ReadAddr);   
 	 spi->read(pBuffer,NumByteToRead);
 	cs->set();
-	spi->releaseSpiRight();
+	spi->release_spi_right();
 
 }  
 /***************************************************************
@@ -76,9 +76,9 @@ void W25X::read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25X::fastRead(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)   
+void W25X::fast_read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)   
 { 
-	spi->getSpiRight(&spiDevW25x16);
+	spi->get_spi_right(&spi_dev_w25x16);
 	cs->reset();
 	 spi->write(W25X_FastReadData);         //发送读取命令   
 	 spi->write((u8)((ReadAddr)>>16));  //发送24bit地址    
@@ -87,7 +87,7 @@ void W25X::fastRead(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)
 	 spi->write(0xff);   //空字节
 	 spi->read(pBuffer,NumByteToRead);
 	cs->set();
-	spi->releaseSpiRight();
+	spi->release_spi_right();
 
 }  
 /***************************************************************
@@ -107,7 +107,7 @@ void W25X::write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
 	u16 secoff;
 	u16 secremain;	   
  	u16 i;    
-	spi->getSpiRight(&spiDevW25x16);
+	spi->get_spi_right(&spi_dev_w25x16);
 
 	secpos=WriteAddr/4096;//扇区地址 0~511 for w25x16
 	secoff=WriteAddr%4096;//在扇区内的偏移
@@ -116,21 +116,21 @@ void W25X::write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
 	if(NumByteToWrite<=secremain)secremain=NumByteToWrite;//不大于4096个字节
 	while(1) 
 	{	
-		read(SPI_FLASH_BUF,secpos*4096,4096);//读出整个扇区的内容
+		read(spi_flash_buf,secpos*4096,4096);//读出整个扇区的内容
 		for(i=0;i<secremain;i++)//校验数据
 		{
-			if(SPI_FLASH_BUF[secoff+i]!=0XFF)break;//需要擦除  	  
+			if(spi_flash_buf[secoff+i]!=0XFF)break;//需要擦除  	  
 		}
 		if(i<secremain)//需要擦除
 		{
-			eraseSector(secpos);//擦除这个扇区
+			erase_sector(secpos);//擦除这个扇区
 			for(i=0;i<secremain;i++)	   //复制
 			{
-				SPI_FLASH_BUF[i+secoff]=pBuffer[i];	  
+				spi_flash_buf[i+secoff]=pBuffer[i];	  
 			}
-			writeNoCheck(SPI_FLASH_BUF,secpos*4096,4096);//写入整个扇区  
+			write_no_check(spi_flash_buf,secpos*4096,4096);//写入整个扇区  
 
-		}else writeNoCheck(pBuffer,WriteAddr,secremain);//写已经擦除了的,直接写入扇区剩余区间. 				   
+		}else write_no_check(pBuffer,WriteAddr,secremain);//写已经擦除了的,直接写入扇区剩余区间. 				   
 		if(NumByteToWrite==secremain)break;//写入结束了
 		else//写入未结束
 		{
@@ -144,7 +144,7 @@ void W25X::write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
 			else secremain=NumByteToWrite;			//下一个扇区可以写完了
 		}	 
 	}
-	spi->releaseSpiRight();
+	spi->release_spi_right();
 	
 }
 
@@ -159,7 +159,7 @@ void W25X::write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25X::writePage(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
+void W25X::write_page(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
 {
 	writeEnable();                  //SET WEL 
 	cs->reset();
@@ -182,14 +182,14 @@ void W25X::writePage(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25X::writeNoCheck(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)   
+void W25X::write_no_check(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)   
 { 			 		 
 	u16 pageremain;	   
 	pageremain=256-WriteAddr%256; //单页剩余的字节数		 	    
 	if(NumByteToWrite<=pageremain)pageremain=NumByteToWrite;//不大于256个字节
 	while(1)
 	{	   
-		writePage(pBuffer,WriteAddr,pageremain);
+		write_page(pBuffer,WriteAddr,pageremain);
 		if(NumByteToWrite==pageremain)break;//写入结束了
 	 	else //NumByteToWrite>pageremain
 		{
@@ -209,7 +209,7 @@ void W25X::writeNoCheck(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25X::eraseSector(u32 Dst_Addr)   
+void W25X::erase_sector(u32 Dst_Addr)   
 {   
 	Dst_Addr*=4096;
 	writeEnable();                  //SET WEL 	 
@@ -234,7 +234,7 @@ void W25X::eraseSector(u32 Dst_Addr)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25X::eraseChip(void)   
+void W25X::erase_chip(void)   
 {                                             
 	writeEnable();                  //SET WEL 
 	_waitBusy();   

@@ -19,8 +19,8 @@ This specification is preliminary and is subject to change at any time without n
 I2C::I2C(I2C_TypeDef* I2Cx,GPIO* SCLPin,GPIO* SDAPin)
 {
 	_I2Cx = I2Cx;
-	_SCLPin = SCLPin;
-	_SDAPin = SDAPin;
+	scl_pin = SCLPin;
+	sda_pin = SDAPin;
 	
 }
 void  I2C::begin(uint32_t speed)
@@ -36,8 +36,8 @@ void  I2C::begin(uint32_t speed)
 //		RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C3,ENABLE); 
 		
 	
-	_SDAPin->mode(AF_OD);
-	_SCLPin->mode(AF_OD);
+	sda_pin->mode(AF_OD);
+	scl_pin->mode(AF_OD);
 	
 	  /* I2C ÅäÖÃ */
 	I2C_InitStructure.I2C_Mode = I2C_Mode_I2C ; 
@@ -55,7 +55,7 @@ void  I2C::begin(uint32_t speed)
 
 }
 
-void I2C::setSpeed(uint32_t speed)
+void I2C::set_speed(uint32_t speed)
 {
 	_speed = speed;
 	I2C_InitTypeDef I2C_InitStructure; 
@@ -75,7 +75,7 @@ void I2C::setSpeed(uint32_t speed)
 	I2C_AcknowledgeConfig(_I2Cx, ENABLE);   
 
 }
-uint32_t I2C::readConfig()
+uint32_t I2C::read_config()
 {
 	return _speed;
 }
@@ -102,13 +102,13 @@ int8_t I2C::stop()
 	I2C_GenerateSTOP(_I2Cx,ENABLE);
 	return err;
 }
-int8_t I2C::sendNoAck()
+int8_t I2C::send_no_ack()
 {
 	int8_t err = 0;
 	I2C_AcknowledgeConfig(_I2Cx,DISABLE);
 	return err;
 }
-int8_t I2C::sendAck()
+int8_t I2C::send_ack()
 {
 	int8_t err = 0;
 	I2C_AcknowledgeConfig(_I2Cx,ENABLE);
@@ -116,7 +116,7 @@ int8_t I2C::sendAck()
 }
 
 
-int8_t I2C::sendByte(uint8_t data)
+int8_t I2C::send_byte(uint8_t data)
 {
 	uint16_t times = 1000;
 	int8_t err = 0;
@@ -132,7 +132,7 @@ int8_t I2C::sendByte(uint8_t data)
 	}
 	return err;
 }
-int8_t I2C::send7BitsAddress(uint8_t slaveAddress)
+int8_t I2C::send_7bits_address(uint8_t slaveAddress)
 {
 	uint16_t times = 1000;
 	int8_t err = 0;
@@ -165,7 +165,7 @@ int8_t I2C::send7BitsAddress(uint8_t slaveAddress)
 	return err;
 
 }
-int8_t I2C::receiveByte(uint8_t* data)
+int8_t I2C::receive_byte(uint8_t* data)
 {	
 	uint16_t times = 1000;
 	int8_t err = 0;
@@ -183,29 +183,29 @@ int8_t I2C::receiveByte(uint8_t* data)
 }
 
 
-int8_t I2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
+int8_t I2C::write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
 {
 	uint16_t err = 0;
 
 	start();
-	send7BitsAddress(slaveAddress);
-	sendByte(regAddress);
-	sendByte(data);
+	send_7bits_address(slaveAddress);
+	send_byte(regAddress);
+	send_byte(data);
 	stop();
 
 	return err;
 	
 }
-int8_t I2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
+int8_t I2C::write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
 {
 	uint16_t err = 0;
 
 	start();
-	send7BitsAddress(slaveAddress);
-	sendByte(regAddress);
+	send_7bits_address(slaveAddress);
+	send_byte(regAddress);
 	while(numToRead--)
 	{
-	  sendByte(*data);
+	  send_byte(*data);
 		data++;
 	}
 	stop();
@@ -213,58 +213,58 @@ int8_t I2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint
 	return err;
 	
 }
-int8_t I2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
+int8_t I2C::read_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
 {
 	start();
-	send7BitsAddress(slaveAddress);
+	send_7bits_address(slaveAddress);
 	I2C_Cmd(_I2Cx,ENABLE);
-	sendByte(regAddress);
+	send_byte(regAddress);
 	start();
-	send7BitsAddress(slaveAddress + 1);
-	sendNoAck();
+	send_7bits_address(slaveAddress + 1);
+	send_no_ack();
 	stop();
-	receiveByte(data);
-	sendAck();
+	receive_byte(data);
+	send_ack();
 	return 0;
 }
 
-int8_t I2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
+int8_t I2C::read_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
 {
 	uint8_t i = 0;
 	start();
-	send7BitsAddress(slaveAddress);
+	send_7bits_address(slaveAddress);
 	I2C_Cmd(_I2Cx,ENABLE);
-	sendByte(regAddress);
+	send_byte(regAddress);
 	start();
-	send7BitsAddress(slaveAddress + 1);
+	send_7bits_address(slaveAddress + 1);
 	
 	while(numToRead)
 	{
 		if(numToRead == 1)
 		{
-			sendNoAck();
+			send_no_ack();
 			stop();
 		}
-	  receiveByte(data);
+	  receive_byte(data);
 		data++;
 		numToRead--;
 		i++;
 	}
-	sendAck();
+	send_ack();
 
 	return i;
 }
 
-int8_t I2C::waitBusy(uint8_t slaveAddress)
+int8_t I2C::wait_busy(uint8_t slaveAddress)
 {
 	int8_t ret;
 	uint8_t i = 0;
 	do
 	{
 		start();
-		ret = send7BitsAddress(slaveAddress);
-		sendAck();
-		sendByte(slaveAddress);
+		ret = send_7bits_address(slaveAddress);
+		send_ack();
+		send_byte(slaveAddress);
 		stop();
 		if(i++==100)
 		{

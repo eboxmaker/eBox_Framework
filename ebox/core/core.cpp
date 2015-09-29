@@ -17,18 +17,17 @@ This specification is preliminary and is subject to change at any time without n
 #include "common.h"
 #include "ebox.h"
 
-void 	Init_ADC1(void);
 
- __IO uint32_t millisSeconds;
+ __IO uint32_t millis_seconds;
  
 #if USE_OS 
 	#include "cpu.h"
 	#include "os.h"
-	#define SysTickOverFlowValue (9000000/OS_TICKS_PER_SEC)//SysTickOverFlowValue取值范围（100-9000），主频为72Mhz的情况下
+	#define systick_over_flow_value (9000000/OS_TICKS_PER_SEC)//SysTickOverFlowValue取值范围（100-9000），主频为72Mhz的情况下
 
 	void eBoxInit(void)
 	{
-		Init_ADC1();
+		init_ADC1();
 		
 		NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
 
@@ -40,13 +39,13 @@ void 	Init_ADC1(void);
 
 #else
 
-	#define SysTickOverFlowValue 9000//此值取值范围（100-9000），主频为72Mhz的情况下
+	#define systick_over_flow_value 9000//此值取值范围（100-9000），主频为72Mhz的情况下
 
 	void eBoxInit(void)
 	{
-		SysTick_Config(SysTickOverFlowValue);//  每隔 (nhz/9,000,000)s产生一次中断
+		SysTick_Config(systick_over_flow_value);//  每隔 (nhz/9,000,000)s产生一次中断
 		SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);//9Mhz的systemticks clock；
-		Init_ADC1();
+		init_ADC1();
 		
 		NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
 
@@ -59,7 +58,7 @@ void 	Init_ADC1(void);
 
 uint32_t millis( void )
 {
-  return millisSeconds;
+  return millis_seconds;
 }
 
 void delay_ms(uint32_t ms)
@@ -67,7 +66,7 @@ void delay_ms(uint32_t ms)
 	#if USE_OS 
 		OS_TimeDelay(ms);
 	#else
-		uint32_t end = millis() + ms*(9000/SysTickOverFlowValue);
+		uint32_t end = millis() + ms*(9000/systick_over_flow_value);
 		uint32_t systick = SysTick->VAL;
 
 		while (millis() < end) {
@@ -88,11 +87,11 @@ void delay_us(uint16_t us)
 	if(count == 0)return;
 	
 	count = us * 9;
-	if(count>SysTickOverFlowValue - 1)count = SysTickOverFlowValue-1;
-	noInterrupts();
+	if(count>systick_over_flow_value - 1)count = systick_over_flow_value-1;
+	no_interrupts();
 	if(systick < count)
 	{
-		count  = ((SysTickOverFlowValue-5)  + systick - count);///
+		count  = ((systick_over_flow_value-5)  + systick - count);///
 		while(SysTick->VAL <= count)
 		{
 			;
@@ -104,7 +103,7 @@ void delay_us(uint16_t us)
 		{
 			;
 		}
-		millisSeconds++;//矫正毫秒计数
+		millis_seconds++;//矫正毫秒计数
 	}
 	else
 	{
@@ -116,7 +115,7 @@ void delay_us(uint16_t us)
 			;
 		}
 	}
-	Interrupts();
+	interrupts();
 }
 
     								   
@@ -139,7 +138,7 @@ extern "C"{
 	void SysTick_Handler(void)//systick中断
 	{
 
-		millisSeconds++;
+		millis_seconds++;
 
 	}
 

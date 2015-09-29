@@ -15,7 +15,7 @@ This specification is preliminary and is subject to change at any time without n
 #include "timerone.h"
 
 
-callbackFun timOneCallbackTable[1];
+callback_fun_type timOneCallbackTable[1];
 
 TIMERONE::TIMERONE()
 {
@@ -36,7 +36,7 @@ void TIMERONE::begin(uint32_t Frq)
 		if((0xffff>=_period)&&(_period>=1000))break;
 	}
 
-	baseInit(_period,_prescaler);
+	base_init(_period,_prescaler);
 	
 	NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;//
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;// 
@@ -64,7 +64,7 @@ void TIMERONE::stop(void)
 {
 	 TIM_Cmd(TIM1, DISABLE); //????
 }
-void TIMERONE::baseInit(uint16_t period,uint16_t prescaler)
+void TIMERONE::base_init(uint16_t period,uint16_t prescaler)
 {
 	
  TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
@@ -85,15 +85,15 @@ void TIMERONE::baseInit(uint16_t period,uint16_t prescaler)
 // TIM_ARRPreloadConfig(TIM1, ENABLE);
 	
 }
-void TIMERONE::setReload(uint16_t Autoreload)
+void TIMERONE::set_reload(uint16_t Autoreload)
 {
 	TIM_SetAutoreload(TIM1,Autoreload);
 }
-void TIMERONE::clearCount(void)
+void TIMERONE::clear_count(void)
 {
 	TIM1->CNT = 0;
 }
-void TIMERONE::attachInterrupt(void(*callback)(void))
+void TIMERONE::attach_interrupt(void(*callback)(void))
 {
 	 timOneCallbackTable[0] = callback;
 }

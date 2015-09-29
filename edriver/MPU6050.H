@@ -78,14 +78,14 @@ This specification is preliminary and is subject to change at any time without n
 class MPU6050
 {
 	public:
-		 MPU6050(I2C* pI2C)
+		 MPU6050(I2C* p_i2c)
 	  {
-		 i2c = pI2C;
+		 i2c = p_i2c;
 		 };	
 		void 			begin(uint32_t speed);
-		int16_t 	getData(uint8_t regAddress);
-		int8_t 		getData(uint8_t regAddress,int16_t* buf,uint8_t numToRead);
-		void 			getID(uint8_t* id);
+		int16_t 	get_data(uint8_t regAddress);
+		int8_t 		get_data(uint8_t regAddress,int16_t* buf,uint8_t numToRead);
+		void 			get_id(uint8_t* id);
 
 	private:
 		I2C* i2c;

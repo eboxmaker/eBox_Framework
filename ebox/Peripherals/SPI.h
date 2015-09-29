@@ -40,8 +40,8 @@ typedef struct
 	uint8_t devNum;
 	uint8_t mode;
 	uint16_t prescaler;
-	uint16_t bitOrder;
-}SPICONFIG;
+	uint16_t bit_order;
+}SPI_CONFIG_TYPE;
 
 
 /*
@@ -49,18 +49,17 @@ typedef struct
 	2.该spi功能强大，总线支持同时挂载不同MODE ,SPEED,bitOder的设备
 	3.每一个spi设备应有一个自己的SPICONFIG的配置，以支持该设备的的读写，
 		在读写前需要检测当前spi配置是否的devNum，如果是就跳过config，如果不是
-		则调用config(SPICONFIG* spiConfig);
+		则调用config(SPI_CONFIG_TYPE* spiConfig);
 */
 //默认配置 空，只依靠结构体SPICONFIG来初始化
-
-class	SPIClASS 
+class	SPI
 {
 	public:
-		SPIClASS(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin);
+		SPI(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin);
 	
-		void begin (SPICONFIG* spiConfig);
-		void config(SPICONFIG* spiConfig);
-		uint8_t readConfig(void);
+		void begin (SPI_CONFIG_TYPE* SPI_CONFIG_TYPE);
+		void config(SPI_CONFIG_TYPE* SPI_CONFIG_TYPE);
+		uint8_t read_config(void);
 		
 		int8_t  write(uint8_t data);
 		int8_t  write(uint8_t *data,uint16_t dataln);
@@ -69,8 +68,8 @@ class	SPIClASS
 		int8_t  read(uint8_t* data);
 		int8_t  read(uint8_t *rcvdata,uint16_t dataln);
 	public:
-		int8_t getSpiRight(SPICONFIG* spiConfig);
-		int8_t releaseSpiRight(void);
+		int8_t get_spi_right(SPI_CONFIG_TYPE* SPI_CONFIG_TYPE);
+		int8_t release_spi_right(void);
 
 
 	private:
@@ -80,7 +79,7 @@ class	SPIClASS
 };
 /*
 	注意：1.该类的SPI_CLOCK_DIV是由delay_us延时函数控制。略有不准，比硬件SPI会慢很多
-				2.speed设置只能为SPI_CLOCK_DIVx。如果不是此值，则会将SPI_CLOCK_DIV的值直接传递给delay_us.即delay_us(SPICONFIG->prescaler);
+				2.speed设置只能为SPI_CLOCK_DIVx。如果不是此值，则会将SPI_CLOCK_DIV的值直接传递给delay_us.即delay_us(SPI_CONFIG_TYPE->prescaler);
 				3.初期调试I2C设备建议使用SPI_CLOCK_DIV256。
 */
 class SOFTSPI
@@ -88,8 +87,8 @@ class SOFTSPI
 	public:
 		SOFTSPI(GPIO* SCKPin,GPIO* MISOPin,GPIO* MOSIPin);
 	
-		void 		begin(SPICONFIG* spiConfig);
-	  void 		config(SPICONFIG* spiConfig);
+		void 		begin(SPI_CONFIG_TYPE* spiConfig);
+	  void 		config(SPI_CONFIG_TYPE* spiConfig);
 		uint8_t readConfig(void);
 		
 		int8_t  write(uint8_t data);
@@ -99,18 +98,18 @@ class SOFTSPI
 		int8_t  read(uint8_t* data);
 		int8_t  read(uint8_t *rcvdata,uint16_t dataln);
 	public:
-		int8_t getSpiRight(SPICONFIG* spiConfig);
-		int8_t releaseSpiRight(void);
+		int8_t get_spi_right(SPI_CONFIG_TYPE* spiConfig);
+		int8_t release_spi_right(void);
 
 
 	private:
-		GPIO* 	sckPin;
-		GPIO*		mosiPin;
-		GPIO*		misoPin;
+		GPIO* 	sck_pin;
+		GPIO*		mosi_pin;
+		GPIO*		miso_pin;
 			
 		uint8_t mode;	
-		uint8_t bitOrder;
-		uint8_t spidelay;
+		uint8_t bit_order;
+		uint8_t spi_delay;
 	
 		uint8_t currentDevNum;
 		uint8_t busy;

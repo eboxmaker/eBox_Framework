@@ -17,7 +17,7 @@ This specification is preliminary and is subject to change at any time without n
 
 #define EXTI_LINE_NUM 16
 
-callbackFun extiCallbackTable[EXTI_LINE_NUM];
+callback_fun_type exti_callback_table[EXTI_LINE_NUM];
 
 
 //  trigger	:
@@ -29,29 +29,29 @@ EXTIx::EXTIx(GPIO* EXTIPin, EXTITrigger_TypeDef trigger)
 {
 
 
-	extiPin = EXTIPin;
+	exti_pin = EXTIPin;
 	_trigger = trigger;
 	
 }
 void EXTIx::begin()
 {
-	initInfo(extiPin);
+	init_info(exti_pin);
 	
-	extiPin->mode(INPUT);
+	exti_pin->mode(INPUT);
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
 	
 	EXTI_InitTypeDef EXTI_InitStructure;
 	/* EXTI line(PB0) mode config */
-	GPIO_EXTILineConfig(PortSource, PinSource); 
-  EXTI_InitStructure.EXTI_Line = ExtiLine;
+	GPIO_EXTILineConfig(port_source, pin_source); 
+  EXTI_InitStructure.EXTI_Line = exti_line;
   EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
   EXTI_InitStructure.EXTI_Trigger = _trigger; //ÏÂ½µÑØÖÐ¶Ï
   EXTI_InitStructure.EXTI_LineCmd = ENABLE;
   EXTI_Init(&EXTI_InitStructure); 
 
 }
-void EXTIx::interrupt(FunctionalState x)
+void EXTIx::interrupt(FunctionalState enable)
 {
 	 NVIC_InitTypeDef NVIC_InitStructure;
   
@@ -62,95 +62,95 @@ void EXTIx::interrupt(FunctionalState x)
   NVIC_InitStructure.NVIC_IRQChannel = irq;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = x;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = enable;
   NVIC_Init(&NVIC_InitStructure);
 
 }
 
-void EXTIx::initInfo(GPIO* EXTIPin)
+void EXTIx::init_info(GPIO* EXTIPin)
 {
 	switch((uint32_t)EXTIPin->port)
 	{
-		case (uint32_t)GPIOA: PortSource = GPIO_PortSourceGPIOA;break;
-		case (uint32_t)GPIOB: PortSource = GPIO_PortSourceGPIOB;break;
-		case (uint32_t)GPIOC: PortSource = GPIO_PortSourceGPIOC;break;
-		case (uint32_t)GPIOD: PortSource = GPIO_PortSourceGPIOD;break;
-		case (uint32_t)GPIOE: PortSource = GPIO_PortSourceGPIOE;break;
-		case (uint32_t)GPIOF: PortSource = GPIO_PortSourceGPIOF;break;
+		case (uint32_t)GPIOA: port_source = GPIO_PortSourceGPIOA;break;
+		case (uint32_t)GPIOB: port_source = GPIO_PortSourceGPIOB;break;
+		case (uint32_t)GPIOC: port_source = GPIO_PortSourceGPIOC;break;
+		case (uint32_t)GPIOD: port_source = GPIO_PortSourceGPIOD;break;
+		case (uint32_t)GPIOE: port_source = GPIO_PortSourceGPIOE;break;
+		case (uint32_t)GPIOF: port_source = GPIO_PortSourceGPIOF;break;
 	}
 	switch(EXTIPin->pin)
 	{
 		case GPIO_Pin_0:
-			PinSource = GPIO_PinSource0;ExtiLine = EXTI_Line0;irq = EXTI0_IRQn;
+			pin_source = GPIO_PinSource0;exti_line = EXTI_Line0;irq = EXTI0_IRQn;
 			break;
 		
 		case GPIO_Pin_1:
-			PinSource = GPIO_PinSource1;ExtiLine = EXTI_Line1;irq = EXTI1_IRQn;
+			pin_source = GPIO_PinSource1;exti_line = EXTI_Line1;irq = EXTI1_IRQn;
 			break;
 		
 		case GPIO_Pin_2:
-			PinSource = GPIO_PinSource2;ExtiLine = EXTI_Line2;irq = EXTI2_IRQn;
+			pin_source = GPIO_PinSource2;exti_line = EXTI_Line2;irq = EXTI2_IRQn;
 			break;
 		
 		case GPIO_Pin_3:
-			PinSource = GPIO_PinSource3;ExtiLine = EXTI_Line3;irq = EXTI3_IRQn;
+			pin_source = GPIO_PinSource3;exti_line = EXTI_Line3;irq = EXTI3_IRQn;
 			break;
 		
 		case GPIO_Pin_4:
-			PinSource = GPIO_PinSource4;ExtiLine = EXTI_Line4;irq = EXTI4_IRQn;
+			pin_source = GPIO_PinSource4;exti_line = EXTI_Line4;irq = EXTI4_IRQn;
 			break;
 		
 		case GPIO_Pin_5:
-			PinSource = GPIO_PinSource5;ExtiLine = EXTI_Line5;irq = EXTI9_5_IRQn;
+			pin_source = GPIO_PinSource5;exti_line = EXTI_Line5;irq = EXTI9_5_IRQn;
 			break;
 		
 		case GPIO_Pin_6:
-			PinSource = GPIO_PinSource6;ExtiLine = EXTI_Line6;irq = EXTI9_5_IRQn;
+			pin_source = GPIO_PinSource6;exti_line = EXTI_Line6;irq = EXTI9_5_IRQn;
 			break;
 		
 		case GPIO_Pin_7:
-			PinSource = GPIO_PinSource7;ExtiLine = EXTI_Line7;irq = EXTI9_5_IRQn;
+			pin_source = GPIO_PinSource7;exti_line = EXTI_Line7;irq = EXTI9_5_IRQn;
 			break;
 		
 		case GPIO_Pin_8:
-			PinSource = GPIO_PinSource8;ExtiLine = EXTI_Line8;irq = EXTI9_5_IRQn;
+			pin_source = GPIO_PinSource8;exti_line = EXTI_Line8;irq = EXTI9_5_IRQn;
 			break;
 		
 		case GPIO_Pin_9:
-			PinSource = GPIO_PinSource9;ExtiLine = EXTI_Line9;irq = EXTI9_5_IRQn;
+			pin_source = GPIO_PinSource9;exti_line = EXTI_Line9;irq = EXTI9_5_IRQn;
 			break;
 		
 		case GPIO_Pin_10:
-			PinSource = GPIO_PinSource10;ExtiLine = EXTI_Line10;irq = EXTI15_10_IRQn;
+			pin_source = GPIO_PinSource10;exti_line = EXTI_Line10;irq = EXTI15_10_IRQn;
 			break;
 		
 		case GPIO_Pin_11:
-			PinSource = GPIO_PinSource11;ExtiLine = EXTI_Line11;irq = EXTI15_10_IRQn;
+			pin_source = GPIO_PinSource11;exti_line = EXTI_Line11;irq = EXTI15_10_IRQn;
 			break;
 		
 		case GPIO_Pin_12:
-			PinSource = GPIO_PinSource12;ExtiLine = EXTI_Line12;irq = EXTI15_10_IRQn;
+			pin_source = GPIO_PinSource12;exti_line = EXTI_Line12;irq = EXTI15_10_IRQn;
 			break;
 		
 		case GPIO_Pin_13:
-			PinSource = GPIO_PinSource13;ExtiLine = EXTI_Line13;irq = EXTI15_10_IRQn;
+			pin_source = GPIO_PinSource13;exti_line = EXTI_Line13;irq = EXTI15_10_IRQn;
 			break;
 		
 		case GPIO_Pin_14:
-			PinSource = GPIO_PinSource14;ExtiLine = EXTI_Line14;irq = EXTI15_10_IRQn;
+			pin_source = GPIO_PinSource14;exti_line = EXTI_Line14;irq = EXTI15_10_IRQn;
 			break;
 		
 		case GPIO_Pin_15:
-			PinSource = GPIO_PinSource15;ExtiLine = EXTI_Line15;irq = EXTI15_10_IRQn;
+			pin_source = GPIO_PinSource15;exti_line = EXTI_Line15;irq = EXTI15_10_IRQn;
 			break;
 		
 	}
 
 }
 
-void EXTIx::attachInterrupt(void (*callbackFun)(void))
+void EXTIx::attach_interrupt(void (*callback_fun)(void))
 {
-		extiCallbackTable[PinSource] = callbackFun;
+		exti_callback_table[pin_source] = callback_fun;
 }
 extern "C" {
 	
@@ -158,7 +158,7 @@ extern "C" {
 	{
 		if(EXTI_GetITStatus(EXTI_Line0) != RESET) 
 		{
-			extiCallbackTable[0]();
+			exti_callback_table[0]();
 			EXTI_ClearITPendingBit(EXTI_Line0);    
 		}  	
 	}
@@ -166,7 +166,7 @@ extern "C" {
 	{
 		if(EXTI_GetITStatus(EXTI_Line1) != RESET)
 		{
-			extiCallbackTable[1]();
+			exti_callback_table[1]();
 
 			EXTI_ClearITPendingBit(EXTI_Line1);    
 		}  	
@@ -176,7 +176,7 @@ extern "C" {
 		if(EXTI_GetITStatus(EXTI_Line2) != RESET) 
 		{
 
-			extiCallbackTable[2]();
+			exti_callback_table[2]();
 
 			EXTI_ClearITPendingBit(EXTI_Line2);    
 		}  	
@@ -185,7 +185,7 @@ extern "C" {
 	{
 		if(EXTI_GetITStatus(EXTI_Line3) != RESET) 
 		{
-			extiCallbackTable[3]();
+			exti_callback_table[3]();
 			EXTI_ClearITPendingBit(EXTI_Line3);     
 		}  	
 	}
@@ -193,7 +193,7 @@ extern "C" {
 	{
 		if(EXTI_GetITStatus(EXTI_Line4) != RESET) 
 		{
-			extiCallbackTable[4]();
+			exti_callback_table[4]();
 			EXTI_ClearITPendingBit(EXTI_Line4);     
 		}  	
 	}
@@ -202,27 +202,27 @@ extern "C" {
 	{
 		if(EXTI_GetITStatus(EXTI_Line5) != RESET) 
 		{
-			extiCallbackTable[5]();
+			exti_callback_table[5]();
 			EXTI_ClearITPendingBit(EXTI_Line5);     
 		}   
 		if(EXTI_GetITStatus(EXTI_Line6) != RESET) 
 		{
-			extiCallbackTable[6]();
+			exti_callback_table[6]();
 			EXTI_ClearITPendingBit(EXTI_Line6);    
 		}  
 		if(EXTI_GetITStatus(EXTI_Line7) != RESET) 
 		{
-			extiCallbackTable[7]();
+			exti_callback_table[7]();
 			EXTI_ClearITPendingBit(EXTI_Line7);     
 		}   
 		if(EXTI_GetITStatus(EXTI_Line8) != RESET) 
 		{
-			extiCallbackTable[8]();
+			exti_callback_table[8]();
 			EXTI_ClearITPendingBit(EXTI_Line8);    
 		}	
 		if(EXTI_GetITStatus(EXTI_Line9) != RESET) 
 		{
-			extiCallbackTable[9]();
+			exti_callback_table[9]();
 			EXTI_ClearITPendingBit(EXTI_Line9);    
 		}   
 
@@ -232,32 +232,32 @@ extern "C" {
 	{
 		if(EXTI_GetITStatus(EXTI_Line10) != RESET) 
 		{
-			extiCallbackTable[10]();
+			exti_callback_table[10]();
 			EXTI_ClearITPendingBit(EXTI_Line10);     
 		}   
 		if(EXTI_GetITStatus(EXTI_Line11) != RESET) 
 		{
-			extiCallbackTable[11]();
+			exti_callback_table[11]();
 			EXTI_ClearITPendingBit(EXTI_Line11);     
 		}  
 		if(EXTI_GetITStatus(EXTI_Line12) != RESET) 
 		{
-			extiCallbackTable[12]();
+			exti_callback_table[12]();
 			EXTI_ClearITPendingBit(EXTI_Line12);     
 		}   
 		if(EXTI_GetITStatus(EXTI_Line13) != RESET) 
 		{
-			extiCallbackTable[13]();
+			exti_callback_table[13]();
 			EXTI_ClearITPendingBit(EXTI_Line13);     
 		}	
 		if(EXTI_GetITStatus(EXTI_Line14) != RESET) 
 		{
-			extiCallbackTable[14]();
+			exti_callback_table[14]();
 			EXTI_ClearITPendingBit(EXTI_Line14);     
 		}   
 		if(EXTI_GetITStatus(EXTI_Line15) != RESET) 
 		{
-			extiCallbackTable[15]();
+			exti_callback_table[15]();
 			EXTI_ClearITPendingBit(EXTI_Line15);    
 		}   
 

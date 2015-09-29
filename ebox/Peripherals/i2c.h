@@ -28,28 +28,28 @@ class I2C
 	public:
 		I2C(I2C_TypeDef* I2Cx,GPIO* SCLPin,GPIO* SDAPin);
 		void			begin(uint32_t speed);
-		void 			setSpeed(uint32_t speed);
-		uint32_t	readConfig();
+		void 			set_speed(uint32_t speed);
+		uint32_t	read_config();
 
-		int8_t	writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);
-		int8_t	writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToWrite);
-		int8_t	readByte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data);
-		int8_t	readByte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
-	  int8_t	waitBusy(uint8_t slaveAddress);
+		int8_t	write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);
+		int8_t	write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToWrite);
+		int8_t	read_byte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data);
+		int8_t	read_byte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
+	  int8_t	wait_busy(uint8_t slaveAddress);
 	private:
 		int8_t start();
 		int8_t stop();
-		int8_t sendNoAck();
-		int8_t sendAck();
+		int8_t send_no_ack();
+		int8_t send_ack();
 
-		int8_t sendByte(uint8_t regData);
-		int8_t send7BitsAddress(uint8_t slaveAddress);
-		int8_t receiveByte(uint8_t* data);
+		int8_t send_byte(uint8_t regData);
+		int8_t send_7bits_address(uint8_t slaveAddress);
+		int8_t receive_byte(uint8_t* data);
 
 	private:
 		I2C_TypeDef* _I2Cx;
-		GPIO* _SDAPin;
-		GPIO* _SCLPin;
+		GPIO* sda_pin;
+		GPIO* scl_pin;
 		uint32_t _speed;
 };
 
@@ -68,30 +68,30 @@ class SOFTI2C
   public:
 		SOFTI2C(GPIO* SCLpin, GPIO* SDApin);
 		void 		  begin(uint32_t speed);
-		int8_t 		setSpeed(uint32_t speed);
-		uint32_t	readConfig();
-		int8_t		writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);
-		int8_t 		writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToWrite);
-		int8_t 		readByte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data);
-		int8_t 		readByte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
-	  int8_t		waitBusy(uint8_t slaveAddress);
+		int8_t 		set_speed(uint32_t speed);
+		uint32_t	read_config();
+		int8_t		write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);
+		int8_t 		write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToWrite);
+		int8_t 		read_byte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data);
+		int8_t 		read_byte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
+	  int8_t		wait_busy(uint8_t slaveAddress);
 
 
 	private:
 		void 		start();
 		void 		stop();
-		int8_t 	sendAck();
-		int8_t 	sendNoAck();
+		int8_t 	send_ack();
+		int8_t 	send_no_ack();
 	
-		int8_t 	sendByte(uint8_t Byte);
-		int8_t	send7BitsAddress(uint8_t slaveAddress);
-		uint8_t receiveByte();
+		int8_t 	send_byte(uint8_t Byte);
+		int8_t	send_7bits_address(uint8_t slaveAddress);
+		uint8_t receive_byte();
 	
-		int8_t	waitAck();
+		int8_t	wait_ack();
 	
   private:
-		GPIO* 		sdaPin;
-		GPIO* 		sclPin;
+		GPIO* 		sda_pin;
+		GPIO* 		scl_pin;
 		uint32_t	_speed;
 		uint16_t	_delayTimes;
 		uint8_t 	busy;

@@ -33,10 +33,10 @@ LCD1602::LCD1602(GPIO* LEDPin,GPIO* ENPin,GPIO* RWPin,GPIO* RSPin,GPIO* DB0,GPIO
 		 d6		= DB6;
 		 d7		= DB7;
 
-	nDelay = 1;
+	delay_times = 1;
 }
 
-inline void LCD1602::LCDdelay(uint32_t nCount)
+inline void LCD1602::lcd_delay(uint32_t nCount)
 {
    for(; nCount != 0; nCount--);
 }
@@ -49,7 +49,7 @@ inline uint8_t LCD1602::bz(void)
 	rs->reset();
 	rw->set();
 	en->set();
-	LCDdelay(nDelay);
+	lcd_delay(delay_times);
 	result = d7->read();//
 	en->reset();
 
@@ -88,11 +88,11 @@ void LCD1602::wcmd(uint8_t cmd)
 //	DATAOUT |= cmd;
 
 
-	LCDdelay(nDelay);
+	lcd_delay(delay_times);
 	en->set();
-	LCDdelay(nDelay);
+	lcd_delay(delay_times);
 	en->reset();
-	LCDdelay(nDelay);
+	lcd_delay(delay_times);
 }	
 /*********************************************************************
 *名    称：Writedata()
@@ -126,9 +126,9 @@ void LCD1602::wdat(uint8_t dat)
 //	DATAOUT &= 0XFF00;
 //	DATAOUT |= dat;
 
-	LCDdelay(nDelay);
+	lcd_delay(delay_times);
 	en->set();
-	LCDdelay(nDelay);
+	lcd_delay(delay_times);
 	en->reset();
 }
 	
@@ -152,7 +152,7 @@ void LCD1602::pos(uint8_t pos)
 *          col:列，0~15，用于指定显示的列，范围可以是0~40
 *出口参数：无
 *********************************************************************/
-void LCD1602::setPos(uint8_t row,uint8_t col)
+void LCD1602::set_pos(uint8_t row,uint8_t col)
 {
 	if(row==1) wcmd(col | 0x80);
 	else wcmd(col | 0xC0);
@@ -161,7 +161,7 @@ void LCD1602::setPos(uint8_t row,uint8_t col)
 *功  能：显示一个字符	  
 *入  口：ch：待显示的字符
 *********************************************************************/
-void LCD1602::dispChar(char ch)
+void LCD1602::disp_char(char ch)
 {
 	wdat(ch);
 }
@@ -170,9 +170,9 @@ void LCD1602::dispChar(char ch)
 *入  口：row:行 1或2        col:列，0~15
 *        ch：待显示的字符
 *********************************************************************/
-void LCD1602::dispChar(uint8_t row,uint8_t col,char ch)
+void LCD1602::disp_char(uint8_t row,uint8_t col,char ch)
 {
-	setPos(row,col);
+	set_pos(row,col);
 	wdat(ch);
 }
 /*********************************************************************
@@ -181,7 +181,7 @@ void LCD1602::dispChar(uint8_t row,uint8_t col,char ch)
 *入口参数：str[]:待显示的字符串
 *出口参数：无
 *********************************************************************/
-void LCD1602::dispString(char str[])
+void LCD1602::disp_string(char str[])
 {
     uint8_t i=0;
 	while(str[i] != '\0')
@@ -199,10 +199,10 @@ void LCD1602::dispString(char str[])
 *出口参数：无
 *说    明：指定位置是显示的初始位置，第一个字符显示的位置
 *********************************************************************/
-void LCD1602::dispString(uint8_t row,uint8_t col,char str[])
+void LCD1602::disp_string(uint8_t row,uint8_t col,char str[])
 {
-	setPos(row,col);
-	dispString(str);
+	set_pos(row,col);
+	disp_string(str);
 }
 void LCD1602::printf(const char* fmt,...)
 {
@@ -226,7 +226,7 @@ void LCD1602::printf(uint8_t row,uint8_t col,const char* fmt,...)
 	va_start(va_params,fmt);   
 	vsprintf(buf,fmt,va_params);   
 	va_end(va_params); 
-	setPos(row,col);
+	set_pos(row,col);
 	while(buf[i] != '\0')
 	{
 	   wdat(buf[i++]);
@@ -248,48 +248,48 @@ void LCD1602::printf(uint8_t row,uint8_t col,const char* fmt,...)
 *          Time:hh:mm:ss    *
 *********************************************************************/
 
-void LCD1602::dispDateTime(uint32_t year,uint8_t month,uint8_t day,uint8_t hour,uint8_t min,uint8_t sec)
+void LCD1602::disp_date_time(uint32_t year,uint8_t month,uint8_t day,uint8_t hour,uint8_t min,uint8_t sec)
 {
 	char s[8];
-	setPos(1,0);
-	dispString("Date:");
+	set_pos(1,0);
+	disp_string("Date:");
 	
 	sprintf(s,"%04d-%02d-%02d",year,month,day);
-	dispString(s);
+	disp_string(s);
 	
 
-	setPos(1,15);
-	dispChar('*'); //第一行结束符显示
-	setPos(2,0);
-	dispString("Time:  ");
+	set_pos(1,15);
+	disp_char('*'); //第一行结束符显示
+	set_pos(2,0);
+	disp_string("Time:  ");
 
 	sprintf(s,"%02d:%02d:%02d",hour,min,sec);
-	dispString(s);
+	disp_string(s);
 
-	setPos(2,15);
-	dispChar('*'); //第二行结束符显示
+	set_pos(2,15);
+	disp_char('*'); //第二行结束符显示
 }
 
-void LCD1602::dispTimeHMS(uint8_t hour,uint8_t min,uint8_t sec)
+void LCD1602::disp_time_HMS(uint8_t hour,uint8_t min,uint8_t sec)
 {
 	char s[8];
 
-	setPos(2,0);
-	dispString("Time:  ");
+	set_pos(2,0);
+	disp_string("Time:  ");
 
 	sprintf(s,"%02d:%02d:%02d",hour,min,sec);
-	dispString(s);
+	disp_string(s);
 
-	setPos(2,15);
-	dispChar('*'); //第二行结束符显示
+	set_pos(2,15);
+	disp_char('*'); //第二行结束符显示
 }
 //屏幕整体左移一格，用于滚动显示
-void LCD1602::shiftLeft()
+void LCD1602::shift_left()
 {
 	wcmd(0x18);
 }
 //屏幕整体右移一格，用于滚动显示
-void LCD1602::shiftRight(void)
+void LCD1602::shift_right(void)
 {
 	wcmd(0x1C);
 }
@@ -326,25 +326,25 @@ void LCD1602::flicker(void)
 {
 	wcmd(0x0D);
 }
-void LCD1602::flickerChar(uint8_t row,uint8_t col)
+void LCD1602::flicker_char(uint8_t row,uint8_t col)
 {
 	wcmd(0x0D);
-	setPos(row,col);
+	set_pos(row,col);
 }
 //关闭字符闪烁
-void LCD1602::closeFlicker(void)
+void LCD1602::close_flicker(void)
 {
 	wcmd(0x0C);
 }
 //屏幕秒闪烁一次
-void LCD1602::flickerScreen(void)
+void LCD1602::flicker_screen(void)
 {
 	wcmd(0x08);//关显示
-	LCDdelay(0x3fffff);
+	lcd_delay(0x3fffff);
 	wcmd(0x0C);//开显示
-	LCDdelay(0x3fffff);
+	lcd_delay(0x3fffff);
 }
-void LCD1602::backLight(u8 i)
+void LCD1602::back_light(u8 i)
 {
 	if(i == 1)
 		led->set();
@@ -385,28 +385,28 @@ void LCD1602::begin(void)
 	d7->mode(OUTPUT_PP);
 
 	wcmd(0x38);  //16*2显示，5*7点阵，8位数据
-	LCDdelay(100);
+	lcd_delay(100);
 	wcmd(0x38);  //16*2显示，5*7点阵，8位数据
-	LCDdelay(100);
+	lcd_delay(100);
 	wcmd(0x38);  //16*2显示，5*7点阵，8位数据
-	LCDdelay(100);
+	lcd_delay(100);
 	wcmd(0x08);  //先关显示，后开显示
-	LCDdelay(100);
+	lcd_delay(100);
 	wcmd(0x01);  //清除LCD的显示内容
-	LCDdelay(100);
+	lcd_delay(100);
 	wcmd(0x06);  //自动右移光标,0x04为左移光标
-	LCDdelay(100);
+	lcd_delay(100);
 	wcmd(0x0c);  //显示开，关光标;0x08为关显示
-	LCDdelay(100);
-	backLight(1);
+	lcd_delay(100);
+	back_light(1);
 }
 void LCD1602::test(void)
 {
 	char str[]={"Hello World  !"};
-	dispString(1,1,str);
-	flickerChar(2,3);
-	flickerScreen();
-	flickerScreen();
-	flickerScreen();
+	disp_string(1,1,str);
+	flicker_char(2,3);
+	flicker_screen();
+	flicker_screen();
+	flicker_screen();
 }
 

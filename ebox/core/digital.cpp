@@ -47,15 +47,15 @@ GPIO::GPIO(GPIO_TypeDef* _port,uint16_t _pin)
 	}
 }
 
-void GPIO::mode(PINMODE modeVal)
+void GPIO::mode(PIN_MODE mode)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 
-	if(modeVal == AF_OD || modeVal == AF_PP)
+	if(mode == AF_OD || mode == AF_PP)
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
 	
 	GPIO_InitStructure.GPIO_Pin = pin;
-	GPIO_InitStructure.GPIO_Mode = (GPIOMode_TypeDef)modeVal;
+	GPIO_InitStructure.GPIO_Mode = (GPIOMode_TypeDef)mode;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(port, &GPIO_InitStructure);   //³õÊ¼»¯GPIOC¶Ë¿Ú
 }
@@ -89,32 +89,32 @@ uint8_t GPIO::read(void)
 	return  0;
 }
 
-uint8_t shiftIn(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder) {
+uint8_t shift_in(GPIO* data_pin, GPIO* clock_pin, uint8_t bit_order) {
 	uint8_t value = 0;
 	uint8_t i;
 
 	for (i = 0; i < 8; ++i) {
-		clockPin->write(HIGH);
-		if (bitOrder == LSBFIRST)
-			value |= dataPin->read() << i;
+		clock_pin->write(HIGH);
+		if (bit_order == LSB_FIRST)
+			value |= data_pin->read() << i;
 		else
-			value |= dataPin->read() << (7 - i);
-		clockPin->write(LOW);
+			value |= data_pin->read() << (7 - i);
+		clock_pin->write(LOW);
 	}
 	return value;
 }
 
-void shiftOut(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder, uint8_t val)
+void shift_out(GPIO* data_pin, GPIO* clock_pin, uint8_t bit_order, uint8_t val)
 {
 	int i;
 	for (i = 0; i < 8; i++)  
 	{
-		if (bitOrder == LSBFIRST)
-			dataPin->write(!!(val & (1 << i)));
+		if (bit_order == LSB_FIRST)
+			data_pin->write(!!(val & (1 << i)));
 		else	
-			dataPin->write(!!(val & (1 << (7 - i))));
-			clockPin->write(HIGH);
-			clockPin->write(LOW);
+			data_pin->write(!!(val & (1 << (7 - i))));
+			clock_pin->write(HIGH);
+			clock_pin->write(LOW);
 
 	}
 }
