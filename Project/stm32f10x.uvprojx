@@ -688,9 +688,9 @@
               <FilePath>..\edriver\mmc_sd.cpp</FilePath>
             </File>
             <File>
-              <FileName>24c02.cpp</FileName>
+              <FileName>at24c02.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\edriver\24c02.cpp</FilePath>
+              <FilePath>..\edriver\at24c02.cpp</FilePath>
             </File>
           </Files>
         </Group>

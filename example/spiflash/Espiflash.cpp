@@ -11,7 +11,7 @@ void setup()
 {
 	eBoxInit();
 	uart3.begin(9600);
-	flash.begin();
+	flash.begin(1);
 }
 
 

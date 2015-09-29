@@ -27,7 +27,7 @@ class SD
 				cs = cspin;
 				spi = pSPI;
 			}
-			int begin(void);
+			int begin(uint8_t dev_num);
 			uint8_t init();
 			int getCID(u8 *cid_data);
 			int getCSD(u8 *csd_data);

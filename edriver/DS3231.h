@@ -65,10 +65,7 @@ This specification is preliminary and is subject to change at any time without n
 			{
 				i2c = p_soft_i2c;
 			};	
-			void begin(uint32_t speed)
-			{
-				i2c->begin(speed);
-			};
+			void begin(uint32_t _speed);
 			void get_date_time(date_time_typedef *t);
 			void get_time(char* buf);
 			void get_date(char* buf);
@@ -76,6 +73,7 @@ This specification is preliminary and is subject to change at any time without n
  
 	 private:
 		  SOFTI2C* i2c;
+			uint32_t speed;
 			uint8_t bcd_to_dec(uint8_t bcd_code);
 			uint8_t dec_to_bcd(uint8_t dec);
  };

@@ -34,7 +34,7 @@ void setup()
 	uart1.begin(9600);
 	uart1.printf("\r\nuart1 9600 ok!");
 	
-	w5500.begin(mac,lip,sub,gw);
+	w5500.begin(2,mac,lip,sub,gw);
 
 	attachEthToSocket(&w5500);
 	

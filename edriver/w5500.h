@@ -40,7 +40,7 @@ class W5500
 			spi = pSPI;
 
 		}
-		void begin(u8* mac,u8* ip,u8* subnet,u8* gateway);
+		void begin(uint8_t dev_num,u8* mac,u8* ip,u8* subnet,u8* gateway);
 		void reset();
 
 		u8 getISR(u8 s);

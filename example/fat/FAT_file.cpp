@@ -107,7 +107,7 @@ void setup()
 	uart1.begin(9600);
 			uart1.printf("\r\nsystem start!");
 
-	ret = sd.begin();
+	ret = sd.begin(3);
 	if(!ret)
 		uart1.printf("\r\nsdcard init ok!");
 	attachSDCardToFat(&sd);
