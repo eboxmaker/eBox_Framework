@@ -9,64 +9,62 @@ Copyright 2015 shentq. All Rights Reserved.
 
 //STM32 RUN IN eBox
 #include "ebox.h"
-#include "24c02.h"
+#include "mmc_sd.h"
+#include "ff.h"
 
-EEPROM ee(&si2c1);
-uint8_t data;
+extern void attachSDCardToFat(SD* sd);
+
+
+static FATFS fs;            // Work area (file system object) for logical drive
+FATFS *fss;
+DIR DirObject;       //目录结构
+FRESULT res;
+u8 ret;
+	
+SD sd(&PB12,&spi2);
+
+void dirOpt()
+{
+	res=f_mkdir("0:123");//新建目录只能一级一级的建，即调用一次f_mkdir(),建一层目录而已，目录名不能以数字开头
+	if(res==FR_OK)
+		uart1.printf("\r\n创建目录成功 !");
+	else if(res==FR_EXIST)
+		uart1.printf("\r\n所建目录已存在 !");    
+	else
+		uart1.printf("\r\n创建目录失败~~~~(>_<)~~~~");
+
+	res=f_opendir(&DirObject,"0:123");//打开目录
+	if(res==FR_OK)
+	{
+		uart1.printf("\r\n打开目录成功 !");
+		uart1.printf("\r\n该目录所在簇号：%d",DirObject.clust);
+		uart1.printf("\r\n该目录所在扇区号：%d",DirObject.sect);
+	}
+	else if(res==FR_NO_PATH)
+		uart1.printf("\r\n所找目录路径不存在");    
+	else
+		uart1.printf("\r\n打开目录失败~~~~(>_<)~~~~");
+}
 void setup()
 {
 	eBoxInit();
 	uart1.begin(9600);
-	ee.begin(100000);
+	ret = sd.begin();
+	if(!ret)
+		uart1.printf("\r\nsdcard init ok!");
+	attachSDCardToFat(&sd);
 	
-
-	PA7.mode(AIN);
+	res = f_mount(&fs,"0:",1);
+	uart1.printf("\r\nres = %d",res);
 }
-
-int16_t x,i;
-uint8_t buf[512];
-uint8_t rbuf[512];
+u32 count;
 int main(void)
 {
 	setup();
-	
-	uart1.printf("===wbuf===\r\n");
-		for(uint16_t i =0;i<512;i++)
-		{
-			buf[i] = i%256;
-		}	
-		for(uint16_t i =0;i<32;i++)
-		{		
-			for(uint16_t j =0;j<16;j++)
-			{
-				uart1.printf(" %02x ",buf[i*16+j]);	
-				//ee.byteWrite(i*16+j,buf[i*16+j]);
-			}	
-			uart1.printf("\r\n ");	
-		}
-			ee.byteWrite(0,buf,512);
-			data = ee.byteRead(0,rbuf,512);
-		
-		
-		uart1.printf("\r\n===rbuf===\r\n");
-
-		for(uint16_t i =0;i<32;i++)
-		{		
-			for(uint16_t j =0;j<16;j++)
-			{
-				uart1.printf(" %02x ",rbuf[i*16+j]);	
-			}	
-			uart1.printf("\r\n ");	
-		}
-	uart1.printf("\r\n======\r\n");
-	
-//ee.byteWrite(0,0xaa);
-//delay_ms(10);
-//data = ee.byteRead(0);
-//uart1.printf("\r\n data = %02x\r\n",data);
+	dirOpt();
 	while(1)
 	{
-	uart1.printf("\r\nruning!");
+		
 		delay_ms(1000);
 	}
 

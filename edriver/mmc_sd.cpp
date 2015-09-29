@@ -23,9 +23,7 @@ int SD::begin(void)
 	SPIDevSDCard.mode = SPI_MODE0;
 	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
 	SPIDevSDCard.bitOrder = SPI_BITODER_MSB;
-	
-//	spi->begin(&SPIDevSDCard);
-	
+		
 	cs->mode(OUTPUT_PP);
 	cs->set();
 	SD_Type = 0;
@@ -43,7 +41,7 @@ int SD::begin(void)
 *                   other：失败
 *******************************************************************************/
 
-uint8_t SD::wait(void)
+uint8_t SD::_wait(void)
 {
   u8 r1;
   u16 retry=0;
@@ -65,14 +63,11 @@ uint8_t SD::wait(void)
 * Output         : None
 * Return         : u8 r1 SD卡返回的响应
 *******************************************************************************/
-uint8_t SD::sendCommand(u8 cmd, u32 arg,u8 crc)
+uint8_t SD::_sendCommand(u8 cmd, u32 arg,u8 crc)
 {
   unsigned char r1;
   unsigned int Retry = 0;
 
-//  SD_CS_DISABLE();
-//  SPI_ReadWriteByte(0xff);//提高兼容性，如果没有这里，有些SD卡可能不支持
-//  SD_CS_ENABLE();//片选端置低，选中SD卡
  
 	cs->set();
 	spi->write(0xff);//提高兼容性，如果没有这里，有些SD卡可能不支持
@@ -109,10 +104,11 @@ uint8_t SD::sendCommand(u8 cmd, u32 arg,u8 crc)
 * Output         : None
 * Return         : u8 r1 SD卡返回的响应
 *******************************************************************************/
-uint8_t SD::sendCommandNoDeassert(u8 cmd, u32 arg,u8 crc)
+uint8_t SD::_sendCommandNoDeassert(u8 cmd, u32 arg,u8 crc)
 {
   unsigned char r1;
   unsigned int Retry = 0;
+	
 
 	cs->set();
 	spi->write(0xff);//提高兼容性，如果没有这里，有些SD卡可能不支持
@@ -170,7 +166,7 @@ uint8_t SD::init()
   do
   {
     //发送CMD0，让SD卡进入IDLE状态
-    r1 = sendCommand(CMD0, 0,0x95);
+    r1 = _sendCommand(CMD0, 0,0x95);
     retry++;
   }while((r1 != 0x01) && (retry<200));
   //跳出循环后，检查原因：初始化成功？or 重试超时？
@@ -179,7 +175,7 @@ uint8_t SD::init()
 	
   //-----------------SD卡复位到idle结束-----------------	 
   //获取卡片的SD版本信息
-  r1 = sendCommandNoDeassert(CMD8, 0x1aa,0x87);	     
+  r1 = _sendCommandNoDeassert(CMD8, 0x1aa,0x87);	     
     //如果卡片版本信息是v1.0版本的，即r1=0x05，则进行以下初始化
   if(r1 == 0x05)
   {
@@ -198,11 +194,11 @@ uint8_t SD::init()
      do
      {
        //先发CMD55，应返回0x01；否则出错
-       r1 = sendCommand(CMD55, 0, 0);
+       r1 = _sendCommand(CMD55, 0, 0);
        if(r1 != 0x01)
          return r1;	  
        //得到正确响应后，发ACMD41，应得到返回值0x00，否则重试400次
-       r1 = sendCommand(ACMD41, 0, 0);
+       r1 = _sendCommand(ACMD41, 0, 0);
        retry++;
      }while((r1!=0x00) && (retry<400));
      // 判断是超时还是得到正确回应
@@ -215,7 +211,7 @@ uint8_t SD::init()
         //发送MMC卡初始化命令（没有测试）
         do
         {
-           r1 = sendCommand(CMD1, 0, 0);
+           r1 = _sendCommand(CMD1, 0, 0);
            retry++;
         }while((r1!=0x00)&& (retry<400));
         if(retry==400)return 1;   //MMC卡初始化超时		    
@@ -230,10 +226,10 @@ uint8_t SD::init()
      spi->write(0xFF);
         
      //禁止CRC校验	   
-     r1 = sendCommand(CMD59, 0, 0x95);
+     r1 = _sendCommand(CMD59, 0, 0x95);
      if(r1 != 0x00)return r1;  //命令错误，返回r1   	   
      //设置Sector Size
-     r1 = sendCommand(CMD16, 512, 0x95);
+     r1 = _sendCommand(CMD16, 512, 0x95);
      if(r1 != 0x00)return r1;//命令错误，返回r1		 
      //-----------------SD卡、MMC卡初始化结束-----------------
 
@@ -256,14 +252,14 @@ uint8_t SD::init()
        //发卡初始化指令CMD55+ACMD41
        do
        {
-    	  r1 = sendCommand(CMD55, 0, 0);
+    	  r1 = _sendCommand(CMD55, 0, 0);
     	  if(r1!=0x01)return r1;	   
-    	  r1 = sendCommand(ACMD41, 0x40000000, 1);
+    	  r1 = _sendCommand(ACMD41, 0x40000000, 1);
           if(retry>200)return r1;  //超时则返回r1状态  
        }while(r1!=0);		  
        //初始化指令发送完成，接下来获取OCR信息		   
        //-----------鉴别SD2.0卡版本开始-----------
-       r1 = sendCommandNoDeassert(CMD58, 0, 0);
+       r1 = _sendCommandNoDeassert(CMD58, 0, 0);
        if(r1!=0x00)return r1;  //如果命令没有返回正确应答，直接退出，返回应答		 
        //读OCR指令发出后，紧接着是4字节的OCR信息
        buff[0] = spi->read();
@@ -299,7 +295,7 @@ uint8_t SD::init()
 *                  0：NO_ERR
 *                  other：错误信息
 *******************************************************************************/
-int SD::receiveData(u8 *data, u16 len, u8 release)
+int SD::_receiveData(u8 *data, u16 len, u8 release)
 {
   u16 retry;
   u8 r1;
@@ -349,12 +345,15 @@ int SD::receiveData(u8 *data, u16 len, u8 release)
 int SD::getCID(u8 *cid_data)
 {
   u8 r1;
+	
+	spi->getSpiRight(&SPIDevSDCard);
 
   //发CMD10命令，读CID
-  r1 = sendCommand(CMD10, 0, 0xFF);
+  r1 = _sendCommand(CMD10, 0, 0xFF);
   if(r1 != 0x00)return r1;  //没返回正确应答，则退出，报错    
   //接收16个字节的数据
-  receiveData(cid_data, 16, RELEASE);	 
+  _receiveData(cid_data, 16, RELEASE);	
+	spi->releaseSpiRight();	
   return 0;
 }
 /*******************************************************************************
@@ -371,11 +370,13 @@ int SD::getCSD(u8 *csd_data)
 {
   u8 r1;
 
+	spi->getSpiRight(&SPIDevSDCard);
   //发CMD9命令，读CSD
-  r1 = sendCommand(CMD9, 0, 0xFF);
+  r1 = _sendCommand(CMD9, 0, 0xFF);
   if(r1 != 0x00)return r1;  //没返回正确应答，则退出，报错  
   //接收16个字节的数据
-  receiveData(csd_data, 16, RELEASE);
+  _receiveData(csd_data, 16, RELEASE);
+	spi->releaseSpiRight();	
 
   return 0;
 }
@@ -394,6 +395,7 @@ u32 SD::getCapacity(void)
   u8 r1;
   u16 i;
   u16 temp;
+	spi->getSpiRight(&SPIDevSDCard);
 
   //取CSD信息，如果期间出错，返回0
   if(getCSD(csd)!=0) return 0;	    
@@ -437,6 +439,8 @@ u32 SD::getCapacity(void)
     //The final result
     Capacity *= (u32)temp;//字节为单位 	  
   }
+		spi->releaseSpiRight();	
+
   return (u32)Capacity;
 }
 /*******************************************************************************
@@ -454,17 +458,21 @@ u8 SD::readSingleBlock(u32 sector, u8 *buffer)
   u8 r1;
 
   //设置为高速模式
-  //SPI_Config(SPI_SPEED_HIGH);
+	spi->getSpiRight(&SPIDevSDCard);
+	
   SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
 	spi->config(&SPIDevSDCard);
   
   //如果不是SDHC，将sector地址转成byte地址
   sector = sector<<9;
 
-  r1 = sendCommand(CMD17, sector, 1);//读命令
+  r1 = _sendCommand(CMD17, sector, 1);//读命令
 												    
   if(r1 != 0x00)return r1; 		   							  
-  r1 = receiveData(buffer, 512, RELEASE);		 
+  r1 = _receiveData(buffer, 512, RELEASE);
+	
+	spi->releaseSpiRight();	
+	
   if(r1 != 0)
     return r1;   //读数据出错！
   else 
@@ -486,7 +494,7 @@ u8 SD::writeSingleBlock(u32 sector,  u8 *data)
   u16 i;
   u16 retry;
   //设置为高速模式
-  //SPI_Config(SPI_SPEED_HIGH);
+	spi->getSpiRight(&SPIDevSDCard);
 	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
 	spi->config(&SPIDevSDCard);
 
@@ -496,7 +504,7 @@ u8 SD::writeSingleBlock(u32 sector,  u8 *data)
      sector = sector<<9;//512*sector即物理扇区的边界对齐地址
   }
 
-  r1 = sendCommand(CMD24, sector, 0x01);
+  r1 = _sendCommand(CMD24, sector, 0x01);
   if(r1 != 0x00)
   {
     return r1;  //应答不正确，直接返回
@@ -543,6 +551,9 @@ u8 SD::writeSingleBlock(u32 sector,  u8 *data)
   //写入完成，片选置1
   cs->set();
   spi->write(0xff);
+	
+	spi->releaseSpiRight();	
+	
 
   return 0;
 }
@@ -560,27 +571,32 @@ u8 SD::writeSingleBlock(u32 sector,  u8 *data)
 u8 SD::readMultiBlock(u32 sector, u8 *buffer, u8 count)
 {
   u8 r1;	 			 
-  //SPI_Config(SPI_SPEED_HIGH);//设置为高速模式  
+	
+	spi->getSpiRight(&SPIDevSDCard);
+	
 	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
 	spi->config(&SPIDevSDCard);
   sector = sector<<9;//如果不是SDHC，将sector地址转成byte地址
  //SD_WaitReady();
  //发读多块命令
-  r1 = sendCommand(CMD18, sector, 1);//读命令
+  r1 = _sendCommand(CMD18, sector, 1);//读命令
   if(r1 != 0x00)return r1;	 
   do//开始接收数据
   {
-    if(receiveData(buffer, 512, NO_RELEASE) != 0x00)
+    if(_receiveData(buffer, 512, NO_RELEASE) != 0x00)
     {
        break;
     }
     buffer += 512;
   } while(--count);		 
   //全部传输完毕，发送停止命令
-  sendCommand(CMD12, 0, 1);
+  _sendCommand(CMD12, 0, 1);
   //释放总线
   cs->set();
   spi->write(0xFF);    
+	
+	spi->releaseSpiRight();	
+	
   if(count != 0)
     return count;   //如果没有传完，返回剩余个数	 
   else 
@@ -601,15 +617,17 @@ u8 SD::writeMultiBlock(u32 sector,  const u8 *data, u8 count)
 {
   u8 r1;
   u16 i;	 		 
-  //SPI_Config(SPI_SPEED_HIGH);//设置为高速模式	 
+	
+	spi->getSpiRight(&SPIDevSDCard);
+
 	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
 	spi->config(&SPIDevSDCard);
 	
   if(SD_Type != SD_TYPE_V2HC)
     sector = sector<<9;//如果不是SDHC，给定的是sector地址，将其转换成byte地址  
   if(SD_Type != SD_TYPE_MMC) 
-    r1 = sendCommand(ACMD23, count, 0x01);//如果目标卡不是MMC卡，启用ACMD23指令使能预擦除   
-  r1 = sendCommand(CMD25, sector, 0x01);//发多块写入指令
+    r1 = _sendCommand(ACMD23, count, 0x01);//如果目标卡不是MMC卡，启用ACMD23指令使能预擦除   
+  r1 = _sendCommand(CMD25, sector, 0x01);//发多块写入指令
   if(r1 != 0x00)return r1;  //应答不正确，直接返回	 
   cs->reset();//开始准备数据传输   
   spi->write(0xff);//先放3个空数据，等待SD卡准备好
@@ -637,7 +655,7 @@ u8 SD::writeMultiBlock(u32 sector,  const u8 *data, u8 count)
      }
 
      //等待SD卡写入完成
-     if(wait()==1)
+     if(_wait()==1)
      {
         cs->set();    //等待SD卡写入完成超时，直接退出报错
         return 1;
@@ -650,7 +668,7 @@ u8 SD::writeMultiBlock(u32 sector,  const u8 *data, u8 count)
     {
        count =  0xfe;
     }		   
-    if(wait()) //等待准备好
+    if(_wait()) //等待准备好
     {
       cs->set();
       return 1;  
@@ -658,6 +676,9 @@ u8 SD::writeMultiBlock(u32 sector,  const u8 *data, u8 count)
     //写入完成，片选置1
     cs->set();
     spi->write(0xff);  
+		
+	spi->releaseSpiRight();	
+	
     return count;   //返回count值，如果写完则count=0，否则count=1
 }
 /*******************************************************************************
@@ -675,7 +696,10 @@ u8 SD::writeMultiBlock(u32 sector,  const u8 *data, u8 count)
 u8 SD::readBytes(unsigned long address,unsigned char *buf,unsigned int offset,unsigned int bytes)
 {
   u8 r1;u16 i=0;  
-  r1=sendCommand(CMD17,address<<9,1);//发送读扇区命令      
+	
+	spi->getSpiRight(&SPIDevSDCard);
+
+  r1=_sendCommand(CMD17,address<<9,1);//发送读扇区命令      
   if(r1!=0x00)return r1;  //应答不正确，直接返回
   cs->reset();//选中SD卡
   while (spi->read()!= 0xFE)//直到读取到了数据的开始头0XFE，才继续
@@ -696,6 +720,10 @@ u8 SD::readBytes(unsigned long address,unsigned char *buf,unsigned int offset,un
   spi->write(0xff);//发送伪CRC码
   spi->write(0xff);  
   cs->set();//关闭SD卡
+	
+	spi->releaseSpiRight();	
+	
+
   return 0;
 }
 
