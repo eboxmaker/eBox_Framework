@@ -43,7 +43,7 @@ void setup()
 	eBoxInit();
 	uart1.begin(9600);
 
-	w5500.begin(mac,lip,sub,gw);
+	w5500.begin(2,mac,lip,sub,gw);
 	w5500.attchInterruputEvent(ethEvent);
 	attachEthToSocket(&w5500);
 	

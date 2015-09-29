@@ -154,7 +154,7 @@ int8_t SPI::read(uint8_t *rcvdata,uint16_t dataln)
 	return 0;
 }
 
-int8_t SPI::get_spi_right(SPI_CONFIG_TYPE* spi_config)
+int8_t SPI::take_spi_right(SPI_CONFIG_TYPE* spi_config)
 {
 	while((busy == 1)&&(spi_config->devNum != read_config()))
 		delay_ms(1);

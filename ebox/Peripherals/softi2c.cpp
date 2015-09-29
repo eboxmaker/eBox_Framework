@@ -20,45 +20,46 @@ SOFTI2C::SOFTI2C(GPIO* SCLpin, GPIO* SDApin)
 	scl_pin = SCLpin;
 	sda_pin = SDApin;
 }	
-void SOFTI2C::begin(uint32_t speed)
-{
-	set_speed(speed);
+void SOFTI2C::begin(uint32_t _speed)
+{	
+	speed = _speed;
+	config(speed);
 	sda_pin->mode(OUTPUT_PP);
 	scl_pin->mode(OUTPUT_PP);
 }
-int8_t SOFTI2C::set_speed(uint32_t speed)
+int8_t SOFTI2C::config(uint32_t _speed)
 {
-	_speed = speed;
-	switch(_speed)
+	speed = _speed;
+	switch(speed)
 	{
 		case 400000:
-			_delayTimes = 4;
+			delay_times = 4;
 			break;
 		case 300000:
-			_delayTimes = 8;
+			delay_times = 8;
 			break;
 		case 200000:
-			_delayTimes = 16;
+			delay_times = 16;
 			break;
 		case 100000:
-			_delayTimes = 32;
+			delay_times = 32;
 			break;
 		default:
-			_delayTimes = _speed;
+			delay_times = speed;
 			break;
 	}
 	return 0;
 }
 uint32_t SOFTI2C::read_config()
 {
-	return _speed;
+	return speed;
 }
 void SOFTI2C::start()
 {
 	sda_pin->mode(OUTPUT_PP);
 	sda_pin->set();
-	scl_pin->set();delay_us(_delayTimes);
-	sda_pin->reset();delay_us(_delayTimes);
+	scl_pin->set();delay_us(delay_times);
+	sda_pin->reset();delay_us(delay_times);
 	scl_pin->reset();
 
 }
@@ -67,19 +68,19 @@ void SOFTI2C::stop()
 {
 	sda_pin->mode(OUTPUT_PP);
 	scl_pin->reset();
-	sda_pin->reset();delay_us(_delayTimes);
-	scl_pin->set();delay_us(_delayTimes);
+	sda_pin->reset();delay_us(delay_times);
+	scl_pin->set();delay_us(delay_times);
 	sda_pin->set();
 }
 int8_t SOFTI2C::wait_ack()
 {
 	uint8_t cErrTime = 5;
 	sda_pin->mode(INPUT_PU);
-	scl_pin->set();delay_us(_delayTimes);
+	scl_pin->set();delay_us(delay_times);
 	while(sda_pin->read())
 	{
 		cErrTime--;
-		delay_us(_delayTimes);
+		delay_us(delay_times);
 		if(cErrTime == 0)
 		{
 			sda_pin->mode(OUTPUT_PP);
@@ -89,24 +90,24 @@ int8_t SOFTI2C::wait_ack()
 		}
 	
 	}
-	scl_pin->reset();delay_us(_delayTimes);
+	scl_pin->reset();delay_us(delay_times);
 	return 0;
 }
 int8_t SOFTI2C::send_ack()
 {
 	sda_pin->mode(OUTPUT_PP);
-	sda_pin->reset();delay_us(_delayTimes);
-	scl_pin->set();delay_us(_delayTimes);
-	scl_pin->reset();delay_us(_delayTimes);
+	sda_pin->reset();delay_us(delay_times);
+	scl_pin->set();delay_us(delay_times);
+	scl_pin->reset();delay_us(delay_times);
 
 	return 0;
 }
 int8_t SOFTI2C::send_no_ack()	
 {
 	sda_pin->mode(OUTPUT_PP);
-	sda_pin->set();delay_us(_delayTimes);
-	scl_pin->set();delay_us(_delayTimes);
-	scl_pin->reset();delay_us(_delayTimes);
+	sda_pin->set();delay_us(delay_times);
+	scl_pin->set();delay_us(delay_times);
+	scl_pin->reset();delay_us(delay_times);
  return 0;
 }
 int8_t SOFTI2C::send_byte(uint8_t byte)
@@ -118,10 +119,10 @@ int8_t SOFTI2C::send_byte(uint8_t byte)
 	while( ii-- )
 	{
 		scl_pin->reset();
-		sda_pin->write(byte & 0x80);delay_us(_delayTimes);
+		sda_pin->write(byte & 0x80);delay_us(delay_times);
 		byte += byte;//<<1
-		scl_pin->set();delay_us(_delayTimes);
-		scl_pin->reset();delay_us(_delayTimes);
+		scl_pin->set();delay_us(delay_times);
+		scl_pin->reset();delay_us(delay_times);
 	}
 	ret = wait_ack();
   return ret;
@@ -141,11 +142,11 @@ uint8_t SOFTI2C::receive_byte(void)
 	while(i--)
 	{
 		byte += byte;
-		scl_pin->reset();delay_us(_delayTimes);
-		scl_pin->set();delay_us(_delayTimes);
+		scl_pin->reset();delay_us(delay_times);
+		scl_pin->set();delay_us(delay_times);
 		byte |= sda_pin->read();
 	}
-	scl_pin->reset();delay_us(_delayTimes);
+	scl_pin->reset();delay_us(delay_times);
 
 	return byte;
 }
@@ -267,5 +268,20 @@ int8_t SOFTI2C::wait_busy(uint8_t slaveAddress)
 		}
 	}while(ret != 0);//如果返回值不是0，继续等待
 	return 0;
+	return 0;
+}
+int8_t SOFTI2C::take_i2c_right(uint32_t speed)
+{
+	while((busy == 1) && (1))
+	{
+		delay_ms(1);
+	}
+	config(speed);
+	busy = 1;
+	return 0;
+}
+int8_t SOFTI2C::release_i2c_right(void)
+{
+	busy = 0;
 	return 0;
 }

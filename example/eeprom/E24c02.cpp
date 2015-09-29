@@ -9,7 +9,7 @@ Copyright 2015 shentq. All Rights Reserved.
 
 //STM32 RUN IN eBox
 #include "ebox.h"
-#include "24c02.h"
+#include "at24c02.h"
 
 EEPROM ee(&si2c1);
 uint8_t data;

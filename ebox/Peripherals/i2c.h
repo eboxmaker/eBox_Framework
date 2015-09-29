@@ -16,10 +16,10 @@ This specification is preliminary and is subject to change at any time without n
 #define __I2C_H
 
 #include "common.h"
+
 /*
-	1.暂时只支持I2C1
+	1.支持I2C1和I2C2
 	2.暂时不支持remap，后续很快会完成
-	注意：该类可以当做父类被其他类调用，应用历程详见MPU605的例子，也可以单独实例化后调用
 */
 
 class I2C
@@ -28,14 +28,18 @@ class I2C
 	public:
 		I2C(I2C_TypeDef* I2Cx,GPIO* SCLPin,GPIO* SDAPin);
 		void			begin(uint32_t speed);
-		void 			set_speed(uint32_t speed);
+		void 			config(uint32_t speed);
 		uint32_t	read_config();
 
 		int8_t	write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);
 		int8_t	write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToWrite);
 		int8_t	read_byte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data);
 		int8_t	read_byte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
-	  int8_t	wait_busy(uint8_t slaveAddress);
+	  int8_t	wait_dev_busy(uint8_t slaveAddress);
+	public:
+		int8_t take_i2c_right(uint32_t speed);
+		int8_t release_i2c_right(void);
+
 	private:
 		int8_t start();
 		int8_t stop();
@@ -51,6 +55,8 @@ class I2C
 		GPIO* sda_pin;
 		GPIO* scl_pin;
 		uint32_t _speed;
+		uint8_t busy;
+
 };
 
 
@@ -58,23 +64,28 @@ class I2C
 
 /*
 	1.支持任何IO引脚；
-	注意：1.该类可以当做父类被其他类调用，应用历程详见MPU605的例子，也可以单独实例化后调用。
-				2.该类的speed是由delay_us延时函数控制。略有不准
-				3.speed设置只能为100000，200000,300k,400k。如果不是此值，则会将speed的值直接传递给delay_us.即delay_us(speed);
-				4.初期调试I2C设备建议使用100k。或者大于3的值
+	2.函数接口和硬件I2C完全一样可以互相替代
+	注意：
+				1.该类的speed是由delay_us延时函数控制。略有不准
+				2.speed设置只能为100000，200000,300k,400k。如果不是此值，则会将speed的值直接传递给delay_us.即delay_us(speed);
+				3.初期调试I2C设备建议使用100k。或者大于10的值
 */
 class SOFTI2C 
 {
   public:
 		SOFTI2C(GPIO* SCLpin, GPIO* SDApin);
-		void 		  begin(uint32_t speed);
-		int8_t 		set_speed(uint32_t speed);
+		void 		  begin(uint32_t _speed);
+		int8_t 		config(uint32_t _speed);
 		uint32_t	read_config();
 		int8_t		write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);
 		int8_t 		write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToWrite);
 		int8_t 		read_byte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data);
 		int8_t 		read_byte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
 	  int8_t		wait_busy(uint8_t slaveAddress);
+	public:
+		int8_t take_i2c_right(uint32_t speed);
+		int8_t release_i2c_right(void);
+	
 
 
 	private:
@@ -92,8 +103,8 @@ class SOFTI2C
   private:
 		GPIO* 		sda_pin;
 		GPIO* 		scl_pin;
-		uint32_t	_speed;
-		uint16_t	_delayTimes;
+		uint32_t	speed;
+		uint16_t	delay_times;
 		uint8_t 	busy;
 };
 

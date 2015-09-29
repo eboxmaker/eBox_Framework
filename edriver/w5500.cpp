@@ -15,13 +15,13 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "w5500.h"
 
-void W5500::begin(u8* mac,u8* ip,u8* subnet,u8* gateway)
+void W5500::begin(uint8_t dev_num,u8* mac,u8* ip,u8* subnet,u8* gateway)
 {
 	u8 txsize[MAX_SOCK_NUM] = {2,2,2,2,2,2,2,2};
   u8 rxsize[MAX_SOCK_NUM] = {2,2,2,2,2,2,2,2};
 	
 
-	spiDevW5500.devNum = 2;
+	spiDevW5500.devNum = dev_num;
 	spiDevW5500.mode = SPI_MODE0;
 	spiDevW5500.prescaler = SPI_CLOCK_DIV2;
 	spiDevW5500.bit_order = SPI_BITODER_MSB;
@@ -68,7 +68,7 @@ void W5500::reset()
 void W5500::write(u32 addrbsb, u8 data)
 {
 
-	spi->get_spi_right(&spiDevW5500);
+	spi->take_spi_right(&spiDevW5500);
    cs->reset();                              // CS=0, SPI start
 	 spi->write( (addrbsb & 0x00FF0000)>>16);// Address byte 1
    spi->write( (addrbsb & 0x0000FF00)>> 8);// Address byte 2
@@ -81,7 +81,7 @@ void W5500::write(u32 addrbsb, u8 data)
 u8  W5500::read(u32 addrbsb)
 {
    u8 data = 0;
-	 spi->get_spi_right(&spiDevW5500);
+	 spi->take_spi_right(&spiDevW5500);
    cs->reset();                          // CS=0, SPI start
    spi->write( (addrbsb & 0x00FF0000)>>16);// Address byte 1
    spi->write( (addrbsb & 0x0000FF00)>> 8);// Address byte 2
@@ -94,7 +94,7 @@ u8  W5500::read(u32 addrbsb)
 }
 u16 W5500::write(u32 addrbsb,u8* buf, u16 len)
 {
-	 spi->get_spi_right(&spiDevW5500);
+	 spi->take_spi_right(&spiDevW5500);
    cs->reset();                               // CS=0, SPI start
    spi->write( (addrbsb & 0x00FF0000)>>16);// Address byte 1
    spi->write( (addrbsb & 0x0000FF00)>> 8);// Address byte 2
@@ -108,7 +108,7 @@ u16 W5500::write(u32 addrbsb,u8* buf, u16 len)
 }
 u16 W5500::read(u32 addrbsb,u8* buf, u16 len)
 {
-	spi->get_spi_right(&spiDevW5500);
+	spi->take_spi_right(&spiDevW5500);
   cs->reset();                               // CS=0, SPI start
   spi->write( (addrbsb & 0x00FF0000)>>16);// Address byte 1
   spi->write( (addrbsb & 0x0000FF00)>> 8);// Address byte 2

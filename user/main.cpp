@@ -1,52 +1,89 @@
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
+
+Copyright 2015 shentq. All Rights Reserved.
+*/
+
+//STM32 RUN IN eBox
+
 
 #include "ebox.h"
-#include "w25x16.h"
+#include "w5500.h"
+#include "socket.h"
+#include "udp.h"
 
-
-
-W25X flash(&PE5,&spi1);
-
-
+  u8 mac[6]={0x00,0x08,0xdc,0x11,0x11,0x11};/*定义Mac变量*/
+  u8 lip[4]={192,168,1,111};/*定义lp变量*/
+  u8 sub[4]={255,255,255,0};/*定义subnet变量*/
+  u8 gw[4]={192,168,1,1};/*定义gateway变量*/
+	
+  u8 ip[6];
+	u8 buf[100];
+	
+W5500 w5500(&PC13,&PC14,&PC15,&spi2);
+	
+UDP udp1;
+UDP udp2;
+	
 void setup()
 {
 	eBoxInit();
-	uart3.begin(9600);
-	flash.begin();
+	uart1.begin(9600);
+	uart1.printf("\r\nuart1 9600 ok!");
+	
+	w5500.begin(2,mac,lip,sub,gw);
+
+	attachEthToSocket(&w5500);
+	
+  w5500.getMAC (ip);
+  uart1.printf("\r\nmac : %02x.%02x.%02x.%02x.%02x.%02x\r\n", ip[0],ip[1],ip[2],ip[3],ip[4],ip[5]);
+  w5500.getIP (ip);
+  uart1.printf("IP : %d.%d.%d.%d\r\n", ip[0],ip[1],ip[2],ip[3]);
+  w5500.getSubnet(ip);
+  uart1.printf("mask : %d.%d.%d.%d\r\n", ip[0],ip[1],ip[2],ip[3]);
+  w5500.getGateway(ip);
+  uart1.printf("GW : %d.%d.%d.%d\r\n", ip[0],ip[1],ip[2],ip[3]);
+  uart1.printf("Network is ready.\r\n");
+	
+	if(udp1.begin(0,30000) == 0)
+		uart1.printf("\r\nudp1 server creat ok! listen on 30000");
+	if(udp2.begin(1,30001) == 0)
+		uart1.printf("\r\nudp2 server creat ok! listen on 30001");
+
 }
-
-
-int16_t tmp[7];
-uint16_t id;
-uint8_t buf[10];
-uint8_t wbuf[10];
+u16 len;
 int main(void)
 {
 	setup();
-	for(int i=0;i<10;i++)
 
-	 wbuf[i] = i;
 	while(1)
 	{
-		flash.read_id(&id);
-		uart3.printf("\r\n==readid=======\r\n");
-		uart3.printf("id = %x",id);
 
-		uart3.printf("\r\n==write&read========\r\n");
-		flash.write(wbuf,0,10);
-		flash.read(buf,0,10);	
-		for(int i=0;i<10;i++)
-		uart3.printf(" %x",buf[i]);
-		
-		uart3.printf("\r\n==erase&read========\r\n");
-		flash.erase_sector(0);
-		flash.read(buf,1,10);	
-		for(int i=0;i<10;i++)
-		uart3.printf(" %x",buf[i]);
-		uart3.printf("\r\n=========================\r\n");
-		uart3.printf("\r\n\r\n");
-		
-		delay_ms(1000);
+		if(udp1.recv(buf))
+		{
+			uart1.printf("\r\n============================");		
+			uart1.printf("\r\n本地端口:%d",udp1.localPort );
+			uart1.printf("\r\n消息来源:%d.%d.%d.%d:%d", udp1.remoteIP[0],udp1.remoteIP[1],udp1.remoteIP[2],udp1.remoteIP[3],udp1.remotePort);
+			uart1.printf("\r\n数据内容:");		
+			uart1.printf((const char *)buf);		
+			udp1.sendto(udp1.remoteIP,udp1.remotePort,buf,100);
+		}
+		if(udp2.recv(buf))
+		{
+			uart1.printf("\r\n============================");		
+			uart1.printf("\r\n本地端口:%d",udp2.localPort );
+			uart1.printf("\r\n消息来源:%d.%d.%d.%d:%d", udp2.remoteIP[0],udp2.remoteIP[1],udp2.remoteIP[2],udp2.remoteIP[3],udp2.remotePort);
+			uart1.printf("\r\n数据内容:");		
+			uart1.printf((const char *)buf);		
+			udp2.sendto(udp2.remoteIP,udp2.remotePort,buf,100);
+		}
+
 	}
+
+
 }
 
 

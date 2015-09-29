@@ -16,9 +16,9 @@ This specification is preliminary and is subject to change at any time without n
 #include "w25x16.h"
 
 
-void W25X::begin()
+void W25X::begin(uint8_t dev_num)
 {
-	spi_dev_w25x16.devNum = 1;
+	spi_dev_w25x16.devNum = dev_num;
 	spi_dev_w25x16.mode = SPI_MODE0;
 	spi_dev_w25x16.prescaler = 0;
 	spi_dev_w25x16.bit_order = SPI_BITODER_MSB;
@@ -29,7 +29,7 @@ void W25X::begin()
 }
 void W25X::read_id(uint16_t* id)
 {
-	spi->get_spi_right(&spi_dev_w25x16);
+	spi->take_spi_right(&spi_dev_w25x16);
 
 	cs->reset();
 	spi->write(0x90);
@@ -55,7 +55,7 @@ void W25X::read_id(uint16_t* id)
 ***************************************************************/
 void W25X::read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)   
 { 
-	spi->get_spi_right(&spi_dev_w25x16);
+	spi->take_spi_right(&spi_dev_w25x16);
 	cs->reset();
 	 spi->write(W25X_ReadData);         //发送读取命令   
 	 spi->write((u8)((ReadAddr)>>16));  //发送24bit地址    
@@ -78,7 +78,7 @@ void W25X::read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)
 ***************************************************************/
 void W25X::fast_read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)   
 { 
-	spi->get_spi_right(&spi_dev_w25x16);
+	spi->take_spi_right(&spi_dev_w25x16);
 	cs->reset();
 	 spi->write(W25X_FastReadData);         //发送读取命令   
 	 spi->write((u8)((ReadAddr)>>16));  //发送24bit地址    
@@ -107,7 +107,7 @@ void W25X::write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
 	u16 secoff;
 	u16 secremain;	   
  	u16 i;    
-	spi->get_spi_right(&spi_dev_w25x16);
+	spi->take_spi_right(&spi_dev_w25x16);
 
 	secpos=WriteAddr/4096;//扇区地址 0~511 for w25x16
 	secoff=WriteAddr%4096;//在扇区内的偏移

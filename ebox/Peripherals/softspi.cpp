@@ -276,7 +276,7 @@ int8_t  SOFTSPI::read(uint8_t *rcvdata,uint16_t dataln)
 	return 0;
 }
 
-int8_t SOFTSPI::get_spi_right(SPI_CONFIG_TYPE* spiConfig)
+int8_t SOFTSPI::take_spi_right(SPI_CONFIG_TYPE* spiConfig)
 {
 	while((busy == 1)&&(spiConfig->devNum != readConfig()))
 		delay_ms(1);

@@ -18,6 +18,7 @@ This specification is preliminary and is subject to change at any time without n
 
 I2C::I2C(I2C_TypeDef* I2Cx,GPIO* SCLPin,GPIO* SDAPin)
 {
+	busy = 0;
 	_I2Cx = I2Cx;
 	scl_pin = SCLPin;
 	sda_pin = SDAPin;
@@ -55,7 +56,7 @@ void  I2C::begin(uint32_t speed)
 
 }
 
-void I2C::set_speed(uint32_t speed)
+void I2C::config(uint32_t speed)
 {
 	_speed = speed;
 	I2C_InitTypeDef I2C_InitStructure; 
@@ -255,7 +256,7 @@ int8_t I2C::read_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint
 	return i;
 }
 
-int8_t I2C::wait_busy(uint8_t slaveAddress)
+int8_t I2C::wait_dev_busy(uint8_t slaveAddress)
 {
 	int8_t ret;
 	uint8_t i = 0;
@@ -271,5 +272,20 @@ int8_t I2C::wait_busy(uint8_t slaveAddress)
 			return -1;
 		}
 	}while(ret != 0);//如果返回值不是0，继续等待
+	return 0;
+}
+int8_t I2C::take_i2c_right(uint32_t speed)
+{
+	while(busy == 1)
+	{
+		delay_ms(1);
+	}
+	//config(speed);
+	busy = 1;
+	return 0;
+}
+int8_t I2C::release_i2c_right(void)
+{
+	busy = 0;
 	return 0;
 }

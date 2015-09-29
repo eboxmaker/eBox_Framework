@@ -47,7 +47,7 @@ class W25X
 			cs = cspin;
 			spi = pSPI;
 		}
-		void begin();
+		void begin(uint8_t dev_num);
 		void read_id(uint16_t* id);
 		void read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead); 
 		void fast_read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead);

@@ -45,11 +45,12 @@ typedef struct
 
 
 /*
-	1.目前只测试了SPI1，理论支持SPI2和spi3，望网友测试
-	2.该spi功能强大，总线支持同时挂载不同MODE ,SPEED,bitOder的设备
-	3.每一个spi设备应有一个自己的SPICONFIG的配置，以支持该设备的的读写，
-		在读写前需要检测当前spi配置是否的devNum，如果是就跳过config，如果不是
-		则调用config(SPI_CONFIG_TYPE* spiConfig);
+	1.目前只测试了SPI1、SPI2，spi3望网友测试
+	2.该spi功能强大，总线支持同时挂载不同MODE ,SPEED,bit_oder的设备
+	3.每一个spi设备应有一个自己的SPI_CONFIG的配置，以支持该设备的的读写，
+		在读写前需要获得SPI的控制权，如果获取不到则一直等待！主要是为了兼容操作系统，
+		如果不使用操作系统也必须加上获得控制权的代码，在是用完SPI后一定要释放SPI总线，
+		如果不释放总线会导致别的SPI设备一直处于等待的状态
 */
 //默认配置 空，只依靠结构体SPICONFIG来初始化
 class	SPI
@@ -68,7 +69,7 @@ class	SPI
 		int8_t  read(uint8_t* data);
 		int8_t  read(uint8_t *rcvdata,uint16_t dataln);
 	public:
-		int8_t get_spi_right(SPI_CONFIG_TYPE* SPI_CONFIG_TYPE);
+		int8_t take_spi_right(SPI_CONFIG_TYPE* spi_config);
 		int8_t release_spi_right(void);
 
 
@@ -82,6 +83,7 @@ class	SPI
 	注意：1.该类的SPI_CLOCK_DIV是由delay_us延时函数控制。略有不准，比硬件SPI会慢很多
 				2.speed设置只能为SPI_CLOCK_DIVx。如果不是此值，则会将SPI_CLOCK_DIV的值直接传递给delay_us.即delay_us(SPI_CONFIG_TYPE->prescaler);
 				3.初期调试I2C设备建议使用SPI_CLOCK_DIV256。
+				4.函数接口和硬件SPI完全一样可以互相替换。
 */
 class SOFTSPI
 {
@@ -99,7 +101,7 @@ class SOFTSPI
 		int8_t  read(uint8_t* data);
 		int8_t  read(uint8_t *rcvdata,uint16_t dataln);
 	public:
-		int8_t get_spi_right(SPI_CONFIG_TYPE* spiConfig);
+		int8_t take_spi_right(SPI_CONFIG_TYPE* spiConfig);
 		int8_t release_spi_right(void);
 
 

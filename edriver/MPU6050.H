@@ -82,13 +82,14 @@ class MPU6050
 	  {
 		 i2c = p_i2c;
 		 };	
-		void 			begin(uint32_t speed);
+		void 			begin(uint32_t _speed);
 		int16_t 	get_data(uint8_t regAddress);
 		int8_t 		get_data(uint8_t regAddress,int16_t* buf,uint8_t numToRead);
 		void 			get_id(uint8_t* id);
 
 	private:
 		I2C* i2c;
+	  uint32_t speed;
 		
 	
 };
