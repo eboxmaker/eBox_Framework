@@ -38,7 +38,7 @@ This specification is preliminary and is subject to change at any time without n
 #define RTC_CLOCK_SOURCE RTC_CLOCK_LSI
 //#define RTC_CLOCK_SOURCE RTC_CLOCK_LSE
 
-class RTCCLASS
+class RTC_CLASS
 {
 	public:
 		uint8_t sec;
@@ -64,7 +64,7 @@ class RTCCLASS
 		uint8_t is_config(uint16_t configFlag);
 		void set_config_flag(uint16_t configFlag);
 };
+extern RTC_CLASS 	rtc;
 
-extern RTCCLASS 	rtc;
 #endif
 

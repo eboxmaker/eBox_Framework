@@ -42,7 +42,7 @@ This specification is preliminary and is subject to change at any time without n
 class W25X
 {
 	public:
-		W25X(GPIO* cspin,SOFTSPI* pSPI)
+		W25X(GPIO* cspin,SPI* pSPI)
 		{
 			cs = cspin;
 			spi = pSPI;
@@ -60,8 +60,8 @@ class W25X
 	private:
 		u8 spi_flash_buf[4096];
 		SPI_CONFIG_TYPE spi_dev_w25x16;
-		SOFTSPI* spi;
 		GPIO* cs;
+		SPI* spi;
 
 		u8 readSR(void);  
 		void _waitBusy(void);

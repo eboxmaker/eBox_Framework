@@ -53,12 +53,12 @@ void setup()
 
 	timer2.begin(1000);
 	timer2.interrupt(ENABLE);
-	timer2.attachInterrupt(t2it);
+	timer2.attach_interrupt(t2it);
 	timer2.start();
 	
 	t1.begin(10000);
 	t1.interrupt(ENABLE);
-	t1.attachInterrupt(t1it);
+	t1.attach_interrupt(t1it);
 	t1.start();
 }
 

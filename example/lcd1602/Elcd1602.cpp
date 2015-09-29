@@ -2,7 +2,7 @@
 #include "ebox.h"
 #include "lcd1602.h"
 
-LCD1602 lcd(PB12,PB13,PB14,PB15,PB0,PB1,PB2,PB3,PB4,PB5,PB6,PB7);
+LCD1602 lcd(&PB12,&PB13,&PB14,&PB15,&PB0,&PB1,&PB2,&PB3,&PB4,&PB5,&PB6,&PB7);
 
 void setup()
 {
