@@ -32,7 +32,7 @@ static u16 RSIZE[MAX_SOCK_NUM]; /**< Max Rx buffer size by each channel */
 class W5500
 {
 	public:
-		W5500(GPIO* cspin,GPIO* rstpin,GPIO* intpin,SPIClASS* pSPI)
+		W5500(GPIO* cspin,GPIO* rstpin,GPIO* intpin,SPI* pSPI)
 		{
 			cs = cspin;
 		  rstPin = rstpin;
@@ -111,17 +111,18 @@ class W5500
 		u16  read(u32 addrbsb,u8* buf, u16 len);
 		void sysinit( u8 * tx_size, u8 * rx_size  );
 		
-		void attchInterruputEvent(void (*callbackFun)(void))
+		void attch_interruputEvent(void (*callbackFun)(void))
 		{
 			EXTIx ex(intPin,EXTI_Trigger_Falling);
-			ex.attachInterrupt(callbackFun);
+			ex.attach_interrupt(callbackFun);
 		}
 	private:
 		GPIO* cs;
 		GPIO* rstPin;
 		GPIO* intPin;
-		SPICONFIG spiDevW5500;
-		SPIClASS* spi;
+		SPI_CONFIG_TYPE spiDevW5500;
+		SPI* spi;
+	
 	
 };
 #define SOCKET0 0

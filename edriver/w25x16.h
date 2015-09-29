@@ -48,18 +48,18 @@ class W25X
 			spi = pSPI;
 		}
 		void begin();
-		void readId(uint16_t* id);
+		void read_id(uint16_t* id);
 		void read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead); 
-		void fastRead(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead);
+		void fast_read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead);
 		void write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);
 
-		void eraseSector(u32 Dst_Addr);
-		void eraseChip(void);
+		void erase_sector(u32 Dst_Addr);
+		void erase_chip(void);
 
 
 	private:
-		u8 SPI_FLASH_BUF[4096];
-		SPICONFIG spiDevW25x16;
+		u8 spi_flash_buf[4096];
+		SPI_CONFIG_TYPE spi_dev_w25x16;
 		SOFTSPI* spi;
 		GPIO* cs;
 
@@ -71,8 +71,8 @@ class W25X
 		void writeEnable(void);
 		void writeDisable(void);
 	
-		void writePage(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);
-		void writeNoCheck(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);
+		void write_page(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);
+		void write_no_check(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);
 
 
 };

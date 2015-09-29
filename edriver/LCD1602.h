@@ -21,37 +21,39 @@ class LCD1602
 {
 	
 	public:
-		LCD1602(GPIO* LEDPin,GPIO* ENPin,GPIO* RWPin,GPIO* RSPin,GPIO* DB0,GPIO* DB1,GPIO* DB2,GPIO* DB3,GPIO* DB4,GPIO* DB5,GPIO* DB6,GPIO* DB7);
+		LCD1602(GPIO* LEDPin,GPIO* ENPin,GPIO* RWPin,GPIO* RSPin,\
+						GPIO* DB0,GPIO* DB1,GPIO* DB2,GPIO* DB3,GPIO* DB4,GPIO* DB5,GPIO* DB6,GPIO* DB7);
+	
 		LCD1602(GPIO* LEDPin,GPIO* ENPin,GPIO* RWPin,GPIO* RSPin,GPIO* DB0,GPIO* DB1,GPIO* DB2,GPIO* DB3);
 		//基本功能
 		void begin(void);
-		void setPos(uint8_t row,uint8_t col);
+		void set_pos(uint8_t row,uint8_t col);
 	
-		void dispChar(char ch);
-		void dispChar(uint8_t row,uint8_t col,char ch);
+		void disp_char(char ch);
+		void disp_char(uint8_t row,uint8_t col,char ch);
 	
-		void dispString(char str[]);
-		void dispString(uint8_t row,uint8_t col,char str[]);
+		void disp_string(char str[]);
+		void disp_string(uint8_t row,uint8_t col,char str[]);
 	
 		void printf(const char* fmt,...);
 		void printf(uint8_t row,uint8_t col,const char* fmt,...);
 		void test(void);
 		//基本控制函数
-		void backLight(u8 i);
-		void shiftLeft();
-		void shiftRight(void);
+		void back_light(u8 i);
+		void shift_left();
+		void shift_right(void);
 		void clear(void);
 		void Return(void);
 		void close(void);
 		void open(void);
 		void flicker(void);
-		void flickerChar(uint8_t row,uint8_t col);
-		void closeFlicker(void);
-		void flickerScreen(void);
+		void flicker_char(uint8_t row,uint8_t col);
+		void close_flicker(void);
+		void flicker_screen(void);
 		//用户自定义功能
-		void dispTimeHMS(uint8_t hour,uint8_t min,uint8_t sec);
-		void dispTimeYMD(uint32_t year,uint8_t month,uint8_t day);
-		void dispDateTime(uint32_t year,uint8_t month,uint8_t day,uint8_t hour,uint8_t min,uint8_t sec);
+		void disp_time_HMS(uint8_t hour,uint8_t min,uint8_t sec);
+		void disp_time_YMD(uint32_t year,uint8_t month,uint8_t day);
+		void disp_date_time(uint32_t year,uint8_t month,uint8_t day,uint8_t hour,uint8_t min,uint8_t sec);
 	private:
 		GPIO* led;
 		GPIO* en;
@@ -66,8 +68,8 @@ class LCD1602
 		GPIO* d6;
 		GPIO* d7;
 	
-		uint16_t nDelay;
-		inline void LCDdelay(uint32_t nCount);
+		uint16_t delay_times;
+		inline void lcd_delay(uint32_t nCount);
 		inline uint8_t bz();
 		void wcmd(uint8_t cmd);
 		void wdat(uint8_t dat) ;

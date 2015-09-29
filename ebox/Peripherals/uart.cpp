@@ -18,18 +18,18 @@ This specification is preliminary and is subject to change at any time without n
 
 
 
-callbackFun UARTCallbackTable[3];//支持串口的rx中断
+callback_fun_type usart_callback_table[3];//支持串口的rx中断
 
 
-USART::USART(USART_TypeDef * USARTx,GPIO* txPin,GPIO* rxPin)
+USART::USART(USART_TypeDef * USARTx,GPIO* tx_pin,GPIO* rx_pin)
 {
 	_USARTx = USARTx;
-	txPin->mode(AF_PP);
-	rxPin->mode(INPUT);
+	tx_pin->mode(AF_PP);
+	rx_pin->mode(INPUT);
 }
 
 
-void USART::begin(uint32_t BaudRate)
+void USART::begin(uint32_t baud_rate)
 {
    USART_InitTypeDef USART_InitStructure;
 	 NVIC_InitTypeDef NVIC_InitStructure;
@@ -78,7 +78,7 @@ void USART::begin(uint32_t BaudRate)
 				break;
 		}
 
-    USART_InitStructure.USART_BaudRate = BaudRate;
+    USART_InitStructure.USART_BaudRate = baud_rate;
     USART_InitStructure.USART_Parity = USART_Parity_No;
     USART_InitStructure.USART_WordLength = USART_WordLength_8b;
     USART_InitStructure.USART_StopBits = USART_StopBits_1;
@@ -90,45 +90,45 @@ void USART::begin(uint32_t BaudRate)
 		USART_DMACmd(_USARTx,USART_DMAReq_Tx,ENABLE);    
     USART_Cmd(_USARTx, ENABLE);
 }
-void USART::interrupt(FunctionalState x)
+void USART::interrupt(FunctionalState enable)
 {
-	USART_ITConfig(_USARTx,USART_IT_RXNE,x);
+	USART_ITConfig(_USARTx,USART_IT_RXNE,enable);
 }
-void USART::attachInterrupt(void (*callbackFun)(void))
+void USART::attach_interrupt(void (*callback_fun)(void))
 {
 	switch((uint32_t)_USARTx)
 	{
 		case (uint32_t)USART1:
-			UARTCallbackTable[0] = callbackFun;break;
+			usart_callback_table[0] = callback_fun;break;
 		case (uint32_t)USART2:
-			UARTCallbackTable[1] = callbackFun;break;
+			usart_callback_table[1] = callback_fun;break;
 		case (uint32_t)USART3:
-			UARTCallbackTable[2] = callbackFun;break;
+			usart_callback_table[2] = callback_fun;break;
 	}
 }
-uint16_t USART::receiveData()
+uint16_t USART::receive()
 {
 	return (uint16_t)(_USARTx->DR & (uint16_t)0x01FF);
 }
 
-int USART::putChar(char ch)
+int USART::put_char(char ch)
 {
 	USART_SendData(_USARTx,ch);
-	while(USART_GetFlagStatus(_USARTx, USART_FLAG_TC) == RESET);
+	wait_busy();
 	return ch;
 }
-void USART::putString(const char *str)
+void USART::put_string(const char *str)
 {
 	while(*str!='\0')
 	{
 		USART_SendData(_USARTx,*str++);
-		while(USART_GetFlagStatus(_USARTx, USART_FLAG_TC) == RESET);
+		wait_busy();
 	}
 }	
-void USART::putString(const char *str,uint16_t length)
+void USART::put_string(const char *str,uint16_t length)
 {
 	#if (USE_DMA == 1)
-	  while(USART_GetFlagStatus(_USARTx, USART_FLAG_TC) == RESET);
+	  wait_busy();
 	  DMA_DeInit(_DMA1_Channelx);   //将DMA的通道1寄存器重设为缺省值
 		_DMA1_Channelx->CPAR = (u32)&_USARTx->DR; //外设地址
     _DMA1_Channelx->CMAR = (u32) str; //mem地址
@@ -156,22 +156,22 @@ void USART::putString(const char *str,uint16_t length)
 	#endif
 }	
 
-void USART::printfln(const char *str,uint16_t length)
+void USART::printf_length(const char *str,uint16_t length)
 {	
 	#if (USE_DMA == 1)
 		uint16_t i = 0;
-		uint16_t tmpln;
-		tmpln = length;
+		uint16_t tmp_length;
+		tmp_length = length;
 
-		while(USART_GetFlagStatus(_USARTx, USART_FLAG_TC) == RESET);
-		while(tmpln--)
+		wait_busy();
+		while(tmp_length--)
 		{
-			sendBuf[i++] = *str++;
+			send_buf[i++] = *str++;
 		};
 
 		DMA_DeInit(_DMA1_Channelx);   //将DMA的通道1寄存器重设为缺省值
 		_DMA1_Channelx->CPAR = (u32)&_USARTx->DR; //外设地址
-    _DMA1_Channelx->CMAR = (u32) sendBuf; //mem地址
+    _DMA1_Channelx->CMAR = (u32) send_buf; //mem地址
     _DMA1_Channelx->CNDTR = length ; //传输长度
     _DMA1_Channelx->CCR = (0 << 14) | // 非存储器到存储器模式
             (2 << 12) | // 通道优先级高
@@ -194,10 +194,10 @@ void USART::printfln(const char *str,uint16_t length)
 void USART::printf(const char* fmt,...)
 {
 	 __IO uint16_t length = 0;
-	while(USART_GetFlagStatus(_USARTx, USART_FLAG_TC) == RESET);
+	wait_busy();
 	va_list va_params;   
 	va_start(va_params,fmt);   
-	length = vsprintf(sendBuf,fmt,va_params);   
+	length = vsprintf(send_buf,fmt,va_params);   
 	va_end(va_params); 
 
 	#if (USE_DMA == 1)
@@ -205,7 +205,7 @@ void USART::printf(const char* fmt,...)
 	{
 		DMA_DeInit(_DMA1_Channelx);   //将DMA的通道1寄存器重设为缺省值
 		_DMA1_Channelx->CPAR = (u32)&_USARTx->DR; //外设地址
-    _DMA1_Channelx->CMAR = (u32) sendBuf; //mem地址
+    _DMA1_Channelx->CMAR = (u32) send_buf; //mem地址
     _DMA1_Channelx->CNDTR = length ; //传输长度
     _DMA1_Channelx->CCR = (0 << 14) | // 非存储器到存储器模式
             (2 << 12) | // 通道优先级高
@@ -222,7 +222,7 @@ void USART::printf(const char* fmt,...)
             (0 <<  1) | // 是否允许传输完成中断
             (1);        // 通道开启
 //			DMA_InitStructure.DMA_PeripheralBaseAddr =  (u32)&_USARTx->DR;  //DMA外设ADC基地址
-//			DMA_InitStructure.DMA_MemoryBaseAddr = (u32)sendBuf;  //DMA内存基地址
+//			DMA_InitStructure.DMA_MemoryBaseAddr = (u32)send_buf;  //DMA内存基地址
 //			DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;  //
 //			DMA_InitStructure.DMA_BufferSize = 128;  //DMA通道的DMA缓存的大小
 //			DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;  //
@@ -238,12 +238,12 @@ void USART::printf(const char* fmt,...)
 //		DMA_Cmd(_DMA1_Channelx,ENABLE);  
 	}
 	#else
-		putString(sendBuf);
+		putString(send_buf);
 	#endif
 	
 }
 
-void USART::waitBusy()
+void USART::wait_busy()
 {
 	while(USART_GetFlagStatus(_USARTx, USART_FLAG_TC) == RESET);
 }
@@ -256,7 +256,7 @@ void USART1_IRQHandler(void)
 
 	if(USART_GetITStatus(USART1,USART_IT_RXNE)==SET)
 	{
-		UARTCallbackTable[0]();
+		usart_callback_table[0]();
 		USART_ClearITPendingBit(USART1,USART_IT_RXNE);
 	}
 }
@@ -265,7 +265,7 @@ void USART2_IRQHandler(void)
 
 	if(USART_GetITStatus(USART2,USART_IT_RXNE)==SET)
 	{
-		UARTCallbackTable[1]();
+		usart_callback_table[1]();
 		USART_ClearITPendingBit(USART2,USART_IT_RXNE);
 	}
 }
@@ -274,7 +274,7 @@ void USART3_IRQHandler(void)
 
 	if(USART_GetITStatus(USART3,USART_IT_RXNE)==SET)
 	{
-		UARTCallbackTable[2]();
+		usart_callback_table[2]();
 		USART_ClearITPendingBit(USART3,USART_IT_RXNE);
 	}
 }

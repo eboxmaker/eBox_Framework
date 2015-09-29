@@ -15,18 +15,18 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "i2c.h"
 
-SOFTI2C::SOFTI2C(GPIO* SCLPin, GPIO* SDAPin)
+SOFTI2C::SOFTI2C(GPIO* SCLpin, GPIO* SDApin)
 {
-	sclPin = SCLPin;
-	sdaPin = SDAPin;
+	scl_pin = SCLpin;
+	sda_pin = SDApin;
 }	
 void SOFTI2C::begin(uint32_t speed)
 {
-	setSpeed(speed);
-	sdaPin->mode(OUTPUT_PP);
-	sclPin->mode(OUTPUT_PP);
+	set_speed(speed);
+	sda_pin->mode(OUTPUT_PP);
+	scl_pin->mode(OUTPUT_PP);
 }
-int8_t SOFTI2C::setSpeed(uint32_t speed)
+int8_t SOFTI2C::set_speed(uint32_t speed)
 {
 	_speed = speed;
 	switch(_speed)
@@ -49,118 +49,118 @@ int8_t SOFTI2C::setSpeed(uint32_t speed)
 	}
 	return 0;
 }
-uint32_t SOFTI2C::readConfig()
+uint32_t SOFTI2C::read_config()
 {
 	return _speed;
 }
 void SOFTI2C::start()
 {
-	sdaPin->mode(OUTPUT_PP);
-	sdaPin->set();
-	sclPin->set();delay_us(_delayTimes);
-	sdaPin->reset();delay_us(_delayTimes);
-	sclPin->reset();
+	sda_pin->mode(OUTPUT_PP);
+	sda_pin->set();
+	scl_pin->set();delay_us(_delayTimes);
+	sda_pin->reset();delay_us(_delayTimes);
+	scl_pin->reset();
 
 }
 
 void SOFTI2C::stop()
 {
-	sdaPin->mode(OUTPUT_PP);
-	sclPin->reset();
-	sdaPin->reset();delay_us(_delayTimes);
-	sclPin->set();delay_us(_delayTimes);
-	sdaPin->set();
+	sda_pin->mode(OUTPUT_PP);
+	scl_pin->reset();
+	sda_pin->reset();delay_us(_delayTimes);
+	scl_pin->set();delay_us(_delayTimes);
+	sda_pin->set();
 }
-int8_t SOFTI2C::waitAck()
+int8_t SOFTI2C::wait_ack()
 {
 	uint8_t cErrTime = 5;
-	sdaPin->mode(INPUT_PU);
-	sclPin->set();delay_us(_delayTimes);
-	while(sdaPin->read())
+	sda_pin->mode(INPUT_PU);
+	scl_pin->set();delay_us(_delayTimes);
+	while(sda_pin->read())
 	{
 		cErrTime--;
 		delay_us(_delayTimes);
 		if(cErrTime == 0)
 		{
-			sdaPin->mode(OUTPUT_PP);
+			sda_pin->mode(OUTPUT_PP);
 			stop();
 			return -1;
 		
 		}
 	
 	}
-	sclPin->reset();delay_us(_delayTimes);
+	scl_pin->reset();delay_us(_delayTimes);
 	return 0;
 }
-int8_t SOFTI2C::sendAck()
+int8_t SOFTI2C::send_ack()
 {
-	sdaPin->mode(OUTPUT_PP);
-	sdaPin->reset();delay_us(_delayTimes);
-	sclPin->set();delay_us(_delayTimes);
-	sclPin->reset();delay_us(_delayTimes);
+	sda_pin->mode(OUTPUT_PP);
+	sda_pin->reset();delay_us(_delayTimes);
+	scl_pin->set();delay_us(_delayTimes);
+	scl_pin->reset();delay_us(_delayTimes);
 
 	return 0;
 }
-int8_t SOFTI2C::sendNoAck()	
+int8_t SOFTI2C::send_no_ack()	
 {
-	sdaPin->mode(OUTPUT_PP);
-	sdaPin->set();delay_us(_delayTimes);
-	sclPin->set();delay_us(_delayTimes);
-	sclPin->reset();delay_us(_delayTimes);
+	sda_pin->mode(OUTPUT_PP);
+	sda_pin->set();delay_us(_delayTimes);
+	scl_pin->set();delay_us(_delayTimes);
+	scl_pin->reset();delay_us(_delayTimes);
  return 0;
 }
-int8_t SOFTI2C::sendByte(uint8_t byte)
+int8_t SOFTI2C::send_byte(uint8_t byte)
 {
 	int8_t ret = 0;
 
 	uint8_t ii = 8;
-	sdaPin->mode(OUTPUT_PP);
+	sda_pin->mode(OUTPUT_PP);
 	while( ii-- )
 	{
-		sclPin->reset();
-		sdaPin->write(byte & 0x80);delay_us(_delayTimes);
+		scl_pin->reset();
+		sda_pin->write(byte & 0x80);delay_us(_delayTimes);
 		byte += byte;//<<1
-		sclPin->set();delay_us(_delayTimes);
-		sclPin->reset();delay_us(_delayTimes);
+		scl_pin->set();delay_us(_delayTimes);
+		scl_pin->reset();delay_us(_delayTimes);
 	}
-	ret = waitAck();
+	ret = wait_ack();
   return ret;
 }
-int8_t	SOFTI2C::send7BitsAddress(uint8_t slaveAddress)
+int8_t	SOFTI2C::send_7bits_address(uint8_t slaveAddress)
 {
 	int8_t ret = 0;
-	sendByte(slaveAddress);
+	send_byte(slaveAddress);
 	return ret;
 }
 
-uint8_t SOFTI2C::receiveByte(void)
+uint8_t SOFTI2C::receive_byte(void)
 {
 	uint8_t i = 8;
 	uint8_t byte = 0;
-	sdaPin->mode(INPUT_PU);
+	sda_pin->mode(INPUT_PU);
 	while(i--)
 	{
 		byte += byte;
-		sclPin->reset();delay_us(_delayTimes);
-		sclPin->set();delay_us(_delayTimes);
-		byte |= sdaPin->read();
+		scl_pin->reset();delay_us(_delayTimes);
+		scl_pin->set();delay_us(_delayTimes);
+		byte |= sda_pin->read();
 	}
-	sclPin->reset();delay_us(_delayTimes);
+	scl_pin->reset();delay_us(_delayTimes);
 
 	return byte;
 }
-int8_t SOFTI2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
+int8_t SOFTI2C::write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
 {
 	int8_t ret = 0;
 		start();
 	
-    if (send7BitsAddress(slaveAddress) == -1)
+    if (send_7bits_address(slaveAddress) == -1)
         ret = -1;
 		
-    if (sendByte(regAddress) == -1)
+    if (send_byte(regAddress) == -1)
         ret = -2;
 
-    if (sendByte(data) == -1)
+    if (send_byte(data) == -1)
         ret = -3;
 		
 		stop();
@@ -168,21 +168,21 @@ int8_t SOFTI2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
     delay_us(10);      
     return ret;
 }
-int8_t SOFTI2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToWrite)
+int8_t SOFTI2C::write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToWrite)
 {
 	int8_t ret = 0;
 		start();
 
-    if (send7BitsAddress(slaveAddress) == -1)
+    if (send_7bits_address(slaveAddress) == -1)
         ret = -1;
 		
-    if (sendByte(regAddress) == -1)
+    if (send_byte(regAddress) == -1)
         ret = -2;
 
 		while(numToWrite--)
 		{
-			sendByte(*data++);
-			if (waitAck() == -1)
+			send_byte(*data++);
+			if (wait_ack() == -1)
 					ret = -3;
 		}
 		
@@ -191,75 +191,75 @@ int8_t SOFTI2C::writeByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,
     delay_us(10);      
     return ret;
 }
-int8_t 	SOFTI2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
+int8_t 	SOFTI2C::read_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
 {
 
 	int8_t ret = 0;
 		start();
 
-    if (send7BitsAddress(slaveAddress) == -1)
+    if (send_7bits_address(slaveAddress) == -1)
         ret = -1;
 
 
-    if (sendByte(regAddress) == -1)
+    if (send_byte(regAddress) == -1)
         ret = -2;
 
 		start();
 
-    if (sendByte(slaveAddress + 1) == -1)
+    if (send_byte(slaveAddress + 1) == -1)
         ret = -3;
 
-		*data = receiveByte();
-		sendNoAck();
+		*data = receive_byte();
+		send_no_ack();
 		stop();
 
 	return ret;
 }
-int8_t 	SOFTI2C::readByte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
+int8_t 	SOFTI2C::read_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
 {
 	int8_t ret = 0;
 	int i = 0;
 	
 		start();
 
-    if (send7BitsAddress(slaveAddress) == -1)
+    if (send_7bits_address(slaveAddress) == -1)
         ret = -1;
 
 
-    if (sendByte(regAddress) == -1)
+    if (send_byte(regAddress) == -1)
         ret = -2;
 
 		start();
-    if (send7BitsAddress(slaveAddress + 1) == -1)
+    if (send_7bits_address(slaveAddress + 1) == -1)
         ret = -3;
 		
 		while(numToRead)
 		{
-			*data++ = receiveByte();
+			*data++ = receive_byte();
 			numToRead--;
 			i++;
 			if(numToRead == 0)
 			{
-				sendNoAck();
+				send_no_ack();
 				stop();
 				ret = 0;
 			}
 			else
-				sendAck();
+				send_ack();
 		}
 
 	return ret;
 }
-int8_t SOFTI2C::waitBusy(uint8_t slaveAddress)
+int8_t SOFTI2C::wait_busy(uint8_t slaveAddress)
 {
 	int8_t ret;
 	uint8_t i = 0;
 	do
 	{
 		start();
-		ret = send7BitsAddress(slaveAddress);
-		sendAck();
-		sendByte(slaveAddress);
+		ret = send_7bits_address(slaveAddress);
+		send_ack();
+		send_byte(slaveAddress);
 		stop();
 		if(i++==100)
 		{

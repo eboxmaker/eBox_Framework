@@ -35,25 +35,25 @@ This specification is preliminary and is subject to change at any time without n
 class USART
 {
 	 public:
-			USART(USART_TypeDef * USARTx,GPIO* txPin,GPIO* rxPin);
+			USART(USART_TypeDef * USARTx,GPIO* tx_pin,GPIO* rx_pin);
 	 
-			void begin(uint32_t BaudRate);
-			void attachInterrupt(void (*callbackFun)(void));
+			void begin(uint32_t baud_rate);
+			void attach_interrupt(void (*callback_fun)(void));
 			void interrupt(FunctionalState enable);
-			uint16_t receiveData();
+			uint16_t receive();
 	 
-			int 	putChar(char ch);
-			void 	putString(const char *str);
-			void 	putString(const char *str,uint16_t length);
+			int 	put_char(char ch);
+			void 	put_string(const char *str);
+			void 	put_string(const char *str,uint16_t length);
 
 			void printf(const char* fmt,...);		
-			void printfln(const char *str,uint16_t length);
-			void waitBusy();
+			void printf_length(const char *str,uint16_t length);
+			void wait_busy();
 	 
 	 private:
 		USART_TypeDef* 				_USARTx;
 	  DMA_Channel_TypeDef*	_DMA1_Channelx;
-		char 									sendBuf[UART_MAX_SEND_BUF];
+		char 									send_buf[UART_MAX_SEND_BUF];
 };
 
 

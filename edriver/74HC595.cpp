@@ -17,34 +17,34 @@ This specification is preliminary and is subject to change at any time without n
 
 _74hc595::_74hc595(GPIO* dataPin, GPIO* sckPin,GPIO* rckPin)
 {
-	_dataPin 	= dataPin;
-	_sckPin 	= sckPin;
-	_rckPin 	= rckPin;
+	data_pin 	= dataPin;
+	sck_pin 	= sckPin;
+	rck_pin 	= rckPin;
 	
 
 }
 void _74hc595::begin()
 {
-	_dataPin->mode(OUTPUT_PP);
-	_sckPin->mode(OUTPUT_PP);
-	_rckPin->mode(OUTPUT_PP);
+	data_pin->mode(OUTPUT_PP);
+	sck_pin->mode(OUTPUT_PP);
+	rck_pin->mode(OUTPUT_PP);
 }
-void _74hc595::write(uint8_t* Data,uint8_t dataLen,uint8_t bitOder)
+void _74hc595::write(uint8_t* data,uint8_t dataLen,uint8_t bit_oder)
 {
-	_rckPin->write(LOW);
+	rck_pin->write(LOW);
 	for(int i = 0; i < dataLen; i++)
-	shiftOut(_dataPin,_sckPin,bitOder,Data[i]);
+	shift_out(data_pin,sck_pin,bit_oder,data[i]);
 
 }
-void _74hc595::write(uint8_t data,uint8_t bitOder)
+void _74hc595::write(uint8_t data,uint8_t bit_oder)
 {
-	_rckPin->write(LOW);
-	shiftOut(_dataPin,_sckPin,bitOder,data);
+	rck_pin->write(LOW);
+	shift_out(data_pin,sck_pin,bit_oder,data);
 
 }
 void _74hc595::update()
 {
-  _rckPin->write(HIGH);
+  rck_pin->write(HIGH);
 
 }
 

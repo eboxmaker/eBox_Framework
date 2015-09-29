@@ -28,10 +28,6 @@ u8 MMC_disk_write( const u8 *data, u32 sector, u8 count)
 {
 	return(sdCard->writeMultiBlock(sector,data,count));
 }
-uint32_t getSysTime(void)
-{
-	return millisSeconds/1000;
 
-}
 
 

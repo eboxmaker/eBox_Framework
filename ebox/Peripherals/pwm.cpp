@@ -29,14 +29,14 @@ PWM::PWM(GPIO*  PWMPin,uint32_t Frq)
 //	if(isPwmPin(PWMpin))
 //	{
 		pwmPin = PWMPin;
-		initInfo(PWMPin);
+		init_info(PWMPin);
 		
 		pwmPin->mode(AF_PP);
-		setFrq(Frq);
+		set_frq(Frq);
 
 //	}
 }
-void PWM::baseInit(uint16_t Period,uint16_t Prescaler)
+void PWM::base_init(uint16_t Period,uint16_t Prescaler)
 {
 	period = Period;//更新period
 
@@ -53,7 +53,7 @@ void PWM::baseInit(uint16_t Period,uint16_t Prescaler)
 	TIM_Cmd(TIMx, ENABLE); //
 
 }	
-void PWM::initInfo(GPIO* PWMPin)
+void PWM::init_info(GPIO* PWMPin)
 {
 	if(PWMPin->port == GPIOA)
 	{
@@ -110,7 +110,7 @@ void PWM::initInfo(GPIO* PWMPin)
 
 //pwm的频率 = 72M/72/1000;
 //
-void PWM::setFrq(uint32_t Frq)
+void PWM::set_frq(uint32_t Frq)
 {
 	uint32_t _period  =0;
 	uint32_t _prescaler = 1;
@@ -121,13 +121,13 @@ void PWM::setFrq(uint32_t Frq)
 		if((0xffff>=_period)&&(_period>=1000))break;
 	}
 	
-	baseInit(_period,_prescaler);
-	setDuty(duty);
+	base_init(_period,_prescaler);
+	set_duty(duty);
 
 }
 
 //duty:0-1000对应0%-100.0%
-void PWM::setDuty(uint16_t Duty)
+void PWM::set_duty(uint16_t Duty)
 {
 
 			duty = Duty;
@@ -166,13 +166,13 @@ void PWM::setDuty(uint16_t Duty)
 		
 }
 //duty:0-1000对应0%-100.0%
-void analogWrite(GPIO* PWMpin, uint16_t Duty) 
+void analog_write(GPIO* PWMpin, uint16_t Duty) 
 {
 //	if(isPwmPin(PWMpin))
 //	{
 			PWM p(PWMpin,1000);
 			//p.SetFrq(1000,1);
-			p.setDuty(Duty);
+			p.set_duty(Duty);
 
 //	}
 //	else

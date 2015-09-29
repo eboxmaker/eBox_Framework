@@ -17,73 +17,73 @@ This specification is preliminary and is subject to change at any time without n
 /*----------------------------------------------------------------------*
 
  *----------------------------------------------------------------------*/
-Button::Button(GPIO* pin, uint8_t pullUpEnable)
+BUTTON::BUTTON(GPIO* Pin, uint8_t PullUp)
 {
-    _pin = pin;
-    _pullUpEnable = pullUpEnable;
+    pin = Pin;
+    pull_up = PullUp;
 }
 
-void Button::begin()
+void BUTTON::begin()
 {
-    _pin->mode(INPUT);
-    if (_pullUpEnable != 0){
-        _pin->write(HIGH);       //enable pullup resistor
+    pin->mode(INPUT);
+    if (pull_up != 0){
+        pin->write(HIGH);       //enable pullup resistor
 		 }
         
-    _state = _pin->read();
-    if (_pullUpEnable == 0){
-         _state = !_state;
+    state = pin->read();
+    if (pull_up == 0){
+         state = !state;
 	 }
 
-    _time = millis();
-    _lastState = _state;
-    _changed = 0;
-    _lastChange = _time;
+    time = millis();
+    last_state = state;
+    changed = 0;
+    last_change = time;
 }
-uint8_t Button::loop(void)
+uint8_t BUTTON::loop(void)
 {
     static uint32_t ms;
     static uint8_t pinVal;
 
 	ms = millis();
-	pinVal = _pin->read();
-	if(_pullUpEnable == 0) pinVal = !pinVal;
+	pinVal = pin->read();
+	if(pull_up == 0) pinVal = !pinVal;
 
-	_lastState = _state;
-	_state = pinVal;
-	_time = ms;
+	last_state = state;
+	state = pinVal;
+	time = ms;
 
-	if(_state != _lastState){
-		if(_longpressflag == 1){//mask the signal fafter long pressed 
-			_longpressflag = 0;
-			_longpresstimes = 0;
-			return _state;
+	if(state != last_state){
+		if(long_press_flag == 1){//mask the signal fafter long pressed 
+			long_press_flag = 0;
+			long_press_times = 0;
+			return state;
 			}
-		_lastChange = ms;
-		_changed = 1;
+		last_change = ms;
+		changed = 1;
 	}
 	else{
-		_changed = 0;
+		changed = 0;
 	}
-	return _state;
+	return state;
 	
 }
 
 //等待按键松开后才返回1；
-uint8_t Button::release(void)
+uint8_t BUTTON::release(void)
 {
-	if(_state&&_changed){
-		_changed = 0;
+	if(state&&changed){
+		changed = 0;
 		return 1;
 	}
 	else
 		return 0;
 }
 //按键按下返回1；
-uint8_t Button::click(void)
+uint8_t BUTTON::click(void)
 {
-	if(!_state&&_changed){
-		_changed = 0;
+	if(!state&&changed){
+		changed = 0;
 		return 1;
 	}
 	else
@@ -94,20 +94,20 @@ uint8_t Button::click(void)
 //ms: 长按按键ms 后触发
 //times: 触发times后将不再触发
 //times=0;则连续触发
-uint8_t Button::pressedFor(uint32_t ms,uint8_t times)
+uint8_t BUTTON::pressed_for(uint32_t ms,uint8_t times)
 {
 	if(times == 0){
-		if(_state == 0 && _time - _lastChange >= ms ){
-			_longpressflag = 1;
+		if(state == 0 && time - last_change >= ms ){
+			long_press_flag = 1;
 			return 1;
 		}
 		else
 			return 0;
 	}
 		
-	else if(_state == 0 && _time - _lastChange >= ms && _longpresstimes < times){
-			_longpressflag = 1;
-			_longpresstimes++;
+	else if(state == 0 && time - last_change >= ms && long_press_times < times){
+			long_press_flag = 1;
+			long_press_times++;
 			return 1;
 		}
 		else

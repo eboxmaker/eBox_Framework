@@ -20,11 +20,11 @@ This specification is preliminary and is subject to change at any time without n
 //默认开启16通道 采用DMA+ADC连续转换模式。提供AD采集服务
 //只需将IO设置为AIN模式即可读取引脚相应的电压
 #define CH 16
-u16  AD_Value[CH];   //用来存放ADC转换结果，也是DMA的目标地址
+u16  AD_value[CH];   //用来存放ADC转换结果，也是DMA的目标地址
 
 
 /*配置ADC1*/
-void ADC1_Configuration(void)
+void ADC1_configuration(void)
 {
 	 
 	ADC_InitTypeDef  ADC_InitStructure;
@@ -78,13 +78,13 @@ void ADC1_Configuration(void)
 	
 }
 /*配置DMA*/
-void DMA_Configuration(void)
+void DMA_configuration(void)
 	{
 	/* ADC1  DMA1 Channel Config */
 	DMA_InitTypeDef DMA_InitStructure;
 	DMA_DeInit(DMA1_Channel1);   //将DMA的通道1寄存器重设为缺省值
 	DMA_InitStructure.DMA_PeripheralBaseAddr =  (u32)&ADC1->DR;  //DMA外设ADC基地址
-	DMA_InitStructure.DMA_MemoryBaseAddr = (u32)&AD_Value;  //DMA内存基地址
+	DMA_InitStructure.DMA_MemoryBaseAddr = (u32)&AD_value;  //DMA内存基地址
 	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;  //内存作为数据传输的目的地
 	DMA_InitStructure.DMA_BufferSize = CH;  //DMA通道的DMA缓存的大小
 	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;  //外设地址寄存器不变
@@ -99,22 +99,22 @@ void DMA_Configuration(void)
 	}
 
 
-void Init_ADC1(void)
+void init_ADC1(void)
 	{
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1 , ENABLE );	  //使能ADC1通道时钟，各个管脚时钟
 	RCC_ADCCLKConfig(RCC_PCLK2_Div6);   //72M/6=12,ADC最大时间不能超过14M
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);	//使能DMA传输
 		
-	ADC1_Configuration();
-	DMA_Configuration();
+	ADC1_configuration();
+	DMA_configuration();
 	ADC_SoftwareStartConvCmd(ADC1, ENABLE);
 	DMA_Cmd(DMA1_Channel1, ENABLE);	 //启动DMA通道
 
 	 
 	}
 
-uint16_t analogRead(GPIO* pin)
+uint16_t analog_read(GPIO* pin)
 {
 	switch((uint32_t)pin->port)
 	{
@@ -122,53 +122,53 @@ uint16_t analogRead(GPIO* pin)
 			switch(pin->pin)
 			{
 				case GPIO_Pin_0:
-					return AD_Value[0];
+					return AD_value[0];
 				case GPIO_Pin_1:
-					return AD_Value[1];
+					return AD_value[1];
 				case GPIO_Pin_2:
-					return AD_Value[2];
+					return AD_value[2];
 				case GPIO_Pin_3:
-					return AD_Value[3];
+					return AD_value[3];
 				case GPIO_Pin_4:
-					return AD_Value[4];
+					return AD_value[4];
 				case GPIO_Pin_5:
-					return AD_Value[5];
+					return AD_value[5];
 				case GPIO_Pin_6:
-					return AD_Value[6];
+					return AD_value[6];
 				case GPIO_Pin_7:
-					return AD_Value[7];
+					return AD_value[7];
 			}
 		case (uint32_t)GPIOB:
 			switch(pin->pin)
 			{
 				case GPIO_Pin_0:
-					return AD_Value[8];
+					return AD_value[8];
 				case GPIO_Pin_1:
-					return AD_Value[9];
+					return AD_value[9];
 			}
 		case (uint32_t)GPIOC:
 			switch(pin->pin)
 			{
 				case GPIO_Pin_0:
-					return AD_Value[10];
+					return AD_value[10];
 				case GPIO_Pin_1:
-					return AD_Value[11];
+					return AD_value[11];
 				case GPIO_Pin_2:
-					return AD_Value[12];
+					return AD_value[12];
 				case GPIO_Pin_3:
-					return AD_Value[13];
+					return AD_value[13];
 				case GPIO_Pin_4:
-					return AD_Value[14];
+					return AD_value[14];
 				case GPIO_Pin_5:
-					return AD_Value[15];
+					return AD_value[15];
 			}
 	}		
 
 	return 0;
 
 }
-uint16_t analogReadToVoltage(GPIO* pin)   
+uint16_t analog_read_voltage(GPIO* pin)   
 { 
-   return (u16)(analogRead(pin)*3300/4096);   //求的结果扩大了1000倍，方便下面求出小数
+   return (u16)(analog_read(pin)*3300/4096);   //求的结果扩大了1000倍，方便下面求出小数
 }
 

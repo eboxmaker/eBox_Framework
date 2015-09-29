@@ -17,23 +17,23 @@ This specification is preliminary and is subject to change at any time without n
 #define __ENCODER_H
 #include "ebox.h"
 #include "button.h"
-class Encoder
+class ENCODER
 {
 	public:
-		Encoder(GPIO* Apin,GPIO* Bpin);
-		int ReadEncoder();
+		ENCODER(GPIO* Apin,GPIO* Bpin);
+		int read_encoder();
 
 
 	private:
 		
-	GPIO* _Apin;
-	GPIO*	_Bpin;
+	GPIO* a_pin;
+	GPIO*	b_pin;
 	
-	uint8_t _astate;
-	uint8_t _alaststate;
+	uint8_t a_state;
+	uint8_t a_last_state;
 
-	uint8_t _bstate;
-	uint8_t _blaststate;
+	uint8_t b_state;
+	uint8_t b_last_state;
 
 };
 #endif

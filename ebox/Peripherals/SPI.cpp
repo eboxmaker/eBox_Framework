@@ -16,7 +16,7 @@ This specification is preliminary and is subject to change at any time without n
 #include "spi.h"
 
 
-SPIClASS::SPIClASS(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin)
+SPI::SPI(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin)
 {
 	busy = 0;
 	spi = SPIx;
@@ -26,7 +26,7 @@ SPIClASS::SPIClASS(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin)
 	
 };
 
-void SPIClASS::begin(SPICONFIG* spiConfig)
+void SPI::begin(SPI_CONFIG_TYPE* spiConfig)
 {		
 	if(spi == SPI1)
 	{	
@@ -43,7 +43,7 @@ void SPIClASS::begin(SPICONFIG* spiConfig)
 
 	config(spiConfig);
 }
-void SPIClASS::config(SPICONFIG* spiConfig)
+void SPI::config(SPI_CONFIG_TYPE* spiConfig)
 {
 	SPI_InitTypeDef SPI_InitStructure;
 
@@ -77,19 +77,19 @@ void SPIClASS::config(SPICONFIG* spiConfig)
 	  SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
 	}
 	SPI_InitStructure.SPI_BaudRatePrescaler = spiConfig->prescaler;
-	SPI_InitStructure.SPI_FirstBit = spiConfig->bitOrder; 
+	SPI_InitStructure.SPI_FirstBit = spiConfig->bit_order; 
 	SPI_Init(spi,&SPI_InitStructure);
 	SPI_Cmd(spi,ENABLE);
 
 }
 
-uint8_t SPIClASS::readConfig(void)
+uint8_t SPI::read_config(void)
 {
 	return currentDevNum; 
 }
 
 
-int8_t SPIClASS::write(uint8_t data)
+int8_t SPI::write(uint8_t data)
 {
   __IO uint8_t dummyByte;
 	while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
@@ -101,7 +101,7 @@ int8_t SPIClASS::write(uint8_t data)
 
 	return 0;
 }
-int8_t SPIClASS::read(uint8_t* data)
+int8_t SPI::read(uint8_t* data)
 {
 	while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
 	;
@@ -112,7 +112,7 @@ int8_t SPIClASS::read(uint8_t* data)
 	
 	return 0;
 }
-uint8_t SPIClASS::read()
+uint8_t SPI::read()
 {
 	while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
 	;
@@ -122,7 +122,7 @@ uint8_t SPIClASS::read()
 	return(spi->DR);
 	
 }
-int8_t SPIClASS::write(uint8_t *data,uint16_t dataln)
+int8_t SPI::write(uint8_t *data,uint16_t dataln)
 {
 	__IO uint8_t dummyByte;
 	if(dataln == 0)
@@ -138,7 +138,7 @@ int8_t SPIClASS::write(uint8_t *data,uint16_t dataln)
 	}
 	return 0;
 }
-int8_t SPIClASS::read(uint8_t *rcvdata,uint16_t dataln)
+int8_t SPI::read(uint8_t *rcvdata,uint16_t dataln)
 {
 	if(dataln == 0)
 		return -1;
@@ -154,15 +154,15 @@ int8_t SPIClASS::read(uint8_t *rcvdata,uint16_t dataln)
 	return 0;
 }
 
-int8_t SPIClASS::getSpiRight(SPICONFIG* spiConfig)
+int8_t SPI::get_spi_right(SPI_CONFIG_TYPE* spi_config)
 {
-	while((busy == 1)&&(spiConfig->devNum != readConfig()))
+	while((busy == 1)&&(spi_config->devNum != read_config()))
 		delay_ms(1);
-	config(spiConfig);
+	config(spi_config);
 	busy = 1;
 	return 0;
 }
-int8_t SPIClASS::releaseSpiRight(void)
+int8_t SPI::release_spi_right(void)
 {
 	busy = 0;
 	return 0;

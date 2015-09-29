@@ -51,8 +51,8 @@ extern USART uart1;
 extern USART uart2;
 extern USART uart3;
 
-extern SPIClASS spi1;	
-extern SPIClASS spi2;
+extern SPI spi1;	
+extern SPI spi2;
 extern SOFTSPI sspi;
 extern I2C i2c1;
 extern I2C i2c2;

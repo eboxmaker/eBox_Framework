@@ -22,7 +22,7 @@ class SD
 {
 
 	public:
-			SD(GPIO* cspin,SPIClASS *pSPI)
+			SD(GPIO* cspin,SPI *pSPI)
 			{
 				cs = cspin;
 				spi = pSPI;
@@ -51,8 +51,8 @@ class SD
 
 	private:
 		GPIO* cs;
-		SPICONFIG SPIDevSDCard;
-		SPIClASS* spi;
+		SPI_CONFIG_TYPE SPIDevSDCard;
+		SPI* spi;
 	
 	
 };

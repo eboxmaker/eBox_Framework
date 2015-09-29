@@ -18,7 +18,7 @@ This specification is preliminary and is subject to change at any time without n
 
 
 
-uint16_t FLASHCLASS::Flash_Write_Without_check(uint32_t iAddress, uint8_t *buf, uint16_t iNumByteToWrite) {
+uint16_t FLASHCLASS::write_without_check(uint32_t iAddress, uint8_t *buf, uint16_t iNumByteToWrite) {
     uint16_t i;
     volatile FLASH_Status FLASHStatus = FLASH_COMPLETE;
     i = 0;
@@ -73,9 +73,9 @@ int FLASHCLASS::write(uint32_t iAddress, uint8_t *buf, uint32_t iNbrToWrite) {
                 for(i=0;i<secremain;i++) {   //复制
                         tmp[i+secoff]=buf[i];   
                 }
-                Flash_Write_Without_check(secpos ,tmp ,FLASH_PAGE_SIZE);//写入整个扇区  
+                write_without_check(secpos ,tmp ,FLASH_PAGE_SIZE);//写入整个扇区  
             } else {
-                Flash_Write_Without_check(iAddress,buf,secremain);//写已经擦除了的,直接写入扇区剩余区间.
+                write_without_check(iAddress,buf,secremain);//写已经擦除了的,直接写入扇区剩余区间.
             }
             
             if(iNumByteToWrite==secremain) //写入结束了

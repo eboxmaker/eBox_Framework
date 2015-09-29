@@ -32,8 +32,8 @@ extern "C"{
 #define LOW  0x0
 
 
-#define LSBFIRST 0
-#define MSBFIRST 1
+#define LSB_FIRST 0
+#define MSB_FIRST 1
 
 #define PI 3.1415926535898
 
@@ -48,22 +48,23 @@ typedef enum
   OUTPUT_PP = 0x10,
   AF_OD = 0x1C,
   AF_PP = 0x18
-}PINMODE;
+}PIN_MODE;
 
 //以后NVIC_PriorityGroupConfig()函数不需要再被调用。更不能再以非NVIC_GROUP_CONFIG值填充调用
 #define NVIC_GROUP_CONFIG NVIC_PriorityGroup_2   /*!< 2 bits for pre-emption priority
 																									 2 bits for subpriority */
 
-#define Interrupts() 		__enable_irq()
-#define noInterrupts() 	__disable_irq()
+#define interrupts() 		__enable_irq()
+#define no_interrupts() 	__disable_irq()
 	
 ///////全局变量、函数///////////////////////////////////////////////
-extern __IO uint32_t millisSeconds;
+extern __IO uint32_t millis_seconds;
 
+typedef void (*callback_fun_type)(void);	 
 typedef void (*callbackFun)(void);	 
 	 
 void eBoxInit(void);	
-
+void 	init_ADC1(void);
 uint32_t millis( void ) ;
 void delay_ms(uint32_t ms);
 void delay_us(uint16_t us);
@@ -73,7 +74,7 @@ class GPIO
 {
 	public:
 		GPIO(GPIO_TypeDef* _port,uint16_t _pin);
-		void mode(PINMODE modeVal);
+		void mode(PIN_MODE modeVal);
 		void set();
 		void reset();
 		void write(uint8_t val);
@@ -85,15 +86,15 @@ class GPIO
 	
 };
 //对io速度要求较高的地方不建议使用
-#define digitalWrite(pin,val)	pin->write(val)
-#define digitalRead(pin) 			pin->read()
-#define pinMode(pin,val)			pin->mode(val)
+#define digital_write(pin,val)	pin->write(val)
+#define digital_read(pin) 			pin->read()
+#define pin_mode(pin,val)			pin->mode(val)
 
-uint16_t	analogRead(GPIO* pin);	
-uint16_t	analogReadToVoltage(GPIO* pin); 
+uint16_t	analog_read(GPIO* pin);	
+uint16_t	analog_read_voltage(GPIO* pin); 
 
-void			shiftOut(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder, uint8_t val);
-uint8_t		shiftIn(GPIO* dataPin, GPIO* clockPin, uint8_t bitOrder);
+void			shift_out(GPIO* data_pin, GPIO* clock_pin, uint8_t bit_order, uint8_t val);
+uint8_t		shift_in(GPIO* data_pin, GPIO* clock_pin, uint8_t bit_order);
 
 
 #ifdef __cplusplus

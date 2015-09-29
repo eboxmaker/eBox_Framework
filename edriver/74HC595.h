@@ -24,14 +24,14 @@ class _74hc595
         
 			_74hc595(GPIO* dataPin, GPIO* sckPin,GPIO* rckPin);
 			void begin();
-			void write(uint8_t* Data,uint8_t dataLen,uint8_t bitOder);
-			void write(uint8_t data,uint8_t bitOder);
+			void write(uint8_t* data,uint8_t dataLen,uint8_t bit_oder);
+			void write(uint8_t data,uint8_t bit_oder);
 			void update();
     
     private:
-			GPIO* _dataPin;
-			GPIO* _sckPin;
-			GPIO* _rckPin;
+			GPIO* data_pin;
+			GPIO* sck_pin;
+			GPIO* rck_pin;
 
 		
 };

@@ -42,7 +42,7 @@ class FLASHCLASS
 	int write(uint32_t iAddress, uint8_t *buf, uint32_t iNbrToWrite);
 
 	private:
-		uint16_t Flash_Write_Without_check(uint32_t iAddress, uint8_t *buf, uint16_t iNumByteToWrite);
+		uint16_t write_without_check(uint32_t iAddress, uint8_t *buf, uint16_t iNumByteToWrite);
 
 };
 

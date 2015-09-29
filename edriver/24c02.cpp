@@ -1,7 +1,7 @@
 #include "24c02.h"
 int8_t EEPROM::byteWrite(uint16_t byteAddr,uint8_t byte)
 {
-	i2c->writeByte(SLAVE_ADDR,byteAddr,byte);
+	i2c->write_byte(SLAVE_ADDR,byteAddr,byte);
 	return 0;
 }
 
@@ -22,7 +22,7 @@ int8_t EEPROM::byteWrite(uint16_t byteAddr,uint8_t* buf,uint16_t numToWrite)
 uint8_t EEPROM::byteRead(uint16_t byteAddr)
 {
 	uint8_t byte;	
-	i2c->readByte(SLAVE_ADDR,byteAddr,&byte);
+	i2c->read_byte(SLAVE_ADDR,byteAddr,&byte);
 	return byte;
 }
 
@@ -34,7 +34,7 @@ int8_t	EEPROM::byteRead(uint16_t byteAddr,uint8_t* buf,uint16_t numToRead)
 //	{
 //			buf[i] = byteRead(byteAddr++);
 //	}
-	ret = i2c->readByte(SLAVE_ADDR,byteAddr,buf,numToRead);
+	ret = i2c->read_byte(SLAVE_ADDR,byteAddr,buf,numToRead);
 	if(ret != 0)
 		uart1.printf("\r\nerr = %d\r\n",ret);
 	return 0;

@@ -19,29 +19,29 @@ This specification is preliminary and is subject to change at any time without n
 
 
 
-Encoder::Encoder(GPIO* Apin,GPIO* Bpin)
+ENCODER::ENCODER(GPIO* Apin,GPIO* Bpin)
 {
 
-	_Apin = Apin;
-	_Bpin = Bpin;
+	a_pin = Apin;
+	b_pin = Bpin;
 
-	_Apin->mode(INPUT_PU);
-	_Bpin->mode(INPUT_PU);
+	a_pin->mode(INPUT_PU);
+	b_pin->mode(INPUT_PU);
 
 
 }
-int Encoder::ReadEncoder()
+int ENCODER::read_encoder()
 {
-	_alaststate = _astate;
-	_blaststate = _bstate;
-	_astate = _Apin->read();
-	_bstate = _Bpin->read();
+	a_last_state = a_state;
+	b_last_state = b_state;
+	a_state = a_pin->read();
+	b_state = b_pin->read();
 
-	if((_astate == 0) && _alaststate && _bstate)
+	if((a_state == 0) && a_last_state && b_state)
 	{
 			return 1;
 	}
-		if((_bstate == 0) && _blaststate && _astate)
+		if((b_state == 0) && b_last_state && a_state)
 	{
 			return 2;
 	}
