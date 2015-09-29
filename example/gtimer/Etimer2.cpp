@@ -36,7 +36,7 @@ void setup()
 	
 	timer2.begin(1000);
 	timer2.interrupt(ENABLE);
-	timer2.attachInterrupt(t2it);
+	timer2.attach_interrupt(t2it);
 	timer2.start();
 }
 

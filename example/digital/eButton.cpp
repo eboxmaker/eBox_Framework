@@ -12,7 +12,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "button.h"
 
 
-Button btn(&PA8,1);
+BUTTON btn(&PA8,1);
 
 void setup()
 {
@@ -44,7 +44,7 @@ int main(void)
 			PB9.write(!PB9.read());
 			uart1.printf("\r\nrelease event!");
 		}
-		if(btn.pressedFor(2000,5))//长按两秒，执行5次
+		if(btn.pressed_for(2000,5))//长按两秒，执行5次
 		{
 			PB10.write(!PB10.read());
 			uart1.printf("\r\nlong press event!");

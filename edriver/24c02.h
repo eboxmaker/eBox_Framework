@@ -24,13 +24,13 @@ class EEPROM
 		{
 			i2c->begin(speed);
 		}
-		int8_t byteWrite(uint16_t byteAddr,uint8_t byte);
-		int8_t byteWrite(uint16_t byteAddr,uint8_t* buf,uint16_t numToWrite);
+		int8_t write_byte(uint16_t byteAddr,uint8_t byte);
+		int8_t write_byte(uint16_t byteAddr,uint8_t* buf,uint16_t numToWrite);
 		
-		uint8_t byteRead(uint16_t byteAddr);
-		int8_t	byteRead(uint16_t byteAddr,uint8_t* buf,uint16_t numToRead);
+		uint8_t read_byte(uint16_t byteAddr);
+		int8_t	read_byte(uint16_t byteAddr,uint8_t* buf,uint16_t numToRead);
 		
-		int8_t pageWrite(uint8_t* buf,uint32_t addr,uint8_t numToWrite);	
+		int8_t write_page(uint8_t* buf,uint32_t addr,uint8_t numToWrite);	
 
 		
 	private:

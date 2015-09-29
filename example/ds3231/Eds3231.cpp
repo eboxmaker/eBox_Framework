@@ -13,7 +13,7 @@ Copyright 2015 shentq. All Rights Reserved.
 
 DS3231 ds(&si2c);
 
-DateTime t;
+date_time_typedef t;
 char time[9];
 char date[9];
 
@@ -33,12 +33,12 @@ void setup()
 int main(void)
 {
 	setup();
-	ds.setTime(&t);
+	ds.set_time(&t);
 	while(1)
 	{	
-		ds.getDateTime(&t);
-		ds.getTime(time);
-		ds.getDate(date);
+		ds.get_date_time(&t);
+		ds.get_time(time);
+		ds.get_date(date);
 		uart3.printf("=======\r\n");
 		uart3.printf("%02d-%02d-%02d %02d:%02d:%02d\r\n",t.year,t.month,t.date,t.hour,t.min,t.sec);
 

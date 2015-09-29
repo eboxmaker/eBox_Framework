@@ -31,7 +31,7 @@ int i;
 void test()
 {
 	uint8_t c;
-	c = uart3.receiveData();
+	c = uart3.receive();
 	switch(state)
 	{
 		case NEEDHEAD:
@@ -63,7 +63,7 @@ void setup()
 	eBoxInit();
 	uart3.begin(9600);
 	uart3.interrupt(ENABLE);
-	uart3.attachInterrupt(test);
+	uart3.attach_interrupt(test);
 }
 
 float x,y;

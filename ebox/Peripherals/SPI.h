@@ -72,6 +72,7 @@ class	SPI
 		int8_t release_spi_right(void);
 
 
+	
 	private:
 	  uint8_t currentDevNum;
 		SPI_TypeDef *spi;

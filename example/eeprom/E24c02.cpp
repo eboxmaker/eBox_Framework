@@ -44,12 +44,12 @@ int main(void)
 			}	
 			uart1.printf("\r\n ");	
 		}
-			ee.byteWrite(0,buf,512);
+			ee.write_byte(0,buf,512);
 		
 		
 		uart1.printf("\r\n===rbuf===\r\n");
 
-			data = ee.byteRead(0,rbuf,512);
+			data = ee.read_byte(0,rbuf,512);
 		for(uint16_t i =0;i<16;i++)
 		{		
 			for(uint16_t j =0;j<16;j++)

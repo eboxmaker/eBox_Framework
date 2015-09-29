@@ -32,7 +32,7 @@ int main(void)
 		if(x >= PI)x=0;
 		y = 2000 - (sin(x)+1)*1000;
 		
-		analogWrite(&PB8,y);
+		analog_write(&PB8,y);
 		delay_ms(10);
 	}
 

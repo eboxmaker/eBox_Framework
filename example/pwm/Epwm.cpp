@@ -36,7 +36,7 @@ int main(void)
 		if(x >= PI)x=0;
 		y = 2000 - (sin(x)+1)*1000;
 		
-		pwm1.setDuty(y);
+		pwm1.set_duty(y);
 		delay_ms(10);
 	}
 

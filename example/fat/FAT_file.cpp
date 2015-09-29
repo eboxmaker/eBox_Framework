@@ -85,7 +85,7 @@ void fileOpt()
 		{
 //			 uart1.printf("成功读取数据：%dBytes\r\n",br);
 //			 uart1.printf("data:%s\r\n",readBuf);
-			 uart1.printfln((const char*)readBuf,sizeof(readBuf));
+			 uart1.printf_length((const char*)readBuf,sizeof(readBuf));
 		}
 		else				
 			{uart1.printf("读取数据失败！\r\n");}
