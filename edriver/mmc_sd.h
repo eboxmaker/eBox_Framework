@@ -28,12 +28,7 @@ class SD
 				spi = pSPI;
 			}
 			int begin(void);
-			
-			uint8_t wait(void);
-			uint8_t sendCommand(u8 cmd, u32 arg,u8 crc);
-			uint8_t sendCommandNoDeassert(u8 cmd, u32 arg,u8 crc);
 			uint8_t init();
-			int receiveData(u8 *data, u16 len, u8 release);
 			int getCID(u8 *cid_data);
 			int getCSD(u8 *csd_data);
 			u32 getCapacity(void);
@@ -43,6 +38,12 @@ class SD
 			u8 writeMultiBlock(u32 sector,  const u8 *data, u8 count);
 			u8 readBytes(unsigned long address,unsigned char *buf,unsigned int offset,unsigned int bytes);
 
+
+	private:
+			uint8_t _wait(void);
+			uint8_t _sendCommand(u8 cmd, u32 arg,u8 crc);
+			uint8_t _sendCommandNoDeassert(u8 cmd, u32 arg,u8 crc);
+			int _receiveData(u8 *data, u16 len, u8 release);
 
 
 	public:

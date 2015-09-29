@@ -15,11 +15,10 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "spi.h"
 
-//#define SPI_NUM 3
-uint8_t SPIClASS::currentDevNum = 0;
 
 SPIClASS::SPIClASS(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin)
 {
+	busy = 0;
 	spi = SPIx;
 	sckPin->mode(AF_PP);
 	mosiPin->mode(AF_PP);
@@ -139,7 +138,7 @@ int8_t SPIClASS::write(uint8_t *data,uint16_t dataln)
 	}
 	return 0;
 }
-int8_t SPIClASS::read(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln)
+int8_t SPIClASS::read(uint8_t *rcvdata,uint16_t dataln)
 {
 	if(dataln == 0)
 		return -1;
@@ -147,7 +146,7 @@ int8_t SPIClASS::read(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln)
 	{
 		while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
 			;
-		spi->DR = dummyByte;
+		spi->DR = 0xff;
 		while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
 			;
 		*rcvdata++ = spi->DR;
@@ -155,7 +154,19 @@ int8_t SPIClASS::read(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln)
 	return 0;
 }
 
-
+int8_t SPIClASS::getSpiRight(SPICONFIG* spiConfig)
+{
+	while((busy == 1)&&(spiConfig->devNum != readConfig()))
+		delay_ms(1);
+	config(spiConfig);
+	busy = 1;
+	return 0;
+}
+int8_t SPIClASS::releaseSpiRight(void)
+{
+	busy = 0;
+	return 0;
+}
 
 
 

@@ -14,7 +14,6 @@ This specification is preliminary and is subject to change at any time without n
 */
 
 #include "spi.h"
-uint8_t SOFTSPI::currentDevNum = 0;
 
 SOFTSPI::SOFTSPI(GPIO* SCKPin,GPIO* MISOPin,GPIO* MOSIPin)
 {
@@ -217,7 +216,6 @@ uint8_t SOFTSPI::transfer3(uint8_t data)
 }
 uint8_t SOFTSPI::transfer(uint8_t data)
 {
-	uint8_t i;
 	uint8_t RcvData = 0 ;
 	switch(mode)
 	{
@@ -267,7 +265,7 @@ int8_t  SOFTSPI::read(uint8_t* data)
 return 0;
 
 }
-int8_t  SOFTSPI::read(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln)
+int8_t  SOFTSPI::read(uint8_t *rcvdata,uint16_t dataln)
 {
 	if(dataln == 0)
 		return -1;
@@ -278,7 +276,19 @@ int8_t  SOFTSPI::read(uint8_t dummyByte,uint8_t *rcvdata,uint16_t dataln)
 	return 0;
 }
 
-
+int8_t SOFTSPI::getSpiRight(SPICONFIG* spiConfig)
+{
+	while((busy == 1)&&(spiConfig->devNum != readConfig()))
+		delay_ms(1);
+	config(spiConfig);
+	busy = 1;
+	return 0;
+}
+int8_t SOFTSPI::releaseSpiRight(void)
+{
+	busy = 0;
+	return 0;
+}
 
 
 
