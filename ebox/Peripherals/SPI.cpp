@@ -26,7 +26,7 @@ SPI::SPI(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin)
 	
 };
 
-void SPI::begin(SPI_CONFIG_TYPE* spiConfig)
+void SPI::begin(SPI_CONFIG_TYPE* spi_config)
 {		
 	if(spi == SPI1)
 	{	
@@ -41,13 +41,13 @@ void SPI::begin(SPI_CONFIG_TYPE* spiConfig)
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,ENABLE);
 	}
 
-	config(spiConfig);
+	config(spi_config);
 }
-void SPI::config(SPI_CONFIG_TYPE* spiConfig)
+void SPI::config(SPI_CONFIG_TYPE* spi_config)
 {
 	SPI_InitTypeDef SPI_InitStructure;
 
-	currentDevNum = spiConfig->devNum;
+	current_dev_num = spi_config->dev_num;
 	
 	
 	SPI_Cmd(spi,DISABLE);
@@ -59,25 +59,25 @@ void SPI::config(SPI_CONFIG_TYPE* spiConfig)
 	SPI_InitStructure.SPI_CRCPolynomial = 7; //CRC多项式
 	SPI_InitStructure.SPI_Mode = SPI_Mode_Master; //主机模式
 
-	if(spiConfig->mode == SPI_MODE0)
+	if(spi_config->mode == SPI_MODE0)
 	{
 	  SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
 	  SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
-	} else if(spiConfig->mode == SPI_MODE1)
+	} else if(spi_config->mode == SPI_MODE1)
 	{
 	  SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
 	  SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
-	} else if(spiConfig->mode == SPI_MODE2)
+	} else if(spi_config->mode == SPI_MODE2)
 	{
 	  SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
 	  SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
-	} else if(spiConfig->mode == SPI_MODE3)
+	} else if(spi_config->mode == SPI_MODE3)
 	{
 	  SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
 	  SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
 	}
-	SPI_InitStructure.SPI_BaudRatePrescaler = spiConfig->prescaler;
-	SPI_InitStructure.SPI_FirstBit = spiConfig->bit_order; 
+	SPI_InitStructure.SPI_BaudRatePrescaler = spi_config->prescaler;
+	SPI_InitStructure.SPI_FirstBit = spi_config->bit_order; 
 	SPI_Init(spi,&SPI_InitStructure);
 	SPI_Cmd(spi,ENABLE);
 
@@ -85,7 +85,7 @@ void SPI::config(SPI_CONFIG_TYPE* spiConfig)
 
 uint8_t SPI::read_config(void)
 {
-	return currentDevNum; 
+	return current_dev_num; 
 }
 
 
@@ -156,9 +156,9 @@ int8_t SPI::read(uint8_t *rcvdata,uint16_t dataln)
 
 int8_t SPI::take_spi_right(SPI_CONFIG_TYPE* spi_config)
 {
-	while((busy == 1)&&(spi_config->devNum != read_config()))
+	while((busy == 1)&&(spi_config->dev_num != read_config()))
 		delay_ms(1);
-	if(spi_config->devNum == read_config())
+	if(spi_config->dev_num == read_config())
 	{
 		busy = 1;
 		return 0;

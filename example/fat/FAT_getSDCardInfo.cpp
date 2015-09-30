@@ -59,7 +59,7 @@ void getSDCardInfo()
 }
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart1.begin(9600);
 	ret = sd.begin(3);
 	if(!ret)

@@ -99,7 +99,7 @@ void DMA_configuration(void)
 	}
 
 
-void init_ADC1(void)
+void ADC1_init(void)
 	{
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1 , ENABLE );	  //使能ADC1通道时钟，各个管脚时钟

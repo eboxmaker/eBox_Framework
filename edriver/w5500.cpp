@@ -21,7 +21,7 @@ void W5500::begin(uint8_t dev_num,u8* mac,u8* ip,u8* subnet,u8* gateway)
   u8 rxsize[MAX_SOCK_NUM] = {2,2,2,2,2,2,2,2};
 	
 
-	spiDevW5500.devNum = dev_num;
+	spiDevW5500.dev_num = dev_num;
 	spiDevW5500.mode = SPI_MODE0;
 	spiDevW5500.prescaler = SPI_CLOCK_DIV2;
 	spiDevW5500.bit_order = SPI_BITODER_MSB;

@@ -103,7 +103,7 @@ void fileOpt()
 }
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart1.begin(9600);
 			uart1.printf("\r\nsystem start!");
 

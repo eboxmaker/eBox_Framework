@@ -21,7 +21,7 @@ void rtcsecit()
 
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart1.begin(9600);
 	rtc.begin();
 	rtc.attach_interrupt(RTC_EVENT_SEC,rtcsecit);

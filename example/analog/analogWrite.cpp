@@ -15,7 +15,7 @@ Copyright 2015 shentq. All Rights Reserved.
 	
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 
 }
 

@@ -16,7 +16,7 @@ BUTTON btn(&PA8,1);
 
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart1.begin(9600);
    btn.begin();
 }

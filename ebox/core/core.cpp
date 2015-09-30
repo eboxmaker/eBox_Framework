@@ -25,9 +25,9 @@ This specification is preliminary and is subject to change at any time without n
 	#include "os.h"
 	#define systick_over_flow_value (9000000/OS_TICKS_PER_SEC)//SysTickOverFlowValue取值范围（100-9000），主频为72Mhz的情况下
 
-	void eBoxInit(void)
+	void ebox_init(void)
 	{
-		init_ADC1();
+		ADC1_init();
 		
 		NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
 
@@ -41,11 +41,11 @@ This specification is preliminary and is subject to change at any time without n
 
 	#define systick_over_flow_value 9000//此值取值范围（100-9000），主频为72Mhz的情况下
 
-	void eBoxInit(void)
+	void ebox_init(void)
 	{
 		SysTick_Config(systick_over_flow_value);//  每隔 (nhz/9,000,000)s产生一次中断
 		SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);//9Mhz的systemticks clock；
-		init_ADC1();
+		ADC1_init();
 		
 		NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
 

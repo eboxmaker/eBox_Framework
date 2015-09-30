@@ -11,7 +11,7 @@ MPU6050 mpu(&i2c1);
 
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart1.begin(9600);
 
 	mpu.begin(400000);

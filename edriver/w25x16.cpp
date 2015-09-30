@@ -18,7 +18,7 @@ This specification is preliminary and is subject to change at any time without n
 
 void W25X::begin(uint8_t dev_num)
 {
-	spi_dev_w25x16.devNum = dev_num;
+	spi_dev_w25x16.dev_num = dev_num;
 	spi_dev_w25x16.mode = SPI_MODE0;
 	spi_dev_w25x16.prescaler = 0;
 	spi_dev_w25x16.bit_order = SPI_BITODER_MSB;

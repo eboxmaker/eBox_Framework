@@ -166,13 +166,13 @@ void PWM::set_duty(uint16_t Duty)
 		
 }
 //duty:0-1000∂‘”¶0%-100.0%
-void analog_write(GPIO* PWMpin, uint16_t Duty) 
+void analog_write(GPIO* pwm_pin, uint16_t duty) 
 {
 //	if(isPwmPin(PWMpin))
 //	{
-			PWM p(PWMpin,1000);
+			PWM p(pwm_pin,1000);
 			//p.SetFrq(1000,1);
-			p.set_duty(Duty);
+			p.set_duty(duty);
 
 //	}
 //	else

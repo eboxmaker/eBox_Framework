@@ -19,7 +19,7 @@ This specification is preliminary and is subject to change at any time without n
 int SD::begin(uint8_t dev_num)
 {
 	int ret = 0;
-	SPIDevSDCard.devNum = dev_num;
+	SPIDevSDCard.dev_num = dev_num;
 	SPIDevSDCard.mode = SPI_MODE0;
 	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
 	SPIDevSDCard.bit_order = SPI_BITODER_MSB;

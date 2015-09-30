@@ -5,7 +5,7 @@ static uint16 local_port;
 
 W5500* eth;
 
-void attachEthToSocket(W5500* e)
+void attach_eth_to_socket(W5500* e)
 {
 	eth = e;
 }

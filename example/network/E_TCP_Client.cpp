@@ -33,7 +33,7 @@ TCPCLIENT tcp;
 
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart1.begin(9600);
 
 	w5500.begin(mac,lip,sub,gw);

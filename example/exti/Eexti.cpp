@@ -22,7 +22,7 @@ void exit()
 }
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart1.begin(9600);
 	ex.begin();
 	ex.attachInterrupt(exit);
