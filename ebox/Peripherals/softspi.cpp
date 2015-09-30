@@ -82,7 +82,7 @@ void SOFTSPI::config(SPI_CONFIG_TYPE* spiConfig)
 			break;
 	}
 }
-uint8_t SOFTSPI::readConfig(void)
+uint8_t SOFTSPI::read_config(void)
 {
 	return currentDevNum; 
 }
@@ -276,11 +276,16 @@ int8_t  SOFTSPI::read(uint8_t *rcvdata,uint16_t dataln)
 	return 0;
 }
 
-int8_t SOFTSPI::take_spi_right(SPI_CONFIG_TYPE* spiConfig)
+int8_t SOFTSPI::take_spi_right(SPI_CONFIG_TYPE* spi_config)
 {
-	while((busy == 1)&&(spiConfig->devNum != readConfig()))
+	while((busy == 1)&&(spi_config->devNum != read_config()))
 		delay_ms(1);
-	config(spiConfig);
+	if(spi_config->devNum == read_config())
+	{
+		busy = 1;
+		return 0;
+	}
+	config(spi_config);
 	busy = 1;
 	return 0;
 }

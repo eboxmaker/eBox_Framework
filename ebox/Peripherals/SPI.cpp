@@ -158,6 +158,11 @@ int8_t SPI::take_spi_right(SPI_CONFIG_TYPE* spi_config)
 {
 	while((busy == 1)&&(spi_config->devNum != read_config()))
 		delay_ms(1);
+	if(spi_config->devNum == read_config())
+	{
+		busy = 1;
+		return 0;
+	}
 	config(spi_config);
 	busy = 1;
 	return 0;

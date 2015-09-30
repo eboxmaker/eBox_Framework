@@ -64,7 +64,7 @@ uint32_t millis( void )
 void delay_ms(uint32_t ms)
 {	 	
 	#if USE_OS 
-		OS_TimeDelay(ms);
+		OS_DelayTimes(ms);
 	#else
 		uint32_t end = millis() + ms*(9000/systick_over_flow_value);
 		uint32_t systick = SysTick->VAL;
