@@ -92,7 +92,7 @@ class SOFTSPI
 	
 		void 		begin(SPI_CONFIG_TYPE* spiConfig);
 	  void 		config(SPI_CONFIG_TYPE* spiConfig);
-		uint8_t readConfig(void);
+		uint8_t read_config(void);
 		
 		int8_t  write(uint8_t data);
 		int8_t  write(uint8_t *data,uint16_t dataln);
