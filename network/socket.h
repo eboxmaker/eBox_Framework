@@ -8,7 +8,7 @@
 
 extern W5500* eth;
 
-void attachEthToSocket(W5500* e);
+void attach_eth_to_socket(W5500* e);
 extern int  _socket(SOCKET s, uint8 protocol, uint16 port, uint8 flag); // Opens a socket(TCP or UDP or IP_RAW mode)
 extern void _close(SOCKET s); // Close socket
 extern int  _connect(SOCKET s, uint8 * addr, uint16 port); // Establish TCP connection (Active connection)

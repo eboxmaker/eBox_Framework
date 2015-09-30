@@ -63,8 +63,8 @@ extern __IO uint32_t millis_seconds;
 typedef void (*callback_fun_type)(void);	 
 typedef void (*callbackFun)(void);	 
 	 
-void eBoxInit(void);	
-void 	init_ADC1(void);
+void ebox_init(void);	
+void 	ADC1_init(void);
 uint32_t millis( void ) ;
 void delay_ms(uint32_t ms);
 void delay_us(uint16_t us);
@@ -86,9 +86,9 @@ class GPIO
 	
 };
 //对io速度要求较高的地方不建议使用
-#define digital_write(pin,val)	pin->write(val)
-#define digital_read(pin) 			pin->read()
-#define pin_mode(pin,val)			pin->mode(val)
+#define digital_write(pin,val)	pin.write(val)
+#define digital_read(pin) 			pin.read()
+#define pin_mode(pin,val)			pin.mode(val)
 
 uint16_t	analog_read(GPIO* pin);	
 uint16_t	analog_read_voltage(GPIO* pin); 

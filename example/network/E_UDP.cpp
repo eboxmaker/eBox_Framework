@@ -30,7 +30,7 @@ UDP udp2;
 	
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart1.begin(9600);
 	uart1.printf("\r\nuart1 9600 ok!");
 	

@@ -19,7 +19,7 @@ char date[9];
 
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart3.begin(9600);
 	ds.begin(400000);
 	

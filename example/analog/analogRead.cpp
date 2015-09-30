@@ -13,7 +13,7 @@ Copyright 2015 shentq. All Rights Reserved.
 
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart1.begin(9600);
 	PA7.mode(AIN);
 }

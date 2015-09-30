@@ -22,14 +22,14 @@ SOFTSPI::SOFTSPI(GPIO* SCKPin,GPIO* MISOPin,GPIO* MOSIPin)
 	mosi_pin = MOSIPin;
 	
 }
-void SOFTSPI::begin(SPI_CONFIG_TYPE* spiConfig)
+void SOFTSPI::begin(SPI_CONFIG_TYPE* spi_config)
 {
 
 	sck_pin->mode(OUTPUT_PP);
 	miso_pin->mode(INPUT);
 	mosi_pin->mode(OUTPUT_PP);
 	
-	config(spiConfig);
+	config(spi_config);
 	switch(mode)
 	{
 		case SPI_MODE0:
@@ -46,12 +46,12 @@ void SOFTSPI::begin(SPI_CONFIG_TYPE* spiConfig)
 				break;			
 	}
 }
-void SOFTSPI::config(SPI_CONFIG_TYPE* spiConfig)
+void SOFTSPI::config(SPI_CONFIG_TYPE* spi_config)
 {
-	currentDevNum = spiConfig->devNum;
-	mode = spiConfig->mode;
-	bit_order = spiConfig->bit_order;
-	switch(spiConfig->prescaler)
+	current_dev_num = spi_config->dev_num;
+	mode = spi_config->mode;
+	bit_order = spi_config->bit_order;
+	switch(spi_config->prescaler)
 	{
 		case SPI_BaudRatePrescaler_2:
 			spi_delay = 0;
@@ -78,13 +78,13 @@ void SOFTSPI::config(SPI_CONFIG_TYPE* spiConfig)
 			spi_delay = 64;
 			break;
 		default:
-			spi_delay = spiConfig->prescaler;
+			spi_delay = spi_config->prescaler;
 			break;
 	}
 }
 uint8_t SOFTSPI::read_config(void)
 {
-	return currentDevNum; 
+	return current_dev_num; 
 }
 
 uint8_t SOFTSPI::transfer0(uint8_t data)
@@ -278,9 +278,9 @@ int8_t  SOFTSPI::read(uint8_t *rcvdata,uint16_t dataln)
 
 int8_t SOFTSPI::take_spi_right(SPI_CONFIG_TYPE* spi_config)
 {
-	while((busy == 1)&&(spi_config->devNum != read_config()))
+	while((busy == 1)&&(spi_config->dev_num != read_config()))
 		delay_ms(1);
-	if(spi_config->devNum == read_config())
+	if(spi_config->dev_num == read_config())
 	{
 		busy = 1;
 		return 0;

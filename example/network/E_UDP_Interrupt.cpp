@@ -40,7 +40,7 @@ void ethEvent()
 }
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart1.begin(9600);
 
 	w5500.begin(2,mac,lip,sub,gw);

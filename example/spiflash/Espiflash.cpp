@@ -9,7 +9,7 @@ W25X flash(&PE5,&spi1);
 
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart3.begin(9600);
 	flash.begin(1);
 }

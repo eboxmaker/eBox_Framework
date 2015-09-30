@@ -19,7 +19,7 @@ PWM pwm1(&PB8,1000);
 
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart1.begin(9600);
 }
 

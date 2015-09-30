@@ -11,7 +11,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	PB8.mode(OUTPUT_PP);
 }
 int main(void)

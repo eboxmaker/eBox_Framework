@@ -90,8 +90,6 @@ class MPU6050
 	private:
 		I2C* i2c;
 	  uint32_t speed;
-		
-	
 };
 
 #endif

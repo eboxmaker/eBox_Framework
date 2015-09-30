@@ -6,7 +6,7 @@ LCD1602 lcd(&PB12,&PB13,&PB14,&PB15,&PB0,&PB1,&PB2,&PB3,&PB4,&PB5,&PB6,&PB7);
 
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart1.begin(9600);
 	lcd.begin();
 

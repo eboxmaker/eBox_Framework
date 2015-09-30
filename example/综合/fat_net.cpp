@@ -33,7 +33,7 @@ u32 rl;
 float x;
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart1.begin(9600);
 	ret = sd.begin();
 	if(!ret)

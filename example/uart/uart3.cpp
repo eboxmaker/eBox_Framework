@@ -60,7 +60,7 @@ void test()
 	
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart3.begin(9600);
 	uart3.interrupt(ENABLE);
 	uart3.attach_interrupt(test);

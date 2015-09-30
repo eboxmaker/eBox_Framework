@@ -15,7 +15,7 @@ EEPROM ee(&si2c1);
 uint8_t data;
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart1.begin(9600);
 	ee.begin(100000);
 	

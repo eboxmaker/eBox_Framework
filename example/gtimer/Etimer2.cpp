@@ -30,7 +30,7 @@ void t2it()
 }
 void setup()
 {
-	eBoxInit();
+	ebox_init();
 	uart1.begin(9600);
 	PB8.mode(OUTPUT_PP);
 	

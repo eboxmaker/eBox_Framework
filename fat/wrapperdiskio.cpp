@@ -8,7 +8,7 @@ int	MMC_disk_status(void)
 	return 0;
 };
 
-void attachSDCardToFat(SD* sd)
+void attach_sd_to_fat(SD* sd)
 {
 	sdCard = sd;
 }
