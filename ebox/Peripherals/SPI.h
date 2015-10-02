@@ -56,24 +56,21 @@ typedef struct
 class	SPI
 {
 	public:
-		SPI(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin);
+		SPI(SPI_TypeDef *SPIx,GPIO* p_sck_pin,GPIO* p_miso_pin,GPIO* p_mosi_pin);
 	
 		void begin (SPI_CONFIG_TYPE* spi_config);
 		void config(SPI_CONFIG_TYPE* spi_config);
 		uint8_t read_config(void);
 		
 		int8_t  write(uint8_t data);
-		int8_t  write(uint8_t *data,uint16_t dataln);
+		int8_t  write(uint8_t *data,uint16_t datalength);
 	
 		uint8_t read();
-		int8_t  read(uint8_t* data);
-		int8_t  read(uint8_t *rcvdata,uint16_t dataln);
+		int8_t  read(uint8_t * recv_data);
+		int8_t  read(uint8_t *recv_data,uint16_t datalength);
 	public:
 		int8_t take_spi_right(SPI_CONFIG_TYPE* spi_config);
 		int8_t release_spi_right(void);
-
-
-	
 	private:
 	  uint8_t current_dev_num;
 		SPI_TypeDef *spi;
@@ -88,7 +85,7 @@ class	SPI
 class SOFTSPI
 {
 	public:
-		SOFTSPI(GPIO* SCKPin,GPIO* MISOPin,GPIO* MOSIPin);
+		SOFTSPI(GPIO* p_sck_pin,GPIO* p_miso_pin,GPIO* p_mosi_pin);
 	
 		void 		begin(SPI_CONFIG_TYPE* spi_config);
 	  void 		config(SPI_CONFIG_TYPE* spi_config);

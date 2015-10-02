@@ -61,7 +61,6 @@ typedef enum
 extern __IO uint32_t millis_seconds;
 
 typedef void (*callback_fun_type)(void);	 
-typedef void (*callbackFun)(void);	 
 	 
 void ebox_init(void);	
 void 	ADC1_init(void);
@@ -74,7 +73,7 @@ class GPIO
 {
 	public:
 		GPIO(GPIO_TypeDef* _port,uint16_t _pin);
-		void mode(PIN_MODE modeVal);
+		void mode(PIN_MODE mode_val);
 		void set();
 		void reset();
 		void write(uint8_t val);
@@ -86,9 +85,9 @@ class GPIO
 	
 };
 //对io速度要求较高的地方不建议使用
+#define pin_mode(pin,val)			pin.mode(val)
 #define digital_write(pin,val)	pin.write(val)
 #define digital_read(pin) 			pin.read()
-#define pin_mode(pin,val)			pin.mode(val)
 
 uint16_t	analog_read(GPIO* pin);	
 uint16_t	analog_read_voltage(GPIO* pin); 

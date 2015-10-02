@@ -22,17 +22,17 @@ TIMERONE::TIMERONE()
 
 
 }
-void TIMERONE::begin(uint32_t Frq)
+void TIMERONE::begin(uint32_t frq)
 {
 	NVIC_InitTypeDef NVIC_InitStructure;
 	uint32_t _period  =0;
 	uint32_t _prescaler = 1;
 	
 	
-	if(Frq>=720000)Frq = 720000;
+	if(frq>=720000)frq = 720000;
 	for(;_prescaler <= 0xffff;_prescaler++)
 	{
-		_period = 72000000/_prescaler/Frq;
+		_period = 72000000/_prescaler/frq;
 		if((0xffff>=_period)&&(_period>=1000))break;
 	}
 

@@ -16,17 +16,17 @@ This specification is preliminary and is subject to change at any time without n
 #include "i2c.h"
 
 
-I2C::I2C(I2C_TypeDef* I2Cx,GPIO* SCLPin,GPIO* SDAPin)
+I2C::I2C(I2C_TypeDef* I2Cx,GPIO* p_scl_pin,GPIO* p_sda_pin)
 {
 	busy = 0;
 	_I2Cx = I2Cx;
-	scl_pin = SCLPin;
-	sda_pin = SDAPin;
+	scl_pin = p_scl_pin;
+	sda_pin = p_sda_pin;
 	
 }
-void  I2C::begin(uint32_t speed)
+void  I2C::begin(uint32_t _speed)
 {
-	_speed = speed;
+	speed = _speed;
 	I2C_InitTypeDef I2C_InitStructure; 
 
 	if(_I2Cx == I2C1)
@@ -46,7 +46,7 @@ void  I2C::begin(uint32_t speed)
 	//I2C_InitStructure.I2C_OwnAddress1 = SlaveAddress; 
 	I2C_InitStructure.I2C_Ack = I2C_Ack_Enable; 
 	I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit; 
-	I2C_InitStructure.I2C_ClockSpeed = _speed; 
+	I2C_InitStructure.I2C_ClockSpeed = speed; 
 
 	/* I2C1 初始化 */
 	I2C_Init(_I2Cx, &I2C_InitStructure);	   
@@ -56,9 +56,9 @@ void  I2C::begin(uint32_t speed)
 
 }
 
-void I2C::config(uint32_t speed)
+void I2C::config(uint32_t _speed)
 {
-	_speed = speed;
+	speed = _speed;
 	I2C_InitTypeDef I2C_InitStructure; 
 	
 	  /* I2C 配置 */
@@ -68,7 +68,7 @@ void I2C::config(uint32_t speed)
 	I2C_InitStructure.I2C_Ack = I2C_Ack_Enable; 
 	I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit; 
 
-	I2C_InitStructure.I2C_ClockSpeed = _speed; 
+	I2C_InitStructure.I2C_ClockSpeed = speed; 
 	I2C_Init(_I2Cx, &I2C_InitStructure);	   
 	/* 使能 I2C1 */
 	I2C_Cmd  (_I2Cx,ENABLE); 
@@ -78,7 +78,7 @@ void I2C::config(uint32_t speed)
 }
 uint32_t I2C::read_config()
 {
-	return _speed;
+	return speed;
 }
 int8_t I2C::start()
 {
@@ -133,13 +133,13 @@ int8_t I2C::send_byte(uint8_t data)
 	}
 	return err;
 }
-int8_t I2C::send_7bits_address(uint8_t slaveAddress)
+int8_t I2C::send_7bits_address(uint8_t slave_address)
 {
 	uint16_t times = 1000;
 	int8_t err = 0;
-	if(slaveAddress&0x01)
+	if(slave_address&0x01)
 	{
-		I2C_Send7bitAddress(_I2Cx,slaveAddress,I2C_Direction_Receiver);
+		I2C_Send7bitAddress(_I2Cx,slave_address,I2C_Direction_Receiver);
 		while(!I2C_CheckEvent(_I2Cx,I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
 		{
 			times--;
@@ -152,7 +152,7 @@ int8_t I2C::send_7bits_address(uint8_t slaveAddress)
 	}
 	else
 	{
-		I2C_Send7bitAddress(_I2Cx,slaveAddress,I2C_Direction_Transmitter);
+		I2C_Send7bitAddress(_I2Cx,slave_address,I2C_Direction_Transmitter);
 		while(!I2C_CheckEvent(_I2Cx,I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
 		{
 			times--;
@@ -184,27 +184,27 @@ int8_t I2C::receive_byte(uint8_t* data)
 }
 
 
-int8_t I2C::write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
+int8_t I2C::write_byte(uint8_t slave_address,uint8_t reg_address,uint8_t data)
 {
 	uint16_t err = 0;
 
 	start();
-	send_7bits_address(slaveAddress);
-	send_byte(regAddress);
+	send_7bits_address(slave_address);
+	send_byte(reg_address);
 	send_byte(data);
 	stop();
 
 	return err;
 	
 }
-int8_t I2C::write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
+int8_t I2C::write_byte(uint8_t slave_address,uint8_t reg_address,uint8_t* data,uint16_t num_to_write)
 {
 	uint16_t err = 0;
 
 	start();
-	send_7bits_address(slaveAddress);
-	send_byte(regAddress);
-	while(numToRead--)
+	send_7bits_address(slave_address);
+	send_byte(reg_address);
+	while(num_to_write--)
 	{
 	  send_byte(*data);
 		data++;
@@ -214,14 +214,14 @@ int8_t I2C::write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uin
 	return err;
 	
 }
-int8_t I2C::read_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
+int8_t I2C::read_byte(uint8_t slave_address,uint8_t reg_address,uint8_t* data)
 {
 	start();
-	send_7bits_address(slaveAddress);
+	send_7bits_address(slave_address);
 	I2C_Cmd(_I2Cx,ENABLE);
-	send_byte(regAddress);
+	send_byte(reg_address);
 	start();
-	send_7bits_address(slaveAddress + 1);
+	send_7bits_address(slave_address + 1);
 	send_no_ack();
 	stop();
 	receive_byte(data);
@@ -229,26 +229,26 @@ int8_t I2C::read_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
 	return 0;
 }
 
-int8_t I2C::read_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
+int8_t I2C::read_byte(uint8_t slave_address,uint8_t reg_address,uint8_t* data,uint16_t num_to_read)
 {
 	uint8_t i = 0;
 	start();
-	send_7bits_address(slaveAddress);
+	send_7bits_address(slave_address);
 	I2C_Cmd(_I2Cx,ENABLE);
-	send_byte(regAddress);
+	send_byte(reg_address);
 	start();
-	send_7bits_address(slaveAddress + 1);
+	send_7bits_address(slave_address + 1);
 	
-	while(numToRead)
+	while(num_to_read)
 	{
-		if(numToRead == 1)
+		if(num_to_read == 1)
 		{
 			send_no_ack();
 			stop();
 		}
 	  receive_byte(data);
 		data++;
-		numToRead--;
+		num_to_read--;
 		i++;
 	}
 	send_ack();
@@ -256,16 +256,16 @@ int8_t I2C::read_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint
 	return i;
 }
 
-int8_t I2C::wait_dev_busy(uint8_t slaveAddress)
+int8_t I2C::wait_dev_busy(uint8_t slave_address)
 {
 	int8_t ret;
 	uint8_t i = 0;
 	do
 	{
 		start();
-		ret = send_7bits_address(slaveAddress);
+		ret = send_7bits_address(slave_address);
 		send_ack();
-		send_byte(slaveAddress);
+		send_byte(slave_address);
 		stop();
 		if(i++==100)
 		{
@@ -274,13 +274,14 @@ int8_t I2C::wait_dev_busy(uint8_t slaveAddress)
 	}while(ret != 0);//如果返回值不是0，继续等待
 	return 0;
 }
-int8_t I2C::take_i2c_right(uint32_t speed)
+int8_t I2C::take_i2c_right(uint32_t _speed)
 {
 	while(busy == 1)
 	{
 		delay_ms(1);
 	}
-	//config(speed);
+	speed = _speed;
+	config(speed);
 	busy = 1;
 	return 0;
 }

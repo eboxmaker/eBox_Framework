@@ -15,7 +15,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "udp.h"
 
   u8 mac[6]={0x00,0x08,0xdc,0x11,0x11,0x11};/*定义Mac变量*/
-  u8 lip[4]={192,168,1,111};/*定义lp变量*/
+  u8 lip[4]={192,168,1,119};/*定义lp变量*/
   u8 sub[4]={255,255,255,0};/*定义subnet变量*/
   u8 gw[4]={192,168,1,1};/*定义gateway变量*/
 	
@@ -23,7 +23,7 @@ Copyright 2015 shentq. All Rights Reserved.
   u8 ip[6];
 	
 	u8 recvBuf[2048];
-W5500 w5500(PA4,SPI1,PA5,PA6,PA7,PA2,PA3);
+W5500 w5500(&PC13,&PC14,&PC15,&spi2);
 	
 UDP udp;
 
@@ -32,7 +32,7 @@ u16 len;
 	
 void ethEvent()
 {
-
+	len = udp.interrupt_recv(recvBuf);
 	uart1.printf("\r\n==========");
 	uart1.printf("\r\n接收中断！");
 	udp.recvFlag = 1;
@@ -44,8 +44,8 @@ void setup()
 	uart1.begin(9600);
 
 	w5500.begin(2,mac,lip,sub,gw);
-	w5500.attchInterruputEvent(ethEvent);
-	attachEthToSocket(&w5500);
+	w5500.attch_interruput_event(ethEvent);
+	attach_eth_to_socket(&w5500);
 	
   w5500.getMAC (ip);
   uart1.printf("mac : %02x.%02x.%02x.%02x.%02x.%02x\r\n", ip[0],ip[1],ip[2],ip[3],ip[4],ip[5]);
@@ -69,7 +69,7 @@ int main(void)
 	while(1)
 	{
 		
-		if(udp.recv(recvBuf))
+		if(len!=0)
 		{
 			uart1.printf("\r\n============================");		
 			uart1.printf("\r\n本地端口:%d",udp.localPort );
@@ -78,6 +78,7 @@ int main(void)
 			uart1.printf("\r\n数据内容:");		
 			uart1.printf((const char *)recvBuf);
 			udp.sendto(udp.remoteIP,udp.remotePort,recvBuf,100);
+			len = 0;
 		}
 //		udp.sendto(rip,8080,data,60);
 //		delay_ms(500);

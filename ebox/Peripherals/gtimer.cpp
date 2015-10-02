@@ -26,14 +26,14 @@ TIM::TIM(TIM_TypeDef* TIMx)
 	_TIMx = TIMx;
 }
 
-void TIM::begin(uint32_t Frq)
+void TIM::begin(uint32_t frq)
 {
 	uint32_t _period  =0;
 	uint32_t _prescaler = 1;
-	if(Frq>=720000)Frq = 720000;
+	if(frq>=720000)frq = 720000;
 	for(;_prescaler <= 0xffff;_prescaler++)
 	{
-		_period = 72000000/_prescaler/Frq;
+		_period = 72000000/_prescaler/frq;
 		if((0xffff>=_period)&&(_period>=1000))break;
 	}
 
@@ -95,9 +95,9 @@ void TIM::base_init(uint16_t period,uint16_t prescaler)
 	NVIC_Init(&NVIC_InitStructure);
 
 }
-void TIM::set_reload(uint16_t Autoreload)
+void TIM::set_reload(uint16_t autoreload)
 {
-	TIM_SetAutoreload(_TIMx,Autoreload);
+	TIM_SetAutoreload(_TIMx,autoreload);
 }
 void TIM::clear_count(void)
 {

@@ -42,18 +42,18 @@ This specification is preliminary and is subject to change at any time without n
 class W25X
 {
 	public:
-		W25X(GPIO* cspin,SPI* pSPI)
+		W25X(GPIO* p_cs_pin,SPI* p_SPI)
 		{
-			cs = cspin;
-			spi = pSPI;
+			cs = p_cs_pin;
+			spi = p_SPI;
 		}
 		void begin(uint8_t dev_num);
 		void read_id(uint16_t* id);
-		void read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead); 
-		void fast_read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead);
-		void write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);
+		void read(u8* buf,u32 read_addr,u16 num_to_read); 
+		void fast_read(u8* buf,u32 read_addr,u16 num_to_read);
+		void write(u8* buf,u32 write_addr,u16 num_to_write);
 
-		void erase_sector(u32 Dst_Addr);
+		void erase_sector(u32 dst_addr);
 		void erase_chip(void);
 
 
@@ -71,8 +71,8 @@ class W25X
 		void writeEnable(void);
 		void writeDisable(void);
 	
-		void write_page(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);
-		void write_no_check(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite);
+		void write_page(u8* buf,u32 write_addr,u16 num_to_write);
+		void write_no_check(u8* buf,u32 write_addr,u16 num_to_write);
 
 
 };

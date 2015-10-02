@@ -16,13 +16,13 @@ This specification is preliminary and is subject to change at any time without n
 #include "spi.h"
 
 
-SPI::SPI(SPI_TypeDef *SPIx,GPIO* sckPin,GPIO* misoPin,GPIO* mosiPin)
+SPI::SPI(SPI_TypeDef *SPIx,GPIO* p_sck_pin,GPIO* p_miso_pin,GPIO* p_mosi_pin)
 {
 	busy = 0;
 	spi = SPIx;
-	sckPin->mode(AF_PP);
-	mosiPin->mode(AF_PP);
-	misoPin->mode(AF_PP);
+	p_sck_pin->mode(AF_PP);
+	p_miso_pin->mode(AF_PP);
+	p_mosi_pin->mode(AF_PP);
 	
 };
 
@@ -101,15 +101,20 @@ int8_t SPI::write(uint8_t data)
 
 	return 0;
 }
-int8_t SPI::read(uint8_t* data)
+int8_t SPI::write(uint8_t *data,uint16_t datalength)
 {
-	while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
-	;
-	spi->DR = 0xff;
-	while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
-	;
-	*data = spi->DR;
-	
+	__IO uint8_t dummyByte;
+	if(datalength == 0)
+		return -1;
+	while(datalength--)
+	{
+		while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+			;
+		spi->DR = *data++;
+		while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+			;
+		dummyByte = spi->DR;
+	}
 	return 0;
 }
 uint8_t SPI::read()
@@ -122,34 +127,30 @@ uint8_t SPI::read()
 	return(spi->DR);
 	
 }
-int8_t SPI::write(uint8_t *data,uint16_t dataln)
+int8_t SPI::read(uint8_t* recv_data)
 {
-	__IO uint8_t dummyByte;
-	if(dataln == 0)
-		return -1;
-	while(dataln--)
-	{
-		while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
-			;
-		spi->DR = *data++;
-		while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
-			;
-		dummyByte = spi->DR;
-	}
+	while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+	;
+	spi->DR = 0xff;
+	while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+	;
+	*recv_data = spi->DR;
+	
 	return 0;
 }
-int8_t SPI::read(uint8_t *rcvdata,uint16_t dataln)
+
+int8_t SPI::read(uint8_t *recv_data,uint16_t datalength)
 {
-	if(dataln == 0)
+	if(datalength == 0)
 		return -1;
-	while(dataln--)
+	while(datalength--)
 	{
 		while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
 			;
 		spi->DR = 0xff;
 		while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
 			;
-		*rcvdata++ = spi->DR;
+		*recv_data++ = spi->DR;
 	}
 	return 0;
 }

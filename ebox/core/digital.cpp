@@ -47,15 +47,15 @@ GPIO::GPIO(GPIO_TypeDef* _port,uint16_t _pin)
 	}
 }
 
-void GPIO::mode(PIN_MODE mode)
+void GPIO::mode(PIN_MODE mode_val)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 
-	if(mode == AF_OD || mode == AF_PP)
+	if(mode_val == AF_OD || mode_val == AF_PP)
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
 	
 	GPIO_InitStructure.GPIO_Pin = pin;
-	GPIO_InitStructure.GPIO_Mode = (GPIOMode_TypeDef)mode;
+	GPIO_InitStructure.GPIO_Mode = (GPIOMode_TypeDef)mode_val;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(port, &GPIO_InitStructure);   //³õÊ¼»¯GPIOC¶Ë¿Ú
 }

@@ -20,22 +20,22 @@ void EEPROM::begin(uint32_t _speed)
 	speed = _speed;
 	i2c->begin(speed);
 }
-int8_t EEPROM::write_byte(uint16_t byteAddr,uint8_t byte)
+int8_t EEPROM::write_byte(uint16_t byte_addr,uint8_t byte)
 {
 	i2c->take_i2c_right(speed);
-	i2c->write_byte(SLAVE_ADDR,byteAddr,byte);
+	i2c->write_byte(SLAVE_ADDR,byte_addr,byte);
 	i2c->release_i2c_right();
 	return 0;
 }
 
-int8_t EEPROM::write_byte(uint16_t byteAddr,uint8_t* buf,uint16_t numToWrite)
+int8_t EEPROM::write_byte(uint16_t byte_addr,uint8_t* buf,uint16_t num_to_write)
 {
 	int8_t ret = 0;
 
-	for(uint16_t i = 0; i < numToWrite; i++)
+	for(uint16_t i = 0; i < num_to_write; i++)
 	{
-			write_byte(byteAddr++,buf[i]);
-		  //ret = i2c->waitBusy(SLAVE_ADDR);//如果有错误再加此句
+			write_byte(byte_addr++,buf[i]);
+		  //ret = i2c->wait_dev_busy(SLAVE_ADDR);//如果有错误再加此句
 	
 	}
 
@@ -43,17 +43,17 @@ int8_t EEPROM::write_byte(uint16_t byteAddr,uint8_t* buf,uint16_t numToWrite)
 	return ret;
 }
 
-uint8_t EEPROM::read_byte(uint16_t byteAddr)
+uint8_t EEPROM::read_byte(uint16_t byte_addr)
 {
 	uint8_t byte;	
 	i2c->take_i2c_right(speed);
-	i2c->read_byte(SLAVE_ADDR,byteAddr,&byte);
+	i2c->read_byte(SLAVE_ADDR,byte_addr,&byte);
 	i2c->release_i2c_right();
 	
 	return byte;
 }
 
-int8_t	EEPROM::read_byte(uint16_t byteAddr,uint8_t* buf,uint16_t numToRead)
+int8_t	EEPROM::read_byte(uint16_t byte_addr,uint8_t* buf,uint16_t num_to_read)
 {
 	int8_t ret = 0;
 	i2c->take_i2c_right(speed);
@@ -62,7 +62,7 @@ int8_t	EEPROM::read_byte(uint16_t byteAddr,uint8_t* buf,uint16_t numToRead)
 //	{
 //			buf[i] = byteRead(byteAddr++);
 //	}
-	ret = i2c->read_byte(SLAVE_ADDR,byteAddr,buf,numToRead);
+	ret = i2c->read_byte(SLAVE_ADDR,byte_addr,buf,num_to_read);
 	i2c->release_i2c_right();
 	if(ret != 0)
 		uart1.printf("\r\nerr = %d\r\n",ret);

@@ -36,25 +36,18 @@ This specification is preliminary and is subject to change at any time without n
 class PWM
 {	
 	public:
-		PWM(GPIO*  PWMPin,uint32_t Frq);
-		void set_frq(uint32_t Frq);
+		PWM(GPIO* p_pwm_pin,uint32_t frq);
+		void set_frq(uint32_t frq);
 		void set_duty(uint16_t Duty);
-
 	private:
 		TIM_TypeDef* 	TIMx;
 		uint32_t 			rcc;
 		uint8_t 			ch;
-	
 		uint16_t 			period;//保存溢出值，用于计算占空比
 	  uint16_t 			duty;//保存占空比值
-	
-
-		GPIO* 				pwmPin;
-
-	  void init_info(GPIO* PWMPin);
+	  void init_info(GPIO* p_pwm_pin);
 		void base_init(uint16_t Period,uint16_t Prescaler);
-	
 };
-void analog_write(GPIO* pwm_pin, uint16_t duty);
+void analog_write(GPIO* p_pwm_pin, uint16_t duty);
 
 #endif

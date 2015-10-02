@@ -29,16 +29,13 @@ class TIM
 {
 	public:
 		TIM(TIM_TypeDef* TIMx);
-
-		void begin(uint32_t Frq);
+		void begin(uint32_t frq);
 		void attach_interrupt(void(*callback)(void));
 		void interrupt(FunctionalState enable);
-	
 		void start(void);
 		void stop(void);
-		void set_reload(uint16_t Autoreload);
-		void clear_count(void);
-		
+		void set_reload(uint16_t autoreload);
+		void clear_count(void);	
 	private:
 		void base_init(uint16_t period,uint16_t prescaler);
 		TIM_TypeDef *_TIMx;
