@@ -15,10 +15,10 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "i2c.h"
 
-SOFTI2C::SOFTI2C(GPIO* SCLpin, GPIO* SDApin)
+SOFTI2C::SOFTI2C(GPIO* p_scl_pin, GPIO* p_sda_pin)
 {
-	scl_pin = SCLpin;
-	sda_pin = SDApin;
+	scl_pin = p_scl_pin;
+	sda_pin = p_sda_pin;
 }	
 void SOFTI2C::begin(uint32_t _speed)
 {	
@@ -127,10 +127,10 @@ int8_t SOFTI2C::send_byte(uint8_t byte)
 	ret = wait_ack();
   return ret;
 }
-int8_t	SOFTI2C::send_7bits_address(uint8_t slaveAddress)
+int8_t	SOFTI2C::send_7bits_address(uint8_t slave_address)
 {
 	int8_t ret = 0;
-	send_byte(slaveAddress);
+	send_byte(slave_address);
 	return ret;
 }
 
@@ -150,15 +150,15 @@ uint8_t SOFTI2C::receive_byte(void)
 
 	return byte;
 }
-int8_t SOFTI2C::write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
+int8_t SOFTI2C::write_byte(uint8_t slave_address,uint8_t reg_address,uint8_t data)
 {
 	int8_t ret = 0;
 		start();
 	
-    if (send_7bits_address(slaveAddress) == -1)
+    if (send_7bits_address(slave_address) == -1)
         ret = -1;
 		
-    if (send_byte(regAddress) == -1)
+    if (send_byte(reg_address) == -1)
         ret = -2;
 
     if (send_byte(data) == -1)
@@ -169,18 +169,18 @@ int8_t SOFTI2C::write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data)
     delay_us(10);      
     return ret;
 }
-int8_t SOFTI2C::write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToWrite)
+int8_t SOFTI2C::write_byte(uint8_t slave_address,uint8_t reg_address,uint8_t* data,uint16_t num_to_write)
 {
 	int8_t ret = 0;
 		start();
 
-    if (send_7bits_address(slaveAddress) == -1)
+    if (send_7bits_address(slave_address) == -1)
         ret = -1;
 		
-    if (send_byte(regAddress) == -1)
+    if (send_byte(reg_address) == -1)
         ret = -2;
 
-		while(numToWrite--)
+		while(num_to_write--)
 		{
 			send_byte(*data++);
 			if (wait_ack() == -1)
@@ -192,22 +192,22 @@ int8_t SOFTI2C::write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data
     delay_us(10);      
     return ret;
 }
-int8_t 	SOFTI2C::read_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data)
+int8_t 	SOFTI2C::read_byte(uint8_t slave_address,uint8_t reg_address,uint8_t* data)
 {
 
 	int8_t ret = 0;
 		start();
 
-    if (send_7bits_address(slaveAddress) == -1)
+    if (send_7bits_address(slave_address) == -1)
         ret = -1;
 
 
-    if (send_byte(regAddress) == -1)
+    if (send_byte(reg_address) == -1)
         ret = -2;
 
 		start();
 
-    if (send_byte(slaveAddress + 1) == -1)
+    if (send_byte(slave_address + 1) == -1)
         ret = -3;
 
 		*data = receive_byte();
@@ -216,30 +216,30 @@ int8_t 	SOFTI2C::read_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data
 
 	return ret;
 }
-int8_t 	SOFTI2C::read_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead)
+int8_t 	SOFTI2C::read_byte(uint8_t slave_address,uint8_t reg_address,uint8_t* data,uint16_t num_to_read)
 {
 	int8_t ret = 0;
 	int i = 0;
 	
 		start();
 
-    if (send_7bits_address(slaveAddress) == -1)
+    if (send_7bits_address(slave_address) == -1)
         ret = -1;
 
 
-    if (send_byte(regAddress) == -1)
+    if (send_byte(reg_address) == -1)
         ret = -2;
 
 		start();
-    if (send_7bits_address(slaveAddress + 1) == -1)
+    if (send_7bits_address(slave_address + 1) == -1)
         ret = -3;
 		
-		while(numToRead)
+		while(num_to_read)
 		{
 			*data++ = receive_byte();
-			numToRead--;
+			num_to_read--;
 			i++;
-			if(numToRead == 0)
+			if(num_to_read == 0)
 			{
 				send_no_ack();
 				stop();
@@ -251,16 +251,16 @@ int8_t 	SOFTI2C::read_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data
 
 	return ret;
 }
-int8_t SOFTI2C::wait_busy(uint8_t slaveAddress)
+int8_t SOFTI2C::wait_busy(uint8_t slave_address)
 {
 	int8_t ret;
 	uint8_t i = 0;
 	do
 	{
 		start();
-		ret = send_7bits_address(slaveAddress);
+		ret = send_7bits_address(slave_address);
 		send_ack();
-		send_byte(slaveAddress);
+		send_byte(slave_address);
 		stop();
 		if(i++==100)
 		{
@@ -270,12 +270,14 @@ int8_t SOFTI2C::wait_busy(uint8_t slaveAddress)
 	return 0;
 	return 0;
 }
-int8_t SOFTI2C::take_i2c_right(uint32_t speed)
+int8_t SOFTI2C::take_i2c_right(uint32_t _speed)
 {
+	
 	while((busy == 1) && (1))
 	{
 		delay_ms(1);
 	}
+	speed = _speed;
 	config(speed);
 	busy = 1;
 	return 0;

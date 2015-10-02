@@ -32,16 +32,26 @@ static u16 RSIZE[MAX_SOCK_NUM]; /**< Max Rx buffer size by each channel */
 class W5500
 {
 	public:
-		W5500(GPIO* cspin,GPIO* rstpin,GPIO* intpin,SPI* pSPI)
+		W5500(GPIO* p_cs_pin,GPIO* p_rst_pin,GPIO* p_int_pin,SPI* pSPI)
 		{
-			cs = cspin;
-		  rstPin = rstpin;
-			intPin = intpin;
+			cs = 		 p_cs_pin;
+		  rst_pin = p_rst_pin;
+			int_pin = p_int_pin;
 			spi = pSPI;
 
 		}
 		void begin(uint8_t dev_num,u8* mac,u8* ip,u8* subnet,u8* gateway);
 		void reset();
+
+		void send_data_processing(u8 s, u8 *data, u16 len);
+		void recv_data_processing(u8 s, u8 *data, u16 len);
+
+		void write(u32 addrbsb, u8 data);
+		u8   read (u32 addrbsb);
+		u16  write(u32 addrbsb,u8* buf, u16 len);
+		u16  read (u32 addrbsb,u8* buf, u16 len);
+		void sysinit( u8 * tx_size, u8 * rx_size  );
+
 
 		u8 getISR(u8 s);
 		void putISR(u8 s, u8 val);
@@ -102,24 +112,18 @@ class W5500
 		
 		
 		
-		void send_data_processing(u8 s, u8 *data, u16 len);
-		void recv_data_processing(u8 s, u8 *data, u16 len);
-
-		void write(u32 addrbsb, u8 data);
-		u8   read(u32 addrbsb);
-		u16  write(u32 addrbsb,u8* buf, u16 len);
-		u16  read(u32 addrbsb,u8* buf, u16 len);
-		void sysinit( u8 * tx_size, u8 * rx_size  );
 		
-		void attch_interruputEvent(void (*callbackFun)(void))
+		void attch_interruput_event(void (*callbackFun)(void))
 		{
-			EXTIx ex(intPin,EXTI_Trigger_Falling);
+			EXTIx ex(int_pin,EXTI_Trigger_Falling);
+			ex.begin();
 			ex.attach_interrupt(callbackFun);
+			ex.interrupt(ENABLE);
 		}
 	private:
 		GPIO* cs;
-		GPIO* rstPin;
-		GPIO* intPin;
+		GPIO* rst_pin;
+		GPIO* int_pin;
 		SPI_CONFIG_TYPE spiDevW5500;
 		SPI* spi;
 	

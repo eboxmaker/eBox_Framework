@@ -25,11 +25,11 @@ callback_fun_type exti_callback_table[EXTI_LINE_NUM];
 //  				EXTI_Trigger_Falling  
 //  				EXTI_Trigger_Rising_Falling 
 
-EXTIx::EXTIx(GPIO* EXTIPin, EXTITrigger_TypeDef trigger)
+EXTIx::EXTIx(GPIO* EXTI_pin, EXTITrigger_TypeDef trigger)
 {
 
 
-	exti_pin = EXTIPin;
+	exti_pin = EXTI_pin;
 	_trigger = trigger;
 	
 }
@@ -67,9 +67,9 @@ void EXTIx::interrupt(FunctionalState enable)
 
 }
 
-void EXTIx::init_info(GPIO* EXTIPin)
+void EXTIx::init_info(GPIO* EXTI_pin)
 {
-	switch((uint32_t)EXTIPin->port)
+	switch((uint32_t)EXTI_pin->port)
 	{
 		case (uint32_t)GPIOA: port_source = GPIO_PortSourceGPIOA;break;
 		case (uint32_t)GPIOB: port_source = GPIO_PortSourceGPIOB;break;
@@ -78,7 +78,7 @@ void EXTIx::init_info(GPIO* EXTIPin)
 		case (uint32_t)GPIOE: port_source = GPIO_PortSourceGPIOE;break;
 		case (uint32_t)GPIOF: port_source = GPIO_PortSourceGPIOF;break;
 	}
-	switch(EXTIPin->pin)
+	switch(EXTI_pin->pin)
 	{
 		case GPIO_Pin_0:
 			pin_source = GPIO_PinSource0;exti_line = EXTI_Line0;irq = EXTI0_IRQn;

@@ -44,20 +44,16 @@ class RTC_CLASS
 		uint8_t sec;
 		uint8_t min;
 		uint8_t hour;
-	
 	public:
 		void begin();
-		void interrupt(uint32_t bits,FunctionalState x);
 		void attach_interrupt(uint16_t event, void (*callbackFun)(void));
-	
+		void interrupt(uint32_t bits,FunctionalState x);
 		void set_counter(uint32_t count);
 		void set_alarm(uint32_t count);
 		uint32_t get_counter();
-	
 		void set_time_HMS(uint8_t h,uint8_t m,uint8_t s);
 		void set_alarm  (uint8_t h,uint8_t m,uint8_t s);
 		void get_time_HMS(uint8_t* h,uint8_t* m,uint8_t* s);
-		
 	
 	private:
 		void config();

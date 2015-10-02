@@ -24,15 +24,13 @@ This specification is preliminary and is subject to change at any time without n
 
 
 	
-PWM::PWM(GPIO*  PWMPin,uint32_t Frq)
+PWM::PWM(GPIO*  p_pwm_pin,uint32_t frq)
 {
 //	if(isPwmPin(PWMpin))
 //	{
-		pwmPin = PWMPin;
-		init_info(PWMPin);
-		
-		pwmPin->mode(AF_PP);
-		set_frq(Frq);
+		init_info(p_pwm_pin);
+		p_pwm_pin->mode(AF_PP);
+		set_frq(frq);
 
 //	}
 }
@@ -53,11 +51,11 @@ void PWM::base_init(uint16_t Period,uint16_t Prescaler)
 	TIM_Cmd(TIMx, ENABLE); //
 
 }	
-void PWM::init_info(GPIO* PWMPin)
+void PWM::init_info(GPIO* p_pwm_pin)
 {
-	if(PWMPin->port == GPIOA)
+	if(p_pwm_pin->port == GPIOA)
 	{
-		switch(PWMPin->pin)
+		switch(p_pwm_pin->pin)
 		{
 			case GPIO_Pin_0:
 				TIMx = TIM2;rcc = RCC_APB1Periph_TIM2;ch = TIMxCH1;//irq = TIM2_IRQn;
@@ -86,9 +84,9 @@ void PWM::init_info(GPIO* PWMPin)
 				break;
 		}
 	}
-	if(PWMPin->port == GPIOB)
+	if(p_pwm_pin->port == GPIOB)
 	{
-		switch(PWMPin->pin)
+		switch(p_pwm_pin->pin)
 		{
 			case GPIO_Pin_6:
 				TIMx = TIM4;rcc = RCC_APB1Periph_TIM4;ch = TIMxCH1;//irq = TIM4_IRQn;
@@ -110,14 +108,14 @@ void PWM::init_info(GPIO* PWMPin)
 
 //pwm的频率 = 72M/72/1000;
 //
-void PWM::set_frq(uint32_t Frq)
+void PWM::set_frq(uint32_t frq)
 {
 	uint32_t _period  =0;
 	uint32_t _prescaler = 1;
-	if(Frq>=720000)Frq = 720000;
+	if(frq>=720000)frq = 720000;
 	for(;_prescaler <= 0xffff;_prescaler++)
 	{
-		_period = 72000000/_prescaler/Frq;
+		_period = 72000000/_prescaler/frq;
 		if((0xffff>=_period)&&(_period>=1000))break;
 	}
 	
@@ -166,11 +164,11 @@ void PWM::set_duty(uint16_t Duty)
 		
 }
 //duty:0-1000对应0%-100.0%
-void analog_write(GPIO* pwm_pin, uint16_t duty) 
+void analog_write(GPIO* p_pwm_pin, uint16_t duty) 
 {
 //	if(isPwmPin(PWMpin))
 //	{
-			PWM p(pwm_pin,1000);
+			PWM p(p_pwm_pin,1000);
 			//p.SetFrq(1000,1);
 			p.set_duty(duty);
 

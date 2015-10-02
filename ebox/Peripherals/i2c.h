@@ -26,18 +26,18 @@ class I2C
 {
 
 	public:
-		I2C(I2C_TypeDef* I2Cx,GPIO* SCLPin,GPIO* SDAPin);
-		void			begin(uint32_t speed);
-		void 			config(uint32_t speed);
+		I2C(I2C_TypeDef* I2Cx,GPIO* p_scl_pin,GPIO* p_sda_pin);
+		void			begin(uint32_t _speed);
+		void 			config(uint32_t _speed);
 		uint32_t	read_config();
 
-		int8_t	write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);
-		int8_t	write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToWrite);
-		int8_t	read_byte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data);
-		int8_t	read_byte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
-	  int8_t	wait_dev_busy(uint8_t slaveAddress);
+		int8_t	write_byte(uint8_t slave_address,uint8_t reg_address,uint8_t data);
+		int8_t	write_byte(uint8_t slave_address,uint8_t reg_address,uint8_t* data,uint16_t num_to_write);
+		int8_t	read_byte (uint8_t slave_address,uint8_t reg_address,uint8_t* data);
+		int8_t	read_byte (uint8_t slave_address,uint8_t reg_address,uint8_t* data,uint16_t num_to_read);
+	  int8_t	wait_dev_busy(uint8_t slave_address);
 	public:
-		int8_t take_i2c_right(uint32_t speed);
+		int8_t take_i2c_right(uint32_t _speed);
 		int8_t release_i2c_right(void);
 
 	private:
@@ -47,14 +47,14 @@ class I2C
 		int8_t send_ack();
 
 		int8_t send_byte(uint8_t regData);
-		int8_t send_7bits_address(uint8_t slaveAddress);
+		int8_t send_7bits_address(uint8_t slave_address);
 		int8_t receive_byte(uint8_t* data);
 
 	private:
 		I2C_TypeDef* _I2Cx;
 		GPIO* sda_pin;
 		GPIO* scl_pin;
-		uint32_t _speed;
+		uint32_t speed;
 		uint8_t busy;
 
 };
@@ -73,17 +73,17 @@ class I2C
 class SOFTI2C 
 {
   public:
-		SOFTI2C(GPIO* SCLpin, GPIO* SDApin);
+		SOFTI2C(GPIO* p_scl_pin, GPIO* p_sda_pin);
 		void 		  begin(uint32_t _speed);
 		int8_t 		config(uint32_t _speed);
 		uint32_t	read_config();
-		int8_t		write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t data);
-		int8_t 		write_byte(uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToWrite);
-		int8_t 		read_byte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data);
-		int8_t 		read_byte (uint8_t slaveAddress,uint8_t regAddress,uint8_t* data,uint16_t numToRead);
-	  int8_t		wait_busy(uint8_t slaveAddress);
+		int8_t		write_byte(uint8_t slave_address,uint8_t reg_address,uint8_t data);
+		int8_t 		write_byte(uint8_t slave_address,uint8_t reg_address,uint8_t* data,uint16_t num_to_write);
+		int8_t 		read_byte (uint8_t slave_address,uint8_t reg_address,uint8_t* data);
+		int8_t 		read_byte (uint8_t slave_address,uint8_t reg_address,uint8_t* data,uint16_t num_to_read);
+	  int8_t		wait_busy (uint8_t slave_address);
 	public:
-		int8_t take_i2c_right(uint32_t speed);
+		int8_t take_i2c_right(uint32_t _speed);
 		int8_t release_i2c_right(void);
 	
 
@@ -95,7 +95,7 @@ class SOFTI2C
 		int8_t 	send_no_ack();
 	
 		int8_t 	send_byte(uint8_t Byte);
-		int8_t	send_7bits_address(uint8_t slaveAddress);
+		int8_t	send_7bits_address(uint8_t slave_address);
 		uint8_t receive_byte();
 	
 		int8_t	wait_ack();

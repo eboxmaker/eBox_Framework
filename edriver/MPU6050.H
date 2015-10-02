@@ -72,7 +72,7 @@ This specification is preliminary and is subject to change at any time without n
 #define	GYRO_ZOUT_L		0x48
 #define	PWR_MGMT_1		0x6B	//电源管理，典型值：0x00(正常启用)
 #define	WHO_AM_I			0x75	//IIC地址寄存器(默认数值0x68，只读)
-#define	SlaveAddress	0xD0	//IIC写入时的地址字节数据
+#define SLAVEADDRESS	0xD0	//IIC写入时的地址字节数据
 
 
 class MPU6050
@@ -83,8 +83,8 @@ class MPU6050
 		 i2c = p_i2c;
 		 };	
 		void 			begin(uint32_t _speed);
-		int16_t 	get_data(uint8_t regAddress);
-		int8_t 		get_data(uint8_t regAddress,int16_t* buf,uint8_t numToRead);
+		int16_t 	get_data(uint8_t reg_address);
+		int8_t 		get_data(uint8_t reg_address,int16_t* buf,uint8_t num_to_read);
 		void 			get_id(uint8_t* id);
 
 	private:

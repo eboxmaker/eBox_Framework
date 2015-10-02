@@ -18,7 +18,7 @@ class UDP
 		u16 send(UDPMessage *msg);
 		u16 sendto(u8* rIP,u16 rPort,u8* buf,u16 len);
 		u16 recv(u8* buf);
-//		u8 interruptRecv(u8* buf);
+		u16 interrupt_recv(u8* buf);
 		u8 close();
 	
 	public:
