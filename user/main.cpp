@@ -8,81 +8,57 @@ Copyright 2015 shentq. All Rights Reserved.
 */
 
 //STM32 RUN IN eBox
+
 #include "ebox.h"
-#include "mmc_sd.h"
-#include "ff.h"
-
-extern void attach_sd_to_fat(SD* sd);
 
 
-static FATFS fs;            // Work area (file system object) for logical drive
-FATFS *fss;
-FRESULT res;
-DIR DirObject;       //目录结构
-DWORD free_clust;//空簇，空扇区大小
-
-	
-SD sd(&PB12,&spi2);
 
 
-u8 ret;
+uint32_t xx;
+uint8_t flag;
+TIM timer2(TIM2);
 
-u8 buf[1024];
-u32 rl;
-float x;
-void getSDCardInfo()
+void t2it()
 {
-	ret = sd.getCID(buf);
-	uart1.printf("\r\n========================");
-	uart1.printf("\r\nget CID Info,ret = %d",ret);
-	uart1.printf("\r\n");
-	uart1.printf((const char*)buf);
-
-	rl = sd.getCapacity();
-	uart1.printf("\r\n========================");
-	uart1.printf("\r\n容量 = %d",rl/1024/1024);	
-
-	
-	res=f_getfree("/",&free_clust,&fss);
-	if(res==FR_OK)
+	xx++;
+	if(xx == 1000)
 	{
-		uart1.printf("\r\n该分区空闲扇区数为：%d",(fss->free_clust)*(fss->csize));
-		uart1.printf("\r\n该分区大小为：%dM",(fss->free_clust)*(fss->csize)/2048);
-		uart1.printf("\r\n该分区空簇数为：%d",free_clust);
-		uart1.printf("\r\n该分区空扇区数为：%d",free_clust*(fss->csize));
+		flag = 1;
+		xx = 0;
+		PB8.write(!PB8.read());
 	}
-	else
-		uart1.printf("\r\n获取分区空簇失败,res = %d",res);
-	uart1.printf("\r\n OVER !");
-
-	
 }
 void setup()
 {
 	ebox_init();
 	uart1.begin(9600);
-	ret = sd.begin(3);
-	if(!ret)
-		uart1.printf("\r\nsdcard init ok!");
-	attach_sd_to_fat(&sd);
+	PB8.mode(OUTPUT_PP);
 	
-	res = f_mount(&fs,"0:",1);
-	uart1.printf("\r\nres = %d",res);
-   
+	timer2.begin(1000);
+	timer2.interrupt(ENABLE);
+	timer2.attach_interrupt(t2it);
+	timer2.start();
 }
-u32 count;
+
+
 int main(void)
 {
 	setup();
-	getSDCardInfo();
 	while(1)
 	{
-		
-		delay_ms(1000);
+		if(flag == 1)
+		{
+//			uart1.printf("\r\ntimer2 is triggered 1000 times !",xx);
+			flag = 0;
+		}
 	}
 
 
 }
+
+
+
+
 
 
 

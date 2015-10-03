@@ -63,11 +63,11 @@ class	SPI
 		uint8_t read_config(void);
 		
 		int8_t  write(uint8_t data);
-		int8_t  write(uint8_t *data,uint16_t datalength);
+		int8_t  write(uint8_t *data,uint16_t data_length);
 	
 		uint8_t read();
 		int8_t  read(uint8_t * recv_data);
-		int8_t  read(uint8_t *recv_data,uint16_t datalength);
+		int8_t  read(uint8_t *recv_data,uint16_t data_length);
 	public:
 		int8_t take_spi_right(SPI_CONFIG_TYPE* spi_config);
 		int8_t release_spi_right(void);
@@ -92,11 +92,11 @@ class SOFTSPI
 		uint8_t read_config(void);
 		
 		int8_t  write(uint8_t data);
-		int8_t  write(uint8_t *data,uint16_t dataln);
+		int8_t  write(uint8_t *data,uint16_t data_length);
 	
 		uint8_t read();
 		int8_t  read(uint8_t* data);
-		int8_t  read(uint8_t *rcvdata,uint16_t dataln);
+		int8_t  read(uint8_t *rcvdata,uint16_t data_length);
 	public:
 		int8_t take_spi_right(SPI_CONFIG_TYPE* spi_config);
 		int8_t release_spi_right(void);

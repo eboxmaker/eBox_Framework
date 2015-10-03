@@ -101,12 +101,12 @@ int8_t SPI::write(uint8_t data)
 
 	return 0;
 }
-int8_t SPI::write(uint8_t *data,uint16_t datalength)
+int8_t SPI::write(uint8_t *data,uint16_t data_length)
 {
 	__IO uint8_t dummyByte;
-	if(datalength == 0)
+	if(data_length == 0)
 		return -1;
-	while(datalength--)
+	while(data_length--)
 	{
 		while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
 			;
@@ -139,11 +139,11 @@ int8_t SPI::read(uint8_t* recv_data)
 	return 0;
 }
 
-int8_t SPI::read(uint8_t *recv_data,uint16_t datalength)
+int8_t SPI::read(uint8_t *recv_data,uint16_t data_length)
 {
-	if(datalength == 0)
+	if(data_length == 0)
 		return -1;
-	while(datalength--)
+	while(data_length--)
 	{
 		while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
 			;

@@ -17,10 +17,10 @@ This specification is preliminary and is subject to change at any time without n
 /*----------------------------------------------------------------------*
 
  *----------------------------------------------------------------------*/
-BUTTON::BUTTON(GPIO* Pin, uint8_t PullUp)
+BUTTON::BUTTON(GPIO* p_pin, uint8_t pull_up)
 {
-    pin = Pin;
-    pull_up = PullUp;
+    pin = p_pin;
+    pull_up = pull_up;
 }
 
 void BUTTON::begin()

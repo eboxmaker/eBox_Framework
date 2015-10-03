@@ -28,12 +28,12 @@ void TIMERONE::begin(uint32_t frq)
 	uint32_t _period  =0;
 	uint32_t _prescaler = 1;
 	
+	if(frq>=1000000)frq = 1000000;
 	
-	if(frq>=720000)frq = 720000;
 	for(;_prescaler <= 0xffff;_prescaler++)
 	{
 		_period = 72000000/_prescaler/frq;
-		if((0xffff>=_period)&&(_period>=1000))break;
+		if((0xffff>=_period))break;
 	}
 
 	base_init(_period,_prescaler);
@@ -48,6 +48,13 @@ void TIMERONE::begin(uint32_t frq)
 	interrupt(DISABLE);
 	stop();
 }
+void TIMERONE::reset_frq(uint32_t frq)
+{
+	begin(frq);
+	interrupt(ENABLE);
+	start();
+}
+
 void TIMERONE::interrupt(FunctionalState enable)
 {
  TIM_ClearITPendingBit(TIM1 , TIM_FLAG_Update);

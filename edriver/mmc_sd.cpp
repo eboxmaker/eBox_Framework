@@ -447,10 +447,9 @@ u8 SD::readSingleBlock(u32 sector, u8 *buffer)
   u8 r1;
 
   //设置为高速模式
+  SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
 	spi->take_spi_right(&SPIDevSDCard);
 	
-  SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
-	spi->config(&SPIDevSDCard);
   
   //如果不是SDHC，将sector地址转成byte地址
   sector = sector<<9;
@@ -483,9 +482,8 @@ u8 SD::writeSingleBlock(u32 sector,  u8 *data)
   u16 i;
   u16 retry;
   //设置为高速模式
-	spi->take_spi_right(&SPIDevSDCard);
 	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
-	spi->config(&SPIDevSDCard);
+	spi->take_spi_right(&SPIDevSDCard);
 
   //如果不是SDHC，给定的是sector地址，将其转换成byte地址
   if(SD_Type!=SD_TYPE_V2HC)
@@ -561,10 +559,9 @@ u8 SD::readMultiBlock(u32 sector, u8 *buffer, u8 count)
 {
   u8 r1;	 			 
 	
+	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
 	spi->take_spi_right(&SPIDevSDCard);
 	
-	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
-	spi->config(&SPIDevSDCard);
   sector = sector<<9;//如果不是SDHC，将sector地址转成byte地址
  //SD_WaitReady();
  //发读多块命令
@@ -607,10 +604,9 @@ u8 SD::writeMultiBlock(u32 sector,  const u8 *data, u8 count)
   u8 r1;
   u16 i;	 		 
 	
+	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
 	spi->take_spi_right(&SPIDevSDCard);
 
-	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
-	spi->config(&SPIDevSDCard);
 	
   if(SD_Type != SD_TYPE_V2HC)
     sector = sector<<9;//如果不是SDHC，给定的是sector地址，将其转换成byte地址  
