@@ -69,9 +69,6 @@ int8_t	EEPROM::read_byte(uint16_t byte_addr,uint8_t* buf,uint16_t num_to_read)
 	return 0;
 }
 
-
-
-
 int8_t EEPROM::write_page(uint8_t* buf,uint32_t addr,uint8_t numToWrite)
 {
 

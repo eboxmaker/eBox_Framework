@@ -30,14 +30,35 @@ void TIM::begin(uint32_t frq)
 {
 	uint32_t _period  =0;
 	uint32_t _prescaler = 1;
-	if(frq>=720000)frq = 720000;
+	if(frq>=1000000)frq = 1000000;
 	for(;_prescaler <= 0xffff;_prescaler++)
 	{
 		_period = 72000000/_prescaler/frq;
-		if((0xffff>=_period)&&(_period>=1000))break;
+		if((0xffff>=_period))break;
 	}
 
 	base_init(_period,_prescaler);
+}
+void TIM::reset_frq(uint32_t frq)
+{
+	begin(frq);
+	interrupt(ENABLE);
+	start();
+}
+void TIM::attach_interrupt(void(*callback)(void))
+{
+	switch((uint32_t)_TIMx)
+	{
+		case (uint32_t)TIM2:
+			gTimxCallbackTable[0] = callback;
+			break;
+		case (uint32_t)TIM3:
+			gTimxCallbackTable[1] = callback;
+			break;
+		case (uint32_t)TIM4:
+			gTimxCallbackTable[2] = callback;
+			break;
+	}
 }
 void TIM::interrupt(FunctionalState enable)
 {
@@ -63,10 +84,10 @@ void TIM::base_init(uint16_t period,uint16_t prescaler)
 	TIM_DeInit(_TIMx);
 	switch((uint32_t)_TIMx)
 	{
-		case (uint32_t)TIM1:
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
-			NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
-			break;
+//		case (uint32_t)TIM1:
+//			RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
+//			NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
+//			break;
 		case (uint32_t)TIM2:
 			RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 			NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
@@ -95,29 +116,15 @@ void TIM::base_init(uint16_t period,uint16_t prescaler)
 	NVIC_Init(&NVIC_InitStructure);
 
 }
-void TIM::set_reload(uint16_t autoreload)
+void TIM::set_reload(uint16_t auto_reload)
 {
-	TIM_SetAutoreload(_TIMx,autoreload);
+	TIM_SetAutoreload(_TIMx,auto_reload);
 }
 void TIM::clear_count(void)
 {
 	_TIMx->CNT = 0;
 }
-void TIM::attach_interrupt(void(*callback)(void))
-{
-	switch((uint32_t)_TIMx)
-	{
-		case (uint32_t)TIM2:
-			gTimxCallbackTable[0] = callback;
-			break;
-		case (uint32_t)TIM3:
-			gTimxCallbackTable[1] = callback;
-			break;
-		case (uint32_t)TIM4:
-			gTimxCallbackTable[2] = callback;
-			break;
-	}
-}
+
 
 
 extern "C"{

@@ -22,9 +22,9 @@ class _74hc595
 {
     public:
         
-			_74hc595(GPIO* dataPin, GPIO* sckPin,GPIO* rckPin);
+			_74hc595(GPIO* p_data_pin, GPIO* p_sck_pin,GPIO* p_rck_pin);
 			void begin();
-			void write(uint8_t* data,uint8_t dataLen,uint8_t bit_oder);
+			void write(uint8_t* data,uint8_t data_length,uint8_t bit_oder);
 			void write(uint8_t data,uint8_t bit_oder);
 			void update();
     
