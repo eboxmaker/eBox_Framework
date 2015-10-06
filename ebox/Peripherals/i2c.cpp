@@ -49,6 +49,7 @@ void  I2C::begin(uint32_t _speed)
 	I2C_InitStructure.I2C_ClockSpeed = speed; 
 
 	/* I2C1 初始化 */
+	I2C_DeInit(_I2Cx);
 	I2C_Init(_I2Cx, &I2C_InitStructure);	   
 	
 	/* 使能 I2C1 */
@@ -135,7 +136,7 @@ int8_t I2C::send_byte(uint8_t data)
 }
 int8_t I2C::send_7bits_address(uint8_t slave_address)
 {
-	uint16_t times = 1000;
+	uint16_t times = 5000;
 	int8_t err = 0;
 	if(slave_address&0x01)
 	{

@@ -19,6 +19,9 @@ void setup()
 	ebox_init();
 	uart1.begin(9600);
    btn.begin();
+	PB8.mode(OUTPUT_PP);
+	PB9.mode(OUTPUT_PP);
+	PB10.mode(OUTPUT_PP);
 }
 
 
@@ -26,11 +29,6 @@ void setup()
 int main(void)
 {
 	setup();
-	PB8.mode(OUTPUT_PP);
-	PB9.mode(OUTPUT_PP);
-	PB10.mode(OUTPUT_PP);
-
-	
 	while(1)
 	{
 		btn.loop();
@@ -50,7 +48,6 @@ int main(void)
 			uart1.printf("\r\nlong press event!");
 		}
 	}
-
 }
 
 

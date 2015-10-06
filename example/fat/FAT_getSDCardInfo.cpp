@@ -32,13 +32,13 @@ u32 rl;
 float x;
 void getSDCardInfo()
 {
-	ret = sd.getCID(buf);
+	ret = sd.get_CID(buf);
 	uart1.printf("\r\n========================");
 	uart1.printf("\r\nget CID Info,ret = %d",ret);
 	uart1.printf("\r\n");
 	uart1.printf((const char*)buf);
 
-	rl = sd.getCapacity();
+	rl = sd.get_capacity();
 	uart1.printf("\r\n========================");
 	uart1.printf("\r\n»›¡ø = %d",rl/1024/1024);	
 
