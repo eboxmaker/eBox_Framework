@@ -78,8 +78,8 @@
             <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
-            <RunUserProg1>1</RunUserProg1>
-            <RunUserProg2>1</RunUserProg2>
+            <RunUserProg1>0</RunUserProg1>
+            <RunUserProg2>0</RunUserProg2>
             <UserProg1Name>$KARM\BIN\ELFDWT.EXE #L BASEADDRESS(0x08000000)</UserProg1Name>
             <UserProg2Name>fromelf --bin ".\Objects\@L.axf" --output ".\Objects\@L.bin"</UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
@@ -691,6 +691,16 @@
               <FileName>at24c02.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\edriver\at24c02.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>L3G4200D.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\L3G4200D.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>lsm303dhlc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\lsm303dhlc.cpp</FilePath>
             </File>
           </Files>
         </Group>
