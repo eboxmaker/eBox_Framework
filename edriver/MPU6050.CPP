@@ -43,6 +43,7 @@ void MPU6050::get_id(uint8_t* id)
 int16_t  MPU6050::get_data(uint8_t reg_address)
 {
 	uint8_t tmp[2];
+  i2c->take_i2c_right(speed);
 	i2c->read_byte(SLAVEADDRESS,reg_address,tmp,2);
 	i2c->release_i2c_right();
 

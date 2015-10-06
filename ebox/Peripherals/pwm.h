@@ -45,6 +45,7 @@ class PWM
 		uint8_t 			ch;
 		uint16_t 			period;//保存溢出值，用于计算占空比
 	  uint16_t 			duty;//保存占空比值
+	
 	  void init_info(GPIO* p_pwm_pin);
 		void base_init(uint16_t Period,uint16_t Prescaler);
 };

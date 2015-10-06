@@ -11,28 +11,28 @@ class SD
 {
 
 	public:
-			SD(GPIO* cspin,SPI *pSPI)
+			SD(GPIO* cspin,SPI* p_SPI)
 			{
 				cs = cspin;
-				spi = pSPI;
+				spi = p_SPI;
 			}
 			int begin(uint8_t dev_num);
 			uint8_t init();
-			int getCID(u8 *cid_data);
-			int getCSD(u8 *csd_data);
-			u32 getCapacity(void);
-			u8 readSingleBlock(u32 sector, u8 *buffer);
-			u8 writeSingleBlock(u32 sector,  u8 *data);
-			u8 readMultiBlock(u32 sector, u8 *buffer, u8 count);
-			u8 writeMultiBlock(u32 sector,  const u8 *data, u8 count);
-			u8 readBytes(unsigned long address,unsigned char *buf,unsigned int offset,unsigned int bytes);
+			int get_CID(u8 *cid_data);
+			int get_CSD(u8 *csd_data);
+			u32 get_capacity(void);
+			u8 read_single_block(u32 sector, u8 *buffer);
+			u8 write_single_block(u32 sector,  u8 *data);
+			u8 read_multi_block(u32 sector, u8 *buffer, u8 count);
+			u8 write_multi_block(u32 sector,  const u8 *data, u8 count);
+			u8 read_bytes(unsigned long address,unsigned char *buf,unsigned int offset,unsigned int bytes);
 
 
 	private:
 			uint8_t _wait(void);
-			uint8_t _sendCommand(u8 cmd, u32 arg,u8 crc);
-			uint8_t _sendCommandNoDeassert(u8 cmd, u32 arg,u8 crc);
-			int _receiveData(u8 *data, u16 len, u8 release);
+			uint8_t _send_command(u8 cmd, u32 arg,u8 crc);
+			uint8_t _send_command_no_deassert(u8 cmd, u32 arg,u8 crc);
+			int _receive_data(u8 *data, u16 len, u8 release);
 
 
 	public:
