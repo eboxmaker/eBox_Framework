@@ -369,7 +369,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\edriver;..\network;..\fat;..\user</IncludePath>
+              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\edriver;..\network;..\fat;..\user;..\other</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -741,6 +741,16 @@
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fat\ff.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>other</GroupName>
+          <Files>
+            <File>
+              <FileName>color_convert.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\other\color_convert.cpp</FilePath>
             </File>
           </Files>
         </Group>

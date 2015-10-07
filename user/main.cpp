@@ -8,40 +8,67 @@ Copyright 2015 shentq. All Rights Reserved.
 */
 
 //STM32 RUN IN eBox
+
+
 #include "ebox.h"
+#include "math.h"
+#include "color_convert.h"
 
-#include "lsm303dhlc.h"
+PWM g(&PA0,1000);
+PWM r(&PA1,1000);
+PWM b(&PA2,1000);
+COLOR_HSL hsl;
+COLOR_RGB rgb;
+COLOR_HSV hsv;
 
-
-LSM303DLHC lsm(&si2c2);
+//STM32 RUN IN eBox
 
 void setup()
 {
 	ebox_init();
 	uart1.begin(9600);
-	uart1.printf("buadrate = 9600");
-	lsm.begin(400000);
-   
+	hsl.h = 0;//色相
+	hsl.s = 1;//饱和度
+	hsl.l = 0.5;//亮度
+	
+	hsv.h = 93;//色相
+	hsv.s = 0.92;//饱和度
+	hsv.v = 0.94;//亮度
+	
+	rgb.r = 76;
+	rgb.g = 57;
+	rgb.b = 53;
 }
-u32 count;
 int main(void)
 {
 	setup();
+	
 	while(1)
-	{
-		lsm.read_acc();
-		lsm.read_mag();
-		uart1.printf("==========================\r\n");
-		uart1.printf("x:%d;\r\n",lsm.acc_x);
-		uart1.printf("y:%d;\r\n",lsm.acc_y);
-		uart1.printf("z:%d;\r\n",lsm.acc_z);
-		//lsm.read_reg(LSM303_MAG_ADDR,LSM303M_CRB_REG);
-		uart1.printf("x:%d;\r\n",lsm.mag_x);
-		uart1.printf("y:%d;\r\n",lsm.mag_y);
-		uart1.printf("z:%d;\r\n",lsm.mag_z);
-		delay_ms(1000);
+	{	
+//		hsl.hue += 1;
+//		if(hsl.hue>360)hsl.hue=0;		
+//		hsl.saturation ++;
+//		if(hsl.saturation>100)hsl.saturation=0;
+//		hsl.luminance ++;
+//		if(hsl.luminance>100)hsl.saturation=0;		
+//		HSLtoRGB(&hsl,&rgb);
+		
+		hsv.h++;
+		if(hsv.h>360)hsv.h = 0;		
+//		hsv.s+=0.01;
+//		if(hsv.s>1)hsv.s = 0;		
+//		hsv.v+=0.01;
+//		if(hsv.v>1)hsv.v = 0;		
+			HSV_to_RGB(hsv,rgb);
+//		RGB_to_HSV(rgb,hsv);
+				r.set_duty(rgb.r*3);
+				g.set_duty(rgb.g*3);
+				b.set_duty(rgb.b*3);
+				delay_ms(10);
+			
+	
+		
 	}
-
 
 }
 
