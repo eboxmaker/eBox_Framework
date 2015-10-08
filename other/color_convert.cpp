@@ -221,3 +221,25 @@ void HSV_to_RGB(const COLOR_HSV &hsv, COLOR_RGB &rgb)
     rgb.r = ( red > 255) ? 255 : red;
     rgb.r = ( red < 0) ? 0 : rgb. r;
 }
+void RGB_to_GRB(COLOR_RGB &rgb,COLOR_GRB &grb)
+{
+
+	grb.g = rgb.g;
+	grb.r = rgb.r;
+	grb.b = rgb.b;
+	
+}
+void RGB_BUF_to_GRB(COLOR_BUF &c_buf)
+{
+	u8 tmp;
+	if(c_buf.color_type == RGB_TYPE)
+	{
+		for(u8 i = 0; i < 100; i ++)
+		{
+			tmp = c_buf.data[i][0];
+			c_buf.data[i][0] = c_buf.data[i][1];
+			c_buf.data[i][1] = tmp;
+		}
+	}
+
+}
