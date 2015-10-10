@@ -8,11 +8,12 @@ LCD_init: 5110LCD初始化
 -----------------------------------------------------------------------*/
 void NOKIA5110::begin()
 {
- SCLK.mode(OUTPUT_PP);		
- SDIN.mode(OUTPUT_PP);		
- LCD_DC.mode(OUTPUT_PP);		
- LCD_CE.mode(OUTPUT_PP);		
- LCD_RST.mode(OUTPUT_PP);		
+	SCLK.mode(OUTPUT_PP);		
+	SDIN.mode(OUTPUT_PP);		
+	LCD_DC.mode(OUTPUT_PP);		
+	LCD_CE.mode(OUTPUT_PP);		
+	LCD_RST.mode(OUTPUT_PP);		
+	LCD_LED.mode(OUTPUT_PP);
 	
    LCD_RST.reset();
    LCD_RST.set();
@@ -28,6 +29,7 @@ void NOKIA5110::begin()
     write_cmd(0x0c);	// 设定显示模式，正常显示
   
    LCD_CE.reset();
+	 back_led(1);
 
 }
 
@@ -53,10 +55,31 @@ LCD_set_XY        : 设置LCD坐标函数
           Y       ：0－5
 -----------------------------------------------------------------------*/
 void NOKIA5110::set_xy(unsigned char X, unsigned char Y)
-  {
-    write_cmd(0x40 | Y);		// column
-    write_cmd(0x80 | X);          	// row
-  }
+{
+	write_cmd(0x40 | Y);		// column
+	write_cmd(0x80 | X);          	// row
+}
+
+/*-----------------------------------------------------------------------
+back_led        : 设置LCD背光
+
+输入参数：val：	1：on
+								0：off
+-----------------------------------------------------------------------*/
+void NOKIA5110::back_led(u8 val)
+{
+	LCD_LED.write(val);
+}
+
+/*-----------------------------------------------------------------------
+contrast        : 设置LCD对比度
+
+输入参数：val：	0-255
+-----------------------------------------------------------------------*/
+void NOKIA5110::contrast(u8 val)
+{
+    write_cmd(0xba);	// 设置偏置电压
+}
 
 /*-----------------------------------------------------------------------
 LCD_write_char    : 显示英文字符

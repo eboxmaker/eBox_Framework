@@ -24,12 +24,6 @@ NOKIA5110 lcd;
 void setup()
 {
 	ebox_init();
-	PB8.mode(OUTPUT_PP);
-	PB8.set();
-	
-	
-	digital_write(PB8,HIGH);
-	
 	uart1.begin(115200);
 	lcd.begin();
 		lcd.disp_string(0,0,"  Welcome to  ");

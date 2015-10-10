@@ -14,6 +14,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #define LCD_DC 		PB11
 #define LCD_CE 		PB10
 #define LCD_RST 	PB9
+#define LCD_LED 	PB8
 
 class NOKIA5110
 {
@@ -22,7 +23,9 @@ class NOKIA5110
 	void begin();
 	void clear(void);
 	void set_xy(unsigned char X, unsigned char Y);	
-	
+	void back_led(u8 val);
+	void contrast(u8 val);
+
 	void write_data(unsigned char dat);
 	void write_cmd(unsigned char cmd);
 
