@@ -707,6 +707,16 @@
               <FileType>8</FileType>
               <FilePath>..\edriver\colorled.cpp</FilePath>
             </File>
+            <File>
+              <FileName>Nokia5110.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\Nokia5110.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FT800.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\FT800.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

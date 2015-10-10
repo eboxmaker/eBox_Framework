@@ -132,7 +132,7 @@ USART uart3(USART3,&PB10,&PB11);
 //spi
 SPI spi1(SPI1,&PA5,&PA6,&PA7);	
 SPI spi2(SPI2,&PB13,&PB14,&PB15);	
-SOFTSPI  sspi(&PA5,&PA6,&PA7);
+SOFTSPI  sspi1(&PA5,&PA6,&PA7);
 
 //i2c
 I2C i2c1(I2C1,&PB6,&PB7);

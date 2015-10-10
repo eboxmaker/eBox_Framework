@@ -113,6 +113,7 @@ void shift_out(GPIO* data_pin, GPIO* clock_pin, uint8_t bit_order, uint8_t val)
 			data_pin->write(!!(val & (1 << i)));
 		else	
 			data_pin->write(!!(val & (1 << (7 - i))));
+		
 			clock_pin->write(HIGH);
 			clock_pin->write(LOW);
 
