@@ -16,28 +16,28 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "nokia5110.h"
 
 
-NOKIA5110 lcd;
 
+#include "ws2812.h"
 
+WS2812 led(&PB0);
 
 
 void setup()
 {
 	ebox_init();
 	uart1.begin(115200);
-	lcd.begin();
-		lcd.disp_string(0,0,"  Welcome to  ");
-		lcd.disp_string(0,1,"  ebox world ");
-		lcd.disp_string(0,2,"cloudmaker.org");
-		lcd.disp_string(0,3," Nokia5110 LCD");
-		lcd.write_chinese_string(12,4,12,4,0,5);  
+	led.begin();
+	
+
 }
 u8 str[] = "123";
 int main(void)
 {
 	setup();
+	
 	while(1)
 	{	
+		led.rainbow_Loop();
     delay_ms(300);
 
 	}
