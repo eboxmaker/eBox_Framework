@@ -3,7 +3,7 @@
 // 6 x 8 font
 // 1 pixel space at left and bottom
 // index = ASCII - 32
-const unsigned char font6x8[][6] =
+const unsigned char font6x8[92][6] =
 {
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },   // sp
     { 0x00, 0x00, 0x00, 0x2f, 0x00, 0x00 },   // !
