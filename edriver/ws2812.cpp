@@ -2,6 +2,7 @@
 #include <stdlib.h>							// For rand() 		function
 #include <math.h>							// For floor() 		function
 #include "color_convert.h"
+#include "lcd_font.h"
 
 /* Buffer that holds one complete DMA transmission.
  *  
@@ -32,8 +33,8 @@ void WS2812::reset()
 	delay_us(500);
 }
 void WS2812::RCC_Config(void) {
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);					// Enable clock for TIM2
-	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);					// Enable clock for DMA1
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);					
+	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);					
 }
 
 void WS2812::TIM_Config(void) {
@@ -128,91 +129,88 @@ void WS2812::send_data(uint8_t *led_Colors, uint16_t len) {
 COLOR_HSV hsv;
 COLOR_HSL hsl;
 COLOR_RGB rgb;
-char xin[]=
-{
-	'-','-','-','-','-','-','-','-',
-	'-','x','x','x','x','x','-','-',
-	'-','x','x','x','x','x','-','-',
-	'x','x','x','x','x','x','x','-',
-	'-','x','x','x','x','x','-','-',
-	'-','-','x','x','x','-','-','-',
-	'-','-','-','x','-','-','-','-',
-	'-','-','-','-','-','-','-','-'
-};
 
-u8 wtable[] = 
-{0x00,0x7C,0x46,0x42,0x42,0x7C,0x7C,0x42};/*"B",1*/
-u8 ascii[4][8] = 
-{
-
-
-{0x10,0x10,0x30,0x28,0x28,0x78,0x48,0xCC},/*"A",0*/
-
-{0x3C,0x48,0x48,0x38,0x48,0x48,0x48,0x3C},/*"B",1*/
-
-{0x78,0x44,0x04,0x04,0x04,0x04,0x44,0x38},/*"C",2*/
-
-{0x3C,0x48,0x48,0x48,0x48,0x48,0x48,0x3C},/*"D",3*/
-};
 void WS2812::rainbow_Loop(){
 	
 	u8 intStageNum = 0;
 	float   r = 255, g = 0, b = 0;
-	uint16_t i,k;
+	uint16_t i,k,m;
 		hsl.s = 1;
 		hsl.l = 0.5;
 		
 		hsv.s = 1;
 		hsv.v = 0.1;
-	for(int t = 0; t < 4; t++)
-	
-	for(i = 0; i < 360; i++) {
-		for(int j = 0; j < 64 ; j ++)
-			{
-				k++;
-				k = k%8;
-				if((ascii[t][j/8])&(1<<k))		
-				{
-					hsv.h = (i + j)%360;
-					hsv.s = 1;
-					hsv.v = 1;
+	for(int t = 0; t < 92; t++)
+		for(i = 0; i < 360; i++) {
+			for(int j = 0; j < 8 ; j ++)
+				for(k = 0; k <8; k ++)
+					{
+						if(j > 1)
+						{
+							if(font6x8[t][8 - j]&(1<<k))
+							{
+								hsv.h = (i)%360;
+								hsv.s = 1;
+								hsv.v = 0.1;
 
-					
-					hsl.h = (i + j)%360;
-					hsl.s = 1;
-					hsl.l = 0.5;
-					
-					HSV_to_RGB(hsv,rgb);
-					//HSL_to_RGB(hsl,rgb);
-					rgb1[j][0] = rgb.r;// (uint8_t)floor(r/20+j);
-					rgb1[j][1] = rgb.g;//(uint8_t)floor(g/20+j);
-					rgb1[j][2] = rgb.b;//(uint8_t)floor(b/20+j);
-					led_Colors[j] = j;
-				}					
-				else
-				{
-					hsv.h = 240;
-					hsv.s = 0.5;
-					hsv.v = 0.05;
+								
+								hsl.h = (i + j)%360;
+								hsl.s = 1;
+								hsl.l = 0.5;
+								
+								HSV_to_RGB(hsv,rgb);
+								//HSL_to_RGB(hsl,rgb);
+								rgb1[j*8 + k][0] = rgb.r;// (uint8_t)floor(r/20+j);
+								rgb1[j*8 + k][1] = rgb.g;//(uint8_t)floor(g/20+j);
+								rgb1[j*8 + k][2] = rgb.b;//(uint8_t)floor(b/20+j);
+								led_Colors[j*8 + k] = j*8 + k;
+							}
+							else
+							{
+								hsv.h = (i)%360;
+								hsv.s = 1;
+								hsv.v = 0;
 
-					
-					hsl.h = (i + j)%360;
-					hsl.s = 1;
-					hsl.l = 0.5;
-					
-					HSV_to_RGB(hsv,rgb);
-					//HSL_to_RGB(hsl,rgb);
-					rgb1[j][0] = rgb.r;// (uint8_t)floor(r/20+j);
-					rgb1[j][1] = rgb.g;//(uint8_t)floor(g/20+j);
-					rgb1[j][2] = rgb.b;//(uint8_t)floor(b/20+j);
-					led_Colors[j] = j;
-				}
+								
+								hsl.h = (i + j)%360;
+								hsl.s = 1;
+								hsl.l = 0.5;
+								
+								HSV_to_RGB(hsv,rgb);
+								//HSL_to_RGB(hsl,rgb);
+
+								rgb1[j*8 + k][0] = rgb.r;// (uint8_t)floor(r/20+j);
+								rgb1[j*8 + k][1] = rgb.g;//(uint8_t)floor(g/20+j);
+								rgb1[j*8 + k][2] = rgb.b;//(uint8_t)floor(b/20+j);
+								led_Colors[j*8 + k] = j*8 + k;
+
+							}
+						}
+						else
+						{
+								hsv.h = 240;
+								hsv.s = 1;
+								hsv.v = 0;
+
+								
+								hsl.h = (i + j)%360;
+								hsl.s = 1;
+								hsl.l = 0.5;
+								
+								HSV_to_RGB(hsv,rgb);
+							//	HSL_to_RGB(hsl,rgb);
+
+								rgb1[j*8 + k][0] = rgb.g;// (uint8_t)floor(r/20+j);
+								rgb1[j*8 + k][1] = rgb.r;//(uint8_t)floor(g/20+j);
+								rgb1[j*8 + k][2] = rgb.b;//(uint8_t)floor(b/20+j);
+								led_Colors[j*8 + k] = j*8 + k;
+
+						}
+							
+					}								
 			
-			}
 		// Send data to LEDs
 		send_data(led_Colors, LED_COUNT);	
-		delay_ms(2);
+		//delay_us(10);
 	}
 }
-
-

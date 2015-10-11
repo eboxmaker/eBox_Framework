@@ -38,7 +38,7 @@ int main(void)
 	while(1)
 	{	
 		led.rainbow_Loop();
-    delay_ms(300);
+    //delay_ms(300);
 
 	}
 
