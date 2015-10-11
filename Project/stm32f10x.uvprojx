@@ -717,6 +717,11 @@
               <FileType>8</FileType>
               <FilePath>..\edriver\FT800.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ws2812.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\ws2812.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

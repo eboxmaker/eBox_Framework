@@ -14,7 +14,8 @@
 uint8_t rgb1[LED_COUNT][3];						//Array that will store color data
 
 uint8_t led_Colors[LED_COUNT];						//Array of integers that will function as indexes for the rgb array
-uint16_t ledBuff[LED_BUFFER_SIZE];					//Array of data to be sent to leds.
+uint8_t ledBuff[LED_BUFFER_SIZE];					//Array of data to be sent to leds.
+
 
 
 void WS2812::begin()
@@ -74,7 +75,7 @@ void WS2812::DMA_Config(void) {
 	DMA_InitStruct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;			// Do not incrament the peripheral address
 	DMA_InitStruct.DMA_MemoryInc = DMA_MemoryInc_Enable;				// Incrament the buffer index
 	DMA_InitStruct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;	// Specifies the peripheral data width
-	DMA_InitStruct.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;		// Specifies the memory data width
+	DMA_InitStruct.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;		// Specifies the memory data width
 	DMA_InitStruct.DMA_Mode = DMA_Mode_Normal;					// Specifies the operation mode. Normal or Circular
 	DMA_InitStruct.DMA_Priority = DMA_Priority_High;				// Specifies the software priority
 	DMA_InitStruct.DMA_M2M = DMA_M2M_Disable;					//
@@ -127,33 +128,90 @@ void WS2812::send_data(uint8_t *led_Colors, uint16_t len) {
 COLOR_HSV hsv;
 COLOR_HSL hsl;
 COLOR_RGB rgb;
+char xin[]=
+{
+	'-','-','-','-','-','-','-','-',
+	'-','x','x','x','x','x','-','-',
+	'-','x','x','x','x','x','-','-',
+	'x','x','x','x','x','x','x','-',
+	'-','x','x','x','x','x','-','-',
+	'-','-','x','x','x','-','-','-',
+	'-','-','-','x','-','-','-','-',
+	'-','-','-','-','-','-','-','-'
+};
+
+u8 wtable[] = 
+{0x00,0x7C,0x46,0x42,0x42,0x7C,0x7C,0x42};/*"B",1*/
+u8 ascii[4][8] = 
+{
+
+
+{0x10,0x10,0x30,0x28,0x28,0x78,0x48,0xCC},/*"A",0*/
+
+{0x3C,0x48,0x48,0x38,0x48,0x48,0x48,0x3C},/*"B",1*/
+
+{0x78,0x44,0x04,0x04,0x04,0x04,0x44,0x38},/*"C",2*/
+
+{0x3C,0x48,0x48,0x48,0x48,0x48,0x48,0x3C},/*"D",3*/
+};
 void WS2812::rainbow_Loop(){
 	
 	u8 intStageNum = 0;
 	float   r = 255, g = 0, b = 0;
-	uint16_t i;
+	uint16_t i,k;
+		hsl.s = 1;
+		hsl.l = 0.5;
+		
+		hsv.s = 1;
+		hsv.v = 0.1;
+	for(int t = 0; t < 4; t++)
 	
 	for(i = 0; i < 360; i++) {
-		hsl.s = 0.5;
-		hsl.l = 0.5;
-		hsv.s = 1;
-		hsv.v = 0.5;
 		for(int j = 0; j < 64 ; j ++)
 			{
-				
-				hsv.h = (i+j)%360;
-				hsl.h = (i + j)%360;
-				HSV_to_RGB(hsv,rgb);
-				//HSL_to_RGB(hsl,rgb);
-				rgb1[j][0] = rgb.r;// (uint8_t)floor(r/20+j);
-				rgb1[j][1] = rgb.g;//(uint8_t)floor(g/20+j);
-				rgb1[j][2] = rgb.b;//(uint8_t)floor(b/20+j);	
-				led_Colors[j] = j;
+				k++;
+				k = k%8;
+				if((ascii[t][j/8])&(1<<k))		
+				{
+					hsv.h = (i + j)%360;
+					hsv.s = 1;
+					hsv.v = 1;
+
+					
+					hsl.h = (i + j)%360;
+					hsl.s = 1;
+					hsl.l = 0.5;
+					
+					HSV_to_RGB(hsv,rgb);
+					//HSL_to_RGB(hsl,rgb);
+					rgb1[j][0] = rgb.r;// (uint8_t)floor(r/20+j);
+					rgb1[j][1] = rgb.g;//(uint8_t)floor(g/20+j);
+					rgb1[j][2] = rgb.b;//(uint8_t)floor(b/20+j);
+					led_Colors[j] = j;
+				}					
+				else
+				{
+					hsv.h = 240;
+					hsv.s = 0.5;
+					hsv.v = 0.05;
+
+					
+					hsl.h = (i + j)%360;
+					hsl.s = 1;
+					hsl.l = 0.5;
+					
+					HSV_to_RGB(hsv,rgb);
+					//HSL_to_RGB(hsl,rgb);
+					rgb1[j][0] = rgb.r;// (uint8_t)floor(r/20+j);
+					rgb1[j][1] = rgb.g;//(uint8_t)floor(g/20+j);
+					rgb1[j][2] = rgb.b;//(uint8_t)floor(b/20+j);
+					led_Colors[j] = j;
+				}
 			
 			}
 		// Send data to LEDs
 		send_data(led_Colors, LED_COUNT);	
-		delay_ms(1);
+		delay_ms(2);
 	}
 }
 
