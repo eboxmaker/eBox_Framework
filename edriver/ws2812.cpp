@@ -98,7 +98,7 @@ void WS2812::send_data(uint8_t *led_Colors, uint16_t len) {
 	
 	while(len) {		
 		for (i = 0; i < 3; i++) {						// Set RGB LED color R -> i=0, G -> i=1, B -> i=2
-			temp = rgb1[led][i];
+			temp = rgb1[led_Colors[led]][i];
 			for (j = 0; j < 8; j++) {					// Set 8 bits of color
 				if ((temp) & 0x80) {					// Data sent MSB first, j = 0 is MSB j = 7 is LSB	
 					ledBuff[memaddr++] = PWM_HIGH_WIDTH; 		// Compare value for logical 1
@@ -141,7 +141,7 @@ void WS2812::rainbow_Loop(){
 		hsv.s = 1;
 		hsv.v = 0.1;
 	for(int t = 0; t < 92; t++)
-		for(i = 0; i < 360; i++) {
+		for(i = 0; i < 64; i++) {
 			for(int j = 0; j < 8 ; j ++)
 				for(k = 0; k <8; k ++)
 					{
@@ -149,7 +149,7 @@ void WS2812::rainbow_Loop(){
 						{
 							if(font6x8[t][8 - j]&(1<<k))
 							{
-								hsv.h = (i)%360;
+								hsv.h = (i*4)%360;
 								hsv.s = 1;
 								hsv.v = 0.1;
 
@@ -163,11 +163,10 @@ void WS2812::rainbow_Loop(){
 								rgb1[j*8 + k][0] = rgb.r;// (uint8_t)floor(r/20+j);
 								rgb1[j*8 + k][1] = rgb.g;//(uint8_t)floor(g/20+j);
 								rgb1[j*8 + k][2] = rgb.b;//(uint8_t)floor(b/20+j);
-								led_Colors[j*8 + k] = j*8 + k;
 							}
 							else
 							{
-								hsv.h = (i)%360;
+								hsv.h = (i*4)%360;
 								hsv.s = 1;
 								hsv.v = 0;
 
@@ -182,7 +181,6 @@ void WS2812::rainbow_Loop(){
 								rgb1[j*8 + k][0] = rgb.r;// (uint8_t)floor(r/20+j);
 								rgb1[j*8 + k][1] = rgb.g;//(uint8_t)floor(g/20+j);
 								rgb1[j*8 + k][2] = rgb.b;//(uint8_t)floor(b/20+j);
-								led_Colors[j*8 + k] = j*8 + k;
 
 							}
 						}
@@ -203,14 +201,45 @@ void WS2812::rainbow_Loop(){
 								rgb1[j*8 + k][0] = rgb.g;// (uint8_t)floor(r/20+j);
 								rgb1[j*8 + k][1] = rgb.r;//(uint8_t)floor(g/20+j);
 								rgb1[j*8 + k][2] = rgb.b;//(uint8_t)floor(b/20+j);
-								led_Colors[j*8 + k] = j*8 + k;
 
 						}
+						int l,h,l_offset,h_offset;
+						if(i > 8)
+						l_offset = i*8/64;
+						h_offset = 0;
+						
+						if(l_offset > 0)
+						{
+							l = j + l_offset;
+							l %= 8 ;
+						}
+						else
+						{
+							if(j + l_offset >= 0)
+								l = j + l_offset;
+							else
+								l = 8 + j + l_offset;
+						}
+						
+						if(h_offset > 0)
+						{
+							h = k + h_offset;
+							h %= 8 ;
+						}
+						else
+						{
+							if(k + h_offset >= 0)
+								h = k + h_offset;
+							else
+								h =  k + h_offset + 8;
+						}
+
+						led_Colors[j*8 + k] = l*8 + h;
 							
 					}								
 			
 		// Send data to LEDs
 		send_data(led_Colors, LED_COUNT);	
-		//delay_us(10);
+		delay_ms(10);
 	}
 }
