@@ -21,7 +21,7 @@ This specification is preliminary and is subject to change at any time without n
 class BUTTON
 {
     public:
-      BUTTON(GPIO* p_pin, uint8_t pull_up);
+      BUTTON(GPIO* p_pin, uint8_t p_pull_up);
 			void begin();
 			uint8_t loop(void);
 			uint8_t release(void);
