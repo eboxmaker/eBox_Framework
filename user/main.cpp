@@ -10,37 +10,82 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 
 
+/*
+一个简单的命令帧接收示例
+*/
 #include "ebox.h"
-#include "math.h"
-#include "colorled.h"
-#include "nokia5110.h"
 
 
 
-#include "ws2812.h"
+#define  HEAD '$' 
+#define  END '!' 
 
-WS2812 led(&PB0);
+#define  NEEDHEAD 0 
+#define  NEEDDATA 1 
+#define  DATAEND 2 
+
+uint8_t state = NEEDHEAD;
+
+char rcv[100];
+int i;
+void test()
+{
+	uint8_t c;
+	c = uart1.receive();
+	switch(state)
+	{
+		case NEEDHEAD:
+			if(c == HEAD)
+			{
+				i = 0;
+				rcv[i++] = c;
+				state = NEEDDATA;
+			}
+			break;
+		case NEEDDATA:
+			if(c == END)
+			{
+				rcv[i] = c;
+				state = DATAEND;			
+			}
+			else
+			{
+				rcv[i++] = c;
+			}		
+			break;
+	}
 
 
+}
+	
 void setup()
 {
 	ebox_init();
-	uart1.begin(115200);
-	led.begin();
-	
-
+	uart1.begin(9600);
+	uart1.interrupt(ENABLE);
+	uart1.attach_interrupt(test);
 }
-u8 str[] = "123";
+
+float x,y;
 int main(void)
 {
+
 	setup();
-	
+	uart1.printf("uart is ok !\r\n");
+
 	while(1)
-	{	
-		led.rainbow_Loop();
-    //delay_ms(300);
+	{		 	
+		if(state == DATAEND)
+		{
+		
+			uart1.printf(rcv);
+			for(int i = 0; i < 100; i ++)
+				rcv[i] = 0;
+			state = NEEDHEAD;
+		}
 
 	}
+
 
 }
 

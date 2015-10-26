@@ -45,7 +45,7 @@ void USART::begin(uint32_t baud_rate)
 				RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);
 				_DMA1_Channelx = DMA1_Channel4;
 			
-				NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
+				NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
 				NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
 				NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 				NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
