@@ -39,7 +39,7 @@ uint8_t DS3231::dec_to_bcd(uint8_t dec)
 	return bcd;
 }
 
-void	DS3231::get_date_time(date_time_typedef *t)
+void	DS3231::get_date_time(DS_DATA_TIME_STRUCT *t)
 {
 	uint8_t buf[8];
 	i2c->take_i2c_right(speed);
@@ -56,7 +56,7 @@ void	DS3231::get_date_time(date_time_typedef *t)
 	t->min		=bcd_to_dec(buf[1]);
 	t->sec	  =bcd_to_dec(buf[0]);	
 }
-void DS3231::get_date(char* buf)
+void DS3231::get_date(u8* buf)
 {		
 	uint8_t tmpbuf[3];
 	i2c->take_i2c_right(speed);
@@ -64,17 +64,15 @@ void DS3231::get_date(char* buf)
 	i2c->read_byte(DS3231_ADDRESS,DS3231_DAY,tmpbuf,3);				//ÈÕÆÚ
 	i2c->release_i2c_right();
 
-	buf[0] =char( (tmpbuf[2]>>4) + 0x30);
-	buf[1] =char( (tmpbuf[2]&0x0f) + 0x30);
-	buf[2] = '-';
-	buf[3] =char( (tmpbuf[1]>>4) + 0x30);
-	buf[4] =char( (tmpbuf[1]&0x0f) + 0x30);
-	buf[5] = '-';
-	buf[6] =char( (tmpbuf[0]>>4) + 0x30);
-	buf[7] =char( (tmpbuf[0]&0x0f) + 0x30);
-	buf[8] ='\0';
+	buf[0] =u8( (tmpbuf[0]>>4) + 0x30);
+	buf[1] =u8( (tmpbuf[0]&0x0f) + 0x30);
+	buf[2] =u8( (tmpbuf[1]>>4) + 0x30);
+	buf[3] =u8( (tmpbuf[1]&0x0f) + 0x30);
+	buf[4] =u8( (tmpbuf[2]>>4) + 0x30);
+	buf[5] =u8( (tmpbuf[2]&0x0f) + 0x30);
+	buf[6] ='\0';
 }
-void DS3231::get_time(char* buf)
+void DS3231::get_time(u8* buf)
 {
 	uint8_t tmpbuf[3];
 
@@ -82,21 +80,21 @@ void DS3231::get_time(char* buf)
 	i2c->read_byte(DS3231_ADDRESS,DS3231_SECOND,tmpbuf,3);		
 	i2c->release_i2c_right();
 
-	buf[0] =char( (tmpbuf[2]>>4) + 0x30);
-	buf[1] =char( (tmpbuf[2]&0x0f) + 0x30);
-	buf[2] = ':';
-	buf[3] =char( (tmpbuf[1]>>4) + 0x30);
-	buf[4] =char( (tmpbuf[1]&0x0f) + 0x30);
-	buf[5] = ':';
-	buf[6] =char( (tmpbuf[0]>>4) + 0x30);
-	buf[7] =char( (tmpbuf[0]&0x0f) + 0x30);
-	buf[8] ='\0';
+	buf[0] =u8( (tmpbuf[2]>>4) + 0x30);
+	buf[1] =u8( (tmpbuf[2]&0x0f) + 0x30);
+	buf[2] =u8( (tmpbuf[1]>>4) + 0x30);
+	buf[3] =u8( (tmpbuf[1]&0x0f) + 0x30);
+	buf[4] =u8( (tmpbuf[0]>>4) + 0x30);
+	buf[5] =u8( (tmpbuf[0]&0x0f) + 0x30);
+	buf[6] ='\0';
 
 	
 }
-void	DS3231::set_time(date_time_typedef *t)
+void	DS3231::set_time(void *dt)
 {
-		date_time_typedef tBCD;
+		DS_DATA_TIME_STRUCT tBCD;
+		DS_DATA_TIME_STRUCT *t = (DS_DATA_TIME_STRUCT*)dt;
+	
 		tBCD.week = dec_to_bcd(t->week);
 		tBCD.year = dec_to_bcd(t->year);
 		tBCD.month = dec_to_bcd(t->month);
