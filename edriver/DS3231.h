@@ -46,7 +46,6 @@ This specification is preliminary and is subject to change at any time without n
 //timer.w_year,timer.w_month,timer.w_date,timer.hour,timer.min,timer.sec
  typedef struct
  {
-	 u8 w;
 	 u8 year;
 	 u8 month;
 	 u8 date;
@@ -54,22 +53,23 @@ This specification is preliminary and is subject to change at any time without n
 	 u8 min;
 	 u8 sec;
 	 u8 week;
- 
- }date_time_typedef;
+ }DS_DATA_TIME_STRUCT;
 
  class DS3231
  {
+	 
 	 public:
-			date_time_typedef t;
+			DS_DATA_TIME_STRUCT t;
 			DS3231(SOFTI2C* p_soft_i2c)
 			{
 				i2c = p_soft_i2c;
 			};	
 			void begin(uint32_t _speed);
-			void get_date_time(date_time_typedef *t);
-			void get_time(char* buf);
-			void get_date(char* buf);
-			void set_time(date_time_typedef *t);
+			void get_date_time(DS_DATA_TIME_STRUCT *t);
+			void get_time(u8 *buf);
+			void get_date(u8 *buf);
+
+			void set_time(void *dt);
  
 	 private:
 		  SOFTI2C* i2c;
