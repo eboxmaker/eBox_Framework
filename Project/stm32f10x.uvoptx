@@ -163,6 +163,10 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>DLGUARM</Key>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>ARMRTXEVENTFLAGS</Key>
           <Name>-L70 -Z18 -C0 -M0 -T1</Name>
         </SetRegEntry>
@@ -191,18 +195,50 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>75</LineNumber>
+          <LineNumber>77</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134233134</Address>
+          <Address>134230442</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\user\main.cpp</Filename>
+          <Filename>..\edriver\Button.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\ebox_v1_0\../user/main.cpp\75</Expression>
+          <Expression>\\ebox_v1_0\../edriver/Button.cpp\77</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>58</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134230294</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\edriver\Button.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\ebox_v1_0\../edriver/Button.cpp\58</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>28</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\edriver\Button.h</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>

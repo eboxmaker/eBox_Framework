@@ -1,36 +1,51 @@
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
 
+Copyright 2015 shentq. All Rights Reserved.
+*/
+
+//STM32 RUN IN eBox
 #include "ebox.h"
-#include "Max7456.h"
+#include "button.h"
 
 
-OSD osd(&PB0,&spi1);
+BUTTON btn(&PA0,1);
 
 void setup()
 {
 	ebox_init();
-	uart1.begin(115200);
-	osd.begin(1);
+	uart3.begin(9600);
+	uart3.printf("\r\nok\r\n");
+   btn.begin();
 
-		
 }
+
+
 
 int main(void)
 {
 	setup();
-	
 	while(1)
 	{
-		uart1.printf("ebox max7456 test\n\r");
-		
-		osd.set_panel(6,6);
-    osd.open_panel();
-    osd.printf("ebox Max7456 test"); 
-    osd.close_panel();
-		delay_ms(1000);
-		
-		
+		btn.loop();
+		if(btn.click())
+		{
+			uart3.printf("\r\nclick event!");
+		}
+		if(btn.release())
+		{
+			uart3.printf("\r\nrelease event!");
+		}
+		if(btn.pressed_for(2000,5))//长按两秒，执行5次
+		{
+			uart3.printf("\r\nlong press event!");
+		}
 	}
-
-
 }
+
+
+
 

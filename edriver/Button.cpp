@@ -21,21 +21,24 @@ BUTTON::BUTTON(GPIO* p_pin, uint8_t p_pull_up)
 {
     pin = p_pin;
     pull_up = p_pull_up;
+		state = p_pull_up;
 }
 
 void BUTTON::begin()
 {
-    pin->mode(INPUT);
     if (pull_up != 0){
-        pin->write(HIGH);       //enable pullup resistor
+				pin->mode(INPUT_PU);
 		 }
+		else
+			pin->mode(INPUT_PD);
         
-    state = pin->read();
+    //state = pin->read();//由于io反应慢导致读取此值默认一直为0；导致开机误触发一次按键释放
     if (pull_up == 0){
          state = !state;
 	 }
 
     time = millis();
+	 	
     last_state = state;
     changed = 0;
     last_change = time;
@@ -52,7 +55,6 @@ uint8_t BUTTON::loop(void)
 	last_state = state;
 	state = pinVal;
 	time = ms;
-
 	if(state != last_state){
 		if(long_press_flag == 1){//mask the signal fafter long pressed 
 			long_press_flag = 0;
