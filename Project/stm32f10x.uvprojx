@@ -722,6 +722,11 @@
               <FileType>8</FileType>
               <FilePath>..\edriver\ws2812.cpp</FilePath>
             </File>
+            <File>
+              <FileName>Max7456.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\Max7456.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
