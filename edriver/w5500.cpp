@@ -143,7 +143,7 @@ other 2 channels couldn't be used, for there's no available memory.\n
 */
 void W5500::sysinit( u8 * tx_size, u8 * rx_size  )
 {
-  int16 i;
+  int16 i = 0;
   int16 ssum,rsum;
 #ifdef __DEF_IINCHIP_DBG__
 //  printf("sysinit()\r\n");

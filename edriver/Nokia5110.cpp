@@ -39,7 +39,7 @@ LCD_clear         : LCDÇåÆÁº¯Êý
 -----------------------------------------------------------------------*/
 void NOKIA5110::clear(void)
   {
-    unsigned int i;
+    unsigned int i = 0;
 
     write_cmd(0x0c);			
     write_cmd(0x80);			
@@ -114,7 +114,7 @@ void NOKIA5110::disp_string(unsigned char X,unsigned char Y,const char *s)
 void NOKIA5110::printf(uint8_t row,uint8_t col,const char* fmt,...)
 {
 	char buf[16];
-	u8 i;
+	u8 i = 0;
 	va_list va_params;   
 	va_start(va_params,fmt);   
 	vsprintf(buf,fmt,va_params);   
