@@ -32,7 +32,7 @@ int SD::begin(uint8_t dev_num)
 
 uint8_t SD::_wait(void)
 {
-  u8 r1;
+  u8 r1 = 0;
   u16 retry=0;
   do
   {
@@ -54,7 +54,7 @@ uint8_t SD::_wait(void)
 *******************************************************************************/
 uint8_t SD::_send_command(u8 cmd, u32 arg,u8 crc)
 {
-  unsigned char r1;
+  unsigned char r1 = 0;
   unsigned int Retry = 0;
 
  
@@ -95,7 +95,7 @@ uint8_t SD::_send_command(u8 cmd, u32 arg,u8 crc)
 *******************************************************************************/
 uint8_t SD::_send_command_no_deassert(u8 cmd, u32 arg,u8 crc)
 {
-  unsigned char r1;
+  unsigned char r1 = 0;
   unsigned int Retry = 0;
 	
 
@@ -132,9 +132,9 @@ uint8_t SD::_send_command_no_deassert(u8 cmd, u32 arg,u8 crc)
 *******************************************************************************/
 uint8_t SD::init()
 {
-  u16 i;      // 用来循环计数
-  u8 r1;      // 存放SD卡的返回值
-  u16 retry;  // 用来进行超时计数
+  u16 i = 0;      // 用来循环计数
+  u8 r1 = 0;      // 存放SD卡的返回值
+  u16 retry = 0;  // 用来进行超时计数
   u8 buff[6];
 	
 	SPIDevSDCard.prescaler = SPI_CLOCK_DIV256;

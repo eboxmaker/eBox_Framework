@@ -207,7 +207,7 @@ void LCD1602::disp_string(uint8_t row,uint8_t col,char str[])
 void LCD1602::printf(const char* fmt,...)
 {
 	char buf[16];
-	u8 i;
+	u8 i = 0;
 	va_list va_params;   
 	va_start(va_params,fmt);   
 	vsprintf(buf,fmt,va_params);   
@@ -221,7 +221,7 @@ void LCD1602::printf(const char* fmt,...)
 void LCD1602::printf(uint8_t row,uint8_t col,const char* fmt,...)
 {
 	char buf[16];
-	u8 i;
+	u8 i = 0;
 	va_list va_params;   
 	va_start(va_params,fmt);   
 	vsprintf(buf,fmt,va_params);   
