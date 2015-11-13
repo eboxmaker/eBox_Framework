@@ -19,6 +19,12 @@ GPIO::GPIO(GPIO_TypeDef* _port,uint16_t _pin)
 {
 	port = _port;
 	pin = _pin;
+}
+
+void GPIO::mode(PIN_MODE mode_val)
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
+  
 	switch((uint32_t)port)
 	{
 		case (uint32_t)GPIOA:
@@ -45,11 +51,6 @@ GPIO::GPIO(GPIO_TypeDef* _port,uint16_t _pin)
 			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOF,ENABLE);
 			break;
 	}
-}
-
-void GPIO::mode(PIN_MODE mode_val)
-{
-	GPIO_InitTypeDef GPIO_InitStructure;
 
 	if(mode_val == AF_OD || mode_val == AF_PP)
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
