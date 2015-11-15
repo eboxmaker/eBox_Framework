@@ -8,9 +8,6 @@
 #define  DNS_RET_SUCCESS   2
 
 
-
-
-
 #define  INITRTT     2000L	/* Initial smoothed response time */
 #define  MAXCNAME    10	/* Maximum amount of cname recursion */
          
@@ -69,25 +66,23 @@ struct dhdr
 };
 
 
-
-
-extern uint8_t DNS_GET_IP[];
-
 #define	MAX_DNS_BUF_SIZE	256		/* maximum size of DNS buffer. */
 
 class DNS
 {
 	public:
-		uint8_t rip[4];
+		uint8_t domain_ip[4];
+		uint16_t msg_id;
+
 	public:
 		int 		begin(SOCKET p_s,uint16_t p_port);
 		uint8_t query(uint8_t *name);
 	private:
-//		int 		parse_name(uint8_t * msg, uint8_t * compressed, uint16_t len);
-//		uint8_t *question(uint8_t * msg, uint8_t * cp);
-//		uint8_t *answer(uint8_t * msg, uint8_t * cp);
-//		uint8_t parseMSG(struct dhdr * pdhdr, uint8_t * pbuf);
-//		int 		makequery(uint16_t op, uint8_t * name, uint8_t * buf, uint16_t len);
+		int 		parse_name(uint8_t * msg, uint8_t * compressed, uint16_t len);
+		uint8_t *question(uint8_t * msg, uint8_t * cp);
+		uint8_t *answer(uint8_t * msg, uint8_t * cp);
+		uint8_t parseMSG(struct dhdr * pdhdr, uint8_t * pbuf);
+		int 		makequery(uint16_t op, uint8_t * name, uint8_t * buf, uint16_t len);
 		SOCKET s;
 		uint16_t port;
 	

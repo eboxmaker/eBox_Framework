@@ -1,13 +1,6 @@
 #include "dns.h"
 #include "string.h"
 
-uint8_t DNS_GET_IP[4];
-uint16_t MSG_ID = 0x1122;
-
-uint8_t BUFPUB[2048];
-
-
-
 
 /*
 ********************************************************************************
@@ -22,7 +15,7 @@ uint8_t BUFPUB[2048];
 * Note        :
 ********************************************************************************
 */
-int parse_name(uint8_t * msg, uint8_t * compressed, /*char * buf,*/ uint16_t len)
+int DNS::parse_name(uint8_t * msg, uint8_t * compressed, /*char * buf,*/ uint16_t len)
 {
   uint16_t slen;		/* Length of current segment */
   uint8_t  * cp;
@@ -92,7 +85,7 @@ int parse_name(uint8_t * msg, uint8_t * compressed, /*char * buf,*/ uint16_t len
 * Note        :
 ********************************************************************************
 */
-uint8_t * dns_question(uint8_t * msg, uint8_t * cp)
+uint8_t *DNS::question(uint8_t * msg, uint8_t * cp)
 {
   int16_t len;
   //	int8_t  xdata name[MAX_DNS_BUF_SIZE];
@@ -120,7 +113,7 @@ uint8_t * dns_question(uint8_t * msg, uint8_t * cp)
 * Note        :
 ********************************************************************************
 */
-uint8_t * dns_answer(uint8_t * msg, uint8_t * cp)
+uint8_t *DNS::answer(uint8_t * msg, uint8_t * cp)
 {
   int16_t len, type;
   //	int8_t  xdata name[MAX_DNS_BUF_SIZE];
@@ -139,10 +132,10 @@ uint8_t * dns_answer(uint8_t * msg, uint8_t * cp)
   switch (type)
   {
     case TYPE_A:
-      DNS_GET_IP[0] = *cp++;
-      DNS_GET_IP[1] = *cp++;
-      DNS_GET_IP[2] = *cp++;
-      DNS_GET_IP[3] = *cp++;
+      domain_ip[0] = *cp++;
+      domain_ip[1] = *cp++;
+      domain_ip[2] = *cp++;
+      domain_ip[3] = *cp++;
       break;
     case TYPE_CNAME:
     case TYPE_MB:
@@ -214,12 +207,12 @@ uint8_t * dns_answer(uint8_t * msg, uint8_t * cp)
 * Note        :
 ********************************************************************************
 */
-uint8_t parseMSG(struct dhdr * pdhdr, uint8_t * pbuf)
+uint8_t DNS::parseMSG(struct dhdr * pdhdr, uint8_t * pbuf)
 {
-  uint16_t tmp;
-  uint16_t i;
-  uint8_t * msg;
-  uint8_t * cp;
+  uint16_t tmp = 0;
+  uint16_t i = 0;
+  uint8_t * msg = 0;
+  uint8_t * cp = 0;
   
   msg = pbuf;
   memset(pdhdr, 0, sizeof(pdhdr));
@@ -247,13 +240,13 @@ uint8_t parseMSG(struct dhdr * pdhdr, uint8_t * pbuf)
   /* Question section */
   for (i = 0; i < pdhdr->qdcount; i++)
   {
-    cp = dns_question(msg, cp);
+    cp = question(msg, cp);
   }
   
   /* Answer section */
   for (i = 0; i < pdhdr->ancount; i++)
   {
-    cp = dns_answer(msg, cp);
+    cp = answer(msg, cp);
   }
   
   /* Name server (authority) section */
@@ -285,7 +278,7 @@ uint8_t parseMSG(struct dhdr * pdhdr, uint8_t * pbuf)
 * Note        :
 ********************************************************************************
 */
-int dns_makequery(uint16_t op, uint8_t * name, uint8_t * buf, uint16_t len)
+int DNS::makequery(uint16_t op, uint8_t * name, uint8_t * buf, uint16_t len)
 {
   uint8_t  *cp;
   uint8_t   *cp1;
@@ -296,8 +289,8 @@ int dns_makequery(uint16_t op, uint8_t * name, uint8_t * buf, uint16_t len)
   
   cp = buf;
   
-  MSG_ID++;
-  *(uint16_t*)&cp[0] = htons(MSG_ID);
+  msg_id++;
+  *(uint16_t*)&cp[0] = htons(msg_id);
   p = (op << 11) | 0x0100;			/* Recursion desired */
   *(uint16_t*)&cp[2] = htons(p);
   *(uint16_t*)&cp[4] = htons(1);
@@ -352,10 +345,13 @@ int dns_makequery(uint16_t op, uint8_t * name, uint8_t * buf, uint16_t len)
 */
 uint8_t DNS::query(uint8_t * name)
 {
+	int ret;
   static uint32_t dns_wait_time = 0;
   struct dhdr dhp;
   uint8_t ip[4];
   uint16_t len, port;
+	uint8_t BUFPUB[256];
+
   switch(eth->getSn_SR(s))
   {
     case SOCK_UDP:
@@ -386,10 +382,11 @@ uint8_t DNS::query(uint8_t * name)
     case SOCK_CLOSED:
       dns_wait_time = 0;
       _socket(s, Sn_MR_UDP, port, 0);
-      len = dns_makequery(0, name, BUFPUB, MAX_DNS_BUF_SIZE);
-      _sendto(s, BUFPUB, len, eth->dns, IPPORT_DOMAIN);
-      _sendto(s, BUFPUB, len, eth->dns, IPPORT_DOMAIN);
-      break;         
+      len = makequery(0, name, BUFPUB, MAX_DNS_BUF_SIZE);
+			do{
+				ret = _sendto(s, BUFPUB, len, eth->dns, IPPORT_DOMAIN);
+			}while(ret == 0);
+			break;         
   }
   return DNS_RET_PROGRESS;
 }
@@ -400,11 +397,7 @@ int DNS::begin(SOCKET p_s,uint16_t p_port)
 	int ret = 0;
 	s = p_s;
 	port =p_port;
-	if(eth->getSn_SR(s) != SOCK_CLOSED)
-	{
-		_close(s);
-	}
-
+	msg_id = 0x1122;
 	return ret;
 }
 
