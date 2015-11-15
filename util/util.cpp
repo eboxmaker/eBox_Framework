@@ -2,6 +2,7 @@
 #include "util.h"
 
 
+
 /**
 @brief	CONVERT STRING INTO INTEGER
 @return	a integer number
@@ -117,20 +118,7 @@ uint32_t swapl(uint32_t l32)//交换高低字节
   return ret;
 }
 
-////get mid str
-//void mid(int8_t* src, int8_t* s1, int8_t* s2, int8_t* sub)
-//{
-//	int8_t* sub1;
-//	int8_t* sub2;
-//	uint16_t n;
 
-//  sub1=strstr(src,s1);
-//  sub1+=strlen(s1);
-//  sub2=strstr(sub1,s2);
-//  n=sub2-sub1;
-//  strncpy(sub,sub1,n);
-//  sub[n]=0;
-//}
 void inet_addr_(unsigned char* addr,unsigned char *ip)
 {
 	int i;
@@ -151,6 +139,32 @@ void inet_addr_(unsigned char* addr,unsigned char *ip)
 		nexttok = NULL;
 	}
 }	
+int find_str(uint8_t *s_str,uint8_t *p_str,uint16_t &seek)
+{
+	seek = 0;
+	uint8_t *temp_str=NULL;
+	uint8_t *temp_ptr=NULL;
+	uint8_t *temp_char=NULL;
+	if(0==s_str||0==p_str)
+		return -2;
+	for(temp_str=s_str;*temp_str!='\0';temp_str++)	 //依次查找字符串
+	{
+		temp_char=temp_str; //指向当前字符串
+		//比较
+		for(temp_ptr=p_str;*temp_ptr!='\0';temp_ptr++)
+		{	
+			if(*temp_ptr!=*temp_char)
+			break;
+			temp_char++;
+		}
+		if(*temp_ptr=='\0')  //出现了所要查找的字符，退出
+		{
+			return 0;
+		}
+		seek++;  //当前偏移量加1
+	}
+	return -1;
+}
 
 
 

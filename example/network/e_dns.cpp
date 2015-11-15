@@ -69,7 +69,7 @@ void setup()
   uart1.printf("GW : %d.%d.%d.%d\r\n", ip[0],ip[1],ip[2],ip[3]);
   uart1.printf("Network is ready.\r\n");
 	
-	ddns.begin(2,3000);
+	ddns.begin(SOCKET2,3000);
 
 //	memcpy(ConfigMsg.lip, lip, 4);
 //  memcpy(ConfigMsg.sub, sub, 4);
@@ -83,9 +83,9 @@ void setup()
 
 int main(void)
 {
+	  int8_t dns_retry_cnt=0;
+  int8_t dns_ok=0;
 
-  uint8_t dns_retry_cnt=0;
-  uint8_t dns_ok=0;
 	setup();
 
 	while(1)
@@ -98,13 +98,12 @@ int main(void)
 //    }
 //    else if(memcmp(ConfigMsg.dns,"\x00\x00\x00\x00",4))
 //    {
-      switch(ddns.query(name)) /*发送DNS请求*/
+      switch(ddns.query("www.baidu.com")) /*发送DNS请求*/
       {
         case DNS_RET_SUCCESS:
           dns_ok=1;
-          memcpy(rip,DNS_GET_IP,4);
           dns_retry_cnt=0;
-          uart1.printf("Get [%s]'s IP address [%d.%d.%d.%d] from %d.%d.%d.%d\r\n",name,rip[0],rip[1],rip[2],rip[3],dns[0],dns[1],dns[2],dns[3]);
+          uart1.printf("Get [%s]'s IP address [%d.%d.%d.%d] from %d.%d.%d.%d\r\n",name,ddns.rip[0],ddns.rip[1],ddns.rip[2],ddns.rip[3],eth->dns[0],eth->dns[1],eth->dns[2],eth->dns[3]);
           break;
         case DNS_RET_FAIL:
           dns_ok=0;
@@ -114,6 +113,7 @@ int main(void)
         default:
           break;
       }
+			delay_ms(1000);
     
 //  }
 //  else

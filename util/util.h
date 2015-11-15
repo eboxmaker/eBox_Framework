@@ -14,10 +14,10 @@
 
 
 
+#define min3v(v1, v2, v3)   ((v1)>(v2)? ((v2)>(v3)?(v3):(v2)):((v1)>(v3)?(v3):(v2)))
+#define max3v(v1, v2, v3)   ((v1)<(v2)? ((v2)<(v3)?(v3):(v2)):((v1)<(v3)?(v3):(v1)))
 
 
-//int putchar(int ch);
-//int getchar(void);
 
 
 uint16_t ATOI(char* str,uint16_t base); 			/* Convert a string to integer number */
@@ -33,5 +33,6 @@ void replacetochar(char * str, char oldchar, char newchar);
 
 void mid(int8_t* src, int8_t* s1, int8_t* s2, int8_t* sub);
 void inet_addr_(unsigned char* addr,unsigned char *ip);
+int find_str(uint8_t *s_str,uint8_t *p_str,uint16_t &seek);
 
 #endif

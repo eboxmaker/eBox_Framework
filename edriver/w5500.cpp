@@ -14,8 +14,8 @@ This specification is preliminary and is subject to change at any time without n
 */
 
 #include "w5500.h"
-
-void W5500::begin(uint8_t dev_num,u8* mac,u8* ip,u8* subnet,u8* gateway)
+#include "string.h"
+void W5500::begin(uint8_t dev_num,u8* p_mac,u8* p_ip,u8* p_subnet,u8* p_gateway,u8* p_dns)
 {
 	u8 txsize[MAX_SOCK_NUM] = {2,2,2,2,2,2,2,2};
   u8 rxsize[MAX_SOCK_NUM] = {2,2,2,2,2,2,2,2};
@@ -45,11 +45,16 @@ void W5500::begin(uint8_t dev_num,u8* mac,u8* ip,u8* subnet,u8* gateway)
 	setSn_IMR(6,0x04);//允许接收中断
 	setSn_IMR(7,0x04);//允许接收中断
 	
+	memcpy(mac,p_mac,4);
+	memcpy(ip,p_ip,4);
+	memcpy(subnet,p_subnet,4);
+	memcpy(gw,p_gateway,4);
+	memcpy(dns,p_dns,4);
 	
 	setSHAR(mac);/*配置Mac地址*/
 	setSIPR(ip);/*配置Ip地址*/
 	setSUBR(subnet);/*配置子网掩码*/
-	setGAR(gateway);/*配置默认网关*/
+	setGAR(gw);/*配置默认网关*/
 	
   sysinit(txsize, rxsize); /*初始化8个socket*/
   setRTR(2000);/*设置溢出时间值*/
