@@ -5,8 +5,8 @@
 class TCPCLIENT
 {
 	public:
-		int begin(SOCKET ps,uint16 port);
-		int connect(u8* IP,uint16 Port);
+		int begin(SOCKET ps,uint16_t port);
+		int connect(u8* IP,uint16_t Port);
 		u16 recv(u8* buf);
 //		u16 interruptRecv(u8* buf);
 	  u16 send(u8* buf,u16 len);
@@ -25,7 +25,7 @@ class TCPCLIENT
 class TCPSERVER
 {
 	public:
-		int begin(SOCKET ps,uint16 port);
+		int begin(SOCKET ps,uint16_t port);
 		u16 recv(u8* buf);
 	  u16 send(u8* buf,u16 len);
 	  void close();

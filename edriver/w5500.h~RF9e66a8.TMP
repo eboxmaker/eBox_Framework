@@ -18,10 +18,58 @@ This specification is preliminary and is subject to change at any time without n
 #include "ebox.h"
 
 
-//typedef int8_t				u_char;		/**< 8-bit value */
+/**
+ * The 8-bit signed data type.
+ */
+/**
+ * The volatile 8-bit signed data type.
+ */
+//typedef volatile char vint8;
+/**
+ * The 8-bit unsigned data type.
+ */
+//typedef unsigned char int8_t;
+/**
+ * The volatile 8-bit unsigned data type.
+ */
+typedef volatile unsigned char vuint8;
+
+/**
+ * The 16-bit signed data type.
+ */
+/**
+ * The volatile 16-bit signed data type.
+ */
+//typedef volatile int vint16;
+/**
+ * The 16-bit unsigned data type.
+ */
+typedef unsigned short uint16;
+/**
+ * The volatile 16-bit unsigned data type.
+ */
+//typedef volatile unsigned int vuint16;
+/**
+ * The 32-bit signed data type.
+ */
+typedef long int32;
+/**
+ * The volatile 32-bit signed data type.
+ */
+//typedef volatile long vint32;
+/**
+ * The 32-bit unsigned data type.
+ */
+typedef unsigned long uint32;
+/**
+ * The volatile 32-bit unsigned data type.
+ */
+//typedef volatile unsigned long vuint32;
+
+typedef int8_t				u_char;		/**< 8-bit value */
 typedef int8_t 			SOCKET;
-//typedef uint16_t			u_short;	/**< 16-bit value */
-//typedef uint16_t			u_int;		/**< 16-bit value */
+typedef uint16			u_short;	/**< 16-bit value */
+typedef uint16			u_int;		/**< 16-bit value */
 //typedef uint32			u_long;		/**< 32-bit value */
 
 
@@ -52,9 +100,9 @@ typedef struct _CONFIG_MSG
   
   //communication
   uint8_t mode; //tcp client, tcp server, udp. 
-  uint16_t lport;
+  uint16 lport;
   uint8_t rip[4]; //remote ip address
-  uint16_t rport; //remmote port number
+  uint16 rport; //remmote port number
   uint8_t dns_flag;
   uint8_t domain[32];
   

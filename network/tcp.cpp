@@ -2,7 +2,7 @@
 #include "ebox.h"
 
 
-int TCPCLIENT::begin(SOCKET ps,uint16 port)
+int TCPCLIENT::begin(SOCKET ps,uint16_t port)
 {
 	int ret = 0;
 	s = ps;
@@ -10,7 +10,7 @@ int TCPCLIENT::begin(SOCKET ps,uint16 port)
 	
 	return ret;
 }
-int TCPCLIENT::connect(u8* IP,uint16 Port)
+int TCPCLIENT::connect(u8* IP,uint16_t Port)
 {
 	int ret = 0;
 	u8 i = 20;
@@ -102,7 +102,7 @@ u16 TCPCLIENT::send(u8* buf,u16 len)
 	return _send(s,buf,len);
 }
 
-int TCPSERVER::begin(SOCKET ps,uint16 port)
+int TCPSERVER::begin(SOCKET ps,uint16_t port)
 {
 	int ret = 0;
 	u8 tmp;
