@@ -10,10 +10,12 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 
 
+#include "string.h"
 #include "ebox.h"
 #include "w5500.h"
 #include "tcp.h"
-#include "socket.h"
+#include "dns.h"
+
   u8 mac[6]={0x00,0x08,0xdc,0x11,0x11,0x11};/*定义Mac变量*/
   u8 lip[4]={192,168,1,199};/*定义lp变量*/
   u8 sub[4]={255,255,255,0};/*定义subnet变量*/
@@ -24,9 +26,6 @@ Copyright 2015 shentq. All Rights Reserved.
   u8 ip[6];
 	u16 len;
 	
-#include "string.h"
-#include "dns.h"
-#define SOCK_DNS              2
 
 
 DNS ddns;
@@ -37,9 +36,8 @@ u8 name[]="www.nciae.edu.cn";
 	
 
 	
-W5500 w5500(&PA4,&PA2,&PA3,&spi1);
+W5500 w5500(&PC13,&PC14,&PC15,&spi2);
 	
-TCPSERVER tcpServer;
 
 int ret;
 
@@ -69,15 +67,9 @@ void setup()
   uart1.printf("GW : %d.%d.%d.%d\r\n", ip[0],ip[1],ip[2],ip[3]);
   uart1.printf("Network is ready.\r\n");
 	
-	ddns.begin(2,3000);
+	ddns.begin(SOCKET1,3000);
 
-//	memcpy(ConfigMsg.lip, lip, 4);
-//  memcpy(ConfigMsg.sub, sub, 4);
-//  memcpy(ConfigMsg.gw,  gw, 4);
-//  memcpy(ConfigMsg.mac, mac,6);
-//	ret = tcpServer.begin(SOCKET0,30000);
-//	if(ret == 0)
-//		uart1.printf("\r\n success !");
+
 
 }
 
@@ -90,21 +82,12 @@ int main(void)
 
 	while(1)
 	{
-//    if( (dns_ok==1) ||  (dns_retry_cnt > DNS_RETRY))
-//    {
-//      uart1.printf("dns ok.\r\n");
-//						while(1);
-
-//    }
-//    else if(memcmp(ConfigMsg.dns,"\x00\x00\x00\x00",4))
-//    {
       switch(ddns.query(name)) /*发送DNS请求*/
       {
         case DNS_RET_SUCCESS:
           dns_ok=1;
-          memcpy(rip,DNS_GET_IP,4);
           dns_retry_cnt=0;
-          uart1.printf("Get [%s]'s IP address [%d.%d.%d.%d] from %d.%d.%d.%d\r\n",name,rip[0],rip[1],rip[2],rip[3],dns[0],dns[1],dns[2],dns[3]);
+          uart1.printf("Get [%s]'s IP address [%d.%d.%d.%d] from %d.%d.%d.%d\r\n",name,ddns.domain_ip[0],ddns.domain_ip[1],ddns.domain_ip[2],ddns.domain_ip[3],dns[0],dns[1],dns[2],dns[3]);
           break;
         case DNS_RET_FAIL:
           dns_ok=0;
@@ -115,9 +98,6 @@ int main(void)
           break;
       }
     
-//  }
-//  else
-//     uart1.printf("Invalid DNS server [%d.%d.%d.%d]\r\n",ConfigMsg.dns[0],ConfigMsg.dns[1],ConfigMsg.dns[2],ConfigMsg.dns[3]);
 
 
 
