@@ -20,9 +20,40 @@ This specification is preliminary and is subject to change at any time without n
 
 typedef int8_t 			SOCKET;
 
-
-
-
+typedef struct _CONFIG_MSG
+{
+  uint8_t op[4];//header: FIND;SETT;FACT...
+  uint8_t mac[6];
+  uint8_t sw_ver[2];
+  //device name & serial number;
+  uint8_t device_name[16];
+  uint8_t device_serial[16];
+  
+  uint8_t lip[4];
+  uint8_t sub[4];
+  uint8_t gw[4];
+  uint8_t dns[4];	
+  uint8_t dhcp;
+  uint8_t debug;
+ 
+  uint8_t baudrate;
+  uint8_t databit; //index,0:7 bits, 1:8 bits
+  uint8_t parity;
+  uint8_t stopbit;
+  uint8_t flow;
+ 
+  //password for web/telnet config
+  uint8_t pwd[16];//md5 digest
+  
+  //communication
+  uint8_t mode; //tcp client, tcp server, udp. 
+  uint16_t lport;
+  uint8_t rip[4]; //remote ip address
+  uint16_t rport; //remmote port number
+  uint8_t dns_flag;
+  uint8_t domain[32];
+  
+}CONFIG_MSG;
 
 #define	MAX_SOCK_NUM		8	/**< Maxmium number of socket  */
 
@@ -33,13 +64,6 @@ static u16 RSIZE[MAX_SOCK_NUM]; /**< Max Rx buffer size by each channel */
 class W5500
 {
 	public:
-		uint8_t mac[4];
-		uint8_t ip[4];
-		uint8_t	subnet[4];
-		uint8_t gw[4];
-		uint8_t dns[4];
-	
-	public:
 		W5500(GPIO* p_cs_pin,GPIO* p_rst_pin,GPIO* p_int_pin,SPI* pSPI)
 		{
 			cs = 		 p_cs_pin;
@@ -48,7 +72,7 @@ class W5500
 			spi = pSPI;
 
 		}
-		void begin(uint8_t dev_num,u8* p_mac,u8* p_ip,u8* p_subnet,u8* p_gateway,u8* p_dns);
+		void begin(uint8_t dev_num,u8* mac,u8* ip,u8* subnet,u8* gateway);
 		void reset();
 
 		void send_data_processing(SOCKET s, u8 *data, u16 len);

@@ -3,76 +3,11 @@
 
 uint8_t DNS_GET_IP[4];
 uint16_t MSG_ID = 0x1122;
-uint8_t BUFPUB[1024];
 
-extern CONFIG_MSG ConfigMsg;
+uint8_t BUFPUB[2048];
 
-/*
-********************************************************************************
-*              MAKE DNS QUERY MESSAGE
-*
-* Description : This function makes DNS query message.
-* Arguments   : op   - Recursion desired
-*               name - is a pointer to the domain name.
-*               buf  - is a pointer to the buffer for DNS message.
-*               len  - is the MAX. size of buffer.
-* Returns     : the pointer to the DNS message.
-* Note        :
-********************************************************************************
-*/
-int dns_makequery(uint16_t op, uint8_t * name, uint8_t * buf, uint16_t len)
-{
-  uint8_t  *cp;
-  uint8_t   *cp1;
-  //	int8_t   sname[MAX_DNS_BUF_SIZE];
-  uint8_t  *dname;
-  uint16_t p;
-  uint16_t dlen;
-  
-  cp = buf;
-  
-  MSG_ID++;
-  *(uint16_t*)&cp[0] = htons(MSG_ID);
-  p = (op << 11) | 0x0100;			/* Recursion desired */
-  *(uint16_t*)&cp[2] = htons(p);
-  *(uint16_t*)&cp[4] = htons(1);
-  *(uint16_t*)&cp[6] = htons(0);
-  *(uint16_t*)&cp[8] = htons(0);
-  *(uint16_t*)&cp[10]= htons(0);
-  
-  cp += sizeof(uint16_t)*6;
-  //	strcpy(sname, name);
-  dname = name;
-  dlen = strlen((char*)dname);
-  for (;;)
-  {
-    /* Look for next dot */
-    cp1 = (unsigned char*)strchr((char*)dname, '.');
-    
-    if (cp1) len = cp1 - dname;	/* More to come */
-    else len = dlen;			/* Last component */
-    
-    *cp++ = len;				/* Write length of component */
-    if (len == 0) break;
-    
-    /* Copy component up to (but not including) dot */
-    strncpy((char *)cp, (char*)dname, len);
-    cp += len;
-    if (!cp1)
-    {
-      *cp++ = 0;			/* Last one; write null and finish */
-      break;
-    }
-    dname += len+1;
-    dlen -= len+1;
-  }
-  
-  *(uint16_t*)&cp[0] = htons(0x0001);				/* type */
-  *(uint16_t*)&cp[2] = htons(0x0001);				/* class */
-  cp += sizeof(uint16_t)*2;
-  
-  return ((int)((uint32_t)(cp) - (uint32_t)(buf)));
-}
+
+
 
 /*
 ********************************************************************************
@@ -337,6 +272,72 @@ uint8_t parseMSG(struct dhdr * pdhdr, uint8_t * pbuf)
   else return 0;
 }
 
+/*
+********************************************************************************
+*              MAKE DNS QUERY MESSAGE
+*
+* Description : This function makes DNS query message.
+* Arguments   : op   - Recursion desired
+*               name - is a pointer to the domain name.
+*               buf  - is a pointer to the buffer for DNS message.
+*               len  - is the MAX. size of buffer.
+* Returns     : the pointer to the DNS message.
+* Note        :
+********************************************************************************
+*/
+int dns_makequery(uint16_t op, uint8_t * name, uint8_t * buf, uint16_t len)
+{
+  uint8_t  *cp;
+  uint8_t   *cp1;
+  //	int8_t   sname[MAX_DNS_BUF_SIZE];
+  uint8_t  *dname;
+  uint16_t p;
+  uint16_t dlen;
+  
+  cp = buf;
+  
+  MSG_ID++;
+  *(uint16_t*)&cp[0] = htons(MSG_ID);
+  p = (op << 11) | 0x0100;			/* Recursion desired */
+  *(uint16_t*)&cp[2] = htons(p);
+  *(uint16_t*)&cp[4] = htons(1);
+  *(uint16_t*)&cp[6] = htons(0);
+  *(uint16_t*)&cp[8] = htons(0);
+  *(uint16_t*)&cp[10]= htons(0);
+  
+  cp += sizeof(uint16_t)*6;
+  //	strcpy(sname, name);
+  dname = name;
+  dlen = strlen((char*)dname);
+  for (;;)
+  {
+    /* Look for next dot */
+    cp1 = (unsigned char*)strchr((char*)dname, '.');
+    
+    if (cp1) len = cp1 - dname;	/* More to come */
+    else len = dlen;			/* Last component */
+    
+    *cp++ = len;				/* Write length of component */
+    if (len == 0) break;
+    
+    /* Copy component up to (but not including) dot */
+    strncpy((char *)cp, (char*)dname, len);
+    cp += len;
+    if (!cp1)
+    {
+      *cp++ = 0;			/* Last one; write null and finish */
+      break;
+    }
+    dname += len+1;
+    dlen -= len+1;
+  }
+  
+  *(uint16_t*)&cp[0] = htons(0x0001);				/* type */
+  *(uint16_t*)&cp[2] = htons(0x0001);				/* class */
+  cp += sizeof(uint16_t)*2;
+  
+  return ((int)((uint32_t)(cp) - (uint32_t)(buf)));
+}
 
 
 /*
@@ -349,7 +350,7 @@ uint8_t parseMSG(struct dhdr * pdhdr, uint8_t * pbuf)
 * Note        :
 ********************************************************************************
 */
-uint8_t dns_query(uint8_t s, uint8_t * name)
+uint8_t DNS::query(uint8_t * name)
 {
   static uint32_t dns_wait_time = 0;
   struct dhdr dhp;
@@ -384,13 +385,27 @@ uint8_t dns_query(uint8_t s, uint8_t * name)
       break;
     case SOCK_CLOSED:
       dns_wait_time = 0;
-      _socket(s, Sn_MR_UDP, 3000, 0);
-      //if(ConfigMsg.debug) printf("dns socket init over\r\n");
+      _socket(s, Sn_MR_UDP, port, 0);
       len = dns_makequery(0, name, BUFPUB, MAX_DNS_BUF_SIZE);
-      //if(ConfigMsg.debug) printf("dns make query\r\n");
-      _sendto(s, BUFPUB, len, EXTERN_DNS_SERVERIP, IPPORT_DOMAIN);
+      _sendto(s, BUFPUB, len, eth->dns, IPPORT_DOMAIN);
+      _sendto(s, BUFPUB, len, eth->dns, IPPORT_DOMAIN);
       break;         
   }
   return DNS_RET_PROGRESS;
 }
+
+
+int DNS::begin(SOCKET p_s,uint16_t p_port)
+{
+	int ret = 0;
+	s = p_s;
+	port =p_port;
+	if(eth->getSn_SR(s) != SOCK_CLOSED)
+	{
+		_close(s);
+	}
+
+	return ret;
+}
+
 
