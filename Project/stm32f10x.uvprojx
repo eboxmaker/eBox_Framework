@@ -369,7 +369,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\edriver;..\network;..\fat;..\user;..\other</IncludePath>
+              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\util;..\edriver;..\network;..\fat;..\user;..\other</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -635,6 +635,16 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>util</GroupName>
+          <Files>
+            <File>
+              <FileName>util.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\util\util.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>edriver</GroupName>
           <Files>
             <File>
@@ -746,6 +756,11 @@
               <FileName>tcp.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\network\tcp.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>dns.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\network\dns.cpp</FilePath>
             </File>
           </Files>
         </Group>

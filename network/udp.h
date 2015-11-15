@@ -14,7 +14,7 @@ class UDPMessage
 class UDP
 {
 	public:
-		u8 begin(SOCKET ps,uint16 port);
+		u8 begin(SOCKET ps,uint16_t port);
 		u16 send(UDPMessage *msg);
 		u16 sendto(u8* rIP,u16 rPort,u8* buf,u16 len);
 		u16 recv(u8* buf);

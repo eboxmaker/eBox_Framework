@@ -143,8 +143,8 @@ other 2 channels couldn't be used, for there's no available memory.\n
 */
 void W5500::sysinit( u8 * tx_size, u8 * rx_size  )
 {
-  int16 i = 0;
-  int16 ssum,rsum;
+  int16_t i = 0;
+  int16_t ssum,rsum;
 #ifdef __DEF_IINCHIP_DBG__
 //  printf("sysinit()\r\n");
 #endif
@@ -160,8 +160,8 @@ void W5500::sysinit( u8 * tx_size, u8 * rx_size  )
 //         printf("tx_size[%d]: %d, Sn_TXMEM_SIZE = %d\r\n",i, tx_size[i], IINCHIP_READ(Sn_TXMEM_SIZE(i)));
 //         printf("rx_size[%d]: %d, Sn_RXMEM_SIZE = %d\r\n",i, rx_size[i], IINCHIP_READ(Sn_RXMEM_SIZE(i)));
 #endif
-    SSIZE[i] = (int16)(0);
-    RSIZE[i] = (int16)(0);
+    SSIZE[i] = (int16_t)(0);
+    RSIZE[i] = (int16_t)(0);
 
 
     if (ssum <= 16384)
@@ -169,22 +169,22 @@ void W5500::sysinit( u8 * tx_size, u8 * rx_size  )
          switch( tx_size[i] )
       {
       case 1:
-        SSIZE[i] = (int16)(1024);
+        SSIZE[i] = (int16_t)(1024);
         break;
       case 2:
-        SSIZE[i] = (int16)(2048);
+        SSIZE[i] = (int16_t)(2048);
         break;
       case 4:
-        SSIZE[i] = (int16)(4096);
+        SSIZE[i] = (int16_t)(4096);
         break;
       case 8:
-        SSIZE[i] = (int16)(8192);
+        SSIZE[i] = (int16_t)(8192);
         break;
       case 16:
-        SSIZE[i] = (int16)(16384);
+        SSIZE[i] = (int16_t)(16384);
       break;
       default :
-        RSIZE[i] = (int16)(2048);
+        RSIZE[i] = (int16_t)(2048);
         break;
       }
     }
@@ -194,22 +194,22 @@ void W5500::sysinit( u8 * tx_size, u8 * rx_size  )
          switch( rx_size[i] )
       {
       case 1:
-        RSIZE[i] = (int16)(1024);
+        RSIZE[i] = (int16_t)(1024);
         break;
       case 2:
-        RSIZE[i] = (int16)(2048);
+        RSIZE[i] = (int16_t)(2048);
         break;
       case 4:
-        RSIZE[i] = (int16)(4096);
+        RSIZE[i] = (int16_t)(4096);
         break;
       case 8:
-        RSIZE[i] = (int16)(8192);
+        RSIZE[i] = (int16_t)(8192);
         break;
       case 16:
-        RSIZE[i] = (int16)(16384);
+        RSIZE[i] = (int16_t)(16384);
         break;
       default :
-        RSIZE[i] = (int16)(2048);
+        RSIZE[i] = (int16_t)(2048);
         break;
       }
     }
@@ -220,20 +220,20 @@ void W5500::sysinit( u8 * tx_size, u8 * rx_size  )
 }
 
 
-u8 W5500::getISR(u8 s)
+u8 W5500::getISR(SOCKET s)
 {
   return I_STATUS[s];
 }
-void W5500::putISR(u8 s, u8 val)
+void W5500::putISR(SOCKET s, u8 val)
 {
    I_STATUS[s] = val;
 }
 
-u16 W5500::getRxMAX(u8 s)
+u16 W5500::getRxMAX(SOCKET s)
 {
    return RSIZE[s];
 }
-u16 W5500::getTxMAX(u8 s)
+u16 W5500::getTxMAX(SOCKET s)
 {
    return SSIZE[s];
 }
@@ -384,11 +384,11 @@ void W5500::setSIR(u8 val)
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-void W5500::setSn_IMR(u8 s,u8 mask)
+void W5500::setSn_IMR(SOCKET s,u8 mask)
 {
   write( Sn_IMR(s), mask);
 }
-u8 W5500::getSn_IMR(u8 s)
+u8 W5500::getSn_IMR(SOCKET s)
 {
   return read(Sn_IMR(s));
 }
@@ -396,13 +396,13 @@ u8 W5500::getSn_IMR(u8 s)
 /**
 @brief  This sets the maximum segment size of TCP in Active Mode), while in Passive Mode this is set by peer
 */
-void W5500::setSn_MSS(u8 s, u16 Sn_MSSR)
+void W5500::setSn_MSS(SOCKET s, u16 Sn_MSSR)
 {
   write( Sn_MSSR0(s), (u8)((Sn_MSSR & 0xff00) >> 8));
   write( Sn_MSSR1(s), (u8)(Sn_MSSR & 0x00ff));
 }
 
-void W5500::setSn_TTL(u8 s, u8 ttl)
+void W5500::setSn_TTL(SOCKET s, u8 ttl)
 {    
    write( Sn_TTL(s) , ttl);
 }
@@ -411,7 +411,7 @@ void W5500::setSn_TTL(u8 s, u8 ttl)
 
 These below functions are used to read the Interrupt & Soket Status register
 */
-u8  W5500::getSn_IR(u8 s)
+u8  W5500::getSn_IR(SOCKET s)
 {
    return read(Sn_IR(s));
 }
@@ -419,18 +419,18 @@ u8  W5500::getSn_IR(u8 s)
 /**
 @brief   get socket status
 */
-u8  W5500::getSn_SR(u8 s)
+u8  W5500::getSn_SR(SOCKET s)
 {
    return read(Sn_SR(s));
 }
-void W5500::getSn_DIPR(u8 s,u8* ip)
+void W5500::getSn_DIPR(SOCKET s,u8* ip)
 {
 	ip[0] = read(Sn_DIPR0(s));
 	ip[1] = read(Sn_DIPR1(s));
 	ip[2] = read(Sn_DIPR2(s));
 	ip[3] = read(Sn_DIPR3(s));
 }
-u16 W5500::getSn_DPORT(u8 s)
+u16 W5500::getSn_DPORT(SOCKET s)
 {
 	u16 tmp;
 	tmp = (read(Sn_DPORT0(s))<<8) + read(Sn_DPORT1(s));
@@ -443,7 +443,7 @@ u16 W5500::getSn_DPORT(u8 s)
 This gives free buffer size of transmit buffer. This is the data size that user can transmit.
 User shuold check this value first and control the size of transmitting data
 */
-u16 W5500::getSn_TX_FSR(u8 s)
+u16 W5500::getSn_TX_FSR(SOCKET s)
 {
   u16 val=0,val1=0;
   do
@@ -485,7 +485,7 @@ u16 W5500::getSn_RX_RSR(SOCKET s)
 This function read the Tx write pointer register and after copy the data in buffer update the Tx write pointer
 register. User should read upper byte first and lower byte later to get proper value.
 */
-void W5500::send_data_processing(u8 s, u8 *data, u16 len)
+void W5500::send_data_processing(SOCKET s, u8 *data, u16 len)
 {
   u16 ptr = 0;
   u32 addrbsb = 0;
@@ -515,7 +515,7 @@ This function read the Rx read pointer register
 and after copy the data from receive buffer update the Rx write pointer register.
 User should read upper byte first and lower byte later to get proper value.
 */
-void W5500::recv_data_processing(u8 s, u8 *data, u16 len)
+void W5500::recv_data_processing(SOCKET s, u8 *data, u16 len)
 {
   u16 ptr = 0;
   u32 addrbsb = 0;
@@ -537,7 +537,7 @@ void W5500::recv_data_processing(u8 s, u8 *data, u16 len)
   write( Sn_RX_RD1(s), (u8)(ptr & 0x00ff));
 }
 
-void W5500::setSn_IR(u8 s, u8 val)
+void W5500::setSn_IR(SOCKET s, u8 val)
 {
     write(Sn_IR(s), val);
 }

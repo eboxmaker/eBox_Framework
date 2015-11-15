@@ -1,6 +1,6 @@
 #include "udp.h"
 
-u8 UDP::begin(SOCKET ps,uint16 port)
+u8 UDP::begin(SOCKET ps,uint16_t port)
 {
 	u8 ret;
 	s= ps;
