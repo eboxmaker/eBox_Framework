@@ -1,6 +1,77 @@
 #include "dns.h"
 #include "string.h"
 
+int DNS::begin(SOCKET p_s,uint16_t p_port)
+{
+	int ret = 0;
+	s = p_s;
+	port =p_port;
+	msg_id = 0x1122;
+	return ret;
+}
+
+/*
+********************************************************************************
+*              MAKE DNS QUERY AND PARSE THE REPLY
+*
+* Description : This function makes DNS query message and parses the reply from DNS server.
+* Arguments   : name - is a pointer to the domain name.
+* Returns     : if succeeds : 1, fails : -1
+* Note        :
+********************************************************************************
+*/
+uint8_t DNS::query(uint8_t * name)
+{
+	int i;
+	int ret = 0;
+  static uint32_t dns_wait_time = 0;
+  struct dhdr dhp;
+  uint8_t ip[4];
+  uint16_t len, port;
+	uint8_t BUFPUB[256];
+	do
+	{
+		switch(eth->getSn_SR(s))
+		{
+			case SOCK_UDP:
+				if ((len = eth->getSn_RX_RSR(s)) > 0)
+				{
+					if (len > MAX_DNS_BUF_SIZE) len = MAX_DNS_BUF_SIZE;
+					len = _recvfrom(s, BUFPUB, len, ip, &port);
+					if(parseMSG(&dhp, BUFPUB))
+					{
+						_close(s);
+						ret = DNS_RET_SUCCESS;
+						break;
+					}
+					else 
+						dns_wait_time = DNS_RESPONSE_TIMEOUT;
+				}
+				else
+				{
+					delay_ms(1000);
+					dns_wait_time++;
+				}
+				if(dns_wait_time >= DNS_RESPONSE_TIMEOUT)   // 3ÃÊ
+				{
+					_close(s);
+					ret = DNS_RET_FAIL;
+					return ret;
+				}
+				break;
+			case SOCK_CLOSED:
+				_socket(s, Sn_MR_UDP, port, 0);
+				len = makequery(0, name, BUFPUB, MAX_DNS_BUF_SIZE);
+				i = 0;
+				do{
+					ret = _sendto(s, BUFPUB, len, eth->dns, IPPORT_DOMAIN);
+					i++;
+				}while(ret == 0 && i < 5);
+				break;         
+		}
+	}while(ret != DNS_RET_SUCCESS);
+	return ret;
+}
 
 /*
 ********************************************************************************
@@ -332,73 +403,5 @@ int DNS::makequery(uint16_t op, uint8_t * name, uint8_t * buf, uint16_t len)
   return ((int)((uint32_t)(cp) - (uint32_t)(buf)));
 }
 
-
-/*
-********************************************************************************
-*              MAKE DNS QUERY AND PARSE THE REPLY
-*
-* Description : This function makes DNS query message and parses the reply from DNS server.
-* Arguments   : name - is a pointer to the domain name.
-* Returns     : if succeeds : 1, fails : -1
-* Note        :
-********************************************************************************
-*/
-uint8_t DNS::query(uint8_t * name)
-{
-	int ret;
-  static uint32_t dns_wait_time = 0;
-  struct dhdr dhp;
-  uint8_t ip[4];
-  uint16_t len, port;
-	uint8_t BUFPUB[256];
-
-  switch(eth->getSn_SR(s))
-  {
-    case SOCK_UDP:
-      if ((len = eth->getSn_RX_RSR(s)) > 0)
-      {
-        if (len > MAX_DNS_BUF_SIZE) len = MAX_DNS_BUF_SIZE;
-        len = _recvfrom(s, BUFPUB, len, ip, &port);
-        if(parseMSG(&dhp, BUFPUB))
-        {
-          _close(s);
-          return DNS_RET_SUCCESS;
-        }
-        else 
-          dns_wait_time = DNS_RESPONSE_TIMEOUT;
-      }
-      else
-      {
-        delay_ms(1000);
-        dns_wait_time++;
-        //if(ConfigMsg.debug) printf("dns wait time=%d\r\n", dns_wait_time);
-      }
-      if(dns_wait_time >= DNS_RESPONSE_TIMEOUT)   // 3ÃÊ
-      {
-        _close(s);
-        return DNS_RET_FAIL;
-      }
-      break;
-    case SOCK_CLOSED:
-      dns_wait_time = 0;
-      _socket(s, Sn_MR_UDP, port, 0);
-      len = makequery(0, name, BUFPUB, MAX_DNS_BUF_SIZE);
-			do{
-				ret = _sendto(s, BUFPUB, len, eth->dns, IPPORT_DOMAIN);
-			}while(ret == 0);
-			break;         
-  }
-  return DNS_RET_PROGRESS;
-}
-
-
-int DNS::begin(SOCKET p_s,uint16_t p_port)
-{
-	int ret = 0;
-	s = p_s;
-	port =p_port;
-	msg_id = 0x1122;
-	return ret;
-}
 
 
