@@ -2,10 +2,9 @@
 #define __UDP_H
 #include "socket.h"
 #define  DNS_RESPONSE_TIMEOUT 3 // 3 seconds
-#define  DNS_RETRY            100//3 times
 #define  DNS_RET_PROGRESS  0
-#define  DNS_RET_FAIL      1
-#define  DNS_RET_SUCCESS   2
+#define  DNS_RET_SUCCESS      1
+#define  DNS_RET_FAIL   2
 
 
 #define  INITRTT     2000L	/* Initial smoothed response time */
@@ -65,7 +64,6 @@ struct dhdr
 	uint16_t  arcount;	/* Additional record count */
 };
 
-
 #define	MAX_DNS_BUF_SIZE	256		/* maximum size of DNS buffer. */
 
 class DNS
@@ -73,7 +71,6 @@ class DNS
 	public:
 		uint8_t domain_ip[4];
 		uint16_t msg_id;
-
 	public:
 		int 		begin(SOCKET p_s,uint16_t p_port);
 		uint8_t query(uint8_t *name);
