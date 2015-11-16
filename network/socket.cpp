@@ -156,7 +156,7 @@ void _disconnect(SOCKET s)
    eth->write( Sn_CR(s) ,Sn_CR_DISCON);
 
    /* wait to process the command... */
-   while( eth->read(Sn_CR(s) ) )
+   while( eth->read(Sn_CR(s)) )
       ;
    /* ------- */
 }

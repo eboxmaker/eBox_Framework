@@ -50,10 +50,40 @@ int TCPCLIENT::connect(u8* IP,uint16_t Port)
 		ret = -1;
 	return ret;
 }
+uint8_t TCPCLIENT::status()
+{	 
+  return eth->getSn_SR(s);
+}
+int TCPCLIENT::rx_availabe()
+{
+   if( eth->getRxMAX(s) > 0)
+        return 1;
+   else
+       return 0;
+}
+uint8_t	TCPCLIENT::is_connected()
+{
+    uint8_t tmp = status();
+    return !(tmp == SOCK_CLOSED || tmp == SOCK_LISTEN || tmp == SOCK_FIN_WAIT ||\
+        (tmp == SOCK_CLOSE_WAIT && !rx_availabe()));
+}
+
+void TCPCLIENT::stop()
+{
+    uint32_t start = millis();  
+    _disconnect(s);
+    // wait a second for the connection to close
+    while (status() != SOCK_CLOSED && millis() - start < 1000)
+        delay_ms(1);
+    if(status() == SOCK_CLOSED)
+        _close(s);
+}
+
 u16 TCPCLIENT::recv(u8* buf)
 {
 	u16 len = 0;
 
+    if(is_connected())
 	if(eth->getSn_IR(s) & Sn_IR_RECV)
 	{
 		eth->setSn_IR(s, Sn_IR_RECV);/*Sn_IRµÄµÚ0Î»ÖÃ1*/

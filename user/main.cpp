@@ -10,62 +10,53 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 
 
-#include "string.h"
 #include "ebox.h"
 #include "w5500.h"
 #include "tcp.h"
-#include "dns.h"
 
-u8 mac[6]={0x00,0x08,0xdc,0x11,0x11,0x11};/*定义Mac变量*/
-u8 ip[4]={192,168,1,199};/*定义lp变量*/
-u8 sub[4]={255,255,255,0};/*定义subnet变量*/
-u8 gw[4]={192,168,1,1};/*定义gateway变量*/
-u8 dns[4] = {192,168,1,1};
+  u8 mac[6]={0x00,0x08,0xdc,0x11,0x11,0x11};/*定义Mac变量*/
+  u8 lip[4]={192,168,1,119};/*定义lp变量*/
+  u8 sub[4]={255,255,255,0};/*定义subnet变量*/
+  u8 gw[4]={192,168,1,1};/*定义gateway变量*/
+  u8 dns[4]={192,168,1,1};/*定dns变量*/
+	
+  u8 rip[4]={192,168,1,112};/*定义lp变量*/
+	u8 buf[1024];
+  u8 ip[6];
+	u16 len;
 
-
-DNS ddns;
 	
 W5500 w5500(&PC13,&PC14,&PC15,&spi2);
 	
-int ret;
-u8 name[]="www.nciae.edu.cn";
-u8 buf[6];
+TCPCLIENT tcp;
+
+
 
 void setup()
 {
 	ebox_init();
-	uart1.begin(115200);
-	ret = sizeof(long);
-	ret = sizeof(int);
-	ret = sizeof(short int);
-	ret = sizeof(short);
+	uart1.begin(9600);
 
-	w5500.begin(2,mac,ip,sub,gw,dns);
-
+	w5500.begin(2,mac,lip,sub,gw,dns);
+	
 	
 	attach_eth_to_socket(&w5500);
 	
-  w5500.getMAC (buf);
-  uart1.printf("mac : %02x.%02x.%02x.%02x.%02x.%02x\r\n", buf[0],buf[1],buf[2],buf[3],buf[4],buf[5]);
-  w5500.getIP (buf);
-  uart1.printf("IP : %d.%d.%d.%d\r\n", buf[0],buf[1],buf[2],buf[3]);
-  w5500.getSubnet(buf);
-  uart1.printf("mask : %d.%d.%d.%d\r\n", buf[0],buf[1],buf[2],buf[3]);
-  w5500.getGateway(buf);
-  uart1.printf("GW : %d.%d.%d.%d\r\n", buf[0],buf[1],buf[2],buf[3]);
+  w5500.getMAC (ip);
+  uart1.printf("mac : %02x.%02x.%02x.%02x.%02x.%02x\r\n", ip[0],ip[1],ip[2],ip[3],ip[4],ip[5]);
+  w5500.getIP (ip);
+  uart1.printf("IP : %d.%d.%d.%d\r\n", ip[0],ip[1],ip[2],ip[3]);
+  w5500.getSubnet(ip);
+  uart1.printf("mask : %d.%d.%d.%d\r\n", ip[0],ip[1],ip[2],ip[3]);
+  w5500.getGateway(ip);
+  uart1.printf("GW : %d.%d.%d.%d\r\n", ip[0],ip[1],ip[2],ip[3]);
   uart1.printf("Network is ready.\r\n");
 	
-	ddns.begin(SOCKET1,3000);
-	
-	ret = ddns.query(name);
-	if(ret == DNS_RET_SUCCESS) /*发送DNS请求*/
-		uart1.printf("Get [%s]'s IP address [%d.%d.%d.%d] from %d.%d.%d.%d\r\n",name,ddns.domain_ip[0],ddns.domain_ip[1],ddns.domain_ip[2],ddns.domain_ip[3],dns[0],dns[1],dns[2],dns[3]);
-	else if(ret == DNS_RET_FAIL)
-    uart1.printf("获取超时\r\n");
-	else
-    uart1.printf("未知错误.\r\n");
-}
+	tcp.begin(SOCKET7,3000);	
+	tcp.connect(rip,8080);
 
+
+}
 int main(void)
 {
 	setup();
@@ -73,7 +64,26 @@ int main(void)
 	while(1)
 	{
 
+		len = tcp.recv(buf);
+		if(len > 0)
+		{
+			uart1.printf("\r\n============================");		
+			uart1.printf("\r\n本地端口:%d",tcp.localPort );
+			uart1.printf("\r\n消息来源:%d.%d.%d.%d:%d", tcp.remoteIP[0],tcp.remoteIP[1],tcp.remoteIP[2],tcp.remoteIP[3],tcp.remotePort);
+			uart1.printf("\r\n数据长度:%d",len);		
+			uart1.printf("\r\n数据内容:");		
+			uart1.printf((const char *)buf);
+			tcp.send(buf,len);
+		}
+
+
+
+
+		
+
 	}
+
+
 }
 
 

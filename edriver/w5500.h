@@ -33,7 +33,7 @@ static u16 RSIZE[MAX_SOCK_NUM]; /**< Max Rx buffer size by each channel */
 class W5500
 {
 	public:
-		uint8_t mac[4];
+		uint8_t mac[6];
 		uint8_t ip[4];
 		uint8_t	subnet[4];
 		uint8_t gw[4];
