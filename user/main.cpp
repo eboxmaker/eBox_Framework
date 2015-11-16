@@ -12,7 +12,7 @@ Copyright 2015 shentq. All Rights Reserved.
 
 #include "ebox.h"
 #include "w5500.h"
-#include "tcp.h"
+#include "PubSubClient.h"
 
   u8 mac[6]={0x00,0x08,0xdc,0x11,0x11,0x11};/*定义Mac变量*/
   u8 lip[4]={192,168,1,119};/*定义lp变量*/
@@ -20,7 +20,7 @@ Copyright 2015 shentq. All Rights Reserved.
   u8 gw[4]={192,168,1,1};/*定义gateway变量*/
   u8 dns[4]={192,168,1,1};/*定dns变量*/
 	
-  u8 rip[4]={192,168,1,112};/*定义lp变量*/
+  u8 rip[4]={192,84,45,43};/*定义lp变量*/
 	u8 buf[1024];
   u8 ip[6];
 	u16 len;
@@ -29,17 +29,17 @@ Copyright 2015 shentq. All Rights Reserved.
 W5500 w5500(&PC13,&PC14,&PC15,&spi2);
 	
 TCPCLIENT tcp;
+  
+PubSubClient mqtt(&tcp,0,300);
 
-
-
+uint8_t xbuf[1000];
+  uint8_t xlen;
 void setup()
 {
 	ebox_init();
 	uart1.begin(9600);
 
 	w5500.begin(2,mac,lip,sub,gw,dns);
-	
-	
 	attach_eth_to_socket(&w5500);
 	
   w5500.getMAC (ip);
@@ -52,10 +52,10 @@ void setup()
   uart1.printf("GW : %d.%d.%d.%d\r\n", ip[0],ip[1],ip[2],ip[3]);
   uart1.printf("Network is ready.\r\n");
 	
-	tcp.begin(SOCKET7,3000);	
-	tcp.connect(rip,8080);
-
-
+	mqtt.begin(rip,1883);
+	mqtt.connect("xxxxx");
+    mqtt.subscribe("planets/earth");
+    mqtt.readPacket(&xlen);
 }
 int main(void)
 {

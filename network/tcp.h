@@ -6,11 +6,11 @@ class TCPCLIENT
 {
 	public:
 		int     begin(SOCKET ps,uint16_t port);
-		int		connect(u8* IP,uint16_t Port);
+		bool	connect(u8* IP,uint16_t Port);
 	
 		uint8_t status();//网卡当前的状态
-		int		rx_availabe();//接收缓冲区是否可用
-		uint8_t	is_connected();//是否存在链接
+		bool	available();//接收缓冲区是否可用
+		bool	is_connected();//是否存在链接
 		void	stop();
 	
 		u16     recv(u8* buf);

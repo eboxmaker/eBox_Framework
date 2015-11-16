@@ -12,11 +12,11 @@ void attach_eth_to_socket(W5500* e)
 }
 /**
 @brief   This Socket function initialize the channel in perticular mode, and set the port and wait for W5200 done it.
-@return  0 for sucess else -1.
+@return  1 for sucess else -1,-2.
 */
 int _socket(SOCKET s, int8_t protocol, uint16_t port, int8_t flag)
 {
-   int ret = 0;
+   int ret = 1;
 	 u16 i;
    if (
         ((protocol&0x0F) == Sn_MR_TCP)    ||
@@ -76,11 +76,11 @@ void _close(SOCKET s)
 }
 /**
 @brief   This function established  the connection for the channel in passive (server) mode. This function waits for the request from the peer.
-@return  0 for success else -1.
+@return  1 for success else -1.
 */
 int _listen(SOCKET s)
 {
-   int ret = 0;
+   int ret = 1;
    if (eth->read( Sn_SR(s) ) == SOCK_INIT)
    {
       eth->write( Sn_CR(s) ,Sn_CR_LISTEN);
@@ -88,7 +88,6 @@ int _listen(SOCKET s)
       while( eth->read(Sn_CR(s) ) )
          ;
       /* ------- */
-      ret = 0;
    }
    else
    {
@@ -100,17 +99,14 @@ int _listen(SOCKET s)
 @brief   This function established  the connection for the channel in Active (client) mode.
       This function waits for the untill the connection is established.
 
-@return  0 for success else 255.
+@return  1 for success else -1,-2.
 */
 int _connect(SOCKET s, uint8_t * addr, uint16_t port)
 {
-    int ret = 0;
-    if
-        (
-            ((addr[0] == 0xFF) && (addr[1] == 0xFF) && (addr[2] == 0xFF) && (addr[3] == 0xFF)) ||
-            ((addr[0] == 0x00) && (addr[1] == 0x00) && (addr[2] == 0x00) && (addr[3] == 0x00)) ||
-            (port == 0x00)
-        )
+    int ret = 1;
+    if(((addr[0] == 0xFF) && (addr[1] == 0xFF) && (addr[2] == 0xFF) && (addr[3] == 0xFF)) ||
+        ((addr[0] == 0x00) && (addr[1] == 0x00) && (addr[2] == 0x00) && (addr[3] == 0x00)) ||
+        (port == 0x00))
     {
       ret = -1;
     }
@@ -170,8 +166,10 @@ uint16_t _send(SOCKET s, const uint8_t * buf, uint16_t len)
   uint16_t ret=0;
   uint16_t freesize=0;
 
-  if (len > eth->getTxMAX(s)) ret = eth->getTxMAX(s); // check size not to exceed MAX size.
-  else ret = len;
+  if (len > eth->getTxMAX(s)) 
+      ret = 0; // check size not to exceed MAX size.
+  else 
+      ret = len;
 
   // if freebuf is available, start.
   do
@@ -243,8 +241,10 @@ uint16_t _sendto(SOCKET s, const uint8_t * buf, uint16_t len, uint8_t * addr, ui
 {
    uint16_t ret=0;
 
-   if (len > eth->getTxMAX(s)) ret = eth->getTxMAX(s); // check size not to exceed MAX size.
-   else ret = len;
+   if (len > eth->getTxMAX(s)) 
+       ret = eth->getTxMAX(s); // check size not to exceed MAX size.
+   else 
+       ret = len;
 
    if( ((addr[0] == 0x00) && (addr[1] == 0x00) && (addr[2] == 0x00) && (addr[3] == 0x00)) || ((port == 0x00)) )//||(ret == 0) )
    {

@@ -10,9 +10,9 @@ int TCPCLIENT::begin(SOCKET ps,uint16_t port)
 	
 	return ret;
 }
-int TCPCLIENT::connect(u8* IP,uint16_t Port)
+bool TCPCLIENT::connect(u8* IP,uint16_t Port)
 {
-	int ret = 0;
+	bool ret = false;
 	u8 i = 20;
 	u8 tmp;
 	remoteIP[0] = IP[0];
@@ -23,49 +23,49 @@ int TCPCLIENT::connect(u8* IP,uint16_t Port)
 	DBG("\r\nremote server:%d.%d.%d.%d:%d",remoteIP[0],remoteIP[1],remoteIP[2],remoteIP[3],remotePort);
 	while(--i)
 	{
-	 tmp =eth->getSn_SR(s);
-	 switch(tmp)/*获取socket0的状态*/
-    {
-		 case SOCK_INIT:
+		tmp =eth->getSn_SR(s);
+		switch(tmp)/*获取socket0的状态*/
+		{
+		case SOCK_INIT:
 			 ret = _connect(s, remoteIP ,remotePort);/*在TCP模式下向服务器发送连接请求*/ 
-		 	 DBG("\r\nconnnect() return = %d",ret);
-		 	 DBG("\r\nconnecting to server...");
+			 DBG("\r\nconnnect() return = %d",ret);
+			 DBG("\r\nconnecting to server...");
 		 break;
 		 case SOCK_ESTABLISHED:
 			   if(eth->getSn_IR(s) & Sn_IR_CON)
-         {
-            eth->setSn_IR(s, Sn_IR_CON);/*Sn_IR的第0位置1*/
-         }
+				 {
+					eth->setSn_IR(s, Sn_IR_CON);/*Sn_IR的第0位置1*/
+				 }
 				 DBG("\r\nconnected !");
 		 return ret;
 		 case SOCK_CLOSED:
-			ret = _socket(s,Sn_MR_TCP,localPort,Sn_MR_ND);/*打开socket的一个端口*/
-		  DBG("\r\nopen local port:%d,use %d socket",localPort,s);
-		 	DBG("\r\n_socket() return = %d",ret);
+			_socket(s,Sn_MR_TCP,localPort,Sn_MR_ND);/*打开socket的一个端口*/
+			DBG("\r\nopen local port:%d,use %d socket",localPort,s);
+			DBG("\r\n_socket() return = %d",ret);
 		 break;
 		}
 		delay_ms(500);
 	}
 	if(i == 0)
-		ret = -1;
+		ret = false;
 	return ret;
 }
 uint8_t TCPCLIENT::status()
 {	 
   return eth->getSn_SR(s);
 }
-int TCPCLIENT::rx_availabe()
+bool TCPCLIENT::available()
 {
-   if( eth->getRxMAX(s) > 0)
-        return 1;
-   else
-       return 0;
+	if( eth->getRxMAX(s) > 0)
+		return true;
+	else
+		return false;
 }
-uint8_t	TCPCLIENT::is_connected()
+bool TCPCLIENT::is_connected()
 {
     uint8_t tmp = status();
     return !(tmp == SOCK_CLOSED || tmp == SOCK_LISTEN || tmp == SOCK_FIN_WAIT ||\
-        (tmp == SOCK_CLOSE_WAIT && !rx_availabe()));
+        (tmp == SOCK_CLOSE_WAIT && !available()));
 }
 
 void TCPCLIENT::stop()

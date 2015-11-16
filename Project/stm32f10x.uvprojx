@@ -762,6 +762,11 @@
               <FileType>8</FileType>
               <FilePath>..\network\dns.cpp</FilePath>
             </File>
+            <File>
+              <FileName>PubSubClient.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\network\PubSubClient.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
