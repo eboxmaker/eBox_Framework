@@ -23,7 +23,7 @@ bool TCPCLIENT::connect(u8* IP,uint16_t Port)
 	DBG("\r\nremote server:%d.%d.%d.%d:%d",remoteIP[0],remoteIP[1],remoteIP[2],remoteIP[3],remotePort);
 	while(--i)
 	{
-		tmp =eth->getSn_SR(s);
+		tmp =status();
 		switch(tmp)/*获取socket0的状态*/
 		{
 		case SOCK_INIT:
@@ -32,14 +32,10 @@ bool TCPCLIENT::connect(u8* IP,uint16_t Port)
 			 DBG("\r\nconnecting to server...");
 		 break;
 		 case SOCK_ESTABLISHED:
-			   if(eth->getSn_IR(s) & Sn_IR_CON)
-				 {
-					eth->setSn_IR(s, Sn_IR_CON);/*Sn_IR的第0位置1*/
-				 }
 				 DBG("\r\nconnected !");
 		 return ret;
 		 case SOCK_CLOSED:
-			_socket(s,Sn_MR_TCP,localPort,Sn_MR_ND);/*打开socket的一个端口*/
+			ret = _socket(s,Sn_MR_TCP,localPort,Sn_MR_ND);/*打开socket的一个端口*/
 			DBG("\r\nopen local port:%d,use %d socket",localPort,s);
 			DBG("\r\n_socket() return = %d",ret);
 		 break;
@@ -50,17 +46,21 @@ bool TCPCLIENT::connect(u8* IP,uint16_t Port)
 		ret = false;
 	return ret;
 }
+//返回socket状态
 uint8_t TCPCLIENT::status()
 {	 
-  return eth->getSn_SR(s);
+  return socket_status(s);
 }
-bool TCPCLIENT::available()
+
+//返回接收缓冲区长度
+uint16_t TCPCLIENT::available()
 {
-	if( eth->getRxMAX(s) > 0)
-		return true;
-	else
-		return false;
+    return recv_available(s);
 }
+
+//判断链接是否可用
+//1:可用
+//0：不用
 bool TCPCLIENT::is_connected()
 {
     uint8_t tmp = status();
@@ -68,6 +68,7 @@ bool TCPCLIENT::is_connected()
         (tmp == SOCK_CLOSE_WAIT && !available()));
 }
 
+//按照标准的断开链接过程，断开链接
 void TCPCLIENT::stop()
 {
     uint32_t start = millis();  
@@ -79,54 +80,41 @@ void TCPCLIENT::stop()
         _close(s);
 }
 
+//接收缓冲区所有内容
+//非阻塞
 u16 TCPCLIENT::recv(u8* buf)
 {
-	u16 len = 0;
-
+	u16 llen = 0;
     if(is_connected())
-	if(eth->getSn_IR(s) & Sn_IR_RECV)
 	{
-		eth->setSn_IR(s, Sn_IR_RECV);/*Sn_IR的第0位置1*/
-		len=eth->getSn_RX_RSR(s);/*len为已接收数据的大小*/
-		if(len>0)
-		{
-			_recv(s,buf,len);/*W5500接收来自Sever的数据*/
-				recvFlag = 0;
+		llen = available();/*len为已接收数据的大小*/
+		if(llen > 0){
+			_recv(s,buf,llen);/*W5500接收来自Sever的数据*/
 		}	
 	}
-
-		return len;
+	return llen;
 }
-//u16 TCPCLIENT::interruptRecv(u8* buf)
-//{
-//	u16 len;
-//	u8 tmp2,tmp3;
+//读取特定长度
+//非阻塞
+u16 TCPCLIENT::recv(u8* buf,uint16_t len)
+{
+    uint16_t ret;
+    uint16_t llen;
+    if(is_connected())
+	{
+		llen = available();/*llen为已接收数据的大小*/
+        if(llen > 0){    
+            if(len >= llen){
+                ret = _recv(s,buf,llen);/*W5500接收来自Sever的数据*/
+            }	
+            else{
+                ret = _recv(s,buf,len);/*W5500接收来自Sever的数据*/
+            }
+        }       
+	}
+    return ret;
+}
 
-//	tmp2 = eth->getSIR();
-//	tmp3 = eth->getSn_IR(s);
-//	#if 0
-//	DBG("SIr:0x%02x",tmp2);
-//	DBG("Sn_Ir:0x%02x",tmp3);
-//	#endif
-//	if(tmp2&(1<<s))
-//	{
-//		eth->setSIR(1<<s);/*SIR的第0位置1*/
-//	}
-//	
-//	if(tmp3&Sn_IR_RECV)
-//	{
-//		eth->setSn_IR(s, Sn_IR_RECV);/*Sn_IR的第2位置1*/
-//		
-//		len=eth->getSn_RX_RSR(s);/*len为已接收数据的大小*/
-//		if(len>0)
-//		{
-//			_recv(s,buf,len);/*W5500接收来自Sever的数据*/
-//			recvFlag = 0;
-//		}
-//	}
-//	
-//	return len;
-//}
 u16 TCPCLIENT::send(u8* buf,u16 len)
 {
 	return _send(s,buf,len);
@@ -140,59 +128,49 @@ int TCPSERVER::begin(SOCKET ps,uint16_t port)
 	
 	s = ps;
 	localPort = port;
-  DBG("\r\ncreat TCP server !");
+    DBG("\r\ncreat TCP server !");
 
 	while(--i)
 	{
-	 tmp =eth->getSn_SR(s);
-	 switch(tmp)/*获取socket0的状态*/
-   {
-         case SOCK_INIT:/*socket初始化完成*/
-           ret = _listen(s);/*在TCP模式下向服务器发送连接请求*/
-					 if(ret == 0)
-					 {
-						 DBG("\r\nlisten on port:%d,socket:%d",localPort,s);
-						 DBG("\r\nwait one connection !");
-						 return ret;
-					 }
-					 else
-						 DBG("\r\nerr code:%d",ret);
-						 
-           break;
-         case SOCK_CLOSED:/*socket关闭*/
-           ret = _socket(s,Sn_MR_TCP,localPort,Sn_MR_ND);/*打开socket的一个端口*/
-				   if(ret == 0)
-						 DBG("\r\nopen port:%d success !",localPort);
-           break;
-				 default :
-					 DBG("\r\nerr code:%d",tmp);
-					 break;
-
-	 }
+	 tmp = socket_status(s);/*获取socket的状态*/
+    switch(tmp){
+        case SOCK_INIT:/*socket初始化完成*/
+            ret = _listen(s);/*在TCP模式下向服务器发送连接请求*/
+            if(ret == 1){
+                DBG("\r\nlisten on port:%d,socket:%d",localPort,s);
+                DBG("\r\nwait one connection !");
+                return ret;
+            }
+            else
+                DBG("\r\nerr code:%d",ret);
+            break;
+        case SOCK_CLOSED:/*socket关闭*/
+            ret = _socket(s,Sn_MR_TCP,localPort,Sn_MR_ND);/*打开socket的一个端口*/
+            if(ret == 0)
+                DBG("\r\nopen port:%d success !",localPort);
+            break;
+       default :
+            DBG("\r\nerr code:%d",tmp);
+            break;
+    }
  }
 	return ret;
 }
 u16 TCPSERVER::recv(u8* buf)
 {
 	u16 len = 0;
-	u8 tmp;
 	
-	 tmp = eth->getSn_SR(s);
-	 switch(tmp)/*获取socket0的状态*/
-	 {
-      case SOCK_ESTABLISHED:/*socket连接建立*/
-				 if(eth->getSn_IR(s) & Sn_IR_CON)
-				 {
-						eth->setSn_IR(s, Sn_IR_CON);/*Sn_IR的第0位置1*/
-					  eth->getSn_DIPR(s,remoteIP);
-						remotePort = eth->getSn_DPORT(s);
-						DBG("\r\none tcp client connected !");
-						DBG("\r\nclient info:%d.%d.%d.%d:%d !",remoteIP[0],remoteIP[1],remoteIP[2],remoteIP[3],remotePort);
-				 }
-
-				len = eth->getSn_RX_RSR(s);/*len为已接收数据的大小*/
-				if(len>0)
-				{
+	 switch(socket_status(s)){/*获取socket0的状态*/
+          case SOCK_ESTABLISHED:/*socket连接建立*/
+                if(client_connecte_event(s)){
+                    get_remote_ip(s,remoteIP);
+                    remotePort = get_remote_port(s);
+                    DBG("\r\none tcp client connected !");
+                    DBG("\r\nclient info:%d.%d.%d.%d:%d !",remoteIP[0],remoteIP[1],remoteIP[2],remoteIP[3],remotePort);
+                }
+				len = recv_available(s);/*len为已接收数据的大小*/
+				if(len>0)				
+                {
 					len = _recv(s,buf,len);/*W5200接收来自Sever的数据*/
 				}
 				break;
@@ -207,7 +185,6 @@ u16 TCPSERVER::recv(u8* buf)
 				DBG("\r\n链接已经关闭,开始重新打开服务器！");
 				begin(s,localPort);
 				break;
-			
 			default:
 			  break;
 
@@ -216,6 +193,7 @@ u16 TCPSERVER::recv(u8* buf)
 }
 void TCPSERVER::close()
 {
+    
 	 _close(s);
 }
 u16 TCPSERVER::send(u8* buf,u16 len)

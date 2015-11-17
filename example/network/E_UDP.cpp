@@ -15,14 +15,15 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "socket.h"
 #include "udp.h"
 
-  u8 mac[6]={0x00,0x08,0xdc,0x11,0x11,0x11};/*定义Mac变量*/
-  u8 lip[4]={192,168,1,119};/*定义lp变量*/
-  u8 sub[4]={255,255,255,0};/*定义subnet变量*/
-  u8 gw[4]={192,168,1,1};/*定义gateway变量*/
-  u8 dns[4]={192,168,1,1};/*定dns变量*/
-	
-  u8 ip[6];
-	u8 buf[100];
+extern void attach_eth_to_socket(W5500* e);
+u8 mac[6]={0x00,0x08,0xdc,0x11,0x11,0x11};/*定义Mac变量*/
+u8 lip[4]={192,168,1,119};/*定义lp变量*/
+u8 sub[4]={255,255,255,0};/*定义subnet变量*/
+u8 gw[4]={192,168,1,1};/*定义gateway变量*/
+u8 dns[4]={192,168,1,1};/*定dns变量*/
+
+u8 ip[6];
+u8 buf[100];
 	
 W5500 w5500(&PC13,&PC14,&PC15,&spi2);
 	
