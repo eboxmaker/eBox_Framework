@@ -369,7 +369,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\util;..\edriver;..\network;..\fat;..\user;..\other</IncludePath>
+              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\util;..\edriver;..\network;..\fat;..\user;..\other;..\network\MQTTPacket\src;..\network\MQTTPacket\samples</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -748,6 +748,11 @@
               <FilePath>..\network\socket.cpp</FilePath>
             </File>
             <File>
+              <FileName>dns.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\network\dns.cpp</FilePath>
+            </File>
+            <File>
               <FileName>udp.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\network\udp.cpp</FilePath>
@@ -757,15 +762,60 @@
               <FileType>8</FileType>
               <FilePath>..\network\tcp.cpp</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mqtt</GroupName>
+          <Files>
             <File>
-              <FileName>dns.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\network\dns.cpp</FilePath>
+              <FileName>MQTTConnectClient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\network\MQTTPacket\src\MQTTConnectClient.c</FilePath>
             </File>
             <File>
-              <FileName>PubSubClient.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\network\PubSubClient.cpp</FilePath>
+              <FileName>MQTTConnectServer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\network\MQTTPacket\src\MQTTConnectServer.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTDeserializePublish.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\network\MQTTPacket\src\MQTTDeserializePublish.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTFormat.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\network\MQTTPacket\src\MQTTFormat.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTPacket.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\network\MQTTPacket\src\MQTTPacket.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTSerializePublish.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\network\MQTTPacket\src\MQTTSerializePublish.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTSubscribeClient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\network\MQTTPacket\src\MQTTSubscribeClient.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTSubscribeServer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\network\MQTTPacket\src\MQTTSubscribeServer.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTUnsubscribeClient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\network\MQTTPacket\src\MQTTUnsubscribeClient.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQTTUnsubscribeServer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\network\MQTTPacket\src\MQTTUnsubscribeServer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -806,6 +856,11 @@
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\user\main.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>transport.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\network\MQTTPacket\samples\transport.c</FilePath>
             </File>
           </Files>
         </Group>

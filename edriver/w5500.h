@@ -114,9 +114,9 @@ class W5500
 		void getSn_DIPR(SOCKET s,u8* ip);
 		u16 getSn_DPORT(SOCKET s);
 		
-		u8   getSn_SR(SOCKET s);
-		u16  getSn_TX_FSR(SOCKET s);
-		u16 getSn_RX_RSR(SOCKET s);
+		u8      getSn_SR(SOCKET s);
+		u16     get_tx_free_size(SOCKET s);
+		u16     get_rx_recv_size(SOCKET s);
 
 		
 		

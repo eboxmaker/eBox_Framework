@@ -35,15 +35,15 @@ void W5500::begin(uint8_t dev_num,u8* p_mac,u8* p_ip,u8* p_subnet,u8* p_gateway,
 	reset();
 	//中断屏蔽寄存器
 	//setIMR(0XF0);
-	setSIMR(0XFF);//允许所有socket产生中断。
-	setSn_IMR(0,0x04);//允许接收中断
-	setSn_IMR(1,0x04);//允许接收中断
-	setSn_IMR(2,0x04);//允许接收中断
-	setSn_IMR(3,0x04);//允许接收中断
-	setSn_IMR(4,0x04);//允许接收中断
-	setSn_IMR(5,0x04);//允许接收中断
-	setSn_IMR(6,0x04);//允许接收中断
-	setSn_IMR(7,0x04);//允许接收中断
+//	setSIMR(0XFF);//允许所有socket产生中断。
+//	setSn_IMR(0,0x04);//允许接收中断
+//	setSn_IMR(1,0x04);//允许接收中断
+//	setSn_IMR(2,0x04);//允许接收中断
+//	setSn_IMR(3,0x04);//允许接收中断
+//	setSn_IMR(4,0x04);//允许接收中断
+//	setSn_IMR(5,0x04);//允许接收中断
+//	setSn_IMR(6,0x04);//允许接收中断
+//	setSn_IMR(7,0x04);//允许接收中断
 	
 	memcpy(mac,p_mac,4);
 	memcpy(ip,p_ip,4);
@@ -449,7 +449,7 @@ u16 W5500::getSn_DPORT(SOCKET s)
 This gives free buffer size of transmit buffer. This is the data size that user can transmit.
 User shuold check this value first and control the size of transmitting data
 */
-u16 W5500::getSn_TX_FSR(SOCKET s)
+u16 W5500::get_tx_free_size(SOCKET s)
 {
   u16 val=0,val1=0;
   do
@@ -469,7 +469,7 @@ u16 W5500::getSn_TX_FSR(SOCKET s)
 
 This gives size of received data in receive buffer.
 */
-u16 W5500::getSn_RX_RSR(SOCKET s)
+u16 W5500::get_rx_recv_size(SOCKET s)
 {
   u16 val=0,val1=0;
   do
