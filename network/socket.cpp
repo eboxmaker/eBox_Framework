@@ -1,6 +1,7 @@
 #include "socket.h"
 #include "util.h"
 #include "string.h"
+#include "w5500.h"
 static uint16_t local_port;
 
 W5500* eth;
@@ -174,7 +175,7 @@ uint16_t _send(SOCKET s, const uint8_t * buf, uint16_t len)
   // if freebuf is available, start.
   do
   {
-    freesize = eth->getSn_TX_FSR(s);
+    freesize = eth->get_tx_free_size(s);
     status = eth->read(Sn_SR(s));
     if ((status != SOCK_ESTABLISHED) && (status != SOCK_CLOSE_WAIT))
     {
@@ -370,6 +371,47 @@ uint16_t _recvfrom(SOCKET s, uint8_t *buf, uint16_t len, uint8_t *addr, uint16_t
    }
    return data_len;
 }
+////////////////////////////////////////////////////////////////////////////////////////////
+uint8_t socket_status(SOCKET s)
+{
+    return eth->getSn_SR(s);
+}
+int16_t recv_available(SOCKET s)
+{
+   return eth->get_rx_recv_size(s);
+}
+bool   get_remote_ip(SOCKET s,uint8_t *ip)
+{
+    bool ret;
+    eth->getSn_DIPR(s,ip);
+    if(ip != NULL)
+        ret = true;
+    else
+        ret = false;
+    return ret;
+}
+uint16_t get_remote_port(SOCKET s)
+{
+    return eth->getSn_DPORT(s);
+}
+bool client_connecte_event(SOCKET s)
+{
+    if(eth->getSn_IR(s) & Sn_IR_CON){
+        eth->setSn_IR(s, Sn_IR_CON);/*Sn_IRµÄµÚ0Î»ÖÃ1*/
+        return true;
+    }
+    return false;
+}
+bool  get_dns(uint8_t *dns)
+{
+    dns[0] = eth->dns[0];
+    dns[1] = eth->dns[1];
+    dns[2] = eth->dns[2];
+    dns[3] = eth->dns[3];
+    return true;
+}
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
 @brief	Convert 32bit Address(Host Ordering) into Dotted Decimal Format
@@ -389,7 +431,7 @@ char* inet_ntoa_pad(unsigned long addr)
 {
 	static char addr_str[16];
 	memset(addr_str,0,16);
-	printf(addr_str,"%03d.%03d.%03d.%03d",(int)(addr>>24 & 0xFF),(int)(addr>>16 & 0xFF),(int)(addr>>8 & 0xFF),(int)(addr & 0xFF));
+	//printf(addr_str,"%03d.%03d.%03d.%03d",(int)(addr>>24 & 0xFF),(int)(addr>>16 & 0xFF),(int)(addr>>8 & 0xFF),(int)(addr & 0xFF));
 	return addr_str;
 }
 
@@ -717,21 +759,21 @@ void GetNetConfig(void)
 {
 	char addr[6];
 	uint32_t iaddr;
-	printf("\r\n================================================\r\n");
-	printf("       Net Config Information\r\n");
-	printf("================================================\r\n");
+	//printf("\r\n================================================\r\n");
+	//printf("       Net Config Information\r\n");
+	//printf("================================================\r\n");
 	GetMacAddress(addr);
-	printf("MAC ADDRESS      : 0x%02X.0x%02X.0x%02X.0x%02X.0x%02X.0x%02X\r\n",addr[0],addr[1],addr[2],addr[3],addr[4],addr[5]);
+	//printf("MAC ADDRESS      : 0x%02X.0x%02X.0x%02X.0x%02X.0x%02X.0x%02X\r\n",addr[0],addr[1],addr[2],addr[3],addr[4],addr[5]);
 	
 	iaddr = GetSubMask();
-	printf("SUBNET MASK      : %s\r\n",inet_ntoa(iaddr));
+	//printf("SUBNET MASK      : %s\r\n",inet_ntoa(iaddr));
 
 	iaddr = GetGWAddress();
-	printf("G/W IP ADDRESS   : %s\r\n",inet_ntoa(iaddr));
+	//printf("G/W IP ADDRESS   : %s\r\n",inet_ntoa(iaddr));
 
 	iaddr = GetIPAddress();
-	printf("LOCAL IP ADDRESS : %s\r\n",inet_ntoa(iaddr));
-	printf("================================================\r\n");		
+	//printf("LOCAL IP ADDRESS : %s\r\n",inet_ntoa(iaddr));
+	//printf("================================================\r\n");		
 }
 #endif
 

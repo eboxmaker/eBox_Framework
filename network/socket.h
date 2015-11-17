@@ -1,16 +1,13 @@
 #ifndef __SOCKET_H
 #define __SOCKET_H
-#include "w5500.h"
+#include "stm32f10x.h"
+#include "stdbool.h"
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+typedef int8_t 			SOCKET;
 
-
-
-
-
-
-extern W5500* eth;
-
-void attach_eth_to_socket(W5500* e);
 extern int  _socket(SOCKET s, int8_t protocol, uint16_t port, int8_t flag); // Opens a socket(TCP or UDP or IP_RAW mode)
 extern void _close(SOCKET s); // Close socket
 extern int  _connect(SOCKET s, uint8_t *addr, uint16_t port); // Establish TCP connection (Active connection)
@@ -21,6 +18,17 @@ extern uint16_t _recv(SOCKET s, uint8_t * buf, uint16_t len);	// Receive data (T
 extern uint16_t _sendto(SOCKET s, const uint8_t *buf, uint16_t len, uint8_t *addr, uint16_t port); // Send data (UDP/IP RAW)
 extern uint16_t _recvfrom(SOCKET s, uint8_t * buf, uint16_t len, uint8_t * addr, uint16_t  *port); // Receive data (UDP/IP RAW)
 
+
+///////////////////////////////////////////////////////////////////////////////////
+//Íø¿¨µÄ¹¦ÄÜ
+extern uint8_t  socket_status(SOCKET s);
+extern int16_t  recv_available(SOCKET s);
+
+extern bool     get_remote_ip(SOCKET s,uint8_t *ip);
+extern uint16_t get_remote_port(SOCKET s);
+extern bool     client_connecte_event(SOCKET s);
+
+extern bool     get_dns(uint8_t *dns);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //util
 
@@ -48,5 +56,7 @@ void		GetDestMacAddr(SOCKET s, int8_t* mac);
 void GetNetConfig(void);
 #endif
 
-
+#ifdef __cplusplus
+}
+#endif
 #endif

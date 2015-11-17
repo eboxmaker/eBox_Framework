@@ -1,6 +1,8 @@
 #ifndef __UDP_H
 #define __UDP_H
 #include "socket.h"
+#include "w5500.h"
+
 #define  DNS_RESPONSE_TIMEOUT 3 // 3 seconds
 #define  DNS_RET_PROGRESS  0
 #define  DNS_RET_SUCCESS      1
@@ -72,14 +74,14 @@ class DNS
 		uint8_t domain_ip[4];
 		uint16_t msg_id;
 	public:
-		int 		begin(SOCKET p_s,uint16_t p_port);
+		int 	begin(SOCKET p_s,uint16_t p_port);
 		uint8_t query(uint8_t *name);
 	private:
-		int 		parse_name(uint8_t * msg, uint8_t * compressed, uint16_t len);
+		int 	parse_name(uint8_t * msg, uint8_t * compressed, uint16_t len);
 		uint8_t *question(uint8_t * msg, uint8_t * cp);
 		uint8_t *answer(uint8_t * msg, uint8_t * cp);
 		uint8_t parseMSG(struct dhdr * pdhdr, uint8_t * pbuf);
-		int 		makequery(uint16_t op, uint8_t * name, uint8_t * buf, uint16_t len);
+		int 	makequery(uint16_t op, uint8_t * name, uint8_t * buf, uint16_t len);
 		SOCKET s;
 		uint16_t port;
 	

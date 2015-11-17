@@ -22,19 +22,23 @@ int DNS::begin(SOCKET p_s,uint16_t p_port)
 */
 uint8_t DNS::query(uint8_t * name)
 {
-	int i;
-	int ret = 0;
-  static uint32_t dns_wait_time = 0;
-  struct dhdr dhp;
-  uint8_t ip[4];
-  uint16_t len, port;
+    int i;
+    int ret = 0;
+    static uint32_t dns_wait_time = 0;
+    struct dhdr dhp;
+    uint8_t ip[4];
+    uint16_t len, port;
+    uint8_t dns[4];
 	uint8_t BUFPUB[256];
+    
+    get_dns(dns);
+    
 	do
 	{
-		switch(eth->getSn_SR(s))
+		switch(socket_status(s))
 		{
 			case SOCK_UDP:
-				if ((len = eth->getSn_RX_RSR(s)) > 0)
+				if ((len = recv_available(s)) > 0)
 				{
 					if (len > MAX_DNS_BUF_SIZE) len = MAX_DNS_BUF_SIZE;
 					len = _recvfrom(s, BUFPUB, len, ip, &port);
@@ -64,7 +68,7 @@ uint8_t DNS::query(uint8_t * name)
 				len = makequery(0, name, BUFPUB, MAX_DNS_BUF_SIZE);
 				i = 0;
 				do{
-					ret = _sendto(s, BUFPUB, len, eth->dns, IPPORT_DOMAIN);
+					ret = _sendto(s, BUFPUB, len, dns, IPPORT_DOMAIN);
 					i++;
 				}while(ret == 0 && i < 5);
 				break;         
