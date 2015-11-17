@@ -35,15 +35,12 @@ uint8_t DNS::query(uint8_t * name)
     
 	do
 	{
-		switch(socket_status(s))
-		{
+		switch(socket_status(s)){
 			case SOCK_UDP:
-				if ((len = recv_available(s)) > 0)
-				{
+				if ((len = recv_available(s)) > 0){
 					if (len > MAX_DNS_BUF_SIZE) len = MAX_DNS_BUF_SIZE;
 					len = _recvfrom(s, BUFPUB, len, ip, &port);
-					if(parseMSG(&dhp, BUFPUB))
-					{
+					if(parseMSG(&dhp, BUFPUB)){
 						_close(s);
 						ret = DNS_RET_SUCCESS;
 						break;
@@ -51,13 +48,11 @@ uint8_t DNS::query(uint8_t * name)
 					else 
 						dns_wait_time = DNS_RESPONSE_TIMEOUT;
 				}
-				else
-				{
+				else{
 					delay_ms(1000);
 					dns_wait_time++;
 				}
-				if(dns_wait_time >= DNS_RESPONSE_TIMEOUT)   // 3ÃÊ
-				{
+				if(dns_wait_time >= DNS_RESPONSE_TIMEOUT){
 					_close(s);
 					ret = DNS_RET_FAIL;
 					return ret;

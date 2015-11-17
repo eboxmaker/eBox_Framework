@@ -13,7 +13,7 @@ void attach_eth_to_socket(W5500* e)
 }
 /**
 @brief   This Socket function initialize the channel in perticular mode, and set the port and wait for W5200 done it.
-@return  1 for sucess else -1,-2.
+@return  1 for sucess else -1:hard error,-2:protocol error.
 */
 int _socket(SOCKET s, int8_t protocol, uint16_t port, int8_t flag)
 {
@@ -77,11 +77,11 @@ void _close(SOCKET s)
 }
 /**
 @brief   This function established  the connection for the channel in passive (server) mode. This function waits for the request from the peer.
-@return  1 for success else -1.
+@return  1 for success else 0.
 */
-int _listen(SOCKET s)
+bool _listen(SOCKET s)
 {
-   int ret = 1;
+   bool ret ;
    if (eth->read( Sn_SR(s) ) == SOCK_INIT)
    {
       eth->write( Sn_CR(s) ,Sn_CR_LISTEN);
@@ -89,10 +89,11 @@ int _listen(SOCKET s)
       while( eth->read(Sn_CR(s) ) )
          ;
       /* ------- */
+      ret =true;
    }
    else
    {
-      ret = -1;
+      ret = false;
    }
    return ret;
 }
@@ -100,11 +101,11 @@ int _listen(SOCKET s)
 @brief   This function established  the connection for the channel in Active (client) mode.
       This function waits for the untill the connection is established.
 
-@return  1 for success else -1,-2.
+@return  1 for success else -1:param error,-2:time out.
 */
 int _connect(SOCKET s, uint8_t * addr, uint16_t port)
 {
-    int ret = 1;
+    int ret;
     if(((addr[0] == 0xFF) && (addr[1] == 0xFF) && (addr[2] == 0xFF) && (addr[3] == 0xFF)) ||
         ((addr[0] == 0x00) && (addr[1] == 0x00) && (addr[2] == 0x00) && (addr[3] == 0x00)) ||
         (port == 0x00))
@@ -137,6 +138,7 @@ int _connect(SOCKET s, uint8_t * addr, uint16_t port)
                 break;
             }
         }
+        ret = 1;
     }
 
    return ret;
@@ -148,7 +150,7 @@ int _connect(SOCKET s, uint8_t * addr, uint16_t port)
 @brief   This function used for disconnect the socket and parameter is "s" which represent the socket number
 @return  1 for success else 0.
 */
-void _disconnect(SOCKET s)
+bool _disconnect(SOCKET s)
 {
    eth->write( Sn_CR(s) ,Sn_CR_DISCON);
 
@@ -156,15 +158,16 @@ void _disconnect(SOCKET s)
    while( eth->read(Sn_CR(s)) )
       ;
    /* ------- */
+   return true;
 }
 /**
 @brief   This function used to send the data in TCP mode
-@return  1 for success else 0.
+@return   sended data size for success else 0.
 */
-uint16_t _send(SOCKET s, const uint8_t * buf, uint16_t len)
+int _send(SOCKET s, const uint8_t * buf, uint16_t len)
 {
   int8_t status=0;
-  uint16_t ret=0;
+  int ret=0;
   uint16_t freesize=0;
 
   if (len > eth->getTxMAX(s)) 
@@ -216,9 +219,9 @@ uint16_t _send(SOCKET s, const uint8_t * buf, uint16_t len)
 @brief   This function is an application I/F function which is used to receive the data in TCP mode.
       It continues to wait for data as much as the application wants to receive.
 
-@return  received data size for success else -1.
+@return  received data size for success else 0.
 */
-uint16_t _recv(SOCKET s, uint8_t * buf, uint16_t len)
+int _recv(SOCKET s, uint8_t * buf, uint16_t len)
 {
    uint16_t ret=0;
    if ( len > 0 )
@@ -236,9 +239,9 @@ uint16_t _recv(SOCKET s, uint8_t * buf, uint16_t len)
 @brief   This function is an application I/F function which is used to send the data for other then TCP mode.
       Unlike TCP transmission, The peer's destination address and the port is needed.
 
-@return  This function return send data size for success else -1.
+@return  This function return send data size for success else 0.
 */
-uint16_t _sendto(SOCKET s, const uint8_t * buf, uint16_t len, uint8_t * addr, uint16_t port)
+int _sendto(SOCKET s, const uint8_t * buf, uint16_t len, uint8_t * addr, uint16_t port)
 {
    uint16_t ret=0;
 
@@ -288,7 +291,7 @@ uint16_t _sendto(SOCKET s, const uint8_t * buf, uint16_t len, uint8_t * addr, ui
 
 @return  This function return received data size for success else -1.
 */
-uint16_t _recvfrom(SOCKET s, uint8_t *buf, uint16_t len, uint8_t *addr, uint16_t *port)
+int _recvfrom(SOCKET s, uint8_t *buf, uint16_t len, uint8_t *addr, uint16_t *port)
 {
    uint8_t head[8];
    uint16_t data_len=0;
@@ -376,7 +379,14 @@ uint8_t socket_status(SOCKET s)
 {
     return eth->getSn_SR(s);
 }
-int16_t recv_available(SOCKET s)
+
+/**
+
+@brief   get socket RX recv buf size
+
+@return  This gives size of received data in receive buffer.
+*/
+uint16_t recv_available(SOCKET s)
 {
    return eth->get_rx_recv_size(s);
 }

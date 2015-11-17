@@ -11,18 +11,18 @@ typedef int8_t 			SOCKET;
 extern int  _socket(SOCKET s, int8_t protocol, uint16_t port, int8_t flag); // Opens a socket(TCP or UDP or IP_RAW mode)
 extern void _close(SOCKET s); // Close socket
 extern int  _connect(SOCKET s, uint8_t *addr, uint16_t port); // Establish TCP connection (Active connection)
-extern void _disconnect(SOCKET s); // disconnect the connection
-extern int  _listen(SOCKET s);	// Establish TCP connection (Passive connection)
-extern uint16_t _send(SOCKET s, const uint8_t * buf, uint16_t len); // Send data (TCP)
-extern uint16_t _recv(SOCKET s, uint8_t * buf, uint16_t len);	// Receive data (TCP)
-extern uint16_t _sendto(SOCKET s, const uint8_t *buf, uint16_t len, uint8_t *addr, uint16_t port); // Send data (UDP/IP RAW)
-extern uint16_t _recvfrom(SOCKET s, uint8_t * buf, uint16_t len, uint8_t * addr, uint16_t  *port); // Receive data (UDP/IP RAW)
+extern bool _disconnect(SOCKET s); // disconnect the connection
+extern bool _listen(SOCKET s);	// Establish TCP connection (Passive connection)
+extern int _send(SOCKET s, const uint8_t * buf, uint16_t len); // Send data (TCP)
+extern int _recv(SOCKET s, uint8_t * buf, uint16_t len);	// Receive data (TCP)
+extern int _sendto(SOCKET s, const uint8_t *buf, uint16_t len, uint8_t *addr, uint16_t port); // Send data (UDP/IP RAW)
+extern int _recvfrom(SOCKET s, uint8_t * buf, uint16_t len, uint8_t * addr, uint16_t  *port); // Receive data (UDP/IP RAW)
 
 
 ///////////////////////////////////////////////////////////////////////////////////
 //Íø¿¨µÄ¹¦ÄÜ
 extern uint8_t  socket_status(SOCKET s);
-extern int16_t  recv_available(SOCKET s);
+extern uint16_t  recv_available(SOCKET s);
 
 extern bool     get_remote_ip(SOCKET s,uint8_t *ip);
 extern uint16_t get_remote_port(SOCKET s);

@@ -92,7 +92,7 @@ int main(void)
 	setup();
 	while(1)
 	{	
-        mqtt_publish("123","myself test");
+        mqtt_publish("planets/earth","myself test");
             delay_ms(2000);
 	}
 }
@@ -131,13 +131,15 @@ MQTTPacket_connectData data = MQTTPacket_connectData_initializer;
 	len += MQTTSerialize_publish((unsigned char *)(buf + len), buflen - len, 0, 0, 0, 0, topicString, (unsigned char *)payload, payloadlen);
 
 	len += MQTTSerialize_disconnect((unsigned char *)(buf + len), buflen - len);
-
-    delay_ms(500);
-	rc = transport_sendPacketBuffer(mysock, (unsigned char *)buf, len);
-	if (rc == len)
-		uart1.printf("Successfully published\r\n");
-	else
-		uart1.printf("Publish failed\r\n");
+    while(1)
+    {
+        delay_ms(500);
+        rc = transport_sendPacketBuffer(mysock, (unsigned char *)buf, len);
+        if (rc == len)
+            uart1.printf("Successfully published\r\n");
+        else
+            uart1.printf("Publish failed\r\n");
+    }
 
 exit:
 	transport_close(mysock);
@@ -170,16 +172,23 @@ int mqtt_publish(char *pTopic,char *pMessage)
   if(transport_open(host,1883))
         uart1.printf("open is ok\r\n");
   topicString.cstring = pTopic;
-  len += MQTTSerialize_publish(buf + len, buflen - len, 0, 0, 0, 0, topicString, (unsigned char*)pMessage, msglen); /* 2 */
+  len += MQTTSerialize_publish(buf + len, buflen - len, 0, 0, 1, 0, topicString, (unsigned char*)pMessage, msglen); /* 2 */
  
   len += MQTTSerialize_disconnect(buf + len, buflen - len); /* 3 */
-  delay_ms(500);
-  rc = transport_sendPacketBuffer(7,buf,len);
-  if(rc > 0)
-        uart1.printf("trans is ok,len = %d\r\n",rc);
-  else
-         uart1.printf("trans is failed,len = %d\r\n",rc);
-     
+
+    while(1)
+    {
+      delay_ms(1000);
+      rc = transport_sendPacketBuffer(7,buf,len);
+      if(rc > 0)
+            uart1.printf("trans is ok,len = %x\r\n",rc);
+      else
+      {
+             uart1.printf("trans is failed,len = %x\r\n",rc);
+          break;
+      }
+      
+     }
   transport_close(7);
         if (rc == len)
                uart1.printf("Successfully published\r\n");
