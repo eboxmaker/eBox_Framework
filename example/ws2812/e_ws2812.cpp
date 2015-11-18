@@ -34,8 +34,3 @@ int main(void)
 	}
 
 }
-
-
-
-
-

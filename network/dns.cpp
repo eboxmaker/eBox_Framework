@@ -9,7 +9,6 @@ int DNS::begin(SOCKET p_s,uint16_t p_port)
 	msg_id = 0x1122;
 	return ret;
 }
-
 /*
 ********************************************************************************
 *              MAKE DNS QUERY AND PARSE THE REPLY
@@ -28,10 +27,10 @@ uint8_t DNS::query(uint8_t * name)
     struct dhdr dhp;
     uint8_t ip[4];
     uint16_t len, port;
-    uint8_t dns[4];
+    uint8_t dns_server_ip[4];
 	uint8_t BUFPUB[256];
     
-    get_dns(dns);
+    get_local_dns(dns_server_ip);
     
 	do
 	{
@@ -63,13 +62,18 @@ uint8_t DNS::query(uint8_t * name)
 				len = makequery(0, name, BUFPUB, MAX_DNS_BUF_SIZE);
 				i = 0;
 				do{
-					ret = _sendto(s, BUFPUB, len, dns, IPPORT_DOMAIN);
+					ret = _sendto(s, BUFPUB, len, dns_server_ip, IPPORT_DOMAIN);
 					i++;
 				}while(ret == 0 && i < 5);
 				break;         
 		}
 	}while(ret != DNS_RET_SUCCESS);
 	return ret;
+}
+bool DNS::get_domain_ip(uint8_t *ip)
+{
+    memcpy(ip,domain_ip,4);
+    return true;
 }
 
 /*
@@ -105,14 +109,13 @@ int DNS::parse_name(uint8_t * msg, uint8_t * compressed, /*char * buf,*/ uint16_
     
     if (!indirect) clen++;
     
-    if ((slen & 0xc0) == 0xc0)
-    {
-      if (!indirect)
-        clen++;
-      indirect = 1;
-      /* Follow indirection */
-      cp = &msg[((slen & 0x3f)<<8) + *cp];
-      slen = *cp++;
+    if ((slen & 0xc0) == 0xc0){
+          if (!indirect)
+            clen++;
+          indirect = 1;
+          /* Follow indirection */
+          cp = &msg[((slen & 0x3f)<<8) + *cp];
+          slen = *cp++;
     }
     
     if (slen == 0)	/* zero length == all done */

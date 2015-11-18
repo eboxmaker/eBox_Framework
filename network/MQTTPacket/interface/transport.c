@@ -52,18 +52,21 @@ On other scenarios, the user must solve this by taking into account that the cur
 MQTTPacket_read() has a function pointer for a function call to get the data to a buffer, but no provisions
 to know the caller or other indicator (the socket id): int (*getfn)(unsigned char*, int)
 */
-static int mysock = INVALID_SOCKET;
 
-static uint8_t  my_socket = 7;
-uint16_t local_port = 30000;
+static uint8_t  my_socket;
+int             my_port;
+int transport_init(int local_sock,int local_port)
+{
+    my_socket = local_sock;
+    my_port = local_port;
+}
 /*
 @return  sended data size for success else 0.
 */
-int transport_sendPacketBuffer(int sock, unsigned char* buf, int buflen)
+int transport_sendPacketBuffer(unsigned char* buf, int buflen)
 {
 	int rc = 0;
-    my_socket = sock;
-    rc = _send(sock,buf,buflen);
+    rc = _send(my_socket,buf,buflen);
 	return rc;
 }
 
@@ -86,11 +89,13 @@ int transport_getdata(unsigned char* buf, int count)
 int transport_getdatanb(void *sck, unsigned char* buf, int count)
 {
     int rc;
-     rc = _recv(my_socket,buf,count);
+    while(rc == 0)
+    {
+        rc = _recv(my_socket,buf,count);
+    }
 	return rc;
 }
 
-#define Sn_MR_TCP 0x01
 /**
 return >=0 for a socket descriptor, <0 for an error code
 @todo Basically moved from the sample without changes, should accomodate same usage for 'sock' for clarity,
@@ -99,20 +104,21 @@ removing indirections
 */
 int transport_open(char* addr, int port)
 {
-    int i = 200;
+    int i = 100;
     int ret;
-	while(--i)
+    _close(my_socket);
+	while(i--)
 	{
 		switch(socket_status(my_socket))/*获取socket0的状态*/
 		{
-		case 0x13:
+		case SOCK_INIT:
 			 ret = _connect(my_socket, (unsigned char *)addr ,port);/*在TCP模式下向服务器发送连接请求*/ 
              break;
-		 case 0x17:
+		 case SOCK_ESTABLISHED:
              ret = 1;
              return ret;
-		 case 0x00:
-			ret = _socket(my_socket,Sn_MR_TCP,local_port,0x20);/*打开socket的一个端口*/
+		 case SOCK_CLOSED:
+			ret = _socket(my_socket,Sn_MR_TCP,my_port,0x20);/*打开socket的一个端口*/
              break;
 		}
 	}
