@@ -35,6 +35,7 @@ u8 _dns[4] = {192,168,1,1};
 
 
 char host[]="m2m.eclipse.org";
+//char host[]="messagesight.demos.ibm.com";
 u16 host_port = 1883;
 W5500 w5500(&PC13,&PC14,&PC15,&spi2);
 	
@@ -76,7 +77,7 @@ int main(void)
         value%=1000000;
         mqtt.publish((char*)"planets/earth",string);
             delay_ms(2000);
-//        mqtt.subscribe("planets/earth");
+        mqtt.subscribe("planets/earth");
 	}
 }
 
