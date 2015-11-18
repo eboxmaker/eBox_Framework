@@ -20,6 +20,38 @@ extern int _recvfrom(SOCKET s, uint8_t * buf, uint16_t len, uint8_t * addr, uint
 
 
 ///////////////////////////////////////////////////////////////////////////////////
+//------网卡socket状态表--------
+/* Sn_SR values */
+#define SOCK_CLOSED                  0x00     /**< closed */
+#define SOCK_INIT                    0x13     /**< init state */
+#define SOCK_LISTEN                  0x14     /**< listen state */
+#define SOCK_SYNSENT                 0x15     /**< connection state */
+#define SOCK_SYNRECV                 0x16     /**< connection state */
+#define SOCK_ESTABLISHED             0x17     /**< success to connect */
+#define SOCK_FIN_WAIT                0x18     /**< closing state */
+#define SOCK_CLOSING                 0x1A     /**< closing state */
+#define SOCK_TIME_WAIT               0x1B     /**< closing state */
+#define SOCK_CLOSE_WAIT              0x1C     /**< closing state */
+#define SOCK_LAST_ACK                0x1D     /**< closing state */
+#define SOCK_UDP                     0x22     /**< udp socket */
+#define SOCK_IPRAW                   0x32     /**< ip raw mode socket */
+#define SOCK_MACRAW                  0x42     /**< mac raw mode socket */
+#define SOCK_PPPOE                   0x5F     /**< pppoe socket */
+
+/* 网络协议类型 */
+#define Sn_MR_CLOSE                  0x00     /**< unused socket */
+#define Sn_MR_TCP                    0x01     /**< TCP */
+#define Sn_MR_UDP                    0x02     /**< UDP */
+#define Sn_MR_IPRAW                  0x03      /**< IP LAYER RAW SOCK */
+#define Sn_MR_MACRAW                 0x04      /**< MAC LAYER RAW SOCK */
+#define Sn_MR_PPPOE                  0x05     /**< PPPoE */
+#define Sn_MR_UCASTB                 0x10     /**< Unicast Block in UDP Multicating*/
+#define Sn_MR_ND                     0x20     /**< No Delayed Ack(TCP) flag */
+#define Sn_MR_MC                     0x20     /**< Multicast IGMP (UDP) flag */
+#define Sn_MR_BCASTB                 0x40     /**< Broadcast blcok in UDP Multicating */
+#define Sn_MR_MULTI                  0x80     /**< support UDP Multicating */
+
+
 //网卡的功能
 extern uint8_t  socket_status(SOCKET s);
 extern uint16_t  recv_available(SOCKET s);
@@ -28,7 +60,7 @@ extern bool     get_remote_ip(SOCKET s,uint8_t *ip);
 extern uint16_t get_remote_port(SOCKET s);
 extern bool     client_connecte_event(SOCKET s);
 
-extern bool     get_dns(uint8_t *dns);
+extern bool     get_local_dns(uint8_t *dns);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //util
 

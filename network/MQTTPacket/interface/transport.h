@@ -17,7 +17,8 @@
 #ifdef __cplusplus
 extern "C"{
 #endif
-int transport_sendPacketBuffer(int sock, unsigned char* buf, int buflen);
+int transport_init(int local_sock,int local_port);
+int transport_sendPacketBuffer(unsigned char* buf, int buflen);
 int transport_getdata(unsigned char* buf, int count);
 int transport_getdatanb(void *sck, unsigned char* buf, int count);
 int transport_open(char* host, int port);

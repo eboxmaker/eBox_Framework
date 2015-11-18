@@ -412,7 +412,7 @@ bool client_connecte_event(SOCKET s)
     }
     return false;
 }
-bool  get_dns(uint8_t *dns)
+bool  get_local_dns(uint8_t *dns)
 {
     dns[0] = eth->dns[0];
     dns[1] = eth->dns[1];
