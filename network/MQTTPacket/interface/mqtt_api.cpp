@@ -17,15 +17,20 @@ void MQTT::set_server_domain(char *domain,uint16_t port)
     DNS dns;	
     dns.begin(1,port);
     
-    
+	uart1.printf("-----start----------\r\n",domain);    
+	uart1.printf("域名解析：\r\n",domain);    
 	ret = dns.query(domain);
-    dns.get_domain_ip(server_ip);
 	if(ret == DNS_RET_SUCCESS) /*发送DNS请求*/
-		uart1.printf("Get [%s]'s IP address [%d.%d.%d.%d] from \r\n",domain,dns.domain_ip[0],dns.domain_ip[1],dns.domain_ip[2],dns.domain_ip[3]);
+    {
+        dns.get_domain_ip(server_ip);
+		uart1.printf("domain : [%s]' \r\n",domain);
+		uart1.printf("IP     : [%d.%d.%d.%d]\r\n",dns.domain_ip[0],dns.domain_ip[1],dns.domain_ip[2],dns.domain_ip[3]);
+    }
 	else if(ret == DNS_RET_FAIL)
     uart1.printf("获取超时\r\n");
 	else
     uart1.printf("未知错误.\r\n");
+	uart1.printf("------end---------\r\n\r\n",domain);    
 
     server_port = port;
 }
@@ -64,6 +69,8 @@ int MQTT::publish(char *topick,char *message)
   len = MQTTSerialize_connect(buf, buflen, &data); /* 1 */
   len += MQTTSerialize_publish(buf + len, buflen - len, 0, 0, 1, 0, topicString, (unsigned char*)message, msglen); /* 2 */
   len += MQTTSerialize_disconnect(buf + len, buflen - len); /* 3 */
+  
+    uart1.printf("----------start:publish-----------------\r\n");
  
     //链接服务器
     rc = transport_open((char *)server_ip,server_port);
@@ -77,25 +84,24 @@ int MQTT::publish(char *topick,char *message)
       delay_ms(500);
       rc = transport_sendPacketBuffer(buf,len);
       if(rc > 0){
-            uart1.printf("---------------------------\r\n");
-            uart1.printf("topick = %s\r\n",topick);
-            uart1.printf("message = %s\r\n",message);
+          uart1.printf("topick  : %s\r\n",topick);
+          uart1.printf("message : %s\r\n",message);
             uart1.printf("trans is ok,len = %d\r\n",rc);
       }
       else
       {
+            uart1.printf("trans is failed,len = %x\r\n",rc);
             uart1.printf("---------------------------\r\n");
-             uart1.printf("trans is failed,len = %x\r\n",rc);
           //break;
       }
       
 //     }
-  transport_close(7);
+  transport_close(local_socket);
         if (rc == len)
                uart1.printf("Successfully published\r\n");
         else
                 uart1.printf("Publish failed\r\n");
-  uart1.printf("-----------------------------\r\n");
+  uart1.printf("-----------end------------------\r\n\r\n");
   return 0;
 }
 int MQTT::subscribe(char *topick)
@@ -117,6 +123,7 @@ int MQTT::subscribe(char *topick)
   transport_init(local_socket,local_port);
 
 
+   uart1.printf("----------start:subscribe-----------------\r\n");
     //链接服务器
     rc = transport_open((char *)server_ip,server_port);
   if(rc != 0)
@@ -124,7 +131,7 @@ int MQTT::subscribe(char *topick)
   else
       uart1.printf("open failed\r\n");
 
-   data.clientID.cstring = "me";
+   data.clientID.cstring = "Client55249";
 	data.keepAliveInterval = 20;
 	data.cleansession = 1;
 	data.username.cstring = "testuser";
@@ -148,7 +155,7 @@ int MQTT::subscribe(char *topick)
 		goto exit;
 
 	/* subscribe */
-	topicString.cstring = "substopic";
+	topicString.cstring = topick;
 	len = MQTTSerialize_subscribe(buf, buflen, 0, msgid, 1, &topicString, &req_qos);
 
 	rc = transport_sendPacketBuffer( buf, len);
@@ -164,12 +171,15 @@ int MQTT::subscribe(char *topick)
 			uart1.printf("granted qos != 0, %d\n", granted_qos);
 			goto exit;
 		}
+        uart1.printf("subscribe:ok!\r\n");
+        uart1.printf("topick   :\"%s\"\r\n",topick);
+
 	}
 	else
 		goto exit;
 
 	/* loop getting msgs on subscribed topic */
-	topicString.cstring = "pubtopic";
+	topicString.cstring = topick;
 //	while (1)
 //	{
 		/* transport_getdata() has a built-in 1 second timeout,
@@ -187,12 +197,12 @@ int MQTT::subscribe(char *topick)
 
 			rc = MQTTDeserialize_publish(&dup, &qos, &retained, &msgid, &receivedTopic,
 					&payload_in, &payloadlen_in, buf, buflen);
-			uart1.printf("message arrived %.*s\r\n", payloadlen_in, payload_in);
+			uart1.printf("message  :\" %.*s\"\r\n", payloadlen_in, payload_in);
 		}
 
-		uart1.printf("publishing reading\r\n");
-		len = MQTTSerialize_publish(buf, buflen, 0, 0, 0, 0, topicString, (unsigned char*)payload, payloadlen);
-		rc = transport_sendPacketBuffer(buf, len);
+//		uart1.printf("publishing reading\r\n");
+//		len = MQTTSerialize_publish(buf, buflen, 0, 0, 0, 0, topicString, (unsigned char*)payload, payloadlen);
+//		rc = transport_sendPacketBuffer(buf, len);
 //	}
 
 	uart1.printf("disconnecting\r\n");
@@ -202,6 +212,7 @@ int MQTT::subscribe(char *topick)
 exit:
 	transport_close(mysock);
 	uart1.printf("disconnected\r\n");
+   uart1.printf("----------end-----------------\r\n\r\n");
 
 	return 0;
 }

@@ -111,8 +111,12 @@ int transport_open(char* addr, int port)
     int ret;
     _close(my_socket);
     ret = _socket(my_socket,Sn_MR_TCP,my_port,0x20);/*打开socket的一个端口*/
+    
+    do{
     ret = _connect(my_socket, (unsigned char *)addr ,port);/*在TCP模式下向服务器发送连接请求*/ 
+    }while(ret == -2);
 
+ 
     return ret;  
 }
 /*

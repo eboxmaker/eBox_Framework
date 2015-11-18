@@ -239,5 +239,4 @@ void RGB_BUF_to_GRB(COLOR_BUF &c_buf)
 			c_buf.data[i][1] = tmp;
 		}
 	}
-
 }

@@ -268,7 +268,6 @@ int8_t SOFTI2C::wait_busy(uint8_t slave_address)
 		}
 	}while(ret != 0);//如果返回值不是0，继续等待
 	return 0;
-	return 0;
 }
 int8_t SOFTI2C::take_i2c_right(uint32_t _speed)
 {
