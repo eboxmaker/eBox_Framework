@@ -36,6 +36,7 @@ class WS2812
 		void DMA_Config(void);
 		void send_data(uint8_t *led_Colors, uint16_t len);
 		void rainbow_Loop();
+        void rainbow_Loop1();
 	private:
 		GPIO* pin;
 		

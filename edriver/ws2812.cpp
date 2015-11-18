@@ -129,9 +129,79 @@ void WS2812::send_data(uint8_t *led_Colors, uint16_t len) {
 COLOR_HSV hsv;
 COLOR_HSL hsl;
 COLOR_RGB rgb;
+uint8_t table[]={
+    '-','-','-','x','x','-','-','-',
+    '-','-','x','x','x','x','-','-',
+    '-','x','x','x','x','x','x','-',
+    'x','x','x','x','x','x','x','x',
+    '-','x','x','x','x','x','x','-',
+    '-','x','x','x','x','x','x','-',
+    '-','x','x','x','x','x','x','-',
+    '-','x','x','x','x','x','x','-',
 
+};
+//显示图形
 void WS2812::rainbow_Loop(){
 	
+	u8 intStageNum = 0;
+	float   r = 255, g = 0, b = 0;
+	uint16_t i,k,m;
+    hsl.s = 1;
+    hsl.l = 0.5;
+    
+    hsv.s = 1;
+    hsv.v = 0.1;
+    for(i = 0; i < 360; i++) {
+        for(int j = 0; j < 64 ; j ++){
+            if((table[ j] == 'x')&(1<<k))
+            {
+                //HSV模式
+                hsv.h = (i+j)%360;
+                hsv.s = 1;
+                hsv.v = 0.1;
+                HSV_to_RGB(hsv,rgb);
+                //HSL模式
+//                hsl.h = (i+j)%360;
+//                hsl.s = 1;
+//                hsl.l = 0.5;
+//                HSL_to_RGB(hsl,rgb);
+                
+                rgb1[j][0] = rgb.r;// (uint8_t)floor(r/20+j);
+                rgb1[j][1] = rgb.g;//(uint8_t)floor(g/20+j);
+                rgb1[j][2] = rgb.b;//(uint8_t)floor(b/20+j);
+                
+            }
+            else
+            {
+                //HSV模式
+                hsv.h = (i+j)%360;
+                hsv.s = 1;
+                hsv.v = 0;
+                HSV_to_RGB(hsv,rgb);
+
+                
+//                hsl.h = (i+j)%360;
+//                hsl.s = 1;
+//                hsl.l = 0.5;
+//                HSL_to_RGB(hsl,rgb);
+                
+
+                rgb1[j][0] = rgb.r;// (uint8_t)floor(r/20+j);
+                rgb1[j][1] = rgb.g;//(uint8_t)floor(g/20+j);
+                rgb1[j][2] = rgb.b;//(uint8_t)floor(b/20+j);
+
+            }
+
+            led_Colors[j] = j;         
+        }								
+    // Send data to LEDs
+    send_data(led_Colors, LED_COUNT);	
+    delay_ms(2);
+	}
+}
+
+//遍历字符串
+void WS2812::rainbow_Loop1(){
 	u8 intStageNum = 0;
 	float   r = 255, g = 0, b = 0;
 	uint16_t i,k,m;
@@ -240,6 +310,6 @@ void WS2812::rainbow_Loop(){
 			
 		// Send data to LEDs
 		send_data(led_Colors, LED_COUNT);	
-		delay_ms(10);
-	}
+		delay_ms(5);
+	}    
 }
