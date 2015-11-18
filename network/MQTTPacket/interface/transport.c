@@ -76,10 +76,13 @@ int transport_sendPacketBuffer(unsigned char* buf, int buflen)
 int transport_getdata(unsigned char* buf, int count)
 {
     int rc = 0;
-    while(rc == 0)
-    {
-         rc = _recv(my_socket,buf,count);
-    }
+	u16 llen = 0;
+    while(llen == 0){
+		llen = recv_available(my_socket);/*len为已接收数据的大小*/
+		if(llen > 0){
+			rc = _recv(my_socket,buf,count);/*W5500接收来自Sever的数据*/
+		}	
+	}
 	return rc;
 }
 

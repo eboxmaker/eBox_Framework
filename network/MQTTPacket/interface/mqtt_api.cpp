@@ -118,10 +118,13 @@ int MQTT::subscribe(char *topick)
 
 
     //Á´½Ó·þÎñÆ÷
-  if(transport_open((char *)server_ip,server_port))
-        uart1.printf("open is ok\r\n");
+    rc = transport_open((char *)server_ip,server_port);
+  if(rc != 0)
+        uart1.printf("open is ok status = %d\r\n",rc);
+  else
+      uart1.printf("open failed\r\n");
 
-	data.clientID.cstring = "me";
+   data.clientID.cstring = "me";
 	data.keepAliveInterval = 20;
 	data.cleansession = 1;
 	data.username.cstring = "testuser";
@@ -167,8 +170,8 @@ int MQTT::subscribe(char *topick)
 
 	/* loop getting msgs on subscribed topic */
 	topicString.cstring = "pubtopic";
-	while (1)
-	{
+//	while (1)
+//	{
 		/* transport_getdata() has a built-in 1 second timeout,
 		your mileage will vary */
 		if (MQTTPacket_read(buf, buflen, transport_getdata) == PUBLISH)
@@ -190,7 +193,7 @@ int MQTT::subscribe(char *topick)
 		uart1.printf("publishing reading\r\n");
 		len = MQTTSerialize_publish(buf, buflen, 0, 0, 0, 0, topicString, (unsigned char*)payload, payloadlen);
 		rc = transport_sendPacketBuffer(buf, len);
-	}
+//	}
 
 	uart1.printf("disconnecting\r\n");
 	len = MQTTSerialize_disconnect(buf, buflen);
@@ -198,6 +201,7 @@ int MQTT::subscribe(char *topick)
 
 exit:
 	transport_close(mysock);
+	uart1.printf("disconnected\r\n");
 
 	return 0;
 }
