@@ -768,6 +768,16 @@
           <GroupName>mqtt</GroupName>
           <Files>
             <File>
+              <FileName>mqtt_api.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\network\MQTTPacket\interface\mqtt_api.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>transport.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\network\MQTTPacket\interface\transport.c</FilePath>
+            </File>
+            <File>
               <FileName>MQTTConnectClient.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\network\MQTTPacket\src\MQTTConnectClient.c</FilePath>
@@ -816,11 +826,6 @@
               <FileName>MQTTUnsubscribeServer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\network\MQTTPacket\src\MQTTUnsubscribeServer.c</FilePath>
-            </File>
-            <File>
-              <FileName>transport.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\network\MQTTPacket\interface\transport.c</FilePath>
             </File>
           </Files>
         </Group>

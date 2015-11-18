@@ -17,15 +17,10 @@ void attach_eth_to_socket(W5500* e)
 */
 int _socket(SOCKET s, int8_t protocol, uint16_t port, int8_t flag)
 {
-   int ret = 1;
+   int ret = -3;
 	 u16 i;
-   if (
-        ((protocol&0x0F) == Sn_MR_TCP)    ||
-        ((protocol&0x0F) == Sn_MR_UDP)    ||
-        ((protocol&0x0F) == Sn_MR_IPRAW)  ||
-        ((protocol&0x0F) == Sn_MR_MACRAW) ||
-        ((protocol&0x0F) == Sn_MR_PPPOE)
-      )
+   if ( ((protocol&0x0F) == Sn_MR_TCP) || ((protocol&0x0F) == Sn_MR_UDP) || ((protocol&0x0F) == Sn_MR_IPRAW)||\
+        ((protocol&0x0F) == Sn_MR_MACRAW) || (protocol&0x0F) == Sn_MR_PPPOE)
    {
       _close(s);
       eth->write(Sn_MR(s) ,protocol | flag);
@@ -40,21 +35,20 @@ int _socket(SOCKET s, int8_t protocol, uint16_t port, int8_t flag)
       eth->write( Sn_CR(s) ,Sn_CR_OPEN); // run sockinit Sn_CR
 
       /* wait to process the command... */
-      while( eth->read(Sn_CR(s)) )
-			{
-				if(i++>0xfff0)
-				{
-					ret = -1;
-					break;
-				}
-			}
-         ;
+      while( eth->read(Sn_CR(s)) ){
+            if(i++>0xfff0)
+            {
+                return -1;
+            }
+        }
+      ;
+        return  1;
       /* ------- */
     
    }
    else
    {
-      ret = -2;
+      return  -2;
    }
    return ret;
 }
@@ -105,7 +99,7 @@ bool _listen(SOCKET s)
 */
 int _connect(SOCKET s, uint8_t * addr, uint16_t port)
 {
-    int ret;
+    int ret = -3;
     if(((addr[0] == 0xFF) && (addr[1] == 0xFF) && (addr[2] == 0xFF) && (addr[3] == 0xFF)) ||
         ((addr[0] == 0x00) && (addr[1] == 0x00) && (addr[2] == 0x00) && (addr[3] == 0x00)) ||
         (port == 0x00))
@@ -124,21 +118,30 @@ int _connect(SOCKET s, uint8_t * addr, uint16_t port)
         eth->write( Sn_CR(s) ,Sn_CR_CONNECT);
         /* wait for completion */
         while ( eth->read(Sn_CR(s) ) ) ;
-
-        while ( eth->read(Sn_SR(s)) != SOCK_SYNSENT )
+        while(eth->read(Sn_SR(s)) != SOCK_ESTABLISHED)
         {
-            if(eth->read(Sn_SR(s)) == SOCK_ESTABLISHED)
-            {			
-                 break;	 
-            }
             if (eth->getSn_IR(s) & Sn_IR_TIMEOUT)
             {
                 eth->write(Sn_IR(s), (Sn_IR_TIMEOUT));  // clear TIMEOUT Interrupt
-                ret = -2;
-                break;
+                return -2;
             }
         }
         ret = 1;
+
+//        while ( eth->read(Sn_SR(s)) != SOCK_SYNSENT )
+//        {
+//            if(eth->read(Sn_SR(s)) == SOCK_ESTABLISHED)
+//            {	
+//                ret =1;                
+//                break ;
+//            }
+//            if (eth->getSn_IR(s) & Sn_IR_TIMEOUT)
+//            {
+//                eth->write(Sn_IR(s), (Sn_IR_TIMEOUT));  // clear TIMEOUT Interrupt
+//                ret = -2;
+//                break;
+//            }
+//        }
     }
 
    return ret;

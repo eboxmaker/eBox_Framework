@@ -104,26 +104,13 @@ removing indirections
 */
 int transport_open(char* addr, int port)
 {
-    int i = 100;
+    int i = 2000000;
     int ret;
     _close(my_socket);
-	while(i--)
-	{
-		switch(socket_status(my_socket))/*获取socket0的状态*/
-		{
-		case SOCK_INIT:
-			 ret = _connect(my_socket, (unsigned char *)addr ,port);/*在TCP模式下向服务器发送连接请求*/ 
-             break;
-		 case SOCK_ESTABLISHED:
-             ret = 1;
-             return ret;
-		 case SOCK_CLOSED:
-			ret = _socket(my_socket,Sn_MR_TCP,my_port,0x20);/*打开socket的一个端口*/
-             break;
-		}
-	}
-    ret = 0;
-return ret;  
+    ret = _socket(my_socket,Sn_MR_TCP,my_port,0x20);/*打开socket的一个端口*/
+    ret = _connect(my_socket, (unsigned char *)addr ,port);/*在TCP模式下向服务器发送连接请求*/ 
+
+    return ret;  
 }
 /*
 @return  1 for success else 0:time out.

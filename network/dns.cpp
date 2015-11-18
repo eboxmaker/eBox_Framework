@@ -19,7 +19,7 @@ int DNS::begin(SOCKET p_s,uint16_t p_port)
 * Note        :
 ********************************************************************************
 */
-uint8_t DNS::query(uint8_t * name)
+uint8_t DNS::query(char * name)
 {
     int i;
     int ret = 0;
@@ -59,7 +59,7 @@ uint8_t DNS::query(uint8_t * name)
 				break;
 			case SOCK_CLOSED:
 				_socket(s, Sn_MR_UDP, port, 0);
-				len = makequery(0, name, BUFPUB, MAX_DNS_BUF_SIZE);
+				len = makequery(0, (uint8_t *)name, BUFPUB, MAX_DNS_BUF_SIZE);
 				i = 0;
 				do{
 					ret = _sendto(s, BUFPUB, len, dns_server_ip, IPPORT_DOMAIN);
