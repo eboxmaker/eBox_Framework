@@ -75,7 +75,7 @@ class DNS
 		uint16_t msg_id;
 	public:
 		int 	begin(SOCKET p_s,uint16_t p_port);
-		uint8_t query(uint8_t *name);
+		uint8_t query(char *name);
         bool    get_domain_ip(uint8_t *ip);
 	private:
 		int 	parse_name(uint8_t * msg, uint8_t * compressed, uint16_t len);
