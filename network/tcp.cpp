@@ -33,18 +33,20 @@ bool TCPCLIENT::connect(u8* IP,uint16_t Port)
 		switch(state)/*获取socket0的状态*/
 		{
             case SOCK_INIT:
+                TCP_DBG("sending connect cmd...\r\n",localPort,s);
                 ret = _connect(s, remoteIP ,remotePort);/*在TCP模式下向服务器发送连接请求*/ 
                 if(ret == 1){
-                    TCP_DBG("connecting to server...\r\n");
+                    TCP_DBG("send connect cmd ok !\r\n");
                 }
                 else{
-                     TCP_DBG("connect failed...\r\n");                   
+                     TCP_DBG("send connect cmd failed !\r\n");                   
                 }
                 break;
             case SOCK_ESTABLISHED:
                 TCP_DBG("connecte successe!\r\n\r\n");
                 return true;
             case SOCK_CLOSED:
+                TCP_DBG("openning local socket...\r\n",localPort,s);
                 ret = _socket(s,Sn_MR_TCP,localPort,Sn_MR_ND);/*打开socket的一个端口*/
                 if(ret == 1){
                     TCP_DBG("open local port:%d,use %d socket is ok!\r\n",localPort,s);
@@ -124,8 +126,14 @@ u16 TCPCLIENT::recv(u8* buf,uint16_t len)
             else{
                 ret = _recv(s,buf,len);/*W5500接收来自Sever的数据*/
             }
+            TCP_DBG("需要的数据长度：%d\r\n网卡的数据:%d\r\n",len,llen);
         }       
 	}
+    else
+    {
+       TCP_DBG("链接断开！！！！\r\n");
+
+    }
     return ret;
 }
 

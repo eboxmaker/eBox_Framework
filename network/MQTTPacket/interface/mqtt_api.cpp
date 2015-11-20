@@ -63,10 +63,15 @@ int MQTT::publish(char *topick,char *message)
   int msglen = strlen(message);
   int buflen = sizeof(buf);
     
+    unsigned char ping_buf[200];
+    int ping_buf_len = sizeof(ping_buf);
+    int ping_len = 0;
+     ping_len = MQTTSerialize_pingreq(ping_buf,ping_buf_len);
+   
   transport_init(local_socket,local_port);
  
   data.clientID.cstring = "me1";
-  data.keepAliveInterval = 5;
+  data.keepAliveInterval = 60;
   data.cleansession = 1;
   topicString.cstring = topick;
    //组织消息
@@ -83,8 +88,8 @@ int MQTT::publish(char *topick,char *message)
     else
         MQTT_DBG("connect mqtt server is failed:%d\r\n",rc);
   //发布消息
-//    while(1)
-//    {
+//while(1)
+//{
       rc = transport_sendPacketBuffer(buf,len);
       if(rc > 0){
           MQTT_DBG("topick  : %s\r\n",topick);
@@ -97,6 +102,27 @@ int MQTT::publish(char *topick,char *message)
             MQTT_DBG("---------------------------\r\n");
           //break;
       }
+//      int tmp = MQTTPacket_read(buf, buflen, transport_getdata);
+//		if (tmp)
+//		{            
+//            int pid;
+//            unsigned char sessionPresent, connack_rc;
+//             MQTT_DBG("tmp = %d\r\n",tmp);
+//           
+//            MQTTSerialize_puback(buf,buflen,pid);
+//            //MQTTSerialize_ack(buf,buflen,connack_rc,0,0);
+//            MQTT_DBG("tmp = %d\r\n",tmp);
+//        }
+//          MQTT_DBG("---------\r\n",tmp);
+
+//        transport_sendPacketBuffer(ping_buf,ping_len);
+//         //MQTTPacket_read(buf, buflen, transport_getdata);
+//		if (MQTTPacket_read(buf, buflen, transport_getdata) == PINGRESP)
+//		{            
+//            unsigned char sessionPresent, connack_rc;
+//            MQTTDeserialize_connack(&sessionPresent, &connack_rc, buf, buflen);
+//            MQTT_DBG("ping requst\r\n");
+//        }
 //      delay_ms(1000);
 //      
 //     }
@@ -122,7 +148,11 @@ int MQTT::subscribe(char *topick)
 	char* payload = "mypayload";
 	int payloadlen = strlen(payload);
 	int len = 0;
-
+    
+	unsigned char ping_buf[200];
+	int ping_buf_len = sizeof(ping_buf);
+    int ping_len = 0;
+    
 
   transport_init(local_socket,local_port);
 
@@ -136,13 +166,15 @@ int MQTT::subscribe(char *topick)
       MQTT_DBG("open failed\r\n");
 
    data.clientID.cstring = "Client55249";
-	data.keepAliveInterval = 20;
+	data.keepAliveInterval = 5;
 	data.cleansession = 1;
 	data.username.cstring = "testuser";
 	data.password.cstring = "testpassword";
 
 	len = MQTTSerialize_connect(buf, buflen, &data);
 	rc = transport_sendPacketBuffer( buf, len);
+
+    ping_len = MQTTSerialize_pingreq(ping_buf,ping_buf_len);
 
 	/* wait for connack */
 	if (MQTTPacket_read(buf, buflen, transport_getdata) == CONNACK)
@@ -184,11 +216,12 @@ int MQTT::subscribe(char *topick)
 
 	/* loop getting msgs on subscribed topic */
 	topicString.cstring = topick;
-//	while (1)
-//	{
+	while (1)
+	{
 		/* transport_getdata() has a built-in 1 second timeout,
 		your mileage will vary */
-		if (MQTTPacket_read(buf, buflen, transport_getdata) == PUBLISH)
+        int tmp = MQTTPacket_read(buf, buflen, transport_getdata);
+		if (tmp == PUBLISH)
 		{
 			unsigned char dup;
 			int qos;
@@ -204,10 +237,18 @@ int MQTT::subscribe(char *topick)
 			MQTT_DBG("message  :\" %.*s\"\r\n", payloadlen_in, payload_in);
 		}
 
+        transport_sendPacketBuffer(ping_buf,ping_len);
+         MQTTPacket_read(buf, buflen, transport_getdata);
+		if (tmp == PINGRESP)
+		{            
+            unsigned char sessionPresent, connack_rc;
+            MQTTDeserialize_connack(&sessionPresent, &connack_rc, buf, buflen);
+            MQTT_DBG("ping requst\r\n");
+        }
 //		MQTT_DBG("publishing reading\r\n");
 //		len = MQTTSerialize_publish(buf, buflen, 0, 0, 0, 0, topicString, (unsigned char*)payload, payloadlen);
 //		rc = transport_sendPacketBuffer(buf, len);
-//	}
+	}
 
 	MQTT_DBG("disconnecting\r\n");
 	len = MQTTSerialize_disconnect(buf, buflen);
