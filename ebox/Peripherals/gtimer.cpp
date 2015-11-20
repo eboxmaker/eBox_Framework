@@ -21,7 +21,7 @@ callback_fun_type gTimxCallbackTable[3];
 //////////////////////////////////////
 
 
-TIM::TIM(TIM_TypeDef* TIMx)
+TIM::TIM(TIM_TypeDef *TIMx)
 {
 	_TIMx = TIMx;
 }
@@ -62,44 +62,44 @@ void TIM::attach_interrupt(void(*callback)(void))
 }
 void TIM::interrupt(FunctionalState enable)
 {
- TIM_ClearITPendingBit(_TIMx , TIM_FLAG_Update);//必须加，否则开启中断会立即产生一次中断
- TIM_ITConfig(_TIMx,TIM_IT_Update,enable);
+    TIM_ClearITPendingBit(_TIMx , TIM_FLAG_Update);//必须加，否则开启中断会立即产生一次中断
+    TIM_ITConfig(_TIMx,TIM_IT_Update,enable);
 }
 
 void TIM::start(void)
 {
-	 TIM_Cmd(_TIMx, ENABLE); //????
+    TIM_Cmd(_TIMx, ENABLE); //????
 }
 
 void TIM::stop(void)
 {
-	 TIM_Cmd(_TIMx, DISABLE); //????
+    TIM_Cmd(_TIMx, DISABLE); //????
 }
 void TIM::base_init(uint16_t period,uint16_t prescaler)
 {
-	NVIC_InitTypeDef NVIC_InitStructure;
-	
+    NVIC_InitTypeDef NVIC_InitStructure;
 
-	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	TIM_DeInit(_TIMx);
-	switch((uint32_t)_TIMx)
-	{
+
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
+    TIM_DeInit(_TIMx);
+    switch((uint32_t)_TIMx)
+    {
 //		case (uint32_t)TIM1:
 //			RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
 //			NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
 //			break;
-		case (uint32_t)TIM2:
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-			NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
-			break;
-		case (uint32_t)TIM3:
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
-			NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;//
-			break;
-		case (uint32_t)TIM4:
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
-			NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;//
-			break;
+        case (uint32_t)TIM2:
+            RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+            NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
+            break;
+        case (uint32_t)TIM3:
+            RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+            NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;//
+            break;
+        case (uint32_t)TIM4:
+            RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
+            NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;//
+            break;
 	}
 	
 	TIM_TimeBaseStructure.TIM_Period=period-1;//ARR寄存器
@@ -128,31 +128,31 @@ void TIM::clear_count(void)
 
 
 extern "C"{
-	void TIM2_IRQHandler(void)
-	{
+void TIM2_IRQHandler(void)
+{
 
-	 if(TIM_GetITStatus(TIM2 , TIM_IT_Update) == SET)
-	 {
-		TIM_ClearITPendingBit(TIM2 , TIM_FLAG_Update);
-			gTimxCallbackTable[0]();
-	 }
-	 
-	}
-	void TIM3_IRQHandler(void)
-	{
-	 if(TIM_GetITStatus(TIM3 , TIM_IT_Update) == SET)
-	 {
-		TIM_ClearITPendingBit(TIM3 , TIM_FLAG_Update);
-			gTimxCallbackTable[1]();
-	 }
-	}
-	void TIM4_IRQHandler(void)
-	{
-	 if(TIM_GetITStatus(TIM4 , TIM_IT_Update) == SET)
-	 {
-		TIM_ClearITPendingBit(TIM4 , TIM_FLAG_Update);
-			gTimxCallbackTable[2]();
-	 }
-	}
+    if(TIM_GetITStatus(TIM2 , TIM_IT_Update) == SET)
+    {
+        TIM_ClearITPendingBit(TIM2 , TIM_FLAG_Update);
+        gTimxCallbackTable[0]();
+    }
+
+}
+void TIM3_IRQHandler(void)
+{
+    if(TIM_GetITStatus(TIM3 , TIM_IT_Update) == SET)
+    {
+        TIM_ClearITPendingBit(TIM3 , TIM_FLAG_Update);
+        gTimxCallbackTable[1]();
+    }
+}
+void TIM4_IRQHandler(void)
+{
+    if(TIM_GetITStatus(TIM4 , TIM_IT_Update) == SET)
+    {
+    TIM_ClearITPendingBit(TIM4 , TIM_FLAG_Update);
+    gTimxCallbackTable[2]();
+    }
+}
 }
 
