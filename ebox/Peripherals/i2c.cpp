@@ -16,7 +16,7 @@ This specification is preliminary and is subject to change at any time without n
 #include "i2c.h"
 
 
-I2C::I2C(I2C_TypeDef* I2Cx,GPIO* p_scl_pin,GPIO* p_sda_pin)
+I2C::I2C(I2C_TypeDef *I2Cx,GPIO *p_scl_pin,GPIO *p_sda_pin)
 {
 	busy = 0;
 	_I2Cx = I2Cx;
@@ -167,7 +167,7 @@ int8_t I2C::send_7bits_address(uint8_t slave_address)
 	return err;
 
 }
-int8_t I2C::receive_byte(uint8_t* data)
+int8_t I2C::receive_byte(uint8_t *data)
 {	
 	uint16_t times = 1000;
 	int8_t err = 0;
@@ -198,7 +198,7 @@ int8_t I2C::write_byte(uint8_t slave_address,uint8_t reg_address,uint8_t data)
 	return err;
 	
 }
-int8_t I2C::write_byte(uint8_t slave_address,uint8_t reg_address,uint8_t* data,uint16_t num_to_write)
+int8_t I2C::write_byte(uint8_t slave_address,uint8_t reg_address,uint8_t *data,uint16_t num_to_write)
 {
 	uint16_t err = 0;
 
@@ -215,7 +215,7 @@ int8_t I2C::write_byte(uint8_t slave_address,uint8_t reg_address,uint8_t* data,u
 	return err;
 	
 }
-int8_t I2C::read_byte(uint8_t slave_address,uint8_t reg_address,uint8_t* data)
+int8_t I2C::read_byte(uint8_t slave_address,uint8_t reg_address,uint8_t *data)
 {
 	start();
 	send_7bits_address(slave_address);
@@ -230,7 +230,7 @@ int8_t I2C::read_byte(uint8_t slave_address,uint8_t reg_address,uint8_t* data)
 	return 0;
 }
 
-int8_t I2C::read_byte(uint8_t slave_address,uint8_t reg_address,uint8_t* data,uint16_t num_to_read)
+int8_t I2C::read_byte(uint8_t slave_address,uint8_t reg_address,uint8_t *data,uint16_t num_to_read)
 {
 	uint8_t i = 0;
 	start();

@@ -16,7 +16,7 @@ This specification is preliminary and is subject to change at any time without n
 #include "spi.h"
 
 
-SPI::SPI(SPI_TypeDef *SPIx,GPIO* p_sck_pin,GPIO* p_miso_pin,GPIO* p_mosi_pin)
+SPI::SPI(SPI_TypeDef *SPIx,GPIO *p_sck_pin,GPIO *p_miso_pin,GPIO *p_mosi_pin)
 {
 	busy = 0;
 	spi = SPIx;
@@ -26,7 +26,7 @@ SPI::SPI(SPI_TypeDef *SPIx,GPIO* p_sck_pin,GPIO* p_miso_pin,GPIO* p_mosi_pin)
 	
 };
 
-void SPI::begin(SPI_CONFIG_TYPE* spi_config)
+void SPI::begin(SPI_CONFIG_TYPE *spi_config)
 {		
 	if(spi == SPI1)
 	{	
@@ -43,7 +43,7 @@ void SPI::begin(SPI_CONFIG_TYPE* spi_config)
 
 	config(spi_config);
 }
-void SPI::config(SPI_CONFIG_TYPE* spi_config)
+void SPI::config(SPI_CONFIG_TYPE *spi_config)
 {
 	SPI_InitTypeDef SPI_InitStructure;
 
@@ -127,7 +127,7 @@ uint8_t SPI::read()
 	return(spi->DR);
 	
 }
-int8_t SPI::read(uint8_t* recv_data)
+int8_t SPI::read(uint8_t *recv_data)
 {
 	while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
 	;
@@ -155,7 +155,7 @@ int8_t SPI::read(uint8_t *recv_data,uint16_t data_length)
 	return 0;
 }
 
-int8_t SPI::take_spi_right(SPI_CONFIG_TYPE* spi_config)
+int8_t SPI::take_spi_right(SPI_CONFIG_TYPE *spi_config)
 {
 	while((busy == 1)&&(spi_config->dev_num != read_config()))
 		delay_ms(1);

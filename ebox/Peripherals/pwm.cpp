@@ -24,7 +24,7 @@ This specification is preliminary and is subject to change at any time without n
 
 
 	
-PWM::PWM(GPIO*  p_pwm_pin,uint32_t frq)
+PWM::PWM(GPIO * p_pwm_pin,uint32_t frq)
 {
 //	if(isPwmPin(PWMpin))
 //	{
@@ -51,7 +51,7 @@ void PWM::base_init(uint16_t Period,uint16_t Prescaler)
 	TIM_Cmd(TIMx, ENABLE); //
 
 }	
-void PWM::init_info(GPIO* p_pwm_pin)
+void PWM::init_info(GPIO *p_pwm_pin)
 {
 	if(p_pwm_pin->port == GPIOA)
 	{
@@ -128,43 +128,43 @@ void PWM::set_frq(uint32_t frq)
 void PWM::set_duty(uint16_t Duty)
 {
 
-			duty = Duty;
-	
-			uint16_t pulse = 0;
-			float percent;
-					
-			if(duty>1000)
-				duty = 1000;
-			percent = duty/1000.0;
-			
-		  pulse = (uint16_t) (( percent * period ));
+    duty = Duty;
 
-			TIM_OCInitTypeDef  TIM_OCInitStructure;
-			
-			TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
-			TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-			TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-			TIM_OCInitStructure.TIM_Pulse = pulse;
-				switch(ch)
-				{
-					case TIMxCH1:
-						TIM_OC1Init(TIMx, &TIM_OCInitStructure);
-						break;
-					case TIMxCH2:
-						TIM_OC2Init(TIMx, &TIM_OCInitStructure);
-						break;
-					case TIMxCH3:
-						TIM_OC3Init(TIMx, &TIM_OCInitStructure);
-						break;
-					case TIMxCH4:
-						TIM_OC4Init(TIMx, &TIM_OCInitStructure);
-						break;
-				}		
+    uint16_t pulse = 0;
+    float percent;
+            
+    if(duty>1000)
+        duty = 1000;
+    percent = duty/1000.0;
+
+    pulse = (uint16_t) (( percent  *period ));
+
+    TIM_OCInitTypeDef  TIM_OCInitStructure;
+
+    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+    TIM_OCInitStructure.TIM_Pulse = pulse;
+    switch(ch)
+    {
+        case TIMxCH1:
+            TIM_OC1Init(TIMx, &TIM_OCInitStructure);
+            break;
+        case TIMxCH2:
+            TIM_OC2Init(TIMx, &TIM_OCInitStructure);
+            break;
+        case TIMxCH3:
+            TIM_OC3Init(TIMx, &TIM_OCInitStructure);
+            break;
+        case TIMxCH4:
+            TIM_OC4Init(TIMx, &TIM_OCInitStructure);
+            break;
+    }		
 		
 		
 }
 //duty:0-1000∂‘”¶0%-100.0%
-void analog_write(GPIO* p_pwm_pin, uint16_t duty) 
+void analog_write(GPIO *p_pwm_pin, uint16_t duty) 
 {
 //	if(isPwmPin(PWMpin))
 //	{
