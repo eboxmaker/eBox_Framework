@@ -25,7 +25,7 @@ callback_fun_type exti_callback_table[EXTI_LINE_NUM];
 //  				EXTI_Trigger_Falling  
 //  				EXTI_Trigger_Rising_Falling 
 
-EXTIx::EXTIx(GPIO* p_exti_pin, EXTITrigger_TypeDef p_trigger)
+EXTIx::EXTIx(GPIO *p_exti_pin, EXTITrigger_TypeDef p_trigger)
 {
 
 
@@ -44,30 +44,30 @@ void EXTIx::begin()
 	EXTI_InitTypeDef EXTI_InitStructure;
 	/* EXTI line(PB0) mode config */
 	GPIO_EXTILineConfig(port_source, pin_source); 
-  EXTI_InitStructure.EXTI_Line = exti_line;
-  EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-  EXTI_InitStructure.EXTI_Trigger = trigger; //下降沿中断
-  EXTI_InitStructure.EXTI_LineCmd = ENABLE;
-  EXTI_Init(&EXTI_InitStructure); 
+    EXTI_InitStructure.EXTI_Line = exti_line;
+    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    EXTI_InitStructure.EXTI_Trigger = trigger; //下降沿中断
+    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    EXTI_Init(&EXTI_InitStructure); 
 
 }
 void EXTIx::interrupt(FunctionalState enable)
 {
-	 NVIC_InitTypeDef NVIC_InitStructure;
+    NVIC_InitTypeDef NVIC_InitStructure;
   
   /* Configure one bit for preemption priority */
 //  NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);//使用全局控制值
   
-  /* 配置P[A|B|C|D|E]0为中断源 */
-  NVIC_InitStructure.NVIC_IRQChannel = irq;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = enable;
-  NVIC_Init(&NVIC_InitStructure);
+    /* 配置P[A|B|C|D|E]0为中断源 */
+    NVIC_InitStructure.NVIC_IRQChannel = irq;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = enable;
+    NVIC_Init(&NVIC_InitStructure);
 
 }
 
-void EXTIx::init_info(GPIO* p_exti_pin)
+void EXTIx::init_info(GPIO *p_exti_pin)
 {
 	switch((uint32_t)p_exti_pin->port)
 	{
@@ -150,117 +150,117 @@ void EXTIx::init_info(GPIO* p_exti_pin)
 
 void EXTIx::attach_interrupt(void (*callback_fun)(void))
 {
-		exti_callback_table[pin_source] = callback_fun;
+    exti_callback_table[pin_source] = callback_fun;
 }
 extern "C" {
 	
-	void EXTI0_IRQHandler(void)
-	{
-		if(EXTI_GetITStatus(EXTI_Line0) != RESET) 
-		{
-			exti_callback_table[0]();
-			EXTI_ClearITPendingBit(EXTI_Line0);    
-		}  	
-	}
-	void EXTI1_IRQHandler(void)
-	{
-		if(EXTI_GetITStatus(EXTI_Line1) != RESET)
-		{
-			exti_callback_table[1]();
+void EXTI0_IRQHandler(void)
+{
+    if(EXTI_GetITStatus(EXTI_Line0) != RESET) 
+    {
+        exti_callback_table[0]();
+        EXTI_ClearITPendingBit(EXTI_Line0);    
+    }  	
+}
+void EXTI1_IRQHandler(void)
+{
+    if(EXTI_GetITStatus(EXTI_Line1) != RESET)
+    {
+        exti_callback_table[1]();
 
-			EXTI_ClearITPendingBit(EXTI_Line1);    
-		}  	
-	}
-	void EXTI2_IRQHandler(void)
-	{
-		if(EXTI_GetITStatus(EXTI_Line2) != RESET) 
-		{
+        EXTI_ClearITPendingBit(EXTI_Line1);    
+    }  	
+}
+void EXTI2_IRQHandler(void)
+{
+    if(EXTI_GetITStatus(EXTI_Line2) != RESET) 
+    {
 
-			exti_callback_table[2]();
+        exti_callback_table[2]();
 
-			EXTI_ClearITPendingBit(EXTI_Line2);    
-		}  	
-	}
-	void EXTI3_IRQHandler(void)
-	{
-		if(EXTI_GetITStatus(EXTI_Line3) != RESET) 
-		{
-			exti_callback_table[3]();
-			EXTI_ClearITPendingBit(EXTI_Line3);     
-		}  	
-	}
-	void EXTI4_IRQHandler(void)
-	{
-		if(EXTI_GetITStatus(EXTI_Line4) != RESET) 
-		{
-			exti_callback_table[4]();
-			EXTI_ClearITPendingBit(EXTI_Line4);     
-		}  	
-	}
+        EXTI_ClearITPendingBit(EXTI_Line2);    
+    }  	
+}
+void EXTI3_IRQHandler(void)
+{
+    if(EXTI_GetITStatus(EXTI_Line3) != RESET) 
+    {
+        exti_callback_table[3]();
+        EXTI_ClearITPendingBit(EXTI_Line3);     
+    }  	
+}
+void EXTI4_IRQHandler(void)
+{
+    if(EXTI_GetITStatus(EXTI_Line4) != RESET) 
+    {
+        exti_callback_table[4]();
+        EXTI_ClearITPendingBit(EXTI_Line4);     
+    }  	
+}
 
-	void EXTI9_5_IRQHandler(void)
-	{
-		if(EXTI_GetITStatus(EXTI_Line5) != RESET) 
-		{
-			exti_callback_table[5]();
-			EXTI_ClearITPendingBit(EXTI_Line5);     
-		}   
-		if(EXTI_GetITStatus(EXTI_Line6) != RESET) 
-		{
-			exti_callback_table[6]();
-			EXTI_ClearITPendingBit(EXTI_Line6);    
-		}  
-		if(EXTI_GetITStatus(EXTI_Line7) != RESET) 
-		{
-			exti_callback_table[7]();
-			EXTI_ClearITPendingBit(EXTI_Line7);     
-		}   
-		if(EXTI_GetITStatus(EXTI_Line8) != RESET) 
-		{
-			exti_callback_table[8]();
-			EXTI_ClearITPendingBit(EXTI_Line8);    
-		}	
-		if(EXTI_GetITStatus(EXTI_Line9) != RESET) 
-		{
-			exti_callback_table[9]();
-			EXTI_ClearITPendingBit(EXTI_Line9);    
-		}   
+void EXTI9_5_IRQHandler(void)
+{
+    if(EXTI_GetITStatus(EXTI_Line5) != RESET) 
+    {
+        exti_callback_table[5]();
+        EXTI_ClearITPendingBit(EXTI_Line5);     
+    }   
+    if(EXTI_GetITStatus(EXTI_Line6) != RESET) 
+    {
+        exti_callback_table[6]();
+        EXTI_ClearITPendingBit(EXTI_Line6);    
+    }  
+    if(EXTI_GetITStatus(EXTI_Line7) != RESET) 
+    {
+        exti_callback_table[7]();
+        EXTI_ClearITPendingBit(EXTI_Line7);     
+    }   
+    if(EXTI_GetITStatus(EXTI_Line8) != RESET) 
+    {
+        exti_callback_table[8]();
+        EXTI_ClearITPendingBit(EXTI_Line8);    
+    }	
+    if(EXTI_GetITStatus(EXTI_Line9) != RESET) 
+    {
+        exti_callback_table[9]();
+        EXTI_ClearITPendingBit(EXTI_Line9);    
+    }   
 
-	}
+}
 
-	void EXTI15_10_IRQHandler(void)
-	{
-		if(EXTI_GetITStatus(EXTI_Line10) != RESET) 
-		{
-			exti_callback_table[10]();
-			EXTI_ClearITPendingBit(EXTI_Line10);     
-		}   
-		if(EXTI_GetITStatus(EXTI_Line11) != RESET) 
-		{
-			exti_callback_table[11]();
-			EXTI_ClearITPendingBit(EXTI_Line11);     
-		}  
-		if(EXTI_GetITStatus(EXTI_Line12) != RESET) 
-		{
-			exti_callback_table[12]();
-			EXTI_ClearITPendingBit(EXTI_Line12);     
-		}   
-		if(EXTI_GetITStatus(EXTI_Line13) != RESET) 
-		{
-			exti_callback_table[13]();
-			EXTI_ClearITPendingBit(EXTI_Line13);     
-		}	
-		if(EXTI_GetITStatus(EXTI_Line14) != RESET) 
-		{
-			exti_callback_table[14]();
-			EXTI_ClearITPendingBit(EXTI_Line14);     
-		}   
-		if(EXTI_GetITStatus(EXTI_Line15) != RESET) 
-		{
-			exti_callback_table[15]();
-			EXTI_ClearITPendingBit(EXTI_Line15);    
-		}   
+void EXTI15_10_IRQHandler(void)
+{
+    if(EXTI_GetITStatus(EXTI_Line10) != RESET) 
+    {
+        exti_callback_table[10]();
+        EXTI_ClearITPendingBit(EXTI_Line10);     
+    }   
+    if(EXTI_GetITStatus(EXTI_Line11) != RESET) 
+    {
+        exti_callback_table[11]();
+        EXTI_ClearITPendingBit(EXTI_Line11);     
+    }  
+    if(EXTI_GetITStatus(EXTI_Line12) != RESET) 
+    {
+        exti_callback_table[12]();
+        EXTI_ClearITPendingBit(EXTI_Line12);     
+    }   
+    if(EXTI_GetITStatus(EXTI_Line13) != RESET) 
+    {
+        exti_callback_table[13]();
+        EXTI_ClearITPendingBit(EXTI_Line13);     
+    }	
+    if(EXTI_GetITStatus(EXTI_Line14) != RESET) 
+    {
+        exti_callback_table[14]();
+        EXTI_ClearITPendingBit(EXTI_Line14);     
+    }   
+    if(EXTI_GetITStatus(EXTI_Line15) != RESET) 
+    {
+        exti_callback_table[15]();
+        EXTI_ClearITPendingBit(EXTI_Line15);    
+    }   
 
-	}
+}
 
 }

@@ -114,7 +114,7 @@ void ADC1_init(void)
 	 
 	}
 
-uint16_t analog_read(GPIO* pin)
+uint16_t analog_read(GPIO *pin)
 {
 	switch((uint32_t)pin->port)
 	{
@@ -167,7 +167,7 @@ uint16_t analog_read(GPIO* pin)
 	return 0;
 
 }
-uint16_t analog_read_voltage(GPIO* pin)   
+uint16_t analog_read_voltage(GPIO *pin)   
 { 
    return (u16)(analog_read(pin)*3300/4096);   //求的结果扩大了1000倍，方便下面求出小数
 }

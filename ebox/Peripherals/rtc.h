@@ -53,12 +53,12 @@ class RTC_CLASS
 		uint32_t get_counter();
 		void set_time_HMS(uint8_t h,uint8_t m,uint8_t s);
 		void set_alarm  (uint8_t h,uint8_t m,uint8_t s);
-		void get_time_HMS(uint8_t* h,uint8_t* m,uint8_t* s);
+		void get_time_HMS(uint8_t *h,uint8_t *m,uint8_t *s);
 	
 	private:
-		void config();
+		void    config();
 		uint8_t is_config(uint16_t configFlag);
-		void set_config_flag(uint16_t configFlag);
+		void    set_config_flag(uint16_t configFlag);
 };
 extern RTC_CLASS 	rtc;
 

@@ -15,14 +15,14 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "spi.h"
 
-SOFTSPI::SOFTSPI(GPIO* p_sck_pin,GPIO* p_miso_pin,GPIO* p_mosi_pin)
+SOFTSPI::SOFTSPI(GPIO *p_sck_pin,GPIO *p_miso_pin,GPIO *p_mosi_pin)
 {
 	sck_pin =  p_sck_pin;
 	miso_pin = p_miso_pin;
 	mosi_pin = p_mosi_pin;
 	
 }
-void SOFTSPI::begin(SPI_CONFIG_TYPE* spi_config)
+void SOFTSPI::begin(SPI_CONFIG_TYPE *spi_config)
 {
 
 	sck_pin->mode(OUTPUT_PP);
@@ -46,7 +46,7 @@ void SOFTSPI::begin(SPI_CONFIG_TYPE* spi_config)
 				break;			
 	}
 }
-void SOFTSPI::config(SPI_CONFIG_TYPE* spi_config)
+void SOFTSPI::config(SPI_CONFIG_TYPE *spi_config)
 {
 	current_dev_num = spi_config->dev_num;
 	mode = spi_config->mode;
@@ -259,7 +259,7 @@ uint8_t SOFTSPI::read()
 {
 	return transfer(0xff);
 }
-int8_t  SOFTSPI::read(uint8_t* data)
+int8_t  SOFTSPI::read(uint8_t *data)
 {
 	*data = transfer(0xff);
 return 0;
@@ -276,7 +276,7 @@ int8_t  SOFTSPI::read(uint8_t *rcvdata,uint16_t data_length)
 	return 0;
 }
 
-int8_t SOFTSPI::take_spi_right(SPI_CONFIG_TYPE* spi_config)
+int8_t SOFTSPI::take_spi_right(SPI_CONFIG_TYPE *spi_config)
 {
 	while((busy == 1)&&(spi_config->dev_num != read_config()))
 		delay_ms(1);

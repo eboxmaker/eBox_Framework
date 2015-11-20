@@ -15,7 +15,7 @@ This specification is preliminary and is subject to change at any time without n
 */#include "common.h"
 
 
-GPIO::GPIO(GPIO_TypeDef* _port,uint16_t _pin)
+GPIO::GPIO(GPIO_TypeDef *_port,uint16_t _pin)
 {
 	port = _port;
 	pin = _pin;
@@ -63,11 +63,11 @@ void GPIO::mode(PIN_MODE mode_val)
 
 void GPIO::set()
 {
-		port->BSRR = pin;
+    port->BSRR = pin;
 }
 void GPIO::reset()
 {
-		port->BRR = pin;
+    port->BRR = pin;
 }
 
 void GPIO::write(uint8_t val)
@@ -78,7 +78,7 @@ void GPIO::write(uint8_t val)
 		port->BSRR = pin;
 }
 
-void GPIO::read(uint8_t* val)
+void GPIO::read(uint8_t *val)
 {
 	*val = port->IDR & pin;
 }		
@@ -89,12 +89,18 @@ uint8_t GPIO::read(void)
 		return 1;
 	return  0;
 }
+void GPIO::toggle()
+{
+    port->ODR ^= pin;
+}	
 
-uint8_t shift_in(GPIO* data_pin, GPIO* clock_pin, uint8_t bit_order) {
+uint8_t shift_in(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order) 
+{
 	uint8_t value = 0;
 	uint8_t i;
 
-	for (i = 0; i < 8; ++i) {
+	for (i = 0; i < 8; ++i) 
+    {
 		clock_pin->write(HIGH);
 		if (bit_order == LSB_FIRST)
 			value |= data_pin->read() << i;
@@ -105,7 +111,7 @@ uint8_t shift_in(GPIO* data_pin, GPIO* clock_pin, uint8_t bit_order) {
 	return value;
 }
 
-void shift_out(GPIO* data_pin, GPIO* clock_pin, uint8_t bit_order, uint8_t val)
+void shift_out(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order, uint8_t val)
 {
 	int i;
 	for (i = 0; i < 8; i++)  
