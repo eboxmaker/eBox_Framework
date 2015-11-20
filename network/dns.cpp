@@ -1,6 +1,12 @@
 #include "dns.h"
 #include "string.h"
 
+#define DNS_DEBUG 1
+#if DNS_DEBUG
+	#define DNS_DBG(...) DBG(__VA_ARGS__)
+#else
+	#define  DNS_DBG(...) 
+#endif
 int DNS::begin(SOCKET p_s,uint16_t p_port)
 {
 	int ret = 0;
@@ -19,56 +25,67 @@ int DNS::begin(SOCKET p_s,uint16_t p_port)
 * Note        :
 ********************************************************************************
 */
-uint8_t DNS::query(char * name)
+int DNS::query(char *name)
 {
-    int i;
+    int state;
     int ret = 0;
     static uint32_t dns_wait_time = 0;
     struct dhdr dhp;
     uint8_t ip[4];
     uint16_t len, port;
     uint8_t dns_server_ip[4];
-	uint8_t BUFPUB[256];
+	uint8_t BUFPUB[100];
     
     get_local_dns(dns_server_ip);
+    len = makequery(0, (uint8_t *)name, BUFPUB, MAX_DNS_BUF_SIZE);
+    DNS_DBG("域名:[%s]\r\n",name);
+    DNS_DBG("域名解析中...\r\n");
     
-	do
-	{
-		switch(socket_status(s)){
-			case SOCK_UDP:
-				if ((len = recv_available(s)) > 0){
-					if (len > MAX_DNS_BUF_SIZE) len = MAX_DNS_BUF_SIZE;
-					len = _recvfrom(s, BUFPUB, len, ip, &port);
-					if(parseMSG(&dhp, BUFPUB)){
-						_close(s);
-						ret = DNS_RET_SUCCESS;
-						break;
-					}
-					else 
-						dns_wait_time = DNS_RESPONSE_TIMEOUT;
-				}
-				else{
-					delay_ms(1000);
-					dns_wait_time++;
-				}
-				if(dns_wait_time >= DNS_RESPONSE_TIMEOUT){
-					_close(s);
-					ret = DNS_RET_FAIL;
-					return ret;
-				}
-				break;
-			case SOCK_CLOSED:
-				_socket(s, Sn_MR_UDP, port, 0);
-				len = makequery(0, (uint8_t *)name, BUFPUB, MAX_DNS_BUF_SIZE);
-				i = 0;
-				do{
-					ret = _sendto(s, BUFPUB, len, dns_server_ip, IPPORT_DOMAIN);
-					i++;
-				}while(ret == 0 && i < 5);
-				break;         
-		}
-	}while(ret != DNS_RET_SUCCESS);
-	return ret;
+    while(1)
+    {
+        state = socket_status(s);
+        if(state == SOCK_CLOSED)
+        {
+            DNS_DBG("dns's socket closed!,socket: %d\r\n",s);
+            DNS_DBG("openning dns's socket... !\r\n");
+            if(_socket(s, Sn_MR_UDP, port, 0) == 1)
+            DNS_DBG("open dns's socket seccusse!\r\n");                     
+        }
+
+        if(state == SOCK_UDP)
+        {
+            DNS_DBG("sending query cmd...\r\n");            
+            if(_sendto(s, BUFPUB, len, dns_server_ip, IPPORT_DOMAIN) > 0)
+                DNS_DBG("send dns cmd ok!\r\n");   
+
+            if ((len = recv_available(s)) > 0){
+                if (len > MAX_DNS_BUF_SIZE) {
+                    len = MAX_DNS_BUF_SIZE;
+                }
+                len = _recvfrom(s, BUFPUB, len, ip, &port);
+                DNS_DBG("receiv dns's date ok!datelen:%d\r\n",len);   
+                if(parseMSG(&dhp, BUFPUB)){
+                    _close(s);
+                    DNS_DBG("query is ok!\r\n");   
+                    return 1;
+                }
+                else {
+                    DNS_DBG("dns's date is bad!\r\n");   
+                    return -1;
+                }
+            }
+            else{
+                DNS_DBG("wait dns's date...!\r\n");   
+                delay_ms(1000);
+                dns_wait_time++;
+            }
+            if(dns_wait_time >= 3){
+                _close(s);
+                return -2;
+            }
+        }
+    };
+    return -3;
 }
 bool DNS::get_domain_ip(uint8_t *ip)
 {

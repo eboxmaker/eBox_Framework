@@ -53,12 +53,14 @@ MQTTPacket_read() has a function pointer for a function call to get the data to 
 to know the caller or other indicator (the socket id): int (*getfn)(unsigned char*, int)
 */
 
-static uint8_t  my_socket;
-int             my_port;
+
+#include "tcp.h"
+
+TCPCLIENT mqtt_tcp;
 int transport_init(int local_sock,int local_port)
 {
-    my_socket = local_sock;
-    my_port = local_port;
+    mqtt_tcp.begin(local_sock,local_port);
+    return 0;
 }
 /*
 @return  sended data size for success else 0.
@@ -66,22 +68,19 @@ int transport_init(int local_sock,int local_port)
 int transport_sendPacketBuffer(unsigned char* buf, int buflen)
 {
 	int rc = 0;
-    rc = _send(my_socket,buf,buflen);
+    rc = mqtt_tcp.send(buf,buflen);
 	return rc;
 }
 
 /*
 @return  received data size for success else 0.
+阻塞式接收，如果mqtt超时会导致链接中断
 */
 int transport_getdata(unsigned char* buf, int count)
 {
     int rc = 0;
-	u16 llen = 0;
-    while(llen == 0){
-		llen = recv_available(my_socket);/*len为已接收数据的大小*/
-		if(llen > 0){
-			rc = _recv(my_socket,buf,count);/*W5500接收来自Sever的数据*/
-		}	
+    while(rc == 0){
+		rc = mqtt_tcp.recv(buf,count);	
 	}
 	return rc;
 }
@@ -94,7 +93,7 @@ int transport_getdatanb(void *sck, unsigned char* buf, int count)
     int rc;
     while(rc == 0)
     {
-        rc = _recv(my_socket,buf,count);
+        rc = mqtt_tcp.recv(buf,count);
     }
 	return rc;
 }
@@ -106,18 +105,8 @@ removing indirections
 @return  1 for success else 0:time out.
 */
 int transport_open(char* addr, int port)
-{
-    int i = 2000000;
-    int ret;
-    _close(my_socket);
-    ret = _socket(my_socket,Sn_MR_TCP,my_port,0x20);/*打开socket的一个端口*/
-    
-    do{
-    ret = _connect(my_socket, (unsigned char *)addr ,port);/*在TCP模式下向服务器发送连接请求*/ 
-    }while(ret == -2);
-
- 
-    return ret;  
+{    
+	return mqtt_tcp.connect((unsigned char *)addr,port);   
 }
 /*
 @return  1 for success else 0:time out.
@@ -125,6 +114,6 @@ int transport_open(char* addr, int port)
 
 int transport_close(int sock)
 {
-    _close(my_socket);
+    mqtt_tcp.stop();
 	return 1;
 }

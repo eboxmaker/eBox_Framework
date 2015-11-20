@@ -1,6 +1,12 @@
 #include "tcp.h"
 #include "ebox.h"
 
+#define TCP_DEBUG 1
+#if TCP_DEBUG
+	#define TCP_DBG(...) DBG(__VA_ARGS__)
+#else
+	#define  TCP_DBG(...) 
+#endif
 
 int TCPCLIENT::begin(SOCKET ps,uint16_t port)
 {
@@ -12,39 +18,48 @@ int TCPCLIENT::begin(SOCKET ps,uint16_t port)
 }
 bool TCPCLIENT::connect(u8* IP,uint16_t Port)
 {
-	bool ret = false;
+	int ret;
 	u8 i = 20;
-	u8 tmp;
+	u8 state;
 	remoteIP[0] = IP[0];
 	remoteIP[1] = IP[1];
 	remoteIP[2] = IP[2];
 	remoteIP[3] = IP[3];
 	remotePort = Port;
-	DBG("\r\nremote server:%d.%d.%d.%d:%d",remoteIP[0],remoteIP[1],remoteIP[2],remoteIP[3],remotePort);
+	TCP_DBG("remote server:%d.%d.%d.%d:%d\r\n",remoteIP[0],remoteIP[1],remoteIP[2],remoteIP[3],remotePort);
 	while(--i)
 	{
-		tmp =status();
-		switch(tmp)/*获取socket0的状态*/
+		state =status();
+		switch(state)/*获取socket0的状态*/
 		{
-		case SOCK_INIT:
-			 ret = _connect(s, remoteIP ,remotePort);/*在TCP模式下向服务器发送连接请求*/ 
-			 DBG("\r\nconnnect() return = %d",ret);
-			 DBG("\r\nconnecting to server...");
-		 break;
-		 case SOCK_ESTABLISHED:
-				 DBG("\r\nconnected !");
-		 return ret;
-		 case SOCK_CLOSED:
-			ret = _socket(s,Sn_MR_TCP,localPort,Sn_MR_ND);/*打开socket的一个端口*/
-			DBG("\r\nopen local port:%d,use %d socket",localPort,s);
-			DBG("\r\n_socket() return = %d",ret);
-		 break;
+            case SOCK_INIT:
+                ret = _connect(s, remoteIP ,remotePort);/*在TCP模式下向服务器发送连接请求*/ 
+                if(ret == 1){
+                    TCP_DBG("connecting to server...\r\n");
+                }
+                else{
+                     TCP_DBG("connect failed...\r\n");                   
+                }
+                break;
+            case SOCK_ESTABLISHED:
+                TCP_DBG("connecte successe!\r\n\r\n");
+                return true;
+            case SOCK_CLOSED:
+                ret = _socket(s,Sn_MR_TCP,localPort,Sn_MR_ND);/*打开socket的一个端口*/
+                if(ret == 1){
+                    TCP_DBG("open local port:%d,use %d socket is ok!\r\n",localPort,s);
+                }
+                else{
+                    TCP_DBG("open local eth err : %d",ret);
+                }
+                break;
 		}
 		delay_ms(500);
 	}
 	if(i == 0)
-		ret = false;
-	return ret;
+		return false;
+    
+	return false;
 }
 //返回socket状态
 uint8_t TCPCLIENT::status()
@@ -74,8 +89,7 @@ void TCPCLIENT::stop()
     uint32_t start = millis();  
     _disconnect(s);
     // wait a second for the connection to close
-    while (status() != SOCK_CLOSED && millis() - start < 1000)
-        delay_ms(1);
+    while (status() != SOCK_CLOSED && millis() - start < 2000);
     if(status() == SOCK_CLOSED)
         _close(s);
 }
@@ -137,8 +151,8 @@ int TCPSERVER::begin(SOCKET ps,uint16_t port)
         case SOCK_INIT:/*socket初始化完成*/
             ret = _listen(s);/*在TCP模式下向服务器发送连接请求*/
             if(ret == 1){
-                DBG("\r\nlisten on port:%d,socket:%d",localPort,s);
-                DBG("\r\nwait one connection !");
+                TCP_DBG("\r\nlisten on port:%d,socket:%d",localPort,s);
+                TCP_DBG("\r\nwait one connection !");
                 return ret;
             }
             else
@@ -147,10 +161,10 @@ int TCPSERVER::begin(SOCKET ps,uint16_t port)
         case SOCK_CLOSED:/*socket关闭*/
             ret = _socket(s,Sn_MR_TCP,localPort,Sn_MR_ND);/*打开socket的一个端口*/
             if(ret == 0)
-                DBG("\r\nopen port:%d success !",localPort);
+                TCP_DBG("\r\nopen port:%d success !",localPort);
             break;
        default :
-            DBG("\r\nerr code:%d",tmp);
+            TCP_DBG("\r\nerr code:%d",tmp);
             break;
     }
  }
@@ -165,8 +179,8 @@ u16 TCPSERVER::recv(u8* buf)
                 if(client_connecte_event(s)){
                     get_remote_ip(s,remoteIP);
                     remotePort = get_remote_port(s);
-                    DBG("\r\none tcp client connected !");
-                    DBG("\r\nclient info:%d.%d.%d.%d:%d !",remoteIP[0],remoteIP[1],remoteIP[2],remoteIP[3],remotePort);
+                    TCP_DBG("\r\none tcp client connected !");
+                    TCP_DBG("\r\nclient info:%d.%d.%d.%d:%d !",remoteIP[0],remoteIP[1],remoteIP[2],remoteIP[3],remotePort);
                 }
 				len = recv_available(s);/*len为已接收数据的大小*/
 				if(len>0)				
@@ -177,12 +191,12 @@ u16 TCPSERVER::recv(u8* buf)
 			case SOCK_LISTEN:
 				break;
 			case SOCK_CLOSE_WAIT:
-				DBG("\r\n链接请求关闭");
+				TCP_DBG("\r\n链接请求关闭");
 				close();
 				break;
 			case SOCK_CLOSED:
 				//DBG("\r\ntmp = %x",tmp);
-				DBG("\r\n链接已经关闭,开始重新打开服务器！");
+				TCP_DBG("\r\n链接已经关闭,开始重新打开服务器！");
 				begin(s,localPort);
 				break;
 			default:
@@ -193,8 +207,7 @@ u16 TCPSERVER::recv(u8* buf)
 }
 void TCPSERVER::close()
 {
-    
-	 _close(s);
+ 	 _close(s);
 }
 u16 TCPSERVER::send(u8* buf,u16 len)
 {

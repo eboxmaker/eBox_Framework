@@ -3,10 +3,7 @@
 #include "socket.h"
 #include "w5500.h"
 
-#define  DNS_RESPONSE_TIMEOUT 3 // 3 seconds
-#define  DNS_RET_PROGRESS  0
-#define  DNS_RET_SUCCESS      1
-#define  DNS_RET_FAIL   2
+
 
 
 #define  INITRTT     2000L	/* Initial smoothed response time */
@@ -75,7 +72,7 @@ class DNS
 		uint16_t msg_id;
 	public:
 		int 	begin(SOCKET p_s,uint16_t p_port);
-		uint8_t query(char *name);
+		int     query(char *name);
         bool    get_domain_ip(uint8_t *ip);
 	private:
 		int 	parse_name(uint8_t * msg, uint8_t * compressed, uint16_t len);
