@@ -18,7 +18,7 @@ This specification is preliminary and is subject to change at any time without n
 
 #define DATAOUT  GPIOB->ODR             //PD[0..7]--(LCD)D0~D7
 
-LCD1602::LCD1602(GPIO* LEDPin,GPIO* ENPin,GPIO* RWPin,GPIO* RSPin,GPIO* DB0,GPIO* DB1,GPIO* DB2,GPIO* DB3,GPIO* DB4,GPIO* DB5,GPIO* DB6,GPIO* DB7)
+LCD1602::LCD1602(GPIO *LEDPin,GPIO *ENPin,GPIO *RWPin,GPIO *RSPin,GPIO *DB0,GPIO *DB1,GPIO *DB2,GPIO *DB3,GPIO *DB4,GPIO *DB5,GPIO *DB6,GPIO *DB7)
 {
 		 led = LEDPin;
 		 en	= ENPin;
@@ -136,8 +136,8 @@ void LCD1602::wdat(uint8_t dat)
 *名    称：pos()
 *功    能：设定显示位置
 *入口参数：pos:显示位置,值的范围如下：
-*    0x00----------------0x0f 0x10-------0x27 第一行（一次显示16个字符）
-*    0x40----------------0x4f 0x50-------0x67 第二行
+ *   0x00----------------0x0f 0x10-------0x27 第一行（一次显示16个字符）
+ *   0x40----------------0x4f 0x50-------0x67 第二行
 *出口参数：无
 *********************************************************************/
 void LCD1602::pos(uint8_t pos)
@@ -149,7 +149,7 @@ void LCD1602::pos(uint8_t pos)
 *名    称：setPos()
 *功    能：根据习惯设定显示位置
 *入口参数：row:行，row=1表示第一行，row=2表示第二行
-*          col:列，0~15，用于指定显示的列，范围可以是0~40
+ *         col:列，0~15，用于指定显示的列，范围可以是0~40
 *出口参数：无
 *********************************************************************/
 void LCD1602::set_pos(uint8_t row,uint8_t col)
@@ -168,7 +168,7 @@ void LCD1602::disp_char(char ch)
 /*********************************************************************
 *功  能：在指定位置显示一个字符	  
 *入  口：row:行 1或2        col:列，0~15
-*        ch：待显示的字符
+ *       ch：待显示的字符
 *********************************************************************/
 void LCD1602::disp_char(uint8_t row,uint8_t col,char ch)
 {
@@ -194,8 +194,8 @@ void LCD1602::disp_string(char str[])
 *名    称：setPos_dispString()
 *功    能：使LCD1602从指定位置开始显示一个字符串
 *入口参数：row:显示行，1或2
-*          col:显示列，0~15 （0~40） 
-*          str[]:待显示的字符串
+ *         col:显示列，0~15 （0~40） 
+ *         str[]:待显示的字符串
 *出口参数：无
 *说    明：指定位置是显示的初始位置，第一个字符显示的位置
 *********************************************************************/
@@ -204,7 +204,7 @@ void LCD1602::disp_string(uint8_t row,uint8_t col,char str[])
 	set_pos(row,col);
 	disp_string(str);
 }
-void LCD1602::printf(const char* fmt,...)
+void LCD1602::printf(const char *fmt,...)
 {
 	char buf[16];
 	u8 i = 0;
@@ -218,7 +218,7 @@ void LCD1602::printf(const char* fmt,...)
 	   wdat(buf[i++]);
 	}
 }
-void LCD1602::printf(uint8_t row,uint8_t col,const char* fmt,...)
+void LCD1602::printf(uint8_t row,uint8_t col,const char *fmt,...)
 {
 	char buf[16];
 	u8 i = 0;
@@ -237,15 +237,15 @@ void LCD1602::printf(uint8_t row,uint8_t col,const char* fmt,...)
 *名    称：DispDateTime()
 *功    能：显示日历，显示日期与时间
 *入口参数：year:年,可以是任意值
-*          month:月，1~12
-*          day:日，1~31
-*          hour:时，1~24 或  1~12
-*          min:分，0~59
-*          sec:秒，0~59
+ *         month:月，1~12
+ *         day:日，1~31
+ *         hour:时，1~24 或  1~12
+ *         min:分，0~59
+ *         sec:秒，0~59
 *出口参数：无
 *说    明：使用前必须先宏定义USE_DISP_DATE，在包含文件之前定义有效
 *显示格式：Date:yyyy-mm-dd  *
-*          Time:hh:mm:ss    *
+ *         Time:hh:mm:ss    *
 *********************************************************************/
 
 void LCD1602::disp_date_time(uint32_t year,uint8_t month,uint8_t day,uint8_t hour,uint8_t min,uint8_t sec)
@@ -317,10 +317,10 @@ void LCD1602::open(void)
 *名    称：FlickerChar()
 *功    能：使指定位置字符闪烁，不显示光标
 *入口参数：row:行 1,2  
-*          col:列 0~15
+ *         col:列 0~15
 *出口参数：无
 *说    明：写命令0x0D不显示光标的闪烁，写命令0x0F是显示光标的闪烁
-*          一旦设定闪烁后，会根据位置变化闪烁，关闪烁写命令0x0C
+ *         一旦设定闪烁后，会根据位置变化闪烁，关闪烁写命令0x0C
 *********************************************************************/
 void LCD1602::flicker(void)
 {
@@ -358,16 +358,16 @@ void LCD1602::back_light(u8 i)
 *入口参数：无
 *出口参数：无
 *常用命令：0x38:16*2显示，5*&点阵显示字符，8位数据;指令执行时间40us
-*          0x0C:开显示，关光标	  40us
-*          0x08:关显示，关光标	  40us
-*          0x0D:字符闪烁，关光标，接着设定位置，闪烁周期0.4ms左右
-*          0x0F:字符闪烁，开光标
-*          0x06:写完数据自动右移光标，普通情形，从左向右显示  40us
-*          0x04:写完数据自动左移光标，可以从右向左显示	 40us
-*          0x01:清除显示内容，即清屏  1.64ms
-*          0x02:使光标还回起始位置	  1.64ms
-*          0x18:屏幕上所有字符同时左移一格，适合滚动显示 40us
-*          0x1C:屏幕上所有字符同时右移一格，适合滚动显示 40us
+ *         0x0C:开显示，关光标	  40us
+ *         0x08:关显示，关光标	  40us
+ *         0x0D:字符闪烁，关光标，接着设定位置，闪烁周期0.4ms左右
+ *         0x0F:字符闪烁，开光标
+ *         0x06:写完数据自动右移光标，普通情形，从左向右显示  40us
+ *         0x04:写完数据自动左移光标，可以从右向左显示	 40us
+ *         0x01:清除显示内容，即清屏  1.64ms
+ *         0x02:使光标还回起始位置	  1.64ms
+ *         0x18:屏幕上所有字符同时左移一格，适合滚动显示 40us
+ *         0x1C:屏幕上所有字符同时右移一格，适合滚动显示 40us
 *********************************************************************/
 void LCD1602::begin(void)
 {   

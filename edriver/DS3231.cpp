@@ -56,7 +56,7 @@ void	DS3231::get_date_time(DS_DATA_TIME_STRUCT *t)
 	t->min		=bcd_to_dec(buf[1]);
 	t->sec	  =bcd_to_dec(buf[0]);	
 }
-void DS3231::get_date(u8* buf)
+void DS3231::get_date(u8 *buf)
 {		
 	uint8_t tmpbuf[3];
 	i2c->take_i2c_right(speed);
@@ -72,7 +72,7 @@ void DS3231::get_date(u8* buf)
 	buf[5] =u8( (tmpbuf[2]&0x0f) + 0x30);
 	buf[6] ='\0';
 }
-void DS3231::get_time(u8* buf)
+void DS3231::get_time(u8 *buf)
 {
 	uint8_t tmpbuf[3];
 

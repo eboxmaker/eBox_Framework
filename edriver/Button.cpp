@@ -17,7 +17,7 @@ This specification is preliminary and is subject to change at any time without n
 /*----------------------------------------------------------------------*
 
  *----------------------------------------------------------------------*/
-BUTTON::BUTTON(GPIO* p_pin, uint8_t p_pull_up)
+BUTTON::BUTTON(GPIO *p_pin, uint8_t p_pull_up)
 {
     pin = p_pin;
     pull_up = p_pull_up;

@@ -194,7 +194,7 @@ void RTC_CLASS::set_alarm(uint8_t h,uint8_t m,uint8_t s)
 	set_alarm(tmp);
 };
 
-void RTC_CLASS::get_time_HMS(uint8_t* h,uint8_t* m,uint8_t* s)
+void RTC_CLASS::get_time_HMS(uint8_t *h,uint8_t *m,uint8_t *s)
 {
 	uint32_t tmp = 0;
 	tmp = get_counter() % 0x15180;

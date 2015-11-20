@@ -383,7 +383,7 @@ void FT800::cmd_text(int16_t x, int16_t y, int16_t font, uint16_t options, const
 	}
 	free(data);
 }
-void FT800::cmd_button(int16_t x, int16_t y, int16_t w, int16_t h, int16_t font, uint16_t options, const char* str)
+void FT800::cmd_button(int16_t x, int16_t y, int16_t w, int16_t h, int16_t font, uint16_t options, const char *str)
 {	
 	/* 	
 		i: data pointer
@@ -395,7 +395,7 @@ void FT800::cmd_button(int16_t x, int16_t y, int16_t w, int16_t h, int16_t font,
 	const uint16_t length = strlen(str);
 	if(!length) return ;
 	
-	uint32_t* data = (uint32_t*) calloc((length/4)+1, sizeof(uint32_t));
+	uint32_t *data = (uint32_t*) calloc((length/4)+1, sizeof(uint32_t));
 	
 	q = 0;
 	for(i=0; i<(length/4); ++i, q=q+4)

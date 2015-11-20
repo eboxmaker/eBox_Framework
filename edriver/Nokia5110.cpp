@@ -111,7 +111,7 @@ void NOKIA5110::disp_string(unsigned char X,unsigned char Y,const char *s)
 			 s++;
       }
   }
-void NOKIA5110::printf(uint8_t row,uint8_t col,const char* fmt,...)
+void NOKIA5110::printf(uint8_t row,uint8_t col,const char *fmt,...)
 {
 	char buf[16];
 	u8 i = 0;

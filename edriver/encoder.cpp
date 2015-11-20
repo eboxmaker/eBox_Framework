@@ -19,7 +19,7 @@ This specification is preliminary and is subject to change at any time without n
 
 
 
-ENCODER::ENCODER(GPIO* Apin,GPIO* Bpin)
+ENCODER::ENCODER(GPIO *Apin,GPIO *Bpin)
 {
 
 	a_pin = Apin;

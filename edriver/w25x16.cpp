@@ -27,7 +27,7 @@ void W25X::begin(uint8_t dev_num)
 	cs->mode(OUTPUT_PP);
 	cs->set();
 }
-void W25X::read_id(uint16_t* id)
+void W25X::read_id(uint16_t *id)
 {
 	spi->take_spi_right(&spi_dev_w25x16);
 
@@ -44,7 +44,7 @@ void W25X::read_id(uint16_t* id)
 
 }
 /***************************************************************
-函数名称 :  void SPI_Flash_Read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)   
+函数名称 :  void SPI_Flash_Read(u8 *pBuffer,u32 ReadAddr,u16 NumByteToRead)   
 功能描述 : 读取SPI FLASH， 在指定地址开始读取指定长度的数据
 输入参数 : 
 			pBuffer:数据存储区
@@ -53,7 +53,7 @@ void W25X::read_id(uint16_t* id)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25X::read(u8* buf,u32 read_addr,u16 num_to_read)   
+void W25X::read(u8 *buf,u32 read_addr,u16 num_to_read)   
 { 
 	spi->take_spi_right(&spi_dev_w25x16);
 	cs->reset();
@@ -67,7 +67,7 @@ void W25X::read(u8* buf,u32 read_addr,u16 num_to_read)
 
 }  
 /***************************************************************
-函数名称 :  void SPI_Flash_Read(u8* pBuffer,u32 ReadAddr,u16 NumByteToRead)   
+函数名称 :  void SPI_Flash_Read(u8 *pBuffer,u32 ReadAddr,u16 NumByteToRead)   
 功能描述 : 读取SPI FLASH， 在指定地址开始读取指定长度的数据
 输入参数 : 
 			pBuffer:数据存储区
@@ -76,7 +76,7 @@ void W25X::read(u8* buf,u32 read_addr,u16 num_to_read)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25X::fast_read(u8* buf,u32 read_addr,u16 num_to_read)   
+void W25X::fast_read(u8 *buf,u32 read_addr,u16 num_to_read)   
 { 
 	spi->take_spi_right(&spi_dev_w25x16);
 	cs->reset();
@@ -91,7 +91,7 @@ void W25X::fast_read(u8* buf,u32 read_addr,u16 num_to_read)
 
 }  
 /***************************************************************
-函数名称 : void SPI_Flash_Write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)     
+函数名称 : void SPI_Flash_Write(u8 *pBuffer,u32 WriteAddr,u16 NumByteToWrite)     
 功能描述 : 写SPI FLASH，在指定地址开始写入指定长度的数据，该函数带擦除操作!
 输入参数 : 
 			pBuffer:数据存储区
@@ -100,7 +100,7 @@ void W25X::fast_read(u8* buf,u32 read_addr,u16 num_to_read)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25X::write(u8* buf,u32 write_addr,u16 num_to_write)   
+void W25X::write(u8 *buf,u32 write_addr,u16 num_to_write)   
 { 
 	
 	u32 secpos;
@@ -150,7 +150,7 @@ void W25X::write(u8* buf,u32 write_addr,u16 num_to_write)
 
 
 /***************************************************************
-函数名称 : void SPI_Flash_Write_Page(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)
+函数名称 : void SPI_Flash_Write_Page(u8 *pBuffer,u32 WriteAddr,u16 NumByteToWrite)
 功能描述 : SPI在一页(0~65535)内写入少于256个字节的数据， 在指定地址开始写入最大256字节的数据
 输入参数 : 
 			pBuffer:数据存储区
@@ -159,7 +159,7 @@ void W25X::write(u8* buf,u32 write_addr,u16 num_to_write)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25X::write_page(u8* buf,u32 write_addr,u16 num_to_write)
+void W25X::write_page(u8 *buf,u32 write_addr,u16 num_to_write)
 {
 	writeEnable();                  //SET WEL 
 	cs->reset();
@@ -172,7 +172,7 @@ void W25X::write_page(u8* buf,u32 write_addr,u16 num_to_write)
 	_waitBusy();					   //等待写入结束
 } 
 /***************************************************************
-函数名称 : void SPI_Flash_Write_NoCheck(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)   
+函数名称 : void SPI_Flash_Write_NoCheck(u8 *pBuffer,u32 WriteAddr,u16 NumByteToWrite)   
 功能描述 :  无检验写SPI FLASH，必须确保所写的地址范围内的数据全部为0XFF,否则在非0XFF处写入的数据将失败!具有自动换页功能，
 			在指定地址开始写入指定长度的数据,但是要确保地址不越界!
 输入参数 : 
@@ -182,7 +182,7 @@ void W25X::write_page(u8* buf,u32 write_addr,u16 num_to_write)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25X::write_no_check(u8* buf,u32 write_addr,u16 num_to_write)   
+void W25X::write_no_check(u8 *buf,u32 write_addr,u16 num_to_write)   
 { 			 		 
 	u16 pageremain;	   
 	pageremain=256-write_addr%256; //单页剩余的字节数		 	    
@@ -203,7 +203,7 @@ void W25X::write_no_check(u8* buf,u32 write_addr,u16 num_to_write)
 	};	    
 } 
 /***************************************************************
-函数名称 : void SPI_Flash_Write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)     
+函数名称 : void SPI_Flash_Write(u8 *pBuffer,u32 WriteAddr,u16 NumByteToWrite)     
 功能描述 : 擦除一个扇区，擦除一个山区的最少时间:150ms
 输入参数 : Dst_Addr:扇区地址 0~511 for w25x16
 输出参数 : 无
@@ -224,7 +224,7 @@ void W25X::erase_sector(u32 dst_addr)
 
 } 
 /***************************************************************
-函数名称 : void SPI_Flash_Write(u8* pBuffer,u32 WriteAddr,u16 NumByteToWrite)     
+函数名称 : void SPI_Flash_Write(u8 *pBuffer,u32 WriteAddr,u16 NumByteToWrite)     
 功能描述 :  擦除整个芯片
 			整片擦除时间:
 			W25X16:25s 

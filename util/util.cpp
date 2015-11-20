@@ -8,7 +8,7 @@
 @return	a integer number
 */
 uint16_t ATOI(
-	char* str,	/**< is a pointer to convert */
+	char *str,	/**< is a pointer to convert */
 	uint16_t base	/**< is a base value (must be in the range 2 - 16) */
 	)
 {
@@ -19,7 +19,7 @@ uint16_t ATOI(
 }
 
 uint32_t ATOI32(
-	char* str,	/**< is a pointer to convert */
+	char *str,	/**< is a pointer to convert */
 	uint16_t base	/**< is a base value (must be in the range 2 - 16) */
 	)
 {
@@ -48,13 +48,13 @@ void itoa(uint16_t n,uint8_t str[5], uint8_t len)
 @return	success - 1, fail - 0
 */
 int ValidATOI(
-	char* str, 	/**< is a pointer to string to be converted */
+	char *str, 	/**< is a pointer to string to be converted */
 	int base, 	/**< is a base value (must be in the range 2 - 16) */
-	int* ret		/**<  is a integer pointer to return */
+	int *ret		/**<  is a integer pointer to return */
 	)
 {
   int c;
-  char* tstr = str;
+  char *tstr = str;
   if(str == 0 || *str == '\0') return 0;
   while(*tstr != '\0')
   {
@@ -71,7 +71,7 @@ int ValidATOI(
 @brief	replace the specified character in a string with new character
 */ 
 void replacetochar(
-	char * str, 		/**< pointer to be replaced */
+	char *str, 		/**< pointer to be replaced */
 	char oldchar, 	/**< old character */
 	char newchar	/**< new character */
 	)
@@ -124,7 +124,7 @@ void inet_addr_(unsigned char* addr,unsigned char *ip)
 	int i;
 //	u_long inetaddr = 0;
 	char taddr[30];
-	char * nexttok;
+	char *nexttok;
 	char num;
 	strcpy(taddr,(char *)addr);
 	
