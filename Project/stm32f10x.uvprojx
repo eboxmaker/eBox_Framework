@@ -773,9 +773,9 @@
               <FilePath>..\network\MQTTPacket\interface\mqtt_api.cpp</FilePath>
             </File>
             <File>
-              <FileName>transport.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\network\MQTTPacket\interface\transport.c</FilePath>
+              <FileName>transport.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\network\MQTTPacket\interface\transport.cpp</FilePath>
             </File>
             <File>
               <FileName>MQTTConnectClient.c</FileName>

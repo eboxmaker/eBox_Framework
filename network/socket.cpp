@@ -18,7 +18,7 @@ void attach_eth_to_socket(W5500* e)
 int _socket(SOCKET s, int8_t protocol, uint16_t port, int8_t flag)
 {
    int ret = -3;
-	 u16 i;
+//	 u16 i;
    if ( ((protocol&0x0F) == Sn_MR_TCP) || ((protocol&0x0F) == Sn_MR_UDP) || ((protocol&0x0F) == Sn_MR_IPRAW)||\
         ((protocol&0x0F) == Sn_MR_MACRAW) || (protocol&0x0F) == Sn_MR_PPPOE)
    {
@@ -36,10 +36,10 @@ int _socket(SOCKET s, int8_t protocol, uint16_t port, int8_t flag)
 
       /* wait to process the command... */
       while( eth->read(Sn_CR(s)) ){
-            if(i++>0xfff0)
-            {
-                return -1;
-            }
+//            if(i++>0xfff0)
+//            {
+//                return -1;
+//            }
         }
       ;
         return  1;

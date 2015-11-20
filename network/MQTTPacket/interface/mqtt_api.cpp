@@ -5,6 +5,13 @@
 #include "MQTTPacket.h"
 #include "transport.h"
 
+#define MQTT_DEBUG 1
+#if MQTT_DEBUG
+	#define MQTT_DBG(...) DBG(__VA_ARGS__)
+#else
+	#define  MQTT_DBG(...) 
+#endif
+
 int MQTT::begin(SOCKET p_s,uint16_t p_port)
 {
     local_socket = p_s;
@@ -17,20 +24,17 @@ void MQTT::set_server_domain(char *domain,uint16_t port)
     DNS dns;	
     dns.begin(1,port);
     
-	uart1.printf("-----start----------\r\n",domain);    
-	uart1.printf("域名解析：\r\n",domain);    
+	MQTT_DBG("-----start----------\r\n");    
 	ret = dns.query(domain);
-	if(ret == DNS_RET_SUCCESS) /*发送DNS请求*/
+	if(ret == 1) /*发送DNS请求*/
     {
         dns.get_domain_ip(server_ip);
-		uart1.printf("domain : [%s]' \r\n",domain);
-		uart1.printf("IP     : [%d.%d.%d.%d]\r\n",dns.domain_ip[0],dns.domain_ip[1],dns.domain_ip[2],dns.domain_ip[3]);
+		MQTT_DBG("IP     : [%d.%d.%d.%d]\r\n",dns.domain_ip[0],dns.domain_ip[1],dns.domain_ip[2],dns.domain_ip[3]);
     }
-	else if(ret == DNS_RET_FAIL)
-    uart1.printf("获取超时\r\n");
-	else
-    uart1.printf("未知错误.\r\n");
-	uart1.printf("------end---------\r\n\r\n",domain);    
+	else {
+        MQTT_DBG("解析错误：ret= %d\r\n",ret);     
+    }
+	MQTT_DBG("------end---------\r\n\r\n",domain);    
 
     server_port = port;
 }
@@ -61,7 +65,7 @@ int MQTT::publish(char *topick,char *message)
     
   transport_init(local_socket,local_port);
  
-  data.clientID.cstring = "me";
+  data.clientID.cstring = "me1";
   data.keepAliveInterval = 5;
   data.cleansession = 1;
   topicString.cstring = topick;
@@ -70,38 +74,38 @@ int MQTT::publish(char *topick,char *message)
   len += MQTTSerialize_publish(buf + len, buflen - len, 0, 0, 1, 0, topicString, (unsigned char*)message, msglen); /* 2 */
   len += MQTTSerialize_disconnect(buf + len, buflen - len); /* 3 */
   
-    uart1.printf("----------start:publish-----------------\r\n");
+    MQTT_DBG("----------start:publish-----------------\r\n");
  
     //链接服务器
     rc = transport_open((char *)server_ip,server_port);
-  if(rc != 0)
-        uart1.printf("open is ok status = %d\r\n",rc);
-  else
-      uart1.printf("open failed\r\n");
+    if(rc == 1)
+        MQTT_DBG("connect mqtt server is ok !\r\n");
+    else
+        MQTT_DBG("connect mqtt server is failed:%d\r\n",rc);
   //发布消息
 //    while(1)
 //    {
-      delay_ms(500);
       rc = transport_sendPacketBuffer(buf,len);
       if(rc > 0){
-          uart1.printf("topick  : %s\r\n",topick);
-          uart1.printf("message : %s\r\n",message);
-            uart1.printf("trans is ok,len = %d\r\n",rc);
+          MQTT_DBG("topick  : %s\r\n",topick);
+          MQTT_DBG("message : %s\r\n",message);
+          MQTT_DBG("trans is ok,len = %d\r\n",rc);
       }
       else
       {
-            uart1.printf("trans is failed,len = %x\r\n",rc);
-            uart1.printf("---------------------------\r\n");
+            MQTT_DBG("trans is failed,len = %x\r\n",rc);
+            MQTT_DBG("---------------------------\r\n");
           //break;
       }
-      
+//      delay_ms(1000);
+//      
 //     }
   transport_close(local_socket);
         if (rc == len)
-               uart1.printf("Successfully published\r\n");
+               MQTT_DBG("Successfully published\r\n");
         else
-                uart1.printf("Publish failed\r\n");
-  uart1.printf("-----------end------------------\r\n\r\n");
+                MQTT_DBG("Publish failed\r\n");
+  MQTT_DBG("-----------end------------------\r\n\r\n");
   return 0;
 }
 int MQTT::subscribe(char *topick)
@@ -123,13 +127,13 @@ int MQTT::subscribe(char *topick)
   transport_init(local_socket,local_port);
 
 
-   uart1.printf("----------start:subscribe-----------------\r\n");
+   MQTT_DBG("----------start:subscribe-----------------\r\n");
     //链接服务器
     rc = transport_open((char *)server_ip,server_port);
   if(rc != 0)
-        uart1.printf("open is ok status = %d\r\n",rc);
+        MQTT_DBG("open is ok status = %d\r\n",rc);
   else
-      uart1.printf("open failed\r\n");
+      MQTT_DBG("open failed\r\n");
 
    data.clientID.cstring = "Client55249";
 	data.keepAliveInterval = 20;
@@ -147,7 +151,7 @@ int MQTT::subscribe(char *topick)
 
 		if (MQTTDeserialize_connack(&sessionPresent, &connack_rc, buf, buflen) != 1 || connack_rc != 0)
 		{
-			uart1.printf("Unable to connect, return code %d\n", connack_rc);
+			MQTT_DBG("Unable to connect, return code %d\n", connack_rc);
 			goto exit;
 		}
 	}
@@ -168,11 +172,11 @@ int MQTT::subscribe(char *topick)
 		rc = MQTTDeserialize_suback(&submsgid, 1, &subcount, &granted_qos, buf, buflen);
 		if (granted_qos != 0)
 		{
-			uart1.printf("granted qos != 0, %d\n", granted_qos);
+			MQTT_DBG("granted qos != 0, %d\n", granted_qos);
 			goto exit;
 		}
-        uart1.printf("subscribe:ok!\r\n");
-        uart1.printf("topick   :\"%s\"\r\n",topick);
+        MQTT_DBG("subscribe:ok!\r\n");
+        MQTT_DBG("topick   :\"%s\"\r\n",topick);
 
 	}
 	else
@@ -197,22 +201,22 @@ int MQTT::subscribe(char *topick)
 
 			rc = MQTTDeserialize_publish(&dup, &qos, &retained, &msgid, &receivedTopic,
 					&payload_in, &payloadlen_in, buf, buflen);
-			uart1.printf("message  :\" %.*s\"\r\n", payloadlen_in, payload_in);
+			MQTT_DBG("message  :\" %.*s\"\r\n", payloadlen_in, payload_in);
 		}
 
-//		uart1.printf("publishing reading\r\n");
+//		MQTT_DBG("publishing reading\r\n");
 //		len = MQTTSerialize_publish(buf, buflen, 0, 0, 0, 0, topicString, (unsigned char*)payload, payloadlen);
 //		rc = transport_sendPacketBuffer(buf, len);
 //	}
 
-	uart1.printf("disconnecting\r\n");
+	MQTT_DBG("disconnecting\r\n");
 	len = MQTTSerialize_disconnect(buf, buflen);
 	rc = transport_sendPacketBuffer( buf, len);
 
 exit:
 	transport_close(mysock);
-	uart1.printf("disconnected\r\n");
-   uart1.printf("----------end-----------------\r\n\r\n");
+	MQTT_DBG("disconnected\r\n");
+   MQTT_DBG("----------end-----------------\r\n\r\n");
 
 	return 0;
 }
