@@ -21,10 +21,10 @@ class LCD1602
 {
 	
 	public:
-		LCD1602(GPIO* LEDPin,GPIO* ENPin,GPIO* RWPin,GPIO* RSPin,\
-						GPIO* DB0,GPIO* DB1,GPIO* DB2,GPIO* DB3,GPIO* DB4,GPIO* DB5,GPIO* DB6,GPIO* DB7);
+		LCD1602(GPIO *LEDPin,GPIO *ENPin,GPIO *RWPin,GPIO *RSPin,\
+						GPIO *DB0,GPIO *DB1,GPIO *DB2,GPIO *DB3,GPIO *DB4,GPIO *DB5,GPIO *DB6,GPIO *DB7);
 	
-		LCD1602(GPIO* LEDPin,GPIO* ENPin,GPIO* RWPin,GPIO* RSPin,GPIO* DB0,GPIO* DB1,GPIO* DB2,GPIO* DB3);
+		LCD1602(GPIO *LEDPin,GPIO *ENPin,GPIO *RWPin,GPIO *RSPin,GPIO *DB0,GPIO *DB1,GPIO *DB2,GPIO *DB3);
 		//基本功能
 		void begin(void);
 		void set_pos(uint8_t row,uint8_t col);
@@ -35,8 +35,8 @@ class LCD1602
 		void disp_string(char str[]);
 		void disp_string(uint8_t row,uint8_t col,char str[]);
 	
-		void printf(const char* fmt,...);
-		void printf(uint8_t row,uint8_t col,const char* fmt,...);
+		void printf(const char *fmt,...);
+		void printf(uint8_t row,uint8_t col,const char *fmt,...);
 		void test(void);
 		//基本控制函数
 		void back_light(u8 i);
@@ -55,18 +55,18 @@ class LCD1602
 		void disp_time_YMD(uint32_t year,uint8_t month,uint8_t day);
 		void disp_date_time(uint32_t year,uint8_t month,uint8_t day,uint8_t hour,uint8_t min,uint8_t sec);
 	private:
-		GPIO* led;
-		GPIO* en;
-		GPIO* rw;
-		GPIO* rs;
-		GPIO* d0;
-		GPIO* d1;
-		GPIO* d2;
-		GPIO* d3;
-		GPIO* d4;
-		GPIO* d5;
-		GPIO* d6;
-		GPIO* d7;
+		GPIO *led;
+		GPIO *en;
+		GPIO *rw;
+		GPIO *rs;
+		GPIO *d0;
+		GPIO *d1;
+		GPIO *d2;
+		GPIO *d3;
+		GPIO *d4;
+		GPIO *d5;
+		GPIO *d6;
+		GPIO *d7;
 	
 		uint16_t delay_times;
 		inline void lcd_delay(uint32_t nCount);

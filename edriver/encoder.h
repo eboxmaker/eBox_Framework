@@ -20,14 +20,14 @@ This specification is preliminary and is subject to change at any time without n
 class ENCODER
 {
 	public:
-		ENCODER(GPIO* Apin,GPIO* Bpin);
+		ENCODER(GPIO *Apin,GPIO *Bpin);
 		int read_encoder();
 
 
 	private:
 		
-	GPIO* a_pin;
-	GPIO*	b_pin;
+	GPIO *a_pin;
+	GPIO *b_pin;
 	
 	uint8_t a_state;
 	uint8_t a_last_state;

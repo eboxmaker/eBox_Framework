@@ -22,7 +22,7 @@ class LED:public _74hc595
 {
 
 	public:
-			LED(GPIO* dataPin, GPIO* sckPin,GPIO* rckPin):_74hc595(dataPin,sckPin,rckPin){};
+			LED(GPIO *dataPin, GPIO *sckPin,GPIO *rckPin):_74hc595(dataPin,sckPin,rckPin){};
 				void begin();
 				void show_time_HMS(uint8_t hour,uint8_t min,uint8_t sec);
 				void show_date_time(uint16_t year,uint8_t month,uint8_t date);

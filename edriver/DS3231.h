@@ -58,24 +58,24 @@ This specification is preliminary and is subject to change at any time without n
  class DS3231
  {
 	 
-	 public:
-			DS_DATA_TIME_STRUCT t;
-			DS3231(SOFTI2C* p_soft_i2c)
-			{
-				i2c = p_soft_i2c;
-			};	
-			void begin(uint32_t _speed);
-			void get_date_time(DS_DATA_TIME_STRUCT *t);
-			void get_time(u8 *buf);
-			void get_date(u8 *buf);
+    public:
+        DS_DATA_TIME_STRUCT t;
+        DS3231(SOFTI2C *p_soft_i2c)
+        {
+            i2c = p_soft_i2c;
+        };	
+        void begin(uint32_t _speed);
+        void get_date_time(DS_DATA_TIME_STRUCT *t);
+        void get_time(u8 *buf);
+        void get_date(u8 *buf);
 
-			void set_time(void *dt);
+        void set_time(void *dt);
  
-	 private:
-		  SOFTI2C* i2c;
-			uint32_t speed;
-			uint8_t bcd_to_dec(uint8_t bcd_code);
-			uint8_t dec_to_bcd(uint8_t dec);
+    private:
+        SOFTI2C *i2c;
+        uint32_t speed;
+        uint8_t bcd_to_dec(uint8_t bcd_code);
+        uint8_t dec_to_bcd(uint8_t dec);
  };
 
 

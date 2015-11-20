@@ -28,7 +28,7 @@ int8_t EEPROM::write_byte(uint16_t byte_addr,uint8_t byte)
 	return 0;
 }
 
-int8_t EEPROM::write_byte(uint16_t byte_addr,uint8_t* buf,uint16_t num_to_write)
+int8_t EEPROM::write_byte(uint16_t byte_addr,uint8_t *buf,uint16_t num_to_write)
 {
 	int8_t ret = 0;
 
@@ -53,7 +53,7 @@ uint8_t EEPROM::read_byte(uint16_t byte_addr)
 	return byte;
 }
 
-int8_t	EEPROM::read_byte(uint16_t byte_addr,uint8_t* buf,uint16_t num_to_read)
+int8_t	EEPROM::read_byte(uint16_t byte_addr,uint8_t *buf,uint16_t num_to_read)
 {
 	int8_t ret = 0;
 	i2c->take_i2c_right(speed);
@@ -69,7 +69,7 @@ int8_t	EEPROM::read_byte(uint16_t byte_addr,uint8_t* buf,uint16_t num_to_read)
 	return 0;
 }
 
-int8_t EEPROM::write_page(uint8_t* buf,uint32_t addr,uint8_t numToWrite)
+int8_t EEPROM::write_page(uint8_t *buf,uint32_t addr,uint8_t numToWrite)
 {
 
 	return 0;

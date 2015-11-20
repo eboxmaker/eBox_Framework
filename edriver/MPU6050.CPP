@@ -33,7 +33,7 @@ void MPU6050::begin(uint32_t _speed)
 	i2c->write_byte(SLAVEADDRESS,ACCEL_CONFIG,0x01);
 	i2c->release_i2c_right();
 }
-void MPU6050::get_id(uint8_t* id)
+void MPU6050::get_id(uint8_t *id)
 {
   i2c->take_i2c_right(speed);
 	i2c->read_byte(SLAVEADDRESS,WHO_AM_I,id,1);
@@ -50,7 +50,7 @@ int16_t  MPU6050::get_data(uint8_t reg_address)
 	return ((tmp[0]<<8) + tmp[1]);
 
 }
-int8_t  MPU6050::get_data(uint8_t reg_address,int16_t* buf,uint8_t num_to_read)
+int8_t  MPU6050::get_data(uint8_t reg_address,int16_t *buf,uint8_t num_to_read)
 {
 	uint8_t i,readnum;
 	uint8_t tmpbuf[20];

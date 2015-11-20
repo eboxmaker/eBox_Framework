@@ -40,7 +40,7 @@ class W5500
 		uint8_t dns[4];
 	
 	public:
-		W5500(GPIO* p_cs_pin,GPIO* p_rst_pin,GPIO* p_int_pin,SPI* pSPI)
+		W5500(GPIO *p_cs_pin,GPIO *p_rst_pin,GPIO *p_int_pin,SPI *pSPI)
 		{
 			cs = 		 p_cs_pin;
 		  rst_pin = p_rst_pin;
@@ -48,7 +48,7 @@ class W5500
 			spi = pSPI;
 
 		}
-		void begin(uint8_t dev_num,u8* p_mac,u8* p_ip,u8* p_subnet,u8* p_gateway,u8* p_dns);
+		void begin(uint8_t dev_num,u8 *p_mac,u8 *p_ip,u8 *p_subnet,u8 *p_gateway,u8 *p_dns);
 		void reset();
 
 		void send_data_processing(SOCKET s, u8 *data, u16 len);
@@ -56,9 +56,9 @@ class W5500
 
 		void write(u32 addrbsb, u8 data);
 		u8   read (u32 addrbsb);
-		u16  write(u32 addrbsb,u8* buf, u16 len);
-		u16  read (u32 addrbsb,u8* buf, u16 len);
-		void sysinit( u8 * tx_size, u8 * rx_size  );
+		u16  write(u32 addrbsb,u8 *buf, u16 len);
+		u16  read (u32 addrbsb,u8 *buf, u16 len);
+		void sysinit( u8  *tx_size, u8  *rx_size  );
 
 
 		u8 getISR(SOCKET s);
@@ -67,21 +67,21 @@ class W5500
 		u16 getTxMAX(SOCKET s);	
 		
 //通用寄存器
-		void setSHAR(u8* addr );//mac
-		void setSIPR(u8* addr );//ip
-		void setSUBR(u8* addr );//mask
-		void setGAR(u8* addr );	//gateway
+		void setSHAR(u8 *addr );//mac
+		void setSIPR(u8 *addr );//ip
+		void setSUBR(u8 *addr );//mask
+		void setGAR(u8 *addr );	//gateway
 
-		void getSHAR(u8 * addr );//mac
-		void getSIPR(u8 * addr);//ip
-		void getSUBR(u8 * addr);//mask
-		void getGWIP(u8 * addr);//gateway
-		void getGAR(u8 * addr);//gateway
+		void getSHAR(u8  *addr );//mac
+		void getSIPR(u8  *addr);//ip
+		void getSUBR(u8  *addr);//mask
+		void getGWIP(u8  *addr);//gateway
+		void getGAR(u8  *addr);//gateway
 		
-		void getMAC(u8 * addr );//mac
-		void getIP(u8 * addr);//ip
-		void getSubnet(u8 * addr);//mask
-		void getGateway(u8 * addr);//gateway
+		void getMAC(u8  *addr );//mac
+		void getIP(u8  *addr);//ip
+		void getSubnet(u8  *addr);//mask
+		void getGateway(u8  *addr);//gateway
 
 		void setMR(u8 val);
 		
@@ -111,7 +111,7 @@ class W5500
 		void setSn_TTL(SOCKET s, u8 ttl);
 		
 		//获取远端IP和端口
-		void getSn_DIPR(SOCKET s,u8* ip);
+		void getSn_DIPR(SOCKET s,u8 *ip);
 		u16 getSn_DPORT(SOCKET s);
 		
 		u8      getSn_SR(SOCKET s);
@@ -128,11 +128,11 @@ class W5500
 			ex.interrupt(ENABLE);
 		}
 	private:
-		GPIO* cs;
-		GPIO* rst_pin;
-		GPIO* int_pin;
+		GPIO *cs;
+		GPIO *rst_pin;
+		GPIO *int_pin;
 		SPI_CONFIG_TYPE spiDevW5500;
-		SPI* spi;
+		SPI *spi;
 	
 	
 };
@@ -308,7 +308,7 @@ class W5500
  */
 #define Sn_MSSR0(ch)                    (0x001208 + (ch<<5))
 #define Sn_MSSR1(ch)                    (0x001308 + (ch<<5))
-/** 
+/* *
  @brief IP Type of Service(TOS) Register 
  */
 #define Sn_TOS(ch)                      (0x001508 + (ch<<5))
@@ -367,7 +367,7 @@ class W5500
  */
 #define Sn_KPALVTR(ch)                  (0x002F08 + (ch<<5))
 
-/* MODE register values */
+/*MODE register values */
 #define MR_RST                       0x80 /**< reset */
 #define MR_WOL                       0x20 /**< Wake on Lan */
 #define MR_PB                        0x10 /**< ping block */
@@ -375,12 +375,12 @@ class W5500
 #define MR_UDP_FARP                  0x02 /**< enbale FORCE ARP */
 
 
-/* IR register values */
+/*IR register values */
 #define IR_CONFLICT                  0x80 /**< check ip confict */
 #define IR_UNREACH                   0x40 /**< get the destination unreachable message in UDP sending */
 #define IR_PPPoE                     0x20 /**< get the PPPoE close message */
 #define IR_MAGIC                     0x10 /**< get the magic packet interrupt */
-/* SIR register values */
+/*SIR register values */
 #define SIR_0                  0x01 /**< check ip confict */
 #define SIR_1                  0x02 /**< check ip confict */
 #define SIR_2                  0x04 /**< check ip confict */
@@ -391,7 +391,7 @@ class W5500
 #define SIR_7                  0x80 /**< check ip confict */
 
 
-/* Sn_MR values */
+/*Sn_MR values */
 #define Sn_MR_CLOSE                  0x00     /**< unused socket */
 #define Sn_MR_TCP                    0x01     /**< TCP */
 #define Sn_MR_UDP                    0x02     /**< UDP */
@@ -404,14 +404,14 @@ class W5500
 #define Sn_MR_BCASTB                 0x40     /**< Broadcast blcok in UDP Multicating */
 #define Sn_MR_MULTI                  0x80     /**< support UDP Multicating */
 
- /* Sn_MR values on MACRAW MODE */
+ /*Sn_MR values on MACRAW MODE */
 #define Sn_MR_MIP6N                  0x10     /**< IPv6 packet Block */
 #define Sn_MR_MMB                    0x20     /**< IPv4 Multicasting Block */
 //#define Sn_MR_BCASTB                 0x40     /**< Broadcast blcok */
 #define Sn_MR_MFEN                   0x80     /**< support MAC filter enable */
 
 
-/* Sn_CR values */
+/*Sn_CR values */
 #define Sn_CR_OPEN                   0x01     /**< initialize or open socket */
 #define Sn_CR_LISTEN                 0x02     /**< wait connection request in tcp mode(Server mode) */
 #define Sn_CR_CONNECT                0x04     /**< send connection request in tcp mode(Client mode) */
@@ -430,7 +430,7 @@ class W5500
    #define Sn_CR_PCJ                 0x27     
 #endif
 
-/* Sn_IR values */
+/*Sn_IR values */
 #ifdef __DEF_IINCHIP_PPP__
    #define Sn_IR_PRECV               0x80     
    #define Sn_IR_PFAIL               0x40     
@@ -443,7 +443,7 @@ class W5500
 #define Sn_IR_DISCON                 0x02     /**< closed socket */
 #define Sn_IR_CON                    0x01     /**< established connection */
 
-/* Sn_SR values */
+/*Sn_SR values */
 #define SOCK_CLOSED                  0x00     /**< closed */
 #define SOCK_INIT                    0x13     /**< init state */
 #define SOCK_LISTEN                  0x14     /**< listen state */
@@ -460,7 +460,7 @@ class W5500
 #define SOCK_MACRAW                  0x42     /**< mac raw mode socket */
 #define SOCK_PPPOE                   0x5F     /**< pppoe socket */
 
-/* IP PROTOCOL */
+/*IP PROTOCOL */
 #define IPPROTO_IP                   0        /**< Dummy for IP */
 #define IPPROTO_ICMP                 1        /**< Control message protocol */
 #define IPPROTO_IGMP                 2        /**< Internet group management protocol */

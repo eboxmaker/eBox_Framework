@@ -28,7 +28,7 @@ This specification is preliminary and is subject to change at any time without n
 class TIM
 {
 	public:
-		TIM(TIM_TypeDef* TIMx);
+		TIM(TIM_TypeDef *TIMx);
 		void begin(uint32_t frq);
 		void attach_interrupt(void(*callback)(void));
 		void interrupt(FunctionalState enable);

@@ -20,7 +20,7 @@ This specification is preliminary and is subject to change at any time without n
 #include "ebox.h"
 
 
-/* MPU6050 Register Address ------------------------------------------------------------*/
+/*MPU6050 Register Address ------------------------------------------------------------*/
 #define MPU6050_RA_XG_OFFS_TC       0x00 //[7] PWR_MODE, [6:1] XG_OFFS_TC, [0] OTP_BNK_VLD
 #define MPU6050_RA_YG_OFFS_TC       0x01 //[7] PWR_MODE, [6:1] YG_OFFS_TC, [0] OTP_BNK_VLD
 #define MPU6050_RA_ZG_OFFS_TC       0x02 //[7] PWR_MODE, [6:1] ZG_OFFS_TC, [0] OTP_BNK_VLD
@@ -77,19 +77,19 @@ This specification is preliminary and is subject to change at any time without n
 
 class MPU6050
 {
-	public:
-		 MPU6050(I2C* p_i2c)
-	  {
-		 i2c = p_i2c;
-		 };	
-		void 			begin(uint32_t _speed);
-		int16_t 	get_data(uint8_t reg_address);
-		int8_t 		get_data(uint8_t reg_address,int16_t* buf,uint8_t num_to_read);
-		void 			get_id(uint8_t* id);
+    public:
+        MPU6050(I2C *p_i2c)
+        {
+            i2c = p_i2c;
+        };	
+        void        begin(uint32_t _speed);
+        int16_t 	get_data(uint8_t reg_address);
+        int8_t 		get_data(uint8_t reg_address,int16_t *buf,uint8_t num_to_read);
+        void        get_id(uint8_t *id);
 
-	private:
-		I2C* i2c;
-	  uint32_t speed;
+    private:
+        I2C         *i2c;
+        uint32_t    speed;
 };
 
 #endif

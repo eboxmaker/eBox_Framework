@@ -15,7 +15,7 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "w5500.h"
 #include "string.h"
-void W5500::begin(uint8_t dev_num,u8* p_mac,u8* p_ip,u8* p_subnet,u8* p_gateway,u8* p_dns)
+void W5500::begin(uint8_t dev_num,u8 *p_mac,u8 *p_ip,u8 *p_subnet,u8 *p_gateway,u8 *p_dns)
 {
 	u8 txsize[MAX_SOCK_NUM] = {2,2,2,2,2,2,2,2};
   u8 rxsize[MAX_SOCK_NUM] = {2,2,2,2,2,2,2,2};
@@ -98,7 +98,7 @@ u8  W5500::read(u32 addrbsb)
    return data;    
 
 }
-u16 W5500::write(u32 addrbsb,u8* buf, u16 len)
+u16 W5500::write(u32 addrbsb,u8 *buf, u16 len)
 {
 	 spi->take_spi_right(&spiDevW5500);
    cs->reset();                               // CS=0, SPI start
@@ -112,7 +112,7 @@ u16 W5500::write(u32 addrbsb,u8* buf, u16 len)
    return len;  
 
 }
-u16 W5500::read(u32 addrbsb,u8* buf, u16 len)
+u16 W5500::read(u32 addrbsb,u8 *buf, u16 len)
 {
 	spi->take_spi_right(&spiDevW5500);
   cs->reset();                               // CS=0, SPI start
@@ -147,7 +147,7 @@ other 3 channels couldn't be used, for there's no available memory.\n
 If two 4KBytes memory are assigned to two each channels, \n
 other 2 channels couldn't be used, for there's no available memory.\n
 */
-void W5500::sysinit( u8 * tx_size, u8 * rx_size  )
+void W5500::sysinit( u8  *tx_size, u8  *rx_size  )
 {
   int16_t i = 0;
   int16_t ssum,rsum;
@@ -251,7 +251,7 @@ u16 W5500::getTxMAX(SOCKET s)
 @brief  This function sets up MAC address.
 */
 void W5500::setSHAR(  
-	u8 * addr  /**< a pointer to a 6 -byte array responsible to set the MAC address. */
+	u8  *addr  /**< a pointer to a 6 -byte array responsible to set the MAC address. */
   )
 {
   write(SHAR0, addr, 6);  
@@ -260,7 +260,7 @@ void W5500::setSHAR(
 @brief  This function sets up Source IP address.
 */
 void W5500::setSIPR(
-  u8 * addr  /**< a pointer to a 4 -byte array responsible to set the Source IP address. */
+  u8  *addr  /**< a pointer to a 4 -byte array responsible to set the Source IP address. */
   )
 {
     write(SIPR0, addr, 4);  
@@ -268,7 +268,7 @@ void W5500::setSIPR(
 /**
 @brief  It sets up SubnetMask address
 */
-void W5500::setSUBR(u8 * addr)
+void W5500::setSUBR(u8  *addr)
 {   
     write(SUBR0, addr, 4);
 }
@@ -276,7 +276,7 @@ void W5500::setSUBR(u8 * addr)
 @brief  This function sets up gateway IP address.
 */
 void W5500::setGAR(
-  u8 * addr  /**< a pointer to a 4 -byte array responsible to set the Gateway IP address. */
+  u8  *addr  /**< a pointer to a 4 -byte array responsible to set the Gateway IP address. */
   )
 {
     write(GAR0, addr, 4);
@@ -286,39 +286,39 @@ void W5500::setGAR(
 
 
 
-void W5500::getMAC(u8 * addr )//mac
+void W5500::getMAC(u8  *addr )//mac
 {
   read(SHAR0, addr, 6);  
-}void  W5500::getIP(u8 * addr)//ip
+}void  W5500::getIP(u8  *addr)//ip
 {
     read(SIPR0, addr, 4);
 }
-void  W5500::getSubnet(u8 * addr)//mask
+void  W5500::getSubnet(u8  *addr)//mask
 {
     read(SUBR0, addr, 4);
 }
-void W5500::getGateway(u8 * addr)//gateway
+void W5500::getGateway(u8  *addr)//gateway
 {
     read(GAR0, addr, 4);
 }
 
 
-void W5500::getSHAR(u8 * addr )//mac
+void W5500::getSHAR(u8  *addr )//mac
 {
   read(SHAR0, addr, 6);  
-}void  W5500::getSIPR(u8 * addr)//ip
+}void  W5500::getSIPR(u8  *addr)//ip
 {
     read(SIPR0, addr, 4);
 }
-void  W5500::getSUBR(u8 * addr)//mask
+void  W5500::getSUBR(u8  *addr)//mask
 {
     read(SUBR0, addr, 4);
 }
-void W5500::getGWIP(u8 * addr)//gateway
+void W5500::getGWIP(u8  *addr)//gateway
 {
     read(GAR0, addr, 4);
 }
-void  W5500::getGAR(u8 * addr)//gateway
+void  W5500::getGAR(u8  *addr)//gateway
 {
     read(GAR0, addr, 4);
 }
@@ -429,7 +429,7 @@ u8  W5500::getSn_SR(SOCKET s)
 {
    return read(Sn_SR(s));
 }
-void W5500::getSn_DIPR(SOCKET s,u8* ip)
+void W5500::getSn_DIPR(SOCKET s,u8 *ip)
 {
 	ip[0] = read(Sn_DIPR0(s));
 	ip[1] = read(Sn_DIPR1(s));
