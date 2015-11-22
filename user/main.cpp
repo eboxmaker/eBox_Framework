@@ -30,8 +30,8 @@ u8 gw[4]={192,168,1,1};/*定义gateway变量*/
 u8 dns[4] = {192,168,1,1};
 
 
-char host[]="m2m.eclipse.org";
-//char host[]="messagesight.demos.ibm.com";
+//char host[]="m2m.eclipse.org";
+char host[]="messagesight.demos.ibm.com";
 u16 host_port = 1883;
 W5500 w5500(&PC13,&PC14,&PC15,&spi2);
 	
