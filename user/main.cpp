@@ -27,7 +27,7 @@ u8 mac[6]={0x00,0x08,0xdc,0x11,0x11,0x11};/*定义Mac变量*/
 u8 ip[4]={192,168,1,193};/*定义lp变量*/
 u8 sub[4]={255,255,255,0};/*定义subnet变量*/
 u8 gw[4]={192,168,1,1};/*定义gateway变量*/
-u8 _dns[4] = {192,168,1,1};
+u8 dns[4] = {192,168,1,1};
 
 
 char host[]="m2m.eclipse.org";
@@ -43,7 +43,7 @@ void setup()
 	uart1.begin(9600);
     uart1.printf("uart is ok !\r\n");
 
-	w5500.begin(2,mac,ip,sub,gw,_dns);	
+	w5500.begin(2,mac,ip,sub,gw,dns);	
 	attach_eth_to_socket(&w5500);
 	
     w5500.getMAC (buf);
@@ -59,6 +59,7 @@ void setup()
 	mqtt.begin(1,3000);
     mqtt.set_server_domain((char *)host,1883);
     mqtt.set_user("shentqlf","123");
+    mqtt.connect();
 
 }
 int value = 0;
@@ -68,10 +69,11 @@ int main(void)
 	setup();
 	while(1)
 	{	
-        sprintf(string,"value = %d",value);
         value++;
+        sprintf(string,"value = %d",value);
         value%=1000000;
         mqtt.publish((char*)"planets/earth",string);
+        delay_ms(1000);
 //        mqtt.subscribe("planets/earth");
 	}
 }
