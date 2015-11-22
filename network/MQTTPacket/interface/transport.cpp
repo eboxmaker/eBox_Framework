@@ -79,8 +79,12 @@ int transport_sendPacketBuffer(unsigned char* buf, int buflen)
 int transport_getdata(unsigned char* buf, int count)
 {
     int rc = 0;
-    while(rc == 0){
-		rc = mqtt_tcp.recv(buf,count);	
+    uint32_t last_time = millis();
+    
+    while(rc == 0 ){
+        rc = mqtt_tcp.recv(buf,count);	
+        if(millis() - last_time > 1500)
+            return 0;
 	}
 	return rc;
 }
