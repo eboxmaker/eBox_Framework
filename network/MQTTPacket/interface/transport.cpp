@@ -74,20 +74,29 @@ int transport_sendPacketBuffer(unsigned char* buf, int buflen)
 
 /*
 @return  received data size for success else 0.
-阻塞式接收，如果mqtt超时会导致链接中断
+非阻塞式接收，需在应用层做循环判断
 */
 int transport_getdata(unsigned char* buf, int count)
 {
-    int rc = 0;
-    uint32_t last_time = millis();
-    
-    while(rc == 0 ){
-        rc = mqtt_tcp.recv(buf,count);	
-        if(millis() - last_time > 1500)
-            return 0;
-	}
-	return rc;
+	return mqtt_tcp.recv(buf,count);
 }
+///*
+//@return  received data size for success else 0.
+//阻塞式接收，超时返回0
+//*/
+//int transport_getdata(unsigned char* buf, int count)
+//{
+////阻塞式接收
+//    int rc = 0;
+//    uint32_t last_time = millis();
+//    
+//    while(rc == 0 ){
+//        rc = mqtt_tcp.recv(buf,count);	
+//        if(millis() - last_time > 1500)
+//            return 0;
+//	}
+//	return rc;
+//}
 
 /*
 @return  received data size for success else 0.
@@ -120,4 +129,9 @@ int transport_close(int sock)
 {
     mqtt_tcp.stop();
 	return 1;
+}
+int transport_connnected()
+{
+    return mqtt_tcp.is_connected();
+
 }

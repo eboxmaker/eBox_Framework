@@ -23,6 +23,7 @@ int transport_getdata(unsigned char* buf, int count);
 int transport_getdatanb(void *sck, unsigned char* buf, int count);
 int transport_open(char* host, int port);
 int transport_close(int sock);
+int transport_connnected();
 #ifdef __cplusplus
 }
 #endif
