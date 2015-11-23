@@ -2,11 +2,14 @@
 #define __SOCKET_H
 #include "stm32f10x.h"
 #include "stdbool.h"
+#include "w5500.h"//如果socket想要被c文件调用可以将此行注释
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 typedef int8_t 			SOCKET;
+//如果socket想要被c文件调用可以将此函数声明去掉    
+void attach_eth_to_socket(W5500* e);
 
 extern int  _socket(SOCKET s, int8_t protocol, uint16_t port, int8_t flag); // Opens a socket(TCP or UDP or IP_RAW mode)
 extern void _close(SOCKET s); // Close socket

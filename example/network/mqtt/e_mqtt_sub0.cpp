@@ -22,8 +22,8 @@ int toStop = 0;
 MQTT mqtt;
 
 
-u8 mac[6]={0x00,0x08,0xdc,0x11,0x11,0x11};/*定义Mac变量*/
-u8 ip[4]={192,168,1,191};/*定义lp变量*/
+u8 mac[6]={0x00,0x18,0xdc,0x11,0x11,0x11};/*定义Mac变量*/
+u8 ip[4]={192,168,1,195};/*定义lp变量*/
 u8 sub[4]={255,255,255,0};/*定义subnet变量*/
 u8 gw[4]={192,168,1,1};/*定义gateway变量*/
 u8 dns[4] = {192,168,1,1};
@@ -65,7 +65,11 @@ void setup()
     
 	if(mqtt.begin(1,65533) == 1){
         if(mqtt.set_server_domain((char *)host,1883) == 1){
-            mqtt.connect();
+            //mqtt.set_user("shentqlf1","123");
+            if(mqtt.connect() == 1){
+                mqtt.subscribe("planets/earth");
+                mqtt.setCallback(callback);
+            }
         }
     }
 
@@ -78,19 +82,21 @@ int main(void)
 	setup();
 	while(1)
 	{	
-        if(mqtt.connected()){
+        value++;
+        sprintf(string,"value = %d",value);
+        value%=1000000;
+//        mqtt.publish((char*)"planets/earth",string);
+//        delay_ms(1000);
+        if(mqtt.connected())
             mqtt.loop();
-            if(millis() - tmp_time > 500){
-                value++;
-                sprintf(string,"value = %d",value);
-                value%=1000000;
-                mqtt.publish((char*)"planets/earth",string);
-            }
-        }
         else{
             if(mqtt.begin(1,65533) == 1){
                 if(mqtt.set_server_domain((char *)host,1883) == 1){
-                    mqtt.connect();
+                    //mqtt.set_user("shentqlf1","123");
+                    if(mqtt.connect() == 1){
+                        mqtt.subscribe("planets/earth");
+                        mqtt.setCallback(callback);
+                    }
                 }
             }
         }

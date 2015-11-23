@@ -114,7 +114,7 @@ u16 TCPCLIENT::recv(u8* buf)
 //非阻塞
 u16 TCPCLIENT::recv(u8* buf,uint16_t len)
 {
-    uint16_t ret;
+    uint16_t ret = 0;
     uint16_t llen;
     if(is_connected())
 	{
@@ -126,12 +126,13 @@ u16 TCPCLIENT::recv(u8* buf,uint16_t len)
             else{
                 ret = _recv(s,buf,len);/*W5500接收来自Sever的数据*/
             }
-            TCP_DBG("需要的数据长度：%d\r\n网卡的数据:%d\r\n",len,llen);
+//            TCP_DBG("需要的数据长度：%d\r\n网卡的数据:%d\r\n",len,llen);
         }       
 	}
     else
     {
-       TCP_DBG("链接断开！！！！\r\n");
+        return ret;
+//       TCP_DBG("链接断开！！！！\r\n");
 
     }
     return ret;
