@@ -10,12 +10,12 @@
 
 int TCPCLIENT::begin(SOCKET ps,uint16_t port)
 {
-	int ret = 0;
 	s = ps;
-	localPort = port;
-	
-	return ret;
+	localPort = port;	
+	return 1;
 }
+//链接远程服务器
+//返回1成功，0失败
 bool TCPCLIENT::connect(u8* IP,uint16_t Port)
 {
 	int ret;
@@ -69,16 +69,16 @@ uint8_t TCPCLIENT::status()
   return socket_status(s);
 }
 
-//返回接收缓冲区长度
+//返回接收缓冲区长度，0为空
 uint16_t TCPCLIENT::available()
 {
     return recv_available(s);
 }
 
 //判断链接是否可用
-//1:可用
-//0：不用
-bool TCPCLIENT::is_connected()
+//1:链接
+//0:断开
+bool TCPCLIENT::connected()
 {
     uint8_t tmp = status();
     return !(tmp == SOCK_CLOSED || tmp == SOCK_LISTEN || tmp == SOCK_FIN_WAIT ||\
@@ -98,25 +98,27 @@ void TCPCLIENT::stop()
 
 //接收缓冲区所有内容
 //非阻塞
+//返回接收到数据的长度，0为空
 u16 TCPCLIENT::recv(u8* buf)
 {
-	u16 llen = 0;
-    if(is_connected())
+	u16 len = 0;
+    if(connected())
 	{
-		llen = available();/*len为已接收数据的大小*/
-		if(llen > 0){
-			_recv(s,buf,llen);/*W5500接收来自Sever的数据*/
+		len = available();/*len为已接收数据的大小*/
+		if(len > 0){
+			_recv(s,buf,len);/*W5500接收来自Sever的数据*/
 		}	
 	}
-	return llen;
+	return len;
 }
 //读取特定长度
 //非阻塞
+//返回值 ：接收到的长度，0为没有数据
 u16 TCPCLIENT::recv(u8* buf,uint16_t len)
 {
     uint16_t ret = 0;
     uint16_t llen;
-    if(is_connected())
+    if(connected())
 	{
 		llen = available();/*llen为已接收数据的大小*/
         if(llen > 0){    
@@ -138,6 +140,7 @@ u16 TCPCLIENT::recv(u8* buf,uint16_t len)
     return ret;
 }
 
+//返回发送数据的长度，0为发送失败
 u16 TCPCLIENT::send(u8* buf,u16 len)
 {
 	return _send(s,buf,len);
