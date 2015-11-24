@@ -60,7 +60,7 @@ TCPCLIENT mqtt_tcp;
 int transport_init(int local_sock,int local_port)
 {
     mqtt_tcp.begin(local_sock,local_port);
-    return 0;
+    return 1;
 }
 /*
 @return  sended data size for success else 0.
@@ -132,6 +132,6 @@ int transport_close(int sock)
 }
 int transport_connnected()
 {
-    return mqtt_tcp.is_connected();
+    return mqtt_tcp.connected();
 
 }
