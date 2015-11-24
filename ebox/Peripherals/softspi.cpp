@@ -15,11 +15,11 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "spi.h"
 
-SOFTSPI::SOFTSPI(GPIO *p_sck_pin,GPIO *p_miso_pin,GPIO *p_mosi_pin)
+SOFTSPI::SOFTSPI(GPIO *sck,GPIO *miso,GPIO *mosi)
 {
-	sck_pin =  p_sck_pin;
-	miso_pin = p_miso_pin;
-	mosi_pin = p_mosi_pin;
+	this->sck_pin =  sck;
+	this->miso_pin = miso;
+	this->mosi_pin = mosi;
 	
 }
 void SOFTSPI::begin(SPI_CONFIG_TYPE *spi_config)

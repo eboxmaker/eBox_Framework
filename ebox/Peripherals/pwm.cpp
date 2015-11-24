@@ -24,12 +24,12 @@ This specification is preliminary and is subject to change at any time without n
 
 
 	
-PWM::PWM(GPIO * p_pwm_pin,uint32_t frq)
+PWM::PWM(GPIO * pwm_pin,uint32_t frq)
 {
 //	if(isPwmPin(PWMpin))
 //	{
-		init_info(p_pwm_pin);
-		p_pwm_pin->mode(AF_PP);
+		init_info(pwm_pin);
+		pwm_pin->mode(AF_PP);
 		set_frq(frq);
 
 //	}
@@ -51,11 +51,11 @@ void PWM::base_init(uint16_t Period,uint16_t Prescaler)
 	TIM_Cmd(TIMx, ENABLE); //
 
 }	
-void PWM::init_info(GPIO *p_pwm_pin)
+void PWM::init_info(GPIO *pwm_pin)
 {
-	if(p_pwm_pin->port == GPIOA)
+	if(pwm_pin->port == GPIOA)
 	{
-		switch(p_pwm_pin->pin)
+		switch(pwm_pin->pin)
 		{
 			case GPIO_Pin_0:
 				TIMx = TIM2;rcc = RCC_APB1Periph_TIM2;ch = TIMxCH1;//irq = TIM2_IRQn;
@@ -84,9 +84,9 @@ void PWM::init_info(GPIO *p_pwm_pin)
 				break;
 		}
 	}
-	if(p_pwm_pin->port == GPIOB)
+	if(pwm_pin->port == GPIOB)
 	{
-		switch(p_pwm_pin->pin)
+		switch(pwm_pin->pin)
 		{
 			case GPIO_Pin_6:
 				TIMx = TIM4;rcc = RCC_APB1Periph_TIM4;ch = TIMxCH1;//irq = TIM4_IRQn;
@@ -125,17 +125,17 @@ void PWM::set_frq(uint32_t frq)
 }
 
 //duty:0-1000对应0%-100.0%
-void PWM::set_duty(uint16_t Duty)
+void PWM::set_duty(uint16_t duty)
 {
 
-    duty = Duty;
+    this->duty = duty;
 
     uint16_t pulse = 0;
     float percent;
             
-    if(duty>1000)
-        duty = 1000;
-    percent = duty/1000.0;
+    if(this->duty>1000)
+        this->duty = 1000;
+    percent = this->duty/1000.0;
 
     pulse = (uint16_t) (( percent  *period ));
 
@@ -164,11 +164,11 @@ void PWM::set_duty(uint16_t Duty)
 		
 }
 //duty:0-1000对应0%-100.0%
-void analog_write(GPIO *p_pwm_pin, uint16_t duty) 
+void analog_write(GPIO *pwm_pin, uint16_t duty) 
 {
 //	if(isPwmPin(PWMpin))
 //	{
-			PWM p(p_pwm_pin,1000);
+			PWM p(pwm_pin,1000);
 			//p.SetFrq(1000,1);
 			p.set_duty(duty);
 

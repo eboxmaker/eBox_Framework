@@ -26,7 +26,7 @@ class I2C
 {
 
 	public:
-		I2C(I2C_TypeDef *I2Cx,GPIO *p_scl_pin,GPIO *p_sda_pin);
+		I2C(I2C_TypeDef *I2Cx,GPIO *scl_pin,GPIO *sda_pin);
 		void		begin(uint32_t _speed);
 		void        config(uint32_t _speed);
 		uint32_t    read_config();
@@ -51,7 +51,7 @@ class I2C
 		int8_t receive_byte(uint8_t *data);
 
 	private:
-		I2C_TypeDef *_I2Cx;
+		I2C_TypeDef *I2Cx;
 		GPIO        *sda_pin;
 		GPIO        *scl_pin;
 		uint32_t    speed;
@@ -71,9 +71,9 @@ class I2C
 class SOFTI2C 
 {
   public:
-		SOFTI2C(GPIO *p_scl_pin, GPIO *p_sda_pin);
-		void 		begin(uint32_t _speed);
-		int8_t 		config(uint32_t _speed);
+		SOFTI2C(GPIO *scl, GPIO *sda);
+		void 		begin(uint32_t speed);
+		int8_t 		config(uint32_t speed);
 		uint32_t	read_config();
 		int8_t		write_byte(uint8_t slave_address,uint8_t reg_address,uint8_t data);
 		int8_t 		write_byte(uint8_t slave_address,uint8_t reg_address,uint8_t *data,uint16_t num_to_write);

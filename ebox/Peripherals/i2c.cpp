@@ -16,12 +16,12 @@ This specification is preliminary and is subject to change at any time without n
 #include "i2c.h"
 
 
-I2C::I2C(I2C_TypeDef *I2Cx,GPIO *p_scl_pin,GPIO *p_sda_pin)
+I2C::I2C(I2C_TypeDef *I2Cx,GPIO *scl_pin,GPIO *sda_pin)
 {
 	busy = 0;
-	_I2Cx = I2Cx;
-	scl_pin = p_scl_pin;
-	sda_pin = p_sda_pin;
+	this->I2Cx = I2Cx;
+	this->scl_pin = scl_pin;
+	this->sda_pin = sda_pin;
 	
 }
 void  I2C::begin(uint32_t _speed)
@@ -29,11 +29,11 @@ void  I2C::begin(uint32_t _speed)
 	speed = _speed;
 	I2C_InitTypeDef I2C_InitStructure; 
 
-	if(_I2Cx == I2C1)
+	if(I2Cx == I2C1)
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1,ENABLE); 
-	else if(_I2Cx == I2C2)
+	else if(I2Cx == I2C2)
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C2,ENABLE); 
-//	else if(_I2Cx == I2C3)
+//	else if(I2Cx == I2C3)
 //		RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C3,ENABLE); 
 		
 	
@@ -49,11 +49,11 @@ void  I2C::begin(uint32_t _speed)
 	I2C_InitStructure.I2C_ClockSpeed = speed; 
 
 	/* I2C1 初始化 */
-	I2C_DeInit(_I2Cx);
-	I2C_Init(_I2Cx, &I2C_InitStructure);	   
+	I2C_DeInit(I2Cx);
+	I2C_Init(I2Cx, &I2C_InitStructure);	   
 	
 	/* 使能 I2C1 */
-	I2C_Cmd  (_I2Cx,ENABLE); 
+	I2C_Cmd  (I2Cx,ENABLE); 
 
 }
 
@@ -70,11 +70,11 @@ void I2C::config(uint32_t _speed)
 	I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit; 
 
 	I2C_InitStructure.I2C_ClockSpeed = speed; 
-	I2C_Init(_I2Cx, &I2C_InitStructure);	   
+	I2C_Init(I2Cx, &I2C_InitStructure);	   
 	/* 使能 I2C1 */
-	I2C_Cmd  (_I2Cx,ENABLE); 
+	I2C_Cmd  (I2Cx,ENABLE); 
 	/*允许应答模式*/
-	I2C_AcknowledgeConfig(_I2Cx, ENABLE);   
+	I2C_AcknowledgeConfig(I2Cx, ENABLE);   
 
 }
 uint32_t I2C::read_config()
@@ -85,9 +85,9 @@ int8_t I2C::start()
 {
 	uint16_t times=1000;
 	int8_t err = 0;
-	I2C_GenerateSTART(_I2Cx,ENABLE);
+	I2C_GenerateSTART(I2Cx,ENABLE);
 
-	while(!I2C_CheckEvent(_I2Cx,I2C_EVENT_MASTER_MODE_SELECT))
+	while(!I2C_CheckEvent(I2Cx,I2C_EVENT_MASTER_MODE_SELECT))
 	{
 		times--;
 		if(times == 0)
@@ -101,19 +101,19 @@ int8_t I2C::start()
 int8_t I2C::stop()
 {
 	int8_t err = 0;
-	I2C_GenerateSTOP(_I2Cx,ENABLE);
+	I2C_GenerateSTOP(I2Cx,ENABLE);
 	return err;
 }
 int8_t I2C::send_no_ack()
 {
 	int8_t err = 0;
-	I2C_AcknowledgeConfig(_I2Cx,DISABLE);
+	I2C_AcknowledgeConfig(I2Cx,DISABLE);
 	return err;
 }
 int8_t I2C::send_ack()
 {
 	int8_t err = 0;
-	I2C_AcknowledgeConfig(_I2Cx,ENABLE);
+	I2C_AcknowledgeConfig(I2Cx,ENABLE);
 	return err;
 }
 
@@ -122,8 +122,8 @@ int8_t I2C::send_byte(uint8_t data)
 {
 	uint16_t times = 1000;
 	int8_t err = 0;
-	I2C_SendData(_I2Cx,data);
-	while(!I2C_CheckEvent(_I2Cx,I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+	I2C_SendData(I2Cx,data);
+	while(!I2C_CheckEvent(I2Cx,I2C_EVENT_MASTER_BYTE_TRANSMITTED))
 	{
 		times--;
 		if(times == 0)
@@ -140,8 +140,8 @@ int8_t I2C::send_7bits_address(uint8_t slave_address)
 	int8_t err = 0;
 	if(slave_address&0x01)
 	{
-		I2C_Send7bitAddress(_I2Cx,slave_address,I2C_Direction_Receiver);
-		while(!I2C_CheckEvent(_I2Cx,I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
+		I2C_Send7bitAddress(I2Cx,slave_address,I2C_Direction_Receiver);
+		while(!I2C_CheckEvent(I2Cx,I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
 		{
 			times--;
 			if(times == 0)
@@ -153,8 +153,8 @@ int8_t I2C::send_7bits_address(uint8_t slave_address)
 	}
 	else
 	{
-		I2C_Send7bitAddress(_I2Cx,slave_address,I2C_Direction_Transmitter);
-		while(!I2C_CheckEvent(_I2Cx,I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
+		I2C_Send7bitAddress(I2Cx,slave_address,I2C_Direction_Transmitter);
+		while(!I2C_CheckEvent(I2Cx,I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
 		{
 			times--;
 			if(times == 0)
@@ -171,7 +171,7 @@ int8_t I2C::receive_byte(uint8_t *data)
 {	
 	uint16_t times = 1000;
 	int8_t err = 0;
-	while(!I2C_CheckEvent(_I2Cx,I2C_EVENT_MASTER_BYTE_RECEIVED))
+	while(!I2C_CheckEvent(I2Cx,I2C_EVENT_MASTER_BYTE_RECEIVED))
 	{
 		times--;
 		if(times == 0)
@@ -180,7 +180,7 @@ int8_t I2C::receive_byte(uint8_t *data)
 			break;
 		}
 	}
-	*data = I2C_ReceiveData(_I2Cx);//读出寄存器数据
+	*data = I2C_ReceiveData(I2Cx);//读出寄存器数据
 	return err;
 }
 
@@ -219,7 +219,7 @@ int8_t I2C::read_byte(uint8_t slave_address,uint8_t reg_address,uint8_t *data)
 {
 	start();
 	send_7bits_address(slave_address);
-	I2C_Cmd(_I2Cx,ENABLE);
+	I2C_Cmd(I2Cx,ENABLE);
 	send_byte(reg_address);
 	start();
 	send_7bits_address(slave_address + 1);
@@ -235,7 +235,7 @@ int8_t I2C::read_byte(uint8_t slave_address,uint8_t reg_address,uint8_t *data,ui
 	uint8_t i = 0;
 	start();
 	send_7bits_address(slave_address);
-	I2C_Cmd(_I2Cx,ENABLE);
+	I2C_Cmd(I2Cx,ENABLE);
 	send_byte(reg_address);
 	start();
 	send_7bits_address(slave_address + 1);

@@ -16,13 +16,13 @@ This specification is preliminary and is subject to change at any time without n
 #include "spi.h"
 
 
-SPI::SPI(SPI_TypeDef *SPIx,GPIO *p_sck_pin,GPIO *p_miso_pin,GPIO *p_mosi_pin)
+SPI::SPI(SPI_TypeDef *SPIx,GPIO *sck,GPIO *miso,GPIO *mosi)
 {
 	busy = 0;
 	spi = SPIx;
-	p_sck_pin->mode(AF_PP);
-	p_miso_pin->mode(AF_PP);
-	p_mosi_pin->mode(AF_PP);
+	sck->mode(AF_PP);
+	miso->mode(AF_PP);
+	mosi->mode(AF_PP);
 	
 };
 

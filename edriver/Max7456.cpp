@@ -110,10 +110,10 @@ int OSD::get_mode()
   switch(video_mode){
     case MAX7456_MODE_MASK_NTCS:
       return 0;
-      break;
+//      break;
     case MAX7456_MODE_MASK_PAL:
       return 1;
-      break;
+//      break;
   }
   return 0;
 }

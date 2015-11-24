@@ -289,5 +289,3 @@ void USART3_IRQHandler(void)
 //		DMA_ClearFlag(DMA1_FLAG_TC2); 
 //	}
 }
-
-

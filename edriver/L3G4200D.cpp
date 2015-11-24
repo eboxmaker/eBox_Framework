@@ -50,7 +50,7 @@ void L3G4200D::read()
 	int8_t zla;
 	int8_t zha;
 
-	uint8_t addr = L3G4200D_OUT_X_L;
+	//uint8_t addr = L3G4200D_OUT_X_L;
 	
 	xla = read_reg(L3G4200D_OUT_X_L);
 	xha = read_reg(L3G4200D_OUT_X_H);

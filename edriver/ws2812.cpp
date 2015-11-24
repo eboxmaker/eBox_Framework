@@ -90,7 +90,7 @@ void WS2812::DMA_Config(void) {
 void WS2812::send_data(uint8_t *led_Colors, uint16_t len) {
 	
 	
-	uint8_t i, j, k = 0;
+	uint8_t i, j = 0;
 	uint16_t buffersize = (24*len)+42, memaddr = 0;
 
 	
@@ -143,9 +143,9 @@ uint8_t table[]={
 //ÏÔÊ¾Í¼ÐÎ
 void WS2812::rainbow_Loop(){
 	
-	u8 intStageNum = 0;
-	float   r = 255, g = 0, b = 0;
-	uint16_t i,k,m;
+//	u8 intStageNum = 0;
+//	float   r = 255, g = 0, b = 0;
+	uint16_t i,k;
     hsl.s = 1;
     hsl.l = 0.5;
     
@@ -202,9 +202,8 @@ void WS2812::rainbow_Loop(){
 
 //±éÀú×Ö·û´®
 void WS2812::rainbow_Loop1(){
-	u8 intStageNum = 0;
-	float   r = 255, g = 0, b = 0;
-	uint16_t i,k,m;
+//	float   r = 255, g = 0, b = 0;
+	uint16_t i,k;
 		hsl.s = 1;
 		hsl.l = 0.5;
 		

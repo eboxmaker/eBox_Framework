@@ -130,7 +130,7 @@ class W5500
 		GPIO *cs;
 		GPIO *rst_pin;
 		GPIO *int_pin;
-		SPI_CONFIG_TYPE spiDevW5500;
+		SPI_CONFIG_TYPE spi_dev_w5500;
 		SPI *spi;
 	
 	
