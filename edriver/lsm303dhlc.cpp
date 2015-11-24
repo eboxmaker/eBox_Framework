@@ -1,9 +1,9 @@
 #include "lsm303dhlc.h"
 
-void LSM303DLHC::begin(uint32_t _speed)
+void LSM303DLHC::begin(uint32_t speed)
 {
-	speed = _speed;
-	i2c->begin(speed);
+	this->speed = speed;
+	i2c->begin(this->speed);
 	
 	write_reg(LSM303_ACC_ADDR,LSM303A_CTRL_REG1,0x37);
 	write_reg(LSM303_ACC_ADDR,LSM303A_CTRL_REG4,0x10);

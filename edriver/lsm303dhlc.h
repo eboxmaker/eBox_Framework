@@ -51,11 +51,11 @@ class LSM303DLHC
 		int16_t acc_x,acc_y,acc_z;
 		int16_t mag_x,mag_y,mag_z;
 	public:
-		LSM303DLHC(SOFTI2C* p_i2c)
+		LSM303DLHC(SOFTI2C* i2c)
 		{
-			i2c = p_i2c;
+			this->i2c = i2c;
 		}
-		void begin(uint32_t _speed);
+		void begin(uint32_t speed);
 		void write_reg(u8 slave_addr,u8 reg,u8 value);
 		uint8_t read_reg(u8 slave_addr,u8 reg);
 		

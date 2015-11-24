@@ -16,10 +16,10 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "DS3231.h"
 	
-void DS3231::begin(uint32_t _speed)
+void DS3231::begin(uint32_t speed)
 {
-	speed = _speed;
-	i2c->begin(speed);
+	this->speed = speed;
+	i2c->begin(this->speed);
 }
 uint8_t DS3231::bcd_to_dec(uint8_t bcd_code)
 {

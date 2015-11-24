@@ -15,11 +15,11 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "74hc595.h"
 
-_74hc595::_74hc595(GPIO *p_data_pin, GPIO *p_sck_pin,GPIO *p_rck_pin)
+_74hc595::_74hc595(GPIO *data_pin, GPIO *sck_pin,GPIO *rck_pin)
 {
-    data_pin 	= p_data_pin;
-    sck_pin 	= p_sck_pin;
-    rck_pin 	= p_rck_pin;
+    this->data_pin 	= data_pin;
+    this->sck_pin 	= sck_pin;
+    this->rck_pin 	= rck_pin;
 }
 
 void _74hc595::begin()

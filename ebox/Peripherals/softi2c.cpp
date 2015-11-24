@@ -251,7 +251,7 @@ int8_t 	SOFTI2C::read_byte(uint8_t slave_address,uint8_t reg_address,uint8_t* da
 
 	return ret;
 }
-int8_t SOFTI2C::wait_busy(uint8_t slave_address)
+int8_t SOFTI2C::wait_dev_busy(uint8_t slave_address)
 {
 	int8_t ret;
 	uint8_t i = 0;

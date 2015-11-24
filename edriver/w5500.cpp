@@ -15,10 +15,10 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "w5500.h"
 #include "string.h"
-void W5500::begin(uint8_t dev_num,u8 *p_mac,u8 *p_ip,u8 *p_subnet,u8 *p_gateway,u8 *p_dns)
+void W5500::begin(uint8_t dev_num,u8 *mac,u8 *ip,u8 *subnet,u8 *gateway,u8 *dns)
 {
 	u8 txsize[MAX_SOCK_NUM] = {2,2,2,2,2,2,2,2};
-  u8 rxsize[MAX_SOCK_NUM] = {2,2,2,2,2,2,2,2};
+    u8 rxsize[MAX_SOCK_NUM] = {2,2,2,2,2,2,2,2};
 	
 
 	spiDevW5500.dev_num = dev_num;
@@ -45,11 +45,11 @@ void W5500::begin(uint8_t dev_num,u8 *p_mac,u8 *p_ip,u8 *p_subnet,u8 *p_gateway,
 //	setSn_IMR(6,0x04);//允许接收中断
 //	setSn_IMR(7,0x04);//允许接收中断
 	
-	memcpy(mac,p_mac,4);
-	memcpy(ip,p_ip,4);
-	memcpy(subnet,p_subnet,4);
-	memcpy(gw,p_gateway,4);
-	memcpy(dns,p_dns,4);
+	memcpy(this->mac,mac,6);
+	memcpy(this->ip,ip,4);
+	memcpy(this->subnet,subnet,4);
+	memcpy(this->gw,gateway,4);
+	memcpy(this->dns,dns,4);
 	
 	setSHAR(mac);/*配置Mac地址*/
 	setSIPR(ip);/*配置Ip地址*/

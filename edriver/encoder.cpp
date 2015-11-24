@@ -22,8 +22,8 @@ This specification is preliminary and is subject to change at any time without n
 ENCODER::ENCODER(GPIO *Apin,GPIO *Bpin)
 {
 
-	a_pin = Apin;
-	b_pin = Bpin;
+	this->a_pin = Apin;
+	this->b_pin = Bpin;
 
 	a_pin->mode(INPUT_PU);
 	b_pin->mode(INPUT_PU);

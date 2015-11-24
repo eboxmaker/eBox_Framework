@@ -11,10 +11,10 @@ class SD
 {
 
 	public:
-			SD(GPIO *cspin,SPI *p_SPI)
+			SD(GPIO *cs,SPI *spi)
 			{
-				cs = cspin;
-				spi = p_SPI;
+				this->cs  = cs;
+				this->spi = spi;
 			}
 			int begin(uint8_t dev_num);
 			uint8_t init();
@@ -27,21 +27,19 @@ class SD
 			u8 write_multi_block(u32 sector,  const u8 *data, u8 count);
 			u8 read_bytes(unsigned long address,unsigned char *buf,unsigned int offset,unsigned int bytes);
 
-
 	private:
 			uint8_t _wait(void);
 			uint8_t _send_command(u8 cmd, u32 arg,u8 crc);
 			uint8_t _send_command_no_deassert(u8 cmd, u32 arg,u8 crc);
 			int _receive_data(u8 *data, u16 len, u8 release);
 
-
 	public:
 		u8  SD_Type; //SDø®µƒ¿‡–Õ	 
 
 	private:
 		GPIO *cs;
+		SPI  *spi;
 		SPI_CONFIG_TYPE SPIDevSDCard;
-		SPI *spi;
 	
 	
 };

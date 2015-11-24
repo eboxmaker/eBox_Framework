@@ -44,11 +44,11 @@ class L3G4200D
 		} vector;
 
 		vector g; // gyro angular velocity readings
-		L3G4200D(SOFTI2C* p_i2c)
+		L3G4200D(SOFTI2C* i2c)
 		{
-			i2c = p_i2c;
+			this->i2c = i2c;
 		}	
-		void begin(uint32_t _speed);
+		void begin(uint32_t speed);
 		void test();
 		
 		void 		write_reg(uint8_t reg, uint8_t value);

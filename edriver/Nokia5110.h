@@ -9,8 +9,8 @@ Copyright 2015 shentq. All Rights Reserved.
 
 #include "ebox.h"
 
-#define SCLK 			PB13
-#define SDIN 			PB12
+#define SCLK 		PB13
+#define SDIN 		PB12
 #define LCD_DC 		PB11
 #define LCD_CE 		PB10
 #define LCD_RST 	PB9

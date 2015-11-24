@@ -78,34 +78,34 @@
 
 class OSD
 {
-  public:
-    OSD(GPIO* p_cs_pin,SPI* p_SPI)
-		{
-			cs = p_cs_pin;
-			spi = p_SPI;
-		}
-		void begin(uint8_t dev_num);
-    void init(void);
-    void clear(void);
-    void plug(void);
-    void set_panel(uint8_t start_col, uint8_t start_row);
-    void open_panel(void);
-    void close_panel(void);
-    void control(uint8_t ctrl);
-    void detect_mode(void);
-    void set_mode(int mode);
-    void open_single(uint8_t x, uint8_t y);
-    int get_mode(void);
-    int get_center(void);
-    uint8_t write(uint8_t c);
-		void printf(const char* fmt,...);
-    void write_NVM(int font_count, uint8_t *character_bitmap);
+    public:
+        OSD(GPIO* cs,SPI* spi)
+        {
+            this->cs = cs;
+            this->spi = spi;
+        }
+        void begin(uint8_t dev_num);
+        void init(void);
+        void clear(void);
+        void plug(void);
+        void set_panel(uint8_t start_col, uint8_t start_row);
+        void open_panel(void);
+        void close_panel(void);
+        void control(uint8_t ctrl);
+        void detect_mode(void);
+        void set_mode(int mode);
+        void open_single(uint8_t x, uint8_t y);
+        int get_mode(void);
+        int get_center(void);
+        uint8_t write(uint8_t c);
+        void printf(const char* fmt,...);
+        void write_NVM(int font_count, uint8_t *character_bitmap);
     
-  private:
-    uint8_t start_col, start_row, col, row, video_mode, video_center;
-	  SPI_CONFIG_TYPE spi_dev_max7456;
-	  GPIO* cs;
-		SPI* spi;
+    private:
+        uint8_t start_col, start_row, col, row, video_mode, video_center;
+        SPI_CONFIG_TYPE spi_dev_max7456;
+        GPIO* cs;
+        SPI* spi;
 };
 
 #endif

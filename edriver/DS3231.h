@@ -59,12 +59,13 @@ This specification is preliminary and is subject to change at any time without n
  {
 	 
     public:
-        DS_DATA_TIME_STRUCT t;
-        DS3231(SOFTI2C *p_soft_i2c)
+       DS_DATA_TIME_STRUCT t;
+    public:
+        DS3231(SOFTI2C *i2c)
         {
-            i2c = p_soft_i2c;
+            this->i2c = i2c;
         };	
-        void begin(uint32_t _speed);
+        void begin(uint32_t speed);
         void get_date_time(DS_DATA_TIME_STRUCT *t);
         void get_time(u8 *buf);
         void get_date(u8 *buf);
