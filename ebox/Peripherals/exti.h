@@ -27,7 +27,7 @@ This specification is preliminary and is subject to change at any time without n
 class EXTIx
 {
 	public:
-		EXTIx(GPIO *p_exti_pin,EXTITrigger_TypeDef p_trigger);
+		EXTIx(GPIO *exti_pin, EXTITrigger_TypeDef trigger);
 		void begin();
 		void attach_interrupt(void (*callback_fun)(void));
 		void interrupt(FunctionalState enable);
@@ -40,7 +40,7 @@ class EXTIx
         uint32_t            exti_line;
         uint8_t             irq;
 
-        void init_info(GPIO *p_exti_pin);
+        void init_info(GPIO *exti_pin);
 };
 
 #endif

@@ -1,6 +1,6 @@
 
 #include "util.h"
-
+#include "ebox.h"
 
 
 /**
@@ -165,6 +165,3 @@ int find_str(uint8_t *s_str,uint8_t *p_str,uint16_t &seek)
 	}
 	return -1;
 }
-
-
-

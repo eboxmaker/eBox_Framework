@@ -56,7 +56,7 @@ typedef struct
 class	SPI
 {
 	public:
-		SPI(SPI_TypeDef *SPIx,GPIO *p_sck_pin,GPIO *p_miso_pin,GPIO *p_mosi_pin);
+		SPI(SPI_TypeDef *SPIx,GPIO *sck,GPIO *miso,GPIO *mosi);
 	
 		void    begin (SPI_CONFIG_TYPE *spi_config);
 		void    config(SPI_CONFIG_TYPE *spi_config);
@@ -85,7 +85,7 @@ class	SPI
 class SOFTSPI
 {
 	public:
-		SOFTSPI(GPIO *p_sck_pin,GPIO *p_miso_pin,GPIO *p_mosi_pin);
+		SOFTSPI(GPIO *sck,GPIO *miso,GPIO *mosi);
 	
 		void    begin(SPI_CONFIG_TYPE *spi_config);
         void    config(SPI_CONFIG_TYPE *spi_config);

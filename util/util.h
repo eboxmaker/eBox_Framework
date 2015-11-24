@@ -34,5 +34,4 @@ void replacetochar(char * str, char oldchar, char newchar);
 void mid(int8_t* src, int8_t* s1, int8_t* s2, int8_t* sub);
 void inet_addr_(unsigned char* addr,unsigned char *ip);
 int find_str(uint8_t *s_str,uint8_t *p_str,uint16_t &seek);
-
 #endif

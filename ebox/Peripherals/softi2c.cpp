@@ -15,22 +15,22 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "i2c.h"
 
-SOFTI2C::SOFTI2C(GPIO* p_scl_pin, GPIO* p_sda_pin)
+SOFTI2C::SOFTI2C(GPIO *scl, GPIO *sda)
 {
-	scl_pin = p_scl_pin;
-	sda_pin = p_sda_pin;
+	this->scl_pin = scl;
+	this->sda_pin = sda;
 }	
-void SOFTI2C::begin(uint32_t _speed)
+void SOFTI2C::begin(uint32_t speed)
 {	
-	speed = _speed;
-	config(speed);
+	this->speed = speed;
+	config(this->speed);
 	sda_pin->mode(OUTPUT_PP);
 	scl_pin->mode(OUTPUT_PP);
 }
-int8_t SOFTI2C::config(uint32_t _speed)
+int8_t SOFTI2C::config(uint32_t speed)
 {
-	speed = _speed;
-	switch(speed)
+	this->speed = speed;
+	switch(this->speed)
 	{
 		case 400000:
 			delay_times = 4;
@@ -45,7 +45,7 @@ int8_t SOFTI2C::config(uint32_t _speed)
 			delay_times = 32;
 			break;
 		default:
-			delay_times = speed;
+			delay_times = this->speed;
 			break;
 	}
 	return 0;

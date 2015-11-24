@@ -81,7 +81,7 @@ class OSD
     public:
         OSD(GPIO* cs,SPI* spi)
         {
-            this->cs = cs;
+            this->cs  = cs;
             this->spi = spi;
         }
         void begin(uint8_t dev_num);

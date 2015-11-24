@@ -141,4 +141,15 @@ SOFTI2C si2c(&PA4,&PA5);
 SOFTI2C si2c1(&PB6,&PB7);
 SOFTI2C si2c2(&PB10,&PB11);
 //RTC
+//extern "C"{
+//#pragma import(__use_no_semihosting)                              
+
+//int fputc(int ch, FILE *f)
+//{
+//  	USART_SendData(USART1, (u8) ch);
+//  	while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
+//  	return ch;
+//}
+//}
+
 

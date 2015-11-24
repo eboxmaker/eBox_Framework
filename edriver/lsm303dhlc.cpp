@@ -29,7 +29,7 @@ uint8_t LSM303DLHC::read_reg(u8 slave_addr,u8 reg)
 }
 void LSM303DLHC::read_acc(void)
 {
-		u8 buf[6];
+//  u8 buf[6];
 
 	acc_x = ((read_reg(LSM303_ACC_ADDR,LSM303A_OUT_X_H)<<8) + read_reg(LSM303_ACC_ADDR,LSM303A_OUT_X_L));
 	acc_y = ((read_reg(LSM303_ACC_ADDR,LSM303A_OUT_Y_H)<<8) + read_reg(LSM303_ACC_ADDR,LSM303A_OUT_Y_L));
