@@ -11,7 +11,7 @@ class TCPCLIENT
 	
 		uint8_t     status();//网卡当前的状态
 		uint16_t	available();//接收缓冲区是否可用
-		bool	    is_connected();//是否存在链接
+		bool	    connected();//是否存在链接
 		void	    stop();
 	
 		u16     recv(u8* buf);

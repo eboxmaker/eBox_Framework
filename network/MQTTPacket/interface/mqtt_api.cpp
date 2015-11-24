@@ -231,12 +231,12 @@ int MQTT::subscribe(char *topick)
         }
     }while(tmp != SUBACK && (millis() - tmp_time < 1000));
     
-    do{
-        tmp = MQTTPacket_read(buf, buflen, transport_getdata);
-        if (tmp == PUBLISH){
-            MQTT_DBG("first req\r\n");
-        }
-    }while(tmp != PUBLISH);
+//    do{
+//        tmp = MQTTPacket_read(buf, buflen, transport_getdata);
+//        if (tmp == PUBLISH){
+//            MQTT_DBG("first req\r\n");
+//        }
+//    }while(tmp != PUBLISH);
 
 	return 0;
 }
@@ -271,7 +271,7 @@ void MQTT::loop()
                     &payload_in, &payloadlen_in, buf, buflen);
             if(rc == 1){
         //            MQTT_DBG("message  :\" %.*s\"\r\n", payloadlen_in, payload_in);
-                callback(receivedTopic.lenstring.data,receivedTopic.lenstring.len,(char*)payload_in,payloadlen_in);
+                this->callback(receivedTopic.lenstring.data,receivedTopic.lenstring.len,(char*)payload_in,payloadlen_in);
             }
             else
                 MQTT_DBG("message  err :%d",rc);                
@@ -284,7 +284,6 @@ void MQTT::loop()
         }
     }
 }
-MQTT& MQTT::setCallback(void(*callback)(char*,int, char*, int)){
+void MQTT::setCallback(void(*callback)(char*,int, char*, int)){
     this->callback = callback;
-    return *this;
 }

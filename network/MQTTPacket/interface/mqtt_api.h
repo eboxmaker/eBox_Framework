@@ -33,7 +33,7 @@ class MQTT
         int     publish(char *topick,char *message);
         int     subscribe(char *topick);
         void    loop();
-        MQTT&   setCallback(MQTT_CALLBACK_SIGNATURE);
+        void   setCallback(MQTT_CALLBACK_SIGNATURE);
     private:
         SOCKET   local_socket;
         uint16_t local_port;
