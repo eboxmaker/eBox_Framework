@@ -2,11 +2,11 @@
 #include "math.h"
 
 
-void L3G4200D::begin(uint32_t _speed)
+void L3G4200D::begin(uint32_t speed)
 {
 	// 0x0F = 0b00001111
 	// Normal power mode, all axes enabled
-	speed = _speed;
+	this->speed = speed;
 	i2c->begin(speed);
 
 	write_reg(L3G4200D_CTRL_REG1, 0x0F);

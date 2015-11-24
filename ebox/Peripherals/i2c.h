@@ -60,8 +60,6 @@ class I2C
 };
 
 
-
-
 /*
 	1.支持任何IO引脚；
 	2.函数接口和硬件I2C完全一样可以互相替代
@@ -81,7 +79,7 @@ class SOFTI2C
 		int8_t 		write_byte(uint8_t slave_address,uint8_t reg_address,uint8_t *data,uint16_t num_to_write);
 		int8_t 		read_byte (uint8_t slave_address,uint8_t reg_address,uint8_t *data);
 		int8_t 		read_byte (uint8_t slave_address,uint8_t reg_address,uint8_t *data,uint16_t num_to_read);
-	  int8_t		wait_busy (uint8_t slave_address);
+	  int8_t		wait_dev_busy (uint8_t slave_address);
 	public:
 		int8_t      take_i2c_right(uint32_t _speed);
 		int8_t      release_i2c_right(void);

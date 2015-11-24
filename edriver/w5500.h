@@ -40,15 +40,14 @@ class W5500
 		uint8_t dns[4];
 	
 	public:
-		W5500(GPIO *p_cs_pin,GPIO *p_rst_pin,GPIO *p_int_pin,SPI *pSPI)
+		W5500(GPIO *cs,GPIO *rst,GPIO *int_pin,SPI *spi)
 		{
-			cs = 		 p_cs_pin;
-		  rst_pin = p_rst_pin;
-			int_pin = p_int_pin;
-			spi = pSPI;
-
+            this->cs      = cs;
+            this->rst_pin = rst;
+            this->int_pin = int_pin;
+            this->spi     = spi;
 		}
-		void begin(uint8_t dev_num,u8 *p_mac,u8 *p_ip,u8 *p_subnet,u8 *p_gateway,u8 *p_dns);
+		void begin(uint8_t dev_num,u8 *mac,u8 *ip,u8 *subnet,u8 *gateway,u8 *dns);
 		void reset();
 
 		void send_data_processing(SOCKET s, u8 *data, u16 len);

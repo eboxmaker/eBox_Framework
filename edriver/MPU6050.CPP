@@ -16,11 +16,11 @@ This specification is preliminary and is subject to change at any time without n
 #include "mpu6050.h"
 
 
-void MPU6050::begin(uint32_t _speed)
+void MPU6050::begin(uint32_t speed)
 {
-	speed = _speed;
-	i2c->take_i2c_right(speed);
-	i2c->begin(speed);
+	this->speed = speed;
+	i2c->take_i2c_right(this->speed);
+	i2c->begin(this->speed);
 	i2c->write_byte(SLAVEADDRESS,PWR_MGMT_1,0);
 	i2c->write_byte(SLAVEADDRESS,SMPLRT_DIV,0x07);
 	i2c->write_byte(SLAVEADDRESS,CONFIG,0x06);

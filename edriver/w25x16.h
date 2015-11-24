@@ -42,10 +42,10 @@ This specification is preliminary and is subject to change at any time without n
 class W25X
 {
 	public:
-		W25X(GPIO *p_cs_pin,SPI *p_SPI)
+		W25X(GPIO *cs,SPI *spi)
 		{
-			cs = p_cs_pin;
-			spi = p_SPI;
+			this->cs  = cs;
+			this->spi = spi;
 		}
 		void begin(uint8_t dev_num);
 		void read_id(uint16_t *id);

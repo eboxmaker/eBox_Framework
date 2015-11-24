@@ -18,22 +18,22 @@ This specification is preliminary and is subject to change at any time without n
 
 #define DATAOUT  GPIOB->ODR             //PD[0..7]--(LCD)D0~D7
 
-LCD1602::LCD1602(GPIO *LEDPin,GPIO *ENPin,GPIO *RWPin,GPIO *RSPin,GPIO *DB0,GPIO *DB1,GPIO *DB2,GPIO *DB3,GPIO *DB4,GPIO *DB5,GPIO *DB6,GPIO *DB7)
+LCD1602::LCD1602(GPIO *led,GPIO *en,GPIO *rw,GPIO *rs,GPIO *d0,GPIO *d1,GPIO *d2,GPIO *d3,GPIO *d4,GPIO *d5,GPIO *d6,GPIO *d7)
 {
-		 led = LEDPin;
-		 en	= ENPin;
-		 rw	= RWPin;
-		 rs	= RSPin;
-		 d0		= DB0;
-		 d1		= DB1;
-		 d2		= DB2;
-		 d3		= DB3;
-		 d4		= DB4;
-		 d5		= DB5;
-		 d6		= DB6;
-		 d7		= DB7;
+    this->led   = led;
+    this->en	= en;
+    this->rw	= rw;
+    this->rs	= rs;
+    this->d0    = d0;
+    this->d1	= d1;
+    this->d2	= d2;
+    this->d3	= d3;
+    this->d4	= d4;
+    this->d5	= d5;
+    this->d6	= d6;
+    this->d7	= d7;
 
-	delay_times = 1;
+    delay_times = 1;
 }
 
 inline void LCD1602::lcd_delay(uint32_t nCount)

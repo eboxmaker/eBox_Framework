@@ -15,10 +15,10 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "at24c02.h"
 
-void EEPROM::begin(uint32_t _speed)
+void EEPROM::begin(uint32_t speed)
 {
-	speed = _speed;
-	i2c->begin(speed);
+	this->speed = speed;
+	i2c->begin(this->speed);
 }
 int8_t EEPROM::write_byte(uint16_t byte_addr,uint8_t byte)
 {
@@ -34,8 +34,8 @@ int8_t EEPROM::write_byte(uint16_t byte_addr,uint8_t *buf,uint16_t num_to_write)
 
 	for(uint16_t i = 0; i < num_to_write; i++)
 	{
-			write_byte(byte_addr++,buf[i]);
-		  //ret = i2c->wait_dev_busy(SLAVE_ADDR);//如果有错误再加此句
+		  write_byte(byte_addr++,buf[i]);
+		  ret = i2c->wait_dev_busy(SLAVE_ADDR);//如果有错误再加此句
 	
 	}
 
