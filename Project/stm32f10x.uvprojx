@@ -737,6 +737,11 @@
               <FileType>8</FileType>
               <FilePath>..\edriver\Max7456.cpp</FilePath>
             </File>
+            <File>
+              <FileName>NRF24L01.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\NRF24L01.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
