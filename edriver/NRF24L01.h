@@ -11,6 +11,7 @@ class NRF24L01
     
         void    set_tx_mode();
         void    set_rx_mode();
+
         int     send(uint8_t *buf,uint8_t length);
         int     recv(uint8_t *buf);
         int     status(void);
@@ -24,12 +25,50 @@ class NRF24L01
         SPI *spi;
 		SPI_CONFIG_TYPE spi_dev_nrf24l01;
     
+        uint8_t rx_aw;
+    
         uint8_t write_reg(uint8_t reg,uint8_t value);
         uint8_t read_reg(uint8_t reg);
         uint8_t write_buf(uint8_t reg,uint8_t *buf,uint8_t length);
         uint8_t read_buf (uint8_t reg,uint8_t *buf,uint8_t length);
 
+        void    set_rf_frq(uint8_t frq);
+    
+        void    set_chanal(uint8_t ch,uint8_t enable);
+        void    set_chanal_ack(uint8_t ch,uint8_t enable);
+    
+        void    set_addr_width(uint8_t aw);
+        void    set_local_addr(uint8_t ch,uint8_t *addr);
+        void    set_destination_addr(uint8_t *addr);
+    
+        void    set_pload_width(uint8_t ch,uint8_t width);
+        
+        void    set_retry_gap(uint8_t gap);
+        void    set_retry(uint8_t times);
+        
+        void    set_gain(uint8_t rf_gain);
+        void    set_baudrate(bool baudrate);
+        
+        void    set_power(bool pwr);
+        void    set_tx_rx_mode(bool mode);
+        
+        void    set_crc(bool crco,bool enable);
+    
 };
+//enum{
+//    N18 = 0,N12,N6,N0
+//}RF_GAIN;
+#define RF_N_18DB 0
+#define RF_N_12DB 1
+#define RF_N_6DB  2
+#define RF_N_0DB  3
+
+#define _1MBPS 0
+#define _2MBPS 1
+
+#define TX_MODE 0
+#define RX_MODE 1
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //NRF24L01¼Ä´æÆ÷²Ù×÷ÃüÁî
 #define NRF_READ_REG    0x00  //¶ÁÅäÖÃ¼Ä´æÆ÷,µÍ5Î»Îª¼Ä´æÆ÷µØÖ·
