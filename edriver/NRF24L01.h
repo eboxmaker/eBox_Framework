@@ -6,23 +6,28 @@ class NRF24L01
 {
     public:
         NRF24L01(GPIO *irq,GPIO *ce,GPIO *cs,SPI *spi);
-        void begin(uint8_t dev_num);
-        uint8_t write_reg(uint8_t reg,uint8_t value);
-        uint8_t read_reg(uint8_t reg);
-        uint8_t write_buf(uint8_t reg,uint8_t *buf,uint8_t length);
-        uint8_t read_buf (uint8_t reg,uint8_t *buf,uint8_t length);
+        void    begin(uint8_t dev_num);
         int     self_check();
     
         void    set_tx_mode();
-        int     send(uint8_t *buf,uint8_t length);
         void    set_rx_mode();
+        int     send(uint8_t *buf,uint8_t length);
         int     recv(uint8_t *buf);
+        int     status(void);
+        int     read_test(void);
+
+
     private:
         GPIO *irq;
         GPIO *ce;
         GPIO *cs;
         SPI *spi;
 		SPI_CONFIG_TYPE spi_dev_nrf24l01;
+    
+        uint8_t write_reg(uint8_t reg,uint8_t value);
+        uint8_t read_reg(uint8_t reg);
+        uint8_t write_buf(uint8_t reg,uint8_t *buf,uint8_t length);
+        uint8_t read_buf (uint8_t reg,uint8_t *buf,uint8_t length);
 
 };
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,7 +93,7 @@ class NRF24L01
 
 #define TX_ADR_WIDTH    5   //5字节的地址宽度
 #define RX_ADR_WIDTH    5   //5字节的地址宽度
-#define TX_PLOAD_WIDTH  32  //20字节的用户数据宽度
-#define RX_PLOAD_WIDTH  32  //20字节的用户数据宽度
+#define TX_PLOAD_WIDTH  4  //20字节的用户数据宽度
+#define RX_PLOAD_WIDTH  4  //20字节的用户数据宽度
 
 #endif

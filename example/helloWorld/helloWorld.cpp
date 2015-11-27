@@ -11,26 +11,19 @@ Copyright 2015 shentq. All Rights Reserved.
 
 
 #include "ebox.h"
-
-
 void setup()
 {
-	ebox_init();
-	uart1.begin(9600);
-	
+    ebox_init();
+    uart1.begin(9600);	
 }
-
-
 int main(void)
 {
-	setup();
-	while(1)
-	{
-		uart1.printf("hello World !\r\n");
-		delay_ms(1000);
-	}
-
-
+    setup();
+    while(1)
+    {
+        uart1.printf("hello World !\r\n");
+        delay_ms(1000);
+    }
 }
 
 
