@@ -41,68 +41,68 @@ void setup()
    	     uart1.printf("\r\n  NRF与MCU连接失败，请重新检查接线。\r\n");
 
 }
-u8 txbuf[4]={0,1,2,3};	 //发送缓冲
+u8 txbuf[4]={9,8,2,3};	 //发送缓冲
 u8 rxbuf[4];			 //接收缓冲
 
-int main(void)
-{
-	setup();
-	while(1)
-	{
-//        uart1.printf("\r\n 主机端 进入自应答发送模式\r\n");
-//        nrf.set_tx_mode();
-
-//        status = nrf.send(txbuf,32);
-//        switch(status)
-//        {
-//            case MAX_TX:
-// 			 	 	uart1.printf("\r\n 主机端 没接收到应答信号，发送次数超过限定值，发送失败。 \r\n");
-//				 break;
-//            
-//			  case ERROR:
-//			  	 	uart1.printf("\r\n 未知原因导致发送失败。 \r\n");
-//				 break;
-//	
-//			  case TX_OK:
-//			  		uart1.printf("\r\n 主机端 接收到 从机端 的应答信号，发送成功！ \r\n");	 		
-//				 break;  								       
-//        }
-        uart1.printf("\r\n 主机端 进入接收模式。 \r\n");	
-		nrf.set_rx_mode();
-        
-		status = nrf.recv(rxbuf);
-
-			/*判断接收状态*/
-			switch(status)
-			{
-			 case RX_OK:
-                uart1.printf("\r\n 主机端 接收到 从机端 发送的数据为：");
-			 	for(int i=0;i<4;i++)
-				{					
-					uart1.printf(" %d ",rxbuf[i]);
-               	}
-				  break;
-	
-			 case ERROR:
-				  	uart1.printf("\r\n 主机端 接收出错。   \r\n");
-				  break;  		
-			}
-	}
-}
-//发送
 //int main(void)
 //{
 //	setup();
 //	while(1)
 //	{
-//        uart1.printf("\r\n 主机端 进入自应答发送模式\r\n");
-//        nrf.set_tx_mode();
+//		nrf.set_rx_mode();
+////        uart1.printf("\r\n 主机端 进入自应答发送模式\r\n");
+////        nrf.set_tx_mode();
 
-//        do{
-//        status = nrf.send(txbuf,4);
-//        }while(status == MAX_TX);
+////        status = nrf.send(txbuf,32);
+////        switch(status)
+////        {
+////            case MAX_TX:
+//// 			 	 	uart1.printf("\r\n 主机端 没接收到应答信号，发送次数超过限定值，发送失败。 \r\n");
+////				 break;
+////            
+////			  case ERROR:
+////			  	 	uart1.printf("\r\n 未知原因导致发送失败。 \r\n");
+////				 break;
+////	
+////			  case TX_OK:
+////			  		uart1.printf("\r\n 主机端 接收到 从机端 的应答信号，发送成功！ \r\n");	 		
+////				 break;  								       
+////        }
+//        uart1.printf("\r\n 主机端 进入接收模式。 \r\n");	
+//        
+//		status = nrf.recv(rxbuf);
 
-//        delay_ms(1000);
-
+//			/*判断接收状态*/
+//			switch(status)
+//			{
+//			 case RX_OK:
+//                uart1.printf("\r\n 主机端 接收到 从机端 发送的数据为：");
+//			 	for(int i=0;i<4;i++)
+//				{					
+//					uart1.printf(" %d ",rxbuf[i]);
+//               	}
+//				  break;
+//	
+//			 case ERROR:
+//				  	uart1.printf("\r\n 主机端 接收出错。   \r\n");
+//				  break;  		
+//			}
 //	}
 //}
+//发送
+int main(void)
+{
+	setup();
+	while(1)
+	{
+        uart1.printf("\r\n 发送模式\r\n");
+        nrf.set_tx_mode();
+
+        do{
+        status = nrf.send(txbuf,4);
+        }while(status == MAX_TX);
+
+        delay_ms(1000);
+
+	}
+}
