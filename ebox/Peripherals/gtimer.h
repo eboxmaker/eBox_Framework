@@ -25,7 +25,7 @@ This specification is preliminary and is subject to change at any time without n
 
 
 
-class GTIM
+class TIM
 {
     public:
         TIM(TIM_TypeDef *TIMx);

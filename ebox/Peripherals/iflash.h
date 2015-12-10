@@ -37,12 +37,11 @@ This specification is preliminary and is subject to change at any time without n
 	 
 class FLASHCLASS
 {
-	public:
-	int read(uint32_t iAddress, uint8_t *buf, int32_t iNbrToRead) ;
-	int write(uint32_t iAddress, uint8_t *buf, uint32_t iNbrToWrite);
-
-	private:
-		uint16_t write_without_check(uint32_t iAddress, uint8_t *buf, uint16_t iNumByteToWrite);
+    public:
+        int read(uint32_t iAddress, uint8_t *buf, int32_t iNbrToRead) ;
+        int write(uint32_t iAddress, uint8_t *buf, uint32_t iNbrToWrite);
+    private:
+        uint16_t write_without_check(uint32_t iAddress, uint8_t *buf, uint16_t iNumByteToWrite);
 
 };
 

@@ -52,7 +52,7 @@ int8_t SOFTI2C::config(uint32_t speed)
 }
 uint32_t SOFTI2C::read_config()
 {
-	return speed;
+	return this->speed;
 }
 void SOFTI2C::start()
 {
@@ -269,15 +269,15 @@ int8_t SOFTI2C::wait_dev_busy(uint8_t slave_address)
 	}while(ret != 0);//如果返回值不是0，继续等待
 	return 0;
 }
-int8_t SOFTI2C::take_i2c_right(uint32_t _speed)
+int8_t SOFTI2C::take_i2c_right(uint32_t speed)
 {
 	
 	while((busy == 1) && (1))
 	{
 		delay_ms(1);
 	}
-	speed = _speed;
-	config(speed);
+	this->speed = speed;
+	config(this->speed);
 	busy = 1;
 	return 0;
 }
