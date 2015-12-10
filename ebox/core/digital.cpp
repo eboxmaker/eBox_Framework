@@ -15,17 +15,17 @@ This specification is preliminary and is subject to change at any time without n
 */#include "common.h"
 
 
-GPIO::GPIO(GPIO_TypeDef *_port,uint16_t _pin)
+GPIO::GPIO(GPIO_TypeDef *port,uint16_t pin)
 {
-	port = _port;
-	pin = _pin;
+	this->port = port;
+	this->pin = pin;
 }
 
-void GPIO::mode(PIN_MODE mode_val)
+void GPIO::mode(PIN_MODE mode)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
   
-	switch((uint32_t)port)
+	switch((uint32_t)this->port)
 	{
 		case (uint32_t)GPIOA:
 			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
@@ -52,46 +52,46 @@ void GPIO::mode(PIN_MODE mode_val)
 			break;
 	}
 
-	if(mode_val == AF_OD || mode_val == AF_PP)
+	if(mode == AF_OD || mode == AF_PP)
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
 	
-	GPIO_InitStructure.GPIO_Pin = pin;
-	GPIO_InitStructure.GPIO_Mode = (GPIOMode_TypeDef)mode_val;
+	GPIO_InitStructure.GPIO_Pin = this->pin;
+	GPIO_InitStructure.GPIO_Mode = (GPIOMode_TypeDef)mode;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(port, &GPIO_InitStructure);   //初始化GPIOC端口
+	GPIO_Init(this->port, &GPIO_InitStructure);   //初始化GPIOC端口
 }
 
 void GPIO::set()
 {
-    port->BSRR = pin;
+    this->port->BSRR = this->pin;
 }
 void GPIO::reset()
 {
-    port->BRR = pin;
+    this->port->BRR = this->pin;
 }
 
 void GPIO::write(uint8_t val)
 {
 	if(val == 0)
-		port->BRR = pin;
+		this->port->BRR = this->pin;
 	else
-		port->BSRR = pin;
+		this->port->BSRR = this->pin;
 }
 
 void GPIO::read(uint8_t *val)
 {
-	*val = port->IDR & pin;
+	*val = this->port->IDR & this->pin;
 }		
 
 uint8_t GPIO::read(void)
 {
-	if(port->IDR & pin)
+	if(this->port->IDR & this->pin)
 		return 1;
 	return  0;
 }
 void GPIO::toggle()
 {
-    port->ODR ^= pin;
+    port->ODR ^= this->pin;
 }	
 
 uint8_t shift_in(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order) 

@@ -24,9 +24,9 @@ I2C::I2C(I2C_TypeDef *I2Cx,GPIO *scl_pin,GPIO *sda_pin)
 	this->sda_pin = sda_pin;
 	
 }
-void  I2C::begin(uint32_t _speed)
+void  I2C::begin(uint32_t speed)
 {
-	speed = _speed;
+	this->speed = speed;
 	I2C_InitTypeDef I2C_InitStructure; 
 
 	if(I2Cx == I2C1)
@@ -46,7 +46,7 @@ void  I2C::begin(uint32_t _speed)
 	//I2C_InitStructure.I2C_OwnAddress1 = SlaveAddress; 
 	I2C_InitStructure.I2C_Ack = I2C_Ack_Enable; 
 	I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit; 
-	I2C_InitStructure.I2C_ClockSpeed = speed; 
+	I2C_InitStructure.I2C_ClockSpeed = this->speed; 
 
 	/* I2C1 初始化 */
 	I2C_DeInit(I2Cx);
@@ -57,9 +57,9 @@ void  I2C::begin(uint32_t _speed)
 
 }
 
-void I2C::config(uint32_t _speed)
+void I2C::config(uint32_t speed)
 {
-	speed = _speed;
+	this->speed = speed;
 	I2C_InitTypeDef I2C_InitStructure; 
 	
 	  /* I2C 配置 */
@@ -69,7 +69,7 @@ void I2C::config(uint32_t _speed)
 	I2C_InitStructure.I2C_Ack = I2C_Ack_Enable; 
 	I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit; 
 
-	I2C_InitStructure.I2C_ClockSpeed = speed; 
+	I2C_InitStructure.I2C_ClockSpeed = this->speed; 
 	I2C_Init(I2Cx, &I2C_InitStructure);	   
 	/* 使能 I2C1 */
 	I2C_Cmd  (I2Cx,ENABLE); 
@@ -79,7 +79,7 @@ void I2C::config(uint32_t _speed)
 }
 uint32_t I2C::read_config()
 {
-	return speed;
+	return this->speed;
 }
 int8_t I2C::start()
 {

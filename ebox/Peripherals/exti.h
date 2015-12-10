@@ -26,13 +26,13 @@ This specification is preliminary and is subject to change at any time without n
 //	EXTI_Trigger_Rising_Falling 
 class EXTIx
 {
-	public:
-		EXTIx(GPIO *exti_pin, EXTITrigger_TypeDef trigger);
-		void begin();
-		void attach_interrupt(void (*callback_fun)(void));
-		void interrupt(FunctionalState enable);
-		
-	private:
+    public:
+        EXTIx(GPIO *exti_pin, EXTITrigger_TypeDef trigger);
+        void begin();
+        void attach_interrupt(void (*callback_fun)(void));
+        void interrupt(FunctionalState enable);
+
+    private:
         GPIO                *exti_pin;
         EXTITrigger_TypeDef trigger;
         uint8_t             port_source;
