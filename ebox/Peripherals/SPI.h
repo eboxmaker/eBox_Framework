@@ -55,26 +55,26 @@ typedef struct
 //默认配置 空，只依靠结构体SPICONFIG来初始化
 class	SPI
 {
-	public:
-		SPI(SPI_TypeDef *SPIx,GPIO *sck,GPIO *miso,GPIO *mosi);
-	
-		void    begin (SPI_CONFIG_TYPE *spi_config);
-		void    config(SPI_CONFIG_TYPE *spi_config);
-		uint8_t read_config(void);
-		
-		int8_t  write(uint8_t data);
-		int8_t  write(uint8_t *data,uint16_t data_length);
-	
-		uint8_t read();
-		int8_t  read(uint8_t  *recv_data);
-		int8_t  read(uint8_t *recv_data,uint16_t data_length);
-	public:
-		int8_t take_spi_right(SPI_CONFIG_TYPE *spi_config);
-		int8_t release_spi_right(void);
-	private:
+    public:
+        SPI(SPI_TypeDef *SPIx,GPIO *sck,GPIO *miso,GPIO *mosi);
+
+        void    begin (SPI_CONFIG_TYPE *spi_config);
+        void    config(SPI_CONFIG_TYPE *spi_config);
+        uint8_t read_config(void);
+
+        int8_t  write(uint8_t data);
+        int8_t  write(uint8_t *data,uint16_t data_length);
+
+        uint8_t read();
+        int8_t  read(uint8_t  *recv_data);
+        int8_t  read(uint8_t *recv_data,uint16_t data_length);
+    public:
+        int8_t take_spi_right(SPI_CONFIG_TYPE *spi_config);
+        int8_t release_spi_right(void);
+    private:
         uint8_t     current_dev_num;
-		SPI_TypeDef *spi;
-		uint8_t     busy;
+        SPI_TypeDef *spi;
+        uint8_t     busy;
 };
 /*
 	注意：1.该类的SPI_CLOCK_DIV是由delay_us延时函数控制。略有不准，比硬件SPI会慢很多

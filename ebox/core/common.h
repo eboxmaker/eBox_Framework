@@ -71,19 +71,18 @@ void        delayus(uint32_t us);
 
 class GPIO
 {
-	public:
-		GPIO(GPIO_TypeDef   *_port,uint16_t _pin);
-		void mode(PIN_MODE mode_val);
-		void set();
-		void reset();
-		void write(uint8_t val);
-		void read(uint8_t *val);
+    public:
+        GPIO(GPIO_TypeDef *port, uint16_t pin);
+        void mode(PIN_MODE mode);
+        void set();
+        void reset();
+        void write(uint8_t val);
         void toggle();	
-		uint8_t read(void);
-	
-		GPIO_TypeDef* port;
-		uint16_t pin;
-	
+        void read(uint8_t *val);
+        uint8_t read(void);
+
+        GPIO_TypeDef* port;
+        uint16_t pin;	
 };
 
 uint16_t	analog_read(GPIO *pin);	
