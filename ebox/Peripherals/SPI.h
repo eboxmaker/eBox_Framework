@@ -101,7 +101,6 @@ class SOFTSPI
 		int8_t take_spi_right(SPI_CONFIG_TYPE *spi_config);
 		int8_t release_spi_right(void);
 
-
 	private:
 		GPIO    *sck_pin;
 		GPIO    *mosi_pin;
@@ -118,10 +117,7 @@ class SOFTSPI
 		uint8_t transfer1(uint8_t data);
 		uint8_t transfer2(uint8_t data);
 		uint8_t transfer3(uint8_t data);
-		uint8_t transfer(uint8_t data);
-	
-
-	
+		uint8_t transfer(uint8_t data);	
 };
 
 #endif
