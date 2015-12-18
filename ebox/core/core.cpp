@@ -125,7 +125,9 @@ void SysTick_Handler(void)//systick中断
 
 }
 
-
+//void PendSV_Handler(void)
+//{
+//}
 
 //STM32其他中断////////////////////////////
 void NMI_Handler(void)
