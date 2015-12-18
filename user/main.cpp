@@ -13,6 +13,7 @@ void setup()
 {
 	ebox_init();
 	PB8.mode(OUTPUT_PP);
+	PB9.mode(OUTPUT_PP);
 }
 int main(void)
 {
@@ -20,6 +21,7 @@ int main(void)
 	while(1)
 	{
 		PB8.toggle();
+		PB9.toggle();
 		delay_ms(500);
 	}
 
