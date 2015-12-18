@@ -369,7 +369,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\util;..\edriver;..\network;..\fat;..\user;..\other;..\network\MQTTPacket\src;..\network\MQTTPacket\interface</IncludePath>
+              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\util;..\edriver;..\network;..\fat;..\user;..\other;..\network\MQTTPacket\src;..\network\MQTTPacket\interface;..\os</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -641,6 +641,36 @@
               <FileName>util.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\util\util.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>os</GroupName>
+          <Files>
+            <File>
+              <FileName>cpu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\os\cpu.c</FilePath>
+            </File>
+            <File>
+              <FileName>cpu.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\os\cpu.h</FilePath>
+            </File>
+            <File>
+              <FileName>os.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\os\os.c</FilePath>
+            </File>
+            <File>
+              <FileName>os.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\os\os.h</FilePath>
+            </File>
+            <File>
+              <FileName>os_cpu_a.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\os\os_cpu_a.asm</FilePath>
             </File>
           </Files>
         </Group>
