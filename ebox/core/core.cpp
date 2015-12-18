@@ -15,46 +15,27 @@ This specification is preliminary and is subject to change at any time without n
 
 
 #include "common.h"
-#include "ebox.h"
+
 
 
  __IO uint32_t millis_seconds;
- 
-#if USE_OS 
-	#include "cpu.h"
-	#include "os.h"
-	#define systick_over_flow_value (9000000/OS_TICKS_PER_SEC)//SysTickOverFlowValue取值范围（100-9000），主频为72Mhz的情况下
 
-	void ebox_init(void)
-	{
-		ADC1_init();
-		
-		NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
 
-		//将pb4默认设置为IO口，仅用jtag
-		RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
-		 GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
+#define systick_over_flow_value 9000//此值取值范围（100-9000），主频为72Mhz的情况下
 
-	}
+void ebox_init(void)
+{
+    SysTick_Config(systick_over_flow_value);//  每隔 (nhz/9,000,000)s产生一次中断
+    SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);//9Mhz的systemticks clock；
+    ADC1_init();
+    
+    NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
 
-#else
+    //将pb4默认设置为IO口，仅用jtag
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
+     GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
+}
 
-	#define systick_over_flow_value 9000//此值取值范围（100-9000），主频为72Mhz的情况下
-
-	void ebox_init(void)
-	{
-		SysTick_Config(systick_over_flow_value);//  每隔 (nhz/9,000,000)s产生一次中断
-		SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);//9Mhz的systemticks clock；
-		ADC1_init();
-		
-		NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
-
-		//将pb4默认设置为IO口，仅用jtag
-		RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
-		 GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
-
-	}
-#endif
 
 uint32_t millis( void )
 {
@@ -63,21 +44,17 @@ uint32_t millis( void )
 
 void delay_ms(uint32_t ms)
 {	 	
-	#if USE_OS 
-		OS_DelayTimes(ms);
-	#else
-		uint32_t end = millis() + ms*(9000/systick_over_flow_value);
-		uint32_t systick = SysTick->VAL;
 
-		while (millis() < end) {
-			;
-			}
-		while(SysTick->VAL > systick)
-			{
-				;
-			}
+    uint32_t end = millis() + ms*(9000/systick_over_flow_value);
+    uint32_t systick = SysTick->VAL;
 
-	#endif
+    while (millis() < end) {
+        ;
+        }
+    while(SysTick->VAL > systick)
+        {
+            ;
+        }
 }   
 
 void delay_us(uint16_t us)
@@ -130,23 +107,25 @@ void delayus(uint32_t us)
 } 
 
 extern "C"{
+callback_fun_type sys_ticks_cb_table[1] = {0};
 	
-#if USE_OS
-
-#else
 	
-	void SysTick_Handler(void)//systick中断
-	{
+void attch_sys_ticks_interrupt(void (*callback_fun)(void))
+{
+    sys_ticks_cb_table[0] = callback_fun;
 
-		millis_seconds++;
+}
+	
+void SysTick_Handler(void)//systick中断
+{
 
-	}
+    millis_seconds++;
+    if(sys_ticks_cb_table[0] != 0)
+        sys_ticks_cb_table[0]();
 
-	void PendSV_Handler(void)//操作系统中切换任务使用的中断
-	{
-	}
+}
 
-#endif
+
 
 //STM32其他中断////////////////////////////
 void NMI_Handler(void)
