@@ -563,6 +563,11 @@
               <FilePath>..\ebox\core\core.cpp</FilePath>
             </File>
             <File>
+              <FileName>sys.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\core\sys.cpp</FilePath>
+            </File>
+            <File>
               <FileName>digital.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\ebox\core\digital.cpp</FilePath>

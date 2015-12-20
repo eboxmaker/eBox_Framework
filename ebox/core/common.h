@@ -61,10 +61,28 @@ class GPIO
         void toggle();	
         void read(uint8_t *val);
         uint8_t read(void);
-
+        //²Ù×÷·ûÖØÔØ
+        GPIO& operator= (int value) {
+            write(value);
+            return *this;
+        }
+        operator int() {
+            return read();
+        }
+                        
         GPIO_TypeDef* port;
         uint16_t pin;	
 };
+class SYSTEM
+{
+    public:
+        uint32_t chip_id[3];
+        uint16_t flash_size;
+        
+        void  get_chip_info();
+        float get_cpu_temperature();
+};
+extern SYSTEM sys;
 
 void        ADC1_init(void);
 
