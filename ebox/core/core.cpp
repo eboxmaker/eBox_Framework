@@ -31,9 +31,11 @@ void ebox_init(void)
     
     NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
 
-    //将pb4默认设置为IO口，仅用jtag
+    //将pb4默认设置为IO口，禁用jtag
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
      GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
+    sys.get_chip_info();
+
 }
 
 

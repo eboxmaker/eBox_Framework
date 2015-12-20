@@ -12,7 +12,8 @@ No part of this software may be used for any commercial activities by any form o
 
 Disclaimer
 This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
-*/#include "common.h"
+*/
+#include "common.h"
 
 
 GPIO::GPIO(GPIO_TypeDef *port,uint16_t pin)
@@ -93,6 +94,8 @@ void GPIO::toggle()
 {
     port->ODR ^= this->pin;
 }	
+
+
 
 uint8_t shift_in(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order) 
 {
