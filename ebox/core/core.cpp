@@ -14,19 +14,29 @@ This specification is preliminary and is subject to change at any time without n
 */
 
 
+#include "ebox.h"
 #include "common.h"
 
 
-
  __IO uint32_t millis_seconds;
+ __IO uint32_t cpu_calculate_per_sec;
 
 
 #define systick_over_flow_value 9000//此值取值范围（100-9000），主频为72Mhz的情况下
 
 void ebox_init(void)
 {
+    
     SysTick_Config(systick_over_flow_value);//  每隔 (nhz/9,000,000)s产生一次中断
     SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);//9Mhz的systemticks clock；
+    //统计cpu计算能力//////////////////
+    cpu_calculate_per_sec = 0;
+    millis_seconds = 0;
+    do{
+        cpu_calculate_per_sec++;//自加一条，判断一条
+    }while(millis_seconds < 100);
+    cpu_calculate_per_sec = cpu_calculate_per_sec * 10;
+    ////////////////////////////////
     ADC1_init();
     
     NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
@@ -109,6 +119,12 @@ void delayus(uint32_t us)
 } 
 
 extern "C"{
+    
+void ebox_printf(const char *fmt,...)
+{
+    DBG(fmt);
+}
+
 callback_fun_type sys_ticks_cb_table[1] = {0};
 	
 	
