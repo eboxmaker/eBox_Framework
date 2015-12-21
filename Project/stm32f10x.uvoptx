@@ -853,8 +853,8 @@
   </Group>
 
   <Group>
-    <GroupName>os</GroupName>
-    <tvExp>0</tvExp>
+    <GroupName>ebox_os</GroupName>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -866,7 +866,7 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\os\cpu.c</PathWithFileName>
+      <PathWithFileName>..\ebox_os\cpu.c</PathWithFileName>
       <FilenameWithoutPath>cpu.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -879,7 +879,7 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\os\cpu.h</PathWithFileName>
+      <PathWithFileName>..\ebox_os\cpu.h</PathWithFileName>
       <FilenameWithoutPath>cpu.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -892,7 +892,7 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\os\os.c</PathWithFileName>
+      <PathWithFileName>..\ebox_os\os.c</PathWithFileName>
       <FilenameWithoutPath>os.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -905,7 +905,7 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\os\os.h</PathWithFileName>
+      <PathWithFileName>..\ebox_os\os.h</PathWithFileName>
       <FilenameWithoutPath>os.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -918,7 +918,7 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\os\os_cpu_a.asm</PathWithFileName>
+      <PathWithFileName>..\ebox_os\os_cpu_a.asm</PathWithFileName>
       <FilenameWithoutPath>os_cpu_a.asm</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

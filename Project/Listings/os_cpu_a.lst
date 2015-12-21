@@ -287,7 +287,7 @@ Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=.\objects\os_cpu_a.d -o.\objects\os_cpu_a.o -IE:\STM32_X\Project\R
 TE -IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include -IC:\Keil_v5\A
 RM\CMSIS\Include --predefine="__UVISION_VERSION SETA 515" --predefine="STM32F10
-X_MD SETA 1" --list=.\listings\os_cpu_a.lst ..\os\os_cpu_a.asm
+X_MD SETA 1" --list=.\listings\os_cpu_a.lst ..\ebox_os\os_cpu_a.asm
 
 
 
@@ -298,7 +298,7 @@ Relocatable symbols
 
 Symbol: .text
    Definitions
-      At line 20 in file ..\os\os_cpu_a.asm
+      At line 20 in file ..\ebox_os\os_cpu_a.asm
    Uses
       None
 Comment: .text unused
@@ -306,49 +306,49 @@ OSCtxSw 000000C8
 
 Symbol: OSCtxSw
    Definitions
-      At line 162 in file ..\os\os_cpu_a.asm
+      At line 162 in file ..\ebox_os\os_cpu_a.asm
    Uses
-      At line 9 in file ..\os\os_cpu_a.asm
+      At line 9 in file ..\ebox_os\os_cpu_a.asm
 Comment: OSCtxSw used once
 OSStart 0000000E
 
 Symbol: OSStart
    Definitions
-      At line 44 in file ..\os\os_cpu_a.asm
+      At line 44 in file ..\ebox_os\os_cpu_a.asm
    Uses
-      At line 7 in file ..\os\os_cpu_a.asm
+      At line 7 in file ..\ebox_os\os_cpu_a.asm
 Comment: OSStart used once
 OSStartHang 0000002A
 
 Symbol: OSStartHang
    Definitions
-      At line 68 in file ..\os\os_cpu_a.asm
+      At line 68 in file ..\ebox_os\os_cpu_a.asm
    Uses
-      At line 69 in file ..\os\os_cpu_a.asm
+      At line 69 in file ..\ebox_os\os_cpu_a.asm
 Comment: OSStartHang used once
 OS_CPU_SR_Restore 00000008
 
 Symbol: OS_CPU_SR_Restore
    Definitions
-      At line 29 in file ..\os\os_cpu_a.asm
+      At line 29 in file ..\ebox_os\os_cpu_a.asm
    Uses
-      At line 11 in file ..\os\os_cpu_a.asm
+      At line 11 in file ..\ebox_os\os_cpu_a.asm
 Comment: OS_CPU_SR_Restore used once
 OS_CPU_SR_Save 00000000
 
 Symbol: OS_CPU_SR_Save
    Definitions
-      At line 24 in file ..\os\os_cpu_a.asm
+      At line 24 in file ..\ebox_os\os_cpu_a.asm
    Uses
-      At line 10 in file ..\os\os_cpu_a.asm
+      At line 10 in file ..\ebox_os\os_cpu_a.asm
 Comment: OS_CPU_SR_Save used once
 PendSV_Handler 0000002C
 
 Symbol: PendSV_Handler
    Definitions
-      At line 72 in file ..\os\os_cpu_a.asm
+      At line 72 in file ..\ebox_os\os_cpu_a.asm
    Uses
-      At line 8 in file ..\os\os_cpu_a.asm
+      At line 8 in file ..\ebox_os\os_cpu_a.asm
 Comment: PendSV_Handler used once
 PendSV_Handler_NoSave 0000007A
 
@@ -360,9 +360,9 @@ ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 Relocatable symbols
 
    Definitions
-      At line 116 in file ..\os\os_cpu_a.asm
+      At line 116 in file ..\ebox_os\os_cpu_a.asm
    Uses
-      At line 76 in file ..\os\os_cpu_a.asm
+      At line 76 in file ..\ebox_os\os_cpu_a.asm
 Comment: PendSV_Handler_NoSave used once
 8 symbols
 
@@ -375,35 +375,35 @@ NVIC_INT_CTRL E000ED04
 
 Symbol: NVIC_INT_CTRL
    Definitions
-      At line 13 in file ..\os\os_cpu_a.asm
+      At line 13 in file ..\ebox_os\os_cpu_a.asm
    Uses
-      At line 59 in file ..\os\os_cpu_a.asm
-      At line 164 in file ..\os\os_cpu_a.asm
+      At line 59 in file ..\ebox_os\os_cpu_a.asm
+      At line 164 in file ..\ebox_os\os_cpu_a.asm
 
 NVIC_PENDSVSET 10000000
 
 Symbol: NVIC_PENDSVSET
    Definitions
-      At line 14 in file ..\os\os_cpu_a.asm
+      At line 14 in file ..\ebox_os\os_cpu_a.asm
    Uses
-      At line 60 in file ..\os\os_cpu_a.asm
-      At line 165 in file ..\os\os_cpu_a.asm
+      At line 60 in file ..\ebox_os\os_cpu_a.asm
+      At line 165 in file ..\ebox_os\os_cpu_a.asm
 
 NVIC_PENDSV_PRI 000000FF
 
 Symbol: NVIC_PENDSV_PRI
    Definitions
-      At line 16 in file ..\os\os_cpu_a.asm
+      At line 16 in file ..\ebox_os\os_cpu_a.asm
    Uses
-      At line 50 in file ..\os\os_cpu_a.asm
+      At line 50 in file ..\ebox_os\os_cpu_a.asm
 Comment: NVIC_PENDSV_PRI used once
 NVIC_SYSPRI14 E000ED22
 
 Symbol: NVIC_SYSPRI14
    Definitions
-      At line 15 in file ..\os\os_cpu_a.asm
+      At line 15 in file ..\ebox_os\os_cpu_a.asm
    Uses
-      At line 49 in file ..\os\os_cpu_a.asm
+      At line 49 in file ..\ebox_os\os_cpu_a.asm
 Comment: NVIC_SYSPRI14 used once
 4 symbols
 
@@ -416,18 +416,18 @@ OS_Tcb_CurP 00000000
 
 Symbol: OS_Tcb_CurP
    Definitions
-      At line 1 in file ..\os\os_cpu_a.asm
+      At line 1 in file ..\ebox_os\os_cpu_a.asm
    Uses
-      At line 112 in file ..\os\os_cpu_a.asm
-      At line 122 in file ..\os\os_cpu_a.asm
+      At line 112 in file ..\ebox_os\os_cpu_a.asm
+      At line 122 in file ..\ebox_os\os_cpu_a.asm
 
 OS_Tcb_HighRdyP 00000000
 
 Symbol: OS_Tcb_HighRdyP
    Definitions
-      At line 2 in file ..\os\os_cpu_a.asm
+      At line 2 in file ..\ebox_os\os_cpu_a.asm
    Uses
-      At line 123 in file ..\os\os_cpu_a.asm
+      At line 123 in file ..\ebox_os\os_cpu_a.asm
 Comment: OS_Tcb_HighRdyP used once
 2 symbols
 348 symbols in table
