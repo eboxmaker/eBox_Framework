@@ -1,5 +1,5 @@
 /*
-file   : ebox_os.c
+file   : os.c
 author : shentq
 version: V1.0
 date   : 2015/7/5
@@ -241,7 +241,7 @@ void os_init(void)
 {
 	OSRdyTbl = 0;
 	OSPrioCur = OSPrioHighRdy = OS_TASKS;
-	attch_sys_ticks_interrupt(os_time_tick);
+	attch_sys_ticks_interrupt(os_time_tick);//移植的时候需要处理。将os_time_tick放入systick中断，并将此行删除
 	OS_NO_TIME_SW();
 
 }
