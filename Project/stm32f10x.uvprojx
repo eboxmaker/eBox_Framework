@@ -369,7 +369,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\util;..\edriver;..\network;..\fat;..\user;..\other;..\network\MQTTPacket\src;..\network\MQTTPacket\interface;..\ebox_os</IncludePath>
+              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\util;..\edriver;..\network;..\fat;..\user;..\other;..\gui</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -650,36 +650,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>ebox_os</GroupName>
-          <Files>
-            <File>
-              <FileName>cpu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ebox_os\cpu.c</FilePath>
-            </File>
-            <File>
-              <FileName>cpu.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\ebox_os\cpu.h</FilePath>
-            </File>
-            <File>
-              <FileName>os.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ebox_os\os.c</FilePath>
-            </File>
-            <File>
-              <FileName>os.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\ebox_os\os.h</FilePath>
-            </File>
-            <File>
-              <FileName>os_cpu_a.asm</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\ebox_os\os_cpu_a.asm</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>edriver</GroupName>
           <Files>
             <File>
@@ -777,6 +747,26 @@
               <FileType>8</FileType>
               <FilePath>..\edriver\NRF24L01.cpp</FilePath>
             </File>
+            <File>
+              <FileName>lcd_1.8.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\lcd_1.8.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>gui</GroupName>
+          <Files>
+            <File>
+              <FileName>template.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\gui\template.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\gui\gui.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -801,71 +791,6 @@
               <FileName>tcp.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\network\tcp.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>mqtt</GroupName>
-          <Files>
-            <File>
-              <FileName>mqtt_api.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\network\MQTTPacket\interface\mqtt_api.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>transport.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\network\MQTTPacket\interface\transport.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>MQTTConnectClient.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\network\MQTTPacket\src\MQTTConnectClient.c</FilePath>
-            </File>
-            <File>
-              <FileName>MQTTConnectServer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\network\MQTTPacket\src\MQTTConnectServer.c</FilePath>
-            </File>
-            <File>
-              <FileName>MQTTDeserializePublish.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\network\MQTTPacket\src\MQTTDeserializePublish.c</FilePath>
-            </File>
-            <File>
-              <FileName>MQTTFormat.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\network\MQTTPacket\src\MQTTFormat.c</FilePath>
-            </File>
-            <File>
-              <FileName>MQTTPacket.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\network\MQTTPacket\src\MQTTPacket.c</FilePath>
-            </File>
-            <File>
-              <FileName>MQTTSerializePublish.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\network\MQTTPacket\src\MQTTSerializePublish.c</FilePath>
-            </File>
-            <File>
-              <FileName>MQTTSubscribeClient.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\network\MQTTPacket\src\MQTTSubscribeClient.c</FilePath>
-            </File>
-            <File>
-              <FileName>MQTTSubscribeServer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\network\MQTTPacket\src\MQTTSubscribeServer.c</FilePath>
-            </File>
-            <File>
-              <FileName>MQTTUnsubscribeClient.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\network\MQTTPacket\src\MQTTUnsubscribeClient.c</FilePath>
-            </File>
-            <File>
-              <FileName>MQTTUnsubscribeServer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\network\MQTTPacket\src\MQTTUnsubscribeServer.c</FilePath>
             </File>
           </Files>
         </Group>
