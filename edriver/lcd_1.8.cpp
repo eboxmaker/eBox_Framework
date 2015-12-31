@@ -28,6 +28,11 @@ void LCD::begin(u8 dev_num)
     
     init();
 }
+void LCD::soft_reset()
+{
+	write_index(0x01);//soft reset
+}
+
 //向SPI总线传输一个8位数据
 //void  LCD::spi_write_data(u8 Data)
 //{
@@ -136,8 +141,9 @@ void LCD::init(void)
 	write_index(0xC5); //VCOM 
 	write_data_8bit(0x0E); 
 	
+    MADCTL = 0XC0;
 	write_index(0x36); //MX, MY, RGB mode 
-	write_data_8bit(0xC0); 
+	write_data_8bit(MADCTL); 
 	
 	//ST7735R Gamma Sequence
 	write_index(0xe0); 
@@ -200,31 +206,35 @@ void LCD::init(void)
 	write_index(0x29);//Display on	 
 }
 
-/*************************************************
-函数名：Lcd_Clear
-功能：全屏清屏函数
-入口参数：填充颜色COLOR
-返回值：无
-*************************************************/
-void LCD::clear(u16 Color)               
-{	
-   unsigned int i,m;
-   set_region(0,0,X_MAX_PIXEL-1,Y_MAX_PIXEL-1);
-   write_index(0x2C);
-   for(i=0;i<X_MAX_PIXEL;i++)
-    for(m=0;m<Y_MAX_PIXEL;m++)
-    {	
-	  	write_data_16bit(Color);
-    }   
-}
-
 void LCD::on()
 {
-led->set();
+	write_index(0x29);//Display on	 
 }
 void LCD::off()
 {
-    led->reset();
+	write_index(0x28);//Display off	 
+
+}
+void LCD::column_order(u8 order)
+{
+	write_index(0x36); //MX, MY, RGB mode 
+    if(order == 1){
+        MADCTL |= 1 << 6;
+    }
+    else
+        MADCTL &= ~(1 << 6);
+    write_data_8bit(MADCTL); 
+
+}
+void LCD::row_order(u8 order)
+{
+	write_index(0x36); //MX, MY, RGB mode 
+    if(order == 1){
+        MADCTL |= 1 << 7;
+    }
+    else
+        MADCTL &= ~(1 << 7);
+    write_data_8bit(MADCTL); 
 
 }
 /*************************************************
@@ -249,6 +259,21 @@ void LCD::set_region(u16 x_start,u16 y_start,u16 x_end,u16 y_end)
 	
 	write_index(0x2c);
 
+}
+/*************************************************
+函数名：Lcd_Clear
+功能：全屏清屏函数
+入口参数：填充颜色COLOR
+返回值：无
+*************************************************/
+void LCD::clear(u16 Color)               
+{	
+   unsigned int i,m;
+   set_region(0,0,X_MAX_PIXEL-1,Y_MAX_PIXEL-1);
+   write_index(0x2C);
+   for(i = 0; i < X_MAX_PIXEL * Y_MAX_PIXEL; i++){
+	  	write_data_16bit(Color);
+    }   
 }
 /*************************************************
 函数名：LCD_Set_XY
@@ -288,3 +313,234 @@ u16 LCD::read_point(u16 x,u16 y)
   write_data_8bit(Data);
   return Data;
 }
+
+
+
+/*************************************************
+函数名：draw_h_line
+功能：画一个点
+入口参数：无
+返回值：无
+*************************************************/
+void LCD::draw_h_line(int x0, int y,  int x1)
+{
+	set_region(x0,y,x1,y);
+    for (; x0 <= x1; x0++) {
+        write_data_16bit(front_color);
+    }
+}    
+
+/*************************************************
+函数名：draw_v_line
+功能：画一个点
+入口参数：无
+返回值：无
+*************************************************/
+void LCD::draw_v_line(int x, int y0,  int y1)
+{
+	set_region(x,y0,x,y1);
+    
+    for (; y0 <= y1; y0++) {
+        write_data_16bit(front_color);
+    }
+}    
+void LCD::fill_rect(int x0, int y0,  int x1, int y1)
+{
+    u16 i = 0;
+    u8 dx,dy;
+    dx = x1 - x0 + 1;
+    dy = y1 - y0 + 1;
+    
+	set_region(x0,y0,x1,y1);
+    for (; i <= dx * dy; i++) {
+        write_data_16bit(front_color);
+    }
+}
+void LCD::draw_circle(u16 x,u16 y,u16 r) 
+{//Bresenham算法 
+    unsigned short  a,b; 
+    int c; 
+    a=0; 
+    b=r; 
+    c=3-2*r; 
+    while (a<b) 
+    { 
+        draw_point(x+a,y+b,front_color);     //        7 
+        draw_point(x-a,y+b,front_color);     //        6 
+        draw_point(x+a,y-b,front_color);     //        2 
+        draw_point(x-a,y-b,front_color);     //        3 
+        draw_point(x+b,y+a,front_color);     //        8 
+        draw_point(x-b,y+a,front_color);     //        5 
+        draw_point(x+b,y-a,front_color);     //        1 
+        draw_point(x-b,y-a,front_color);     //        4 
+
+        if(c<0) c=c+4*a+6; 
+        else 
+        { 
+            c=c+4*(a-b)+10; 
+            b-=1; 
+        } 
+       a+=1; 
+    } 
+    if (a==b) 
+    { 
+        draw_point(x+a,y+b,front_color); 
+        draw_point(x+a,y+b,front_color); 
+        draw_point(x+a,y-b,front_color); 
+        draw_point(x-a,y-b,front_color); 
+        draw_point(x+b,y+a,front_color); 
+        draw_point(x-b,y+a,front_color); 
+        draw_point(x+b,y-a,front_color); 
+        draw_point(x-b,y-a,front_color); 
+    } 
+	
+}
+//画线函数，使用Bresenham 画线算法
+void LCD::draw_line(u16 x0, u16 y0,u16 x1, u16 y1)   
+{
+int dx,             // difference in x's
+    dy,             // difference in y's
+    dx2,            // dx,dy * 2
+    dy2, 
+    x_inc,          // amount in pixel space to move during drawing
+    y_inc,          // amount in pixel space to move during drawing
+    error,          // the discriminant i.e. error i.e. decision variable
+    index;          // used for looping	
+
+
+	set_xy(x0,y0);
+	dx = x1-x0;//计算x距离
+	dy = y1-y0;//计算y距离
+
+	if (dx>=0)
+	{
+		x_inc = 1;
+	}
+	else
+	{
+		x_inc = -1;
+		dx    = -dx;  
+	} 
+	
+	if (dy>=0)
+	{
+		y_inc = 1;
+	} 
+	else
+	{
+		y_inc = -1;
+		dy    = -dy; 
+	} 
+
+	dx2 = dx << 1;
+	dy2 = dy << 1;
+
+	if (dx > dy)//x距离大于y距离，那么每个x轴上只有一个点，每个y轴上有若干个点
+	{//且线的点数等于x距离，以x轴递增画点
+		// initialize error term
+		error = dy2 - dx; 
+
+		// draw the line
+		for (index=0; index <= dx; index++)//要画的点数不会超过x距离
+		{
+			//画点
+			draw_point(x0,y0,front_color);
+			
+			// test if error has overflowed
+			if (error >= 0) //是否需要增加y坐标值
+			{
+				error-=dx2;
+
+				// move to next line
+				y0+=y_inc;//增加y坐标值
+			} // end if error overflowed
+
+			// adjust the error term
+			error+=dy2;
+
+			// move to the next pixel
+			x0+=x_inc;//x坐标值每次画点后都递增1
+		} // end for
+	} // end if |slope| <= 1
+	else//y轴大于x轴，则每个y轴上只有一个点，x轴若干个点
+	{//以y轴为递增画点
+		// initialize error term
+		error = dx2 - dy; 
+
+		// draw the line
+		for (index=0; index <= dy; index++)
+		{
+			// set the pixel
+			draw_point(x0,y0,front_color);
+
+			// test if error overflowed
+			if (error >= 0)
+			{
+				error-=dy2;
+
+				// move to next line
+				x0+=x_inc;
+			} // end if error overflowed
+
+			// adjust the error term
+			error+=dx2;
+
+			// move to the next pixel
+			y0+=y_inc;
+		} // end for
+	} // end else |slope| > 1
+}
+void LCD::disp_char6x8(uint8_t row,uint8_t col,u8 ch)
+{
+    u8 x,y,i=0,j=0;
+    x = (X_MAX_PIXEL / 6) * col; 
+    y = (Y_MAX_PIXEL / 8) * row;
+    if(ch >= 0x20)ch -= 0x20;
+	set_region(x,y,x+6,y+8);
+    for (i = 0; i <= 6; i++) {
+        for (j = 0; j <= 8; j++) {
+            if(font6x8[ch][i] & (0x80 >> j))
+                write_data_16bit(front_color);
+            else
+                write_data_16bit(back_color);
+                
+        }
+    }
+   
+}
+void LCD::disp_char8x16(uint8_t row,uint8_t col,u8 ch)
+{
+    u8 x,y,i=0,j=0;
+    x = (8) * col; 
+    y = (16) * row;
+    if(ch >= 0x20)ch -= 0x20;
+	set_region(x,y,x+8,y+16);
+    for (i = 0; i <= 16; i++) {
+        for (j = 0; j <= 8; j++) {
+            if(asc16[ch*16 + i] & (0x80 >> j))
+                write_data_16bit(front_color);
+            else
+                write_data_16bit(back_color);
+                
+        }
+    }   
+}
+void LCD::printf(uint8_t row,uint8_t col,const char *fmt,...)
+{
+	char buf[30];
+	u8 i = 0;
+	va_list va_params;   
+	va_start(va_params,fmt);   
+	vsprintf(buf,fmt,va_params);   
+	va_end(va_params); 
+	while(buf[i] != '\0')
+	{
+        if(col*8 > X_MAX_PIXEL - 7){
+            row++;
+            col = 0;
+        }
+	  disp_char8x16(row,col++,buf[i++]);
+	}
+
+}
+

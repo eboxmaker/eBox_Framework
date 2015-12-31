@@ -5,6 +5,12 @@
 class LCD
 {
     public:
+        uint8_t MADCTL;
+        u16 front_color;
+        u16 back_color;
+        u8 row;
+        u8 col;
+    public:
         LCD(GPIO *cs,GPIO *led,GPIO *rs,GPIO *rst,SPI *spi)
         {
             this->cs = cs;
@@ -14,13 +20,26 @@ class LCD
             this->spi = spi;
         }
         void begin(u8 dev_num);
+        void soft_reset();
         void clear(u16 Color);
         void on();
         void off();
+        void column_order(u8 order);
+        void row_order(u8 order);
+
         void set_xy(u16 x,u16 y);
         inline void draw_point(u16 x,u16 y,u16 Data);
         u16 read_point(u16 x,u16 y);
-
+        
+        void draw_h_line(int x0, int y ,  int x1);
+        void draw_v_line(int x , int y0,  int y1);
+        void fill_rect  (int x0, int y0,  int x1, int y1);
+        void draw_circle(u16 x,  u16 y,   u16 r);
+        void draw_line(u16 x0, u16 y0,u16 x1, u16 y1);
+        
+        void disp_char6x8(uint8_t row,uint8_t col,u8 ch);
+        void disp_char8x16(uint8_t row,uint8_t col,u8 ch);
+        void printf(uint8_t row,uint8_t col,const char *fmt,...);
     private:
         GPIO *cs;
         GPIO *led;
