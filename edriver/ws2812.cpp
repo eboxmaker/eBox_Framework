@@ -126,9 +126,6 @@ void WS2812::send_data(uint8_t *led_Colors, uint16_t len) {
 	DMA_Cmd(DMA1_Channel2, DISABLE); 				// disable DMA channel 1
 	DMA_ClearFlag(DMA1_FLAG_TC2); 					// clear DMA1 Channel 1 transfer complete flag
 }
-COLOR_HSV hsv;
-COLOR_HSL hsl;
-COLOR_RGB rgb;
 uint8_t table[]={
     '-','-','-','x','x','-','-','-',
     '-','-','x','x','x','x','-','-',
@@ -142,6 +139,9 @@ uint8_t table[]={
 };
 //ÏÔÊ¾Í¼ÐÎ
 void WS2812::rainbow_Loop(){
+COLOR_HSV hsv;
+COLOR_HSL hsl;
+COLOR_RGB rgb;
 	
 //	u8 intStageNum = 0;
 //	float   r = 255, g = 0, b = 0;
@@ -202,6 +202,9 @@ void WS2812::rainbow_Loop(){
 
 //±éÀú×Ö·û´®
 void WS2812::rainbow_Loop1(){
+COLOR_HSV hsv;
+COLOR_HSL hsl;
+COLOR_RGB rgb;
 //	float   r = 255, g = 0, b = 0;
 	uint16_t i,k;
 		hsl.s = 1;

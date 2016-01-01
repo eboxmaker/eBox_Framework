@@ -19,6 +19,7 @@ void LCD::begin(u8 dev_num)
     led->mode(OUTPUT_PP);
     rs->mode(OUTPUT_PP);
     rst->mode(OUTPUT_PP);
+    led->reset();
     
     spi_dev_lcd.mode = SPI_MODE2;
     spi_dev_lcd.bit_order = MSB_FIRST;
@@ -74,13 +75,37 @@ void LCD::write_data_16bit(u16 Data)
     spi->write(Data); 			//写入低8位数据
     cs->set(); 
 }
-
+//u8 LCD::read_8bit()
+//{
+//    u8 data;
+//    cs->reset();
+//    rs->set();
+//    data = spi->read();
+//    cs->set(); 
+//    return data;
+//}
+//u16 LCD::read_16bit()
+//{
+//    u8 data;
+//    cs->reset();
+//    rs->set();
+//    data |= spi->read();
+//    data |= spi->read() << 8;
+//    cs->set(); 
+//    return data;
+//}
 void LCD::write_reg(u8 Index,u8 Data)
 {
     write_index(Index);
     write_data_8bit(Data);
 }
-
+//u8 LCD::read_reg(u8 Index)
+//{
+//    u8 data;
+//    write_index(Index);    
+//    data = read_8bit();
+//    return data;
+//}
 void LCD::reset(void)
 {
 	rst->reset();
@@ -201,8 +226,12 @@ void LCD::init(void)
 	
 	write_index(0x3A); //65k mode 
 	write_data_8bit(0x05); 
-	
-	
+
+///////////////////////////
+    write_index(0x0c);
+	write_data_8bit(0x00);
+	write_data_8bit(0x05);
+/////////////////////////////////	
 	write_index(0x29);//Display on	 
 }
 
@@ -303,16 +332,17 @@ inline void LCD::draw_point(u16 x,u16 y,u16 Data)
  函数功能：读TFT某一点的颜色                          
  出口参数：color  点颜色值                                 
 ******************************************/
-u16 LCD::read_point(u16 x,u16 y)
-{
-  unsigned int Data;
-  set_xy(x,y);
+//u16 LCD::read_point(u16 x,u16 y)
+//{
+//  u16 data;
+//  set_xy(x,y);
 
-  //Lcd_ReadData();//丢掉无用字节
-  //Data=Lcd_ReadData();
-  write_data_8bit(Data);
-  return Data;
-}
+//    write_index(0x2e);
+
+//    data = read_16bit();
+
+//  return data;
+//}
 
 
 
@@ -343,7 +373,8 @@ void LCD::draw_v_line(int x, int y0,  int y1)
     for (; y0 <= y1; y0++) {
         write_data_16bit(front_color);
     }
-}    
+}   
+#include "color_convert.h"
 void LCD::fill_rect(int x0, int y0,  int x1, int y1)
 {
     u16 i = 0;
@@ -355,6 +386,19 @@ void LCD::fill_rect(int x0, int y0,  int x1, int y1)
     for (; i <= dx * dy; i++) {
         write_data_16bit(front_color);
     }
+}
+void LCD::fill_rect(int x0, int y0,  int x1, int y1,u16 *bitmap)
+{
+    u16 i = 0;
+    u8 dx,dy;
+    dx = x1 - x0 + 1;
+    dy = y1 - y0 + 1;
+    
+	set_region(x0,y0,x1,y1);
+    for (; i <= dx * dy; i++) {
+        write_data_16bit(bitmap[i]);
+    }
+    
 }
 void LCD::draw_circle(u16 x,u16 y,u16 r) 
 {//Bresenham算法 
@@ -490,42 +534,40 @@ int dx,             // difference in x's
 		} // end for
 	} // end else |slope| > 1
 }
-void LCD::disp_char6x8(uint8_t row,uint8_t col,u8 ch)
+
+void LCD::h_disp_char8x16(u16 x,u16 y,u8 ch)
 {
-    u8 x,y,i=0,j=0;
-    x = (X_MAX_PIXEL / 6) * col; 
-    y = (Y_MAX_PIXEL / 8) * row;
-    if(ch >= 0x20)ch -= 0x20;
-	set_region(x,y,x+6,y+8);
-    for (i = 0; i <= 6; i++) {
-        for (j = 0; j <= 8; j++) {
-            if(font6x8[ch][i] & (0x80 >> j))
-                write_data_16bit(front_color);
-            else
-                write_data_16bit(back_color);
-                
-        }
-    }
-   
-}
-void LCD::disp_char8x16(uint8_t row,uint8_t col,u8 ch)
-{
-    u8 x,y,i=0,j=0;
-    x = (8) * col; 
-    y = (16) * row;
     if(ch >= 0x20)ch -= 0x20;
 	set_region(x,y,x+8,y+16);
-    for (i = 0; i <= 16; i++) {
-        for (j = 0; j <= 8; j++) {
+    for (int i = 0; i <= 16; i++) {
+        for (int j = 0; j <= 8; j++) {
             if(asc16[ch*16 + i] & (0x80 >> j))
                 write_data_16bit(front_color);
             else
-                write_data_16bit(back_color);
-                
+                 write_data_16bit(back_color);
         }
     }   
 }
-void LCD::printf(uint8_t row,uint8_t col,const char *fmt,...)
+void LCD::disp_char8x16(u16 x,u16 y,u8 ch)
+{
+	unsigned char i,j;
+	unsigned short k,x0;
+    k = ch;
+    if (k>32) k-=32; else k=0;
+
+    for(i=0;i<16;i++)
+    for(j=0;j<8;j++) 
+    {
+        if(asc16[k*16+i]&(0x80>>j))	
+            draw_point(x+j,y+i,front_color);
+        else 
+        {
+            if(text_mode == ENABLE_BACK_COLOR)draw_point(x+j,y+i,back_color);
+        }
+    }
+    x+=8;  
+}
+void LCD::printf(u16 x,u16 y,const char *fmt,...)
 {
 	char buf[30];
 	u8 i = 0;
@@ -535,12 +577,80 @@ void LCD::printf(uint8_t row,uint8_t col,const char *fmt,...)
 	va_end(va_params); 
 	while(buf[i] != '\0')
 	{
-        if(col*8 > X_MAX_PIXEL - 7){
-            row++;
-            col = 0;
+        if(x>128){
+            y+=16;
+            x = 0;
         }
-	  disp_char8x16(row,col++,buf[i++]);
+        disp_char8x16(x,y,buf[i++]);
+        x+=8;
 	}
-
 }
+void LCD::draw_font_gbk16(u16 x, u16 y, u8 *s)
+{
+	unsigned char i,j;
+	unsigned short k,x0;
+	x0=x;
+
+	while(*s) 
+	{	
+		if((*s) < 128) 
+		{
+			k=*s;
+			if (k==13) 
+			{
+				x=x0;
+				y+=16;
+			}
+			else 
+			{
+				if (k>32) k-=32; else k=0;
+	
+			    for(i=0;i<16;i++)
+				for(j=0;j<8;j++) 
+					{
+				    	if(asc16[k*16+i]&(0x80>>j))	draw_point(x+j,y+i,front_color);
+						else 
+						{
+                            if(text_mode == ENABLE_BACK_COLOR)draw_point(x+j,y+i,back_color);
+						}
+					}
+				x+=8;
+			}
+			s++;
+		}
+			
+		else 
+		{
+		
+
+			for (k=0;k<hz16_num;k++) 
+			{
+			  if ((hz16[k].Index[0]==*(s))&&(hz16[k].Index[1]==*(s+1)))
+			  { 
+				    for(i=0;i<16;i++)
+				    {
+						for(j=0;j<8;j++) 
+							{
+						    	if(hz16[k].Msk[i*2]&(0x80>>j))	draw_point(x+j,y+i,front_color);
+								else {
+									 if(text_mode == ENABLE_BACK_COLOR)draw_point(x+j,y+i,back_color);
+								}
+							}
+						for(j=0;j<8;j++) 
+							{
+						    	if(hz16[k].Msk[i*2+1]&(0x80>>j))	draw_point(x+j+8,y+i,front_color);
+								else 
+								{
+									 if(text_mode == ENABLE_BACK_COLOR)draw_point(x+j+8,y+i,back_color);
+								}
+							}
+				    }
+				}
+			  }
+			s+=2;x+=16;
+		} 
+		
+	}
+}
+
 
