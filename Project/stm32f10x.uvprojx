@@ -647,6 +647,11 @@
               <FileType>8</FileType>
               <FilePath>..\util\util.cpp</FilePath>
             </File>
+            <File>
+              <FileName>color_convert.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\util\color_convert.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -811,16 +816,6 @@
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fat\ff.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>other</GroupName>
-          <Files>
-            <File>
-              <FileName>color_convert.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\other\color_convert.cpp</FilePath>
             </File>
           </Files>
         </Group>

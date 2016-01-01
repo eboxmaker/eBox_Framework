@@ -240,3 +240,9 @@ void RGB_BUF_to_GRB(COLOR_BUF &c_buf)
 		}
 	}
 }
+void rgb_to_565(COLOR_RGB &rgb,u16 &color)
+{
+   color |= (rgb.r >> 3)<<11;
+   color |= (rgb.g >> 2)<<5;
+   color |= (rgb.b >> 3)<<0;
+}

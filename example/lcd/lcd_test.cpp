@@ -48,17 +48,15 @@ void setup()
        lcd.front_color = _color[i];
        lcd.draw_h_line(0,i,128);
     }
-    lcd.text_mode = DISABLE_BACK_COLOR;
-    lcd.disp_char8x16(0,0,'s');
-    //lcd.text_mode = ENABLE_BACK_COLOR;
-    lcd.printf(10,10,"1231asddfgdsfgthkfhddddj2nhd");
+    lcd.disp_char8x16(0,0,index++);
+    
+    lcd.printf(2,2,"1231asddfgdsfgthkfhddddj2nhd");
     
 
     lcd.front_color = GREEN;
     lcd.draw_circle(50,50,50);
     lcd.draw_line(64,50,r,100);
-    lcd.text_mode = DISABLE_BACK_COLOR;
-    lcd.draw_font_gbk16(50,80,(u8 *)"1ad23Õº∆¨œ‘ æ≤‚ ‘");
+    
 
 }
 int main(void)

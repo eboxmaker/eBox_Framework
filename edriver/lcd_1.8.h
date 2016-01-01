@@ -1,6 +1,9 @@
 
 #include "ebox.h"
-
+typedef enum{
+    ENABLE_BACK_COLOR = 0,
+    DISABLE_BACK_COLOR = 1
+}TEXT_MODE_TYPE;
 
 class LCD
 {
@@ -8,8 +11,7 @@ class LCD
         uint8_t MADCTL;
         u16 front_color;
         u16 back_color;
-        u8 row;
-        u8 col;
+        TEXT_MODE_TYPE text_mode;
     public:
         LCD(GPIO *cs,GPIO *led,GPIO *rs,GPIO *rst,SPI *spi)
         {
@@ -34,12 +36,18 @@ class LCD
         void draw_h_line(int x0, int y ,  int x1);
         void draw_v_line(int x , int y0,  int y1);
         void fill_rect  (int x0, int y0,  int x1, int y1);
+        void fill_rect  (int x0, int y0,  int x1, int y1,u16 *bitmap);
         void draw_circle(u16 x,  u16 y,   u16 r);
         void draw_line(u16 x0, u16 y0,u16 x1, u16 y1);
         
-        void disp_char6x8(uint8_t row,uint8_t col,u8 ch);
-        void disp_char8x16(uint8_t row,uint8_t col,u8 ch);
-        void printf(uint8_t row,uint8_t col,const char *fmt,...);
+        void h_disp_char8x16(u16 x,u16 y,u8 ch);
+        void disp_char8x16(u16 x,u16 y,u8 ch);
+        void printf(u16 x,u16 y,const char *fmt,...);
+        void draw_font_gbk16(u16 x, u16 y,u8 *s);
+
+        
+        void draw_bitmap(u16 *bitmap);
+
     private:
         GPIO *cs;
         GPIO *led;
@@ -54,7 +62,12 @@ class LCD
         void write_index(u8 Index);
         void write_data_8bit(u8 Data);
         void write_data_16bit(u16 Data);
+        u8 read_8bit();
+        u16 read_16bit();
+
         void write_reg(u8 Index,u8 Data);
+        u8   read_reg(u8 Index);
+
         void set_region(u16 x_start,u16 y_start,u16 x_end,u16 y_end);
        
 };

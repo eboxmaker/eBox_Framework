@@ -48,9 +48,9 @@ void RGB_to_HSL(/*[in]*/const COLOR_RGB &rgb, /*[out]*/COLOR_HSL &hsl);
 void HSL_to_RGB(const COLOR_HSL &hsl, COLOR_RGB &rgb);
 
 void RGB_to_HSV(const COLOR_RGB &rgb, COLOR_HSV &hsv );
-void HSV_to_RGB(const COLOR_HSV &hsv, COLOR_RGB &bgr);
+void HSV_to_RGB(const COLOR_HSV &hsv, COLOR_RGB &rgb);
 
 void RGB_to_GRB(COLOR_RGB &rgb,COLOR_GRB &grb);
 void RGB_BUF_to_GRB(COLOR_BUF &c_buf);
-
+void rgb_to_565(COLOR_RGB &rgb,u16 &color);
 #endif
