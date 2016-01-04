@@ -18,7 +18,7 @@ This specification is preliminary and is subject to change at any time without n
 #include "common.h"
 
 
- __IO uint32_t millis_seconds;
+ __IO uint64_t millis_seconds;
  __IO uint32_t cpu_calculate_per_sec;
 
 
@@ -48,10 +48,13 @@ void ebox_init(void)
 
 }
 
-
-uint32_t millis( void )
+uint64_t millis( void )
 {
   return millis_seconds;
+}
+uint64_t micros(void)
+{
+    return millis_seconds * 1000 + (9000 - SysTick->VAL / 9);
 }
 
 void delay_ms(uint32_t ms)
@@ -92,7 +95,7 @@ void delay_us(uint16_t us)
 		{
 			;
 		}
-		millis_seconds++;//矫正毫秒计数
+		//millis_seconds++;//矫正毫秒计数
 	}
 	else
 	{
@@ -209,9 +212,9 @@ void UsageFault_Handler(void)
   * @param  None
   * @retval None
   */
-void SVC_Handler(void)
-{
-}
+//void SVC_Handler(void)
+//{
+//}
 
 /**
   * @brief  This function handles Debug Monitor exception.
