@@ -652,5 +652,25 @@ void LCD::draw_font_gbk16(u16 x, u16 y, u8 *s)
 		
 	}
 }
-
+//取模方式 水平扫描 从左到右 低位在前
+void LCD::draw_bitmap(const unsigned char *p) //显示40*40 QQ图片
+{
+  	int i,j,k; 
+	unsigned char picH,picL;
+	clear(BLACK); //清屏  
+	
+	for(k=0;k<4;k++)
+	{
+	   	for(j=0;j<3;j++)
+		{	
+			set_region(40*j,40*k,40*j+39,40*k+39);		//坐标设置
+		    for(i=0;i<40*40;i++)
+			 {	
+			 	picL=*(p+i*2);	//数据低位在前
+				picH=*(p+i*2+1);				
+				write_data_16bit(picH<<8|picL);  						
+			 }	
+		 }
+	}		
+}
 

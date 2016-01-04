@@ -46,7 +46,7 @@ class LCD
         void draw_font_gbk16(u16 x, u16 y,u8 *s);
 
         
-        void draw_bitmap(u16 *bitmap);
+        void draw_bitmap(const unsigned char *p); //œ‘ æ40*40 QQÕº∆¨
 
     private:
         GPIO *cs;
