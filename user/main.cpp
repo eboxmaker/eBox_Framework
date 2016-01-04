@@ -11,7 +11,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 #include "lcd_1.8.h"
 #include "color_convert.h"
-#include "lcd_font.h"
+
 COLOR_HSV hsv;
 COLOR_RGB rgb;
 
@@ -48,28 +48,30 @@ void setup()
        lcd.front_color = _color[i];
        lcd.draw_h_line(0,i,128);
     }
-    lcd.text_mode = ENABLE_BACK_COLOR;
-    lcd.disp_char8x16(0,0,'s');
-    lcd.text_mode = DISABLE_BACK_COLOR;
-    lcd.printf(10,10,"1231asddfgdsfgthkfhddddj2nhd");
+    lcd.disp_char8x16(0,0,index++);
+    
+    lcd.printf(2,2,"1231asddfgdsfgthkfhddddj2nhd");
     
 
     lcd.front_color = GREEN;
     lcd.draw_circle(50,50,50);
     lcd.draw_line(64,50,r,100);
-    lcd.text_mode = DISABLE_BACK_COLOR;
-    lcd.draw_font_gbk16(50,80,(u8 *)"1ad23Õº∆¨œ‘ æ≤‚ ‘");
+    
 
-    lcd.draw_bitmap(gImage_qq);
 }
 int main(void)
 {
 	setup();
     u8 j;
+	uint64_t highStart;
+    uint64_t now;
 	while(1)
 	{
-    delay_ms(1000);
-    PB8.toggle();
+          highStart = micros();
+		  delay_us(20);
+		  now= (micros() - highStart);
+		  uart1.printf("%d,\r\n",now); 
+
 	}
 
 }

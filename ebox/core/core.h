@@ -13,7 +13,7 @@ extern "C"{
 #define no_interrupts() 	__disable_irq()
 	
 ///////全局变量、函数///////////////////////////////////////////////
-extern __IO uint32_t millis_seconds;
+extern __IO uint64_t millis_seconds;
 extern __IO uint32_t cpu_calculate_per_sec;
 
 typedef void (*callback_fun_type)(void);	 
@@ -21,7 +21,8 @@ typedef void (*callback_fun_type)(void);
 extern void ebox_printf(const char *fmt,...);
 
 void ebox_init(void);	
-uint32_t millis( void ) ;
+uint64_t millis(void);
+uint64_t micros(void);
 void delay_ms(uint32_t ms);
 void delay_us(uint16_t us);
 void delayus(uint32_t us);
