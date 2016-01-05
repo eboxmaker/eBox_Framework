@@ -33,7 +33,7 @@ void ebox_init(void)
     cpu_calculate_per_sec = 0;
     millis_seconds = 0;
     do{
-        cpu_calculate_per_sec++;//自加一条，判断一条
+        cpu_calculate_per_sec++;//统计cpu计算能力
     }while(millis_seconds < 100);
     cpu_calculate_per_sec = cpu_calculate_per_sec * 10;
     ////////////////////////////////
@@ -54,71 +54,84 @@ uint64_t millis( void )
 }
 uint64_t micros(void)
 {
-    return millis_seconds * 1000 + (9000 - SysTick->VAL / 9);
+    uint64_t ret;
+    no_interrupts();
+    if((SysTick->CTRL & 0x8000))//如果此时发生了systick溢出，需要对millis_secend进行补偿
+    {
+        millis_seconds++;
+    }
+    ret = millis_seconds * 1000 + (9000 - SysTick->VAL / 9);
+    interrupts();
+    return  ret;
 }
 
-void delay_ms(uint32_t ms)
-{	 	
+//void delay_ms(uint64_t ms)
+//{	 	
 
-    uint32_t end = millis() + ms*(9000/systick_over_flow_value);
-    uint32_t systick = SysTick->VAL;
+//    if(ms <= 0) return;
+//    uint64_t end = millis() + ms*(9000/systick_over_flow_value);
+//    uint64_t systick = SysTick->VAL;
 
-    while (millis() < end) {
-        ;
-        }
-    while(SysTick->VAL > systick)
-        {
-            ;
-        }
-}   
+//    while (millis() < end) {
+//        ;
+//        }
+//    while(SysTick->VAL > systick)
+//        {
+//            ;
+//        }
+//}   
 
-void delay_us(uint16_t us)
-{		 
-	uint32_t systick = SysTick->VAL;
-	uint16_t count;
-	if(count == 0)return;
-	
-	count = us * 9;
-	if(count>systick_over_flow_value - 1)count = systick_over_flow_value-1;
-	no_interrupts();
-	if(systick < count)
-	{
-		count  = ((systick_over_flow_value-5)  + systick - count);///
-		while(SysTick->VAL <= count)
-		{
-			;
-		}
-		if(count == 0)
-			count = 1;
+//void delay_us(uint16_t us)
+//{		 
+//	uint32_t systick = SysTick->VAL;
+//	uint16_t count;
+//	if(count == 0)return;
+//	
+//	count = us * 9;
+//	if(count>systick_over_flow_value - 1)count = systick_over_flow_value-1;
+//	no_interrupts();
+//	if(systick < count)
+//	{
+//		count  = ((systick_over_flow_value-5)  + systick - count);///
+//		while(SysTick->VAL <= count)
+//		{
+//			;
+//		}
+//		if(count == 0)
+//			count = 1;
 
-		while(SysTick->VAL > count)
-		{
-			;
-		}
-		//millis_seconds++;//矫正毫秒计数
-	}
-	else
-	{
-		count  =  systick - count;
-		if(count == 0)
-			count = 1; 
-		while(SysTick->VAL > count)
-		{
-			;
-		}
-	}
-	interrupts();
-}
+//		while(SysTick->VAL > count)
+//		{
+//			;
+//		}
+//        
+////		millis_seconds++;//矫正毫秒计数
+//	}
+//	else
+//	{
+//		count  =  systick - count;
+//		if(count == 0)
+//			count = 1; 
+//		while(SysTick->VAL > count)
+//		{
+//			;
+//		}
+//	}
+//	interrupts();
+//}
 
     								   
 
-
-void delayus(uint32_t us)
-{	 		
-	int i;
-	 for(i=0; i<11*us; i++){
-							;
-		}
+void delay_ms(uint64_t ms)
+{	 	
+    uint64_t end ;
+    end = micros() + ms*1000 - 3;
+    while(micros() < end);
+}   
+void delay_us(uint64_t us)
+{	 	
+    uint64_t end = micros() + us - 3;
+    while(micros() < end);
 } 
 
 extern "C"{
@@ -140,10 +153,11 @@ void attch_sys_ticks_interrupt(void (*callback_fun)(void))
 void SysTick_Handler(void)//systick中断
 {
 
+    no_interrupts();
     millis_seconds++;
     if(sys_ticks_cb_table[0] != 0)
         sys_ticks_cb_table[0]();
-
+    interrupts();
 }
 
 //void PendSV_Handler(void)

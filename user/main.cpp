@@ -68,7 +68,7 @@ int main(void)
 	while(1)
 	{
           highStart = micros();
-		  delay_us(20);
+		  delay_us(515555);
 		  now= (micros() - highStart);
 		  uart1.printf("%d,\r\n",now); 
 

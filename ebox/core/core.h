@@ -23,9 +23,8 @@ extern void ebox_printf(const char *fmt,...);
 void ebox_init(void);	
 uint64_t millis(void);
 uint64_t micros(void);
-void delay_ms(uint32_t ms);
-void delay_us(uint16_t us);
-void delayus(uint32_t us);
+void delay_ms(uint64_t ms);
+void delay_us(uint64_t us);
 void attch_sys_ticks_interrupt(void (*callback_fun)(void));
     
 #ifdef __cplusplus
