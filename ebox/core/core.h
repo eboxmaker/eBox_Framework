@@ -25,6 +25,8 @@ uint64_t millis(void);
 uint64_t micros(void);
 void delay_ms(uint64_t ms);
 void delay_us(uint64_t us);
+void delayms(uint64_t ms);
+void delayus(uint64_t us);
 void attch_sys_ticks_interrupt(void (*callback_fun)(void));
     
 #ifdef __cplusplus

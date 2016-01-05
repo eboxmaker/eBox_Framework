@@ -125,10 +125,25 @@ uint64_t micros(void)
 void delay_ms(uint64_t ms)
 {	 	
     uint64_t end ;
+    no_interrupts();
+    end = micros() + ms*1000 - 3;
+    while(micros() < end);
+    interrupts();
+}   
+void delay_us(uint64_t us)
+{	 	
+    no_interrupts();
+    uint64_t end = micros() + us - 3;
+    while(micros() < end);
+    interrupts();
+} 
+void delayms(uint64_t ms)
+{	 	
+    uint64_t end ;
     end = micros() + ms*1000 - 3;
     while(micros() < end);
 }   
-void delay_us(uint64_t us)
+void delayus(uint64_t us)
 {	 	
     uint64_t end = micros() + us - 3;
     while(micros() < end);
