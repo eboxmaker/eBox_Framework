@@ -20,45 +20,64 @@ LCD lcd(&PA13,&PA15,&PA11,&PA12,&spi2);
 u8 index = 0x20;
 u8 r;
 u16 _color[3600];
+TIM tim2(TIM2);
+uint16_t xx;
+void test8()
+{
+    PB8.toggle();
 
+}
+void test9()
+{
+    PB9.toggle();
+}
 void setup()
 {
+    uart1.begin(115200);
     ebox_init();
     PB8.mode(OUTPUT_PP);
-    lcd.begin(1);
-    lcd.clear(RED);
-    uart1.begin(9600);
+    PB9.mode(OUTPUT_PP);
+//    lcd.begin(1);
+//    lcd.clear(RED);
+    attch_systick_user_event(test8);
+    set_systick_user_event_per_sec(2);
     
-    lcd.column_order(1);
-    lcd.row_order(1);
+//    tim2.begin(1);
+//    tim2.attach_interrupt(test);
+//    tim2.interrupt(ENABLE);
+//    tim2.start();
+//    
+//    lcd.column_order(1);
+//    lcd.row_order(1);
 
-    lcd.front_color = RED;
-    lcd.back_color = BLACK;
-    hsv.s = 1;
-    hsv.v = 0.5;
-    hsv.h = 0;
+//    lcd.front_color = RED;
+//    lcd.back_color = BLACK;
+//    hsv.s = 1;
+//    hsv.v = 0.5;
+//    hsv.h = 0;
 
-    lcd.front_color = RED;
-    if(index >= 0x50)index = 0x20;
-    for(int i = 0; i < 160; i++){
-        hsv.h = i*36/16;
-        hsv.h %= 360;
-        HSV_to_RGB(hsv,rgb);
-        rgb_to_565(rgb,_color[i]);
-       lcd.front_color = _color[i];
-       lcd.draw_h_line(0,i,128);
-    }
-    lcd.disp_char8x16(0,0,index++);
-    
-    lcd.printf(2,2,"1231asddfgdsfgthkfhddddj2nhd");
-    
+//    lcd.front_color = RED;
+//    if(index >= 0x50)index = 0x20;
+//    for(int i = 0; i < 160; i++){
+//        hsv.h = i*36/16;
+//        hsv.h %= 360;
+//        HSV_to_RGB(hsv,rgb);
+//        rgb_to_565(rgb,_color[i]);
+//       lcd.front_color = _color[i];
+//       lcd.draw_h_line(0,i,128);
+//    }
+//    lcd.disp_char8x16(0,0,index++);
+//    
+//    lcd.printf(2,2,"1231asddfgdsfgthkfhddddj2nhd");
+//    
 
-    lcd.front_color = GREEN;
-    lcd.draw_circle(50,50,50);
-    lcd.draw_line(64,50,r,100);
+//    lcd.front_color = GREEN;
+//    lcd.draw_circle(50,50,50);
+//    lcd.draw_line(64,50,r,100);
     
 
 }
+u32 x;
 int main(void)
 {
 	setup();
@@ -68,10 +87,14 @@ int main(void)
 	while(1)
 	{
           highStart = micros();
-		  delayms(100);
+        //no_interrupts();
+		  delay_ms(1000);
 		  now= (micros() - highStart);
 		  uart1.printf("%d,\r\n",now); 
+		  uart1.printf("micros = %d,\r\n",micros()); 
+		  uart1.printf("millis = %d,\r\n",millis_seconds); 
 
+        //interrupts();
 	}
 
 }

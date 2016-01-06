@@ -1,33 +1,53 @@
+/*
+file   : core.h
+author : shentq
+version: V1.0
+date   : 2015/7/5
+brief  : analog read function
+
+Copyright 2015 shentq. All Rights Reserved.
+
+Copyright Notice
+No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentq.
+
+Disclaimer
+This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
+*/
+/*
+此文件为ebox核心文件。
+提供了诸多非常重要的接口。
+可以被标准的c文件调用。
+*/
+
 #ifndef __CORE_H
 #define __CORE_H
 #ifdef __cplusplus
 extern "C"{
 #endif
 #include "stm32f10x.h"
+    
+#define interrupts() 		__enable_irq()//允许所有中断
+#define no_interrupts() 	__disable_irq()//禁止所有中断
+    
+/*!< 2 bits for pre-emption priority
+2 bits for subpriority */
+#define NVIC_GROUP_CONFIG NVIC_PriorityGroup_2//以后NVIC_PriorityGroupConfig()函数不需要再被调用。更不能再以非NVIC_GROUP_CONFIG值填充调用
 
-//以后NVIC_PriorityGroupConfig()函数不需要再被调用。更不能再以非NVIC_GROUP_CONFIG值填充调用
-#define NVIC_GROUP_CONFIG NVIC_PriorityGroup_2   /*!< 2 bits for pre-emption priority
-																									 2 bits for subpriority */
-
-#define interrupts() 		__enable_irq()
-#define no_interrupts() 	__disable_irq()
-	
-///////全局变量、函数///////////////////////////////////////////////
-extern __IO uint64_t millis_seconds;
-extern __IO uint32_t cpu_calculate_per_sec;
 
 typedef void (*callback_fun_type)(void);	 
+	
+///////全局变量、函数///////////////////////////////////////////////
+extern __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
 
-extern void ebox_printf(const char *fmt,...);
+void ebox_init(void); //ebox系统初始化
+uint32_t get_cpu_calculate_per_sec();//获取cpu在不跑操作系统的情况下的计算能力。用于统计cpu绝对使用率
 
-void ebox_init(void);	
-uint64_t millis(void);
-uint64_t micros(void);
-void delay_ms(uint64_t ms);
-void delay_us(uint64_t us);
-void delayms(uint64_t ms);
-void delayus(uint64_t us);
-void attch_sys_ticks_interrupt(void (*callback_fun)(void));
+uint64_t micros(void);//获取系统当前运行了多长时间。单位：us
+uint64_t millis(void);//获取系统当前运行了多长时间。单位：ms
+void delay_ms(uint64_t ms);//延时n毫秒。可在任意情况下使用，包括禁止所有中断的情况。精度正负1us。
+void delay_us(uint64_t us);//延时n微秒。可在任意情况下使用，包括禁止所有中断的情况。精度正负1us。
+void set_systick_user_event_per_sec(u16 frq);//设定用户中断事件的相应频率。frq[1,1000],frq最好是2的倍数
+void attch_systick_user_event(void (*callback_fun)(void));//绑定systick中断调用函数，调用频率由用户决定，频率为1hz-1000hz
     
 #ifdef __cplusplus
 }

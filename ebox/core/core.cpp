@@ -16,17 +16,21 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "ebox.h"
 #include "common.h"
+extern "C"{
 
+#define systick_no_interrupt()  SysTick->CTRL &=0xfffffffd
+#define systick_interrupt()     SysTick->CTRL |=0x0002
 
- __IO uint64_t millis_seconds;
- __IO uint32_t cpu_calculate_per_sec;
-
+ __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
+ __IO uint32_t cpu_calculate_per_sec;//cpu计算能力值
+ __IO uint16_t systick_user_event_per_sec;//真实的值
+ __IO uint16_t _systick_user_event_per_sec;//用于被millis_second取余数
 
 #define systick_over_flow_value 9000//此值取值范围（100-9000），主频为72Mhz的情况下
 
 void ebox_init(void)
 {
-    
+    set_systick_user_event_per_sec(100);
     SysTick_Config(systick_over_flow_value);//  每隔 (nhz/9,000,000)s产生一次中断
     SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);//9Mhz的systemticks clock；
     //统计cpu计算能力//////////////////
@@ -48,22 +52,23 @@ void ebox_init(void)
 
 }
 
-uint64_t millis( void )
+uint32_t get_cpu_calculate_per_sec()
 {
-  return millis_seconds;
+    return cpu_calculate_per_sec;
 }
 uint64_t micros(void)
 {
-    uint64_t ret;
-    no_interrupts();
-    if((SysTick->CTRL & 0x8000))//如果此时发生了systick溢出，需要对millis_secend进行补偿
+    if((SysTick->CTRL & (1<<16)) && (__get_PRIMASK()))//如果此时屏蔽了所有中断且发生了systick溢出，需要对millis_secend进行补偿
     {
         millis_seconds++;
     }
-    ret = millis_seconds * 1000 + (9000 - SysTick->VAL / 9);
-    interrupts();
-    return  ret;
+    return  millis_seconds * 1000 + (9000 - SysTick->VAL / 9);
 }
+uint64_t millis( void )
+{
+  return micros()/1000;
+}
+
 
 //void delay_ms(uint64_t ms)
 //{	 	
@@ -125,54 +130,46 @@ uint64_t micros(void)
 void delay_ms(uint64_t ms)
 {	 	
     uint64_t end ;
-    no_interrupts();
     end = micros() + ms*1000 - 3;
     while(micros() < end);
-    interrupts();
 }   
 void delay_us(uint64_t us)
 {	 	
-    no_interrupts();
-    uint64_t end = micros() + us - 3;
-    while(micros() < end);
-    interrupts();
-} 
-void delayms(uint64_t ms)
-{	 	
-    uint64_t end ;
-    end = micros() + ms*1000 - 3;
-    while(micros() < end);
-}   
-void delayus(uint64_t us)
-{	 	
     uint64_t end = micros() + us - 3;
     while(micros() < end);
 } 
 
-extern "C"{
-    
-void ebox_printf(const char *fmt,...)
-{
-    DBG(fmt);
-}
 
-callback_fun_type sys_ticks_cb_table[1] = {0};
+callback_fun_type systick_cb_table[1] = {0};
 	
-	
-void attch_sys_ticks_interrupt(void (*callback_fun)(void))
+void set_systick_user_event_per_sec(u16 frq)
 {
-    sys_ticks_cb_table[0] = callback_fun;
+    _systick_user_event_per_sec = 1000/frq;
+    systick_user_event_per_sec = frq;
+}	
 
-}
-	
+void attch_systick_user_event(void (*callback_fun)(void))
+{
+    systick_cb_table[0] = callback_fun;
+}	
 void SysTick_Handler(void)//systick中断
 {
 
-    no_interrupts();
-    millis_seconds++;
-    if(sys_ticks_cb_table[0] != 0)
-        sys_ticks_cb_table[0]();
-    interrupts();
+//    no_interrupts();
+//      if(SysTick->CTRL & (1<<16));//读一次CTRL，清零中断标志位
+//    {
+        millis_seconds++;
+//             DBG("%d\r\n",millis_seconds);
+//    }
+    if((millis_seconds%_systick_user_event_per_sec) == 0)
+    {
+        if(systick_cb_table[0] != 0)
+        {
+            systick_cb_table[0]();
+        }
+    }
+//    interrupts();
+
 }
 
 //void PendSV_Handler(void)
