@@ -11,7 +11,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 #include "at24c02.h"
 
-EEPROM ee(&si2c1);
+EEPROM ee(&i2c1);
 uint8_t data;
 void setup()
 {
