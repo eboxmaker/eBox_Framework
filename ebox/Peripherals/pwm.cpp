@@ -24,15 +24,21 @@ This specification is preliminary and is subject to change at any time without n
 
 
 	
-PWM::PWM(GPIO * pwm_pin,uint32_t frq)
+PWM::PWM(GPIO * pwm_pin)
 {
 //	if(isPwmPin(PWMpin))
 //	{
-		init_info(pwm_pin);
-		pwm_pin->mode(AF_PP);
-		set_frq(frq);
-
+    this->pwm_pin = pwm_pin;
 //	}
+}
+void PWM::begin(uint32_t frq,uint16_t duty)
+{
+    init_info(pwm_pin);
+    pwm_pin->mode(AF_PP);
+    
+    set_oc_polarity(1);
+    set_frq(frq);
+    set_duty(duty);
 }
 void PWM::base_init(uint16_t Period,uint16_t Prescaler)
 {
@@ -105,7 +111,16 @@ void PWM::init_info(GPIO *pwm_pin)
 
 }
 
+void PWM::set_oc_polarity(uint8_t flag)
+{
 
+    if(flag == 1)
+        this->oc_polarity = TIM_OCPolarity_High;
+    else if(flag == 0)
+        this->oc_polarity = TIM_OCPolarity_Low;
+ 	set_duty(duty);
+   
+}
 //pwmµÄÆµÂÊ = 72M/72/1000;
 //
 void PWM::set_frq(uint32_t frq)
@@ -143,7 +158,7 @@ void PWM::set_duty(uint16_t duty)
 
     TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
     TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+    TIM_OCInitStructure.TIM_OCPolarity = oc_polarity;
     TIM_OCInitStructure.TIM_Pulse = pulse;
     switch(ch)
     {
@@ -168,9 +183,10 @@ void analog_write(GPIO *pwm_pin, uint16_t duty)
 {
 //	if(isPwmPin(PWMpin))
 //	{
-			PWM p(pwm_pin,1000);
+			PWM p(pwm_pin);
+            p.begin(1000,duty);
 			//p.SetFrq(1000,1);
-			p.set_duty(duty);
+//			p.set_duty(duty);
 
 //	}
 //	else
