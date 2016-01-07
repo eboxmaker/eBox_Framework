@@ -1,15 +1,25 @@
-#include"colorled.h"
-	PWM led_r(&PA1);
-	PWM led_g(&PA0);
-	PWM led_b(&PA2);
+#include "colorled.h"
 
+
+void COLORLED::begin()
+{
+    r = new PWM(r_pin);
+    g = new PWM(g_pin);
+    b = new PWM(b_pin);
+    r->begin(1000,0);
+    g->begin(1000,0);
+    b->begin(1000,0);
+    r->set_oc_polarity(0);
+    g->set_oc_polarity(0);
+    b->set_oc_polarity(0);
+}
 
 void COLORLED::color_rgb(u8 r,u8 g,u8 b)
 {
 	
-		led_r.set_duty(r*3);
-		led_g.set_duty(g*3);
-		led_b.set_duty(b*3);
+		this->r->set_duty(r*3);
+		this->g->set_duty(g*3);
+		this->b->set_duty(b*3);
 
 }
 void COLORLED::color_hsl(int h,float s,float l)
@@ -22,9 +32,9 @@ void COLORLED::color_hsl(int h,float s,float l)
 	
 	HSL_to_RGB(hsl,rgb);
 	
-	led_r.set_duty(rgb.r*1.9);
-	led_g.set_duty(rgb.g*3.9);
-	led_b.set_duty(rgb.b*0.6);
+	this->r->set_duty(rgb.r*1.9);
+	this->g->set_duty(rgb.g*3.9);
+	this->b->set_duty(rgb.b*0.6);
 }
 void COLORLED::color_hsl(COLOR_HSL &hsl)
 {
@@ -32,9 +42,9 @@ void COLORLED::color_hsl(COLOR_HSL &hsl)
 	
 	HSL_to_RGB(hsl,rgb);
 	
-	led_r.set_duty(rgb.r*1.9);
-	led_g.set_duty(rgb.g*3.9);
-	led_b.set_duty(rgb.b*0.6);
+	this->r->set_duty(rgb.r*1.9);
+	this->g->set_duty(rgb.g*3.9);
+	this->b->set_duty(rgb.b*0.6);
 
 }
 void COLORLED::color_hsv(int h,float s,float v)
@@ -46,9 +56,9 @@ void COLORLED::color_hsv(int h,float s,float v)
 	hsv.v = v;
 		
 	HSV_to_RGB(hsv,rgb);
-	led_r.set_duty(rgb.r*1.9);
-	led_g.set_duty(rgb.g*3.9);
-	led_b.set_duty(rgb.b*0.6);
+	this->r->set_duty(rgb.r*1.9);
+	this->g->set_duty(rgb.g*3.9);
+	this->b->set_duty(rgb.b*0.6);
 }
 void COLORLED::color_hsv(COLOR_HSV &hsv)
 {
@@ -56,7 +66,7 @@ void COLORLED::color_hsv(COLOR_HSV &hsv)
 	
 	HSV_to_RGB(hsv,rgb);
 	
-	led_r.set_duty(rgb.r*1.9);
-	led_g.set_duty(rgb.g*3.9);
-	led_b.set_duty(rgb.b*0.6);
+	this->r->set_duty(rgb.r*1.9);
+	this->g->set_duty(rgb.g*3.9);
+	this->b->set_duty(rgb.b*0.6);
 }
