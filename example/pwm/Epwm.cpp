@@ -13,7 +13,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 #include "math.h"
 
-PWM pwm1(&PB8,1000);
+PWM pwm1(&PB8);
 
 //STM32 RUN IN eBox
 
@@ -21,6 +21,8 @@ void setup()
 {
 	ebox_init();
 	uart1.begin(9600);
+    pwm1.begin(1000,20);
+    pwm1.set_oc_polarity(1);
 }
 
 float x;

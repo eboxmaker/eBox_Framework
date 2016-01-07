@@ -1,7 +1,7 @@
 #include"colorled.h"
-	PWM led_r(&PA1,1000);
-	PWM led_g(&PA0,1000);
-	PWM led_b(&PA2,1000);
+	PWM led_r(&PA1);
+	PWM led_g(&PA0);
+	PWM led_b(&PA2);
 
 
 void COLORLED::color_rgb(u8 r,u8 g,u8 b)

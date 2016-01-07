@@ -36,15 +36,19 @@ This specification is preliminary and is subject to change at any time without n
 class PWM
 {	
 	public:
-        PWM(GPIO *pwm_pin,uint32_t frq);
+        PWM(GPIO *pwm_pin);
+        void begin(uint32_t frq,uint16_t duty);
         void set_frq(uint32_t frq);
         void set_duty(uint16_t duty);
+        void set_oc_polarity(uint8_t flag);
 	private:
+        GPIO *pwm_pin;
         TIM_TypeDef *TIMx;
         uint32_t    rcc;
         uint8_t     ch;
         uint16_t    period;//保存溢出值，用于计算占空比
         uint16_t    duty;//保存占空比值
+        uint16_t    oc_polarity;
 
         void init_info(GPIO *pwm_pin);
         void base_init(uint16_t Period,uint16_t Prescaler);
