@@ -369,7 +369,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\util;..\edriver;..\network;..\fat;..\user;..\other;..\gui</IncludePath>
+              <IncludePath>..\Libraries\CMSIS\CM3\CoreSupport;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\ebox;..\ebox\core;..\ebox\Peripherals;..\util;..\edriver;..\network;..\fat;..\user;..\other;..\gui;..\os\uCOS-II\Source;..\os\uCOS-II\Ports</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -760,17 +760,82 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>gui</GroupName>
+          <GroupName>uc/port</GroupName>
           <Files>
             <File>
-              <FileName>template.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\gui\template.cpp</FilePath>
+              <FileName>os_cpu_a.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\os\uCOS-II\Ports\os_cpu_a.asm</FilePath>
             </File>
             <File>
-              <FileName>gui.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\gui\gui.cpp</FilePath>
+              <FileName>os_cpu_c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\os\uCOS-II\Ports\os_cpu_c.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_dbg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\os\uCOS-II\Ports\os_dbg.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>uc/src</GroupName>
+          <Files>
+            <File>
+              <FileName>os_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\os\uCOS-II\Source\os_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_flag.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\os\uCOS-II\Source\os_flag.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_mbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\os\uCOS-II\Source\os_mbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\os\uCOS-II\Source\os_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\os\uCOS-II\Source\os_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_q.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\os\uCOS-II\Source\os_q.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_sem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\os\uCOS-II\Source\os_sem.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\os\uCOS-II\Source\os_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\os\uCOS-II\Source\os_time.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_tmr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\os\uCOS-II\Source\os_tmr.c</FilePath>
+            </File>
+            <File>
+              <FileName>ucos_ii.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\os\uCOS-II\Source\ucos_ii.h</FilePath>
             </File>
           </Files>
         </Group>

@@ -71,7 +71,7 @@ void setup()
 	PB8.mode(OUTPUT_PP);
 	PB9.mode(OUTPUT_PP);
 	PB10.mode(OUTPUT_PP);
-    attch_sys_ticks_interrupt(xPortSysTickHandler);
+    attch_systick_user_event(xPortSysTickHandler);
     
     xTaskCreate( vLEDTask,  "LED0", configMINIMAL_STACK_SIZE, (void *)0, tskIDLE_PRIORITY+3, NULL );
     xTaskCreate( vLEDTask, "LED1", configMINIMAL_STACK_SIZE, (void *)1, tskIDLE_PRIORITY+3, NULL );
