@@ -24,12 +24,14 @@ This specification is preliminary and is subject to change at any time without n
 #include "exti.h"
 #include "gtimer.h"
 #include "pwm.h"
+#include "in_capture.h"
 #include "i2c.h"
 #include "spi.h"
 #include "uart.h"
 #include "timerone.h"
 #include "rtc.h"
 #include "iflash.h"
+
 
 #include "stdio.h"
 

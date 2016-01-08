@@ -15,7 +15,6 @@ This specification is preliminary and is subject to change at any time without n
 #include "timerone.h"
 
 
-callback_fun_type timOneCallbackTable[1];
 
 TIMERONE::TIMERONE()
 {
@@ -101,16 +100,6 @@ void TIMERONE::clear_count(void)
 }
 void TIMERONE::attach_interrupt(void(*callback)(void))
 {
-    timOneCallbackTable[0] = callback;
+    timx_cb_table[0][0] = callback;
 }
-extern "C" {
-void TIM1_UP_IRQHandler(void)
-{
 
-    if(TIM_GetITStatus(TIM1 , TIM_IT_Update) == SET)
-    {
-    TIM_ClearITPendingBit(TIM1 , TIM_FLAG_Update);
-        timOneCallbackTable[0]();
-    }
-}
-}

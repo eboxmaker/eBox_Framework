@@ -16,7 +16,7 @@ This specification is preliminary and is subject to change at any time without n
 
 //#define TIM_NUM 7
 
-callback_fun_type gTimxCallbackTable[3];
+callback_fun_type timx_cb_table[4][5];
 
 //////////////////////////////////////
 
@@ -50,13 +50,13 @@ void TIM::attach_interrupt(void(*callback)(void))
 	switch((uint32_t)_TIMx)
 	{
 		case (uint32_t)TIM2:
-			gTimxCallbackTable[0] = callback;
+			timx_cb_table[1][0] = callback;
 			break;
 		case (uint32_t)TIM3:
-			gTimxCallbackTable[1] = callback;
+			timx_cb_table[2][0] = callback;
 			break;
 		case (uint32_t)TIM4:
-			gTimxCallbackTable[2] = callback;
+			timx_cb_table[3][0] = callback;
 			break;
 	}
 }
@@ -127,32 +127,4 @@ void TIM::clear_count(void)
 
 
 
-extern "C"{
-void TIM2_IRQHandler(void)
-{
-
-    if(TIM_GetITStatus(TIM2 , TIM_IT_Update) == SET)
-    {
-        TIM_ClearITPendingBit(TIM2 , TIM_FLAG_Update);
-        gTimxCallbackTable[0]();
-    }
-
-}
-void TIM3_IRQHandler(void)
-{
-    if(TIM_GetITStatus(TIM3 , TIM_IT_Update) == SET)
-    {
-        TIM_ClearITPendingBit(TIM3 , TIM_FLAG_Update);
-        gTimxCallbackTable[1]();
-    }
-}
-void TIM4_IRQHandler(void)
-{
-    if(TIM_GetITStatus(TIM4 , TIM_IT_Update) == SET)
-    {
-    TIM_ClearITPendingBit(TIM4 , TIM_FLAG_Update);
-    gTimxCallbackTable[2]();
-    }
-}
-}
 
