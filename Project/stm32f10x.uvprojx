@@ -613,6 +613,11 @@
               <FilePath>..\ebox\Peripherals\pwm.cpp</FilePath>
             </File>
             <File>
+              <FileName>in_capture.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\Peripherals\in_capture.cpp</FilePath>
+            </File>
+            <File>
               <FileName>gtimer.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\ebox\Peripherals\gtimer.cpp</FilePath>
@@ -636,6 +641,11 @@
               <FileName>object.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\ebox\object.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_it.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\ebox_it.cpp</FilePath>
             </File>
           </Files>
         </Group>
