@@ -8,53 +8,45 @@ Copyright 2015 shentq. All Rights Reserved.
 */
 
 //STM32 RUN IN eBox
-
-
 #include "ebox.h"
-#include "math.h"
-#include "colorled.h"
+#include "ucos_ii.h"
+static OS_STK startup_task_stk[STARTUP_TASK_STK_SIZE];		  //定义栈
 
-COLOR_HSL hsl;
-COLOR_RGB rgb;
-COLOR_HSV hsv;
-
-COLORLED led(&PB6,&PB7,&PB8);
+void xx()
+{
+    OSIntEnter(); 
+    OSTimeTick(); 
+    OSIntExit(); 
+}
 
 void setup()
 {
 	ebox_init();
-	uart1.begin(9600);
-    led.begin();
-        hsl.s = 0.5;
-		hsl.l = 0.5;
-	
-		hsv.h = 2;
-		hsv.s = 0.5;
-		hsv.v = 0.5;
+	PB8.mode(OUTPUT_PP);
+    set_systick_user_event_per_sec(OS_TICKS_PER_SEC);
+    attch_systick_user_event(xx);
 }
-
-float x;
-uint16_t y;
-
+void Task_LED(void *p_arg)
+{
+    (void)p_arg;                		// 'p_arg' 并没有用到，防止编译器提示警告
+    while (1)
+    {
+        PB8.toggle();
+//        delay_ms(500);
+        OSTimeDlyHMSM(0, 0,0,100);
+    }
+}
 int main(void)
 {
 	setup();
-	
-	while(1)
-	{		 	
-		hsl.h += 1;
-		if(hsl.h>360)hsl.h=0;		
-		led.color_hsl(hsl);
-		delay_ms(10);
-        
-//		hsv.h++;
-//		if(hsv.h>360)hsv.h = 0;	        
-//		led.color_hsv(hsv);
-//		delay_ms(10);
-	}
+	OSInit();
+	OSTaskCreate(Task_LED,(void *)0,
+	   &startup_task_stk[STARTUP_TASK_STK_SIZE-1], STARTUP_TASK_PRIO);
+
+	OSStart();
+    return 0;
+
 
 }
-
-
 
 

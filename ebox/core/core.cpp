@@ -49,6 +49,7 @@ void ebox_init(void)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
      GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
     sys.get_chip_info();
+    set_systick_user_event_per_sec(1000);
 
 }
 
