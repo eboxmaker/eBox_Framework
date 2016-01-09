@@ -11,7 +11,8 @@ void SYSTEM::get_chip_info()
 extern u16 AD_value[];
 float SYSTEM::get_cpu_temperature()
 {
-//    float temp;
+    float temp;
 //    temp = (1.43-(float)AD_value[15])/0.0043+25;
-//    return (float)AD_value[16];
+    return (float)temp;
 }
+

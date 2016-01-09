@@ -94,7 +94,6 @@ uint8_t		shift_in(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order);
 
 
 
-extern callback_fun_type timx_cb_table[4][5];
 
 #ifdef __cplusplus
 }
