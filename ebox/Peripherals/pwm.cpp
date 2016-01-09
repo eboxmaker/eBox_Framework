@@ -33,6 +33,8 @@ PWM::PWM(GPIO * pwm_pin)
 }
 void PWM::begin(uint32_t frq,uint16_t duty)
 {
+    this->duty = duty;
+   
     init_info(pwm_pin);
     pwm_pin->mode(AF_PP);
     
@@ -40,15 +42,16 @@ void PWM::begin(uint32_t frq,uint16_t duty)
     set_frq(frq);
     set_duty(duty);
 }
-void PWM::base_init(uint16_t Period,uint16_t Prescaler)
+void PWM::base_init(uint16_t period,uint16_t prescaler)
 {
-	period = Period;//更新period
+	this->period = period;//更新period
+
 
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	
 	RCC_APB1PeriphClockCmd(rcc, ENABLE);
-	TIM_TimeBaseStructure.TIM_Period=Period-1;//ARR
-	TIM_TimeBaseStructure.TIM_Prescaler=Prescaler-1;
+	TIM_TimeBaseStructure.TIM_Period=this->period-1;//ARR
+	TIM_TimeBaseStructure.TIM_Prescaler=prescaler-1;
 	TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; //
 	TIM_TimeBaseInit(TIMx, &TIM_TimeBaseStructure);
 	
@@ -125,16 +128,25 @@ void PWM::set_oc_polarity(uint8_t flag)
 //
 void PWM::set_frq(uint32_t frq)
 {
-	uint32_t _period  =0;
-	uint32_t _prescaler = 1;
+	uint32_t period  =0;
+	uint32_t prescaler = 1;
 	if(frq>=720000)frq = 720000;
-	for(;_prescaler <= 0xffff;_prescaler++)
+    //千分之一精度分配方案
+	for(;prescaler <= 0xffff;prescaler++)
 	{
-		_period = 72000000/_prescaler/frq;
-		if((0xffff>=_period)&&(_period>=1000))break;
+		period = 72000000/prescaler/frq;
+		if((0xffff>=period)&&(period>=1000))break;
 	}
+    if(prescaler == 65536)//上述算法分配失败
+    //百分之一分配方案
+	for(prescaler = 1;prescaler <= 0xffff;prescaler++)
+	{
+		period = 72000000/prescaler/frq;
+		if((0xffff>=period)&&(period>=100))break;
+	}
+    
 	
-	base_init(_period,_prescaler);
+	base_init(period,prescaler);
 	set_duty(duty);
 
 }

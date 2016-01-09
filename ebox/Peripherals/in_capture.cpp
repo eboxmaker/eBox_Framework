@@ -14,6 +14,7 @@ This specification is preliminary and is subject to change at any time without n
 */
 
 #include "in_capture.h"
+extern callback_fun_type timx_cb_table[4][5];
 
 
 IN_CAPTURE::IN_CAPTURE(GPIO *capture_pin)
@@ -22,6 +23,9 @@ IN_CAPTURE::IN_CAPTURE(GPIO *capture_pin)
     this->period = 0xffff;
     this->prescaler = 72;
     this->polarity = TIM_ICPOLARITY_FALLING;
+    overflow_times = 0;
+    overflow_state = IC_NONE;
+
 }
 void IN_CAPTURE::begin(uint16_t prescaler)
 {
@@ -111,19 +115,19 @@ void IN_CAPTURE::base_init(uint16_t period,uint16_t prescaler)
     {
         case TIM_Channel_1:
             TIM_ClearFlag(this->TIMx, TIM_FLAG_CC1);
-            TIM_ITConfig(this->TIMx,  TIM_IT_CC1 ,ENABLE);   //使能TIMx的通道2捕获中断	
+            TIM_ITConfig(this->TIMx,  TIM_IT_CC1 | TIM_IT_Update, ENABLE);   //使能TIMx的通道2捕获中断	
             break;
         case TIM_Channel_2:
             TIM_ClearFlag(this->TIMx, TIM_FLAG_CC2);
-            TIM_ITConfig(this->TIMx,  TIM_IT_CC2 ,ENABLE);   //使能TIMx的通道2捕获中断	
+            TIM_ITConfig(this->TIMx,  TIM_IT_CC2 | TIM_IT_Update, ENABLE);   //使能TIMx的通道2捕获中断	
             break;
         case TIM_Channel_3:
             TIM_ClearFlag(this->TIMx, TIM_FLAG_CC3);
-            TIM_ITConfig(this->TIMx,  TIM_IT_CC3 ,ENABLE);   //使能TIMx的通道2捕获中断	
+            TIM_ITConfig(this->TIMx,  TIM_IT_CC3 | TIM_IT_Update, ENABLE);   //使能TIMx的通道2捕获中断	
             break;
         case TIM_Channel_4:
             TIM_ClearFlag(this->TIMx, TIM_FLAG_CC4);
-            TIM_ITConfig(this->TIMx,  TIM_IT_CC4 ,ENABLE);   //使能TIMx的通道2捕获中断	
+            TIM_ITConfig(this->TIMx,  TIM_IT_CC4 | TIM_IT_Update, ENABLE);   //使能TIMx的通道2捕获中断	
             break;
     }
 
@@ -205,16 +209,55 @@ void IN_CAPTURE::set_polarity_rising()
 
 }
 
-uint16_t IN_CAPTURE::get_capture()
+uint32_t IN_CAPTURE::get_capture()
 {
-    return _get_capture( this->TIMx );  //get capture value
+    uint32_t capture;
+    capture = _get_capture( this->TIMx ) + overflow_times * this->period;  //get capture value
+    overflow_times = 0;
+    return capture;
 }
+IC_OVERFLOW_STATE_TYEP IN_CAPTURE::get_overflow_state()
+{
+    return overflow_state;
+}
+
 void IN_CAPTURE::set_count(uint16_t count)
 {
 	TIM_SetCounter(this->TIMx,count);  //reset couter 
 
 }
-void IN_CAPTURE::attch_interrupt(void(*callback)(void))
+void IN_CAPTURE::overflow_event_process()
+{
+
+    overflow_times++;
+    if(overflow_times == 0)
+        overflow_state = IC_NONE;          
+    else if(overflow_times > 0 && overflow_times < 0xffff)
+        overflow_state = IC_OVERFLOW;        
+    else if(overflow_times == 0xffff)
+        overflow_state = IC_FAULT;
+}
+
+void IN_CAPTURE::attch_update_interrupt(void(*callback)(void))
+{
+    switch((uint32_t)this->TIMx)
+    {
+        case (uint32_t)TIM2:
+            timx_cb_table[1][0] = callback;
+            break;
+        case (uint32_t)TIM3:
+            timx_cb_table[2][0] = callback;
+            break;
+        case (uint32_t)TIM4:
+            timx_cb_table[3][0] = callback;
+            break;
+        default:
+            break;
+    }
+
+}
+
+void IN_CAPTURE::attch_ic_interrupt(void(*callback)(void))
 {
     switch((uint32_t)this->TIMx)
     {

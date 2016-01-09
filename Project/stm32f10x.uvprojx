@@ -645,7 +645,7 @@
             <File>
               <FileName>ebox_it.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\ebox\ebox_it.cpp</FilePath>
+              <FilePath>..\ebox\core\ebox_it.cpp</FilePath>
             </File>
           </Files>
         </Group>

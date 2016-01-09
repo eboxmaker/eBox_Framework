@@ -16,7 +16,7 @@ This specification is preliminary and is subject to change at any time without n
 
 //#define TIM_NUM 7
 
-callback_fun_type timx_cb_table[4][5];
+extern callback_fun_type timx_cb_table[4][5];
 
 //////////////////////////////////////
 
