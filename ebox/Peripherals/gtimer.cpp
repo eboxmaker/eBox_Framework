@@ -49,7 +49,7 @@ void TIM::attach_interrupt(void(*callback)(void))
 {
 	switch((uint32_t)_TIMx)
 	{
-		case (uint32_t)TIM2:
+		case (uint32_t)TIM7:
 			timx_cb_table[1][0] = callback;
 			break;
 		case (uint32_t)TIM3:
