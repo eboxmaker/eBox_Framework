@@ -6,7 +6,7 @@
 É«²Ê£º256K
 *******************************/
 #include "lcd_1.8.h"
-#include "lcd_font.h"
+#include "font.h"
 
 #define X_MAX_PIXEL	        128
 #define Y_MAX_PIXEL	        160

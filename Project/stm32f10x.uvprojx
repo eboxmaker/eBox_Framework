@@ -772,6 +772,16 @@
               <FileType>8</FileType>
               <FilePath>..\edriver\lcd_1.8.cpp</FilePath>
             </File>
+            <File>
+              <FileName>OLED.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\OLED.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>OLED_ssd1306.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\OLED_ssd1306.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

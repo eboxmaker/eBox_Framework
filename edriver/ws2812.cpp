@@ -2,7 +2,7 @@
 #include <stdlib.h>							// For rand() 		function
 #include <math.h>							// For floor() 		function
 #include "color_convert.h"
-#include "lcd_font.h"
+#include "font.h"
 
 /* Buffer that holds one complete DMA transmission.
  *  
