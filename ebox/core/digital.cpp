@@ -51,6 +51,9 @@ void GPIO::mode(PIN_MODE mode)
 		case (uint32_t)GPIOF:
 			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOF,ENABLE);
 			break;
+		case (uint32_t)GPIOG:
+			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOG,ENABLE);
+			break;
 	}
 
 	if(mode == AF_OD || mode == AF_PP)
