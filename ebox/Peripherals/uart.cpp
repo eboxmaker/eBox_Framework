@@ -72,6 +72,7 @@ void USART::begin(uint32_t baud_rate)
             NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
             NVIC_Init(&NVIC_InitStructure);
             break;
+        #if defined (STM32F10X_HD)
         case (uint32_t)UART4:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4,ENABLE);
         
@@ -90,6 +91,7 @@ void USART::begin(uint32_t baud_rate)
             NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
             NVIC_Init(&NVIC_InitStructure);
             break;
+        #endif
     }
 
     USART_InitStructure.USART_BaudRate = baud_rate;
@@ -146,6 +148,7 @@ void USART::begin(uint32_t baud_rate,uint8_t data_bit,uint8_t parity,float stop_
             NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
             NVIC_Init(&NVIC_InitStructure);
             break;
+        #if defined (STM32F10X_HD)
         case (uint32_t)UART4:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4,ENABLE);
         
@@ -164,6 +167,7 @@ void USART::begin(uint32_t baud_rate,uint8_t data_bit,uint8_t parity,float stop_
             NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
             NVIC_Init(&NVIC_InitStructure);
             break;
+        #endif
     }
 
     USART_InitStructure.USART_BaudRate = baud_rate;
