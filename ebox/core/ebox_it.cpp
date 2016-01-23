@@ -14,7 +14,7 @@ This specification is preliminary and is subject to change at any time without n
 */
 
 #include "common.h"
-callback_fun_type timx_cb_table[4][5];
+callback_fun_type timx_cb_table[7][5];
 
 extern "C"{
     
@@ -129,6 +129,58 @@ void TIM4_IRQHandler(void)
         if(timx_cb_table[3][4] != 0)
             timx_cb_table[3][4]();
         TIM_ClearITPendingBit(TIM4 , TIM_FLAG_CC4);
+    }
+}
+
+void TIM5_IRQHandler(void)
+{
+    if(TIM_GetITStatus(TIM5 , TIM_IT_Update) == SET)
+    {
+        if(timx_cb_table[4][0] != 0)
+            timx_cb_table[4][0]();
+        TIM_ClearITPendingBit(TIM5 , TIM_FLAG_Update);
+    }
+    if(TIM_GetITStatus(TIM5 , TIM_IT_CC1) == SET)
+    {
+        if(timx_cb_table[4][1] != 0)
+            timx_cb_table[4][1]();
+        TIM_ClearITPendingBit(TIM5 , TIM_FLAG_CC1);
+    }
+    if(TIM_GetITStatus(TIM5 , TIM_IT_CC2) == SET)
+    {
+        if(timx_cb_table[4][2] != 0)
+            timx_cb_table[4][2]();
+        TIM_ClearITPendingBit(TIM5 , TIM_FLAG_CC2);
+    }
+    if(TIM_GetITStatus(TIM5 , TIM_IT_CC3) == SET)
+    {
+        if(timx_cb_table[4][3] != 0)
+            timx_cb_table[4][3]();
+        TIM_ClearITPendingBit(TIM5 , TIM_FLAG_CC3);
+    }
+    if(TIM_GetITStatus(TIM5 , TIM_IT_CC4) == SET)
+    {
+        if(timx_cb_table[4][4] != 0)
+            timx_cb_table[4][4]();
+        TIM_ClearITPendingBit(TIM5 , TIM_FLAG_CC4);
+    }
+}
+void TIM6_IRQHandler(void)
+{
+    if(TIM_GetITStatus(TIM6 , TIM_IT_Update) == SET)
+    {
+        if(timx_cb_table[5][0] != 0)
+            timx_cb_table[5][0]();
+        TIM_ClearITPendingBit(TIM6 , TIM_FLAG_Update);
+    }
+}
+void TIM7_IRQHandler(void)
+{
+    if(TIM_GetITStatus(TIM7 , TIM_IT_Update) == SET)
+    {
+        if(timx_cb_table[6][0] != 0)
+            timx_cb_table[6][0]();
+        TIM_ClearITPendingBit(TIM7 , TIM_FLAG_Update);
     }
 }
 

@@ -140,14 +140,14 @@ uint8_t table[]={
 //ÏÔÊ¾Í¼ÐÎ
 void WS2812::rainbow_Loop(){
 COLOR_HSV hsv;
-COLOR_HSL hsl;
+//COLOR_HSL hsl;
 COLOR_RGB rgb;
 	
 //	u8 intStageNum = 0;
 //	float   r = 255, g = 0, b = 0;
 	uint16_t i,k;
-    hsl.s = 1;
-    hsl.l = 0.5;
+//    hsl.s = 1;
+//    hsl.l = 0.5;
     
     hsv.s = 1;
     hsv.v = 0.1;
@@ -203,12 +203,12 @@ COLOR_RGB rgb;
 //±éÀú×Ö·û´®
 void WS2812::rainbow_Loop1(){
 COLOR_HSV hsv;
-COLOR_HSL hsl;
+//COLOR_HSL hsl;
 COLOR_RGB rgb;
 //	float   r = 255, g = 0, b = 0;
 	uint16_t i,k;
-		hsl.s = 1;
-		hsl.l = 0.5;
+//		hsl.s = 1;
+//		hsl.l = 0.5;
 		
 		hsv.s = 1;
 		hsv.v = 0.1;
@@ -226,9 +226,9 @@ COLOR_RGB rgb;
 								hsv.v = 0.1;
 
 								
-								hsl.h = (i + j)%360;
-								hsl.s = 1;
-								hsl.l = 0.5;
+//								hsl.h = (i + j)%360;
+//								hsl.s = 1;
+//								hsl.l = 0.5;
 								
 								HSV_to_RGB(hsv,rgb);
 								//HSL_to_RGB(hsl,rgb);
@@ -243,9 +243,9 @@ COLOR_RGB rgb;
 								hsv.v = 0;
 
 								
-								hsl.h = (i + j)%360;
-								hsl.s = 1;
-								hsl.l = 0.5;
+//								hsl.h = (i + j)%360;
+//								hsl.s = 1;
+//								hsl.l = 0.5;
 								
 								HSV_to_RGB(hsv,rgb);
 								//HSL_to_RGB(hsl,rgb);
@@ -263,9 +263,9 @@ COLOR_RGB rgb;
 								hsv.v = 0;
 
 								
-								hsl.h = (i + j)%360;
-								hsl.s = 1;
-								hsl.l = 0.5;
+//								hsl.h = (i + j)%360;
+//								hsl.s = 1;
+//								hsl.l = 0.5;
 								
 								HSV_to_RGB(hsv,rgb);
 							//	HSL_to_RGB(hsl,rgb);

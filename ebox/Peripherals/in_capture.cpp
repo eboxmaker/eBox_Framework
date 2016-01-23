@@ -14,7 +14,7 @@ This specification is preliminary and is subject to change at any time without n
 */
 
 #include "in_capture.h"
-extern callback_fun_type timx_cb_table[4][5];
+extern callback_fun_type timx_cb_table[7][5];
 
 
 IN_CAPTURE::IN_CAPTURE(GPIO *capture_pin)

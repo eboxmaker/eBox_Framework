@@ -28,7 +28,6 @@ int DNS::begin(SOCKET p_s,uint16_t p_port)
 int DNS::query(char *name)
 {
     int state;
-    int ret = 0;
     static uint32_t dns_wait_time = 0;
     struct dhdr dhp;
     uint8_t ip[4];
@@ -85,7 +84,6 @@ int DNS::query(char *name)
             }
         }
     };
-    return -3;
 }
 bool DNS::get_domain_ip(uint8_t *ip)
 {

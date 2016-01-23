@@ -33,8 +33,6 @@ void  I2C::begin(uint32_t speed)
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1,ENABLE); 
 	else if(I2Cx == I2C2)
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C2,ENABLE); 
-//	else if(I2Cx == I2C3)
-//		RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C3,ENABLE); 
 		
 	
 	sda_pin->mode(AF_OD);

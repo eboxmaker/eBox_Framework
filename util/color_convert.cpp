@@ -208,16 +208,16 @@ void HSV_to_RGB(const COLOR_HSV &hsv, COLOR_RGB &rgb)
     }
 
     u16 blue = int( b * 255);
-    rgb.b = ( blue > 255) ? 255 : blue;//
-    rgb.b = ( blue < 0) ? 0 : rgb. b;
+    rgb.b = ( blue >= 255) ? 255 : blue;//
+    rgb.b = ( blue <= 0) ? 0 : rgb. b;
 
     u16 green = int( g * 255);
-    rgb.g = ( green > 255) ? 255 : green;
-    rgb.g = ( green < 0) ? 0 : rgb. g;
+    rgb.g = ( green >= 255) ? 255 : green;
+    rgb.g = ( green <= 0) ? 0 : rgb. g;
 
     u16 red = int( r * 255);
-    rgb.r = ( red > 255) ? 255 : red;
-    rgb.r = ( red < 0) ? 0 : rgb. r;
+    rgb.r = ( red >= 255) ? 255 : red;
+    rgb.r = ( red <= 0) ? 0 : rgb. r;
 }
 void RGB_to_GRB(COLOR_RGB &rgb,COLOR_GRB &grb)
 {

@@ -297,7 +297,7 @@ void LCD::set_region(u16 x_start,u16 y_start,u16 x_end,u16 y_end)
 *************************************************/
 void LCD::clear(u16 Color)               
 {	
-   unsigned int i,m;
+   unsigned int i;
    set_region(0,0,X_MAX_PIXEL-1,Y_MAX_PIXEL-1);
    write_index(0x2C);
    for(i = 0; i < X_MAX_PIXEL * Y_MAX_PIXEL; i++){
@@ -551,7 +551,7 @@ void LCD::h_disp_char8x16(u16 x,u16 y,u8 ch)
 void LCD::disp_char8x16(u16 x,u16 y,u8 ch)
 {
 	unsigned char i,j;
-	unsigned short k,x0;
+	unsigned short k;
     k = ch;
     if (k>32) k-=32; else k=0;
 

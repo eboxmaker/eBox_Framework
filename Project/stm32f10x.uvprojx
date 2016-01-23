@@ -413,9 +413,9 @@
           <GroupName>start_code</GroupName>
           <Files>
             <File>
-              <FileName>startup_stm32f10x_md.s</FileName>
+              <FileName>startup_stm32f10x_hd.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\startup\arm\startup_stm32f10x_md.s</FilePath>
+              <FilePath>..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\startup\arm\startup_stm32f10x_hd.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -638,14 +638,19 @@
               <FilePath>..\ebox\Peripherals\iflash.cpp</FilePath>
             </File>
             <File>
-              <FileName>object.cpp</FileName>
+              <FileName>wdg.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\ebox\object.cpp</FilePath>
+              <FilePath>..\ebox\Peripherals\wdg.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_it.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\ebox\core\ebox_it.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>object.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\object.cpp</FilePath>
             </File>
             <File>
               <FileName>dac.cpp</FileName>
