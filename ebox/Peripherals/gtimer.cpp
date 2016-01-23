@@ -109,6 +109,7 @@ void TIM::base_init(uint16_t period,uint16_t prescaler)
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
             NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;//
             break;
+        #if defined (STM32F10X_HD)
         case (uint32_t)TIM5:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE);
             NVIC_InitStructure.NVIC_IRQChannel = TIM5_IRQn;//
@@ -121,6 +122,7 @@ void TIM::base_init(uint16_t period,uint16_t prescaler)
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM7, ENABLE);
             NVIC_InitStructure.NVIC_IRQChannel = TIM7_IRQn;//
             break;
+        #endif
 	}
 	
 	TIM_TimeBaseStructure.TIM_Period=period-1;//ARR¼Ä´æÆ÷
