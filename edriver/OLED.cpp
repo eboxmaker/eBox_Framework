@@ -235,7 +235,7 @@ OLED_P6x8Str(unsigned char x,unsigned char y,unsigned char* ch)
 		OLED_Set_Pos(x,y);
 		for(i=0;i<6;i++)
 		{
-			OLED_WrDat(F6x8[c][i]);
+			OLED_WrDat(font6x8[c][i]);
 		}
 		x+=6;
 		j++;
@@ -263,7 +263,7 @@ OLED_P6x8p(unsigned char x,unsigned char y,unsigned char *p,unsigned int len)
 		OLED_Set_Pos(x,y);
 		for(i=0;i<6;i++)
 		{
-			OLED_WrDat(F6x8[c][i]);
+			OLED_WrDat(font6x8[c][i]);
 		}
 		x+=6;
 	}
@@ -297,7 +297,7 @@ OLED_f6x8int(unsigned char x,unsigned char y,unsigned int data)
 		OLED_Set_Pos(x,y);
 		for(i=0;i<6;i++)
 		{	
-			OLED_WrDat(F6x8[c][i]);
+			OLED_WrDat(font6x8[c][i]);
 		}
 		x+=6;
 	}
@@ -323,10 +323,10 @@ OLED_P8x16Str(unsigned char x, unsigned char y,unsigned char* ch)
 		}
 		OLED_Set_Pos(x,y);
 		for(i=0;i<8;i++)
-		OLED_WrDat(F8X16[c*16+i]);
+		OLED_WrDat(font8x16[c*16+i]);
 		OLED_Set_Pos(x,y+1);
 		for(i=0;i<8;i++)
-		OLED_WrDat(F8X16[c*16+i+8]);
+		OLED_WrDat(font8x16[c*16+i+8]);
 		x+=8;
 		j++;
 	}
@@ -351,10 +351,10 @@ OLED_P8x16ASCII(unsigned char x, unsigned char y,unsigned char ch)
 	}
 	OLED_Set_Pos(x,y);
 	for(i=0;i<8;i++)
-	OLED_WrDat(F8X16[c*16+i]);
+	OLED_WrDat(font8x16[c*16+i]);
 	OLED_Set_Pos(x,y+1);
 	for(i=0;i<8;i++)
-	OLED_WrDat(F8X16[c*16+i+8]);
+	OLED_WrDat(font8x16[c*16+i+8]);
 	x+=8;
 	j++;
 	
@@ -374,13 +374,13 @@ OLED_P16x16Ch(unsigned char x,unsigned char y,unsigned char N)
 	OLED_Set_Pos(x , y);
 	for(wm = 0;wm < 16;wm++)    //
 	{
-		OLED_WrDat(F16x16[adder]);
+		OLED_WrDat(font16x16[adder]);
 		adder += 1;
 	}
 	OLED_Set_Pos(x,y + 1);
 	for(wm = 0;wm < 16;wm++)   //
 	{
-		OLED_WrDat(F16x16[adder]);
+		OLED_WrDat(font16x16[adder]);
 		adder += 1;
 	}
 }

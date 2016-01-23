@@ -40,13 +40,13 @@
 /**********************************************************
  *                    函 数 声 明 区                      *
  **********************************************************/
-OLED_SSD1306::OLED_SSD1306(GPIO* p_cs_pin,GPIO* p_res_pin, GPIO* p_dc_pin,GPIO* p_scl_pin,GPIO* p_sda_pin)
+OLED_SSD1306::OLED_SSD1306(GPIO* cs_pin,GPIO* res_pin, GPIO* dc_pin,GPIO* scl_pin,GPIO* sda_pin)
 {
-	cs_pin		= p_cs_pin;
-	res_pin 	= p_res_pin;
-	dc_pin 		= p_dc_pin;
-	scl_pin 	= p_scl_pin;
-	sda_pin 	= p_sda_pin;	
+	this->cs_pin	= cs_pin;
+	this->res_pin	= res_pin;
+	this->dc_pin	= dc_pin;
+	this->scl_pin	= scl_pin;
+	this->sda_pin	= sda_pin;	
 }
 void OLED_SSD1306::begin(void)	//初始化SSD1306	
 {
@@ -55,6 +55,7 @@ void OLED_SSD1306::begin(void)	//初始化SSD1306
 	scl_pin->mode(OUTPUT_PP);
 	sda_pin->mode(OUTPUT_PP);
 	cs_pin->mode(OUTPUT_PP);
+    init();
 }
 
 /***********************************************************
@@ -64,7 +65,7 @@ void OLED_SSD1306::begin(void)	//初始化SSD1306
 *   返回结果：
 *   备    注：
 ***********************************************************/
-void OLED_SSD1306::OLED_WrDat(uint8_t dat)
+void OLED_SSD1306::write_data(uint8_t dat)
 {
 	uint8_t i;
 	dc_pin->set();
@@ -90,7 +91,7 @@ void OLED_SSD1306::OLED_WrDat(uint8_t dat)
 *   返回结果：
 *   备    注：
 ***********************************************************/
-void OLED_SSD1306::OLED_WrCmd(uint8_t cmd)
+void OLED_SSD1306::write_cmd(uint8_t cmd)
 {
 	uint8_t i;
 	dc_pin->reset();
@@ -117,11 +118,11 @@ void OLED_SSD1306::OLED_WrCmd(uint8_t cmd)
 *   备    注：
 ***********************************************************/
 void OLED_SSD1306::
-OLED_Set_Pos(unsigned char x, unsigned char y)
+set_xy(uint16_t x, uint16_t y)
 {
-	OLED_WrCmd(0xb0+y);
-	OLED_WrCmd(((x&0xf0)>>4)|0x10);
-	OLED_WrCmd((x&0x0f)|0x01);
+	write_cmd(0xb0+y);
+	write_cmd(((x&0xf0)>>4)|0x10);
+	write_cmd((x&0x0f)|0x01);
 }
 
 /***********************************************************
@@ -131,15 +132,15 @@ OLED_Set_Pos(unsigned char x, unsigned char y)
 *   返回结果：
 *   备    注：清屏函数,清完屏,整个屏幕是黑色的!和没点亮一样!!!
 ***********************************************************/
-void OLED_SSD1306::OLED_Clear(void)
+void OLED_SSD1306::clear(void)
 {
 	uint8_t i,n;		    
 	for(i=0;i<8;i++)  
 	{  
-		OLED_WrCmd(0xb0+i);    //设置也地址(0~7)
-		OLED_WrCmd (0x00);      //设置显示位置—列低地址
-		OLED_WrCmd (0x10);      //设置显示位置—列高地址   
-		for(n=0;n<128;n++)OLED_WrDat(0); 
+		write_cmd(0xb0+i);    //设置也地址(0~7)
+		write_cmd (0x00);      //设置显示位置—列低地址
+		write_cmd (0x10);      //设置显示位置—列高地址   
+		for(n=0;n<128;n++)write_data(0); 
 	} //更新显示
 }
 
@@ -150,11 +151,11 @@ void OLED_SSD1306::OLED_Clear(void)
 *   返回结果：
 *   备    注：
 ***********************************************************/
-void OLED_SSD1306::OLED_Display_On(void)
+void OLED_SSD1306::display_on(void)
 {
-	OLED_WrCmd(0x8d);	//SET DCDC命令
-	OLED_WrCmd(0X14);  //DCDC ON
-	OLED_WrCmd(0XAF);  //DISPLAY ON
+	write_cmd(0x8d);	//SET DCDC命令
+	write_cmd(0X14);  //DCDC ON
+	write_cmd(0XAF);  //DISPLAY ON
 }
 
 /***********************************************************
@@ -164,11 +165,11 @@ void OLED_SSD1306::OLED_Display_On(void)
 *   返回结果：
 *   备    注：
 ***********************************************************/
-void OLED_SSD1306::OLED_Display_Off(void)
+void OLED_SSD1306::display_off(void)
 {
-	OLED_WrCmd(0x8d);	//SET DCDC命令
-	OLED_WrCmd(0X10);  //DCDC ON
-	OLED_WrCmd(0XAE);  //DISPLAY ON
+	write_cmd(0x8d);	//SET DCDC命令
+	write_cmd(0X10);  //DCDC ON
+	write_cmd(0XAE);  //DISPLAY ON
 }
 
 /***********************************************************
@@ -178,25 +179,25 @@ void OLED_SSD1306::OLED_Display_Off(void)
 *   返回结果：
 *   备    注：在指定位置显示一个字符,包括部分字符
 ***********************************************************/
-void OLED_SSD1306::OLED_ShowChar(uint8_t x,uint8_t y,uint8_t chr)
+void OLED_SSD1306::show_char(uint8_t x,uint8_t y,uint8_t chr)
 {
 		unsigned char c=0,i=0;	
 		c=chr-' ';//得到偏移后的值			
 		if(x>Max_Column-1){x=0;y=y+2;}
 		if(SIZE ==16)
 		{
-			OLED_Set_Pos(x,y);	
+			set_xy(x,y);	
 			for(i=0;i<8;i++)
-				OLED_WrDat(F8X16[c*16+i]);
-			OLED_Set_Pos(x,y+1);
+				write_data(font8x16[c*16+i]);
+			set_xy(x,y+1);
 			for(i=0;i<8;i++)
-				OLED_WrDat(F8X16[c*16+i+8]);
+				write_data(font8x16[c*16+i+8]);
 		}
 		else 
 		{	
-				OLED_Set_Pos(x,y+1);
+				set_xy(x,y+1);
 				for(i=0;i<6;i++)
-					OLED_WrDat(F6x8[c][i]);	
+					write_data(font6x8[c][i]);	
 		}
 }
 
@@ -207,11 +208,11 @@ void OLED_SSD1306::OLED_ShowChar(uint8_t x,uint8_t y,uint8_t chr)
 *   返回结果：
 *   备    注：在指定位置显示一个字符串
 ***********************************************************/
-void OLED_SSD1306::OLED_ShowString(uint8_t x,uint8_t y, uint8_t *chr)
+void OLED_SSD1306::show_string(uint8_t x,uint8_t y, uint8_t *chr)
 {
 	unsigned char j=0;
 	while (chr[j]!='\0')
-	{		OLED_ShowChar(x,y,chr[j]);
+	{		show_char(x,y,chr[j]);
 			x+=8;
 		if(x>120){x=0;y+=2;}
 			j++;
@@ -226,7 +227,7 @@ void OLED_SSD1306::OLED_ShowString(uint8_t x,uint8_t y, uint8_t *chr)
 *   返回结果：
 *   备    注：在指定位置显示一个字符串
 ***********************************************************/
-void OLED_SSD1306::OLED_ShowNum(uint8_t x,uint8_t y,uint32_t num,uint8_t len,uint8_t size)
+void OLED_SSD1306::show_num(uint8_t x,uint8_t y,uint32_t num,uint8_t len,uint8_t size)
 {
 	u8 t,temp;
 	u8 enshow=0;						   
@@ -237,12 +238,12 @@ void OLED_SSD1306::OLED_ShowNum(uint8_t x,uint8_t y,uint32_t num,uint8_t len,uin
 		{
 			if(temp==0)
 			{
-				OLED_ShowChar(x+(size/2)*t,y,' ');
+				show_char(x+(size/2)*t,y,' ');
 				continue;
 			}else enshow=1; 
 		 	 
 		}
-	 	OLED_ShowChar(x+(size/2)*t,y,temp+'0'); 
+	 	show_char(x+(size/2)*t,y,temp+'0'); 
 	}
 }
 
@@ -253,19 +254,19 @@ void OLED_SSD1306::OLED_ShowNum(uint8_t x,uint8_t y,uint32_t num,uint8_t len,uin
 *   返回结果：
 *   备    注：在指定位置显示一个汉字
 ***********************************************************/
-void OLED_SSD1306::OLED_ShowCHinese(uint8_t x,uint8_t y,uint8_t no)
+void OLED_SSD1306::show_chinese(uint8_t x,uint8_t y,uint8_t no)
 {
 	u8 t,adder=0;
-	OLED_Set_Pos(x,y);	
+	set_xy(x,y);	
     for(t=0;t<16;t++)
 		{
-				OLED_WrDat(Hzk[2*no][t]);
+				write_data(Hzk[2*no][t]);
 				adder+=1;
      }	
-		OLED_Set_Pos(x,y+1);	
+		set_xy(x,y+1);	
     for(t=0;t<16;t++)
 			{	
-				OLED_WrDat(Hzk[2*no+1][t]);
+				write_data(Hzk[2*no+1][t]);
 				adder+=1;
       }	
 }
@@ -278,7 +279,7 @@ void OLED_SSD1306::OLED_ShowCHinese(uint8_t x,uint8_t y,uint8_t no)
 *   返回结果：
 *   备    注：
 ***********************************************************/
-void OLED_SSD1306::OLED_DrawBMP(u16 x0, u16 y0,u16 x1, u16 y1,const unsigned char BMP[])
+void OLED_SSD1306::draw_bmp(u16 x0, u16 y0,u16 x1, u16 y1,const unsigned char BMP[])
 { 	
  unsigned int j=0;
  unsigned char x,y;
@@ -287,10 +288,10 @@ void OLED_SSD1306::OLED_DrawBMP(u16 x0, u16 y0,u16 x1, u16 y1,const unsigned cha
   else y=y1/8+1;
 	for(y=y0;y<y1;y++)
 	{
-		OLED_Set_Pos(x0,y);
+		set_xy(x0,y);
     for(x=x0;x<x1;x++)
 	    {      
-	    	OLED_WrDat(BMP[j++]);	    	
+	    	write_data(BMP[j++]);	    	
 	    }
 	}
 } 
@@ -310,46 +311,45 @@ uint32_t OLED_SSD1306::oled_pow(uint8_t m,uint8_t n)
 *   返回结果：
 *   备    注：
 ***********************************************************/
-void OLED_SSD1306::OLED_Init(void)
+void OLED_SSD1306::init(void)
 {
-	begin();
 	res_pin->set();
 	delay_ms(100);
 	res_pin->reset();
 	delay_ms(100);
 	res_pin->set();
 	
-	OLED_WrCmd(0xae);//--turn off oled panel
-	OLED_WrCmd(0x00);//---set low column address
-	OLED_WrCmd(0x10);//---set high column address
-	OLED_WrCmd(0x40);//--set start line address  Set Mapping RAM Display Start Line (0x00~0x3F)
-	OLED_WrCmd(0x81);//--set contrast control register
-	OLED_WrCmd(0xcf); // Set SEG Output Current Brightness
-	OLED_WrCmd(0xa1);//--Set SEG/Column Mapping     0xa0左右反置 0xa1正常
-	OLED_WrCmd(0xc8);//Set COM/Row Scan Direction   0xc0上下反置 0xc8正常
-	OLED_WrCmd(0xa6);//--set normal display
-	OLED_WrCmd(0xa8);//--set multiplex ratio(1 to 64)
-	OLED_WrCmd(0x3f);//--1/64 duty
-	OLED_WrCmd(0xd3);//-set display offset	Shift Mapping RAM Counter (0x00~0x3F)
-	OLED_WrCmd(0x00);//-not offset
-	OLED_WrCmd(0xd5);//--set display clock divide ratio/oscillator frequency
-	OLED_WrCmd(0x80);//--set divide ratio, Set Clock as 100 Frames/Sec
-	OLED_WrCmd(0xd9);//--set pre-charge period
-	OLED_WrCmd(0xf1);//Set Pre-Charge as 15 Clocks & Discharge as 1 Clock
-	OLED_WrCmd(0xda);//--set com pins hardware configuration
-	OLED_WrCmd(0x12);
-	OLED_WrCmd(0xdb);//--set vcomh
-	OLED_WrCmd(0x40);//Set VCOM Deselect Level
-	OLED_WrCmd(0x20);//-Set Page Addressing Mode (0x00/0x01/0x02)
-	OLED_WrCmd(0x02);//
-	OLED_WrCmd(0x8d);//--set Charge Pump enable/disable
-	OLED_WrCmd(0x14);//--set(0x10) disable
-	OLED_WrCmd(0xa4);// Disable Entire Display On (0xa4/0xa5)
-	OLED_WrCmd(0xa6);// Disable Inverse Display On (0xa6/a7)
-	OLED_WrCmd(0xaf);//--turn on oled panel
+	write_cmd(0xae);//--turn off oled panel
+	write_cmd(0x00);//---set low column address
+	write_cmd(0x10);//---set high column address
+	write_cmd(0x40);//--set start line address  Set Mapping RAM Display Start Line (0x00~0x3F)
+	write_cmd(0x81);//--set contrast control register
+	write_cmd(0xcf); // Set SEG Output Current Brightness
+	write_cmd(0xa1);//--Set SEG/Column Mapping     0xa0左右反置 0xa1正常
+	write_cmd(0xc8);//Set COM/Row Scan Direction   0xc0上下反置 0xc8正常
+	write_cmd(0xa6);//--set normal display
+	write_cmd(0xa8);//--set multiplex ratio(1 to 64)
+	write_cmd(0x3f);//--1/64 duty
+	write_cmd(0xd3);//-set display offset	Shift Mapping RAM Counter (0x00~0x3F)
+	write_cmd(0x00);//-not offset
+	write_cmd(0xd5);//--set display clock divide ratio/oscillator frequency
+	write_cmd(0x80);//--set divide ratio, Set Clock as 100 Frames/Sec
+	write_cmd(0xd9);//--set pre-charge period
+	write_cmd(0xf1);//Set Pre-Charge as 15 Clocks & Discharge as 1 Clock
+	write_cmd(0xda);//--set com pins hardware configuration
+	write_cmd(0x12);
+	write_cmd(0xdb);//--set vcomh
+	write_cmd(0x40);//Set VCOM Deselect Level
+	write_cmd(0x20);//-Set Page Addressing Mode (0x00/0x01/0x02)
+	write_cmd(0x02);//
+	write_cmd(0x8d);//--set Charge Pump enable/disable
+	write_cmd(0x14);//--set(0x10) disable
+	write_cmd(0xa4);// Disable Entire Display On (0xa4/0xa5)
+	write_cmd(0xa6);// Disable Inverse Display On (0xa6/a7)
+	write_cmd(0xaf);//--turn on oled panel
 	
-	OLED_WrCmd(0xaf);	/*display ON*/ 
-	OLED_Clear();
-	OLED_Set_Pos(0,0); 
+	write_cmd(0xaf);	/*display ON*/ 
+	clear();
+	set_xy(0,0); 
 }
 

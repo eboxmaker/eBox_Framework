@@ -22,13 +22,13 @@ Copyright 2015 shentq. All Rights Reserved.
  *              CS   ½ÓPD3  
 */
 #include "ebox.h"
-#include "oled.h"
-#include "bmp.h"
-OLED oled(&PD3,&PD4,&PD5,&PD6,&PD7);
+#include "oled_ssd1306.h"
+#include "font.h"
+OLED_SSD1306 oled(&PD3,&PD4,&PD5,&PD6,&PD7);
 void setup()
 {
 	ebox_init();  
-	oled.OLED_Init();
+	oled.begin();
 }
 
 int main(void)
