@@ -299,11 +299,12 @@ void
 OSD::write_NVM(int font_count, uint8_t *character_bitmap)
 {
   uint8_t x;
-  uint8_t char_address_hi, char_address_lo;
+  uint8_t char_address_hi;
+  //uint8_t char_address_lo;
   uint8_t screen_char;
 
   char_address_hi = font_count;
-  char_address_lo = 0;
+  //char_address_lo = 0;
  //Serial.println("write_new_screen");   
 
   // disable display

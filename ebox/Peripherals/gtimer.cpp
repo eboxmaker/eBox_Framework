@@ -16,7 +16,7 @@ This specification is preliminary and is subject to change at any time without n
 
 //#define TIM_NUM 7
 
-extern callback_fun_type timx_cb_table[4][5];
+extern callback_fun_type timx_cb_table[7][5];
 
 //////////////////////////////////////
 
@@ -49,7 +49,7 @@ void TIM::attach_interrupt(void(*callback)(void))
 {
 	switch((uint32_t)_TIMx)
 	{
-		case (uint32_t)TIM7:
+		case (uint32_t)TIM2:
 			timx_cb_table[1][0] = callback;
 			break;
 		case (uint32_t)TIM3:
@@ -57,6 +57,15 @@ void TIM::attach_interrupt(void(*callback)(void))
 			break;
 		case (uint32_t)TIM4:
 			timx_cb_table[3][0] = callback;
+			break;
+		case (uint32_t)TIM5:
+			timx_cb_table[4][0] = callback;
+			break;
+		case (uint32_t)TIM6:
+			timx_cb_table[5][0] = callback;
+			break;
+		case (uint32_t)TIM7:
+			timx_cb_table[6][0] = callback;
 			break;
 	}
 }
@@ -99,6 +108,18 @@ void TIM::base_init(uint16_t period,uint16_t prescaler)
         case (uint32_t)TIM4:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
             NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;//
+            break;
+        case (uint32_t)TIM5:
+            RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE);
+            NVIC_InitStructure.NVIC_IRQChannel = TIM5_IRQn;//
+            break;
+        case (uint32_t)TIM6:
+            RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6, ENABLE);
+            NVIC_InitStructure.NVIC_IRQChannel = TIM6_IRQn;//
+            break;
+        case (uint32_t)TIM7:
+            RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM7, ENABLE);
+            NVIC_InitStructure.NVIC_IRQChannel = TIM7_IRQn;//
             break;
 	}
 	
