@@ -32,7 +32,7 @@ This specification is preliminary and is subject to change at any time without n
         串口4，5没有使用DMA；
 */
 //用户配置//////////////
-#define USE_DMA 1//开启dma，只有串口1，2，3支持4和5不支持
+#define USE_DMA 1//开启dma，只有串口1，2，3支持,4和5不支持
 #define UART_MAX_SEND_BUF 128
 
 class USART
@@ -42,14 +42,14 @@ class USART
 
         void    begin(uint32_t baud_rate);
         void    begin(uint32_t baud_rate,uint8_t data_bit,uint8_t Parity,float stop_bit);
-        void    attach_interrupt(void (*callback_fun)(void));
-        void    interrupt(FunctionalState enable);
+        void    attach_rx_interrupt(void (*callback_fun)(void));
+        void    attach_tx_interrupt(void (*callback_fun)(void));
 
         int 	put_char(uint16_t ch);
         void    put_string(const char *str,uint16_t length);
         void 	put_string(const char *str);
-        void    printf(const char *fmt,...);//需要注意缓冲区溢出
         void    printf_length(const char *str,uint16_t length);
+        void    printf(const char *fmt,...);//需要注意缓冲区溢出
         void    wait_busy();
     
         uint16_t    receive();
@@ -59,6 +59,8 @@ class USART
         DMA_Channel_TypeDef *_DMA1_Channelx;
         char                send_buf[UART_MAX_SEND_BUF];
         uint16_t            dma_send_string(const char *str,uint16_t length);
+        void                set_busy();
+        void                interrupt(FunctionalState enable);
 
 };
 

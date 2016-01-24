@@ -62,8 +62,7 @@ void setup()
 {
 	ebox_init();
 	uart3.begin(9600);
-	uart3.interrupt(ENABLE);
-	uart3.attach_interrupt(test);
+	uart3.attach_rx_interrupt(test);
 }
 
 float x,y;
