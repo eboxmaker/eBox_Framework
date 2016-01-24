@@ -52,13 +52,13 @@ void setup()
 		PB9.mode(OUTPUT_PP);
 
 	timer2.begin(1000);
-	timer2.interrupt(ENABLE);
 	timer2.attach_interrupt(t2it);
+	timer2.interrupt(ENABLE);
 	timer2.start();
 	
 	t1.begin(10000);
-	t1.interrupt(ENABLE);
 	t1.attach_interrupt(t1it);
+	t1.interrupt(ENABLE);
 	t1.start();
 }
 
