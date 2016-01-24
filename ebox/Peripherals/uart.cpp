@@ -281,7 +281,9 @@ void USART::put_string(const char *str)
 {
     uint16_t i = 0;
     uint16_t length = 0;
-
+    
+	wait_busy();
+    set_busy();
     while(str[i++] != '\0')
     {
         length++;
@@ -292,11 +294,15 @@ void USART::put_string(const char *str)
 	
 void USART::printf_length(const char *str,uint16_t length)
 {	
-		put_string(str,length);
+	wait_busy();
+    set_busy();
+    put_string(str,length);
 }
 void USART::printf(const char *fmt,...)
 {
-
+    uint16_t i = 0;
+    uint16_t length = 0;
+    
 	wait_busy();
     set_busy();
 	va_list va_params;   
@@ -304,8 +310,12 @@ void USART::printf(const char *fmt,...)
 	vsprintf(send_buf,fmt,va_params);
 	va_end(va_params); 
 
-	put_string(send_buf);
-	
+    while(send_buf[i++] != '\0')
+    {
+        length++;
+    };
+    if(length > UART_MAX_SEND_BUF) length = UART_MAX_SEND_BUF;
+    put_string(send_buf,length);	
 }
 
 void USART::wait_busy()
