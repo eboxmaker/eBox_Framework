@@ -40,7 +40,7 @@ uint16_t p;
 void setup()
 {
 	ebox_init();
-	uart1.begin(115200);    
+	uart1.begin(9600);    
     p = 1;
     ic.begin(p);//初始化输入捕获参数，p分频
     ic.attch_ic_interrupt(mesure_frq);//绑定捕获中断事件函数

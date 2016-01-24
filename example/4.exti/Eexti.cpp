@@ -25,7 +25,7 @@ void setup()
 	ebox_init();
 	uart1.begin(9600);
 	ex.begin();
-	ex.attachInterrupt(exit);
+	ex.attach_interrupt(exit);
 	ex.interrupt(ENABLE);
 }
 

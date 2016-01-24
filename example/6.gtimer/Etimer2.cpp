@@ -35,8 +35,8 @@ void setup()
 	PB8.mode(OUTPUT_PP);
 	
 	timer2.begin(1000);
-	timer2.interrupt(ENABLE);
 	timer2.attach_interrupt(t2it);
+	timer2.interrupt(ENABLE);
 	timer2.start();
 }
 

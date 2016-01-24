@@ -787,6 +787,11 @@
               <FileType>8</FileType>
               <FilePath>..\edriver\OLED_ssd1306.cpp</FilePath>
             </File>
+            <File>
+              <FileName>LTC1446.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\LTC1446.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

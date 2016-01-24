@@ -31,7 +31,7 @@ uint16_t p;
 void setup()
 {
 	ebox_init();
-	uart1.begin(115200);
+	uart1.begin(9600);
 	PB9.mode(OUTPUT_PP);
     
     p = 1;
