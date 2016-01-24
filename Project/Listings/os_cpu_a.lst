@@ -433,7 +433,7 @@ Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=.\objects\os_cpu_a.d -o.\objects\os_cpu_a.o -IE:\STM32_X\Project\R
 TE -IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include -IC:\Keil_v5\A
 RM\CMSIS\Include --predefine="__UVISION_VERSION SETA 515" --predefine="STM32F10
-X_MD SETA 1" --list=.\listings\os_cpu_a.lst ..\os\uCOS-II\Ports\os_cpu_a.asm
+X_HD SETA 1" --list=.\listings\os_cpu_a.lst ..\os\uCOS-II\Ports\os_cpu_a.asm
 
 
 
