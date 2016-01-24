@@ -46,7 +46,6 @@ class USART
         void    attach_tx_interrupt(void (*callback_fun)(void));
 
         int 	put_char(uint16_t ch);
-        void    put_string(const char *str,uint16_t length);
         void 	put_string(const char *str);
         void    printf_length(const char *str,uint16_t length);
         void    printf(const char *fmt,...);//需要注意缓冲区溢出
@@ -59,6 +58,7 @@ class USART
         DMA_Channel_TypeDef *_DMA1_Channelx;
         char                send_buf[UART_MAX_SEND_BUF];
         uint16_t            dma_send_string(const char *str,uint16_t length);
+        void                put_string(const char *str,uint16_t length);
         void                set_busy();
         void                interrupt(FunctionalState enable);
 
