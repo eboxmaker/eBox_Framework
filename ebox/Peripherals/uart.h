@@ -30,6 +30,7 @@ This specification is preliminary and is subject to change at any time without n
     注意：
         发送缓冲区溢出可能导致单片机出现异常，
         串口4，5没有使用DMA；
+        串口发送，不能在no_interrupt下连续执行两次。
 */
 
 /**
