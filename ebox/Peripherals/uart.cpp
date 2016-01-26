@@ -21,7 +21,14 @@ This specification is preliminary and is subject to change at any time without n
 callback_fun_type usart_callback_table[5][2];//支持串口的rx中断
 
 uint8_t busy[5];
-
+/**
+ *@name     USART::USART(USART_TypeDef *USARTx,GPIO *tx_pin,GPIO *rx_pin)
+ *@brief    串口的构造函数
+ *@param    USARTx:  USART1,2,3和UART4,5
+ *          tx_pin:  外设所对应的tx引脚
+ *          rx_pin:  外设所对应的rx引脚
+ *@retval   None
+*/
 USART::USART(USART_TypeDef *USARTx,GPIO *tx_pin,GPIO *rx_pin)
 {
 	_USARTx = USARTx;
@@ -29,7 +36,12 @@ USART::USART(USART_TypeDef *USARTx,GPIO *tx_pin,GPIO *rx_pin)
 	rx_pin->mode(INPUT);
 }
 
-
+/**
+ *@name     void USART::begin(uint32_t baud_rate)
+ *@brief    串口初始化函数，除了波特率可控外，其他参数默认：8bit数据，1个停止位，无校验，无硬件控制流
+ *@param    baud_rate:  波特率，例如9600，115200，38400等等
+ *@retval   None
+*/
 void USART::begin(uint32_t baud_rate)
 {
     USART_InitTypeDef USART_InitStructure;
@@ -78,6 +90,15 @@ void USART::begin(uint32_t baud_rate)
     USART_Cmd(_USARTx, ENABLE);
     interrupt(ENABLE);
 }
+/**
+ *@name     void    begin(uint32_t baud_rate,uint8_t data_bit,uint8_t parity,float stop_bit);
+ *@brief    串口初始化函数，并带有更多配置参数
+ *@param    baud_rate:  波特率，例如9600，115200，38400等等
+ *          data_bit:   数据位数，只能输入8或者9
+ *          parity:     检验位；0：无校验位，1奇校验，2偶校验
+ *          stop_bit:   停止位；0.5,1,1.5,2四个可选参数
+ *@retval   None
+*/
 void USART::begin(uint32_t baud_rate,uint8_t data_bit,uint8_t parity,float stop_bit)
 {
     USART_InitTypeDef USART_InitStructure;
@@ -151,6 +172,12 @@ void USART::begin(uint32_t baud_rate,uint8_t data_bit,uint8_t parity,float stop_
     USART_Cmd(_USARTx, ENABLE);
 }
 
+/**
+ *@name     void USART::interrupt(FunctionalState enable)
+ *@brief    串口中断控制函数
+ *@param    enable:  ENABLE使能串口的发送完成和接收中断；DISABLE：关闭这两个中断
+ *@retval   None
+*/
 void USART::interrupt(FunctionalState enable)
 {
     NVIC_InitTypeDef NVIC_InitStructure;
@@ -198,6 +225,13 @@ void USART::interrupt(FunctionalState enable)
     }
     NVIC_Init(&NVIC_InitStructure);
 }
+
+/**
+ *@name     void USART::attach_rx_interrupt(void (*callback_fun)(void))
+ *@brief    绑定串口接收中断所调用的用户程序
+ *@param    callback_fun:  用户函数
+ *@retval   None
+*/
 void USART::attach_rx_interrupt(void (*callback_fun)(void))
 {
 	switch((uint32_t)_USARTx)
@@ -214,6 +248,13 @@ void USART::attach_rx_interrupt(void (*callback_fun)(void))
 			usart_callback_table[4][0] = callback_fun;break;
 	}
 }
+
+/**
+ *@name     void USART::attach_tx_interrupt(void (*callback_fun)(void))
+ *@brief    绑定串口发送完成中断所调用的用户程序
+ *@param    callback_fun:  用户函数
+ *@retval   None
+*/
 void USART::attach_tx_interrupt(void (*callback_fun)(void))
 {
 	switch((uint32_t)_USARTx)
@@ -230,10 +271,25 @@ void USART::attach_tx_interrupt(void (*callback_fun)(void))
 			usart_callback_table[4][1] = callback_fun;break;
 	}
 }
+
+/**
+ *@name     uint16_t USART::receive()
+ *@brief    串口接收数据，此函数只能在用户接收中断中调用
+ *@param    NONE
+ *@retval   串口所接收到的数据
+*/
 uint16_t USART::receive()
 {
 	return (uint16_t)(_USARTx->DR & (uint16_t)0x01FF);
 }
+
+/**
+ *@name     uint16_t USART::dma_send_string(const char *str,uint16_t length)
+ *@brief    串口DMA方式发送字符串，缓冲区数据
+ *@param    str：       要发送的字符串，数据缓冲区
+            length：    缓冲区的长度
+ *@retval   发送数据的长度
+*/
 uint16_t USART::dma_send_string(const char *str,uint16_t length)
 {
     DMA_DeInit(_DMA1_Channelx);   //将DMA的通道1寄存器重设为缺省值
@@ -256,12 +312,27 @@ uint16_t USART::dma_send_string(const char *str,uint16_t length)
             (1);        // 通道开启
     return length;
 }
+
+/**
+ *@name     int USART::put_char(uint16_t ch)
+ *@brief    串口方式发送一个字节
+ *@param    ch：    要发送的字符
+ *@retval   已发送的数据
+*/
 int USART::put_char(uint16_t ch)
 {
 	while(USART_GetFlagStatus(_USARTx, USART_FLAG_TXE) == RESET);//单字节等待，等待寄存器空
 	USART_SendData(_USARTx,ch);
 	return ch;
 }
+
+/**
+ *@name     void USART::put_string(const char *str,uint16_t length)
+ *@brief    串口方式发送字符串，缓冲区数据
+ *@param    str：       要发送的字符串，数据缓冲区
+            length：    缓冲区的长度
+ *@retval   NONE
+*/
 void USART::put_string(const char *str,uint16_t length)
 {
    if((_USARTx == USART1 | _USARTx == USART2 | _USARTx == USART3 ) && (USE_DMA == 1))
@@ -277,6 +348,13 @@ void USART::put_string(const char *str,uint16_t length)
         }
     }
 }
+
+/**
+ *@name     void USART::put_string(const char *str)
+ *@brief    串口方式发送一个字节
+ *@param    str：   要发送的字符串,直到遇到'\0'，如果没有'\0'，则按最大缓冲区计算
+ *@retval   已发送的数据
+*/
 void USART::put_string(const char *str)
 {
     uint16_t i = 0;
@@ -287,17 +365,37 @@ void USART::put_string(const char *str)
     while(str[i++] != '\0')
     {
         length++;
+        if(length >= UART_MAX_SEND_BUF){
+            length = UART_MAX_SEND_BUF;
+            break;
+        }
     };
     put_string(str,length);
         
 }	
 	
+/////////////////////////////////////////////////
+/**
+ *@name     int USART::put_char(uint16_t ch)
+ *@brief    串口方式发送一个字节
+ *@param    str：       要发送的字符串，数据缓冲区
+            length：    缓冲区的长度
+ *@retval   已发送的数据
+*/
 void USART::printf_length(const char *str,uint16_t length)
 {	
 	wait_busy();
     set_busy();
     put_string(str,length);
 }
+
+/**
+ *@name     int USART::put_char(uint16_t ch)
+ *@brief    串口方式发送一个字节
+ *@param    str：       要发送的字符串，数据缓冲区
+            length：    缓冲区的长度
+ *@retval   已发送的数据
+*/
 void USART::printf(const char *fmt,...)
 {
     uint16_t i = 0;
@@ -318,6 +416,14 @@ void USART::printf(const char *fmt,...)
     put_string(send_buf,length);	
 }
 
+
+/**
+ *@name     int USART::put_char(uint16_t ch)
+ *@brief    串口方式发送一个字节
+ *@param    str：       要发送的字符串，数据缓冲区
+            length：    缓冲区的长度
+ *@retval   已发送的数据
+*/
 void USART::wait_busy()
 {
     switch((uint32_t)_USARTx)
@@ -339,6 +445,14 @@ void USART::wait_busy()
             break;
     }
 }
+
+/**
+ *@name     int USART::put_char(uint16_t ch)
+ *@brief    串口方式发送一个字节
+ *@param    str：       要发送的字符串，数据缓冲区
+            length：    缓冲区的长度
+ *@retval   已发送的数据
+*/
 void USART::set_busy()
 {
     switch((uint32_t)_USARTx)

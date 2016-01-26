@@ -23,7 +23,12 @@ This specification is preliminary and is subject to change at any time without n
 u16  AD_value[CH];   //用来存放ADC转换结果，也是DMA的目标地址
 
 
-/*配置ADC1*/
+/**
+ *@name     void ADC1_configuration(void)
+ *@brief    ADC配置，将ADC1配置为16通道规则采样，采样周期28.5个周期，10bit精度
+ *@param    NONE
+ *@retval   NONE
+*/
 void ADC1_configuration(void)
 {
 	 
@@ -77,7 +82,12 @@ void ADC1_configuration(void)
 	while(ADC_GetCalibrationStatus(ADC1));		//获取指定ADC1的校准程序,设置状态则等待
 	
 }
-/*配置DMA*/
+/**
+ *@name     void DMA_configuration(void)
+ *@brief    ADC的DMA配置，将ADC1配置为DMA自动传输模式。转换结果自动的传输到内存
+ *@param    NONE
+ *@retval   NONE
+*/
 void DMA_configuration(void)
 	{
 	/* ADC1  DMA1 Channel Config */
@@ -96,9 +106,14 @@ void DMA_configuration(void)
 	DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;  //DMA通道x没有设置为内存到内存传输
 	DMA_Init(DMA1_Channel1, &DMA_InitStructure);  //根据DMA_InitStruct中指定的参数初始化DMA的通道
 
-	}
+}
 
-
+/**
+ *@name     void ADC1_init(void)
+ *@brief    ADC初始化
+ *@param    NONE
+ *@retval   NONE
+*/
 void ADC1_init(void)
 	{
 	
@@ -113,7 +128,13 @@ void ADC1_init(void)
 
 	 
 	}
-
+/**
+ *@name     uint16_t analog_read(GPIO *pin)
+ *@brief    读取ADC1某个引脚上的模拟转换结果
+ *@param    pin：ADC1某通道映射的引脚
+ *@retval   如果引脚正确则返回该引脚的模拟电压值所对应的10bit的ADC转换结果
+            如果引脚错误返回0；
+*/
 uint16_t analog_read(GPIO *pin)
 {
 	switch((uint32_t)pin->port)
@@ -167,6 +188,13 @@ uint16_t analog_read(GPIO *pin)
 	return 0;
 
 }
+/**
+ *@name     uint16_t analog_read_voltage(GPIO *pin) 
+ *@brief    读取某个引脚上的模拟电压
+ *@param    pin：ADC1某通道映射的引脚
+ *@retval   如果引脚正确则返回该引脚的模拟电压值所对应的模拟电压，默认参考电压为3.3V
+            如果引脚错误返回0；
+*/
 uint16_t analog_read_voltage(GPIO *pin)   
 { 
    return (u16)(analog_read(pin)*3300/4096);   //求的结果扩大了1000倍，方便下面求出小数
