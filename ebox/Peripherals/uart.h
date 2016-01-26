@@ -31,6 +31,16 @@ This specification is preliminary and is subject to change at any time without n
         发送缓冲区溢出可能导致单片机出现异常，
         串口4，5没有使用DMA；
 */
+
+/**
+ *@name     void    begin(uint32_t baud_rate,uint8_t data_bit,uint8_t parity,float stop_bit);
+ *@brief    串口初始化函数，并带有更多配置参数
+ *@param    baud_rate:  波特率，例如9600，115200，38400等等
+ *          data_bit:   数据位数，只能输入8或者9
+ *          parity:     检验位；0：无校验位，1奇校验，2偶校验
+ *          stop_bit:   停止位；0.5,1,1.5,2四个可选参数
+ *@retval   None
+*/
 //用户配置//////////////
 #define USE_DMA 1//开启dma，只有串口1，2，3支持,4和5不支持
 #define UART_MAX_SEND_BUF 128
@@ -41,7 +51,7 @@ class USART
         USART(USART_TypeDef *USARTx,GPIO *tx_pin,GPIO *rx_pin);
 
         void    begin(uint32_t baud_rate);
-        void    begin(uint32_t baud_rate,uint8_t data_bit,uint8_t Parity,float stop_bit);
+        void    begin(uint32_t baud_rate,uint8_t data_bit,uint8_t parity,float stop_bit);
         void    attach_rx_interrupt(void (*callback_fun)(void));
         void    attach_tx_interrupt(void (*callback_fun)(void));
 

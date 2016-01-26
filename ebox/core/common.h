@@ -73,6 +73,17 @@ class GPIO
         GPIO_TypeDef* port;
         uint16_t pin;	
 };
+class PARALLEL_GPIO
+{
+    public:
+        GPIO *bit[8];
+    public:
+        void    all_mode(PIN_MODE mode);
+        void    write(uint8_t data);
+        void    write_low_4_4bit(uint8_t data);
+        uint8_t read();
+        uint8_t read_low_4_bit();
+};
 class SYSTEM
 {
     public:

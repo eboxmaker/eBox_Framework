@@ -16,29 +16,21 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 
 
+PARALLEL_GPIO p;
 
-u8 count;
-
-void test()
-{
-	uint8_t c;
-	c = uart1.receive();
-    uart1.put_char(c);
-}
-	
-void test1()
-{
-    count++;
-    PB8.toggle();
-}
 void setup()
 {
 	ebox_init();
 	uart1.begin(9600);
-	uart1.attach_rx_interrupt(test);
-	uart1.attach_tx_interrupt(test1);
-    PB8.mode(OUTPUT_PP);
-    PB8.reset();
+
+    p.bit[0] = &PA1;
+    p.bit[1] = &PA3;
+    p.bit[2] = &PA5;
+    p.bit[3] = &PA7;
+    p.bit[4] = &PA8;
+    p.bit[5] = &PB1;
+    p.bit[6] = &PB6;
+    p.bit[7] = &PB2;
 }
 
 int main(void)
@@ -48,7 +40,7 @@ int main(void)
 
 	while(1)
 	{		 	
-        uart1.printf("uart is ok ! count = %d\r\n",count);
+        p.write(0xaa);
         delay_ms(1000);
 	}
 
