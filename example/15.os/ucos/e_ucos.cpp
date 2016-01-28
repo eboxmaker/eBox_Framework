@@ -23,7 +23,8 @@ void setup()
 {
 	ebox_init();
 	PB8.mode(OUTPUT_PP);
-    attch_sys_ticks_interrupt(xx);
+    set_systick_user_event_per_sec(OS_TICKS_PER_SEC);
+    attch_systick_user_event(xx);
 }
 void Task_LED(void *p_arg)
 {
