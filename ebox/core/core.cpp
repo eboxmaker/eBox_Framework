@@ -18,6 +18,8 @@ This specification is preliminary and is subject to change at any time without n
 #include "common.h"
 extern "C"{
 
+extern u16  AD_value[];
+    
 #define systick_no_interrupt()  SysTick->CTRL &=0xfffffffd
 #define systick_interrupt()     SysTick->CTRL |=0x0002
 
@@ -50,6 +52,7 @@ void ebox_init(void)
      GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
     sys.get_chip_info();
     set_systick_user_event_per_sec(1000);
+    random_seed(AD_value[0]);
 
 }
 
