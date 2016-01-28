@@ -9,54 +9,44 @@ Copyright 2015 shentq. All Rights Reserved.
 
 //STM32 RUN IN eBox
 #include "ebox.h"
+#include "ucos_ii.h"
+static OS_STK startup_task_stk[STARTUP_TASK_STK_SIZE];		  //定义栈
 
-#define N 10
-u8 src_array[N];
-u8 array_len = N - 1;
-
-void random_init()
+void xx()
 {
-    for(int i = 0; i < N; i++)
-        src_array[i] = i;
+    OSIntEnter(); 
+    OSTimeTick(); 
+    OSIntExit(); 
 }
-u8 random_no_repeat()
-{
-    u8 temp;
-
-    if(array_len == 0)
-        return src_array[0];
-    else
-    {
-        u8 seed = random(array_len);
-        temp = src_array[seed];
-        if(seed != (array_len))
-            src_array[seed] = src_array[array_len];
-        array_len--;
-        return temp;
-    }
-}
-
 
 void setup()
 {
-    ebox_init();
-    uart1.begin(9600);
-    random_init();
-    for(int i = 0; i < N; i++)
+	ebox_init();
+	PB8.mode(OUTPUT_PP);
+    set_systick_user_event_per_sec(OS_TICKS_PER_SEC);
+    attch_systick_user_event(xx);
+}
+void Task_LED(void *p_arg)
+{
+    (void)p_arg;                		// 'p_arg' 并没有用到，防止编译器提示警告
+    while (1)
     {
-        uart1.printf("%d:random=%d\r\n",i,random_no_repeat());
-        delay_ms(100);
+        PB8.toggle();
+//        delay_ms(500);
+        OSTimeDlyHMSM(0, 0,0,500);
     }
-	
 }
 int main(void)
 {
-    setup();
-    while(1)
-    {
-    }
+	setup();
+	OSInit();
+	OSTaskCreate(Task_LED,(void *)0,
+	   &startup_task_stk[STARTUP_TASK_STK_SIZE-1], STARTUP_TASK_PRIO);
+
+	OSStart();
+    return 0;
+
+
 }
-
-
 
 
