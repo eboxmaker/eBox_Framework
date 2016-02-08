@@ -58,8 +58,6 @@ int main(void)
             value1 = 0;
         }
 	}
-
-
 }
 
 
