@@ -21,6 +21,8 @@ RINGBUF::RINGBUF(unsigned char *buf,int lenght)
     num = 0;
     this->buf = buf;
     this->max = lenght;
+    for(int i = 0; i < lenght; i++)
+        buf[i] = 0;
 }
 bool RINGBUF::write(unsigned char c)
 {
@@ -54,7 +56,11 @@ int RINGBUF::read(unsigned char *buf,int lenght)
     for(;i < lenght;i++)
     {
         if(num > 0)
-            buf[i] = this->buf[head++];
+        {
+            buf[i] = this->buf[head];
+            head = (head + 1) % max;
+            num--;
+        }
         else
             break;
     }
@@ -65,4 +71,12 @@ int RINGBUF::read(unsigned char *buf,int lenght)
 int RINGBUF::available()
 {
     return num;
+}
+void RINGBUF::clear()
+{
+    head = 0;
+    tail = 0;
+    num = 0;
+    for(int i = 0; i < max; i++)
+        buf[i] = 0;
 }

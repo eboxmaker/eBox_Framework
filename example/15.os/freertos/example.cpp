@@ -72,8 +72,8 @@ void setup()
 	PB9.mode(OUTPUT_PP);
 	PB10.mode(OUTPUT_PP);
     
-    set_systick_user_event_per_sec(OS_TICKS_PER_SEC);
-    attch_systick_user_event(xx);
+    set_systick_user_event_per_sec(configTICK_RATE_HZ);
+    attch_systick_user_event(xPortSysTickHandler);
     
     xTaskCreate( vLEDTask,  "LED0", configMINIMAL_STACK_SIZE, (void *)0, tskIDLE_PRIORITY+3, NULL );
     xTaskCreate( vLEDTask, "LED1", configMINIMAL_STACK_SIZE, (void *)1, tskIDLE_PRIORITY+3, NULL );

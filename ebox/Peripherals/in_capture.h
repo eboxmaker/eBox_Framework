@@ -56,8 +56,6 @@ typedef enum {
 class IN_CAPTURE
 {
     public:
-        uint8_t     polarity;
-    public:
         IN_CAPTURE(GPIO *capture_pin);
         void        begin(uint16_t prescaler);
         void        set_count(uint16_t count);
@@ -77,7 +75,8 @@ class IN_CAPTURE
         uint16_t    prescaler;//保存溢出值，用于计算占空比
         uint16_t    overflow_times;//溢出次数
         IC_OVERFLOW_STATE_TYEP     overflow_state;//溢出的情况。如果发生16位溢出：IC_OVERFLOW，如果发送32位溢出:IC_FAULT
-
+        uint8_t     polarity;
+    
         void        init_info(GPIO *capture_pin);
         void        base_init(uint16_t Period,uint16_t Prescaler);
 

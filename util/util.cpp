@@ -155,8 +155,10 @@ void inet_addr_(unsigned char* addr,unsigned char *ip)
 		nexttok = NULL;
 	}
 }	
-int find_str(uint8_t *s_str,uint8_t *p_str,uint16_t &seek)
+uint16_t find_str(uint8_t *s_str,uint8_t *p_str,uint16_t count,uint16_t &seek)
 {
+    uint16_t _count = 1;
+    uint16_t len = 0;
 	seek = 0;
 	uint8_t *temp_str=NULL;
 	uint8_t *temp_ptr=NULL;
@@ -170,17 +172,69 @@ int find_str(uint8_t *s_str,uint8_t *p_str,uint16_t &seek)
 		for(temp_ptr=p_str;*temp_ptr!='\0';temp_ptr++)
 		{	
 			if(*temp_ptr!=*temp_char)
-			break;
+            {
+                len = 0;               
+                break;
+            }
 			temp_char++;
+            len++;
 		}
 		if(*temp_ptr=='\0')  //出现了所要查找的字符，退出
 		{
-			return 0;
+            if(_count == count)
+                return len;
+            else
+            {
+                _count++;
+                len = 0;
+            }
 		}
 		seek++;  //当前偏移量加1
 	}
-	return -1;
+	return 0;
+}
+uint16_t get_str(char *source, const char *begin,uint16_t count1, const char *end,uint16_t count2, char *out)
+{
+    uint16_t i;
+    uint16_t len1;
+    uint16_t len2;
+    uint16_t index1 = 0;
+    uint16_t index2 = 0;
+    uint16_t length = 0;
+    len1 = find_str((uint8_t *)source,(uint8_t *)begin,count1,index1);
+    len2 = find_str((uint8_t *)source,(uint8_t *)end,count2,index2);
+    length = index2 - index1 - len1;
+    if((len1 != 0) && (len2 != 0))
+    {
+        for( i=0;i<index2 - index1 - len1;i++)
+              out[i] = source[index1 + len1 + i]; 
+        out[i] = '\0';      
+    }     
+     return length;
+   
+}
+uint16_t get_str(char *source, const char *begin,uint16_t count, uint16_t length, char *out)
+{
+    uint16_t i = 0;
+    uint16_t len1 = 0;
+    uint16_t index1 = 0;
+    len1 = find_str((uint8_t *)source,(uint8_t *)begin,count,index1);
+    if(len1 != 0)
+    {
+        for(i=0;i<length;i++)
+              out[i] = source[index1 + len1 + i];   
+        out[i] = '\0';
+    }
+    return length;
 }
 
-
-
+uint16_t get_str(char *source, char *out,uint16_t length)
+{
+    uint16_t i = 0;
+    for (i = 0 ; i < length ; i++)
+    {
+      out[i] = source[i];   
+    }
+    out[i] = '\0';
+    return length;
+}

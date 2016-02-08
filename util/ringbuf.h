@@ -35,6 +35,7 @@ class RINGBUF
     unsigned char read(void);
     int read(unsigned char *buf,int lenght);
     int available();
+    void clear();
     
     private:
     int head;
