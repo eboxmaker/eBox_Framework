@@ -72,7 +72,6 @@ class USART
         void                put_string(const char *str,uint16_t length);
         void                set_busy();
         void                interrupt(FunctionalState enable);
-
 };
 
 

@@ -142,21 +142,21 @@ GPIO PG15(GPIOG,GPIO_Pin_15);
 USART uart1(USART1,&PA9,&PA10);
 USART uart2(USART2,&PA2,&PA3);
 USART uart3(USART3,&PB10,&PB11);
-USART uart4(UART4,&PC10,&PC11);
-USART uart5(UART5,&PC12,&PD2);
+//USART uart4(UART4,&PC10,&PC11);
+//USART uart5(UART5,&PC12,&PD2);
 
 //spi
 SPI     spi1(SPI1,&PA5,&PA6,&PA7);	
 SPI     spi2(SPI2,&PB13,&PB14,&PB15);	
-SPI     spi3(SPI3,&PB3,&PB4,&PB5);	
+//SPI     spi3(SPI3,&PB3,&PB4,&PB5);	
 SOFTSPI	sspi1(&PA5,&PA6,&PA7);
 
 //i2c
 I2C     i2c1(I2C1,&PB6,&PB7);
 I2C     i2c2(I2C2,&PB10,&PB11);
 SOFTI2C si2c(&PA4,&PA5);
-SOFTI2C si2c1(&PB6,&PB7);
-SOFTI2C si2c2(&PB10,&PB11);
+//SOFTI2C si2c1(&PB6,&PB7);
+//SOFTI2C si2c2(&PB10,&PB11);
 //RTC
 //extern "C"{
 //#pragma import(__use_no_semihosting)                              

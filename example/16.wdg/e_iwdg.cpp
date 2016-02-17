@@ -40,8 +40,6 @@ int main(void)
 //        delay_ms(2000);
 //        delay_ms(3000);
 	}
-
-
 }
 
 

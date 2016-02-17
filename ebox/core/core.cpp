@@ -25,14 +25,11 @@ extern u16  AD_value[];
 
  __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
  __IO uint32_t cpu_calculate_per_sec;//cpu计算能力值
- __IO uint16_t systick_user_event_per_sec;//真实的值
- __IO uint16_t _systick_user_event_per_sec;//用于被millis_second取余数
 
 #define systick_over_flow_value 9000//此值取值范围（100-9000），主频为72Mhz的情况下
 
 void ebox_init(void)
 {
-    set_systick_user_event_per_sec(100);
     SysTick_Config(systick_over_flow_value);//  每隔 (nhz/9,000,000)s产生一次中断
     SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);//9Mhz的systemticks clock；
     //统计cpu计算能力//////////////////
@@ -52,7 +49,7 @@ void ebox_init(void)
      GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
     sys.get_chip_info();
     set_systick_user_event_per_sec(1000);
-    random_seed(AD_value[0]);
+    random_seed(AD_value[0]);//初始化随机数种子
 
 }
 
@@ -145,6 +142,8 @@ void delay_us(uint64_t us)
 
 
 callback_fun_type systick_cb_table[1] = {0};
+ __IO uint16_t systick_user_event_per_sec;//真实的值
+ __IO uint16_t _systick_user_event_per_sec;//用于被millis_second取余数
 	
 void set_systick_user_event_per_sec(u16 frq)
 {
