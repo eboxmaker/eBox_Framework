@@ -18,7 +18,6 @@ class EBOX_IWDG
         EBOX_IWDG(){};
         void begin(uint16_t ms);
         void feed();
-
 };
 
 #endif

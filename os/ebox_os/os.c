@@ -241,7 +241,8 @@ void os_init(void)
 {
 	OSRdyTbl = 0;
 	OSPrioCur = OSPrioHighRdy = OS_TASKS;
-	attch_sys_ticks_interrupt(os_time_tick);//移植的时候需要处理。将os_time_tick放入systick中断，并将此行删除
+	set_systick_user_event_per_sec(1000);
+	attch_systick_user_event(os_time_tick);//移植到非ebox环境的时候需要处理。将os_time_tick放入systick中断，并将此行删除
 	OS_NO_TIME_SW();
 
 }
@@ -262,7 +263,7 @@ void idle_task(void)
 {	
 	while(1)
 	{	
-	 os_idle_hook_1();
+	 os_idle_hook();
 	}
 }
 
@@ -327,16 +328,16 @@ void os_idle_hook_1(void)
 		count++;
 		
 	}
-	if(count < cpu_calculate_per_sec)
+	if(count < get_cpu_calculate_per_sec())
 	{
-		count = cpu_calculate_per_sec - count;
-		cpu_usage = (float)(count*100.0/(float)cpu_calculate_per_sec);
+		count = get_cpu_calculate_per_sec() - count;
+		cpu_usage = (float)(count*100.0/(float)get_cpu_calculate_per_sec());
 	}
 
 }
 
 
-float os_get_cpu(void)
+float os_get_cpu_usage(void)
 {
 	return cpu_usage;
 }

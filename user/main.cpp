@@ -1,52 +1,89 @@
-/*
-file   : *.cpp
-author : shentq
-version: V1.0
-date   : 2015/7/5
 
-Copyright 2015 shentq. All Rights Reserved.
-*/
-
-//STM32 RUN IN eBox
 #include "ebox.h"
-#include "ucos_ii.h"
-static OS_STK startup_task_stk[STARTUP_TASK_STK_SIZE];		  //定义栈
+#include "os.h"
 
-void xx()
-{
-    OSIntEnter(); 
-    OSTimeTick(); 
-    OSIntExit(); 
-}
+
+#define TASK_1_STK_SIZE 128
+#define TASK_2_STK_SIZE 128
+#define TASK_3_STK_SIZE 128
+
+static STACK_TypeDef TASK_1_STK[TASK_1_STK_SIZE];
+static STACK_TypeDef TASK_2_STK[TASK_2_STK_SIZE];
+static STACK_TypeDef TASK_3_STK[TASK_3_STK_SIZE];
+
+#define TASK1_PRIO 0
+#define TASK2_PRIO 1
+#define TASK3_PRIO 2
+
+void task_1();
+void task_2();
+void task_3();
+
+
+float cpu;
+INT16U mem;
+u8 task2count = 0;
 
 void setup()
 {
 	ebox_init();
-	PB8.mode(OUTPUT_PP);
-    set_systick_user_event_per_sec(OS_TICKS_PER_SEC);
-    attch_systick_user_event(xx);
+	
+	uart1.begin(9600);
+	uart1.printf("\r\nuart1 9600 ok!");
+    uart1.printf("\r\ncpu:%d",get_cpu_calculate_per_sec());
+    PB8.mode(OUTPUT_PP);
+	os_init();
+	os_task_create(task_1,&TASK_1_STK[TASK_1_STK_SIZE-1],TASK1_PRIO);
+	os_task_create(task_2,&TASK_2_STK[TASK_2_STK_SIZE-1],TASK2_PRIO);
+	os_task_create(task_3,&TASK_3_STK[TASK_3_STK_SIZE-1],TASK3_PRIO);
+	
+	os_start();
+
 }
-void Task_LED(void *p_arg)
+void task_1()
 {
-    (void)p_arg;                		// 'p_arg' 并没有用到，防止编译器提示警告
-    while (1)
-    {
-        PB8.toggle();
-//        delay_ms(500);
-        OSTimeDlyHMSM(0, 0,0,500);
-    }
+	while(1)
+	{
+        PB8 = !PB8;
+		os_time_delay(1000);
+	}
 }
+void task_2()
+{
+  while(1)
+	{
+		task2count++;
+		delay_ms(100);
+		os_time_delay(1000);
+	}
+
+}
+void task_3()
+{
+  while(1)
+	{
+		uart1.printf("Task 3 Running!!!\r\n");
+		cpu = os_get_cpu_usage();
+		mem = os_get_stack_max_usage(TASK_1_STK,TASK_1_STK_SIZE);
+		uart1.printf("cpu = %0.2f%%\r\n",cpu);
+		uart1.printf("mem = %02d%%\r\n",mem);
+		os_time_delay(1000);
+	}
+
+}
+
 int main(void)
 {
 	setup();
-	OSInit();
-	OSTaskCreate(Task_LED,(void *)0,
-	   &startup_task_stk[STARTUP_TASK_STK_SIZE-1], STARTUP_TASK_PRIO);
 
-	OSStart();
-    return 0;
+	while(1)
+	{
+
+	}
 
 
 }
+
+
 
 

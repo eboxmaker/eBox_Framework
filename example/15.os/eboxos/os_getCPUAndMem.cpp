@@ -30,7 +30,7 @@ void setup()
 	
 	uart1.begin(9600);
 	uart1.printf("\r\nuart1 9600 ok!");
-    uart1.printf("\r\ncpu:%d",cpu_calculate_per_sec);
+    uart1.printf("\r\ncpu:%d",get_cpu_calculate_per_sec());
     PB8.mode(OUTPUT_PP);
 	os_init();
 	os_task_create(task_1,&TASK_1_STK[TASK_1_STK_SIZE-1],TASK1_PRIO);
@@ -63,7 +63,7 @@ void task_3()
   while(1)
 	{
 		uart1.printf("Task 3 Running!!!\r\n");
-		cpu = os_get_cpu();
+		cpu = os_get_cpu_usage();
 		mem = os_get_stack_max_usage(TASK_1_STK,TASK_1_STK_SIZE);
 		uart1.printf("cpu = %0.2f%%\r\n",cpu);
 		uart1.printf("mem = %02d%%\r\n",mem);
