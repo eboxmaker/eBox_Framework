@@ -15,6 +15,9 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "common.h"
 callback_fun_type timx_cb_table[7][5];
+uint16_t t2_overflow_times = 0;
+uint16_t t3_overflow_times = 0;
+uint16_t t4_overflow_times = 0;
 
 extern "C"{
     
@@ -34,6 +37,7 @@ void TIM2_IRQHandler(void)
 
     if(TIM_GetITStatus(TIM2 , TIM_IT_Update) == SET)
     {
+        t2_overflow_times++;
         if(timx_cb_table[1][0] != 0)
             timx_cb_table[1][0]();
         TIM_ClearITPendingBit(TIM2 , TIM_FLAG_Update);
@@ -69,6 +73,7 @@ void TIM3_IRQHandler(void)
 {
     if(TIM_GetITStatus(TIM3 , TIM_IT_Update) == SET)
     {
+        t3_overflow_times++;
         if(timx_cb_table[2][0] != 0)
             timx_cb_table[2][0]();
         TIM_ClearITPendingBit(TIM3 , TIM_FLAG_Update);
@@ -102,6 +107,7 @@ void TIM4_IRQHandler(void)
 {
     if(TIM_GetITStatus(TIM4 , TIM_IT_Update) == SET)
     {
+        t4_overflow_times++;
         if(timx_cb_table[3][0] != 0)
             timx_cb_table[3][0]();
         TIM_ClearITPendingBit(TIM4 , TIM_FLAG_Update);

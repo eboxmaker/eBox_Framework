@@ -47,35 +47,31 @@ This specification is preliminary and is subject to change at any time without n
     在采用高分频系数的时候，测量精度较低，但是会降低定时器溢出频率，进而降低cpu开销，
     stm32在72M主频下，最高可测160Khz的信号。如果再大，将无法测量。
 */
-typedef enum {
-    IC_NONE = 0,
-    IC_OVERFLOW = 1,
-    IC_FAULT = 2
-}IC_OVERFLOW_STATE_TYEP;
 
 class IN_CAPTURE
 {
     public:
         IN_CAPTURE(GPIO *capture_pin);
+        void        begin();//使用默认参数，分频系数为1；最大量程为60s
         void        begin(uint16_t prescaler);
         void        set_count(uint16_t count);
         void        set_polarity_falling();
         void        set_polarity_rising();
         void        overflow_event_process();
         uint32_t    get_capture();
-        IC_OVERFLOW_STATE_TYEP        get_overflow_state();
         void        attch_ic_interrupt(void(*callback)(void));
         void        attch_update_interrupt(void(*callback)(void));
 
+        uint8_t     polarity;
     private:
         GPIO        *capture_pin;
         TIM_TypeDef *TIMx;
         uint8_t     ch;
         uint16_t    period;//保存溢出值，用于计算占空比
         uint16_t    prescaler;//保存溢出值，用于计算占空比
-        uint16_t    overflow_times;//溢出次数
-        IC_OVERFLOW_STATE_TYEP     overflow_state;//溢出的情况。如果发生16位溢出：IC_OVERFLOW，如果发送32位溢出:IC_FAULT
-        uint8_t     polarity;
+    
+        uint16_t    *overflow_times;
+        uint32_t    last_value;
     
         void        init_info(GPIO *capture_pin);
         void        base_init(uint16_t Period,uint16_t Prescaler);
