@@ -57,7 +57,6 @@ class IN_CAPTURE
         void        set_count(uint16_t count);
         void        set_polarity_falling();
         void        set_polarity_rising();
-        void        overflow_event_process();
         uint32_t    get_capture();
         void        attch_ic_interrupt(void(*callback)(void));
         void        attch_update_interrupt(void(*callback)(void));
