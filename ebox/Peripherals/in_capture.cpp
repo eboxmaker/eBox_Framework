@@ -15,6 +15,9 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "in_capture.h"
 extern callback_fun_type timx_cb_table[7][5];
+extern uint16_t t2_overflow_times ;
+extern uint16_t t3_overflow_times ;
+extern uint16_t t4_overflow_times ;
 
 
 IN_CAPTURE::IN_CAPTURE(GPIO *capture_pin)
@@ -23,9 +26,6 @@ IN_CAPTURE::IN_CAPTURE(GPIO *capture_pin)
     this->period = 0xffff;
     this->prescaler = 72;
     this->polarity = TIM_ICPOLARITY_FALLING;
-    overflow_times = 0;
-    overflow_state = IC_NONE;
-
 }
 void IN_CAPTURE::begin(uint16_t prescaler)
 {
@@ -52,7 +52,16 @@ void IN_CAPTURE::begin(uint16_t prescaler)
         case TIM_Channel_4:
             _get_capture = TIM_GetCapture4;
             _set_polarity = TIM_OC4PolarityConfig;
-            break;           
+            break;               
+    }
+    switch((uint32_t)TIMx)
+    {
+        case (uint32_t)TIM2:
+            overflow_times = &t2_overflow_times;break;
+        case (uint32_t)TIM3:
+            overflow_times = &t3_overflow_times;break;
+        case (uint32_t)TIM4:
+            overflow_times = &t4_overflow_times;break;
     
     }
 
@@ -211,31 +220,21 @@ void IN_CAPTURE::set_polarity_rising()
 
 uint32_t IN_CAPTURE::get_capture()
 {
-    uint32_t capture;
-    capture = _get_capture( this->TIMx ) + overflow_times * this->period;  //get capture value
-    overflow_times = 0;
+    uint32_t capture = 0;
+    uint32_t now = 0;
+    now = _get_capture( this->TIMx ) + (*overflow_times) * this->period;  //get capture value
+    if(now > last_value)
+        capture = now - last_value;
+    else
+        capture = 0xffffffff + now - last_value;
+    last_value = now;
     return capture;
-}
-IC_OVERFLOW_STATE_TYEP IN_CAPTURE::get_overflow_state()
-{
-    return overflow_state;
 }
 
 void IN_CAPTURE::set_count(uint16_t count)
 {
 	TIM_SetCounter(this->TIMx,count);  //reset couter 
 
-}
-void IN_CAPTURE::overflow_event_process()
-{
-
-    overflow_times++;
-    if(overflow_times == 0)
-        overflow_state = IC_NONE;          
-    else if(overflow_times > 0 && overflow_times < 0xffff)
-        overflow_state = IC_OVERFLOW;        
-    else if(overflow_times == 0xffff)
-        overflow_state = IC_FAULT;
 }
 
 void IN_CAPTURE::attch_update_interrupt(void(*callback)(void))
