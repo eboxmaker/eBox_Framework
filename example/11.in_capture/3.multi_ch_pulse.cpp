@@ -102,13 +102,13 @@ void setup()
     ic3.begin(p);//初始化输入捕获参数，p分频
     ic3.attch_ic_interrupt(measure_3);//绑定捕获中断事件函数
 
-    pwm1.begin(1200,900);
+    pwm1.begin(50,900);
     pwm1.set_oc_polarity(1);
-    pwm2.begin(1200,850);
+    pwm2.begin(50,850);
     pwm2.set_oc_polarity(1);
-    pwm3.begin(1200,603);
+    pwm3.begin(50,603);
     pwm3.set_oc_polarity(1);
-    pwm4.begin(120,201);
+    pwm4.begin(50,201);
     pwm4.set_oc_polarity(1);
    
 }
@@ -123,7 +123,7 @@ int main(void)
         {
 //            uart1.printf("value1 = %d\r\n",value00);
 //            uart1.printf("value2 = %d\r\n",value01);
-            uart1.printf("frq_0 = %0.0f\r\n",(72000000.0/p)/(value00+value01));
+//            uart1.printf("frq_0 = %0.0f\r\n",(72000000.0/p)/(value00+value01));
             uart1.printf("pluse_0 = %0.2f\r\n",value00*100.0/(value00+value01));
             value00 = 0;
             value01 = 0;
@@ -133,7 +133,7 @@ int main(void)
         {
 //            uart1.printf("value1 = %d\r\n",value10);
 //            uart1.printf("value2 = %d\r\n",value11);
-            uart1.printf("frq_1 = %0.0f\r\n",(72000000.0/p)/(value10+value11));
+//            uart1.printf("frq_1 = %0.0f\r\n",(72000000.0/p)/(value10+value11));
             uart1.printf("pluse_1 = %0.2f\r\n",value10*100.0/(value10+value11));
             value10 = 0;
             value11 = 0;
@@ -143,7 +143,7 @@ int main(void)
         {
 //            uart1.printf("value1 = %d\r\n",value20);
 //            uart1.printf("value2 = %d\r\n",value21);
-            uart1.printf("frq_2 = %0.0f\r\n",(72000000.0/p)/(value20+value21));
+//            uart1.printf("frq_2 = %0.0f\r\n",(72000000.0/p)/(value20+value21));
             uart1.printf("pluse_2 = %0.2f\r\n",value20*100.0/(value20+value21));
             value20 = 0;
             value21 = 0;
@@ -153,8 +153,8 @@ int main(void)
         {
 //            uart1.printf("value1 = %d\r\n",value30);
 //            uart1.printf("value2 = %d\r\n",value31);
-            uart1.printf("frq_3 = %0.0f\r\n",(72000000.0/p)/(value30+value31));
             uart1.printf("pluse_3 = %0.2f\r\n",value30*100.0/(value30+value31));
+            uart1.printf("frq_3 = %0.0f\r\n",(72000000.0/p)/(value30+value31));
             value30 = 0;
             value31 = 0;
         }       
