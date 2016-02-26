@@ -386,7 +386,11 @@ void USART::printf_length(const char *str,uint16_t length)
 {	
 	wait_busy();
     set_busy();
-    put_string(str,length);
+    if(length >= UART_MAX_SEND_BUF)
+            length = UART_MAX_SEND_BUF;
+    for(int i = 0; i < length; i++)
+        send_buf[i] = *str++;
+    put_string(send_buf,length);
 }
 
 /**
@@ -405,14 +409,18 @@ void USART::printf(const char *fmt,...)
     set_busy();
 	va_list va_params;   
 	va_start(va_params,fmt);   
-	vsprintf(send_buf,fmt,va_params);
+	vsprintf(send_buf,fmt,va_params);//存在内存溢出的风险
 	va_end(va_params); 
 
     while(send_buf[i++] != '\0')
     {
         length++;
+        if(length >= UART_MAX_SEND_BUF) 
+        {
+            length = UART_MAX_SEND_BUF;
+            break;
+        }
     };
-    if(length > UART_MAX_SEND_BUF) length = UART_MAX_SEND_BUF;
     put_string(send_buf,length);	
 }
 
