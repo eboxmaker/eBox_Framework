@@ -8,27 +8,45 @@ Copyright 2015 shentq. All Rights Reserved.
 */
 
 //STM32 RUN IN eBox
-
-
 #include "ebox.h"
+
+
+
+CanTxMsg TxMessage;
+uint8_t data[8] = {1,2,3,4,5,6,7,8};
 void setup()
 {
-    ebox_init();
-    uart1.begin(9600);	
+	ebox_init();
+    can1.begin(BSP_CAN_500KBPS);
+    can1.interrupt(ENABLE);
+	PB8.mode(OUTPUT_PP);
+  /* Transmit */
+  TxMessage.StdId = 1;
+  TxMessage.ExtId = 1;
+  TxMessage.RTR = CAN_RTR_DATA;
+  TxMessage.IDE = CAN_ID_STD;
+  TxMessage.DLC = 8;
+    int i = 0;
+    TxMessage.Data[i++] = 1;
+    TxMessage.Data[i++] = 2;
+    TxMessage.Data[i++] = 3;
+    TxMessage.Data[i++] = 4;
+    TxMessage.Data[i++] = 5;
+    TxMessage.Data[i++] = 6;
+    TxMessage.Data[i++] = 7;
 }
-char buf[16];
 int main(void)
 {
-    setup();
-    for(int i = 0; i < 16;i++)buf[i] = '1';
-    while(1)
-    {
-        //uart1.printf("hello World !\r\n");
-        uart1.printf_length(buf,1);
+    int i;
+	setup();
+	while(1)
+	{
+        TxMessage.Data[7] = i++;
+        can1.write(&TxMessage);
         delay_ms(1000);
-    }
+
+	}
+
 }
-
-
 
 

@@ -158,5 +158,5 @@ SOFTI2C si2c(&PA4,&PA5);
 SOFTI2C si2c1(&PB6,&PB7);
 SOFTI2C si2c2(&PB10,&PB11);
 
-
-
+//can
+CAN can1(CAN1,&PA11,&PA12);

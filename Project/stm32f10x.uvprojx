@@ -593,9 +593,9 @@
               <FilePath>..\ebox\Peripherals\softi2c.cpp</FilePath>
             </File>
             <File>
-              <FileName>SPI.cpp</FileName>
+              <FileName>spi.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\ebox\Peripherals\SPI.cpp</FilePath>
+              <FilePath>..\ebox\peripherals\spi.cpp</FilePath>
             </File>
             <File>
               <FileName>softspi.cpp</FileName>
@@ -623,9 +623,9 @@
               <FilePath>..\ebox\Peripherals\gtimer.cpp</FilePath>
             </File>
             <File>
-              <FileName>timerOne.cpp</FileName>
+              <FileName>timer_one.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\ebox\Peripherals\timerOne.cpp</FilePath>
+              <FilePath>..\ebox\peripherals\timer_one.cpp</FilePath>
             </File>
             <File>
               <FileName>rtc.cpp</FileName>
@@ -648,14 +648,19 @@
               <FilePath>..\ebox\core\ebox_it.cpp</FilePath>
             </File>
             <File>
-              <FileName>object.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ebox\object.cpp</FilePath>
-            </File>
-            <File>
               <FileName>dac.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\ebox\Peripherals\dac.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>can.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\peripherals\can.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>object.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ebox\object.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -683,6 +688,11 @@
           <GroupName>edriver</GroupName>
           <Files>
             <File>
+              <FileName>encoder.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\encoder.cpp</FilePath>
+            </File>
+            <File>
               <FileName>74HC595.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\edriver\74HC595.cpp</FilePath>
@@ -696,11 +706,6 @@
               <FileName>DS3231.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\edriver\DS3231.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>encoder.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\edriver\encoder.cpp</FilePath>
             </File>
             <File>
               <FileName>LCD1602.cpp</FileName>

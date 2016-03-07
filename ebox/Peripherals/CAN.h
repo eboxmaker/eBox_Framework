@@ -2,7 +2,7 @@
 #ifndef __CAN_H
 #define __CAN_H
 
-#include "ebox.h"
+#include "common.h"
 
 typedef enum
 {
