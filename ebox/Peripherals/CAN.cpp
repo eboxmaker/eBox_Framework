@@ -1,55 +1,6 @@
 
-#include "CAN.h"
+#include "can.h"
 
-callback_fun_type can_callback_table[2];
-
-#ifdef __cplusplus
-extern "C"{
-#endif
-
-void CAN1_RX1_IRQHandler(void)
-{
-    can_callback_table[0]();
-    CAN_FIFORelease(CAN1, CAN_FIFO1);
-}
-
-void CAN2_RX1_IRQHandler(void)
-{
-    can_callback_table[1]();
-    CAN_FIFORelease(CAN2, CAN_FIFO1);
-}
-
-#ifdef __cplusplus
-}
-#endif
-
-void CAN::attach_interrupt(void (*callback_fun)(void))
-{
-    switch((u32)_CANx){
-    case (u32)CAN1:
-        can_callback_table[0] = callback_fun;
-        break;
-    case (u32)CAN2:
-        can_callback_table[1] = callback_fun;
-        break;
-    }
-}
-
-void CAN::interrupt(FunctionalState enable)
-{
-    if(enable==ENABLE){
-        CAN_ITConfig(_CANx,CAN_IT_FMP1, ENABLE);
-    }else{
-        CAN_ITConfig(_CANx,CAN_IT_FMP1, DISABLE);
-    }
-}
-
-CAN::CAN(CAN_TypeDef* CANx,GPIO* p_pin_rx, GPIO* p_pin_tx)
-{
-	_CANx = CANx;
-    this->pin_rx = p_pin_rx;
-    this->pin_tx = p_pin_tx;
-}
 
 
 const uint16_t CANBAUD[][4]=
@@ -65,6 +16,38 @@ const uint16_t CANBAUD[][4]=
     { CAN_SJW_1tq, CAN_BS1_9tq, CAN_BS2_5tq, 3 },       //800k
     { CAN_SJW_1tq, CAN_BS1_3tq, CAN_BS2_5tq, 4 },       //1M
 };
+
+
+CAN::CAN(CAN_TypeDef* CANx,GPIO* p_pin_rx, GPIO* p_pin_tx)
+{
+	_CANx = CANx;
+    this->pin_rx = p_pin_rx;
+    this->pin_tx = p_pin_tx;
+}
+void CAN::begin(BSP_CAN_BAUD bps)
+{
+    u8 i;
+    
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1 | RCC_APB1Periph_CAN2, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
+
+    pin_rx->mode(INPUT_PU);
+    pin_tx->mode(AF_PP);
+
+    set_bps(bps);
+
+    CAN_ITConfig(_CANx,CAN_IT_FMP0, DISABLE);     //关闭FIFO0接收中断
+    CAN_ITConfig(_CANx,CAN_IT_FMP1, DISABLE);     //打开FIFO1接收中断
+
+
+    set_filter(CAN_FIFO0,CAN_ID_STD,0,1<<5, 0xFFFFFFFF);
+    set_filter(CAN_FIFO0,CAN_ID_STD,1,1<<5, 0xFFFFFFFF);
+    set_filter(CAN_FIFO1,CAN_ID_STD,2,1<<5,0xFFFFFFFF);
+
+    for(i=0;i<3;i++)CAN_CancelTransmit(_CANx,i);    
+}
+
+
 
 void CAN::set_bps(BSP_CAN_BAUD bps)
 {
@@ -107,28 +90,6 @@ void CAN::set_filter(u8 Fifo,u8 nCanType,u8 num,u32 ID,u32 Mask)
     CAN_FilterInit(&CAN_FilterInitStructure );
 }
 
-void CAN::begin(BSP_CAN_BAUD bps)
-{
-    u8 i;
-    
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1 | RCC_APB1Periph_CAN2, ENABLE);
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
-
-    pin_rx->mode(INPUT_PU);
-    pin_tx->mode(AF_PP);
-
-    set_bps(bps);
-
-    CAN_ITConfig(_CANx,CAN_IT_FMP0, DISABLE);     //关闭FIFO0接收中断
-    CAN_ITConfig(_CANx,CAN_IT_FMP1, DISABLE);     //打开FIFO1接收中断
-
-
-    set_filter(CAN_FIFO0,CAN_ID_STD,0,0X7DF<<5, 0xFFFFFFFF);
-    set_filter(CAN_FIFO0,CAN_ID_STD,1,0X7E0<<5, 0xFFFFFFFF);
-    set_filter(CAN_FIFO1,CAN_ID_STD,2,0,0);
-
-    for(i=0;i<3;i++)CAN_CancelTransmit(_CANx,i);    
-}
 
 u8 CAN::write(CanTxMsg *pCanMsg)
 {
@@ -167,5 +128,46 @@ u8 CAN::read(CanRxMsg *pCanMsg, u16 WaitTime)
     }
 }
 
+callback_fun_type can_callback_table[2];
 
+void CAN::attach_interrupt(void (*callback_fun)(void))
+{
+    switch((u32)_CANx){
+    case (u32)CAN1:
+        can_callback_table[0] = callback_fun;
+        break;
+    case (u32)CAN2:
+        can_callback_table[1] = callback_fun;
+        break;
+    }
+}
+
+void CAN::interrupt(FunctionalState enable)
+{
+    if(enable==ENABLE){
+        CAN_ITConfig(_CANx,CAN_IT_FMP1, ENABLE);
+    }else{
+        CAN_ITConfig(_CANx,CAN_IT_FMP1, DISABLE);
+    }
+}
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+void CAN1_RX1_IRQHandler(void)
+{
+    can_callback_table[0]();
+    CAN_FIFORelease(CAN1, CAN_FIFO1);
+}
+
+void CAN2_RX1_IRQHandler(void)
+{
+    can_callback_table[1]();
+    CAN_FIFORelease(CAN2, CAN_FIFO1);
+}
+
+#ifdef __cplusplus
+}
+#endif
 

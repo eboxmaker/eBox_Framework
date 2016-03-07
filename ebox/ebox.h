@@ -21,6 +21,7 @@ This specification is preliminary and is subject to change at any time without n
 
 
 
+#include "can.h"
 #include "exti.h"
 #include "gtimer.h"
 #include "pwm.h"
@@ -28,11 +29,12 @@ This specification is preliminary and is subject to change at any time without n
 #include "i2c.h"
 #include "spi.h"
 #include "uart.h"
-#include "timerone.h"
+#include "timer_one.h"
 #include "rtc.h"
 #include "iflash.h"
 #include "dac.h"
 #include "wdg.h"
+
 
 
 #include "stdio.h"
@@ -58,11 +60,14 @@ extern USART uart5;
 extern SPI spi1;	
 extern SPI spi2;
 extern SOFTSPI sspi1;
+
 extern I2C i2c1;
 extern I2C i2c2;
 extern SOFTI2C si2c;
 extern SOFTI2C si2c1;
 extern SOFTI2C si2c2;
+
+extern CAN can1;
 
 extern GPIO PA0;
 extern GPIO PA1;

@@ -1,4 +1,4 @@
-/*
+/*-
 file   : timerone.cpp
 author : shentq
 version: V1.0
@@ -12,7 +12,7 @@ No part of this software may be used for any commercial activities by any form o
 Disclaimer
 This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
 */
-#include "timerone.h"
+#include "timer_one.h"
 
 extern callback_fun_type timx_cb_table[7][5];
 

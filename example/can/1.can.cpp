@@ -11,7 +11,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 #include "can.h"
 
-CAN can(CAN1,&PA11,&PA12);
+
 
 CanTxMsg TxMessage;
 uint8_t data[8] = {1,2,3,4,5,6,7,8};
