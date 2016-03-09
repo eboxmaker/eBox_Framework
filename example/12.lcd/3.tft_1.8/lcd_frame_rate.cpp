@@ -11,7 +11,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 #include "lcd_1.8.h"
 
-LCD lcd(&PA13,&PA15,&PA11,&PA12,&spi2);
+LCD lcd(&PB5,&PB6,&PB4,&PB3,&spi1);
 uint32_t time_last;
 u8 times;
 

@@ -11,7 +11,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 #include "at24c02.h"
 
-EEPROM ee(&i2c1);
+EEPROM ee(&i2c2);
 uint8_t data;
 void setup()
 {
@@ -30,10 +30,14 @@ int main(void)
 {
 	setup();
 	
-	uart1.printf("===wbuf===\r\n");
-		for(uint16_t i =0;i<512;i++)
+		
+	while(1)
+	{
+		
+        uart1.printf("===wbuf===\r\n");
+		for(uint16_t i =0;i<256;i++)
 		{
-			buf[i] = i%256;
+			buf[i] = random()%256;
 		}	
 		for(uint16_t i =0;i<16;i++)
 		{		
@@ -44,12 +48,11 @@ int main(void)
 			}	
 			uart1.printf("\r\n ");	
 		}
-			ee.write_byte(0,buf,512);
-		
-		
+			ee.write_byte(0,buf,256);
+
 		uart1.printf("\r\n===rbuf===\r\n");
 
-			data = ee.read_byte(0,rbuf,512);
+			data = ee.read_byte(0,rbuf,256);
 		for(uint16_t i =0;i<16;i++)
 		{		
 			for(uint16_t j =0;j<16;j++)
@@ -59,14 +62,6 @@ int main(void)
 			uart1.printf("\r\n ");	
 		}
 	uart1.printf("\r\n======\r\n");
-	
-//ee.byteWrite(0,0xaa);
-//delay_ms(10);
-//data = ee.byteRead(0);
-//uart1.printf("\r\n data = %02x\r\n",data);
-	while(1)
-	{
-
 		delay_ms(10000);
 	}
 

@@ -18,7 +18,7 @@ COLOR_HSL hsl;
 COLOR_RGB rgb;
 COLOR_HSV hsv;
 
-COLORLED led(&PB6,&PB7,&PB8);
+COLORLED led(&PB7,&PB8,&PB9);
 
 void setup()
 {
@@ -45,6 +45,9 @@ int main(void)
 		hsl.h += 1;
 		if(hsl.h>360)hsl.h=0;		
 		led.color_hsl(hsl);
+//        led.color_rgb(0,0,255);
+//        led.color_rgb(0,255,0);
+//        led.color_rgb(255,0,0);
 		delay_ms(10);
         
 //		hsv.h++;

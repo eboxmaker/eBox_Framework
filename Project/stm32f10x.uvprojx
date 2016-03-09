@@ -802,6 +802,21 @@
               <FileType>8</FileType>
               <FilePath>..\edriver\LTC1446.cpp</FilePath>
             </File>
+            <File>
+              <FileName>dht11.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\dht11.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ir_encoder.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\ir_encoder.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ir_decoder.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\ir_decoder.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

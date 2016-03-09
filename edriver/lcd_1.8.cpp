@@ -19,7 +19,7 @@ void LCD::begin(u8 dev_num)
     led->mode(OUTPUT_PP);
     rs->mode(OUTPUT_PP);
     rst->mode(OUTPUT_PP);
-    led->reset();
+    led->set();
     
     spi_dev_lcd.mode = SPI_MODE2;
     spi_dev_lcd.bit_order = MSB_FIRST;
