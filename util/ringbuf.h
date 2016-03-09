@@ -30,17 +30,16 @@ class RINGBUF
 
  
     public:
-    RINGBUF(unsigned char *buf,int lenght);
+    RINGBUF();
+    void begin(unsigned char *buf,int lenght);
     bool write(unsigned char c);
     unsigned char read(void);
-    int read(unsigned char *buf,int lenght);
     int available();
     void clear();
     
     private:
-    int head;
-    int tail;
-    int num;
+    volatile int head;
+    volatile int tail;
     int max;
     unsigned char *buf;
 
