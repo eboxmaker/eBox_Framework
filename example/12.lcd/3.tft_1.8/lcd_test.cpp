@@ -15,7 +15,7 @@ Copyright 2015 shentq. All Rights Reserved.
 COLOR_HSV hsv;
 COLOR_RGB rgb;
 
-LCD lcd(&PA13,&PA15,&PA11,&PA12,&spi2);
+LCD lcd(&PB5,&PB6,&PB4,&PB3,&spi1);
 
 u8 index = 0x20;
 u8 r;
