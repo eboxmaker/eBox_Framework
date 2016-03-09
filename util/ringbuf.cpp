@@ -14,11 +14,15 @@ This specification is preliminary and is subject to change at any time without n
 */
 
 #include "ringbuf.h"
-RINGBUF::RINGBUF(unsigned char *buf,int lenght)
+RINGBUF::RINGBUF()
 {
     head = 0;
     tail = 0;
-    num = 0;
+}
+void RINGBUF::begin(unsigned char *buf,int lenght)
+{
+    head = 0;
+    tail = 0;
     this->buf = buf;
     this->max = lenght;
     for(int i = 0; i < lenght; i++)
@@ -26,57 +30,40 @@ RINGBUF::RINGBUF(unsigned char *buf,int lenght)
 }
 bool RINGBUF::write(unsigned char c)
 {
-    if(num < max)
-    {
-        buf[tail] = c;
-        tail = (tail + 1) % max;
-        num++;
-        return true;
-    }
-    else
-        return false;
-    
+  int i = (head + 1) % max;
+	
+  // If the output buffer is full, there's nothing for it other than to 
+  // wait for the interrupt handler to empty it a bit
+  // ???: return 0 here instead?
+  while (i == tail)
+    ;
+	
+  buf[head] = c;
+  head = i;
+  
 }
 unsigned char RINGBUF::read(void)
 {
-    int seek;
-    if(num > 0)
-    {
-        seek = head;
-        head = (head + 1) % max;
-        num--;
-        return buf[seek];
-    }
-    else
-        return 0;   
-}
-int RINGBUF::read(unsigned char *buf,int lenght)
-{
-    int i = 0;
-    for(;i < lenght;i++)
-    {
-        if(num > 0)
-        {
-            buf[i] = this->buf[head];
-            head = (head + 1) % max;
-            num--;
-        }
-        else
-            break;
-    }
-    return i;
-
+  // if the head isn't ahead of the tail, we don't have any characters
+  if (head == tail) {
+    return -1;
+  } else {
+    unsigned char c = buf[tail];
+    tail = (unsigned int)(tail + 1) % max;
+    return c;
+  }		
 }
 
 int RINGBUF::available()
 {
-    return num;
+		return (int)(max + head - tail) % max;
 }
 void RINGBUF::clear()
 {
     head = 0;
     tail = 0;
-    num = 0;
     for(int i = 0; i < max; i++)
-        buf[i] = 0;
+    {	
+			buf[i] = 0;
+		}
 }
