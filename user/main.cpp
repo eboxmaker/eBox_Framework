@@ -8,30 +8,52 @@ Copyright 2015 shentq. All Rights Reserved.
 */
 
 //STM32 RUN IN eBox
-
-
 #include "ebox.h"
-#include "ir_decoder.h"
 
-IR_DECODER ir_decoder;
+#include "lcd_1.8.h"
+
+#define MAX485_T_R_PIN PA1
+
+LCD lcd(&PB5,&PB6,&PB4,&PB3,&spi1);
+uint8_t c = 'o';
+
+void MAX485_T_MODE()
+{
+	MAX485_T_R_PIN.set();
+}
+void MAX485_R_MODE()
+{
+	MAX485_T_R_PIN.reset();
+}
+
 void setup()
 {
-    ebox_init();
+	ebox_init();
+    
+    MAX485_T_R_PIN.mode(OUTPUT_PP);
+    MAX485_T_MODE();
     uart1.begin(115200);
-		ir_decoder.begin();	
-		uart1.printf("ebox ir_decoder test\r\n");
+    
+    PB8.mode(OUTPUT_PP);
+
+    lcd.begin(1);
+    lcd.clear(RED);
+
 }
 int main(void)
 {
 	setup();
+    uint8_t i=0;
+    lcd.front_color = WHITE;
 	while(1)
 	{
-		if(ir_decoder.available())
-		{
-			uint16_t r = ir_decoder.read();
-			uart1.printf("key_code=0x%x repeat=%d\r\n",(r&0xff),((r&0xff00)>>8));
-		
-		}
+        uart1.printf("%d",i);
+        lcd.printf(0,0,"send = %d",i);
+
+        i++;
+        delay_ms(1000);
 	}
+
 }
+
 
