@@ -133,10 +133,10 @@ callback_fun_type can_callback_table[2];
 void CAN::attach_interrupt(void (*callback_fun)(void))
 {
     switch((u32)_CANx){
-    case (u32)CAN1:
+    case (u32)CAN1_BASE:
         can_callback_table[0] = callback_fun;
         break;
-    case (u32)CAN2:
+    case (u32)CAN2_BASE:
         can_callback_table[1] = callback_fun;
         break;
     }

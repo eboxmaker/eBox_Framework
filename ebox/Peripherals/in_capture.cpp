@@ -56,11 +56,11 @@ void IN_CAPTURE::begin(uint16_t prescaler)
     }
     switch((uint32_t)TIMx)
     {
-        case (uint32_t)TIM2:
+        case (uint32_t)TIM2_BASE:
             overflow_times = &t2_overflow_times;break;
-        case (uint32_t)TIM3:
+        case (uint32_t)TIM3_BASE:
             overflow_times = &t3_overflow_times;break;
-        case (uint32_t)TIM4:
+        case (uint32_t)TIM4_BASE:
             overflow_times = &t4_overflow_times;break;
     
     }
@@ -78,19 +78,19 @@ void IN_CAPTURE::base_init(uint16_t period,uint16_t prescaler)
 
     switch((uint32_t)this->TIMx)
     {
-//		case (uint32_t)TIM1:
+//		case (uint32_t)TIM1_BASE:
 //			RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
 //			NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
 //			break;
-        case (uint32_t)TIM2:
+        case (uint32_t)TIM2_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
             NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
             break;
-        case (uint32_t)TIM3:
+        case (uint32_t)TIM3_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
             NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;//
             break;
-        case (uint32_t)TIM4:
+        case (uint32_t)TIM4_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
             NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;//
             break;
@@ -241,13 +241,13 @@ void IN_CAPTURE::attch_update_interrupt(void(*callback)(void))
 {
     switch((uint32_t)this->TIMx)
     {
-        case (uint32_t)TIM2:
+        case (uint32_t)TIM2_BASE:
             timx_cb_table[1][0] = callback;
             break;
-        case (uint32_t)TIM3:
+        case (uint32_t)TIM3_BASE:
             timx_cb_table[2][0] = callback;
             break;
-        case (uint32_t)TIM4:
+        case (uint32_t)TIM4_BASE:
             timx_cb_table[3][0] = callback;
             break;
         default:
@@ -260,7 +260,7 @@ void IN_CAPTURE::attch_ic_interrupt(void(*callback)(void))
 {
     switch((uint32_t)this->TIMx)
     {
-            case (uint32_t)TIM2:
+            case (uint32_t)TIM2_BASE:
                 switch(ch)
                 {
                     case TIM_Channel_1:
@@ -279,7 +279,7 @@ void IN_CAPTURE::attch_ic_interrupt(void(*callback)(void))
                        break;
                 }
                 break;
-            case (uint32_t)TIM3:
+            case (uint32_t)TIM3_BASE:
                 switch(ch)
                 {
                     case TIM_Channel_1:
@@ -298,7 +298,7 @@ void IN_CAPTURE::attch_ic_interrupt(void(*callback)(void))
                        break;
                 }
                 break;
-            case (uint32_t)TIM4:
+            case (uint32_t)TIM4_BASE:
                 switch(ch)
                 {
                     case TIM_Channel_1:

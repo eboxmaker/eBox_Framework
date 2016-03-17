@@ -139,7 +139,7 @@ uint16_t analog_read(GPIO *pin)
 {
 	switch((uint32_t)pin->port)
 	{
-		case  (uint32_t)GPIOA:
+		case  (uint32_t)GPIOA_BASE:
 			switch(pin->pin)
 			{
 				case GPIO_Pin_0:
@@ -159,7 +159,7 @@ uint16_t analog_read(GPIO *pin)
 				case GPIO_Pin_7:
 					return AD_value[7];
 			}
-		case (uint32_t)GPIOB:
+		case (uint32_t)GPIOB_BASE:
 			switch(pin->pin)
 			{
 				case GPIO_Pin_0:
@@ -167,7 +167,7 @@ uint16_t analog_read(GPIO *pin)
 				case GPIO_Pin_1:
 					return AD_value[9];
 			}
-		case (uint32_t)GPIOC:
+		case (uint32_t)GPIOC_BASE:
 			switch(pin->pin)
 			{
 				case GPIO_Pin_0:

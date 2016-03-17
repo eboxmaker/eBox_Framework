@@ -51,27 +51,27 @@ void USART::begin(uint32_t baud_rate)
 
     switch((uint32_t)_USARTx)
     {
-        case (uint32_t)USART1:
+        case (uint32_t)USART1_BASE:
             RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);
             _DMA1_Channelx = DMA1_Channel4;
             break;
 
-        case (uint32_t)USART2:
+        case (uint32_t)USART2_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,ENABLE);
             _DMA1_Channelx = DMA1_Channel7;
             break;
 
-        case (uint32_t)USART3:
+        case (uint32_t)USART3_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
             _DMA1_Channelx = DMA1_Channel2;
             break;
         
         #if defined (STM32F10X_HD)
-        case (uint32_t)UART4:
+        case (uint32_t)UART4_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4,ENABLE);
             break;
         
-        case (uint32_t)UART5:
+        case (uint32_t)UART5_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5,ENABLE);
             break;
         #endif
@@ -107,27 +107,27 @@ void USART::begin(uint32_t baud_rate,uint8_t data_bit,uint8_t parity,float stop_
 
     switch((uint32_t)_USARTx)
     {
-        case (uint32_t)USART1:
+        case (uint32_t)USART1_BASE:
             RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);
             _DMA1_Channelx = DMA1_Channel4;
             break;
 
-        case (uint32_t)USART2:
+        case (uint32_t)USART2_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,ENABLE);
             _DMA1_Channelx = DMA1_Channel7;
             break;
 
-        case (uint32_t)USART3:
+        case (uint32_t)USART3_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
             _DMA1_Channelx = DMA1_Channel2;
             break;
         
         #if defined (STM32F10X_HD)
-        case (uint32_t)UART4:
+        case (uint32_t)UART4_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4,ENABLE);
             break;
         
-        case (uint32_t)UART5:
+        case (uint32_t)UART5_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5,ENABLE);
             break;
         #endif
@@ -188,34 +188,34 @@ void USART::interrupt(FunctionalState enable)
     
     switch((uint32_t)_USARTx)
     {
-        case (uint32_t)USART1:        
+        case (uint32_t)USART1_BASE:        
             NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
             NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
             NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
             NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
             break;
 
-        case (uint32_t)USART2:
+        case (uint32_t)USART2_BASE:
             NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
             NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
             NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
             NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
             break;
 
-        case (uint32_t)USART3:
+        case (uint32_t)USART3_BASE:
             NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
             NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
             NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
             NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
             break;
         #if defined (STM32F10X_HD)
-        case (uint32_t)UART4:        
+        case (uint32_t)UART4_BASE:        
             NVIC_InitStructure.NVIC_IRQChannel = UART4_IRQn;
             NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
             NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
             NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
             break;
-        case (uint32_t)UART5:
+        case (uint32_t)UART5_BASE:
             NVIC_InitStructure.NVIC_IRQChannel = UART5_IRQn;
             NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
             NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
@@ -236,15 +236,15 @@ void USART::attach_rx_interrupt(void (*callback_fun)(void))
 {
 	switch((uint32_t)_USARTx)
 	{
-		case (uint32_t)USART1:
+		case (uint32_t)USART1_BASE:
 			usart_callback_table[0][0] = callback_fun;break;
-		case (uint32_t)USART2:
+		case (uint32_t)USART2_BASE:
 			usart_callback_table[1][0] = callback_fun;break;
-		case (uint32_t)USART3:
+		case (uint32_t)USART3_BASE:
 			usart_callback_table[2][0] = callback_fun;break;
-		case (uint32_t)UART4:
+		case (uint32_t)UART4_BASE:
 			usart_callback_table[3][0] = callback_fun;break;
-		case (uint32_t)UART5:
+		case (uint32_t)UART5_BASE:
 			usart_callback_table[4][0] = callback_fun;break;
 	}
 }
@@ -259,15 +259,15 @@ void USART::attach_tx_interrupt(void (*callback_fun)(void))
 {
 	switch((uint32_t)_USARTx)
 	{
-		case (uint32_t)USART1:
+		case (uint32_t)USART1_BASE:
 			usart_callback_table[0][1] = callback_fun;break;
-		case (uint32_t)USART2:
+		case (uint32_t)USART2_BASE:
 			usart_callback_table[1][1] = callback_fun;break;
-		case (uint32_t)USART3:
+		case (uint32_t)USART3_BASE:
 			usart_callback_table[2][1] = callback_fun;break;
-		case (uint32_t)UART4:
+		case (uint32_t)UART4_BASE:
 			usart_callback_table[3][1] = callback_fun;break;
-		case (uint32_t)UART5:
+		case (uint32_t)UART5_BASE:
 			usart_callback_table[4][1] = callback_fun;break;
 	}
 }
@@ -436,19 +436,19 @@ void USART::wait_busy()
 {
     switch((uint32_t)_USARTx)
     {
-        case (uint32_t)USART1:
+        case (uint32_t)USART1_BASE:
             while(busy[0] == 1);
             break;
-        case (uint32_t)USART2:
+        case (uint32_t)USART2_BASE:
             while(busy[1] == 1);
             break;
-        case (uint32_t)USART3:
+        case (uint32_t)USART3_BASE:
             while(busy[2] == 1);
             break;
-        case (uint32_t)UART4:
+        case (uint32_t)UART4_BASE:
             while(busy[3] == 1);
             break;
-        case (uint32_t)UART5:
+        case (uint32_t)UART5_BASE:
             while(busy[4] == 1);
             break;
     }
@@ -465,19 +465,19 @@ void USART::set_busy()
 {
     switch((uint32_t)_USARTx)
     {
-        case (uint32_t)USART1:
+        case (uint32_t)USART1_BASE:
             busy[0] = 1;
             break;
-        case (uint32_t)USART2:
+        case (uint32_t)USART2_BASE:
             busy[1] = 1;
             break;
-        case (uint32_t)USART3:
+        case (uint32_t)USART3_BASE:
             busy[2] = 1;
             break;
-        case (uint32_t)UART4:
+        case (uint32_t)UART4_BASE:
             busy[3] = 1;
             break;
-        case (uint32_t)UART5:
+        case (uint32_t)UART5_BASE:
             busy[4] = 1;
             break;    
     }

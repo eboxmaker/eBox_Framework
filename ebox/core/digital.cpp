@@ -39,30 +39,30 @@ void GPIO::mode(PIN_MODE mode)
   
 	switch((uint32_t)this->port)
 	{
-		case (uint32_t)GPIOA:
+		case (uint32_t)GPIOA_BASE:
 			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
 			break;
 
-		case (uint32_t)GPIOB:
+		case (uint32_t)GPIOB_BASE:
 			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
 			break;
 
-		case (uint32_t)GPIOC:
+		case (uint32_t)GPIOC_BASE:
 			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC,ENABLE);
 			break;
 
-		case (uint32_t)GPIOD:
+		case (uint32_t)GPIOD_BASE:
 			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD,ENABLE);
 			break;
 
-		case (uint32_t)GPIOE:
+		case (uint32_t)GPIOE_BASE:
 			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE,ENABLE);
 			break;
 		
-		case (uint32_t)GPIOF:
+		case (uint32_t)GPIOF_BASE:
 			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOF,ENABLE);
 			break;
-		case (uint32_t)GPIOG:
+		case (uint32_t)GPIOG_BASE:
 			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOG,ENABLE);
 			break;
 	}

@@ -71,12 +71,12 @@ void EXTIx::init_info(GPIO *exti_pin)
 {
 	switch((uint32_t)exti_pin->port)
 	{
-		case (uint32_t)GPIOA: port_source = GPIO_PortSourceGPIOA;break;
-		case (uint32_t)GPIOB: port_source = GPIO_PortSourceGPIOB;break;
-		case (uint32_t)GPIOC: port_source = GPIO_PortSourceGPIOC;break;
-		case (uint32_t)GPIOD: port_source = GPIO_PortSourceGPIOD;break;
-		case (uint32_t)GPIOE: port_source = GPIO_PortSourceGPIOE;break;
-		case (uint32_t)GPIOF: port_source = GPIO_PortSourceGPIOF;break;
+		case (uint32_t)GPIOA_BASE: port_source = GPIO_PortSourceGPIOA;break;
+		case (uint32_t)GPIOB_BASE: port_source = GPIO_PortSourceGPIOB;break;
+		case (uint32_t)GPIOC_BASE: port_source = GPIO_PortSourceGPIOC;break;
+		case (uint32_t)GPIOD_BASE: port_source = GPIO_PortSourceGPIOD;break;
+		case (uint32_t)GPIOE_BASE: port_source = GPIO_PortSourceGPIOE;break;
+		case (uint32_t)GPIOF_BASE: port_source = GPIO_PortSourceGPIOF;break;
 	}
 	switch(exti_pin->pin)
 	{
