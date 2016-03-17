@@ -49,22 +49,22 @@ void TIM::attach_interrupt(void(*callback)(void))
 {
 	switch((uint32_t)_TIMx)
 	{
-		case (uint32_t)TIM2:
+		case (uint32_t)TIM2_BASE:
 			timx_cb_table[1][0] = callback;
 			break;
-		case (uint32_t)TIM3:
+		case (uint32_t)TIM3_BASE:
 			timx_cb_table[2][0] = callback;
 			break;
-		case (uint32_t)TIM4:
+		case (uint32_t)TIM4_BASE:
 			timx_cb_table[3][0] = callback;
 			break;
-		case (uint32_t)TIM5:
+		case (uint32_t)TIM5_BASE:
 			timx_cb_table[4][0] = callback;
 			break;
-		case (uint32_t)TIM6:
+		case (uint32_t)TIM6_BASE:
 			timx_cb_table[5][0] = callback;
 			break;
-		case (uint32_t)TIM7:
+		case (uint32_t)TIM7_BASE:
 			timx_cb_table[6][0] = callback;
 			break;
 	}
@@ -97,28 +97,28 @@ void TIM::base_init(uint16_t period,uint16_t prescaler)
 //			RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
 //			NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
 //			break;
-        case (uint32_t)TIM2:
+        case (uint32_t)TIM2_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
             NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
             break;
-        case (uint32_t)TIM3:
+        case (uint32_t)TIM3_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
             NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;//
             break;
-        case (uint32_t)TIM4:
+        case (uint32_t)TIM4_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
             NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;//
             break;
         #if defined (STM32F10X_HD)
-        case (uint32_t)TIM5:
+        case (uint32_t)TIM5_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE);
             NVIC_InitStructure.NVIC_IRQChannel = TIM5_IRQn;//
             break;
-        case (uint32_t)TIM6:
+        case (uint32_t)TIM6_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6, ENABLE);
             NVIC_InitStructure.NVIC_IRQChannel = TIM6_IRQn;//
             break;
-        case (uint32_t)TIM7:
+        case (uint32_t)TIM7_BASE:
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM7, ENABLE);
             NVIC_InitStructure.NVIC_IRQChannel = TIM7_IRQn;//
             break;
