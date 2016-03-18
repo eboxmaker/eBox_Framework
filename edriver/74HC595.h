@@ -16,24 +16,24 @@ This specification is preliminary and is subject to change at any time without n
 #ifndef  __74HC595_H
 #define  __74HC595_H
 
-#include "ebox.h" 
+#include "ebox.h"
 
 class _74hc595
 {
-    public:
-        
-			_74hc595(GPIO *data_pin, GPIO *sck_pin,GPIO *rck_pin);
-			void begin();
-			void write(uint8_t *data,uint8_t data_length,uint8_t bit_oder);
-			void write(uint8_t data,uint8_t bit_oder);
-			void update();
-    
-    private:
-			GPIO *data_pin;
-			GPIO *sck_pin;
-			GPIO *rck_pin;
+public:
 
-		
+    _74hc595(GPIO *data_pin, GPIO *sck_pin, GPIO *rck_pin);
+    void begin();
+    void write(uint8_t *data, uint8_t data_length, uint8_t bit_oder);
+    void write(uint8_t data, uint8_t bit_oder);
+    void update();
+
+private:
+    GPIO *data_pin;
+    GPIO *sck_pin;
+    GPIO *rck_pin;
+
+
 };
 
 #endif

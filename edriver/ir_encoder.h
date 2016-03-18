@@ -7,32 +7,32 @@
  *
  * NEC IR encoder library for eBOX.
  *
- * See 
+ * See
  *
  * License:   GPL v3 (http://www.gnu.org/licenses/gpl.html)
- * Datasheet: 
+ * Datasheet:
  *
  * Modification History:
- * -Link                                  - Version 1.0 (2016/01/06) 
- * 
- *      
- *       
- *      
- */	
+ * -Link                                  - Version 1.0 (2016/01/06)
+ *
+ *
+ *
+ *
+ */
 
 
-#include "ebox.h" 
+#include "ebox.h"
 
-class IR_ENCODER 
+class IR_ENCODER
 {
-	public:
-		void begin(PWM* pwm);
-		void send(uint32_t value);
-	private:
-		void init(void);
-		void send_byte(uint8_t data);
-	  PWM* p_pwm;
-		
+public:
+    void begin(PWM *pwm);
+    void send(uint32_t value);
+private:
+    void init(void);
+    void send_byte(uint8_t data);
+    PWM *p_pwm;
+
 };
 
 

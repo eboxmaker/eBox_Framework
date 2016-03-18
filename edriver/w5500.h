@@ -32,108 +32,108 @@ static u16 RSIZE[MAX_SOCK_NUM]; /**< Max Rx buffer size by each channel */
 
 class W5500
 {
-	public:
-		uint8_t mac[6];
-		uint8_t ip[4];
-		uint8_t	subnet[4];
-		uint8_t gw[4];
-		uint8_t dns[4];
-	
-	public:
-		W5500(GPIO *cs,GPIO *rst,GPIO *int_pin,SPI *spi)
-		{
-            this->cs      = cs;
-            this->rst_pin = rst;
-            this->int_pin = int_pin;
-            this->spi     = spi;
-		}
-		void begin(uint8_t dev_num,u8 *mac,u8 *ip,u8 *subnet,u8 *gateway,u8 *dns);
-		void reset();
+public:
+    uint8_t mac[6];
+    uint8_t ip[4];
+    uint8_t	subnet[4];
+    uint8_t gw[4];
+    uint8_t dns[4];
 
-		void send_data_processing(SOCKET s, u8 *data, u16 len);
-		void recv_data_processing(SOCKET s, u8 *data, u16 len);
+public:
+    W5500(GPIO *cs, GPIO *rst, GPIO *int_pin, SPI *spi)
+    {
+        this->cs      = cs;
+        this->rst_pin = rst;
+        this->int_pin = int_pin;
+        this->spi     = spi;
+    }
+    void begin(uint8_t dev_num, u8 *mac, u8 *ip, u8 *subnet, u8 *gateway, u8 *dns);
+    void reset();
 
-		void write(u32 addrbsb, u8 data);
-		u8   read (u32 addrbsb);
-		u16  write(u32 addrbsb,u8 *buf, u16 len);
-		u16  read (u32 addrbsb,u8 *buf, u16 len);
-		void sysinit( u8  *tx_size, u8  *rx_size  );
+    void send_data_processing(SOCKET s, u8 *data, u16 len);
+    void recv_data_processing(SOCKET s, u8 *data, u16 len);
+
+    void write(u32 addrbsb, u8 data);
+    u8   read (u32 addrbsb);
+    u16  write(u32 addrbsb, u8 *buf, u16 len);
+    u16  read (u32 addrbsb, u8 *buf, u16 len);
+    void sysinit( u8  *tx_size, u8  *rx_size  );
 
 
-		u8 getISR(SOCKET s);
-		void putISR(SOCKET s, u8 val);
-		u16 getRxMAX(SOCKET s);
-		u16 getTxMAX(SOCKET s);	
-		
-//通用寄存器
-		void setSHAR(u8 *addr );//mac
-		void setSIPR(u8 *addr );//ip
-		void setSUBR(u8 *addr );//mask
-		void setGAR(u8 *addr );	//gateway
+    u8 getISR(SOCKET s);
+    void putISR(SOCKET s, u8 val);
+    u16 getRxMAX(SOCKET s);
+    u16 getTxMAX(SOCKET s);
 
-		void getSHAR(u8  *addr );//mac
-		void getSIPR(u8  *addr);//ip
-		void getSUBR(u8  *addr);//mask
-		void getGWIP(u8  *addr);//gateway
-		void getGAR(u8  *addr);//gateway
-		
-		void getMAC(u8  *addr );//mac
-		void getIP(u8  *addr);//ip
-		void getSubnet(u8  *addr);//mask
-		void getGateway(u8  *addr);//gateway
+    //通用寄存器
+    void setSHAR(u8 *addr );//mac
+    void setSIPR(u8 *addr );//ip
+    void setSUBR(u8 *addr );//mask
+    void setGAR(u8 *addr );	//gateway
 
-		void setMR(u8 val);
-		
-		void setRTR(u16 timeout);
-		void setRCR(u8 retry);
-		
-		//中断屏蔽寄存器
-		void setIMR(u8 val);
-		void setSIMR(u8 val);
-		//清除中断标志位
-		void setIR(u8 mask);
-		void setSIR(u8 mask);
-		//获取中断状态寄存器
-		u8   getIR( void );
-		u8   getSIR( void );
+    void getSHAR(u8  *addr );//mac
+    void getSIPR(u8  *addr);//ip
+    void getSUBR(u8  *addr);//mask
+    void getGWIP(u8  *addr);//gateway
+    void getGAR(u8  *addr);//gateway
 
-//socket寄存器
-		//中断屏蔽寄存器
-		void setSn_IMR(SOCKET s,u8 mask);
-		u8   getSn_IMR(SOCKET s);
-		//获取中断状态寄存器
-		u8   getSn_IR(SOCKET s);
-		//清除中断标志位
-		void setSn_IR(SOCKET s, u8 val);
-		
-		void setSn_MSS(SOCKET s, u16 Sn_MSSR);
-		void setSn_TTL(SOCKET s, u8 ttl);
-		
-		//获取远端IP和端口
-		void getSn_DIPR(SOCKET s,u8 *ip);
-		u16 getSn_DPORT(SOCKET s);
-		
-		u8      getSn_SR(SOCKET s);
-		u16     get_tx_free_size(SOCKET s);
-		u16     get_rx_recv_size(SOCKET s);
+    void getMAC(u8  *addr );//mac
+    void getIP(u8  *addr);//ip
+    void getSubnet(u8  *addr);//mask
+    void getGateway(u8  *addr);//gateway
 
-		
-		
-		void attch_interruput_event(void (*callbackFun)(void))
-		{
-			EXTIx ex(int_pin,EXTI_Trigger_Falling);
-			ex.begin();
-			ex.attach_interrupt(callbackFun);
-			ex.interrupt(ENABLE);
-		}
-	private:
-		GPIO *cs;
-		GPIO *rst_pin;
-		GPIO *int_pin;
-		SPI_CONFIG_TYPE spi_dev_w5500;
-		SPI *spi;
-	
-	
+    void setMR(u8 val);
+
+    void setRTR(u16 timeout);
+    void setRCR(u8 retry);
+
+    //中断屏蔽寄存器
+    void setIMR(u8 val);
+    void setSIMR(u8 val);
+    //清除中断标志位
+    void setIR(u8 mask);
+    void setSIR(u8 mask);
+    //获取中断状态寄存器
+    u8   getIR( void );
+    u8   getSIR( void );
+
+    //socket寄存器
+    //中断屏蔽寄存器
+    void setSn_IMR(SOCKET s, u8 mask);
+    u8   getSn_IMR(SOCKET s);
+    //获取中断状态寄存器
+    u8   getSn_IR(SOCKET s);
+    //清除中断标志位
+    void setSn_IR(SOCKET s, u8 val);
+
+    void setSn_MSS(SOCKET s, u16 Sn_MSSR);
+    void setSn_TTL(SOCKET s, u8 ttl);
+
+    //获取远端IP和端口
+    void getSn_DIPR(SOCKET s, u8 *ip);
+    u16 getSn_DPORT(SOCKET s);
+
+    u8      getSn_SR(SOCKET s);
+    u16     get_tx_free_size(SOCKET s);
+    u16     get_rx_recv_size(SOCKET s);
+
+
+
+    void attch_interruput_event(void (*callbackFun)(void))
+    {
+        EXTIx ex(int_pin, EXTI_Trigger_Falling);
+        ex.begin();
+        ex.attach_interrupt(callbackFun);
+        ex.interrupt(ENABLE);
+    }
+private:
+    GPIO *cs;
+    GPIO *rst_pin;
+    GPIO *int_pin;
+    SPI_CONFIG_TYPE spi_dev_w5500;
+    SPI *spi;
+
+
 };
 #define SOCKET0 0
 #define SOCKET1 1
@@ -193,7 +193,7 @@ class W5500
 /**
  @brief Socket Interrupt Register
  */
-#define SIR                         (0x001700) 
+#define SIR                         (0x001700)
 /**
  @brief Socket Interrupt Mask Register
  */
@@ -253,7 +253,7 @@ class W5500
 /**
  @brief chip version register address
  */
-#define VERSIONR                    (0x003900)   
+#define VERSIONR                    (0x003900)
 
 
 
@@ -308,11 +308,11 @@ class W5500
 #define Sn_MSSR0(ch)                    (0x001208 + (ch<<5))
 #define Sn_MSSR1(ch)                    (0x001308 + (ch<<5))
 /* *
- @brief IP Type of Service(TOS) Register 
+ @brief IP Type of Service(TOS) Register
  */
 #define Sn_TOS(ch)                      (0x001508 + (ch<<5))
 /**
- @brief IP Time to live(TTL) Register 
+ @brief IP Time to live(TTL) Register
  */
 #define Sn_TTL(ch)                      (0x001608 + (ch<<5))
 /**
@@ -403,7 +403,7 @@ class W5500
 #define Sn_MR_BCASTB                 0x40     /**< Broadcast blcok in UDP Multicating */
 #define Sn_MR_MULTI                  0x80     /**< support UDP Multicating */
 
- /*Sn_MR values on MACRAW MODE */
+/*Sn_MR values on MACRAW MODE */
 #define Sn_MR_MIP6N                  0x10     /**< IPv6 packet Block */
 #define Sn_MR_MMB                    0x20     /**< IPv4 Multicasting Block */
 //#define Sn_MR_BCASTB                 0x40     /**< Broadcast blcok */
@@ -422,18 +422,18 @@ class W5500
 #define Sn_CR_RECV                   0x40     /**< update rxbuf pointer, recv data */
 
 #ifdef __DEF_IINCHIP_PPP__
-   #define Sn_CR_PCON                0x23      
-   #define Sn_CR_PDISCON             0x24      
-   #define Sn_CR_PCR                 0x25      
-   #define Sn_CR_PCN                 0x26     
-   #define Sn_CR_PCJ                 0x27     
+#define Sn_CR_PCON                0x23
+#define Sn_CR_PDISCON             0x24
+#define Sn_CR_PCR                 0x25
+#define Sn_CR_PCN                 0x26
+#define Sn_CR_PCJ                 0x27
 #endif
 
 /*Sn_IR values */
 #ifdef __DEF_IINCHIP_PPP__
-   #define Sn_IR_PRECV               0x80     
-   #define Sn_IR_PFAIL               0x40     
-   #define Sn_IR_PNEXT               0x20     
+#define Sn_IR_PRECV               0x80
+#define Sn_IR_PFAIL               0x40
+#define Sn_IR_PNEXT               0x20
 #endif
 
 #define Sn_IR_SEND_OK                0x10     /**< complete sending */

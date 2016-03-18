@@ -18,12 +18,12 @@ This specification is preliminary and is subject to change at any time without n
 #include "stm32f10x.h"
 
 typedef unsigned char  BOOLEAN;
-typedef unsigned char  INT8U;                                             
-typedef signed   char  INT8S;                                            
-typedef unsigned int   INT16U;                                            
-typedef signed   int   INT16S;                                            
-typedef unsigned long  INT32U;                                        
-typedef signed   long  INT32S; 
+typedef unsigned char  INT8U;
+typedef signed   char  INT8S;
+typedef unsigned int   INT16U;
+typedef signed   int   INT16S;
+typedef unsigned long  INT32U;
+typedef signed   long  INT32S;
 
 typedef unsigned long  STACK_TypeDef;
 typedef unsigned long  PRIO_TypeDef;
@@ -32,18 +32,18 @@ typedef void (*TASK_TypeDef)(void);
 
 typedef enum OS_TASK_STA
 {
-  TASK_READY = 0,//就绪
-  TASK_DELAY = 1,//延时等待
-	TASK_SUSPEND = 2,//挂起
+    TASK_READY = 0,//就绪
+    TASK_DELAY = 1,//延时等待
+    TASK_SUSPEND = 2,//挂起
 } OS_TASK_STA;
 
-typedef struct 
+typedef struct
 {
-  STACK_TypeDef *StkAddr;				 //任务栈顶
-	TICKS_TypeDef OSTCBDly;				 //任务延时时钟
-	OS_TASK_STA State;				     //任务状态
-	
-}OS_TCB,*OS_TCBP;
+    STACK_TypeDef *StkAddr;				 //任务栈顶
+    TICKS_TypeDef OSTCBDly;				 //任务延时时钟
+    OS_TASK_STA State;				     //任务状态
+
+} OS_TCB, *OS_TCBP;
 
 /******************全局变量声明***************/
 
@@ -56,11 +56,11 @@ extern INT32U cpu_sr;//保存 PRIMASK;
 
 extern  INT32U          OSRdyTbl;           // 就绪任务列表
 extern  PRIO_TypeDef    OSPrioCur;          // 当前任务的优先级
-extern  PRIO_TypeDef    OSPrioHighRdy;      // 即将要运行任务的优先级	
+extern  PRIO_TypeDef    OSPrioHighRdy;      // 即将要运行任务的优先级
 extern  OS_TCB          TCB[OS_TASKS + 1];  // 定义任务控制块TCB数组
 
 ////////任务切换需要用的两个TCB指针///////////////////
-extern OS_TCBP OS_Tcb_CurP; 
+extern OS_TCBP OS_Tcb_CurP;
 extern OS_TCBP OS_Tcb_HighRdyP;
 
 ///////////中断相关控制///////////////////////////////////////////////////////////////////
@@ -80,7 +80,7 @@ extern OS_TCB TCB[OS_TASKS + 1];
 void OSCtxSw(void);
 void OSStart(void);
 
-void CPU_task_create(TASK_TypeDef task,STACK_TypeDef *stk,PRIO_TypeDef t_Prio);
+void CPU_task_create(TASK_TypeDef task, STACK_TypeDef *stk, PRIO_TypeDef t_Prio);
 void cpu_start(void);
 
 

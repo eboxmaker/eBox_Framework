@@ -14,18 +14,18 @@ Copyright 2015 shentq. All Rights Reserved.
 
 
 CanTxMsg TxMessage;
-uint8_t data[8] = {1,2,3,4,5,6,7,8};
+uint8_t data[8] = {1, 2, 3, 4, 5, 6, 7, 8};
 void setup()
 {
-	ebox_init();
+    ebox_init();
     can.begin(BSP_CAN_500KBPS);
-	PB8.mode(OUTPUT_PP);
-  /* Transmit */
-  TxMessage.StdId = 0x321;
-  TxMessage.ExtId = 0x01;
-  TxMessage.RTR = CAN_RTR_DATA;
-  TxMessage.IDE = CAN_ID_STD;
-  TxMessage.DLC = 8;
+    PB8.mode(OUTPUT_PP);
+    /* Transmit */
+    TxMessage.StdId = 0x321;
+    TxMessage.ExtId = 0x01;
+    TxMessage.RTR = CAN_RTR_DATA;
+    TxMessage.IDE = CAN_ID_STD;
+    TxMessage.DLC = 8;
     int i = 0;
     TxMessage.Data[i++] = 1;
     TxMessage.Data[i++] = 2;
@@ -38,13 +38,13 @@ void setup()
 }
 int main(void)
 {
-	setup();
-	while(1)
-	{
+    setup();
+    while(1)
+    {
         can.write(&TxMessage);
         delay_ms(1000);
 
-	}
+    }
 
 }
 

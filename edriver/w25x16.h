@@ -23,56 +23,56 @@ This specification is preliminary and is subject to change at any time without n
 //W25X16
 #define FLASH_ID 0XEF14
 //cmd
-#define W25X_WriteEnable		0x06 
-#define W25X_WriteDisable		0x04 
-#define W25X_ReadStatusReg		0x05 
-#define W25X_WriteStatusReg		0x01 
-#define W25X_ReadData			0x03 
-#define W25X_FastReadData		0x0B 
-#define W25X_FastReadDual		0x3B 
-#define W25X_PageProgram		0x02 
-#define W25X_BlockErase			0xD8 
-#define W25X_SectorErase		0x20 
-#define W25X_ChipErase			0xC7 
-#define W25X_PowerDown			0xB9 
-#define W25X_ReleasePowerDown	0xAB 
-#define W25X_DeviceID			0xAB 
-#define W25X_ManufactDeviceID	0x90 
-#define W25X_JedecDeviceID		0x9F 
+#define W25X_WriteEnable		0x06
+#define W25X_WriteDisable		0x04
+#define W25X_ReadStatusReg		0x05
+#define W25X_WriteStatusReg		0x01
+#define W25X_ReadData			0x03
+#define W25X_FastReadData		0x0B
+#define W25X_FastReadDual		0x3B
+#define W25X_PageProgram		0x02
+#define W25X_BlockErase			0xD8
+#define W25X_SectorErase		0x20
+#define W25X_ChipErase			0xC7
+#define W25X_PowerDown			0xB9
+#define W25X_ReleasePowerDown	0xAB
+#define W25X_DeviceID			0xAB
+#define W25X_ManufactDeviceID	0x90
+#define W25X_JedecDeviceID		0x9F
 class W25X
 {
-	public:
-		W25X(GPIO *cs,SPI *spi)
-		{
-			this->cs  = cs;
-			this->spi = spi;
-		}
-		void begin(uint8_t dev_num);
-		void read_id(uint16_t *id);
-		void read(u8 *buf,u32 read_addr,u16 num_to_read); 
-		void fast_read(u8 *buf,u32 read_addr,u16 num_to_read);
-		void write(u8 *buf,u32 write_addr,u16 num_to_write);
+public:
+    W25X(GPIO *cs, SPI *spi)
+    {
+        this->cs  = cs;
+        this->spi = spi;
+    }
+    void begin(uint8_t dev_num);
+    void read_id(uint16_t *id);
+    void read(u8 *buf, u32 read_addr, u16 num_to_read);
+    void fast_read(u8 *buf, u32 read_addr, u16 num_to_read);
+    void write(u8 *buf, u32 write_addr, u16 num_to_write);
 
-		void erase_sector(u32 dst_addr);
-		void erase_chip(void);
+    void erase_sector(u32 dst_addr);
+    void erase_chip(void);
 
 
-	private:
-		u8                  spi_flash_buf[4096];
-		SPI_CONFIG_TYPE     spi_dev_w25x16;
-		GPIO                *cs;
-		SPI                 *spi;
+private:
+    u8                  spi_flash_buf[4096];
+    SPI_CONFIG_TYPE     spi_dev_w25x16;
+    GPIO                *cs;
+    SPI                 *spi;
 
-		u8   readSR(void);  
-		void _waitBusy(void);
-		void powerDown(void);	
-		void wakeUp(void);
-		void writeSR(u8 sr);
-		void writeEnable(void);
-		void writeDisable(void);
-	
-		void write_page(u8 *buf,u32 write_addr,u16 num_to_write);
-		void write_no_check(u8 *buf,u32 write_addr,u16 num_to_write);
+    u8   readSR(void);
+    void _waitBusy(void);
+    void powerDown(void);
+    void wakeUp(void);
+    void writeSR(u8 sr);
+    void writeEnable(void);
+    void writeDisable(void);
+
+    void write_page(u8 *buf, u32 write_addr, u16 num_to_write);
+    void write_no_check(u8 *buf, u32 write_addr, u16 num_to_write);
 
 
 };

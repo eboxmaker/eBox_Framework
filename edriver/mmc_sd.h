@@ -10,38 +10,38 @@ file   : mmc_sd.h
 class SD
 {
 
-	public:
-			SD(GPIO *cs,SPI *spi)
-			{
-				this->cs  = cs;
-				this->spi = spi;
-			}
-			int begin(uint8_t dev_num);
-			uint8_t init();
-			int get_CID(u8 *cid_data);
-			int get_CSD(u8 *csd_data);
-			u32 get_capacity(void);
-			u8 read_single_block(u32 sector, u8 *buffer);
-			u8 write_single_block(u32 sector,const  u8 *data);
-			u8 read_multi_block(u32 sector, u8 *buffer, u8 count);
-			u8 write_multi_block(u32 sector,  const u8 *data, u8 count);
-			u8 read_bytes(unsigned long address,unsigned char *buf,unsigned int offset,unsigned int bytes);
+public:
+    SD(GPIO *cs, SPI *spi)
+    {
+        this->cs  = cs;
+        this->spi = spi;
+    }
+    int begin(uint8_t dev_num);
+    uint8_t init();
+    int get_CID(u8 *cid_data);
+    int get_CSD(u8 *csd_data);
+    u32 get_capacity(void);
+    u8 read_single_block(u32 sector, u8 *buffer);
+    u8 write_single_block(u32 sector, const  u8 *data);
+    u8 read_multi_block(u32 sector, u8 *buffer, u8 count);
+    u8 write_multi_block(u32 sector,  const u8 *data, u8 count);
+    u8 read_bytes(unsigned long address, unsigned char *buf, unsigned int offset, unsigned int bytes);
 
-	private:
-			uint8_t _wait(void);
-			uint8_t _send_command(u8 cmd, u32 arg,u8 crc);
-			uint8_t _send_command_no_deassert(u8 cmd, u32 arg,u8 crc);
-			int _receive_data(u8 *data, u16 len, u8 release);
+private:
+    uint8_t _wait(void);
+    uint8_t _send_command(u8 cmd, u32 arg, u8 crc);
+    uint8_t _send_command_no_deassert(u8 cmd, u32 arg, u8 crc);
+    int _receive_data(u8 *data, u16 len, u8 release);
 
-	public:
-		u8  SD_Type; //SD卡的类型	 
+public:
+    u8  SD_Type; //SD卡的类型
 
-	private:
-		GPIO *cs;
-		SPI  *spi;
-		SPI_CONFIG_TYPE SPIDevSDCard;
-	
-	
+private:
+    GPIO *cs;
+    SPI  *spi;
+    SPI_CONFIG_TYPE SPIDevSDCard;
+
+
 };
 
 /* SD卡类型定义 */
@@ -54,7 +54,7 @@ class SD
 /* SD传输数据结束后是否释放总线宏定义 */
 #define NO_RELEASE      0
 #define RELEASE         1
-							  
+
 /* SD卡指令表 */
 #define CMD0    0      //卡复位  (应答格式：R1)
 #define CMD1    1      //MMC卡开始初始化

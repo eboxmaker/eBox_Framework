@@ -22,20 +22,20 @@ This specification is preliminary and is subject to change at any time without n
 #ifndef __CORE_H
 #define __CORE_H
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 #include "stm32f10x.h"
-    
+
 #define interrupts() 		__enable_irq()//允许所有中断
 #define no_interrupts() 	__disable_irq()//禁止所有中断
-    
+
 /*!< 2 bits for pre-emption priority
 2 bits for subpriority */
 #define NVIC_GROUP_CONFIG NVIC_PriorityGroup_2//以后NVIC_PriorityGroupConfig()函数不需要再被调用。更不能再以非NVIC_GROUP_CONFIG值填充调用
 
 
-typedef void (*callback_fun_type)(void);	 
-	
+typedef void (*callback_fun_type)(void);
+
 ///////全局变量、函数///////////////////////////////////////////////
 extern __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
 
@@ -48,7 +48,7 @@ void delay_ms(uint64_t ms);//延时n毫秒。可在任意情况下使用，包括禁止所有中断的情
 void delay_us(uint64_t us);//延时n微秒。可在任意情况下使用，包括禁止所有中断的情况。精度正负1us。
 void set_systick_user_event_per_sec(u16 frq);//设定用户中断事件的相应频率。frq[1,1000],frq最好是2的倍数
 void attch_systick_user_event(void (*callback_fun)(void));//绑定systick中断调用函数，调用频率由用户决定，频率为1hz-1000hz
-    
+
 #ifdef __cplusplus
 }
 #endif

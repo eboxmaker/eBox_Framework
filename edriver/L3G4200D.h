@@ -37,32 +37,32 @@
 
 class L3G4200D
 {
-	public:
-		typedef struct vector
-		{
-			float x, y, z;
-		} vector;
+public:
+    typedef struct vector
+    {
+        float x, y, z;
+    } vector;
 
-		vector g; // gyro angular velocity readings
-		L3G4200D(SOFTI2C* i2c)
-		{
-			this->i2c = i2c;
-		}	
-		void begin(uint32_t speed);
-		void test();
-		
-		void 		write_reg(uint8_t reg, uint8_t value);
-		uint8_t read_reg(uint8_t reg);
+    vector g; // gyro angular velocity readings
+    L3G4200D(SOFTI2C *i2c)
+    {
+        this->i2c = i2c;
+    }
+    void begin(uint32_t speed);
+    void test();
 
-		void read(void);
+    void 		write_reg(uint8_t reg, uint8_t value);
+    uint8_t read_reg(uint8_t reg);
 
-		// vector functions
-		static void vector_cross(const vector *a, const vector *b, vector *out);
-		static float vector_dot(const vector *a,const vector *b);
-		static void vector_normalize(vector *a);
-		
-		private:
-			SOFTI2C* i2c;
-			uint32_t speed;
+    void read(void);
+
+    // vector functions
+    static void vector_cross(const vector *a, const vector *b, vector *out);
+    static float vector_dot(const vector *a, const vector *b);
+    static void vector_normalize(vector *a);
+
+private:
+    SOFTI2C *i2c;
+    uint32_t speed;
 };
 #endif

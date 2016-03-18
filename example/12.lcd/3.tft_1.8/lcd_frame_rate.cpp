@@ -11,7 +11,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 #include "lcd_1.8.h"
 
-LCD lcd(&PB5,&PB6,&PB4,&PB3,&spi1);
+LCD lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
 uint32_t time_last;
 u8 times;
 
@@ -26,23 +26,23 @@ void setup()
 u16 color = RED;
 int main(void)
 {
-	setup();
-	while(1)
-	{
+    setup();
+    while(1)
+    {
         lcd.off();
-     lcd.clear(RED);
+        lcd.clear(RED);
         lcd.on();
-     delay_ms(1000);
+        delay_ms(1000);
         lcd.off();
-     lcd.clear(BLUE);
+        lcd.clear(BLUE);
         lcd.on();
-     delay_ms(1000);
+        delay_ms(1000);
         lcd.off();
-     lcd.clear(GREEN);
+        lcd.clear(GREEN);
         lcd.on();
-     delay_ms(1000);
-    PB8.toggle();
-	}
+        delay_ms(1000);
+        PB8.toggle();
+    }
 
 }
 

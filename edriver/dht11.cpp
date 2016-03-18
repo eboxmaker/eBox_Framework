@@ -5,7 +5,7 @@
  *
  * DHT11 Temperature and humidity sensor library for eBOX.
  *
- * See http://playground.arduino.cc/main/DHT11Lib 
+ * See http://playground.arduino.cc/main/DHT11Lib
  *
  * License:   GPL v3 (http://www.gnu.org/licenses/gpl.html)
  * Datasheet: http://www.micro4you.com/files/sensor/DHT11.pdf
@@ -30,17 +30,18 @@
  *       * Update the temp/humidity only if the checksum is correct
  *       * Added more comments
  *    - Link                            			  - Version 0.6 (2016/01/03)
- *       * port from ardunio to eBox 
+ *       * port from ardunio to eBox
  */
 #include "Dht11.h"
 
 #define BITS_IN(object) (8 * sizeof((object)))
 
 // The version of this code
-const char* const Dht11::VERSION = "0.6";
+const char *const Dht11::VERSION = "0.6";
 
 // Various named constants.
-enum {
+enum
+{
     /*
      * Time required to signal the DHT11 to switch from low power mode to
      * running mode.  18 ms is the minimal, add a few extra ms to be safe.
@@ -97,29 +98,32 @@ enum {
     CHECKSUM_INDEX =  4,
 };
 
-Dht11::ReadStatus Dht11::read() {
+Dht11::ReadStatus Dht11::read()
+{
     uint8_t    buffer[RESPONSE_SIZE] = { 0 };
     uint8_t    bitIndex              = BYTE_MS_BIT;
     ReadStatus status                = OK;
 
     // Request sample
     pin->mode(OUTPUT_PP);
-		pin->reset();
+    pin->reset();
     delay_ms(START_SIGNAL_WAIT);
 
     // Wait for response
     pin->set();
     delay_us(RESPONSE_WAIT);
     pin->mode(INPUT_PU);
-		
+
     // Acknowledge or timeout
     // Response signal should first be low for 80us...
-    if ((status = this->waitForPinChange(LOW)) != OK) {
+    if ((status = this->waitForPinChange(LOW)) != OK)
+    {
         goto done;
     }
 
     // ... then be high for 80us ...
-    if ((status = this->waitForPinChange(HIGH)) != OK) {
+    if ((status = this->waitForPinChange(HIGH)) != OK)
+    {
         goto done;
     }
 
@@ -129,19 +133,23 @@ Dht11::ReadStatus Dht11::read() {
      * temperature, the fractional part of the temperature, and a checksum
      * that is the sum of the integral parts of humidity and temperature.
      */
-    for (size_t i = 0; i < BITS_IN(buffer); i++) {
-        if ((status = this->waitForPinChange(LOW)) != OK) {
+    for (size_t i = 0; i < BITS_IN(buffer); i++)
+    {
+        if ((status = this->waitForPinChange(LOW)) != OK)
+        {
             goto done;
         }
-        
-				uint64_t highStart = micros();
 
-        if ((status = this->waitForPinChange(HIGH)) != OK) {
+        uint64_t highStart = micros();
+
+        if ((status = this->waitForPinChange(HIGH)) != OK)
+        {
             goto done;
         }
 
         // 26-28 us = 0, 50 us = 1.  40 us is a good threshold between 0 and 1
-        if ((micros() - highStart) > ONE_THRESHOLD) {
+        if ((micros() - highStart) > ONE_THRESHOLD)
+        {
             buffer[i / BITS_PER_BYTE] |= (1 << bitIndex);
         }
 
@@ -151,13 +159,16 @@ Dht11::ReadStatus Dht11::read() {
 
     // Check the checksum.  Only if it's good, record the new values.
     if (buffer[CHECKSUM_INDEX] == (  buffer[HUMIDITY_INDEX]
-                                   + buffer[TEMPERATURE_INDEX])) {
+                                     + buffer[TEMPERATURE_INDEX]))
+    {
         // buffer[1] and buffer[3] should be the fractional parts of the
         // humidity and temperature, respectively, but the DHT11 doesn't
         // provide those values, so we omit them here.
         this->humidity    = buffer[HUMIDITY_INDEX];
         this->temperature = buffer[TEMPERATURE_INDEX];
-    } else {
+    }
+    else
+    {
         status = ERROR_CHECKSUM;
     }
 

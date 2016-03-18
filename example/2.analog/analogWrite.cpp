@@ -12,10 +12,10 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 #include "math.h"
 
-	
+
 void setup()
 {
-	ebox_init();
+    ebox_init();
 
 }
 
@@ -24,17 +24,17 @@ uint16_t y;
 int main(void)
 {
 
-	setup();
+    setup();
 
-	while(1)
-	{		 	
-		x = x + PI*0.01;
-		if(x >= PI)x=0;
-		y = 2000 - (sin(x)+1)*1000;
-		
-		analog_write(&PB8,y);
-		delay_ms(10);
-	}
+    while(1)
+    {
+        x = x + PI * 0.01;
+        if(x >= PI)x = 0;
+        y = 2000 - (sin(x) + 1) * 1000;
+
+        analog_write(&PB8, y);
+        delay_ms(10);
+    }
 
 
 }

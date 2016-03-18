@@ -5,7 +5,7 @@
  *
  * DHT11 Temperature and humidity sensor library for Arduino.
  *
- * See http://playground.arduino.cc/main/DHT11Lib 
+ * See http://playground.arduino.cc/main/DHT11Lib
  *
  * License:   GPL v3 (http://www.gnu.org/licenses/gpl.html)
  * Datasheet: http://www.micro4you.com/files/sensor/DHT11.pdf
@@ -30,7 +30,7 @@
  *       * Update the temp/humidity only if the checksum is correct
  *       * Added more comments
  *    - Link                            			  - Version 0.6 (2016/01/03)
- *       * port from ardunio to eBox 
+ *       * port from ardunio to eBox
  */
 
 #ifndef dht11_h
@@ -43,7 +43,8 @@
  *
  * A class that modes a DHT11 humidity/temperature sensor.
  */
-class Dht11 {
+class Dht11
+{
 private:
     // The last read humidity value
     int humidity;
@@ -52,15 +53,16 @@ private:
     int temperature;
 
     // The pin over which we communicate with the sensor
-    GPIO* pin;
+    GPIO *pin;
 
 
 public:
     // The version of this library
-    static const char* const VERSION;
+    static const char *const VERSION;
 
     // An enumeration modeling the read status of the sensor.
-    enum ReadStatus {
+    enum ReadStatus
+    {
         OK,
         ERROR_CHECKSUM,
         ERROR_TIMEOUT,
@@ -72,10 +74,10 @@ public:
      * Constructs a new Dht11 object that communicates with a DHT11 sensor
      * over the given pin.
      */
-    Dht11(GPIO* p_pin)
-		{
-			pin = p_pin;
-		}
+    Dht11(GPIO *p_pin)
+    {
+        pin = p_pin;
+    }
 
     /*
      * read
@@ -92,7 +94,8 @@ public:
      *
      * Gets the last read relative humidity percentage.
      */
-    inline int getHumidity() const {
+    inline int getHumidity() const
+    {
         return this->humidity;
     }
 
@@ -101,12 +104,14 @@ public:
      *
      * Gets the last read temperature value in degrees Celsius.
      */
-    inline int getTemperature() const {
+    inline int getTemperature() const
+    {
         return this->temperature;
     }
 
 private:
-    enum {
+    enum
+    {
         /*
          * Default value for the maximum number of iterations performed by
          * the waitForPinChange function.
@@ -128,8 +133,10 @@ private:
      */
     inline ReadStatus waitForPinChange(const int oldValue,
                                        unsigned  maxIterations =
-                                              MAX_PIN_CHANGE_ITERATIONS) const {
-        while ((--maxIterations > 0) && (pin->read() == oldValue)) {
+                                           MAX_PIN_CHANGE_ITERATIONS) const
+    {
+        while ((--maxIterations > 0) && (pin->read() == oldValue))
+        {
         }
 
         return (maxIterations > 0) ? OK : ERROR_TIMEOUT;

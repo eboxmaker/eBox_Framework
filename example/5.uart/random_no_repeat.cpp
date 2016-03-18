@@ -44,10 +44,10 @@ void setup()
     random_init();
     for(int i = 0; i < N; i++)
     {
-        uart1.printf("%d:random=%d\r\n",i,random_no_repeat());
+        uart1.printf("%d:random=%d\r\n", i, random_no_repeat());
         delay_ms(100);
     }
-	
+
 }
 int main(void)
 {

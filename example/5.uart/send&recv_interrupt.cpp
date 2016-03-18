@@ -21,11 +21,11 @@ u8 count;
 
 void test()
 {
-	uint8_t c;
-	c = uart1.receive();
+    uint8_t c;
+    c = uart1.receive();
     uart1.put_char(c);
 }
-	
+
 void test1()
 {
     count++;
@@ -33,10 +33,10 @@ void test1()
 }
 void setup()
 {
-	ebox_init();
-	uart1.begin(9600);
-	uart1.attach_rx_interrupt(test);
-	uart1.attach_tx_interrupt(test1);
+    ebox_init();
+    uart1.begin(9600);
+    uart1.attach_rx_interrupt(test);
+    uart1.attach_tx_interrupt(test1);
     PB8.mode(OUTPUT_PP);
     PB8.reset();
 }
@@ -44,13 +44,13 @@ void setup()
 int main(void)
 {
 
-	setup();
+    setup();
 
-	while(1)
-	{		 	
-        uart1.printf("uart is ok ! count = %d\r\n",count);
+    while(1)
+    {
+        uart1.printf("uart is ok ! count = %d\r\n", count);
         delay_ms(1000);
-	}
+    }
 
 
 }

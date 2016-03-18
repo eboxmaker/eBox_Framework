@@ -3,11 +3,11 @@
 
 
 /*******************设置任务优先级*******************/
-#define STARTUP_TASK_PRIO       4	   
- 
+#define STARTUP_TASK_PRIO       4
+
 
 /************设置栈大小（单位为 OS_STK ）************/
-#define STARTUP_TASK_STK_SIZE   80   
+#define STARTUP_TASK_STK_SIZE   80
 
 
 #endif

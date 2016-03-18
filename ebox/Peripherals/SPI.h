@@ -23,25 +23,25 @@ This specification is preliminary and is subject to change at any time without n
 #define SPI_MODE2 0x03
 #define SPI_MODE3 0x01
 
-#define SPI_CLOCK_DIV2     SPI_BaudRatePrescaler_2  
-#define SPI_CLOCK_DIV4     SPI_BaudRatePrescaler_4  
-#define SPI_CLOCK_DIV8     SPI_BaudRatePrescaler_8  
-#define SPI_CLOCK_DIV16    SPI_BaudRatePrescaler_16 
-#define SPI_CLOCK_DIV32    SPI_BaudRatePrescaler_32 
-#define SPI_CLOCK_DIV64    SPI_BaudRatePrescaler_64 
+#define SPI_CLOCK_DIV2     SPI_BaudRatePrescaler_2
+#define SPI_CLOCK_DIV4     SPI_BaudRatePrescaler_4
+#define SPI_CLOCK_DIV8     SPI_BaudRatePrescaler_8
+#define SPI_CLOCK_DIV16    SPI_BaudRatePrescaler_16
+#define SPI_CLOCK_DIV32    SPI_BaudRatePrescaler_32
+#define SPI_CLOCK_DIV64    SPI_BaudRatePrescaler_64
 #define SPI_CLOCK_DIV128   SPI_BaudRatePrescaler_128
 #define SPI_CLOCK_DIV256   SPI_BaudRatePrescaler_256
 
-#define SPI_BITODER_MSB		SPI_FirstBit_MSB                
-#define SPI_BITODER_LSB		SPI_FirstBit_LSB     
-           
+#define SPI_BITODER_MSB		SPI_FirstBit_MSB
+#define SPI_BITODER_LSB		SPI_FirstBit_LSB
+
 typedef struct
 {
-	uint8_t     dev_num;
-	uint8_t     mode;
-	uint16_t    prescaler;
-	uint16_t    bit_order;
-}SPI_CONFIG_TYPE;
+    uint8_t     dev_num;
+    uint8_t     mode;
+    uint16_t    prescaler;
+    uint16_t    bit_order;
+} SPI_CONFIG_TYPE;
 
 
 /*
@@ -55,26 +55,26 @@ typedef struct
 //默认配置 空，只依靠结构体SPICONFIG来初始化
 class	SPI
 {
-    public:
-        SPI(SPI_TypeDef *SPIx,GPIO *sck,GPIO *miso,GPIO *mosi);
+public:
+    SPI(SPI_TypeDef *SPIx, GPIO *sck, GPIO *miso, GPIO *mosi);
 
-        void    begin (SPI_CONFIG_TYPE *spi_config);
-        void    config(SPI_CONFIG_TYPE *spi_config);
-        uint8_t read_config(void);
+    void    begin (SPI_CONFIG_TYPE *spi_config);
+    void    config(SPI_CONFIG_TYPE *spi_config);
+    uint8_t read_config(void);
 
-        int8_t  write(uint8_t data);
-        int8_t  write(uint8_t *data,uint16_t data_length);
+    int8_t  write(uint8_t data);
+    int8_t  write(uint8_t *data, uint16_t data_length);
 
-        uint8_t read();
-        int8_t  read(uint8_t  *recv_data);
-        int8_t  read(uint8_t *recv_data,uint16_t data_length);
-    public:
-        int8_t take_spi_right(SPI_CONFIG_TYPE *spi_config);
-        int8_t release_spi_right(void);
-    private:
-        uint8_t     current_dev_num;
-        SPI_TypeDef *spi;
-        uint8_t     busy;
+    uint8_t read();
+    int8_t  read(uint8_t  *recv_data);
+    int8_t  read(uint8_t *recv_data, uint16_t data_length);
+public:
+    int8_t take_spi_right(SPI_CONFIG_TYPE *spi_config);
+    int8_t release_spi_right(void);
+private:
+    uint8_t     current_dev_num;
+    SPI_TypeDef *spi;
+    uint8_t     busy;
 };
 /*
 	注意：1.该类的SPI_CLOCK_DIV是由delay_us延时函数控制。略有不准，比硬件SPI会慢很多
@@ -84,40 +84,40 @@ class	SPI
 */
 class SOFTSPI
 {
-	public:
-		SOFTSPI(GPIO *sck,GPIO *miso,GPIO *mosi);
-	
-		void    begin(SPI_CONFIG_TYPE *spi_config);
-        void    config(SPI_CONFIG_TYPE *spi_config);
-		uint8_t read_config(void);
-		
-		int8_t  write(uint8_t data);
-		int8_t  write(uint8_t *data,uint16_t data_length);
-	
-		uint8_t read();
-		int8_t  read(uint8_t *data);
-		int8_t  read(uint8_t *rcvdata,uint16_t data_length);
-	public:
-		int8_t take_spi_right(SPI_CONFIG_TYPE *spi_config);
-		int8_t release_spi_right(void);
+public:
+    SOFTSPI(GPIO *sck, GPIO *miso, GPIO *mosi);
 
-	private:
-		GPIO    *sck_pin;
-		GPIO    *mosi_pin;
-		GPIO    *miso_pin;
-			
-		uint8_t mode;	
-		uint8_t bit_order;
-		uint8_t spi_delay;
-	
-		uint8_t current_dev_num;
-		uint8_t busy;
-	
-		uint8_t transfer0(uint8_t data);
-		uint8_t transfer1(uint8_t data);
-		uint8_t transfer2(uint8_t data);
-		uint8_t transfer3(uint8_t data);
-		uint8_t transfer(uint8_t data);	
+    void    begin(SPI_CONFIG_TYPE *spi_config);
+    void    config(SPI_CONFIG_TYPE *spi_config);
+    uint8_t read_config(void);
+
+    int8_t  write(uint8_t data);
+    int8_t  write(uint8_t *data, uint16_t data_length);
+
+    uint8_t read();
+    int8_t  read(uint8_t *data);
+    int8_t  read(uint8_t *rcvdata, uint16_t data_length);
+public:
+    int8_t take_spi_right(SPI_CONFIG_TYPE *spi_config);
+    int8_t release_spi_right(void);
+
+private:
+    GPIO    *sck_pin;
+    GPIO    *mosi_pin;
+    GPIO    *miso_pin;
+
+    uint8_t mode;
+    uint8_t bit_order;
+    uint8_t spi_delay;
+
+    uint8_t current_dev_num;
+    uint8_t busy;
+
+    uint8_t transfer0(uint8_t data);
+    uint8_t transfer1(uint8_t data);
+    uint8_t transfer2(uint8_t data);
+    uint8_t transfer3(uint8_t data);
+    uint8_t transfer(uint8_t data);
 };
 
 #endif
