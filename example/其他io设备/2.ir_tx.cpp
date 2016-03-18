@@ -18,18 +18,18 @@ IR_ENCODER nec;
 void setup()
 {
     ebox_init();
-    nec_tx.begin(38000,0);
-	nec.begin(&nec_tx);
-		
+    nec_tx.begin(38000, 0);
+    nec.begin(&nec_tx);
+
 }
 int main(void)
 {
-	setup();
-	while(1)
-	{
-		nec.send(0x00ff55aa);
-		delay_ms(1000);		
-	}
+    setup();
+    while(1)
+    {
+        nec.send(0x00ff55aa);
+        delay_ms(1000);
+    }
 }
 
 

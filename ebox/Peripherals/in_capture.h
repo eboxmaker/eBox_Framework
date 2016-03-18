@@ -35,32 +35,32 @@ This specification is preliminary and is subject to change at any time without n
 
 class IN_CAPTURE
 {
-    public:
-        IN_CAPTURE(GPIO *capture_pin);
-        void        begin();//使用默认参数，分频系数为1；最大量程为120s
-        void        begin(uint16_t prescaler);
-        void        set_count(uint16_t count);
-        void        set_polarity_falling();
-        void        set_polarity_rising();
-        uint32_t    get_capture();
-        void        attch_ic_interrupt(void(*callback)(void));
-        void        attch_update_interrupt(void(*callback)(void));
+public:
+    IN_CAPTURE(GPIO *capture_pin);
+    void        begin();//使用默认参数，分频系数为1；最大量程为120s
+    void        begin(uint16_t prescaler);
+    void        set_count(uint16_t count);
+    void        set_polarity_falling();
+    void        set_polarity_rising();
+    uint32_t    get_capture();
+    void        attch_ic_interrupt(void(*callback)(void));
+    void        attch_update_interrupt(void(*callback)(void));
 
-        uint8_t     polarity;
-    private:
-        GPIO        *capture_pin;
-        TIM_TypeDef *TIMx;
-        uint8_t     ch;
-        uint16_t    period;//保存溢出值，用于计算占空比
-        uint16_t    prescaler;//保存溢出值，用于计算占空比
-    
-        uint16_t    *overflow_times;
-        uint32_t    last_value;
-    
-        void        init_info(GPIO *capture_pin);
-        void        base_init(uint16_t Period,uint16_t Prescaler);
+    uint8_t     polarity;
+private:
+    GPIO        *capture_pin;
+    TIM_TypeDef *TIMx;
+    uint8_t     ch;
+    uint16_t    period;//保存溢出值，用于计算占空比
+    uint16_t    prescaler;//保存溢出值，用于计算占空比
 
-        uint16_t    (*_get_capture)(TIM_TypeDef *TIMx);
-        void        (*_set_polarity)(TIM_TypeDef *TIMx,uint16_t TIM_OCPolarity);//设置为下降沿或者上升沿捕获
+    uint16_t    *overflow_times;
+    uint32_t    last_value;
+
+    void        init_info(GPIO *capture_pin);
+    void        base_init(uint16_t Period, uint16_t Prescaler);
+
+    uint16_t    (*_get_capture)(TIM_TypeDef *TIMx);
+    void        (*_set_polarity)(TIM_TypeDef *TIMx, uint16_t TIM_OCPolarity); //设置为下降沿或者上升沿捕获
 };
 #endif

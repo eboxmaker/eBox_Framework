@@ -4,56 +4,56 @@
 
 class NRF24L01
 {
-    public:
-        NRF24L01(GPIO *irq,GPIO *ce,GPIO *cs,SPI *spi);
-        void    begin(uint8_t dev_num);
-        int     self_check();
-    
-        void    set_tx_mode();
-        void    set_rx_mode();
+public:
+    NRF24L01(GPIO *irq, GPIO *ce, GPIO *cs, SPI *spi);
+    void    begin(uint8_t dev_num);
+    int     self_check();
 
-        int     send(uint8_t *buf,uint8_t length);
-        int     recv(uint8_t *buf);
-        int     status(void);
-        int     read_test(void);
+    void    set_tx_mode();
+    void    set_rx_mode();
+
+    int     send(uint8_t *buf, uint8_t length);
+    int     recv(uint8_t *buf);
+    int     status(void);
+    int     read_test(void);
 
 
-    private:
-        GPIO *irq;
-        GPIO *ce;
-        GPIO *cs;
-        SPI *spi;
-		SPI_CONFIG_TYPE spi_dev_nrf24l01;
-    
-        uint8_t rx_aw;
-    
-        uint8_t write_reg(uint8_t reg,uint8_t value);
-        uint8_t read_reg(uint8_t reg);
-        uint8_t write_buf(uint8_t reg,uint8_t *buf,uint8_t length);
-        uint8_t read_buf (uint8_t reg,uint8_t *buf,uint8_t length);
+private:
+    GPIO *irq;
+    GPIO *ce;
+    GPIO *cs;
+    SPI *spi;
+    SPI_CONFIG_TYPE spi_dev_nrf24l01;
 
-        void    set_rf_frq(uint8_t frq);
-    
-        void    set_chanal(uint8_t ch,uint8_t enable);
-        void    set_chanal_ack(uint8_t ch,uint8_t enable);
-    
-        void    set_addr_width(uint8_t aw);
-        void    set_local_addr(uint8_t ch,uint8_t *addr);
-        void    set_destination_addr(uint8_t *addr);
-    
-        void    set_pload_width(uint8_t ch,uint8_t width);
-        
-        void    set_retry_gap(uint8_t gap);
-        void    set_retry(uint8_t times);
-        
-        void    set_gain(uint8_t rf_gain);
-        void    set_baudrate(bool baudrate);
-        
-        void    set_power(bool pwr);
-        void    set_tx_rx_mode(bool mode);
-        
-        void    set_crc(bool crco,bool enable);
-    
+    uint8_t rx_aw;
+
+    uint8_t write_reg(uint8_t reg, uint8_t value);
+    uint8_t read_reg(uint8_t reg);
+    uint8_t write_buf(uint8_t reg, uint8_t *buf, uint8_t length);
+    uint8_t read_buf (uint8_t reg, uint8_t *buf, uint8_t length);
+
+    void    set_rf_frq(uint8_t frq);
+
+    void    set_chanal(uint8_t ch, uint8_t enable);
+    void    set_chanal_ack(uint8_t ch, uint8_t enable);
+
+    void    set_addr_width(uint8_t aw);
+    void    set_local_addr(uint8_t ch, uint8_t *addr);
+    void    set_destination_addr(uint8_t *addr);
+
+    void    set_pload_width(uint8_t ch, uint8_t width);
+
+    void    set_retry_gap(uint8_t gap);
+    void    set_retry(uint8_t times);
+
+    void    set_gain(uint8_t rf_gain);
+    void    set_baudrate(bool baudrate);
+
+    void    set_power(bool pwr);
+    void    set_tx_rx_mode(bool mode);
+
+    void    set_crc(bool crco, bool enable);
+
 };
 //enum{
 //    N18 = 0,N12,N6,N0
@@ -81,7 +81,7 @@ class NRF24L01
 #define NOP             0xFF  //空操作,可以用来读状态寄存器	 
 //SPI(NRF24L01)寄存器地址
 #define CONFIG          0x00  //配置寄存器地址;bit0:1接收模式,0发射模式;bit1:电选择;bit2:CRC模式;bit3:CRC使能;
-                              //bit4:中断MAX_RT(达到最大重发次数中断)使能;bit5:中断TX_DS使能;bit6:中断RX_DR使能
+//bit4:中断MAX_RT(达到最大重发次数中断)使能;bit5:中断TX_DS使能;bit6:中断RX_DR使能
 #define EN_AA           0x01  //使能自动应答功能  bit0~5,对应通道0~5
 #define EN_RXADDR       0x02  //接收地址允许,bit0~5,对应通道0~5
 #define SETUP_AW        0x03  //设置地址宽度(所有数据通道):bit1,0:00,3字节;01,4字节;02,5字节;
@@ -89,7 +89,7 @@ class NRF24L01
 #define RF_CH           0x05  //RF通道,bit6:0,工作通道频率;
 #define RF_SETUP        0x06  //RF寄存器;bit3:传输速率(0:1Mbps,1:2Mbps);bit2:1,发射功率;bit0:低噪声放大器增益
 #define STATUS          0x07  //状态寄存器;bit0:TX FIFO满标志;bit3:1,接收数据通道号(最大:6);bit4,达到最多次重发
-                              //bit5:数据发送完成中断;bit6:接收数据中断;
+//bit5:数据发送完成中断;bit6:接收数据中断;
 #define MAX_TX  	0x10  //达到最大发送次数中断
 #define TX_OK   	0x20  //TX发送完成中断
 #define RX_OK   	0x40  //接收到数据中断
@@ -110,7 +110,7 @@ class NRF24L01
 #define RX_PW_P4        0x15  //接收数据通道4有效数据宽度(1~32字节),设置为0则非法
 #define RX_PW_P5        0x16  //接收数据通道5有效数据宽度(1~32字节),设置为0则非法
 #define FIFO_STATUS     0x17  //FIFO状态寄存器;bit0,RX FIFO寄存器空标志;bit1,RX FIFO满标志;bit2,3,保留
-                              //bit4,TX FIFO空标志;bit5,TX FIFO满标志;bit6,1,循环发送上一数据包.0,不循环;
+//bit4,TX FIFO空标志;bit5,TX FIFO满标志;bit6,1,循环发送上一数据包.0,不循环;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //config寄存器的位控制
 //#define RESERVED        0x80

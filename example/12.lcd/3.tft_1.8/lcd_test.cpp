@@ -15,7 +15,7 @@ Copyright 2015 shentq. All Rights Reserved.
 COLOR_HSV hsv;
 COLOR_RGB rgb;
 
-LCD lcd(&PB5,&PB6,&PB4,&PB3,&spi1);
+LCD lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
 
 u8 index = 0x20;
 u8 r;
@@ -28,7 +28,7 @@ void setup()
     lcd.begin(1);
     lcd.clear(RED);
     uart1.begin(9600);
-    
+
     lcd.column_order(1);
     lcd.row_order(1);
 
@@ -40,34 +40,35 @@ void setup()
 
     lcd.front_color = RED;
     if(index >= 0x50)index = 0x20;
-    for(int i = 0; i < 160; i++){
-        hsv.h = i*36/16;
+    for(int i = 0; i < 160; i++)
+    {
+        hsv.h = i * 36 / 16;
         hsv.h %= 360;
-        HSV_to_RGB(hsv,rgb);
-        rgb_to_565(rgb,_color[i]);
-       lcd.front_color = _color[i];
-       lcd.draw_h_line(0,i,128);
+        HSV_to_RGB(hsv, rgb);
+        rgb_to_565(rgb, _color[i]);
+        lcd.front_color = _color[i];
+        lcd.draw_h_line(0, i, 128);
     }
-    lcd.disp_char8x16(0,0,index++);
-    
-    lcd.printf(2,2,"1231asddfgdsfgthkfhddddj2nhd");
-    
+    lcd.disp_char8x16(0, 0, index++);
+
+    lcd.printf(2, 2, "1231asddfgdsfgthkfhddddj2nhd");
+
 
     lcd.front_color = GREEN;
-    lcd.draw_circle(50,50,50);
-    lcd.draw_line(64,50,r,100);
-    
+    lcd.draw_circle(50, 50, 50);
+    lcd.draw_line(64, 50, r, 100);
+
 
 }
 int main(void)
 {
-	setup();
+    setup();
     u8 j;
-	while(1)
-	{
-    delay_ms(1000);
-    PB8.toggle();
-	}
+    while(1)
+    {
+        delay_ms(1000);
+        PB8.toggle();
+    }
 
 }
 

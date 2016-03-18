@@ -23,26 +23,26 @@ NOKIA5110 lcd;
 
 void setup()
 {
-	ebox_init();
-	PB8.mode(OUTPUT_PP);
-	PB8.set();
-	uart1.begin(115200);
-	lcd.begin();
-		lcd.disp_string(0,0,"  Welcome to  ");
-		lcd.disp_string(0,1,"  ebox world ");
-		lcd.disp_string(0,2,"cloudmaker.org");
-		lcd.disp_string(0,3," Nokia5110 LCD");
-		lcd.write_chinese_string(12,4,12,4,0,5);  
+    ebox_init();
+    PB8.mode(OUTPUT_PP);
+    PB8.set();
+    uart1.begin(115200);
+    lcd.begin();
+    lcd.disp_string(0, 0, "  Welcome to  ");
+    lcd.disp_string(0, 1, "  ebox world ");
+    lcd.disp_string(0, 2, "cloudmaker.org");
+    lcd.disp_string(0, 3, " Nokia5110 LCD");
+    lcd.write_chinese_string(12, 4, 12, 4, 0, 5);
 }
 u8 str[] = "123";
 int main(void)
 {
-	setup();
-	while(1)
-	{	
-    delay_ms(300);
+    setup();
+    while(1)
+    {
+        delay_ms(300);
 
-	}
+    }
 
 }
 

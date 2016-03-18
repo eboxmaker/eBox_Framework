@@ -42,9 +42,9 @@ void measure_0()//输入捕获中断事件
     }
     else//检测到上升沿，测量低电平时间完成
     {
-         value01 = ic0.get_capture();
+        value01 = ic0.get_capture();
         ic0.set_polarity_falling();//切换检测下降沿
-   }
+    }
 }
 void measure_1()//输入捕获中断事件
 {
@@ -55,9 +55,9 @@ void measure_1()//输入捕获中断事件
     }
     else//检测到上升沿，测量低电平时间完成
     {
-         value11 = ic1.get_capture();
+        value11 = ic1.get_capture();
         ic1.set_polarity_falling();//切换检测下降沿
-   }
+    }
 }
 void measure_2()//输入捕获中断事件
 {
@@ -68,9 +68,9 @@ void measure_2()//输入捕获中断事件
     }
     else//检测到上升沿，测量低电平时间完成
     {
-         value21 = ic2.get_capture();
+        value21 = ic2.get_capture();
         ic2.set_polarity_falling();//切换检测下降沿
-   }
+    }
 }
 void measure_3()//输入捕获中断事件
 {
@@ -81,17 +81,17 @@ void measure_3()//输入捕获中断事件
     }
     else//检测到上升沿，测量低电平时间完成
     {
-         value31 = ic3.get_capture();
+        value31 = ic3.get_capture();
         ic3.set_polarity_falling();//切换检测下降沿
-   }
+    }
 }
 
 uint16_t p;
 void setup()
 {
-	ebox_init();
-	uart1.begin(9600);
-    
+    ebox_init();
+    uart1.begin(9600);
+
     p = 1;
     ic0.begin(p);//初始化输入捕获参数，p分频
     ic0.attch_ic_interrupt(measure_0);//绑定捕获中断事件函数
@@ -102,63 +102,63 @@ void setup()
     ic3.begin(p);//初始化输入捕获参数，p分频
     ic3.attch_ic_interrupt(measure_3);//绑定捕获中断事件函数
 
-    pwm1.begin(50,900);
+    pwm1.begin(50, 900);
     pwm1.set_oc_polarity(1);
-    pwm2.begin(50,850);
+    pwm2.begin(50, 850);
     pwm2.set_oc_polarity(1);
-    pwm3.begin(50,603);
+    pwm3.begin(50, 603);
     pwm3.set_oc_polarity(1);
-    pwm4.begin(50,201);
+    pwm4.begin(50, 201);
     pwm4.set_oc_polarity(1);
-   
+
 }
 
 int main(void)
 {
-	setup();
-	while(1)
+    setup();
+    while(1)
     {
 
         if(value00 && value01)
         {
-//            uart1.printf("value1 = %d\r\n",value00);
-//            uart1.printf("value2 = %d\r\n",value01);
-//            uart1.printf("frq_0 = %0.0f\r\n",(72000000.0/p)/(value00+value01));
-            uart1.printf("pluse_0 = %0.2f\r\n",value00*100.0/(value00+value01));
+            //            uart1.printf("value1 = %d\r\n",value00);
+            //            uart1.printf("value2 = %d\r\n",value01);
+            //            uart1.printf("frq_0 = %0.0f\r\n",(72000000.0/p)/(value00+value01));
+            uart1.printf("pluse_0 = %0.2f\r\n", value00 * 100.0 / (value00 + value01));
             value00 = 0;
             value01 = 0;
-        }       
+        }
 
         if(value10 && value11)
         {
-//            uart1.printf("value1 = %d\r\n",value10);
-//            uart1.printf("value2 = %d\r\n",value11);
-//            uart1.printf("frq_1 = %0.0f\r\n",(72000000.0/p)/(value10+value11));
-            uart1.printf("pluse_1 = %0.2f\r\n",value10*100.0/(value10+value11));
+            //            uart1.printf("value1 = %d\r\n",value10);
+            //            uart1.printf("value2 = %d\r\n",value11);
+            //            uart1.printf("frq_1 = %0.0f\r\n",(72000000.0/p)/(value10+value11));
+            uart1.printf("pluse_1 = %0.2f\r\n", value10 * 100.0 / (value10 + value11));
             value10 = 0;
             value11 = 0;
-        }   
-        
+        }
+
         if(value20 && value21)
         {
-//            uart1.printf("value1 = %d\r\n",value20);
-//            uart1.printf("value2 = %d\r\n",value21);
-//            uart1.printf("frq_2 = %0.0f\r\n",(72000000.0/p)/(value20+value21));
-            uart1.printf("pluse_2 = %0.2f\r\n",value20*100.0/(value20+value21));
+            //            uart1.printf("value1 = %d\r\n",value20);
+            //            uart1.printf("value2 = %d\r\n",value21);
+            //            uart1.printf("frq_2 = %0.0f\r\n",(72000000.0/p)/(value20+value21));
+            uart1.printf("pluse_2 = %0.2f\r\n", value20 * 100.0 / (value20 + value21));
             value20 = 0;
             value21 = 0;
-        }       
+        }
 
         if(value30 && value31)
         {
-//            uart1.printf("value1 = %d\r\n",value30);
-//            uart1.printf("value2 = %d\r\n",value31);
-            uart1.printf("pluse_3 = %0.2f\r\n",value30*100.0/(value30+value31));
-            uart1.printf("frq_3 = %0.0f\r\n",(72000000.0/p)/(value30+value31));
+            //            uart1.printf("value1 = %d\r\n",value30);
+            //            uart1.printf("value2 = %d\r\n",value31);
+            uart1.printf("pluse_3 = %0.2f\r\n", value30 * 100.0 / (value30 + value31));
+            uart1.printf("frq_3 = %0.0f\r\n", (72000000.0 / p) / (value30 + value31));
             value30 = 0;
             value31 = 0;
-        }       
-	}
+        }
+    }
 }
 
 

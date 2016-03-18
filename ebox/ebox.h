@@ -16,7 +16,7 @@ This specification is preliminary and is subject to change at any time without n
 #define __EBOX_H
 
 
-	 
+
 #include "common.h"
 
 
@@ -44,10 +44,10 @@ This specification is preliminary and is subject to change at any time without n
 ////////系统debug支持////////////////////////////////////////////////////////////////
 #define EBOX_DEBUG 1
 #if EBOX_DEBUG
-  extern USART uart1;//根据不同的串口名称此处需要做相应的修改
-	#define DBG(...) uart1.printf(__VA_ARGS__)
+extern USART uart1;//根据不同的串口名称此处需要做相应的修改
+#define DBG(...) uart1.printf(__VA_ARGS__)
 #else
-	#define  DBG(...) 
+#define  DBG(...)
 #endif
 ////////////////////////////////////////////////////////////////////////////////
 //创建所有引脚对象和宏定义其指针
@@ -57,7 +57,7 @@ extern USART uart3;
 extern USART uart4;
 extern USART uart5;
 
-extern SPI spi1;	
+extern SPI spi1;
 extern SPI spi2;
 extern SOFTSPI sspi1;
 
@@ -323,5 +323,5 @@ extern GPIO PG15;
 
 
 
- #endif
- 
+#endif
+

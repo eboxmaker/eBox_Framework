@@ -19,21 +19,21 @@ This specification is preliminary and is subject to change at any time without n
 #include "button.h"
 class ENCODER
 {
-	public:
-		ENCODER(GPIO *Apin,GPIO *Bpin);
-		int read_encoder();
+public:
+    ENCODER(GPIO *Apin, GPIO *Bpin);
+    int read_encoder();
 
 
-	private:
-		
-	GPIO *a_pin;
-	GPIO *b_pin;
-	
-	uint8_t a_state;
-	uint8_t a_last_state;
+private:
 
-	uint8_t b_state;
-	uint8_t b_last_state;
+    GPIO *a_pin;
+    GPIO *b_pin;
+
+    uint8_t a_state;
+    uint8_t a_last_state;
+
+    uint8_t b_state;
+    uint8_t b_last_state;
 
 };
 #endif

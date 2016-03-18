@@ -20,18 +20,18 @@ This specification is preliminary and is subject to change at any time without n
 
 class LTCX
 {
-	public:
-		LTCX(GPIO* p_cs_pin,SPI* p_SPI)
-		{
-			cs  = p_cs_pin;
-			spi = p_SPI;
-		}
-		void begin(uint8_t dev_num);
-		void write(uint16_t _DACA,uint16_t _DACB);
+public:
+    LTCX(GPIO *p_cs_pin, SPI *p_SPI)
+    {
+        cs  = p_cs_pin;
+        spi = p_SPI;
+    }
+    void begin(uint8_t dev_num);
+    void write(uint16_t _DACA, uint16_t _DACB);
 
-	private:
-		SPI_CONFIG_TYPE spi_dev_LTC1446;
-		GPIO* cs;
-		SPI* spi;
+private:
+    SPI_CONFIG_TYPE spi_dev_LTC1446;
+    GPIO *cs;
+    SPI *spi;
 };
 #endif

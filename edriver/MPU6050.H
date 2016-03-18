@@ -65,7 +65,7 @@ This specification is preliminary and is subject to change at any time without n
 #define	TEMP_OUT_H		0x41
 #define	TEMP_OUT_L		0x42
 #define	GYRO_XOUT_H		0x43
-#define	GYRO_XOUT_L		0x44	
+#define	GYRO_XOUT_L		0x44
 #define	GYRO_YOUT_H		0x45
 #define	GYRO_YOUT_L		0x46
 #define	GYRO_ZOUT_H		0x47
@@ -77,19 +77,19 @@ This specification is preliminary and is subject to change at any time without n
 
 class MPU6050
 {
-    public:
-        MPU6050(I2C *i2c)
-        {
-            this->i2c = i2c;
-        };	
-        void        begin(uint32_t speed);
-        int16_t 	get_data(uint8_t reg_address);
-        int8_t 		get_data(uint8_t reg_address,int16_t *buf,uint8_t num_to_read);
-        void        get_id(uint8_t *id);
+public:
+    MPU6050(I2C *i2c)
+    {
+        this->i2c = i2c;
+    };
+    void        begin(uint32_t speed);
+    int16_t 	get_data(uint8_t reg_address);
+    int8_t 		get_data(uint8_t reg_address, int16_t *buf, uint8_t num_to_read);
+    void        get_id(uint8_t *id);
 
-    private:
-        I2C         *i2c;
-        uint32_t    speed;
+private:
+    I2C         *i2c;
+    uint32_t    speed;
 };
 
 #endif

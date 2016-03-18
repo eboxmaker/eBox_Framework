@@ -23,10 +23,10 @@ int main(void)
     while(1)
     {
         x = analog_read(&PB1);
-        uart1.printf("hex = %05d\r\n",x);
+        uart1.printf("hex = %05d\r\n", x);
         x = analog_read_voltage(&PB1);
-        uart1.printf("val = %04dmv\r\n",x);
-        uart1.printf("==============\r\n",x);
+        uart1.printf("val = %04dmv\r\n", x);
+        uart1.printf("==============\r\n", x);
         delay_ms(1000);
     }
 }

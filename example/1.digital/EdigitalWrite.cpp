@@ -11,17 +11,17 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 void setup()
 {
-	ebox_init();
-	PB8.mode(OUTPUT_PP);
+    ebox_init();
+    PB8.mode(OUTPUT_PP);
 }
 int main(void)
 {
-	setup();
-	while(1)
-	{
-		PB8.set();
-		PB8.reset();
-	}
+    setup();
+    while(1)
+    {
+        PB8.set();
+        PB8.reset();
+    }
 
 }
 

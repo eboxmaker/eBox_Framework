@@ -18,20 +18,20 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
-		ir_decoder.begin();	
-		uart1.printf("ebox ir_decoder test\r\n");
+    ir_decoder.begin();
+    uart1.printf("ebox ir_decoder test\r\n");
 }
 int main(void)
 {
-	setup();
-	while(1)
-	{
-		if(ir_decoder.available())
-		{
-			uint16_t r = ir_decoder.read();
-			uart1.printf("key_code=0x%x repeat=%d\r\n",(r&0xff),((r&0xff00)>>8));
-		
-		}
-	}
+    setup();
+    while(1)
+    {
+        if(ir_decoder.available())
+        {
+            uint16_t r = ir_decoder.read();
+            uart1.printf("key_code=0x%x repeat=%d\r\n", (r & 0xff), ((r & 0xff00) >> 8));
+
+        }
+    }
 }
 

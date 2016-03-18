@@ -28,24 +28,24 @@ This specification is preliminary and is subject to change at any time without n
 class RINGBUF
 {
 
- 
-    public:
+
+public:
     RINGBUF();
-    void begin(unsigned char *buf,int lenght);
+    void begin(unsigned char *buf, int lenght);
     bool write(unsigned char c);
     unsigned char read(void);
     int available();
     void clear();
-    
-    private:
+
+private:
     volatile int head;
     volatile int tail;
     int max;
     unsigned char *buf;
 
-    
-    
-    
-    
+
+
+
+
 };
 #endif

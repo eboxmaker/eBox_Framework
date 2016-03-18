@@ -14,10 +14,10 @@
  */
 class EBOX_IWDG
 {
-    public:
-        EBOX_IWDG(){};
-        void begin(uint16_t ms);
-        void feed();
+public:
+    EBOX_IWDG() {};
+    void begin(uint16_t ms);
+    void feed();
 };
 
 #endif

@@ -40,25 +40,25 @@ This specification is preliminary and is subject to change at any time without n
 
 class RTC_CLASS
 {
-    public:
-        uint8_t sec;
-        uint8_t min;
-        uint8_t hour;
-    public:
-        void begin();
-        void attach_interrupt(uint16_t event, void (*callbackFun)(void));
-        void interrupt(uint32_t bits,FunctionalState x);
-        void set_counter(uint32_t count);
-        void set_alarm(uint32_t count);
-        uint32_t get_counter();
-        void set_time_HMS(uint8_t h,uint8_t m,uint8_t s);
-        void set_alarm  (uint8_t h,uint8_t m,uint8_t s);
-        void get_time_HMS(uint8_t *h,uint8_t *m,uint8_t *s);
+public:
+    uint8_t sec;
+    uint8_t min;
+    uint8_t hour;
+public:
+    void begin();
+    void attach_interrupt(uint16_t event, void (*callbackFun)(void));
+    void interrupt(uint32_t bits, FunctionalState x);
+    void set_counter(uint32_t count);
+    void set_alarm(uint32_t count);
+    uint32_t get_counter();
+    void set_time_HMS(uint8_t h, uint8_t m, uint8_t s);
+    void set_alarm  (uint8_t h, uint8_t m, uint8_t s);
+    void get_time_HMS(uint8_t *h, uint8_t *m, uint8_t *s);
 
-    private:
-        void    config();
-        uint8_t is_config(uint16_t configFlag);
-        void    set_config_flag(uint16_t configFlag);
+private:
+    void    config();
+    uint8_t is_config(uint16_t configFlag);
+    void    set_config_flag(uint16_t configFlag);
 };
 extern RTC_CLASS 	rtc;
 

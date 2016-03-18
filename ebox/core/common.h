@@ -15,7 +15,7 @@ This specification is preliminary and is subject to change at any time without n
 #ifndef __COMMON_H
 #define __COMMON_H
 
-	
+
 #include "core.h"                  // Device header
 
 
@@ -25,7 +25,7 @@ This specification is preliminary and is subject to change at any time without n
 
 #define true 0x1
 #define false 0x0
- 
+
 #define HIGH 0x1
 #define LOW  0x0
 
@@ -37,7 +37,7 @@ This specification is preliminary and is subject to change at any time without n
 
 
 typedef enum
-{ 
+{
     AIN         = 0x0,
     INPUT       = 0x04,
     INPUT_PD    = 0x28,
@@ -46,57 +46,59 @@ typedef enum
     OUTPUT_PP   = 0x10,
     AF_OD       = 0x1C,
     AF_PP       = 0x18
-}PIN_MODE;
+} PIN_MODE;
 
 class GPIO
 {
-    public:
-        GPIO(GPIO_TypeDef *port, uint16_t pin);
-        void mode(PIN_MODE mode);
-        void set();
-        void reset();
-        void write(uint8_t val);
-        void toggle();	
-        void read(uint8_t *val);
-        uint8_t read(void);
-        //操作符重载
-        GPIO& operator= (int value) {
-            write(value);
-            return *this;
-        }
-        operator int() {
-            return read();
-        }
-                        
-        GPIO_TypeDef* port;
-        uint16_t pin;	
+public:
+    GPIO(GPIO_TypeDef *port, uint16_t pin);
+    void mode(PIN_MODE mode);
+    void set();
+    void reset();
+    void write(uint8_t val);
+    void toggle();
+    void read(uint8_t *val);
+    uint8_t read(void);
+    //操作符重载
+    GPIO &operator= (int value)
+    {
+        write(value);
+        return *this;
+    }
+    operator int()
+    {
+        return read();
+    }
+
+    GPIO_TypeDef *port;
+    uint16_t pin;
 };
 class PARALLEL_GPIO
 {
-    public:
-        GPIO *bit[8];
-    public:
-        void    all_mode(PIN_MODE mode);
-        void    write(uint8_t data);
-        void    write_low_4_4bit(uint8_t data);
-        uint8_t read();
-        uint8_t read_low_4_bit();
+public:
+    GPIO *bit[8];
+public:
+    void    all_mode(PIN_MODE mode);
+    void    write(uint8_t data);
+    void    write_low_4_4bit(uint8_t data);
+    uint8_t read();
+    uint8_t read_low_4_bit();
 };
 class SYSTEM
 {
-    public:
-        uint32_t chip_id[3];
-        uint16_t flash_size;
-        
-        void  get_chip_info();
-        float get_cpu_temperature();
+public:
+    uint32_t chip_id[3];
+    uint16_t flash_size;
+
+    void  get_chip_info();
+    float get_cpu_temperature();
 };
 extern SYSTEM sys;
 
 void        ADC1_init(void);
 
-uint16_t	analog_read(GPIO *pin);	
-uint16_t	analog_read_voltage(GPIO *pin); 
+uint16_t	analog_read(GPIO *pin);
+uint16_t	analog_read_voltage(GPIO *pin);
 
 void        shift_out(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order, uint8_t val);
 uint8_t		shift_in(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order);
@@ -104,7 +106,7 @@ uint8_t		shift_in(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order);
 void        random_seed(uint16_t seed);
 uint16_t    random();
 uint16_t    random(uint16_t max);
-uint16_t    random(uint16_t min,uint16_t max);
+uint16_t    random(uint16_t min, uint16_t max);
 
 
 

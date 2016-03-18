@@ -14,7 +14,7 @@ Copyright 2015 shentq. All Rights Reserved.
 void setup()
 {
     ebox_init();
-    uart1.begin(9600);	
+    uart1.begin(9600);
 }
 char buf[] = "hello world !\r\n";
 int main(void)
@@ -23,7 +23,7 @@ int main(void)
     while(1)
     {
         uart1.printf("hello World !\r\n");
-        uart1.printf_length(buf,sizeof(buf));
+        uart1.printf_length(buf, sizeof(buf));
         delay_ms(1000);
     }
 }

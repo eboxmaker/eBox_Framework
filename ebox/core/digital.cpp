@@ -22,10 +22,10 @@ This specification is preliminary and is subject to change at any time without n
  *          pin:    GPIO_Pin_0...15
  *@retval   None
 */
-GPIO::GPIO(GPIO_TypeDef *port,uint16_t pin)
+GPIO::GPIO(GPIO_TypeDef *port, uint16_t pin)
 {
-	this->port = port;
-	this->pin = pin;
+    this->port = port;
+    this->pin = pin;
 }
 /**
  *@name     void GPIO::mode(PIN_MODE mode)
@@ -35,45 +35,45 @@ GPIO::GPIO(GPIO_TypeDef *port,uint16_t pin)
 */
 void GPIO::mode(PIN_MODE mode)
 {
-	GPIO_InitTypeDef GPIO_InitStructure;
-  
-	switch((uint32_t)this->port)
-	{
-		case (uint32_t)GPIOA_BASE:
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
-			break;
+    GPIO_InitTypeDef GPIO_InitStructure;
 
-		case (uint32_t)GPIOB_BASE:
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
-			break;
+    switch((uint32_t)this->port)
+    {
+    case (uint32_t)GPIOA_BASE:
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+        break;
 
-		case (uint32_t)GPIOC_BASE:
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC,ENABLE);
-			break;
+    case (uint32_t)GPIOB_BASE:
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+        break;
 
-		case (uint32_t)GPIOD_BASE:
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD,ENABLE);
-			break;
+    case (uint32_t)GPIOC_BASE:
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+        break;
 
-		case (uint32_t)GPIOE_BASE:
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE,ENABLE);
-			break;
-		
-		case (uint32_t)GPIOF_BASE:
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOF,ENABLE);
-			break;
-		case (uint32_t)GPIOG_BASE:
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOG,ENABLE);
-			break;
-	}
+    case (uint32_t)GPIOD_BASE:
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);
+        break;
 
-	if(mode == AF_OD || mode == AF_PP)
-		RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
-	
-	GPIO_InitStructure.GPIO_Pin = this->pin;
-	GPIO_InitStructure.GPIO_Mode = (GPIOMode_TypeDef)mode;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(this->port, &GPIO_InitStructure);   //初始化GPIOC端口
+    case (uint32_t)GPIOE_BASE:
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE, ENABLE);
+        break;
+
+    case (uint32_t)GPIOF_BASE:
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOF, ENABLE);
+        break;
+    case (uint32_t)GPIOG_BASE:
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOG, ENABLE);
+        break;
+    }
+
+    if(mode == AF_OD || mode == AF_PP)
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
+
+    GPIO_InitStructure.GPIO_Pin = this->pin;
+    GPIO_InitStructure.GPIO_Mode = (GPIOMode_TypeDef)mode;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(this->port, &GPIO_InitStructure);   //初始化GPIOC端口
 }
 /**
  *@name     void GPIO::set()
@@ -106,10 +106,10 @@ void GPIO::reset()
 */
 void GPIO::write(uint8_t val)
 {
-	if(val == 0)
-		this->port->BRR = this->pin;
-	else
-		this->port->BSRR = this->pin;
+    if(val == 0)
+        this->port->BRR = this->pin;
+    else
+        this->port->BSRR = this->pin;
 }
 
 
@@ -121,8 +121,8 @@ void GPIO::write(uint8_t val)
 */
 void GPIO::read(uint8_t *val)
 {
-	*val = this->port->IDR & this->pin;
-}		
+    *val = this->port->IDR & this->pin;
+}
 
 
 /**
@@ -133,9 +133,9 @@ void GPIO::read(uint8_t *val)
 */
 uint8_t GPIO::read(void)
 {
-	if(this->port->IDR & this->pin)
-		return 1;
-	return  0;
+    if(this->port->IDR & this->pin)
+        return 1;
+    return  0;
 }
 
 /**
@@ -147,7 +147,7 @@ uint8_t GPIO::read(void)
 void GPIO::toggle()
 {
     port->ODR ^= this->pin;
-}	
+}
 
 /**
  *@name     void PARALLEL_GPIO::all_mode(PIN_MODE mode)
@@ -175,14 +175,14 @@ void PARALLEL_GPIO::all_mode(PIN_MODE mode)
 */
 void PARALLEL_GPIO::write(uint8_t data)
 {
-    bit[0]->write(data&(0x01 << 0));
-    bit[1]->write(data&(0x01 << 1));
-    bit[2]->write(data&(0x01 << 2));
-    bit[3]->write(data&(0x01 << 3));
-    bit[4]->write(data&(0x01 << 4));
-    bit[5]->write(data&(0x01 << 5));
-    bit[6]->write(data&(0x01 << 6));
-    bit[7]->write(data&(0x01 << 7));
+    bit[0]->write(data & (0x01 << 0));
+    bit[1]->write(data & (0x01 << 1));
+    bit[2]->write(data & (0x01 << 2));
+    bit[3]->write(data & (0x01 << 3));
+    bit[4]->write(data & (0x01 << 4));
+    bit[5]->write(data & (0x01 << 5));
+    bit[6]->write(data & (0x01 << 6));
+    bit[7]->write(data & (0x01 << 7));
 }
 
 /**
@@ -194,14 +194,14 @@ void PARALLEL_GPIO::write(uint8_t data)
 uint8_t PARALLEL_GPIO::read()
 {
     uint8_t data = 0;
-    data |= *bit[0]<<0;
-    data |= *bit[1]<<1;
-    data |= *bit[2]<<2;
-    data |= *bit[3]<<3;
-    data |= *bit[4]<<4;
-    data |= *bit[5]<<5;
-    data |= *bit[6]<<6;
-    data |= *bit[7]<<7;
+    data |= *bit[0] << 0;
+    data |= *bit[1] << 1;
+    data |= *bit[2] << 2;
+    data |= *bit[3] << 3;
+    data |= *bit[4] << 4;
+    data |= *bit[5] << 5;
+    data |= *bit[6] << 6;
+    data |= *bit[7] << 7;
     return data;
 }
 
@@ -213,10 +213,10 @@ uint8_t PARALLEL_GPIO::read()
 */
 void PARALLEL_GPIO::write_low_4_4bit(uint8_t data)
 {
-    bit[0]->write(data&(0x01 << 0));
-    bit[1]->write(data&(0x01 << 1));
-    bit[2]->write(data&(0x01 << 2));
-    bit[3]->write(data&(0x01 << 3));
+    bit[0]->write(data & (0x01 << 0));
+    bit[1]->write(data & (0x01 << 1));
+    bit[2]->write(data & (0x01 << 2));
+    bit[3]->write(data & (0x01 << 3));
 }
 
 /**
@@ -228,40 +228,40 @@ void PARALLEL_GPIO::write_low_4_4bit(uint8_t data)
 uint8_t PARALLEL_GPIO::read_low_4_bit()
 {
     uint8_t data = 0;
-    data |= *bit[0]<<0;
-    data |= *bit[1]<<1;
-    data |= *bit[2]<<2;
-    data |= *bit[3]<<3;
+    data |= *bit[0] << 0;
+    data |= *bit[1] << 1;
+    data |= *bit[2] << 2;
+    data |= *bit[3] << 3;
     return data;
 }
 
 /**
- *@name     uint8_t shift_in(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order) 
+ *@name     uint8_t shift_in(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order)
  *@brief    GPIO按照时钟连续输出一个u8类型的数据，用于串行通信。
  *@param    data_pin：  数据输入引脚
             clock_pin:  时钟信号的引脚
             bit_order:  数据大小端控制LSB_FIRST：低位先发送；MSB_FIRST高位先发送
  *@retval   接收到的数据
 */
-uint8_t shift_in(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order) 
+uint8_t shift_in(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order)
 {
-	uint8_t value = 0;
-	uint8_t i;
+    uint8_t value = 0;
+    uint8_t i;
 
-	for (i = 0; i < 8; ++i) 
+    for (i = 0; i < 8; ++i)
     {
-		clock_pin->write(HIGH);
-		if (bit_order == LSB_FIRST)
-			value |= data_pin->read() << i;
-		else
-			value |= data_pin->read() << (7 - i);
-		clock_pin->write(LOW);
-	}
-	return value;
+        clock_pin->write(HIGH);
+        if (bit_order == LSB_FIRST)
+            value |= data_pin->read() << i;
+        else
+            value |= data_pin->read() << (7 - i);
+        clock_pin->write(LOW);
+    }
+    return value;
 }
 
 /**
- *@name     uint8_t shift_in(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order) 
+ *@name     uint8_t shift_in(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order)
  *@brief    GPIO按照时钟连续输出一个u8类型的数据，用于串行通信。
  *@param    data_pin：  数据输出引脚
             clock_pin:  时钟信号的引脚
@@ -271,17 +271,17 @@ uint8_t shift_in(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order)
 */
 void shift_out(GPIO *data_pin, GPIO *clock_pin, uint8_t bit_order, uint8_t val)
 {
-	int i;
-	for (i = 0; i < 8; i++)  
-	{
-		if (bit_order == LSB_FIRST)
-			data_pin->write(!!(val & (1 << i)));
-		else	
-			data_pin->write(!!(val & (1 << (7 - i))));
-		
-			clock_pin->write(HIGH);
-			clock_pin->write(LOW);
+    int i;
+    for (i = 0; i < 8; i++)
+    {
+        if (bit_order == LSB_FIRST)
+            data_pin->write(!!(val & (1 << i)));
+        else
+            data_pin->write(!!(val & (1 << (7 - i))));
 
-	}
+        clock_pin->write(HIGH);
+        clock_pin->write(LOW);
+
+    }
 }
 

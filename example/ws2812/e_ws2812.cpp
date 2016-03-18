@@ -19,18 +19,18 @@ WS2812 led(&PB0);
 
 void setup()
 {
-	ebox_init();
-	uart1.begin(9600);
+    ebox_init();
+    uart1.begin(9600);
     led.begin();
 
 }
 int main(void)
 {
-	setup();
-	while(1)
-	{	
+    setup();
+    while(1)
+    {
         led.rainbow_Loop();
 
-	}
+    }
 
 }

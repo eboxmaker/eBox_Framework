@@ -3,19 +3,19 @@
 SYSTEM sys;
 void SYSTEM::get_chip_info()
 {
-    chip_id[2] = *(__IO u32*)(0X1FFFF7E8);  //µÍ×Ö½Ú
-    chip_id[1] = *(__IO u32 *)(0X1FFFF7EC); // 
+    chip_id[2] = *(__IO u32 *)(0X1FFFF7E8); //µÍ×Ö½Ú
+    chip_id[1] = *(__IO u32 *)(0X1FFFF7EC); //
     chip_id[0] = *(__IO u32 *)(0X1FFFF7F0); //¸ß×Ö½Ú
-    
-    flash_size = *(u16*)(0x1FFFF7E0);    //Ð¾Æ¬flashÈÝÁ¿
+
+    flash_size = *(u16 *)(0x1FFFF7E0);   //Ð¾Æ¬flashÈÝÁ¿
 }
 extern u16 AD_value[];
 float SYSTEM::get_cpu_temperature()
 {
     float temp;
-//    temp = (1.43-(float)AD_value[15])/0.0043+25;
+    //    temp = (1.43-(float)AD_value[15])/0.0043+25;
     return (float)temp;
-    
+
 }
 void random_seed(uint16_t seed)
 {
@@ -27,9 +27,9 @@ uint16_t random()
 }
 uint16_t random(uint16_t max)
 {
-    return (rand()%max); 
+    return (rand() % max);
 }
-uint16_t random(uint16_t min,uint16_t max)
+uint16_t random(uint16_t min, uint16_t max)
 {
-    return (min + rand()%(max - min)); 
+    return (min + rand() % (max - min));
 }

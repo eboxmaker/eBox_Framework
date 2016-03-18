@@ -3,7 +3,7 @@
 
 
 
-const uint16_t CANBAUD[][4]=
+const uint16_t CANBAUD[][4] =
 {
     { CAN_SJW_1tq, CAN_BS1_6tq, CAN_BS2_3tq, 108 },     //33k
     { CAN_SJW_1tq, CAN_BS1_6tq, CAN_BS2_3tq, 72 },      //50k
@@ -18,33 +18,33 @@ const uint16_t CANBAUD[][4]=
 };
 
 
-CAN::CAN(CAN_TypeDef* CANx,GPIO* p_pin_rx, GPIO* p_pin_tx)
+CAN::CAN(CAN_TypeDef *CANx, GPIO *p_pin_rx, GPIO *p_pin_tx)
 {
-	_CANx = CANx;
+    _CANx = CANx;
     this->pin_rx = p_pin_rx;
     this->pin_tx = p_pin_tx;
 }
 void CAN::begin(BSP_CAN_BAUD bps)
 {
     u8 i;
-    
+
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1 | RCC_APB1Periph_CAN2, ENABLE);
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
 
     pin_rx->mode(INPUT_PU);
     pin_tx->mode(AF_PP);
 
     set_bps(bps);
 
-    CAN_ITConfig(_CANx,CAN_IT_FMP0, DISABLE);     //关闭FIFO0接收中断
-    CAN_ITConfig(_CANx,CAN_IT_FMP1, DISABLE);     //打开FIFO1接收中断
+    CAN_ITConfig(_CANx, CAN_IT_FMP0, DISABLE);    //关闭FIFO0接收中断
+    CAN_ITConfig(_CANx, CAN_IT_FMP1, DISABLE);    //打开FIFO1接收中断
 
 
-    set_filter(CAN_FIFO0,CAN_ID_STD,0,1<<5, 0xFFFFFFFF);
-    set_filter(CAN_FIFO0,CAN_ID_STD,1,1<<5, 0xFFFFFFFF);
-    set_filter(CAN_FIFO1,CAN_ID_STD,2,1<<5,0xFFFFFFFF);
+    set_filter(CAN_FIFO0, CAN_ID_STD, 0, 1 << 5, 0xFFFFFFFF);
+    set_filter(CAN_FIFO0, CAN_ID_STD, 1, 1 << 5, 0xFFFFFFFF);
+    set_filter(CAN_FIFO1, CAN_ID_STD, 2, 1 << 5, 0xFFFFFFFF);
 
-    for(i=0;i<3;i++)CAN_CancelTransmit(_CANx,i);    
+    for(i = 0; i < 3; i++)CAN_CancelTransmit(_CANx, i);
 }
 
 
@@ -69,7 +69,7 @@ void CAN::set_bps(BSP_CAN_BAUD bps)
     CAN_Init(_CANx, &CAN_InitStructure);
 }
 
-void CAN::set_filter(u8 Fifo,u8 nCanType,u8 num,u32 ID,u32 Mask)
+void CAN::set_filter(u8 Fifo, u8 nCanType, u8 num, u32 ID, u32 Mask)
 {
     CAN_FilterInitTypeDef CAN_FilterInitStructure;
 
@@ -77,16 +77,16 @@ void CAN::set_filter(u8 Fifo,u8 nCanType,u8 num,u32 ID,u32 Mask)
     CAN_FilterInitStructure.CAN_FilterActivation = DISABLE;
 
     if(nCanType == CAN_ID_STD)
-    	CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_16bit;
-	else	
-    	CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_32bit;
-		
+        CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_16bit;
+    else
+        CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_32bit;
+
     CAN_FilterInitStructure.CAN_FilterFIFOAssignment = Fifo;
     CAN_FilterInitStructure.CAN_FilterNumber = num;
-    CAN_FilterInitStructure.CAN_FilterIdHigh = ID>>16;
-    CAN_FilterInitStructure.CAN_FilterIdLow = ID&0xffff;
-    CAN_FilterInitStructure.CAN_FilterMaskIdHigh = Mask>>16;
-    CAN_FilterInitStructure.CAN_FilterMaskIdLow = Mask&0xffff;
+    CAN_FilterInitStructure.CAN_FilterIdHigh = ID >> 16;
+    CAN_FilterInitStructure.CAN_FilterIdLow = ID & 0xffff;
+    CAN_FilterInitStructure.CAN_FilterMaskIdHigh = Mask >> 16;
+    CAN_FilterInitStructure.CAN_FilterMaskIdLow = Mask & 0xffff;
     CAN_FilterInit(&CAN_FilterInitStructure );
 }
 
@@ -98,9 +98,9 @@ u8 CAN::write(CanTxMsg *pCanMsg)
 
     TMailbox = CAN_Transmit(_CANx, pCanMsg);
 
-    while((CAN_TransmitStatus(_CANx, TMailbox) != CANTXOK)&& (--nTime));
+    while((CAN_TransmitStatus(_CANx, TMailbox) != CANTXOK) && (--nTime));
 
-    if(nTime==0)
+    if(nTime == 0)
     {
         CAN_CancelTransmit(_CANx, TMailbox);//发送错误时取消发送
         return false;
@@ -113,9 +113,9 @@ u8 CAN::write(CanTxMsg *pCanMsg)
 
 u8 CAN::read(CanRxMsg *pCanMsg, u16 WaitTime)
 {
-	u32 ms;
+    u32 ms;
 
-	ms = millis();
+    ms = millis();
     while(1)
     {
         if(CAN_MessagePending(_CANx, CAN_FIFO0) > 0)
@@ -124,7 +124,7 @@ u8 CAN::read(CanRxMsg *pCanMsg, u16 WaitTime)
             return true;
         }
 
-        if((ms+WaitTime)>millis())return false;
+        if((ms + WaitTime) > millis())return false;
     }
 }
 
@@ -132,7 +132,8 @@ callback_fun_type can_callback_table[2];
 
 void CAN::attach_interrupt(void (*callback_fun)(void))
 {
-    switch((u32)_CANx){
+    switch((u32)_CANx)
+    {
     case (u32)CAN1_BASE:
         can_callback_table[0] = callback_fun;
         break;
@@ -144,15 +145,18 @@ void CAN::attach_interrupt(void (*callback_fun)(void))
 
 void CAN::interrupt(FunctionalState enable)
 {
-    if(enable==ENABLE){
-        CAN_ITConfig(_CANx,CAN_IT_FMP1, ENABLE);
-    }else{
-        CAN_ITConfig(_CANx,CAN_IT_FMP1, DISABLE);
+    if(enable == ENABLE)
+    {
+        CAN_ITConfig(_CANx, CAN_IT_FMP1, ENABLE);
+    }
+    else
+    {
+        CAN_ITConfig(_CANx, CAN_IT_FMP1, DISABLE);
     }
 }
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 void CAN1_RX1_IRQHandler(void)

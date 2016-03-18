@@ -13,30 +13,30 @@ Copyright 2015 shentq. All Rights Reserved.
 
 uint32_t xx;
 
-EXTIx ex(&PA8,EXTI_Trigger_Falling);
+EXTIx ex(&PA8, EXTI_Trigger_Falling);
 
 void exit()
 {
-	xx++;
-	uart1.printf("\r\nxx = %d",xx);
+    xx++;
+    uart1.printf("\r\nxx = %d", xx);
 }
 void setup()
 {
-	ebox_init();
-	uart1.begin(9600);
-	ex.begin();
-	ex.attach_interrupt(exit);
-	ex.interrupt(ENABLE);
+    ebox_init();
+    uart1.begin(9600);
+    ex.begin();
+    ex.attach_interrupt(exit);
+    ex.interrupt(ENABLE);
 }
 
 
 int main(void)
 {
-	setup();
-	while(1)
-	{
-		;
-	}
+    setup();
+    while(1)
+    {
+        ;
+    }
 
 
 }
