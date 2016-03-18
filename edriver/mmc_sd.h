@@ -22,7 +22,7 @@ class SD
 			int get_CSD(u8 *csd_data);
 			u32 get_capacity(void);
 			u8 read_single_block(u32 sector, u8 *buffer);
-			u8 write_single_block(u32 sector,  u8 *data);
+			u8 write_single_block(u32 sector,const  u8 *data);
 			u8 read_multi_block(u32 sector, u8 *buffer, u8 count);
 			u8 write_multi_block(u32 sector,  const u8 *data, u8 count);
 			u8 read_bytes(unsigned long address,unsigned char *buf,unsigned int offset,unsigned int bytes);

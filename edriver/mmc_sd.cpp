@@ -450,7 +450,7 @@ u8 SD::read_single_block(u32 sector, u8 *buffer)
   SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
 	spi->take_spi_right(&SPIDevSDCard);
 	
-  
+  if(SD_Type!=SD_TYPE_V2HC)
   //如果不是SDHC，将sector地址转成byte地址
   sector = sector<<9;
 
@@ -476,7 +476,7 @@ u8 SD::read_single_block(u32 sector, u8 *buffer)
 *                   0： 成功
 *                   other：失败
 *******************************************************************************/
-u8 SD::write_single_block(u32 sector,  u8 *data)
+u8 SD::write_single_block(u32 sector,const  u8 *data)
 {
   u8 r1;
   u16 i;
@@ -525,7 +525,7 @@ u8 SD::write_single_block(u32 sector,  u8 *data)
     
   //等待操作完成
   retry = 0;
-  while(!spi->write(0xff))//卡自编程时，数据线被拉低
+  while(!spi->read())//卡自编程时，数据线被拉低
   {
      retry++;
      if(retry>65534)        //如果长时间写入没有完成，报错退出
@@ -562,7 +562,8 @@ u8 SD::read_multi_block(u32 sector, u8 *buffer, u8 count)
 	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
 	spi->take_spi_right(&SPIDevSDCard);
 	
-  sector = sector<<9;//如果不是SDHC，将sector地址转成byte地址
+	if(SD_Type != SD_TYPE_V2HC)
+			sector = sector<<9;//如果不是SDHC，将sector地址转成byte地址
  //SD_WaitReady();
  //发读多块命令
   r1 = _send_command(CMD18, sector, 1);//读命令
