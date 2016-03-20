@@ -1,7 +1,7 @@
 /*
 file   : softspi.cpp
 author : shentq
-version: V1.0
+version: V1.1
 date   : 2015/7/5
 
 Copyright (c) 2015, eBox by shentq. All Rights Reserved.

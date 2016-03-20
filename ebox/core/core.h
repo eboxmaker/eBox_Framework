@@ -1,7 +1,7 @@
 /*
 file   : core.h
 author : shentq
-version: V1.0
+version: V1.1
 date   : 2015/7/5
 brief  : analog read function
 
