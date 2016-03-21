@@ -17,7 +17,7 @@ void setup()
 {
     ebox_init();
     uart1.begin(9600);
-    ee.begin(100000);
+    ee.begin(400000);
 
 
     PA7.mode(AIN);
@@ -35,33 +35,12 @@ int main(void)
     while(1)
     {
 
-        uart1.printf("===wbuf===\r\n");
         for(uint16_t i = 0; i < 256; i++)
         {
             wbuf[i] = random() % 256;
         }
-        for(uint16_t i = 0; i < 16; i++)
-        {
-            for(uint16_t j = 0; j < 16; j++)
-            {
-                uart1.printf(" %02x ", wbuf[i * 16 + j]);
-                //ee.byteWrite(i*16+j,buf[i*16+j]);
-            }
-            uart1.printf("\r\n ");
-        }
         ee.write_byte(0, wbuf, 256);
-
-        uart1.printf("\r\n===rbuf===\r\n");
-
         data = ee.read_byte(0, rbuf, 256);
-        for(uint16_t i = 0; i < 16; i++)
-        {
-            for(uint16_t j = 0; j < 16; j++)
-            {
-                uart1.printf(" %02x ", rbuf[i * 16 + j]);
-            }
-            uart1.printf("\r\n ");
-        }
         for(int i = 0; i < 256; i++)
         {
             if(wbuf[i] != rbuf[i])
@@ -74,8 +53,6 @@ int main(void)
             uart1.printf("eeprom check ......[err]");
         else
             uart1.printf("eeprom check ......[OK]");
-            
-        uart1.printf("\r\n======\r\n");
         delay_ms(10000);
     }
 

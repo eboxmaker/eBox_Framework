@@ -7,11 +7,11 @@ int	MMC_disk_status(void)
 {
 	return 0;
 };
-
-void attach_sd_to_fat(SD* sd)
+void attach_sd_to_fat(void* sd)
 {
-	sdCard = sd;
+	sdCard = (SD*)sd;
 }
+
 
 u8 MMC_disk_initialize(void)
 {
