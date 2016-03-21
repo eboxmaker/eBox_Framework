@@ -7,9 +7,9 @@ static uint16_t local_port;
 W5500 *eth;
 
 
-void attach_eth_to_socket(W5500 *e)
+void attach_eth_to_socket(void *e)
 {
-    eth = e;
+    eth = (W5500*)e;
 }
 /**
 @brief   This Socket function initialize the channel in perticular mode, and set the port and wait for W5200 done it.

@@ -152,7 +152,7 @@ extern "C" {
         systick_user_event_per_sec = frq;
     }
 
-    void attch_systick_user_event(void (*callback_fun)(void))
+    void attach_systick_user_event(void (*callback_fun)(void))
     {
         systick_cb_table[0] = callback_fun;
     }

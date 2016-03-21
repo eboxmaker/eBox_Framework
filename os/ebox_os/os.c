@@ -242,7 +242,7 @@ void os_init(void)
     OSRdyTbl = 0;
     OSPrioCur = OSPrioHighRdy = OS_TASKS;
     set_systick_user_event_per_sec(1000);
-    attch_systick_user_event(os_time_tick);//移植到非ebox环境的时候需要处理。将os_time_tick放入systick中断，并将此行删除
+    attach_systick_user_event(os_time_tick);//移植到非ebox环境的时候需要处理。将os_time_tick放入systick中断，并将此行删除
     OS_NO_TIME_SW();
 
 }

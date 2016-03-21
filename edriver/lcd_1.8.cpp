@@ -21,11 +21,11 @@ void LCD::begin(u8 dev_num)
     rst->mode(OUTPUT_PP);
     led->set();
 
-    spi_dev_lcd.mode = SPI_MODE2;
-    spi_dev_lcd.bit_order = MSB_FIRST;
-    spi_dev_lcd.dev_num = dev_num;
-    spi_dev_lcd.prescaler = SPI_CLOCK_DIV2;
-    spi->begin(&spi_dev_lcd);
+    config.mode = SPI_MODE2;
+    config.bit_order = MSB_FIRST;
+    config.dev_num = dev_num;
+    config.prescaler = SPI_CLOCK_DIV2;
+    spi->begin(&config);
 
     init();
 }
@@ -53,27 +53,33 @@ void LCD::soft_reset()
 void LCD::write_index(u8 Index)
 {
     //SPI 写命令时序开始
+    spi->take_spi_right(&config);
     cs->reset();
     rs->reset();
     spi->write(Index);
     cs->set();
+    spi->release_spi_right();
 }
 //向液晶屏写一个8位数据
 void LCD::write_data_8bit(u8 Data)
 {
+    spi->take_spi_right(&config);
     cs->reset();
     rs->set();
     spi->write(Data);
     cs->set();
+    spi->release_spi_right();
 }
 //向液晶屏写一个16位数据
 void LCD::write_data_16bit(u16 Data)
 {
+    spi->take_spi_right(&config);
     cs->reset();
     rs->set();
     spi->write(Data >> 8); 	//写入高8位数据
     spi->write(Data); 			//写入低8位数据
     cs->set();
+    spi->release_spi_right();
 }
 //u8 LCD::read_8bit()
 //{
@@ -595,7 +601,7 @@ void LCD::printf(u16 x, u16 y, const char *fmt, ...)
             y += 16;
             x = 0;
         }
-        disp_char8x16(x, y, buf[i++]);
+        h_disp_char8x16(x, y, buf[i++]);
         x += 8;
     }
 }
