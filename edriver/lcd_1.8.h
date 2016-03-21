@@ -55,7 +55,7 @@ private:
     GPIO *rs;
     GPIO *rst;
     SPI  *spi;
-    SPI_CONFIG_TYPE spi_dev_lcd;
+    SPI_CONFIG_TYPE config;
 
     void reset(void);
     void init(void);

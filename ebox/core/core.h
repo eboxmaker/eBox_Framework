@@ -47,7 +47,7 @@ uint64_t millis(void);//获取系统当前运行了多长时间。单位：ms
 void delay_ms(uint64_t ms);//延时n毫秒。可在任意情况下使用，包括禁止所有中断的情况。精度正负1us。
 void delay_us(uint64_t us);//延时n微秒。可在任意情况下使用，包括禁止所有中断的情况。精度正负1us。
 void set_systick_user_event_per_sec(u16 frq);//设定用户中断事件的相应频率。frq[1,1000],frq最好是2的倍数
-void attch_systick_user_event(void (*callback_fun)(void));//绑定systick中断调用函数，调用频率由用户决定，频率为1hz-1000hz
+void attach_systick_user_event(void (*callback_fun)(void));//绑定systick中断调用函数，调用频率由用户决定，频率为1hz-1000hz
 
 #ifdef __cplusplus
 }
