@@ -64,9 +64,7 @@ int8_t	EEPROM::read_byte(uint16_t byte_addr, uint8_t *buf, uint16_t num_to_read)
     //	}
     ret = i2c->read_byte(SLAVE_ADDR, byte_addr, buf, num_to_read);
     i2c->release_i2c_right();
-    if(ret != 0)
-        uart1.printf("\r\nerr = %d\r\n", ret);
-    return 0;
+    return ret;
 }
 
 int8_t EEPROM::write_page(uint8_t *buf, uint32_t addr, uint8_t numToWrite)
