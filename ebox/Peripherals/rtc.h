@@ -24,41 +24,63 @@ This specification is preliminary and is subject to change at any time without n
 */
 
 
+//用户配置
 #define RTC_CLOCK_LSI 0
 #define RTC_CLOCK_LSE 1
 #define RTC_CLOCK_HSI 2//不支持，暂时不可用
 
-//中断事件源
-#define RTC_EVENT_OW		((uint16_t)0x0004)  /*!< Overflow interrupt */
-#define RTC_EVENT_ALR 	((uint16_t)0x0002)  /*!< Alarm interrupt */
-#define RTC_EVENT_SEC		((uint16_t)0x0001)  /*!< Second interrupt */
-
-//用户配置
-#define RTC_CFG_FLAG 0XA5A5
 #define RTC_CLOCK_SOURCE RTC_CLOCK_LSI
 //#define RTC_CLOCK_SOURCE RTC_CLOCK_LSE
 
+
 class RTC_CLASS
 {
-public:
-    uint8_t sec;
-    uint8_t min;
-    uint8_t hour;
+
 public:
     void begin();
-    void attach_interrupt(uint16_t event, void (*callbackFun)(void));
-    void interrupt(uint32_t bits, FunctionalState x);
+
+    void attach_overflow_interrupt(void (*cb_fun)(void));
+    void attach_alarm_interrupt(void (*cb_fun)(void));
+    void attach_sec_interrupt(void (*cb_fun)(void));
+
+    void overflow_interrupt(FunctionalState state);
+    void alarm_interrupt(FunctionalState state);
+    void sec_interrupt(FunctionalState state);
+
+
     void set_counter(uint32_t count);
     void set_alarm(uint32_t count);
     uint32_t get_counter();
-    void set_time_HMS(uint8_t h, uint8_t m, uint8_t s);
-    void set_alarm  (uint8_t h, uint8_t m, uint8_t s);
-    void get_time_HMS(uint8_t *h, uint8_t *m, uint8_t *s);
+
 
 private:
     void    config();
     uint8_t is_config(uint16_t configFlag);
     void    set_config_flag(uint16_t configFlag);
+    void    nvic(FunctionalState state);
+};
+class RTC_CLOCK
+{
+    public:
+        uint8_t sec;
+        uint8_t min;
+        uint8_t hour;
+    public:
+        void begin();
+        void sec_event()
+        {
+            count ++;
+            count %=3600*24;
+            sec  = (count % 60);
+            min  = (count % 3600)/ 60;
+            hour = (count / 3600);
+        }
+        void set_clock(uint8_t h,uint8_t m,uint8_t s)
+        {
+            count = h*3600 + m*60 + s;        
+        }
+    private:
+       uint32_t count;
 };
 extern RTC_CLASS 	rtc;
 

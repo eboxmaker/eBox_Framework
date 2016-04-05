@@ -14,8 +14,10 @@ This specification is preliminary and is subject to change at any time without n
 */
 #include "rtc.h"
 
+#define RTC_CFG_FLAG 0XA5A5
+
 RTC_CLASS rtc;
-callback_fun_type rtcCallbackTable[3];//
+callback_fun_type rtc_callback_table[3];//
 
 void RTC_CLASS::begin()
 {
@@ -103,6 +105,10 @@ void RTC_CLASS::config(void)
 
     /* Wait until last write operation on RTC registers has finished */
     RTC_WaitForLastTask();
+    
+    
+    
+    nvic(ENABLE);
 
 }
 uint8_t RTC_CLASS::is_config(uint16_t configFlag)
@@ -138,7 +144,7 @@ void RTC_CLASS::set_alarm(uint32_t count)
 }
 
 
-void RTC_CLASS::interrupt(uint32_t bits, FunctionalState x)
+void RTC_CLASS::nvic(FunctionalState state)
 {
 
     NVIC_InitTypeDef NVIC_InitStructure;
@@ -150,81 +156,81 @@ void RTC_CLASS::interrupt(uint32_t bits, FunctionalState x)
     NVIC_InitStructure.NVIC_IRQChannel = RTC_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = x;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = state;
     NVIC_Init(&NVIC_InitStructure);
+}
 
+void RTC_CLASS::attach_sec_interrupt(void (*cb_fun)(void))
+{
+    rtc_callback_table[0] = cb_fun;
+}
+void RTC_CLASS::attach_alarm_interrupt(void (*cb_fun)(void))
+{
+    rtc_callback_table[1] = cb_fun;
+}
+void RTC_CLASS::attach_overflow_interrupt(void (*cb_fun)(void))
+{
+    rtc_callback_table[2] = cb_fun;
+}
+
+void RTC_CLASS::sec_interrupt(FunctionalState state)
+{
     /* Wait for RTC registers synchronization */
     RTC_WaitForSynchro();
     /* Wait until last write operation on RTC registers has finished */
     RTC_WaitForLastTask();
-    RTC_ITConfig(bits, x);
-
+    if(state == ENABLE)
+        RTC->CRH |= (1<<0);
+    else
+         RTC->CRH &= ~(1<<0);
 }
-void RTC_CLASS::attach_interrupt(uint16_t event, void (*callbackFun)(void))
+
+void RTC_CLASS::alarm_interrupt(FunctionalState state)
 {
-    switch(event)
-    {
-    case RTC_EVENT_OW:
-        rtcCallbackTable[0] = callbackFun;
-        break;
-    case RTC_EVENT_ALR:
-        rtcCallbackTable[1] = callbackFun;
-        break;
-    case RTC_EVENT_SEC:
-        rtcCallbackTable[2] = callbackFun;
-        break;
-    }
+    /* Wait for RTC registers synchronization */
+    RTC_WaitForSynchro();
+    /* Wait until last write operation on RTC registers has finished */
+    RTC_WaitForLastTask();
+    if(state == ENABLE)
+        RTC->CRH |= (1<<1);
+    else
+         RTC->CRH &= ~(1<<1);
+}
+
+void RTC_CLASS::overflow_interrupt(FunctionalState state)
+{
+     
+    /* Wait for RTC registers synchronization */
+    RTC_WaitForSynchro();
+    /* Wait until last write operation on RTC registers has finished */
+    RTC_WaitForLastTask();
+    if(state == ENABLE)
+        RTC->CRH |= (1<<2);
+    else
+         RTC->CRH &= ~(1<<2);
 }
 
 uint32_t RTC_CLASS::get_counter()
 {
     return RTC_GetCounter();
 };
-
-void RTC_CLASS::set_time_HMS(uint8_t h, uint8_t m, uint8_t s)
-{
-    uint32_t tmp = 0;
-    tmp = h * 3600 + m * 60 + s;
-    set_counter(tmp);
-}
-void RTC_CLASS::set_alarm(uint8_t h, uint8_t m, uint8_t s)
-{
-    uint32_t tmp = 0;
-    tmp = h * 3600 + m * 60 + s;
-    set_alarm(tmp);
-};
-
-void RTC_CLASS::get_time_HMS(uint8_t *h, uint8_t *m, uint8_t *s)
-{
-    uint32_t tmp = 0;
-    tmp = get_counter() % 0x15180;
-    *h = (tmp / 3600);
-    *m = (tmp % 3600) / 60;
-    *s = (tmp % 3600) % 60;
-};
 extern "C" {
     void RTC_IRQHandler(void)
     {
-        if (RTC_GetITStatus(RTC_IT_OW) != RESET)
+        if (RTC_GetITStatus(RTC_IT_SEC) != RESET)
         {
-            rtcCallbackTable[0]();
-            RTC_ClearITPendingBit(RTC_IT_OW);
+            rtc_callback_table[0]();
+            RTC_ClearITPendingBit(RTC_IT_SEC);
         }
         if (RTC_GetITStatus(RTC_IT_ALR) != RESET)
         {
-            rtcCallbackTable[1]();
+            rtc_callback_table[1]();
             RTC_ClearITPendingBit(RTC_IT_ALR);
         }
-        if (RTC_GetITStatus(RTC_IT_SEC) != RESET)
+        if (RTC_GetITStatus(RTC_IT_OW) != RESET)
         {
-            uint32_t tmp = 0;
-            tmp = RTC_GetCounter() % 0x15180;
-            rtc.hour = (tmp / 3600);
-            rtc.min = (tmp % 3600) / 60;
-            rtc.sec = (tmp % 3600) % 60;
-
-            rtcCallbackTable[2]();
-            RTC_ClearITPendingBit(RTC_IT_SEC);
+            rtc_callback_table[2]();
+            RTC_ClearITPendingBit(RTC_IT_OW);
         }
     }
 }
