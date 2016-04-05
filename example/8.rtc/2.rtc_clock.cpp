@@ -1,7 +1,7 @@
 /*
 file   : *.cpp
 author : shentq
-version: V1.1
+version: V1.0
 date   : 2015/7/5
 
 Copyright 2015 shentq. All Rights Reserved.
@@ -13,7 +13,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 RTC_CLOCK clock;
 
-void rtc_sec_event()
+void rtcsecit()
 {
    clock.sec_event();
    uart1.printf("time=%02d:%02d:%02d\r\n", clock.hour, clock.min, clock.sec);
@@ -34,7 +34,7 @@ void setup()
     
     rtc.begin();
     clock.set_clock(23,59,55);
-    rtc.attach_sec_interrupt(rtc_sec_event);
+    rtc.attach_sec_interrupt(rtcsecit);
 
     
     rtc.sec_interrupt(ENABLE);
