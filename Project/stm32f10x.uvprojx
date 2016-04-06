@@ -682,6 +682,11 @@
               <FileType>8</FileType>
               <FilePath>..\util\ringbuf.cpp</FilePath>
             </File>
+            <File>
+              <FileName>calendar.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\util\calendar.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
