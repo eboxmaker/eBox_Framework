@@ -1,8 +1,8 @@
 /*
 file   : pwm.h
 author : shentq
-version: V1.0
-date   : 2015/7/5
+version: V1.1
+date   : 2016/4/6
 
 Copyright 2015 shentq. All Rights Reserved.
 
