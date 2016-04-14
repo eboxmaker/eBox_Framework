@@ -832,6 +832,11 @@
               <FileType>8</FileType>
               <FilePath>..\edriver\fm25v.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ultrasonic_wave.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\edriver\ultrasonic_wave.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
