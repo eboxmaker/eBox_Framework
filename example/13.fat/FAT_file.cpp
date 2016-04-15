@@ -10,11 +10,11 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 #include "ebox.h"
 #include "mmc_sd.h"
+#include "wrapperdiskio.h"
 #include "ff.h"
 
 
 
-extern void attach_sd_to_fat(SD *sd);
 
 
 static FATFS fs;            // Work area (file system object) for logical drive
@@ -41,13 +41,13 @@ void fileOpt()
 
     if(res == FR_OK)
     {
-        uart1.printf("创建文件或打开文件成功  O(∩_∩)O\r\n");
-        uart1.printf("该文件属性:%d\r\n", fsrc.flag);
-        uart1.printf("该文件大小：%d\r\n", fsrc.fsize);
-        uart1.printf("该文件读写开始处：%d\r\n", fsrc.fptr);
+        uart1.printf("open/make file  O(∩_∩)O\r\n");
+        uart1.printf("file flag:%d\r\n", fsrc.flag);
+        uart1.printf("file size：%d\r\n", fsrc.fsize);
+        uart1.printf("file ptr(start location)：%d\r\n", fsrc.fptr);
         //		uart1.printf("该文件开始簇号:%d\r\n",fsrc.org_clust);
         //		uart1.printf("该文件当前簇号：%d\r\n",fsrc.curr_clust);
-        uart1.printf("该文件当前扇区号:%d\r\n", fsrc.dsect);
+        uart1.printf("dsect num:%d\r\n", fsrc.dsect);
 
         f_lseek(&fsrc, 0);
         do
@@ -63,9 +63,9 @@ void fileOpt()
         while (bw < sizeof(buf));  //  判断是否写完(bw > 100，表示写入完成)
     }
     else if(res == FR_EXIST)
-        uart1.printf("该文件已存在\r\n");
+        uart1.printf("file exist\r\n");
     else
-        uart1.printf("创建文件或打开文件失败~~~~(>_<)~~~~ %d\r\n", res);
+        uart1.printf("creat/open failed~~~~(>_<)~~~~ %d\r\n", res);
     f_close(&fsrc);//关闭文件
 
     /////////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ void fileOpt()
     res = f_open(&fsrc, "0:12345.txt", FA_READ); //没有这个文件则创建该文件
     if(res == FR_OK)
     {
-        uart1.printf("该文件大小：%d\r\n", fsrc.fsize);
+        uart1.printf("file size：%d\r\n", fsrc.fsize);
     }
     readsize = 0;
     do
@@ -89,14 +89,14 @@ void fileOpt()
         }
         else
         {
-            uart1.printf("读取数据失败！\r\n");
+            uart1.printf("read failed\r\n");
         }
         readsize += buflen;
         f_lseek(&fsrc, readsize);
 
     }
     while(br == buflen);
-    uart1.printf("文件读取到末尾！\r\n");
+    uart1.printf("read end\r\n");
     f_close(&fsrc);//关闭文件
     f_mount(&fs, "0:", 0);
 
@@ -107,7 +107,7 @@ void fileOpt()
 void setup()
 {
     ebox_init();
-    uart1.begin(9600);
+    uart1.begin(115200);
     uart1.printf("\r\nsystem start!");
 
     ret = sd.begin(3);
