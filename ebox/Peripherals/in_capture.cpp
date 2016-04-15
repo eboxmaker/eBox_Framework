@@ -245,6 +245,10 @@ uint32_t IN_CAPTURE::get_capture()
     last_value = now;
     return capture;
 }
+uint32_t IN_CAPTURE::get_zone_time_us()
+{
+    return get_capture()/(72/this->prescaler);
+}
 
 void IN_CAPTURE::set_count(uint16_t count)
 {

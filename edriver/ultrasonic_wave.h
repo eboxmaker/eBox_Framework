@@ -2,12 +2,15 @@
 #define __CSB_H
 #include "ebox.h"
 
-class ULTRA
+class ULTRA:public IN_CAPTURE
 {
     public:
-        float value;
+        float wave_time;
     public:
-        ULTRA(GPIO *triger);
+        ULTRA(GPIO *echo,GPIO *triger):IN_CAPTURE(echo)
+        {
+            this->triger = triger;
+        };
         void begin();
         float detect();
         
