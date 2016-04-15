@@ -47,6 +47,7 @@ public:
     void        set_polarity_falling();
     void        set_polarity_rising();
     uint32_t    get_capture();
+    uint32_t    get_zone_time_us();
     void        attch_ic_interrupt(void(*callback)(void));
     void        attch_update_interrupt(void(*callback)(void));
 
