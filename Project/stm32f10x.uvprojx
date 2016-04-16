@@ -687,6 +687,21 @@
               <FileType>8</FileType>
               <FilePath>..\util\calendar.cpp</FilePath>
             </File>
+            <File>
+              <FileName>WString.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\util\WString.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>itoa.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\util\itoa.c</FilePath>
+            </File>
+            <File>
+              <FileName>dtostrf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\util\dtostrf.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
