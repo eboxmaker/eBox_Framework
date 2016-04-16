@@ -16,9 +16,15 @@ This specification is preliminary and is subject to change at any time without n
 #define __COMMON_H
 
 
-#include "core.h"                  // Device header
+#include "core.h"                  
 
+#define EBOX_VERSION "16.04.16"
 
+#define EOK         0
+#define EBUSY       1
+#define ETIMEOUT    2
+#define EPARA       3
+#define E2LONG      4
 
 ////////∫Í∂®“Â/////////////////////////////////
 
@@ -89,9 +95,11 @@ class SYSTEM
 public:
     uint32_t chip_id[3];
     uint16_t flash_size;
+    char version[8];
 
     void  get_chip_info();
     float get_cpu_temperature();
+    
 };
 extern SYSTEM sys;
 
