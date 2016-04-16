@@ -11,6 +11,9 @@ Copyright 2016 shentq. All Rights Reserved.
 #include "ebox.h"
 #include "ultrasonic_wave.h"
 
+#include "wstring.h"
+String s="shentqlf";
+
 float value;
 void setup()
 {
@@ -18,6 +21,9 @@ void setup()
     uart1.begin(115200);
     uart1.printf("ok \r\n");
     ultra.begin();
+
+    s += "fuck";
+    uart1.printf(s.c_str());
 }
 int main(void)
 {
