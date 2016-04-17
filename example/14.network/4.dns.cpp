@@ -16,7 +16,6 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "tcp.h"
 #include "dns.h"
 
-extern void attach_eth_to_socket(W5500 *e);
 u8 mac[6] = {0x00, 0x08, 0xdc, 0x11, 0x11, 0x11}; /*定义Mac变量*/
 u8 ip[4] = {192, 168, 1, 199}; /*定义lp变量*/
 u8 sub[4] = {255, 255, 255, 0}; /*定义subnet变量*/
@@ -58,13 +57,13 @@ void setup()
 
     ddns.begin(SOCKET1, 3000);
 
-    ret = ddns.query(name);
-    if(ret == DNS_RET_SUCCESS) /*发送DNS请求*/
+    ret = ddns.query((char*)name);
+    if(ret == 1) /*发送DNS请求*/
         uart1.printf("Get [%s]'s IP address [%d.%d.%d.%d] from %d.%d.%d.%d\r\n", name, ddns.domain_ip[0], ddns.domain_ip[1], ddns.domain_ip[2], ddns.domain_ip[3], dns[0], dns[1], dns[2], dns[3]);
-    else if(ret == DNS_RET_FAIL)
-        uart1.printf("获取超时\r\n");
-    else
+    else if(ret == -1)
         uart1.printf("未知错误.\r\n");
+    else if(ret == -2)
+        uart1.printf("获取超时\r\n");
 }
 
 int main(void)
