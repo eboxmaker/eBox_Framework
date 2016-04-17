@@ -2,7 +2,8 @@
 #define __SOCKET_H
 #include "stm32f10x.h"
 #include "stdbool.h"
-#include "w5500.h"//如果socket想要被c文件调用可以将此行注释
+#include "netconfig.h"
+#include "w5500.h"
 
 #ifdef __cplusplus
 extern "C" {

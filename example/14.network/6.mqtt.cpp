@@ -22,7 +22,6 @@ int toStop = 0;
 MQTT mqtt;
 
 
-extern void attach_eth_to_socket(W5500 *e);
 u8 mac[6] = {0x00, 0x08, 0xdc, 0x11, 0x11, 0x11}; /*定义Mac变量*/
 u8 ip[4] = {192, 168, 1, 198}; /*定义lp变量*/
 u8 sub[4] = {255, 255, 255, 0}; /*定义subnet变量*/

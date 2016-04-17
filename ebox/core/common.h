@@ -25,6 +25,7 @@ This specification is preliminary and is subject to change at any time without n
 #define ETIMEOUT    2
 #define EPARA       3
 #define E2LONG      4
+#define EOTHER      128
 
 ////////∫Í∂®“Â/////////////////////////////////
 

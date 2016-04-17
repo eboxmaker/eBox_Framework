@@ -15,6 +15,13 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "w5500.h"
 #include "string.h"
+
+void W5500::begin(uint8_t dev_num,u8 *mac)
+{
+    uint8_t ip_0[4]={0,};
+    begin(dev_num,mac,ip_0,ip_0,ip_0,ip_0);
+}
+
 void W5500::begin(uint8_t dev_num, u8 *mac, u8 *ip, u8 *subnet, u8 *gateway, u8 *dns)
 {
     u8 txsize[MAX_SOCK_NUM] = {2, 2, 2, 2, 2, 2, 2, 2};
@@ -62,6 +69,7 @@ void W5500::begin(uint8_t dev_num, u8 *mac, u8 *ip, u8 *subnet, u8 *gateway, u8 
     delay_ms(1000);//预留一定时间保证网卡获取相关网络信息
 
 }
+
 void W5500::reset()
 {
     rst_pin->reset();

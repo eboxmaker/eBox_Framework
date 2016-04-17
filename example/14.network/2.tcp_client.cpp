@@ -14,29 +14,28 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "w5500.h"
 #include "tcp.h"
 
-extern void attach_eth_to_socket(W5500 *e);
 u8 mac[6] = {0x00, 0x08, 0xdc, 0x11, 0x11, 0x11}; /*定义Mac变量*/
 u8 lip[4] = {192, 168, 1, 119}; /*定义lp变量*/
 u8 sub[4] = {255, 255, 255, 0}; /*定义subnet变量*/
 u8 gw[4] = {192, 168, 1, 1}; /*定义gateway变量*/
 u8 dns[4] = {192, 168, 1, 1}; /*定dns变量*/
 
-u8 rip[4] = {192, 168, 1, 102}; /*定义lp变量*/
+u8 rip[4] = {192, 168, 1, 108}; /*定义lp变量*/
 u8 buf[1024];
 u8 ip[6];
 u16 len;
 
+
 W5500 w5500(&PC13, &PC14, &PC15, &spi2);
 
-TCPSERVER tcpServer;
+TCPCLIENT tcp;
 
-int ret;
 
 
 void setup()
 {
     ebox_init();
-    uart1.begin(9600);
+    uart1.begin(115200);
 
     w5500.begin(2, mac, lip, sub, gw, dns);
 
@@ -53,9 +52,9 @@ void setup()
     uart1.printf("GW : %d.%d.%d.%d\r\n", ip[0], ip[1], ip[2], ip[3]);
     uart1.printf("Network is ready.\r\n");
 
-    ret = tcpServer.begin(SOCKET0, 30000);
-    //	if(ret == 0)
-    //		uart1.printf("\r\n success !");
+    tcp.begin(SOCKET7, 3000);
+    tcp.connect(rip, 8080);
+
 
 }
 int main(void)
@@ -64,16 +63,22 @@ int main(void)
 
     while(1)
     {
-        len = tcpServer.recv(buf);
+
+        len = tcp.recv(buf);
         if(len > 0)
         {
-            uart1.printf("\r\n==================");
-            uart1.printf("\r\n客户端:%d.%d.%d.%d:%d", tcpServer.remoteIP[0], tcpServer.remoteIP[1], tcpServer.remoteIP[2], tcpServer.remoteIP[3], tcpServer.remotePort);
-            uart1.printf("\r\n数据长度：%d", len);
-            uart1.printf("\r\n数据内容：");
+            uart1.printf("\r\n============================");
+            uart1.printf("\r\n本地端口:%d", tcp.localPort );
+            uart1.printf("\r\n消息来源:%d.%d.%d.%d:%d", tcp.remoteIP[0], tcp.remoteIP[1], tcp.remoteIP[2], tcp.remoteIP[3], tcp.remotePort);
+            uart1.printf("\r\n数据长度:%d", len);
+            uart1.printf("\r\n数据内容:");
             uart1.printf((const char *)buf);
-            tcpServer.send(buf, len);
+            tcp.send(buf, len);
         }
+
+
+
+
 
 
     }

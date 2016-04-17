@@ -47,6 +47,7 @@ public:
         this->int_pin = int_pin;
         this->spi     = spi;
     }
+    void begin(uint8_t dev_num,u8 *mac);
     void begin(uint8_t dev_num, u8 *mac, u8 *ip, u8 *subnet, u8 *gateway, u8 *dns);
     void reset();
 
