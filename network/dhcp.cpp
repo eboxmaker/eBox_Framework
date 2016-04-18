@@ -2,6 +2,7 @@
 #include "stdio.h"
 #include "string.h"
 
+DHCP dhcp;
 
 #define DHCP_DEBUG 1
 
@@ -19,8 +20,9 @@ uint8_t host_name[]  = "iweb";
 #define SOCK_DHCP             0
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-uint8_t EXTERN_DHCPBUF[1024];
-
+#if !USE_HEAP
+    uint8_t EXTERN_DHCPBUF[1024];
+#endif
 
 /*
 *********************************************************************************************************
@@ -114,7 +116,7 @@ void DHCP::send_DHCP_DISCOVER(void)
   pRIPMSG->OPT[i++] = 0x06;
   pRIPMSG->OPT[i++] = subnetMask;
   pRIPMSG->OPT[i++] = routersOnSubnet;
-  pRIPMSG->OPT[i++] = dns;
+  pRIPMSG->OPT[i++] = _dns;
   pRIPMSG->OPT[i++] = domainName;
   pRIPMSG->OPT[i++] = dhcpT1value;
   pRIPMSG->OPT[i++] = dhcpT2value;
@@ -126,9 +128,8 @@ void DHCP::send_DHCP_DISCOVER(void)
   //Delay_ms(800);
   _sendto(SOCK_DHCP, (uint8_t *)pRIPMSG, sizeof(RIP_MSG), ip, DHCP_SERVER_PORT);	
 
-#ifdef DHCP_DEBUG	
-	DHCP_DBG("sent DHCP_DISCOVER\r\n");
-#endif	
+	
+	DHCP_DBG("send DHCP_DISCOVER\r\n");
 }
 
 /*
@@ -222,7 +223,7 @@ void DHCP::send_DHCP_REQUEST(void)
   pRIPMSG->OPT[i++] = 0x08;
   pRIPMSG->OPT[i++] = subnetMask;
   pRIPMSG->OPT[i++] = routersOnSubnet;
-  pRIPMSG->OPT[i++] = dns;
+  pRIPMSG->OPT[i++] = _dns;
   pRIPMSG->OPT[i++] = domainName;
   pRIPMSG->OPT[i++] = dhcpT1value;
   pRIPMSG->OPT[i++] = dhcpT2value;
@@ -238,9 +239,8 @@ void DHCP::send_DHCP_REQUEST(void)
     _sendto(SOCK_DHCP, (const uint8_t *)pRIPMSG, sizeof(RIP_MSG), ip, DHCP_SERVER_PORT);
   //if(len==0)
     //DHCP_DBG("send request error\r\n");
-#ifdef DHCP_DEBUG
+
 	DHCP_DBG("sent DHCP_REQUEST\r\n");
-#endif
 }
 
 
@@ -308,16 +308,14 @@ void DHCP::send_DHCP_RELEASE_DECLINE(char msgtype)
     pRIPMSG->OPT[i++] = net.ip[1];
     pRIPMSG->OPT[i++] = net.ip[2];
     pRIPMSG->OPT[i++] = net.ip[3];		
-  #ifdef DHCP_DEBUG		
+  		
     DHCP_DBG("sent DHCP_DECLINE\r\n");
-  #endif		
   }
-  #ifdef DHCP_DEBUG	
+  	
   else
   {
     DHCP_DBG("sent DHCP_RELEASE\r\n");
   }
-  #endif	
   
   pRIPMSG->OPT[i++] = endOption;	
   
@@ -352,22 +350,20 @@ uint8_t DHCP::parseDHCPMSG(uint16_t length)
   
   len = _recvfrom(SOCK_DHCP, (uint8_t *)pRIPMSG, length, svr_addr, &svr_port);
   
-  #ifdef DHCP_DEBUG
+  
     DHCP_DBG("DHCP_SIP:%u.%u.%u.%u\r\n",DHCP_SIP[0],DHCP_SIP[1],DHCP_SIP[2],DHCP_SIP[3]);
     DHCP_DBG("DHCP_RIP:%u.%u.%u.%u\r\n",DHCP_REAL_SIP[0],DHCP_REAL_SIP[1],DHCP_REAL_SIP[2],DHCP_REAL_SIP[3]);
     DHCP_DBG("svr_addr:%u.%u.%u.%u\r\n",svr_addr[0],svr_addr[1],svr_addr[2],svr_addr[3]);
-  #endif	
   
   if(pRIPMSG->op != DHCP_BOOTREPLY || svr_port != DHCP_SERVER_PORT)
   {
-    #ifdef DHCP_DEBUG	   
+    	   
       DHCP_DBG("DHCP : NO DHCP MSG\r\n");
-    #endif		
     return 0;
   }
   if(memcmp(pRIPMSG->chaddr,net.mac,6) != 0 || pRIPMSG->xid != htonl(DHCP_XID))
   {
-    #ifdef DHCP_DEBUG
+    
       DHCP_DBG("No My DHCP Message. This message is ignored.\r\n");
       DHCP_DBG("\tSRC_MAC_ADDR(%02X.%02X.%02X.",net.mac[0],net.mac[1],net.mac[2]);
       DHCP_DBG("%02X.%02X.%02X)",net.mac[3],net.mac[4],net.mac[5]);
@@ -375,7 +371,6 @@ uint8_t DHCP::parseDHCPMSG(uint16_t length)
       DHCP_DBG("%02X.%02X.%02X)",pRIPMSG->chaddr[3],pRIPMSG->chaddr[4],pRIPMSG->chaddr[5]);
       DHCP_DBG("\tpRIPMSG->xid(%08X), DHCP_XID(%08X)",pRIPMSG->xid,(DHCP_XID));
       DHCP_DBG("\tpRIMPMSG->yiaddr:%d.%d.%d.%d\r\n",pRIPMSG->yiaddr[0],pRIPMSG->yiaddr[1],pRIPMSG->yiaddr[2],pRIPMSG->yiaddr[3]);
-    #endif				
     return 0;
   }
   
@@ -384,28 +379,25 @@ uint8_t DHCP::parseDHCPMSG(uint16_t length)
     if( *((uint32_t*)DHCP_REAL_SIP) != *((uint32_t*)svr_addr) && 
             *((uint32_t*)DHCP_SIP) != *((uint32_t*)svr_addr) ) 
     {
-#ifdef DHCP_DEBUG		
+		
             DHCP_DBG("Another DHCP sever send a response message. This is ignored.\r\n");
             DHCP_DBG("\tIP:%u.%u.%u.%u\r\n",svr_addr[0],svr_addr[1],svr_addr[2],svr_addr[3]);
-#endif				
       return 0;								
     }
   }
   
   memcpy(net.ip,pRIPMSG->yiaddr,4);
   
-  #ifdef DHCP_DEBUG	
+  	
     DHCP_DBG("DHCP MSG received\r\n");
     DHCP_DBG("yiaddr : %u.%u.%u.%u\r\n",net.ip[0],net.ip[1],net.ip[2],net.ip[3]);
-  #endif	
   
   type = 0;
   p = (uint8_t *)(&pRIPMSG->op);
   p = p + 240;
   e = p + (len - 240);
-  #ifdef DHCP_DEBUG
+  
    DHCP_DBG("p : %08X  e : %08X  len : %d\r\n", (uint32_t)p, (uint32_t)e, len);
-  #endif
   while ( p < e ) 
   {
     switch ( *p++ ) 
@@ -417,71 +409,61 @@ uint8_t DHCP::parseDHCPMSG(uint16_t length)
       break;
     case dhcpMessageType :
       opt_len = *p++;
-      type = *p;
-#ifdef DHCP_DEBUG			
+      type = *p;			
       DHCP_DBG("dhcpMessageType : %02X\r\n", type);
-#endif			
-
       break;
     case subnetMask :
       opt_len =* p++;
       memcpy(net.subnet,p,4);
-#ifdef DHCP_DEBUG
+
       DHCP_DBG("subnetMask : ");
       DHCP_DBG("%u.%u.%u.%u\r\n",net.subnet[0],net.subnet[1],net.subnet[2],net.subnet[3]);
-#endif			
       break;
     case routersOnSubnet :
       opt_len = *p++;
       memcpy(net.gw,p,4);
-#ifdef DHCP_DEBUG
+
       DHCP_DBG("routersOnSubnet : ");
       DHCP_DBG("%u.%u.%u.%u\r\n",net.gw[0],net.gw[1],net.gw[2],net.gw[3]);
-#endif			
       break;
-    case dns :
+    case _dns :
       opt_len = *p++;
       memcpy(net.dns,p,4);
       break;
     case dhcpIPaddrLeaseTime :
       opt_len = *p++;
       dhcp_lease_time = ntohl(*((uint32_t*)p));
-#ifdef DHCP_DEBUG			
+			
       DHCP_DBG("dhcpIPaddrLeaseTime : %d\r\n", dhcp_lease_time);
-#endif			
       break;
     case dhcpServerIdentifier :
       opt_len = *p++;
-#ifdef DHCP_DEBUG						
+						
       DHCP_DBG("DHCP_SIP : %u.%u.%u.%u\r\n", DHCP_SIP[0], DHCP_SIP[1], DHCP_SIP[2], DHCP_SIP[3]);
-#endif			
       if( *((uint32_t*)DHCP_SIP) == 0 || 
           *((uint32_t*)DHCP_REAL_SIP) == *((uint32_t*)svr_addr) || 
           *((uint32_t*)DHCP_SIP) == *((uint32_t*)svr_addr) )
       {
         memcpy(DHCP_SIP,p,4);
         memcpy(DHCP_REAL_SIP,svr_addr,4);	// Copy the real ip address of my DHCP server
-#ifdef DHCP_DEBUG						
+						
         DHCP_DBG("My dhcpServerIdentifier : ");
         DHCP_DBG("%u.%u.%u.%u\r\n", DHCP_SIP[0], DHCP_SIP[1], DHCP_SIP[2], DHCP_SIP[3]);
         DHCP_DBG("My DHCP server real IP address : ");
         DHCP_DBG("%u.%u.%u.%u\r\n", DHCP_REAL_SIP[0], DHCP_REAL_SIP[1], DHCP_REAL_SIP[2], DHCP_REAL_SIP[3]);
-#endif						
       }
       else
       {
-#ifdef DHCP_DEBUG			   
+			   
         DHCP_DBG("Another dhcpServerIdentifier : \r\n");
         DHCP_DBG("\tMY(%u.%u.%u.%u) ", DHCP_SIP[0], DHCP_SIP[1], DHCP_SIP[2], DHCP_SIP[3]);
         DHCP_DBG("Another(%u.%u.%u.%u)\r\n", svr_addr[0], svr_addr[1], svr_addr[2], svr_addr[3]);
-#endif				
       }
       break;
     default :
       opt_len = *p++;
-#ifdef DHCP_DEBUG			
+			
       DHCP_DBG("opt_len : %u\r\n", opt_len);
-#endif			
       break;
     } // switch
     p+=opt_len;
@@ -518,18 +500,14 @@ uint8_t DHCP::check_DHCP_state(SOCKET s)
     if(dhcp_state == STATE_DHCP_READY)
     {
        //init_dhcp_client();
-    #ifdef DHCP_DEBUG			
      DHCP_DBG("state : STATE_DHCP_READY\r\n");
-    #endif	   	
     }
     
     
     if(!_socket(SOCK_DHCP,Sn_MR_UDP,DHCP_CLIENT_PORT,0x00))
     {
-    #ifdef DHCP_DEBUG	   
-               DHCP_DBG("Fail to create the DHCPC_SOCK(%u)\r\n",SOCK_DHCP);
-    #endif   
-     return DHCP_RET_ERR;
+        DHCP_DBG("Fail to create the DHCPC_SOCK(%u)\r\n",SOCK_DHCP);
+        return DHCP_RET_ERR;
     }
     
   }
@@ -550,9 +528,7 @@ uint8_t DHCP::check_DHCP_state(SOCKET s)
         reset_DHCP_time();
         send_DHCP_REQUEST();
         dhcp_state = STATE_DHCP_REQUEST;
-#ifdef DHCP_DEBUG			
         DHCP_DBG("state : STATE_DHCP_REQUEST\r\n");
-#endif			
       }
       else 
         check_DHCP_Timeout();
@@ -564,17 +540,13 @@ uint8_t DHCP::check_DHCP_state(SOCKET s)
         reset_DHCP_time();
         if (check_leasedIP()) 
         {
-#ifdef DHCP_DEBUG					
           DHCP_DBG("state : STATE_DHCP_LEASED\r\n");
-#endif		
           dhcp_state = STATE_DHCP_LEASED;
           return DHCP_RET_UPDATE;
         } 
         else 
         {
-#ifdef DHCP_DEBUG					
           DHCP_DBG("state : STATE_DHCP_DISCOVER\r\n");
-#endif				
           dhcp_state = STATE_DHCP_DISCOVER;
           return DHCP_RET_CONFLICT;
         }
@@ -583,9 +555,7 @@ uint8_t DHCP::check_DHCP_state(SOCKET s)
       {
         reset_DHCP_time();
         dhcp_state = STATE_DHCP_DISCOVER;
-#ifdef DHCP_DEBUG				
         DHCP_DBG("state : STATE_DHCP_DISCOVER\r\n");
-#endif			
       }
       else 
         check_DHCP_Timeout();
@@ -599,9 +569,7 @@ uint8_t DHCP::check_DHCP_state(SOCKET s)
         DHCP_XID++;
         send_DHCP_REQUEST();
         dhcp_state = STATE_DHCP_REREQUEST;
-#ifdef DHCP_DEBUG
         DHCP_DBG("state : STATE_DHCP_REREQUEST\r\n");
-#endif
         reset_DHCP_time();
       }
       break;
@@ -611,19 +579,15 @@ uint8_t DHCP::check_DHCP_state(SOCKET s)
       {
         if(memcmp(OLD_SIP,net.ip,4)!=0)	
         {
-#ifdef DHCP_DEBUG
           DHCP_DBG("The IP address from the DHCP server is updated.\r\n");
           DHCP_DBG("OLD_SIP=%u.%u.%u.%u",OLD_SIP[0],OLD_SIP[1],OLD_SIP[2],OLD_SIP[3]);
           DHCP_DBG("net.ip=%u.%u.%u.%u\r\n",net.ip[0],net.ip[1],net.ip[2],net.ip[3]);
-#endif
           return DHCP_RET_UPDATE;
         }
-#ifdef DHCP_DEBUG
         else
         {
           DHCP_DBG("state : STATE_DHCP_LEASED : same IP\r\n");
         }
-#endif
         reset_DHCP_time();
         dhcp_state = STATE_DHCP_LEASED;
       } 
@@ -631,9 +595,7 @@ uint8_t DHCP::check_DHCP_state(SOCKET s)
       {
         reset_DHCP_time();
         dhcp_state = STATE_DHCP_DISCOVER;
-#ifdef DHCP_DEBUG
         DHCP_DBG("state : STATE_DHCP_DISCOVER\r\n");
-#endif
       } 
       else 
         check_DHCP_Timeout();
@@ -674,22 +636,19 @@ void DHCP::check_DHCP_Timeout(void)
       switch ( dhcp_state ) 
       {
       case STATE_DHCP_DISCOVER :
-  #ifdef DHCP_DEBUG			   
+  			   
         DHCP_DBG("<<timeout>> state : STATE_DHCP_DISCOVER\r\n");
-  #endif				
         send_DHCP_DISCOVER();
         break;
       case STATE_DHCP_REQUEST :
-  #ifdef DHCP_DEBUG			   
+  			   
         DHCP_DBG("<<timeout>> state : STATE_DHCP_REQUEST\r\n");
-  #endif				
         send_DHCP_REQUEST();
         break;
 
       case STATE_DHCP_REREQUEST :
-  #ifdef DHCP_DEBUG			   
+  			   
         DHCP_DBG("<<timeout>> state : STATE_DHCP_REREQUEST\r\n");
-  #endif				
         send_DHCP_REQUEST();
         break;
       default :
@@ -704,9 +663,8 @@ void DHCP::check_DHCP_Timeout(void)
     
     send_DHCP_DISCOVER();
     dhcp_state = STATE_DHCP_DISCOVER;
-#ifdef DHCP_DEBUG		
+		
     DHCP_DBG("timeout : state : STATE_DHCP_DISCOVER\r\n");
-#endif		
   }
 }
 
@@ -722,22 +680,19 @@ void DHCP::check_DHCP_Timeout(void)
 uint8_t DHCP::check_leasedIP(void)
 {
   
-  #ifdef DHCP_DEBUG
+  
   DHCP_DBG("<Check the IP Conflict %d.%d.%d.%d: ",net.ip[0],net.ip[1],net.ip[2],net.ip[3]);
-  #endif
   // sendto is complete. that means there is a node which has a same IP.
   
   if ( _sendto(SOCK_DHCP, (const uint8_t*)"CHECK_IP_CONFLICT", 17, net.ip, 5000))
   {
-  #ifdef DHCP_DEBUG
+  
     DHCP_DBG(" Conflict>\r\n");
-  #endif
     send_DHCP_RELEASE_DECLINE(1);
     return 0;
   }
-  #ifdef DHCP_DEBUG
+  
     DHCP_DBG(" No Conflict>\r\n");
-  #endif
   return 1;
 
 }	
@@ -775,15 +730,20 @@ void DHCP::DHCP_timer_handler(void)
 * Note       : 
 *********************************************************************************************************
 */
-void DHCP::param_init(void)
+int DHCP::param_init(void)
 {
     DHCP_HOST_NAME = host_name;   // HOST NAME
     memset(OLD_SIP,0,sizeof(OLD_SIP));
     memset(DHCP_SIP,0,sizeof(DHCP_SIP));
     memset(DHCP_REAL_SIP,0,sizeof(net.subnet));
 
-
+#if USE_HEAP
+    pRIPMSG     = (RIP_MSG*)mem_malloc(1024,1);         // Pointer for the DHCP message
+    if(pRIPMSG == NULL)
+        return EPARA;
+#else
     pRIPMSG     = (RIP_MSG*)EXTERN_DHCPBUF;         // Pointer for the DHCP message
+#endif
     DHCP_XID    = DEFAULT_XID;				
     dhcp_state  = STATE_DHCP_READY;          // DHCP client status
     dhcp_retry_count = 0;    // retry count
@@ -794,18 +754,18 @@ void DHCP::param_init(void)
     
     
     dhcp_state = STATE_DHCP_READY;
+    return EOK;
 }
 
 int DHCP::begin(uint8_t mac[])
 {
+    int ret = EOTHER;
     memcpy(net.mac,mac,6);
-    param_init();
-
-#ifdef DHCP_DEBUG
-   DHCP_DBG("init_dhcp_client:%u\r\n",SOCK_DHCP);
-#endif  
+    ret = param_init();
+    if(ret != EOK)return ret;
     
-    int i=0;
+   DHCP_DBG("init_dhcp_client:%u\r\n",SOCK_DHCP);
+    
    uint8_t dhcpret=0;
      while(1)
      {
@@ -813,21 +773,32 @@ int DHCP::begin(uint8_t mac[])
         switch(dhcpret)
         {
           case DHCP_RET_NONE:
-              i++;
-              if(i == 0xffff)
-                  return ETIMEOUT;
+              delay_ms(1);
+              ret = EWAIT;
             break;
+              
           case DHCP_RET_TIMEOUT:
-                return ETIMEOUT;
+                ret = ETIMEOUT;
+          
           case DHCP_RET_UPDATE:
-                return EOK;
-          case DHCP_RET_CONFLICT:
+                ret = EOK;
             break;
+          
+          case DHCP_RET_CONFLICT:
+              ret = EOTHER;
+            break;
+          
           default:
             break;
         }
+        DHCP_timer_handler();
+        if(ret == ETIMEOUT || ret == EOK)
+            break;
     }
+    #if USE_HEAP
+        mem_free(pRIPMSG,1);
+    #endif
         
-    return EOTHER;
+    return ret;
 }
 

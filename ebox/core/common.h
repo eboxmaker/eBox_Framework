@@ -18,13 +18,14 @@ This specification is preliminary and is subject to change at any time without n
 
 #include "core.h"                  
 
-#define EBOX_VERSION "16.04.16"
+#define EBOX_VERSION "16.04.19"
 
 #define EOK         0
-#define EBUSY       1
-#define ETIMEOUT    2
-#define EPARA       3
-#define E2LONG      4
+#define EWAIT       1
+#define EBUSY       2
+#define ETIMEOUT    3
+#define EPARA       4
+#define E2LONG      5
 #define EOTHER      128
 
 ////////∫Í∂®“Â/////////////////////////////////

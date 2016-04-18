@@ -2,14 +2,15 @@
 #define __DHCP_H
 #include "socket.h"
 
+#define USE_HEAP 0
+
+#ifdef USE_HEAP
+    #include "heap.h"
+#endif
 
 
 
 
-#define EXTERN_DHCP_NAME   "iweb"//ConfigMsg.domain
-#define EXTERN_DHCP_SIP    ConfigMsg.lip
-
-//#define EXTERN_DHCPBUF        gBUFPUBLIC
 
 #define DHCP_RET_NONE      0
 #define DHCP_RET_ERR       1
@@ -72,7 +73,8 @@ enum
    routersOnSubnet         = 3,
    timeServer              = 4,
    nameServer              = 5,
-   dns                     = 6,
+// dns                     = 6,
+   _dns                    = 6,
    logServer               = 7,
    cookieServer            = 8,
    lprServer               = 9,
@@ -168,11 +170,11 @@ class DHCP
         void  send_DHCP_RELEASE_DECLINE(char msgtype);// send the release message to the DHCP server
         uint8_t parseDHCPMSG(uint16_t length);// Receive the message from DHCP server and parse it.
         void  reset_DHCP_time(void);        // Initialize DHCP Timer
-        void  DHCP_timer_handler(void);     // DHCP Timer handler
         uint8_t check_leasedIP(void);         // Check the leased IP address
+        void  DHCP_timer_handler(void);     // DHCP Timer handler
         void  check_DHCP_Timeout(void);     // Check DHCP Timeout 
     private:
-        void param_init(void);
+        int param_init(void);
 
 
         uint8_t*   DHCP_HOST_NAME ;   // HOST NAME
@@ -195,4 +197,6 @@ class DHCP
         uint8_t  DHCP_timer;
 
 };
+extern DHCP dhcp;
+
 #endif
