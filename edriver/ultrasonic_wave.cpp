@@ -1,42 +1,55 @@
 #include "ultrasonic_wave.h"
 
-ULTRA ultra(&PA0,&PA1);
-
-
-
-void mesure_high()
-{
-    if(ultra.polarity == TIM_ICPOLARITY_FALLING)//检测到下降沿，测量高电平时间完成)
-    {
-        ultra.wave_time = ultra.get_zone_time_us();
-        ultra.flag = 1;
-        ultra.set_polarity_rising();
-    }
-    else
-    {
-        ultra.get_zone_time_us();
-        ultra.set_polarity_falling();
-    }
-}
 void ULTRA::begin()
 {
     this->triger->mode(OUTPUT_PP);
     triger->reset();
-    
     IN_CAPTURE::begin(72);
-    ultra.attch_ic_interrupt(mesure_high);
-    
     flag = 0;
+		status = 0;
 }
-float ULTRA::detect()
+
+void ULTRA::attch_mesuer_event(void(*callback)(void))
 {
-    float distance;
+   attch_ic_interrupt(callback);
+}
+
+void ULTRA::mesure_event()
+{
+    if(polarity == TIM_ICPOLARITY_FALLING)//检测到下降沿，测量高电平时间完成)
+    {
+			if(status == 1)
+			{
+        wave_time_us = get_zone_time_us();
+        flag = 1;
+				status = 0;
+			}
+			else
+			{
+				get_zone_time_us();
+			}
+      set_polarity_rising();
+    }
+    else
+    {
+        get_zone_time_us();
+        set_polarity_falling();
+				status = 1;
+    }
+}
+
+void ULTRA::start()
+{
     triger->set();
     delay_us(10);   
     triger->reset();
-    while(flag == 0);
-    flag = 0;
-    distance = (wave_time)/58.0;
-    return distance;
 }
-
+int ULTRA::avaliable()
+{
+	return flag;
+}
+float ULTRA::read_cm()
+{
+	flag = 0;
+	return wave_time_us/58.0;
+}
