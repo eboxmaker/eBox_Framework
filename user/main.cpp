@@ -10,52 +10,51 @@ Copyright 2016 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 #include "ebox.h"
 #include "ultrasonic_wave.h"
-float value;
-float value_2;
 
-ULTRA ultra(&PA0,&PA1);
-ULTRA ultra_2(&PA2,&PA3);
-
-void ultra_event()
+#include "ebox_mem.h"
+    int i;
+void mem_test()
 {
-	ultra.mesure_event();
-}
-void ultra_event_2()
+u8 *ptr;
+u16 *ptr1;
+u32 *ptr2;
+u32 *ptr3;
+    
+ptr=(u8*)mymalloc(100);
+if(ptr)
 {
-	ultra_2.mesure_event();
-}
+for(int i = 0; i < 10;i++)
+    {
+    *ptr =1;
+    }
+    uart1.printf("i = %d\r\n",ptr[0]);   
+    uart1.printf("ptr = %d\r\n",ptr);   
+}   
+myfree(ptr);
+if(ptr == NULL)
+uart1.printf("free ptr\r\n");  
+else
+uart1.printf("ptr = %d\r\n",ptr);   
+    uart1.printf("i = %d\r\n",ptr[0]);   
 
+
+
+}
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    uart1.printf("ok \r\n");
-    ultra.begin();
-		ultra.attch_mesuer_event(ultra_event);
-	
-    ultra_2.begin();
-		ultra_2.attch_mesuer_event(ultra_event_2);
+    uart1.printf("ok \r\n");   
 }
-
 int main(void)
 {
     setup();
+
+
     while(1)
     {       
-        ultra.start();
-        ultra_2.start();
-				if(ultra.avaliable())
-				{
-					value = ultra.read_cm();
-					uart1.printf("value 1 = %0.2fcm\r\n",value);
-				}
-				
-        ultra_2.start();
-				if(ultra_2.avaliable())
-				{
-					value_2 = ultra_2.read_cm();
-					uart1.printf("value 2 = %0.2fcm\r\n",value_2);
-				}
+
+mem_test();
 				
 				
 		delay_ms(1000);
