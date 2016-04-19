@@ -33,14 +33,14 @@ int SD::begin(uint8_t dev_num)
 uint8_t SD::_wait(void)
 {
   u8 r1 = 0;
-  u16 retry=0;
+  u32 retry=0;
   do
   {
     r1 = spi->read();
     retry++;
-    if(retry==0xfffe)
+    if(retry>=0xfffffffe)
       return 1; 
-  }while(r1!=0xFF); 
+  }while(r1==0); 
 	return 0;
 }
 /*******************************************************************************
@@ -296,7 +296,7 @@ int SD::_receive_data(u8 *data, u16 len, u8 release)
   {
     r1 = spi->read();
     retry++;
-    if(retry>8000)  //4000次等待后没有应答，退出报错(根据实验测试，此处最好多试几次
+    if(retry>8000)  //8000次等待后没有应答，退出报错(根据实验测试，此处最好多试几次
     {
       cs->set();
         return 1;
@@ -304,11 +304,13 @@ int SD::_receive_data(u8 *data, u16 len, u8 release)
     }while(r1 != 0xFE);
 		   
     //开始接收数据
-    while(len--)
-    {
-      *data = spi->read();
-      data++;
-    }
+//    while(len--)
+//    {
+//      *data = spi->read();
+//      data++;
+//    }
+    //速度优化
+    spi->read(data,len);
     //下面是2个伪CRC（dummy CRC）
     spi->write(0xFF);
     spi->write(0xFF);
@@ -508,10 +510,12 @@ u8 SD::write_single_block(u32 sector,const  u8 *data)
   spi->write(0xFE);
 
   //发一个sector的数据
-  for(i=0;i<512;i++)
-  {
-     spi->write(*data++);
-  }
+//  for(i=0;i<512;i++)
+//  {
+//     spi->write(*data++);
+//  }
+  //速度优化
+  spi->write((uint8_t *)data,512);
   //发2个Byte的dummy CRC
   spi->write(0xff);
   spi->write(0xff);
@@ -625,10 +629,12 @@ u8 SD::write_multi_block(u32 sector,  const u8 *data, u8 count)
     //放起始令牌0xFC 表明是多块写入
      spi->write(0xFC);	  
      //放一个sector的数据
-     for(i=0;i<512;i++)
-     {
-        spi->write(*data++);
-     }
+//     for(i=0;i<512;i++)
+//     {
+//        spi->write(*data++);
+//     }
+      //速度优化
+      spi->write((uint8_t *)data,512);
      //发2个Byte的dummy CRC
      spi->write(0xff);
      spi->write(0xff);
@@ -650,7 +656,8 @@ u8 SD::write_multi_block(u32 sector,  const u8 *data, u8 count)
     }while(--count);//本sector数据传输完成
     
     //发结束传输令牌0xFD
-    r1 = spi->write(0xFD);
+    spi->write(0xFD);
+    r1 = spi->read();
     if(r1==0x00)
     {
        count =  0xfe;
