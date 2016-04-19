@@ -2,7 +2,7 @@
 #define __DHCP_H
 #include "socket.h"
 
-#define USE_HEAP 0
+#define USE_HEAP 1
 
 #ifdef USE_HEAP
     #include "heap.h"
