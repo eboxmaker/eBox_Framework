@@ -764,7 +764,7 @@ int DHCP::begin(uint8_t mac[])
     ret = param_init();
     if(ret != EOK)return ret;
     
-   DHCP_DBG("init_dhcp_client:%u\r\n",SOCK_DHCP);
+   DHCP_DBG("init_dhcp_client:%d\r\n",SOCK_DHCP);
     
    uint8_t dhcpret=0;
      while(1)
@@ -796,7 +796,9 @@ int DHCP::begin(uint8_t mac[])
             break;
     }
     #if USE_HEAP
+   DHCP_DBG("--mem:%d\r\n",mem_get_free_size());
         mem_free(pRIPMSG,1);
+   DHCP_DBG("--mem:%d\r\n",mem_get_free_size());
     #endif
         
     return ret;
