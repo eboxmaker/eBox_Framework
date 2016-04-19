@@ -47,15 +47,22 @@ void dirOpt()
 }
 void setup()
 {
+    u8 ret;
     ebox_init();
     uart1.begin(115200);
     ret = sd.begin(3);
-    if(!ret)
-        uart1.printf("\r\nsdcard init ok!");
+    if(ret == 0)
+        uart1.printf("sdcard init ok!\r\n");
+    else
+        uart1.printf("sdcard init failed;err = %d\r\n",ret);
+        
     attach_sd_to_fat(&sd);
 
-    res = f_mount(&fs, "0:", 1);
-    uart1.printf("\r\nres = %d", res);
+    res = f_mount(&fs, "0", 1);
+    if(res == FR_OK)
+        uart1.printf("mount ok!\r\n", res);
+    else
+        uart1.printf("mount err!err = %d\r\n", res);
 }
 u32 count;
 int main(void)
