@@ -12,8 +12,8 @@
  * modification history
  *   ...
  ******************************************************************************/
-#ifndef __F_MALLOC_H
-#define __F_MALLOC_H    
+#ifndef __E_HEAP_H
+#define __E_HEAP_H    
 
 #ifdef __cplusplus
 extern "C"{
@@ -103,14 +103,14 @@ typedef struct BLOCK_LINK
 
 extern size_t cfgTOTAL_HEAP_SIZE[];
 
-void *memMalloc( size_t wantedSize,uint8_t memType );
+void *memMalloc( size_t xWantedSize,uint8_t memType );
 void memFree( void *pv,uint8_t memType );
 size_t memGetFreeHeapSize( uint8_t memType );
 
 
 //用户接口
 //E_MemType-1才是数组编号
-#define mem_malloc(wantedSize,memType)    memMalloc(wantedSize,memType-1)       
+#define mem_malloc(xWantedSize,memType)    memMalloc(xWantedSize,memType-1)       
 #define mem_free(pv,memType)               do{memFree(pv,memType-1);pv = NULL;}while(0)
 #define mem_get_free_size(memType)           memGetFreeHeapSize(memType-1)
 

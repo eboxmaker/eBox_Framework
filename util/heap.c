@@ -78,7 +78,7 @@ static const size_t memHeapStructSize	= ( sizeof( BlockLink_t ) + ( ( size_t ) (
 
 /* Create a couple of list links to mark the start and end of the list. */
 static BlockLink_t memStart[COUT_OF_MEM];
-static BlockLink_t *memEnd[COUT_OF_MEM] = {
+static BlockLink_t *pxMemEnd[COUT_OF_MEM] = {
 #if COUT_OF_MEM > 0
     NULL,
 #endif
@@ -136,7 +136,7 @@ static void memInsertBlockIntoFreeList( BlockLink_t *pxBlockToInsert ,uint8_t me
  */
 static void memHeapInit( uint8_t memType );
 
-void *memMalloc( size_t wantedSize ,uint8_t memType )
+void *memMalloc( size_t xWantedSize ,uint8_t memType )
 {
     BlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
     void *pvReturn = NULL;
@@ -151,7 +151,7 @@ void *memMalloc( size_t wantedSize ,uint8_t memType )
 		/* If this is the first call to malloc then the heap will require
 		initialisation to setup the list of free blocks. */
 		/*分配时还没有初始化，先初始化*/
-		if( memEnd[memType] == NULL )
+		if( pxMemEnd[memType] == NULL )
 		{
 			memHeapInit(memType);
 		}
@@ -168,22 +168,22 @@ void *memMalloc( size_t wantedSize ,uint8_t memType )
 		每一个分配出去的内存块大小就有限制了。例如，我用的是STM32F103，size_t是
 		定义为unsigned int类型的，32位，可支持到4G的内存空间。但是最高1位用来指
 		示空间状态的话，那就只有31位去标识内存块地址，即只支持到2G的内存空间*/
-		if( ( wantedSize & memBlockAllocatedBit ) == 0 )
+		if( ( xWantedSize & memBlockAllocatedBit ) == 0 )
 		{
 			/* The wanted size is increased so it can contain a BlockLink_t
 			structure in addition to the requested amount of bytes. */
-			if( wantedSize > 0 )
+			if( xWantedSize > 0 )
 			{
-				wantedSize += memHeapStructSize;                 //实际大小=请求大小+1个BlockLink_t的大小
+				xWantedSize += memHeapStructSize;                 //实际大小=请求大小+1个BlockLink_t的大小
 
 				/* Ensure that blocks are always aligned to the required number
 				of bytes. */
 				/*保证分配的的大小字节对齐*/
-				if( ( wantedSize & BYTE_ALIGNMENT_MASK ) != 0x00 )
+				if( ( xWantedSize & BYTE_ALIGNMENT_MASK ) != 0x00 )
 				{
 					/* Byte alignment required. */
-					wantedSize += ( BYTE_ALIGNMENT - ( wantedSize & BYTE_ALIGNMENT_MASK ) );
-					cfgASSERT( ( wantedSize & portBYTE_ALIGNMENT_MASK ) == 0 );
+					xWantedSize += ( BYTE_ALIGNMENT - ( xWantedSize & BYTE_ALIGNMENT_MASK ) );
+					cfgASSERT( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) == 0 );
 				}
 				else
 				{
@@ -196,14 +196,14 @@ void *memMalloc( size_t wantedSize ,uint8_t memType )
 			}
 
             /*分配大小小于实际可用，可以分配*/
-			if( ( wantedSize > 0 ) && ( wantedSize <= memFreeBytesRemaining[memType] ) )
+			if( ( xWantedSize > 0 ) && ( xWantedSize <= memFreeBytesRemaining[memType] ) )
 			{
 				/* Traverse the list from the start	(lowest address) block until
 				one	of adequate size is found. */
 				/*寻找一块满足分配大小的内存块*/
 				pxPreviousBlock = &(memStart[memType]);
 				pxBlock = memStart[memType].nextFreeBlock;
-				while( ( pxBlock->blockSize < wantedSize ) && ( pxBlock->nextFreeBlock != NULL ) )
+				while( ( pxBlock->blockSize < xWantedSize ) && ( pxBlock->nextFreeBlock != NULL ) )
 				{
 					pxPreviousBlock = pxBlock;
 					pxBlock = pxBlock->nextFreeBlock;
@@ -212,7 +212,7 @@ void *memMalloc( size_t wantedSize ,uint8_t memType )
 				/* If the end marker was reached then a block of adequate size
 				was	not found. */
 				/*找到满足大小的内存块了*/
-				if( pxBlock != memEnd[memType] )
+				if( pxBlock != pxMemEnd[memType] )
 				{
 					/* Return the memory space pointed to - jumping over the
 					BlockLink_t structure at its start. */
@@ -226,19 +226,19 @@ void *memMalloc( size_t wantedSize ,uint8_t memType )
 					two. */
 					/*如果分配出去的空闲块比申请的空间大很多，则将该空闲块进行分割，把剩余的部分
 					重新添加到链表中。*/
-					if( ( pxBlock->blockSize - wantedSize ) > heapMINIMUM_BLOCK_SIZE )
+					if( ( pxBlock->blockSize - xWantedSize ) > heapMINIMUM_BLOCK_SIZE )
 					{
 						/* This block is to be split into two.  Create a new
 						block following the number of bytes requested. The void
 						cast is used to prevent byte alignment warnings from the
 						compiler. */
-						pxNewBlockLink = ( void * ) ( ( ( uint8_t * ) pxBlock ) + wantedSize );
+						pxNewBlockLink = ( void * ) ( ( ( uint8_t * ) pxBlock ) + xWantedSize );
 						cfgASSERT( ( ( ( size_t ) pxNewBlockLink ) & portBYTE_ALIGNMENT_MASK ) == 0 );
 
 						/* Calculate the sizes of two blocks split from the
 						single block. */
-						pxNewBlockLink->blockSize = pxBlock->blockSize - wantedSize;
-						pxBlock->blockSize = wantedSize;
+						pxNewBlockLink->blockSize = pxBlock->blockSize - xWantedSize;
+						pxBlock->blockSize = xWantedSize;
 
 						/* Insert the new block into the list of free blocks. */
 						memInsertBlockIntoFreeList( ( pxNewBlockLink ),memType );
@@ -279,7 +279,7 @@ void *memMalloc( size_t wantedSize ,uint8_t memType )
 			COVERAGE_TEST_MARKER();
 		}
 
-		//traceMALLOC( pvReturn, wantedSize );
+		//traceMALLOC( pvReturn, xWantedSize );
 	}
 	OS_EXIT_CRITICAL();
 
@@ -431,16 +431,16 @@ static void memHeapInit(uint8_t memType)
 	uxAddress = ( ( size_t ) pucAlignedHeap ) + xTotalHeapSize;
 	uxAddress -= memHeapStructSize;
 	uxAddress &= ~( ( size_t ) BYTE_ALIGNMENT_MASK );
-	memEnd[memType] = ( void * ) uxAddress;
-	memEnd[memType]->blockSize = 0;
-	memEnd[memType]->nextFreeBlock = NULL;
+	pxMemEnd[memType] = ( void * ) uxAddress;
+	pxMemEnd[memType]->blockSize = 0;
+	pxMemEnd[memType]->nextFreeBlock = NULL;
 
 	/* To start with there is a single free block that is sized to take up the
 	entire heap space, minus the space taken by pxEnd. */
 	/*初始只有一个可用内存块，大小为所有可用内存池大小*/
 	pxFirstFreeBlock = ( void * ) pucAlignedHeap;
 	pxFirstFreeBlock->blockSize = uxAddress - ( size_t ) pxFirstFreeBlock;
-	pxFirstFreeBlock->nextFreeBlock = memEnd[memType];
+	pxFirstFreeBlock->nextFreeBlock = pxMemEnd[memType];
 
 	/* Only one block exists - and it covers the entire usable heap space. */
 	memMinimumEverFreeBytesRemaining[memType] = pxFirstFreeBlock->blockSize;
@@ -489,7 +489,7 @@ static void memInsertBlockIntoFreeList( BlockLink_t *pxBlockToInsert ,uint8_t me
 	puc = ( uint8_t * ) pxBlockToInsert;
 	if( ( puc + pxBlockToInsert->blockSize ) == ( uint8_t * ) pxIterator->nextFreeBlock )
 	{
-		if( pxIterator->nextFreeBlock != memEnd[memType] )
+		if( pxIterator->nextFreeBlock != pxMemEnd[memType] )
 		{
 			/* Form one big block from the two blocks. */
 			pxBlockToInsert->blockSize += pxIterator->nextFreeBlock->blockSize;
@@ -497,7 +497,7 @@ static void memInsertBlockIntoFreeList( BlockLink_t *pxBlockToInsert ,uint8_t me
 		}
 		else
 		{
-			pxBlockToInsert->nextFreeBlock = memEnd[memType];
+			pxBlockToInsert->nextFreeBlock = pxMemEnd[memType];
 		}
 	}
 	else
