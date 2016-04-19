@@ -383,10 +383,10 @@ int SD::get_CSD(u8 *csd_data)
 * Return         : u32 capacity
 *                   0： 取容量出错
 *******************************************************************************/
-u32 SD::get_capacity(void)
+uint64_t SD::get_capacity(void)
 {
     u8 csd[16];
-    u32 Capacity;
+    uint64_t Capacity;
     u8 r1;
     u16 i;
     u16 temp;
@@ -400,7 +400,7 @@ u32 SD::get_capacity(void)
         Capacity = ((u32)csd[8]) << 8;
         Capacity += (u32)csd[9] + 1;
         Capacity = (Capacity) * 1024; //得到扇区数
-        Capacity *= 512; //得到字节数
+        Capacity = Capacity*512; //得到字节数
     }
     else
     {
@@ -436,7 +436,7 @@ u32 SD::get_capacity(void)
     }
     spi->release_spi_right();
 
-    return (u32)Capacity;
+    return (uint64_t)Capacity;
 }
 /*******************************************************************************
 * Function Name  : SD_ReadSingleBlock
@@ -486,7 +486,7 @@ u8 SD::write_single_block(u32 sector, const  u8 *data)
 {
     u8 r1;
     u16 i;
-    u16 retry;
+    u32 retry;
     //设置为高速模式
     SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
     spi->take_spi_right(&SPIDevSDCard);
@@ -534,7 +534,7 @@ u8 SD::write_single_block(u32 sector, const  u8 *data)
     while(!spi->read())//卡自编程时，数据线被拉低
     {
         retry++;
-        if(retry > 65534)      //如果长时间写入没有完成，报错退出
+        if(retry > 0xfffffffe)      //如果长时间写入没有完成，报错退出
         {
             cs->set();
             return 1;           //写入超时返回1
