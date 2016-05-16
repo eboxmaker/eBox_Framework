@@ -21,23 +21,16 @@ This specification is preliminary and is subject to change at any time without n
 	2.一个中断源，三个中断事件
 	3.支持一个简易时钟
 	4.支持一个闹钟
+    
 */
-
-
-//用户配置
-#define RTC_CLOCK_LSI 0
-#define RTC_CLOCK_LSE 1
-#define RTC_CLOCK_HSI 2//不支持，暂时不可用
-
-#define RTC_CLOCK_SOURCE RTC_CLOCK_LSI
-//#define RTC_CLOCK_SOURCE RTC_CLOCK_LSE
-
 
 class RTC_CLASS
 {
 
 public:
-    void begin();
+    int begin(uint8_t clock_source);//1:LSE;0:LSI如果使用外部晶振
+                                    //正常返回EOK
+                                    //失败后会返回一个ETIMEOUT错误,并自动转为内部晶振。
 
     void attach_overflow_interrupt(void (*cb_fun)(void));
     void attach_alarm_interrupt(void (*cb_fun)(void));
@@ -54,7 +47,7 @@ public:
 
 
 private:
-    void    config();
+    int    config(uint8_t flag);
     uint8_t is_config(uint16_t configFlag);
     void    set_config_flag(uint16_t configFlag);
     void    nvic(FunctionalState state);
