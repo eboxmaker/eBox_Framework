@@ -7,136 +7,54 @@ date   : 2015/7/5
 Copyright 2015 shentq. All Rights Reserved.
 */
 
-//STM32 RUN IN eBox
+/*
+输入捕获实验-测量周期和频率
+本例程为使用输入捕获模式测量一个PWM信号的周期和频率
+请将PA0和PB6使用跳线链接起来
+*/
 #include "ebox.h"
-#include "mmc_sd.h"
-#include "wrapperdiskio.h"
-#include "ff.h"
 
+IN_CAPTURE ic0(&PA0);//创建一个输入捕获的对象
+PWM pwm1(&PB6);//创建一个PWM输出对象
 
+float us;
+uint32_t count;
 
-
-
-static FATFS fs;            // Work area (file system object) for logical drive
-FATFS *fss;
-DIR DirObject;       //目录结构
-FIL fsrc;            // 文件结构
-
-FRESULT res;
-
-SD sd(&PB12, &spi2);
-
-void fileOpt()
+void m_frq_0()//输入捕获中断事件
 {
-    u8 ret;
-    u8 buf[100];
-    u8 readBuf[6] ;
-    u32 bw = 0;
-    u32 br = 0;
-
-   for(int i = 0; i < 100; i++)
-        buf[i] = '1';
-    res = f_open(&fsrc, "0:12345.txt", FA_WRITE | FA_READ | FA_CREATE_ALWAYS); //没有这个文件则创建该文件
-    uart1.printf("\r\n");
-
-    if(res == FR_OK)
-    {
-        uart1.printf("open/make file  O(∩_∩)O\r\n");
-        uart1.printf("file flag:%d\r\n", fsrc.flag);
-        uart1.printf("file size：%d\r\n", fsrc.fsize);
-        uart1.printf("file ptr(start location)：%d\r\n", fsrc.fptr);
-        //		uart1.printf("该文件开始簇号:%d\r\n",fsrc.org_clust);
-        //		uart1.printf("该文件当前簇号：%d\r\n",fsrc.curr_clust);
-        uart1.printf("dsect num:%d\r\n", fsrc.dsect);
-
-        f_lseek(&fsrc, 0);
-        do
-        {
-            res = f_write(&fsrc, buf, sizeof(buf), &bw);
-            if(res)
-            {
-                uart1.printf("write error : %d\r\n", res);
-                break;
-            }
-            uart1.printf("write ok!\r\n");
-        }
-        while (bw < sizeof(buf));  //  判断是否写完(bw > 100，表示写入完成)
-    }
-    else if(res == FR_EXIST)
-        uart1.printf("file exist\r\n");
-    else
-        uart1.printf("creat/open failed~~~~(>_<)~~~~ %d\r\n", res);
-    f_close(&fsrc);//关闭文件
-
-    /////////////////////////////////////////////////////////////////////////////////////
-    u32 readsize;
-    u32 buflen;
-    buflen = sizeof(readBuf);
-    res = f_open(&fsrc, "0:12345.txt", FA_READ); //没有这个文件则创建该文件
-    if(res == FR_OK)
-    {
-        uart1.printf("file size：%d\r\n", fsrc.fsize);
-    }
-    readsize = 0;
-    do
-    {
-        res = f_read(&fsrc, readBuf, buflen, &br);
-        if(res == FR_OK)
-        {
-            //			 uart1.printf("成功读取数据：%dBytes\r\n",br);
-            //			 uart1.printf("data:%s\r\n",readBuf);
-            uart1.printf_length((const char *)readBuf, sizeof(readBuf));
-        }
-        else
-        {
-            uart1.printf("\r\nread failed\r\n");
-        }
-        readsize += buflen;
-        f_lseek(&fsrc, readsize);
-
-    }
-    while(br == buflen);
-    uart1.printf("\r\nread end\r\n");
-    f_close(&fsrc);//关闭文件
-    f_mount(&fs, "0:", 0);
-
-
-
-
+    //适用于低频率采集，优点是生的用户去计算，缺点高频率的调用浮点运算。占用cpu大量时间
+    us = ic0.get_zone_time_us();//获取两个边沿之间的时间。
+    //适用于所有情况，执行效率高，缺点需要用户计算(us)=get_capture()/(72.0/prescaler);
+    //count = ic0.get_capture();//获取两个边沿之间的时间。
 }
+
 void setup()
 {
-    u8 ret;
     ebox_init();
     uart1.begin(115200);
-    ret = sd.begin(3);
-    if(ret == 0)
-        uart1.printf("sdcard init ok!\r\n");
-    else
-        uart1.printf("sdcard init failed;err = %d\r\n",ret);
-        
-    attach_sd_to_fat(&sd);
 
-    res = f_mount(&fs, "0", 1);
-    if(res == FR_OK)
-        uart1.printf("mount ok!\r\n", res);
-    else
-        uart1.printf("mount err!err = %d\r\n", res);
+    ic0.begin(1);//初始化输入捕获参数，p分频
+    ic0.attch_ic_interrupt(m_frq_0);//绑定捕获中断事件函数
+
+    pwm1.begin(1000, 500);
+    pwm1.set_oc_polarity(1);
 }
-u32 count;
 int main(void)
 {
     setup();
-    fileOpt();
     while(1)
     {
-
-        //uart1.printf("\r\nrunning！");
+        while(us == 0);//等待产生数据
+        uart1.printf("PWM周期 = %fus\r\n", us); //输出PWM周期
+        uart1.printf("PWM频率 = %0.1fhz\r\n", 1000000.0/ (us)); //输出PWM频率
+        us = 0;
         delay_ms(1000);
     }
-
-
 }
+
+
+
+
 
 
 
