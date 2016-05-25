@@ -21,7 +21,7 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    rtc.begin(1);
+    rtc.begin();
     rtc.attach_sec_interrupt(rtc_sec_event);
     rtc.sec_interrupt(ENABLE);
     calendar.begin();

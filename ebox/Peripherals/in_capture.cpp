@@ -26,7 +26,6 @@ IN_CAPTURE::IN_CAPTURE(GPIO *capture_pin)
     this->period = 0xffff;
     this->prescaler = 72;
     this->polarity = TIM_ICPOLARITY_FALLING;
-    set_polarity_rising();
 }
 void IN_CAPTURE::begin(uint16_t prescaler)
 {
@@ -246,9 +245,9 @@ uint32_t IN_CAPTURE::get_capture()
     last_value = now;
     return capture;
 }
-float IN_CAPTURE::get_zone_time_us()
+uint32_t IN_CAPTURE::get_zone_time_us()
 {
-    return get_capture()/(72.0/this->prescaler);
+    return get_capture()/(72/this->prescaler);
 }
 
 void IN_CAPTURE::set_count(uint16_t count)
