@@ -13,69 +13,42 @@ Disclaimer
 This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
 */
 #include "rtc.h"
+
 #define RTC_CFG_FLAG 0XA5A5
-#include "ebox.h"
+
 RTC_CLASS rtc;
 callback_fun_type rtc_callback_table[3];//
 
-int RTC_CLASS::begin(uint8_t clock_source)
+void RTC_CLASS::begin()
 {
 
-    int ret = EOK;
-    /* Enable PWR and BKP clocks */
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
-
-    /* Allow access to BKP Domain */
-    PWR_BackupAccessCmd(ENABLE);
-    /* Reset Backup Domain */
-//    BKP_DeInit();
-
-
-    if(is_config(RTC_CFG_FLAG) == 0)
-    {
-        if(config(clock_source) != EOK)
-        {
-            config(0);
-            ret = EPARA;
-        }
-    
-        set_config_flag(RTC_CFG_FLAG);
-    }
-	else
-	{
-		/* Check if the Power On Reset flag is set */
-		if (RCC_GetFlagStatus(RCC_FLAG_PORRST) != RESET)
-		{
-			uart1.printf("\r\n\n Power On Reset occurred....");
-		}
-		/* Check if the Pin Reset flag is set */
-		else if (RCC_GetFlagStatus(RCC_FLAG_PINRST) != RESET)
-		{
-			uart1.printf("\r\n\n External Reset occurred....");
-		}
-		
-		uart1.printf("\r\n No need to configure RTC....");
-		uart1.printf("\r\n step 0....");
-		/* Wait for RTC registers synchronization */
-		RTC_WaitForSynchro();
-		uart1.printf("\r\n step 1....");
-		
-		/* Enable the RTC Second */
-		RTC_ITConfig(RTC_IT_SEC, ENABLE);
-		uart1.printf("\r\n step 2....");
-		
-		/* Wait until last write operation on RTC registers has finished */
-		RTC_WaitForLastTask();
-        
-		uart1.printf("\r\n step 3....");
-	}
-    return ret;
+    //	if(isConfig() == 0)
+    //	{
+    config();
+    set_config_flag(RTC_CFG_FLAG);
+    //	}
+    //	else
+    //	{
+    //		/* Check if the Power On Reset flag is set */
+    //		if (RCC_GetFlagStatus(RCC_FLAG_PORRST) != RESET)
+    //		{
+    //			;
+    //		}
+    //		/* Check if the Pin Reset flag is set */
+    //		else if (RCC_GetFlagStatus(RCC_FLAG_PINRST) != RESET)
+    //		{
+    //			;
+    //		}
+    //		/* Wait for RTC registers synchronization */
+    //		RTC_WaitForSynchro();
+    //
+    //		/* Wait until last write operation on RTC registers has finished */
+    //		RTC_WaitForLastTask();
+    //	}
 }
-int RTC_CLASS::config(uint8_t flag)
+void RTC_CLASS::config(void)
 {
 
-    int ret;
-    uint32_t i=0;
     /* Enable PWR and BKP clocks */
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
 
@@ -84,21 +57,14 @@ int RTC_CLASS::config(uint8_t flag)
 
     /* Reset Backup Domain */
     BKP_DeInit();
-    
-    if(flag == 1)
+    if(RTC_CLOCK_SOURCE)
     {
         /* Enable LSE */
         RCC_LSEConfig(RCC_LSE_ON);
         /* Wait till LSE is ready */
         while (RCC_GetFlagStatus(RCC_FLAG_LSERDY) == RESET)
-        {
-            i++;
-            if(i >= 0x1fffff)
-            {
-                ret = ETIMEOUT;
-                return ret;
-            }
-        }            
+        {}
+
         /* Select LSE as RTC Clock Source */
         RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE);
     }
@@ -125,7 +91,7 @@ int RTC_CLASS::config(uint8_t flag)
 
     /* Wait until last write operation on RTC registers has finished */
     RTC_WaitForLastTask();
-    if(flag == 1)
+    if(RTC_CLOCK_SOURCE)
     {
         /* Set RTC prescaler: set RTC period to 1sec */
         RTC_SetPrescaler(32767); /* RTC period = RTCCLK/RTC_PR = (32.768 KHz)/(32767+1) */
@@ -139,15 +105,18 @@ int RTC_CLASS::config(uint8_t flag)
 
     /* Wait until last write operation on RTC registers has finished */
     RTC_WaitForLastTask();
-       
+    
+    
     
     nvic(ENABLE);
 
-    return EOK;
 }
 uint8_t RTC_CLASS::is_config(uint16_t configFlag)
 {
-    return (BKP_ReadBackupRegister(BKP_DR1) == configFlag);
+    uint8_t flag = 0;
+    if(BKP_ReadBackupRegister(BKP_DR1) == configFlag)
+        flag = 1;
+    return flag;
 }
 void RTC_CLASS::set_config_flag(uint16_t configFlag)
 {

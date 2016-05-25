@@ -21,21 +21,16 @@ This specification is preliminary and is subject to change at any time without n
 /*
 1.支持TIM2，3，4的ch1,2,3,4.共计12个通道
 2.支持测量周期、频率、高级用法支持测量占空比
-3.默认测量下降沿，可通过函数设置测量边沿模式
-4.定时器计数器最大值为0xffff,为了突破这个限制，
+3.定时器计数器最大值为0xffff,为了突破这个限制，
     在本例程中，使用了update溢出中断调用tx_overflow_times可以将计数器
     拓展至2^32。大大提高测量范围，可以实现最高频率（1分频）测量周期低于120s的信号。
     如果使用2分频，可测量周期低于240s的信号。以此类推。
-5.关于分频系数和脉冲宽度测量的计算关系，要遵循一个原则：在不溢出的情况下尽量使用低分频系数（高TIM时钟）去检测对象
-6.关于get_capture()和测量时间结果转换的关系；
+4.关于分频系数和脉冲宽度测量的计算关系，要遵循一个原则：在不溢出的情况下尽量使用低分频系数（高TIM时钟）去检测对象
+5.关于get_capture()和测量时间结果转换的关系；
     时间(us)=get_capture()/(72/prescaler);
     时间(ms)=get_capture()/(72000/prescaler);
     时间(s)=get_capture()/(72000000/prescaler);
-    如果直接使用get_zone_time_us()方法则可直接得到一个计算好的值。可以省去手工计算的过程。
-    此处提供了两种获取边沿宽度的方法，一种是按定时器脉冲数，一种是按时间单位注意其区别。
-
-
-7.如果使用某个定时器通道用于输入捕获，则该定时器所有通道都必须是输入捕获模式，不能再设置为其他工作模式
+6.如果使用某个定时器通道用于输入捕获，则该定时器所有通道都必须是输入捕获模式，不能再设置为其他工作模式
 重点：
     在采用低分频系数的时候，可以保证测量精度，但是会增大定时器溢出频率，进而增大cpu开销，
     在采用高分频系数的时候，测量精度较低，但是会降低定时器溢出频率，进而降低cpu开销，
@@ -51,8 +46,8 @@ public:
     void        set_count(uint16_t count);
     void        set_polarity_falling();
     void        set_polarity_rising();
-    uint32_t    get_capture();//适用于所有情况，执行效率高，缺点需要用户计算(us)=get_capture()/(72.0/prescaler);
-    float       get_zone_time_us();//适用于低频率采集，优点是生的用户去计算，缺点高频率的调用浮点运算。占用cpu大量时间
+    uint32_t    get_capture();
+    uint32_t    get_zone_time_us();
     void        attch_ic_interrupt(void(*callback)(void));
     void        attch_update_interrupt(void(*callback)(void));
 

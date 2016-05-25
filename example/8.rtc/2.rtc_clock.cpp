@@ -32,7 +32,7 @@ void setup()
     ebox_init();
     uart1.begin(115200);
     
-    rtc.begin(1);
+    rtc.begin();
     clock.set_clock(23,59,55);
     rtc.attach_sec_interrupt(rtcsecit);
 
