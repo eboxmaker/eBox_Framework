@@ -191,7 +191,7 @@ void USART::interrupt(FunctionalState enable)
 
     USART_ITConfig(_USARTx, USART_IT_RXNE, enable);
     USART_ITConfig(_USARTx, USART_IT_TC, enable);
-    USART_ClearITPendingBit(USART1, USART_IT_TC);
+    USART_ClearITPendingBit(_USARTx, USART_IT_TC);
 
     switch((uint32_t)_USARTx)
     {
