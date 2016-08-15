@@ -1,10 +1,23 @@
+/**
+  ******************************************************************************
+  * @file   : *.cpp
+  * @author : shentq
+  * @version: V1.2
+  * @date   : 2016/08/14
+
+  * @brief   ebox application example .
+  *
+  * Copyright 2016 shentq. All Rights Reserved.         
+  ******************************************************************************
+ */
+
 
 #include "ebox.h"
 #include "w25x16.h"
 
 
 
-W25X flash(&PA8, &spi1);
+W25x16 flash(&PA15, &spi1);
 
 
 void setup()
@@ -22,10 +35,11 @@ uint8_t wbuf[100];
 int main(void)
 {
     setup();
-    for(int i = 0; i < 100; i++)
-        wbuf[i] = i;
     while(1)
     {
+        for(int i = 0; i < 100; i++)
+            wbuf[i] = random()%256;
+        
         flash.read_id(&id);
         uart1.printf("\r\n==readid=======\r\n");
         uart1.printf("id = %x", id);

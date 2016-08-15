@@ -1,19 +1,21 @@
-/*
-file   : *.cpp
-author : shentq
-version: V1.0
-date   : 2015/7/5
+/**
+  ******************************************************************************
+  * @file   : *.cpp
+  * @author : shentq
+  * @version: V1.2
+  * @date   : 2016/08/14
 
-Copyright 2015 shentq. All Rights Reserved.
-*/
-
-//STM32 RUN IN eBox
+  * @brief   ebox application example .
+  *
+  * Copyright 2016 shentq. All Rights Reserved.         
+  ******************************************************************************
+ */
 
 
 #include "ebox.h"
 #include "math.h"
 
-PWM pwm1(&PB8);
+Pwm pwm1(&PB8);
 
 //STM32 RUN IN eBox
 

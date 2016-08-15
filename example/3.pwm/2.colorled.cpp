@@ -1,13 +1,17 @@
-/*
-file   : *.cpp
-author : shentq
-version: V1.0
-date   : 2015/7/5
+/**
+  ******************************************************************************
+  * @file   : *.cpp
+  * @author : shentq
+  * @version: V1.2
+  * @date   : 2016/08/14
 
-Copyright 2015 shentq. All Rights Reserved.
-*/
+  * @brief   ebox application example .
+  *
+  * Copyright 2016 shentq. All Rights Reserved.         
+  ******************************************************************************
+ */
 
-//STM32 RUN IN eBox
+
 
 
 #include "ebox.h"
@@ -25,11 +29,12 @@ void setup()
     ebox_init();
     uart1.begin(9600);
     led.begin();
-    hsl.s = 0.5;
+    hsl.h = 1;
+    hsl.s = 1;
     hsl.l = 0.5;
 
     hsv.h = 2;
-    hsv.s = 0.5;
+    hsv.s = 1;
     hsv.v = 0.5;
 }
 
@@ -42,18 +47,29 @@ int main(void)
 
     while(1)
     {
-        hsl.h += 1;
-        if(hsl.h > 360)hsl.h = 0;
-        led.color_hsl(hsl);
-        //        led.color_rgb(0,0,255);
-        //        led.color_rgb(0,255,0);
-        //        led.color_rgb(255,0,0);
-        delay_ms(10);
+//方法1：        
+    led.color_rgb(0,0,255);
+    delay_ms(100);
+    led.color_rgb(0,255,0);
+    delay_ms(100);
+    led.color_rgb(255,0,0);
+    delay_ms(100);
+        
+//方法2：
+//        hsv.h++;
+//        if(hsv.h>360)hsv.h = 0;
+//        led.color_hsv(hsv);
+//        delay_ms(10);
 
-        //		hsv.h++;
-        //		if(hsv.h>360)hsv.h = 0;
-        //		led.color_hsv(hsv);
-        //		delay_ms(10);
+//方法3：
+//        hsl.h++;
+//        if(hsl.h > 360)hsl.h = 0;
+//        led.color_hsl(hsl);
+//        delay_ms(10);
+        
+        
+
+
     }
 
 }
