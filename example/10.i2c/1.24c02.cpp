@@ -1,26 +1,27 @@
-/*
-file   : *.cpp
-author : shentq
-version: V1.0
-date   : 2015/7/5
+/**
+  ******************************************************************************
+  * @file   : *.cpp
+  * @author : shentq
+  * @version: V1.2
+  * @date   : 2016/08/14
 
-Copyright 2015 shentq. All Rights Reserved.
-*/
+  * @brief   ebox application example .
+  *
+  * Copyright 2016 shentq. All Rights Reserved.         
+  ******************************************************************************
+ */
 
-//STM32 RUN IN eBox
+
 #include "ebox.h"
 #include "at24c02.h"
 
-EEPROM ee(&i2c2);
+At24c02 ee(&i2c2);
 uint8_t data;
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
     ee.begin(400000);
-
-
-    PA7.mode(AIN);
 }
 
 int16_t x, i;

@@ -1,17 +1,21 @@
-/*
-file   : *.cpp
-author : shentq
-version: V1.1
-date   : 2016/03/26
+/**
+  ******************************************************************************
+  * @file   : *.cpp
+  * @author : shentq
+  * @version: V1.2
+  * @date   : 2016/08/14
 
-Copyright 2016 shentq. All Rights Reserved.
-*/
+  * @brief   ebox application example .
+  *
+  * Copyright 2016 shentq. All Rights Reserved.         
+  ******************************************************************************
+ */
 
-//STM32 RUN IN eBox
+
 #include "ebox.h"
 #include "calendar.h"
 
-CALENDAR calendar;
+Calendar calendar;
 
 void rtc_sec_event()
 {

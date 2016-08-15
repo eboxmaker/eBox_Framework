@@ -14,7 +14,7 @@ Copyright 2015 shentq. All Rights Reserved.
 
 #define MAX485_T_R_PIN PA1
 
-LCD lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
+Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
 uint8_t c = 'o';
 
 void MAX485_T_MODE()
