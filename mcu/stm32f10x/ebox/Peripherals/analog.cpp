@@ -18,7 +18,7 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "common.h"
+#include "analog.h"
 
 /** @defgroup analog 
   * @brief analog driver modules默认开启16通道 采用DMA+ADC连续转换模式。提供AD采集服务，只需将IO设置为AIN

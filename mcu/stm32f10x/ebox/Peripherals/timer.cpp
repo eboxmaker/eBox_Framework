@@ -34,12 +34,14 @@ Timer::Timer(TIM_TypeDef *TIMx)
 
 void Timer::begin(uint32_t frq)
 {
+
     uint32_t _period  = 0;
     uint32_t _prescaler = 1;
-    if(frq >= 1000000)frq = 1000000;
+
+    if(frq >= get_max_frq())frq = get_max_frq();//控制最大频率
     for(; _prescaler <= 0xffff; _prescaler++)
     {
-        _period = 72000000 / _prescaler / frq;
+        _period = get_timer_source_clock() / _prescaler / frq;
         if((0xffff >= _period))break;
     }
 
@@ -135,11 +137,12 @@ void Timer::base_init(uint16_t period, uint16_t prescaler)
         break;
 #endif
     }
+    TIM_InternalClockConfig(_TIMx);
 
     TIM_TimeBaseStructure.TIM_Period = period - 1; //ARR寄存器
     TIM_TimeBaseStructure.TIM_Prescaler = prescaler - 1;
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; //单边斜坡
-    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV4;
 
     TIM_TimeBaseInit(_TIMx, &TIM_TimeBaseStructure);
     TIM_ARRPreloadConfig(_TIMx, ENABLE);	//控制ARR寄存器是否使用影子寄存器
@@ -159,6 +162,32 @@ void Timer::clear_count(void)
     _TIMx->CNT = 0;
 }
 
+uint32_t Timer::get_timer_source_clock()
+{
+    uint32_t temp = 0;
+    uint32_t timer_clock = 0x00;
+    
+    RCC_ClocksTypeDef RCC_ClocksStatus;
+    RCC_GetClocksFreq(&RCC_ClocksStatus);
+    if ((uint32_t)_TIMx == TIM1_BASE)
+    {
+        timer_clock = RCC_ClocksStatus.PCLK2_Frequency;
+    }
+    else
+    {
+        temp = RCC->CFGR;
+        if(temp & 0x00000400)//检测PCLK是否进行过分频，如果进行过分频则定时器的频率为PCLK1的两倍
+            timer_clock = RCC_ClocksStatus.PCLK1_Frequency * 2;
+        else
+            timer_clock = RCC_ClocksStatus.PCLK1_Frequency ;
+    }
+    return timer_clock;
+}
+uint32_t Timer::get_max_frq()
+{
+    return get_timer_source_clock()/400;
+
+}
 
 
 

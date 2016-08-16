@@ -15,6 +15,13 @@
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
   ******************************************************************************
   */
+/**
+ * Modification History:
+ * -shentq                  -version 1.2(2016/08/17)
+ *      *修复了芯片主频只能限制为72Mhz的限制，支持任意主频
+ *      *增加了cpu的信息获取，包括各个总线时钟，芯片容量，芯片计算加加的能力
+ */
+
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 

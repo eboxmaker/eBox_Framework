@@ -19,7 +19,7 @@
 
 uint32_t xx;
 uint8_t flag;
-Timer timer2(TIM2);
+Timer timer1(TIM1);
 
 void t2it()
 {
@@ -34,13 +34,13 @@ void t2it()
 void setup()
 {
     ebox_init();
-    uart1.begin(9600);
+    uart1.begin(115200);
     PB8.mode(OUTPUT_PP);
 
-    timer2.begin(1000);
-    timer2.attach_interrupt(t2it);
-    timer2.interrupt(ENABLE);
-    timer2.start();
+    timer1.begin(1000);
+    timer1.attach_interrupt(t2it);
+    timer1.interrupt(ENABLE);
+    timer1.start();
 }
 
 

@@ -24,7 +24,6 @@ extern uint16_t t2_overflow_times ;
 extern uint16_t t3_overflow_times ;
 extern uint16_t t4_overflow_times ;
 
-static uint32_t timer_clock = 0;
 
 InCapture::InCapture(Gpio *capture_pin)
 {
@@ -43,7 +42,7 @@ void InCapture::begin(uint16_t prescaler )
 
     this->prescaler = prescaler;
     base_init(this->period, this->prescaler);
-    timer_clock = cpu.clock.pclk1/this->prescaler;
+    timer_clock = get_timer_clock();
     switch(ch)
     {
     case TIM_Channel_1:
@@ -423,6 +422,63 @@ void InCapture::attch_ic_interrupt(void(*callback)(void))
         break;
     default:
         break;
+    }
+}
+uint32_t InCapture::get_timer_clock()
+{
+    return get_timer_source_clock()/this->prescaler;
+}
+
+uint32_t InCapture::get_timer_source_clock()
+{
+    uint32_t temp = 0;
+    uint32_t timer_clock = 0x00;
+    
+    RCC_ClocksTypeDef RCC_ClocksStatus;
+    RCC_GetClocksFreq(&RCC_ClocksStatus);
+    if ((uint32_t)this->TIMx == TIM1_BASE)
+    {
+        timer_clock = RCC_ClocksStatus.PCLK2_Frequency;
+    }
+    else
+    {
+        temp = RCC->CFGR;
+        if(temp & 0x00000400)//检测PCLK是否进行过分频，如果进行过分频则定时器的频率为PCLK1的两倍
+            timer_clock = RCC_ClocksStatus.PCLK1_Frequency * 2;
+        else
+            timer_clock = RCC_ClocksStatus.PCLK1_Frequency ;
+    }
+    return timer_clock;
+}
+uint32_t InCapture::get_detect_max_frq()
+{
+    
+    switch(get_timer_source_clock())
+    {
+        case 72000000:
+            return 180000;
+        case 8000000:
+            return 18000;
+        default:
+            return 0;
+    }
+
+}
+uint32_t InCapture::get_detect_min_frq()
+{
+    return 0;
+}
+
+uint8_t InCapture::get_detect_min_pulse_us()
+{
+    switch(get_timer_source_clock())
+    {
+        case 72000000:
+            return 4;
+        case 8000000:
+            return 30;
+        default:
+            return 0;
     }
 }
 
