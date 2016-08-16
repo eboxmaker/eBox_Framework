@@ -27,7 +27,7 @@ COLORLED led(&PB7, &PB8, &PB9);
 void setup()
 {
     ebox_init();
-    uart1.begin(9600);
+    uart1.begin(115200);
     led.begin();
     hsl.h = 1;
     hsl.s = 1;

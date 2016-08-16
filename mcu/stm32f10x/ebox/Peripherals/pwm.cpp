@@ -46,7 +46,7 @@ void Pwm::begin(uint32_t frq, uint16_t duty)
 
     set_oc_polarity(1);
     set_frq(frq);
-    set_duty(duty);
+    _set_duty(duty);
 }
 void Pwm::base_init(uint16_t period, uint16_t prescaler)
 {
@@ -151,38 +151,51 @@ void Pwm::set_oc_polarity(uint8_t flag)
         this->oc_polarity = TIM_OCPolarity_High;
     else if(flag == 0)
         this->oc_polarity = TIM_OCPolarity_Low;
-    set_duty(duty);
+    _set_duty(duty);
 
 }
-//pwm的频率 = 72M/72/1000;
-//
 void Pwm::set_frq(uint32_t frq)
 {
     uint32_t period  = 0;
     uint32_t prescaler = 1;
-    if(frq >= 720000)frq = 720000;
+    
+    
+    
+    if(frq >= get_max_frq())//控制频率，保证其有1%精度
+        frq = get_max_frq();
+    
     //千分之一精度分配方案
     for(; prescaler <= 0xffff; prescaler++)
     {
-        period = 72000000 / prescaler / frq;
-        if((0xffff >= period) && (period >= 1000))break;
+        period = get_timer_source_clock() / prescaler / frq;
+        if((0xffff >= period) && (period >= 1000))
+        {
+            accuracy = 1;
+            break;
+        }
     }
+    
     if(prescaler == 65536)//上述算法分配失败
+    {
         //百分之一分配方案
         for(prescaler = 1; prescaler <= 0xffff; prescaler++)
         {
-            period = 72000000 / prescaler / frq;
-            if((0xffff >= period) && (period >= 100))break;
+            period = get_timer_source_clock() / prescaler / frq;
+            if((0xffff >= period) && (period >= 100))
+            {
+            accuracy = 2;
+            break;
+            }
         }
+    }
 
 
     base_init(period, prescaler);
-    set_duty(duty);
+    _set_duty(duty);
 
 }
-
 //duty:0-1000对应0%-100.0%
-void Pwm::set_duty(uint16_t duty)
+void Pwm::_set_duty(uint16_t duty)
 {
 
     this->duty = duty;
@@ -220,6 +233,86 @@ void Pwm::set_duty(uint16_t duty)
 
 
 }
+
+//duty:0-1000对应0%-100.0%
+void Pwm::set_duty(uint16_t duty)
+{
+    this->duty = duty;
+
+    uint16_t pulse = 0;
+    float percent;
+
+    if(this->duty > 1000)
+        this->duty = 1000;
+    percent = this->duty / 1000.0;
+
+    pulse = (uint16_t) (( percent  * period ));
+
+    switch(ch)
+    {
+    case TIMxCH1:
+        TIMx->CCR1 = pulse;
+        break;
+    case TIMxCH2:
+        TIMx->CCR2 = pulse;
+        break;
+    case TIMxCH3:
+        TIMx->CCR3 = pulse;
+        break;
+    case TIMxCH4:
+        TIMx->CCR4 = pulse;
+        break;
+    }
+
+}
+
+
+
+uint32_t Pwm::get_timer_source_clock()
+{
+    uint32_t temp = 0;
+    uint32_t timer_clock = 0x00;
+    
+    RCC_ClocksTypeDef RCC_ClocksStatus;
+    RCC_GetClocksFreq(&RCC_ClocksStatus);
+    if ((uint32_t)this->TIMx == TIM1_BASE)
+    {
+        timer_clock = RCC_ClocksStatus.PCLK2_Frequency;
+    }
+    else
+    {
+        temp = RCC->CFGR;
+        if(temp & 0x00000400)//检测PCLK是否进行过分频，如果进行过分频则定时器的频率为PCLK1的两倍
+            timer_clock = RCC_ClocksStatus.PCLK1_Frequency * 2;
+        else
+            timer_clock = RCC_ClocksStatus.PCLK1_Frequency ;
+    }
+    return timer_clock;
+}
+uint32_t Pwm::get_max_frq()
+{
+    return get_timer_source_clock()/100;
+
+}
+float Pwm::get_accuracy()
+{
+    
+    switch(accuracy)
+    {
+        case 0:
+            return 0;
+        case 1:
+            return 0.001;
+        case 2:
+            return 0.01;
+
+    }
+    return 0.001;
+
+
+}
+
+
 //duty:0-1000对应0%-100.0%
 void analog_write(Gpio *pwm_pin, uint16_t duty)
 {
@@ -228,7 +321,7 @@ void analog_write(Gpio *pwm_pin, uint16_t duty)
     Pwm p(pwm_pin);
     p.begin(1000, duty);
     //p.SetFrq(1000,1);
-    //			p.set_duty(duty);
+    //			p._set_duty(duty);
 
     //	}
     //	else

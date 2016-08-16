@@ -15,6 +15,12 @@
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
   ******************************************************************************
   */
+/**
+ * Modification History:
+ * -shentq                  -version 1.2(2016/08/17)
+ *      *优化内部结构，降低频繁中断带来的额外计算开销
+ *      *单独增加了波形基本测量工具，简化用户的波形测量编程
+ */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 
@@ -79,6 +85,12 @@ public:
     
     //绑定中断
     void        attch_ic_interrupt(void(*callback)(void));
+    
+    uint32_t    get_timer_clock();
+    uint32_t    get_timer_source_clock();
+    uint32_t    get_detect_max_frq();
+    uint32_t    get_detect_min_frq();
+    uint8_t     get_detect_min_pulse_us();
 
     uint8_t     polarity;
 private:
@@ -94,6 +106,7 @@ private:
     uint16_t    *overflow_times;
     uint32_t    last_value;
     bool        _available;
+    uint32_t    timer_clock;
 
     void        init_info(Gpio *capture_pin);
     void        base_init(uint16_t Period, uint16_t Prescaler);

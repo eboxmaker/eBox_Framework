@@ -35,7 +35,7 @@ Pwm pwm1(&PB6);//创建一个PWM输出对象
 uint32_t frq =0;
 void measure_0()//输入捕获中断事件
 {
-  ic0.simple_event();
+  ic0.complex_event();
 
 }
 uint16_t p;
@@ -46,8 +46,9 @@ void setup()
 
     ic0.begin(1);//初始化输入捕获参数，p分频
     ic0.attch_ic_interrupt(measure_0);//绑定捕获中断事件函数
-    frq = 10000;
-    pwm1.begin(frq, 500);
+    uart1.printf("get_detect_min_pulse_us = %d\r\n",ic0.get_detect_min_pulse_us());
+    frq = 1000;
+    pwm1.begin(frq, 30);
 
 }
 
@@ -64,7 +65,6 @@ int main(void)
             uart1.printf("high_duty = %0.2f%%\r\n", ic0.get_wave_high_duty());
             uart1.printf("low duty  = %0.2f%%\r\n\r\n", ic0.get_wave_low_duty());
         }
-        pwm1.set_frq(frq++);            
         delay_ms(1000);
 
     }
