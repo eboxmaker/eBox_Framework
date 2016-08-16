@@ -593,11 +593,6 @@
               <FilePath>..\..\mcu\stm32f10x\ebox\Peripherals\timer.cpp</FilePath>
             </File>
             <File>
-              <FileName>timer_one.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\mcu\stm32f10x\ebox\Peripherals\timer_one.cpp</FilePath>
-            </File>
-            <File>
               <FileName>uart.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\mcu\stm32f10x\ebox\Peripherals\uart.cpp</FilePath>

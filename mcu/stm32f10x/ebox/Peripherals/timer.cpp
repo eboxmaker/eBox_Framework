@@ -55,6 +55,9 @@ void Timer::attach_interrupt(void(*callback)(void))
 {
     switch((uint32_t)_TIMx)
     {
+    case (uint32_t)TIM1_BASE:
+        timx_cb_table[0][0] = callback;
+        break;
     case (uint32_t)TIM2_BASE:
         timx_cb_table[1][0] = callback;
         break;
@@ -99,10 +102,12 @@ void Timer::base_init(uint16_t period, uint16_t prescaler)
     TIM_DeInit(_TIMx);
     switch((uint32_t)_TIMx)
     {
-    //		case (uint32_t)TIM1:
-    //			RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
-    //			NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
-    //			break;
+    case (uint32_t)TIM1:
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
+        //此处和通用定时器不一样 控制定时器溢出多少次产生一次中断
+        TIM_TimeBaseStructure.TIM_RepetitionCounter = 0 ;
+        NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;//
+        break;
     case (uint32_t)TIM2_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
         NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
