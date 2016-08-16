@@ -35,7 +35,6 @@
 #include "i2c.h"
 #include "spi.h"
 #include "uart.h"
-#include "timer_one.h"
 #include "rtc.h"
 #include "iflash.h"
 #include "dac.h"
