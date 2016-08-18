@@ -34,7 +34,7 @@
 #include "gpio.h"
 #include "analog.h"
 
-#define EBOX_VERSION "1.1"
+#define EBOX_VERSION "1.2"
 
 #define EOK         0
 #define EWAIT       1

@@ -67,13 +67,13 @@ void setup()
 
     p = 1;
     ic0.begin(p);//初始化输入捕获参数，p分频
-    ic0.attch_ic_interrupt(measure_0);//绑定捕获中断事件函数
+    ic0.attach(measure_0);//绑定捕获中断事件函数
     ic1.begin(p);//初始化输入捕获参数，p分频
-    ic1.attch_ic_interrupt(measure_1);//绑定捕获中断事件函数
+    ic1.attach(measure_1);//绑定捕获中断事件函数
     ic2.begin(p);//初始化输入捕获参数，p分频
-    ic2.attch_ic_interrupt(measure_2);//绑定捕获中断事件函数
+    ic2.attach(measure_2);//绑定捕获中断事件函数
     ic3.begin(p);//初始化输入捕获参数，p分频
-    ic3.attch_ic_interrupt(measure_3);//绑定捕获中断事件函数
+    ic3.attach(measure_3);//绑定捕获中断事件函数
 
     pwm1.begin(50, 900);
     pwm1.set_oc_polarity(1);

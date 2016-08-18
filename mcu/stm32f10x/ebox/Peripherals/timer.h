@@ -22,7 +22,7 @@
 #define __GTIMER_H
 
 #include "common.h"
-
+#include "FunctionPointer.h"
 /*
 	1.支持tim1,2,3,4,5,6,7
     2.定时器的时钟源频率可以通过get_timer_clock()获得；
@@ -41,7 +41,6 @@ class Timer
 public:
     Timer(TIM_TypeDef *TIMx);
     void begin(uint32_t frq);
-    void attach_interrupt(void(*callback)(void));
     void interrupt(FunctionalState enable);
     void start(void);
     void stop(void);
@@ -50,11 +49,18 @@ public:
     uint32_t get_timer_source_clock();
     uint32_t get_max_frq();
 
+    static void _irq_handler( uint32_t id);
+    void attach(void (*fptr)(void));
+    template<typename T>
+    void attach(T* tptr, void (T::*mptr)(void)) {
+        _irq.attach(tptr, mptr);
+    }
 private:
     void base_init(uint16_t period, uint16_t prescaler);
     void set_reload(uint16_t auto_reload);
     void clear_count(void);
     TIM_TypeDef *_TIMx;
-
+protected:
+    FunctionPointer _irq;
 };
 #endif

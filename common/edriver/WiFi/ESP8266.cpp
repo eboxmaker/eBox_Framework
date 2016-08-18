@@ -185,7 +185,8 @@ bool ESP8266::begin(Gpio *rst, Uart *uart, uint32_t baud)
     this->uart  = uart;
 
     this->uart->begin(baud);
-    this->uart->attach_rx_interrupt(uart_interrupt_event);
+//    this->uart->attach_rx_interrupt(uart_interrupt_event);
+	  this->uart->attach(uart_interrupt_event);
     this->rst->mode(OUTPUT_PP);
 
     wifi_mode = NET_MODE;

@@ -185,7 +185,7 @@ void ir_decoder_Handler( void )
 void IR_DECODER::begin(void)
 {
     ic.begin(72);
-    ic.attch_ic_interrupt(ir_decoder_Handler);//
+    ic.attach(ir_decoder_Handler);//
     ic.set_polarity_falling();
     irrx_internal.irrx_state = STATE_START;
 

@@ -33,16 +33,26 @@
   * @{
   */  
   
-#define EXTI_LINE_NUM 16
-
 /**
   * @}
   */
 /** @defgroup exti全局变量
   * @{
   */
-  
-callback_fun_type exti_callback_table[EXTI_LINE_NUM];
+static exti_irq_handler irq_handler;
+static uint32_t exti_irq_ids[16];
+ int exti_irq_init(uint8_t index,exti_irq_handler handler,uint32_t id)
+{
+ exti_irq_ids[index] = id;
+ irq_handler =  handler;
+ return 0;
+}
+
+void exti_irq_callback(uint8_t index)
+{
+	irq_handler(exti_irq_ids[index]);
+}
+ 
   
 /**
   * @}
@@ -78,7 +88,10 @@ Exti::Exti(Gpio *pin, EXTITrigger_TypeDef trigger)
  */ 
 void Exti::begin()
 {
+    
+	
     init_info(exti_pin);
+    exti_irq_init(this->pin_source,(&Exti::_irq_handler),(uint32_t)this);
 
     exti_pin->mode(INPUT);
 
@@ -250,23 +263,33 @@ void Exti::init_info(Gpio *pin)
 
 }
 
+void Exti::_irq_handler( uint32_t id)
+{ 
+    Exti *handler = (Exti*)id;
+    handler->_irq.call();
+}
 /**
  * @brief   绑定中断的回调函数，产生中断后程序将执行callback_fun()
- * @param   callback_fun: void (*callback_fun)(void)类型函数的指针。
+ * @param   void (*fptr)(void)类型函数的指针。
  *          
  * @return  NONE
  */ 
-void Exti::attach_interrupt(void (*callback_fun)(void))
+void Exti::attach(void (*fptr)(void)) 
 {
-    exti_callback_table[pin_source] = callback_fun;
+    if (fptr)
+    {
+        _irq.attach(fptr);
+    }
 }
+
+
 extern "C" {
 
     void EXTI0_IRQHandler(void)
     {
         if(EXTI_GetITStatus(EXTI_Line0) != RESET)
         {
-            exti_callback_table[0]();
+            exti_irq_callback(0);
             EXTI_ClearITPendingBit(EXTI_Line0);
         }
     }
@@ -274,7 +297,7 @@ extern "C" {
     {
         if(EXTI_GetITStatus(EXTI_Line1) != RESET)
         {
-            exti_callback_table[1]();
+            exti_irq_callback(1);
 
             EXTI_ClearITPendingBit(EXTI_Line1);
         }
@@ -284,7 +307,7 @@ extern "C" {
         if(EXTI_GetITStatus(EXTI_Line2) != RESET)
         {
 
-            exti_callback_table[2]();
+            exti_irq_callback(2);
 
             EXTI_ClearITPendingBit(EXTI_Line2);
         }
@@ -293,7 +316,7 @@ extern "C" {
     {
         if(EXTI_GetITStatus(EXTI_Line3) != RESET)
         {
-            exti_callback_table[3]();
+            exti_irq_callback(3);
             EXTI_ClearITPendingBit(EXTI_Line3);
         }
     }
@@ -301,7 +324,7 @@ extern "C" {
     {
         if(EXTI_GetITStatus(EXTI_Line4) != RESET)
         {
-            exti_callback_table[4]();
+            exti_irq_callback(4);
             EXTI_ClearITPendingBit(EXTI_Line4);
         }
     }
@@ -310,27 +333,27 @@ extern "C" {
     {
         if(EXTI_GetITStatus(EXTI_Line5) != RESET)
         {
-            exti_callback_table[5]();
+            exti_irq_callback(5);
             EXTI_ClearITPendingBit(EXTI_Line5);
         }
         if(EXTI_GetITStatus(EXTI_Line6) != RESET)
         {
-            exti_callback_table[6]();
+            exti_irq_callback(6);
             EXTI_ClearITPendingBit(EXTI_Line6);
         }
         if(EXTI_GetITStatus(EXTI_Line7) != RESET)
         {
-            exti_callback_table[7]();
+            exti_irq_callback(7);
             EXTI_ClearITPendingBit(EXTI_Line7);
         }
         if(EXTI_GetITStatus(EXTI_Line8) != RESET)
         {
-            exti_callback_table[8]();
+            exti_irq_callback(8);
             EXTI_ClearITPendingBit(EXTI_Line8);
         }
         if(EXTI_GetITStatus(EXTI_Line9) != RESET)
         {
-            exti_callback_table[9]();
+            exti_irq_callback(9);
             EXTI_ClearITPendingBit(EXTI_Line9);
         }
 
@@ -340,32 +363,32 @@ extern "C" {
     {
         if(EXTI_GetITStatus(EXTI_Line10) != RESET)
         {
-            exti_callback_table[10]();
+            exti_irq_callback(10);
             EXTI_ClearITPendingBit(EXTI_Line10);
         }
         if(EXTI_GetITStatus(EXTI_Line11) != RESET)
         {
-            exti_callback_table[11]();
+            exti_irq_callback(11);
             EXTI_ClearITPendingBit(EXTI_Line11);
         }
         if(EXTI_GetITStatus(EXTI_Line12) != RESET)
         {
-            exti_callback_table[12]();
+            exti_irq_callback(12);
             EXTI_ClearITPendingBit(EXTI_Line12);
         }
         if(EXTI_GetITStatus(EXTI_Line13) != RESET)
         {
-            exti_callback_table[13]();
+            exti_irq_callback(13);
             EXTI_ClearITPendingBit(EXTI_Line13);
         }
         if(EXTI_GetITStatus(EXTI_Line14) != RESET)
         {
-            exti_callback_table[14]();
+            exti_irq_callback(14);
             EXTI_ClearITPendingBit(EXTI_Line14);
         }
         if(EXTI_GetITStatus(EXTI_Line15) != RESET)
         {
-            exti_callback_table[15]();
+            exti_irq_callback(15);
             EXTI_ClearITPendingBit(EXTI_Line15);
         }
 

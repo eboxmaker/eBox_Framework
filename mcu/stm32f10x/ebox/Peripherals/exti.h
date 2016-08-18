@@ -21,6 +21,8 @@
 #ifndef __EXTI_H
 #define __EXTI_H
 #include "common.h"
+#include "FunctionPointer.h"
+
 /*
 	1.提供一个io中断
 	*注意：stm32一个中断线EXTI_Linex只能连接到一个port的GPIO_Pin_x，即设置PA0为中断源之后就不能设置PB0，PC0等为中断源
@@ -38,6 +40,13 @@ public:
     void attach_interrupt(void (*callback_fun)(void));
     void interrupt(FunctionalState enable);
 
+    static void _irq_handler( uint32_t id);
+    void attach(void (*fptr)(void));
+    template<typename T>
+    void attach(T* tptr, void (T::*mptr)(void)) {
+        _irq.attach(tptr, mptr);
+    }
+
 private:
     Gpio                *exti_pin;
     EXTITrigger_TypeDef trigger;
@@ -47,6 +56,22 @@ private:
     uint8_t             irq;
 
     void init_info(Gpio *exti_pin);
+protected:
+    FunctionPointer _irq;
 };
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+typedef void (*exti_irq_handler)(uint32_t id);
+
+int exti_irq_init(uint8_t index,exti_irq_handler handler,uint32_t id);
+	
+void exti_irq_callback(uint8_t index);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

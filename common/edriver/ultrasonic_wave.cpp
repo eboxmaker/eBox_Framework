@@ -11,7 +11,7 @@ void ULTRA::begin()
 
 void ULTRA::attch_mesuer_event(void(*callback)(void))
 {
-   attch_ic_interrupt(callback);
+   InCapture::attach(callback);
 }
 
 void ULTRA::mesure_event()

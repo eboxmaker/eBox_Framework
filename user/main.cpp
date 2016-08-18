@@ -11,57 +11,50 @@
   ******************************************************************************
  */
 
-
+/*
+一个简单的命令帧接收示例
+*/
 #include "ebox.h"
 
 
 
+u8 count;
 
-uint32_t xx;
-uint8_t flag;
-Timer timer1(TIM1);
-
-void t2it()
+void test()
 {
-    xx++;
-    if(xx == 1000)
-    {
-        flag = 1;
-        xx = 0;
-        PB8.write(!PB8.read());
-    }
+    uint8_t c;
+    c = uart1.receive();
+    uart1.put_char(c);
+}
+
+void test1()
+{
+    count++;
+    PB8.toggle();
 }
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
+    uart1.attach(test,RxIrq);
+    uart1.attach(test1,TxIrq);
     PB8.mode(OUTPUT_PP);
-
-    timer1.begin(1000);
-    timer1.attach_interrupt(t2it);
-    timer1.interrupt(ENABLE);
-    timer1.start();
+    PB8.reset();
 }
-
 
 int main(void)
 {
+
     setup();
+
     while(1)
     {
-        if(flag == 1)
-        {
-            uart1.printf("\r\ntimer2 is triggered 1000 times !", xx);
-            flag = 0;
-        }
+        uart1.printf("uart is ok ! count = %d\r\n", count);
+        delay_ms(1000);
     }
 
 
 }
-
-
-
-
 
 
 

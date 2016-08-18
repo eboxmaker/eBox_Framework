@@ -24,7 +24,7 @@
 #include "common.h"
 #include <stdio.h>
 #include <stdarg.h>
-
+#include "FunctionPointer.h"
 
 /*
 	1.支持串口1,2,3,4,5；
@@ -51,6 +51,23 @@
 #define USE_DMA 1//开启dma，只有串口1，2，3支持,4和5不支持
 #define UART_MAX_SEND_BUF 128
 
+#define UART_NUM (5)
+
+enum IrqType {
+		RxIrq = 0,
+		TxIrq
+};
+
+enum Uart_It_Index{
+    NUM_UART1  = 0,
+    NUM_UART2  = 1,
+    NUM_UART3  = 2,
+    NUM_UART4  = 3,
+	  NUM_UART5  = 4,	
+} ; 
+
+typedef void (*uart_irq_handler)(uint32_t id, IrqType type);
+
 class Uart
 {
 public:
@@ -58,8 +75,6 @@ public:
 
     void    begin(uint32_t baud_rate);
     void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit);
-    void    attach_rx_interrupt(void (*callback_fun)(void));
-    void    attach_tx_interrupt(void (*callback_fun)(void));
 
     int 	put_char(uint16_t ch);
     void 	put_string(const char *str);
@@ -69,6 +84,28 @@ public:
 
     uint16_t    receive();
 
+    /** Attach a function to call whenever a serial interrupt is generated
+     *
+     *  @param fptr A pointer to a void function, or 0 to set as none
+     *  @param type Which serial interrupt to attach the member function to (Seriall::RxIrq for receive, TxIrq for transmit buffer empty)
+     */
+    void attach(void (*fptr)(void), IrqType type=RxIrq);
+
+    /** Attach a member function to call whenever a serial interrupt is generated
+     *
+     *  @param tptr pointer to the object to call the member function on
+     *  @param mptr pointer to the member function to be called
+     *  @param type Which serial interrupt to attach the member function to (Seriall::RxIrq for receive, TxIrq for transmit buffer empty)
+     */
+    template<typename T>
+    void attach(T* tptr, void (T::*mptr)(void), IrqType type=RxIrq) {
+        if((mptr != NULL) && (tptr != NULL)) {
+            _irq[type].attach(tptr, mptr);
+        }
+    }
+		
+		static void _irq_handler(uint32_t id, IrqType irq_type);
+
 private:
     USART_TypeDef       *_USARTx;
     DMA_Channel_TypeDef *_DMA1_Channelx;
@@ -77,11 +114,19 @@ private:
     void                put_string(const char *str, uint16_t length);
     void                set_busy();
     void                interrupt(FunctionalState enable);
+
+protected:
+    FunctionPointer _irq[2];
 };
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-
-
-
+void serial_irq_handler(uint8_t index, uart_irq_handler handler, uint32_t id);
+#ifdef __cplusplus
+}
+#endif
+	
 #endif
