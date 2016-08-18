@@ -20,10 +20,11 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "common.h"
-callback_fun_type timx_cb_table[7][5];
-uint16_t t2_overflow_times = 0;
-uint16_t t3_overflow_times = 0;
-uint16_t t4_overflow_times = 0;
+#include "timer_it.h"
+__IO uint16_t t1_overflow_times = 0;
+__IO uint16_t t2_overflow_times = 0;
+__IO uint16_t t3_overflow_times = 0;
+__IO uint16_t t4_overflow_times = 0;
 
 extern "C" {
 
@@ -33,9 +34,29 @@ extern "C" {
 
         if(TIM_GetITStatus(TIM1 , TIM_IT_Update) == SET)
         {
-            if(timx_cb_table[0][0] != 0)
-                timx_cb_table[0][0]();
+            t1_overflow_times++;
+						tim_irq_callback(TIM1_IT_Update);
             TIM_ClearITPendingBit(TIM1 , TIM_FLAG_Update);
+        }
+        if(TIM_GetITStatus(TIM1 , TIM_IT_CC1) == SET)
+        {
+						tim_irq_callback(TIM1_IT_CC1);
+            TIM_ClearITPendingBit(TIM1 , TIM_FLAG_CC1);
+        }
+        if(TIM_GetITStatus(TIM1 , TIM_IT_CC2) == SET)
+        {
+						tim_irq_callback(TIM1_IT_CC2);
+            TIM_ClearITPendingBit(TIM1 , TIM_FLAG_CC2);
+        }
+        if(TIM_GetITStatus(TIM1 , TIM_IT_CC3) == SET)
+        {
+						tim_irq_callback(TIM1_IT_CC3);
+            TIM_ClearITPendingBit(TIM1 , TIM_FLAG_CC3);
+        }
+        if(TIM_GetITStatus(TIM1 , TIM_IT_CC4) == SET)
+        {
+						tim_irq_callback(TIM1_IT_CC4);
+            TIM_ClearITPendingBit(TIM1 , TIM_FLAG_CC4);
         }
     }
     void TIM2_IRQHandler(void)
@@ -44,32 +65,27 @@ extern "C" {
         if(TIM_GetITStatus(TIM2 , TIM_IT_Update) == SET)
         {
             t2_overflow_times++;
-            if(timx_cb_table[1][0] != 0)
-                timx_cb_table[1][0]();
+						tim_irq_callback(TIM2_IT_Update);
             TIM_ClearITPendingBit(TIM2 , TIM_FLAG_Update);
         }
         if(TIM_GetITStatus(TIM2 , TIM_IT_CC1) == SET)
         {
-            if(timx_cb_table[1][1] != 0)
-                timx_cb_table[1][1]();
+						tim_irq_callback(TIM2_IT_CC1);
             TIM_ClearITPendingBit(TIM2 , TIM_FLAG_CC1);
         }
         if(TIM_GetITStatus(TIM2 , TIM_IT_CC2) == SET)
         {
-            if(timx_cb_table[1][2] != 0)
-                timx_cb_table[1][2]();
+						tim_irq_callback(TIM2_IT_CC2);
             TIM_ClearITPendingBit(TIM2 , TIM_FLAG_CC2);
         }
         if(TIM_GetITStatus(TIM2 , TIM_IT_CC3) == SET)
         {
-            if(timx_cb_table[1][3] != 0)
-                timx_cb_table[1][3]();
+						tim_irq_callback(TIM2_IT_CC3);
             TIM_ClearITPendingBit(TIM2 , TIM_FLAG_CC3);
         }
         if(TIM_GetITStatus(TIM2 , TIM_IT_CC4) == SET)
         {
-            if(timx_cb_table[1][4] != 0)
-                timx_cb_table[1][4]();
+						tim_irq_callback(TIM2_IT_CC4);
             TIM_ClearITPendingBit(TIM2 , TIM_FLAG_CC4);
         }
 
@@ -80,32 +96,27 @@ extern "C" {
         if(TIM_GetITStatus(TIM3 , TIM_IT_Update) == SET)
         {
             t3_overflow_times++;
-            if(timx_cb_table[2][0] != 0)
-                timx_cb_table[2][0]();
+						tim_irq_callback(TIM3_IT_Update);
             TIM_ClearITPendingBit(TIM3 , TIM_FLAG_Update);
         }
         if(TIM_GetITStatus(TIM3 , TIM_IT_CC1) == SET)
         {
-            if(timx_cb_table[2][1] != 0)
-                timx_cb_table[2][1]();
+						tim_irq_callback(TIM3_IT_CC1);
             TIM_ClearITPendingBit(TIM2 , TIM_FLAG_CC1);
         }
         if(TIM_GetITStatus(TIM3 , TIM_IT_CC2) == SET)
         {
-            if(timx_cb_table[2][2] != 0)
-                timx_cb_table[2][2]();
+						tim_irq_callback(TIM3_IT_CC2);
             TIM_ClearITPendingBit(TIM3 , TIM_FLAG_CC2);
         }
         if(TIM_GetITStatus(TIM3 , TIM_IT_CC3) == SET)
         {
-            if(timx_cb_table[2][3] != 0)
-                timx_cb_table[2][3]();
+						tim_irq_callback(TIM3_IT_CC3);
             TIM_ClearITPendingBit(TIM3 , TIM_FLAG_CC3);
         }
         if(TIM_GetITStatus(TIM3 , TIM_IT_CC4) == SET)
         {
-            if(timx_cb_table[2][4] != 0)
-                timx_cb_table[2][4]();
+						tim_irq_callback(TIM3_IT_CC4);
             TIM_ClearITPendingBit(TIM3 , TIM_FLAG_CC4);
         }
     }
@@ -114,32 +125,27 @@ extern "C" {
         if(TIM_GetITStatus(TIM4 , TIM_IT_Update) == SET)
         {
             t4_overflow_times++;
-            if(timx_cb_table[3][0] != 0)
-                timx_cb_table[3][0]();
+						tim_irq_callback(TIM4_IT_Update);
             TIM_ClearITPendingBit(TIM4 , TIM_FLAG_Update);
         }
         if(TIM_GetITStatus(TIM4 , TIM_IT_CC1) == SET)
         {
-            if(timx_cb_table[3][1] != 0)
-                timx_cb_table[3][1]();
+						tim_irq_callback(TIM4_IT_CC1);
             TIM_ClearITPendingBit(TIM4 , TIM_FLAG_CC1);
         }
         if(TIM_GetITStatus(TIM4 , TIM_IT_CC2) == SET)
         {
-            if(timx_cb_table[3][2] != 0)
-                timx_cb_table[3][2]();
+						tim_irq_callback(TIM4_IT_CC2);
             TIM_ClearITPendingBit(TIM4 , TIM_FLAG_CC2);
         }
         if(TIM_GetITStatus(TIM4 , TIM_IT_CC3) == SET)
         {
-            if(timx_cb_table[3][3] != 0)
-                timx_cb_table[3][3]();
+						tim_irq_callback(TIM4_IT_CC3);
             TIM_ClearITPendingBit(TIM4 , TIM_FLAG_CC3);
         }
         if(TIM_GetITStatus(TIM4 , TIM_IT_CC4) == SET)
         {
-            if(timx_cb_table[3][4] != 0)
-                timx_cb_table[3][4]();
+						tim_irq_callback(TIM4_IT_CC4);
             TIM_ClearITPendingBit(TIM4 , TIM_FLAG_CC4);
         }
     }
@@ -148,32 +154,27 @@ extern "C" {
     {
         if(TIM_GetITStatus(TIM5 , TIM_IT_Update) == SET)
         {
-            if(timx_cb_table[4][0] != 0)
-                timx_cb_table[4][0]();
+						tim_irq_callback(TIM5_IT_Update);
             TIM_ClearITPendingBit(TIM5 , TIM_FLAG_Update);
         }
         if(TIM_GetITStatus(TIM5 , TIM_IT_CC1) == SET)
         {
-            if(timx_cb_table[4][1] != 0)
-                timx_cb_table[4][1]();
+						tim_irq_callback(TIM5_IT_CC1);
             TIM_ClearITPendingBit(TIM5 , TIM_FLAG_CC1);
         }
         if(TIM_GetITStatus(TIM5 , TIM_IT_CC2) == SET)
         {
-            if(timx_cb_table[4][2] != 0)
-                timx_cb_table[4][2]();
+						tim_irq_callback(TIM5_IT_CC2);
             TIM_ClearITPendingBit(TIM5 , TIM_FLAG_CC2);
         }
         if(TIM_GetITStatus(TIM5 , TIM_IT_CC3) == SET)
         {
-            if(timx_cb_table[4][3] != 0)
-                timx_cb_table[4][3]();
+						tim_irq_callback(TIM5_IT_CC3);
             TIM_ClearITPendingBit(TIM5 , TIM_FLAG_CC3);
         }
         if(TIM_GetITStatus(TIM5 , TIM_IT_CC4) == SET)
         {
-            if(timx_cb_table[4][4] != 0)
-                timx_cb_table[4][4]();
+						tim_irq_callback(TIM5_IT_CC4);
             TIM_ClearITPendingBit(TIM5 , TIM_FLAG_CC4);
         }
     }
@@ -181,8 +182,7 @@ extern "C" {
     {
         if(TIM_GetITStatus(TIM6 , TIM_IT_Update) == SET)
         {
-            if(timx_cb_table[5][0] != 0)
-                timx_cb_table[5][0]();
+						tim_irq_callback(TIM6_IT_Update);
             TIM_ClearITPendingBit(TIM6 , TIM_FLAG_Update);
         }
     }
@@ -190,8 +190,7 @@ extern "C" {
     {
         if(TIM_GetITStatus(TIM7 , TIM_IT_Update) == SET)
         {
-            if(timx_cb_table[6][0] != 0)
-                timx_cb_table[6][0]();
+						tim_irq_callback(TIM7_IT_Update);
             TIM_ClearITPendingBit(TIM7 , TIM_FLAG_Update);
         }
     }

@@ -19,7 +19,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "in_capture.h"
-extern callback_fun_type timx_cb_table[7][5];
+#include "timer_it.h"
+extern uint16_t t1_overflow_times ;
 extern uint16_t t2_overflow_times ;
 extern uint16_t t3_overflow_times ;
 extern uint16_t t4_overflow_times ;
@@ -37,7 +38,8 @@ InCapture::InCapture(Gpio *capture_pin)
 }
 void InCapture::begin(uint16_t prescaler )
 {
-    capture_pin->mode(INPUT_PU);
+	  uint8_t index;
+		capture_pin->mode(INPUT_PU);
     init_info(this->capture_pin);
 
     this->prescaler = prescaler;
@@ -64,18 +66,37 @@ void InCapture::begin(uint16_t prescaler )
     }
     switch((uint32_t)TIMx)
     {
+    case (uint32_t)TIM1_BASE:
+        overflow_times = &t1_overflow_times;
+				if(ch== TIM_Channel_1) index = TIM1_IT_CC1;
+				if(ch== TIM_Channel_2) index = TIM1_IT_CC2;
+				if(ch== TIM_Channel_3) index = TIM1_IT_CC3;
+				if(ch== TIM_Channel_4) index = TIM1_IT_CC4;		
+        break;
     case (uint32_t)TIM2_BASE:
         overflow_times = &t2_overflow_times;
+				if(ch== TIM_Channel_1) index = TIM2_IT_CC1;
+				if(ch== TIM_Channel_2) index = TIM2_IT_CC2;
+				if(ch== TIM_Channel_3) index = TIM2_IT_CC3;
+				if(ch== TIM_Channel_4) index = TIM2_IT_CC4;	
         break;
     case (uint32_t)TIM3_BASE:
         overflow_times = &t3_overflow_times;
+				if(ch== TIM_Channel_1) index = TIM3_IT_CC1;
+				if(ch== TIM_Channel_2) index = TIM3_IT_CC2;
+				if(ch== TIM_Channel_3) index = TIM3_IT_CC3;
+				if(ch== TIM_Channel_4) index = TIM3_IT_CC4;	
         break;
     case (uint32_t)TIM4_BASE:
         overflow_times = &t4_overflow_times;
+				if(ch== TIM_Channel_1) index = TIM4_IT_CC1;
+				if(ch== TIM_Channel_2) index = TIM4_IT_CC2;
+				if(ch== TIM_Channel_3) index = TIM4_IT_CC3;
+				if(ch== TIM_Channel_4) index = TIM4_IT_CC4;	
         break;
 
     }
-
+    tim_irq_init(index,(&InCapture::_irq_handler),(uint32_t)this);
 }
 void InCapture::base_init(uint16_t period, uint16_t prescaler)
 {
@@ -89,10 +110,10 @@ void InCapture::base_init(uint16_t period, uint16_t prescaler)
 
     switch((uint32_t)this->TIMx)
     {
-    //		case (uint32_t)TIM1_BASE:
-    //			RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
-    //			NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
-    //			break;
+    case (uint32_t)TIM1_BASE:
+    			RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
+    			NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
+    			break;
     case (uint32_t)TIM2_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
         NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
@@ -358,72 +379,6 @@ void InCapture::set_count(uint16_t count)
     TIM_SetCounter(this->TIMx, count); //reset couter
 }
 
-
-void InCapture::attch_ic_interrupt(void(*callback)(void))
-{
-    switch((uint32_t)this->TIMx)
-    {
-    case (uint32_t)TIM2_BASE:
-        switch(ch)
-        {
-        case TIM_Channel_1:
-            timx_cb_table[1][1] = callback;
-            break;
-        case TIM_Channel_2:
-            timx_cb_table[1][2] = callback;
-            break;
-        case TIM_Channel_3:
-            timx_cb_table[1][3] = callback;
-            break;
-        case TIM_Channel_4:
-            timx_cb_table[1][4] = callback;
-            break;
-        default:
-            break;
-        }
-        break;
-    case (uint32_t)TIM3_BASE:
-        switch(ch)
-        {
-        case TIM_Channel_1:
-            timx_cb_table[2][1] = callback;
-            break;
-        case TIM_Channel_2:
-            timx_cb_table[2][2] = callback;
-            break;
-        case TIM_Channel_3:
-            timx_cb_table[2][3] = callback;
-            break;
-        case TIM_Channel_4:
-            timx_cb_table[2][4] = callback;
-            break;
-        default:
-            break;
-        }
-        break;
-    case (uint32_t)TIM4_BASE:
-        switch(ch)
-        {
-        case TIM_Channel_1:
-            timx_cb_table[3][1] = callback;
-            break;
-        case TIM_Channel_2:
-            timx_cb_table[3][2] = callback;
-            break;
-        case TIM_Channel_3:
-            timx_cb_table[3][3] = callback;
-            break;
-        case TIM_Channel_4:
-            timx_cb_table[3][4] = callback;
-            break;
-        default:
-            break;
-        }
-        break;
-    default:
-        break;
-    }
-}
 uint32_t InCapture::get_timer_clock()
 {
     return get_timer_source_clock()/this->prescaler;
@@ -480,5 +435,19 @@ uint8_t InCapture::get_detect_min_pulse_us()
         default:
             return 0;
     }
+}
+
+
+void InCapture::_irq_handler( uint32_t id){ 
+		InCapture *handler = (InCapture*)id;
+		handler->_irq.call();
+
+}
+
+
+void InCapture::attach(void (*fptr)(void)) {
+    if (fptr) {
+        _irq.attach(fptr);
+		}
 }
 

@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    timer.cpp
   * @author  shentq
-  * @version V1.2
+  * @version V2.0
   * @date    2016/08/14
   * @brief   
   ******************************************************************************
@@ -19,10 +19,23 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "timer.h"
+#include "timer_it.h"
 
-//#define TIM_NUM 7
 
-extern callback_fun_type timx_cb_table[7][5];
+static tim_irq_handler irq_handler;
+static uint32_t tim_irq_ids[TIM_IRQ_ID_NUM];
+
+int tim_irq_init(uint8_t index,tim_irq_handler handler,uint32_t id)
+{
+ tim_irq_ids[index] = id;
+ irq_handler =  handler;
+ return 0;
+}
+
+void tim_irq_callback(uint8_t index)
+{
+	irq_handler(tim_irq_ids[index]);
+}
 
 //////////////////////////////////////
 
@@ -37,7 +50,8 @@ void Timer::begin(uint32_t frq)
 
     uint32_t _period  = 0;
     uint32_t _prescaler = 1;
-
+    uint8_t index;
+	
     if(frq >= get_max_frq())frq = get_max_frq();//控制最大频率
     for(; _prescaler <= 0xffff; _prescaler++)
     {
@@ -46,6 +60,32 @@ void Timer::begin(uint32_t frq)
     }
 
     base_init(_period, _prescaler);
+		
+		switch((uint32_t)_TIMx)
+    {
+    case (uint32_t)TIM1_BASE:
+        index = TIM1_IT_Update;
+        break;
+    case (uint32_t)TIM2_BASE:
+        index = TIM2_IT_Update;
+        break;
+    case (uint32_t)TIM3_BASE:
+        index = TIM3_IT_Update;
+        break;
+    case (uint32_t)TIM4_BASE:
+        index = TIM4_IT_Update;
+        break;
+    case (uint32_t)TIM5_BASE:
+        index = TIM5_IT_Update;
+        break;
+    case (uint32_t)TIM6_BASE:
+        index = TIM6_IT_Update;
+        break;
+    case (uint32_t)TIM7_BASE:
+        index = TIM7_IT_Update;
+        break;
+    }		
+		tim_irq_init(index,(&Timer::_irq_handler),(uint32_t)this);
 }
 void Timer::reset_frq(uint32_t frq)
 {
@@ -53,33 +93,7 @@ void Timer::reset_frq(uint32_t frq)
     interrupt(ENABLE);
     start();
 }
-void Timer::attach_interrupt(void(*callback)(void))
-{
-    switch((uint32_t)_TIMx)
-    {
-    case (uint32_t)TIM1_BASE:
-        timx_cb_table[0][0] = callback;
-        break;
-    case (uint32_t)TIM2_BASE:
-        timx_cb_table[1][0] = callback;
-        break;
-    case (uint32_t)TIM3_BASE:
-        timx_cb_table[2][0] = callback;
-        break;
-    case (uint32_t)TIM4_BASE:
-        timx_cb_table[3][0] = callback;
-        break;
-    case (uint32_t)TIM5_BASE:
-        timx_cb_table[4][0] = callback;
-        break;
-    case (uint32_t)TIM6_BASE:
-        timx_cb_table[5][0] = callback;
-        break;
-    case (uint32_t)TIM7_BASE:
-        timx_cb_table[6][0] = callback;
-        break;
-    }
-}
+
 void Timer::interrupt(FunctionalState enable)
 {
     TIM_ClearITPendingBit(_TIMx , TIM_FLAG_Update);//必须加，否则开启中断会立即产生一次中断
@@ -188,6 +202,21 @@ uint32_t Timer::get_max_frq()
     return get_timer_source_clock()/400;
 
 }
+
+
+void Timer::_irq_handler( uint32_t id){ 
+		Timer *handler = (Timer*)id;
+		handler->_irq.call();
+
+}
+
+
+void Timer::attach(void (*fptr)(void)) {
+    if (fptr) {
+        _irq.attach(fptr);
+		}
+}
+
 
 
 

@@ -21,11 +21,16 @@
 #include "uart.h"
 
 
-
-
-callback_fun_type usart_callback_table[5][2];//支持串口的rx中断
-
 uint8_t busy[5];
+
+
+
+
+static uint32_t serial_irq_ids[UART_NUM] = {0, 0, 0,0,0};
+
+static uart_irq_handler irq_handler;
+
+
 /**
  *@name     Uart::Uart(USART_TypeDef *USARTx,Gpio *tx_pin,Gpio *rx_pin)
  *@brief    串口的构造函数
@@ -49,7 +54,8 @@ Uart::Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin)
 */
 void Uart::begin(uint32_t baud_rate)
 {
-    USART_InitTypeDef USART_InitStructure;
+    uint8_t index;
+		USART_InitTypeDef USART_InitStructure;
 
     if(USE_DMA == 1)
         RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);	//使能DMA时钟
@@ -59,29 +65,36 @@ void Uart::begin(uint32_t baud_rate)
     case (uint32_t)USART1_BASE:
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
         _DMA1_Channelx = DMA1_Channel4;
+				index = NUM_UART1;
         break;
 
     case (uint32_t)USART2_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
         _DMA1_Channelx = DMA1_Channel7;
+				index = NUM_UART2;
         break;
 
     case (uint32_t)USART3_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
         _DMA1_Channelx = DMA1_Channel2;
+				index = NUM_UART3;
         break;
 
 #if defined (STM32F10X_HD)
     case (uint32_t)UART4_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4, ENABLE);
+				index = NUM_UART4;
         break;
 
     case (uint32_t)UART5_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, ENABLE);
+				index = NUM_UART5;
         break;
 #endif
     }
 
+    serial_irq_handler(index, Uart::_irq_handler, (uint32_t)this);
+		
     USART_InitStructure.USART_BaudRate = baud_rate;
     USART_InitStructure.USART_Parity = USART_Parity_No;
     USART_InitStructure.USART_WordLength = USART_WordLength_8b;
@@ -238,61 +251,6 @@ void Uart::interrupt(FunctionalState enable)
     NVIC_Init(&NVIC_InitStructure);
 }
 
-/**
- *@name     void Uart::attach_rx_interrupt(void (*callback_fun)(void))
- *@brief    绑定串口接收中断所调用的用户程序
- *@param    callback_fun:  用户函数
- *@retval   None
-*/
-void Uart::attach_rx_interrupt(void (*callback_fun)(void))
-{
-    switch((uint32_t)_USARTx)
-    {
-    case (uint32_t)USART1_BASE:
-        usart_callback_table[0][0] = callback_fun;
-        break;
-    case (uint32_t)USART2_BASE:
-        usart_callback_table[1][0] = callback_fun;
-        break;
-    case (uint32_t)USART3_BASE:
-        usart_callback_table[2][0] = callback_fun;
-        break;
-    case (uint32_t)UART4_BASE:
-        usart_callback_table[3][0] = callback_fun;
-        break;
-    case (uint32_t)UART5_BASE:
-        usart_callback_table[4][0] = callback_fun;
-        break;
-    }
-}
-
-/**
- *@name     void Uart::attach_tx_interrupt(void (*callback_fun)(void))
- *@brief    绑定串口发送完成中断所调用的用户程序
- *@param    callback_fun:  用户函数
- *@retval   None
-*/
-void Uart::attach_tx_interrupt(void (*callback_fun)(void))
-{
-    switch((uint32_t)_USARTx)
-    {
-    case (uint32_t)USART1_BASE:
-        usart_callback_table[0][1] = callback_fun;
-        break;
-    case (uint32_t)USART2_BASE:
-        usart_callback_table[1][1] = callback_fun;
-        break;
-    case (uint32_t)USART3_BASE:
-        usart_callback_table[2][1] = callback_fun;
-        break;
-    case (uint32_t)UART4_BASE:
-        usart_callback_table[3][1] = callback_fun;
-        break;
-    case (uint32_t)UART5_BASE:
-        usart_callback_table[4][1] = callback_fun;
-        break;
-    }
-}
 
 /**
  *@name     uint16_t Uart::receive()
@@ -507,21 +465,31 @@ void Uart::set_busy()
 }
 
 
+void Uart::attach(void (*fptr)(void), IrqType type) {
+    if (fptr) {
+        _irq[type].attach(fptr);
+    }
+}
+
+void Uart::_irq_handler(uint32_t id, IrqType irq_type) {
+    Uart *handler = (Uart*)id;
+    handler->_irq[irq_type].call();
+}
+
+
 extern "C" {
 
     void USART1_IRQHandler(void)
     {
         if(USART_GetITStatus(USART1, USART_IT_RXNE) == SET)
         {
-            if(usart_callback_table[0][0] != 0)
-                usart_callback_table[0][0]();
+						irq_handler(serial_irq_ids[NUM_UART1],RxIrq);
             USART_ClearITPendingBit(USART1, USART_IT_RXNE);
         }
         if(USART_GetITStatus(USART1, USART_IT_TC) == SET)
         {
             busy[0] = 0;
-            if(usart_callback_table[0][1] != 0)
-                usart_callback_table[0][1]();
+						irq_handler(serial_irq_ids[NUM_UART1],TxIrq);
             USART_ClearITPendingBit(USART1, USART_IT_TC);
         }
     }
@@ -529,15 +497,13 @@ extern "C" {
     {
         if(USART_GetITStatus(USART2, USART_IT_RXNE) == SET)
         {
-            if(usart_callback_table[1][0] != 0)
-                usart_callback_table[1][0]();
+						irq_handler(serial_irq_ids[NUM_UART2],RxIrq);
             USART_ClearITPendingBit(USART2, USART_IT_RXNE);
         }
         if(USART_GetITStatus(USART2, USART_IT_TC) == SET)
         {
             busy[1] = 0;
-            if(usart_callback_table[1][1] != 0)
-                usart_callback_table[1][1]();
+						irq_handler(serial_irq_ids[NUM_UART2],TxIrq);
             USART_ClearITPendingBit(USART2, USART_IT_TC);
         }
     }
@@ -545,15 +511,13 @@ extern "C" {
     {
         if(USART_GetITStatus(USART3, USART_IT_RXNE) == SET)
         {
-            if(usart_callback_table[2][0] != 0)
-                usart_callback_table[2][0]();
+						irq_handler(serial_irq_ids[NUM_UART3],RxIrq);
             USART_ClearITPendingBit(USART3, USART_IT_RXNE);
         }
         if(USART_GetITStatus(USART3, USART_IT_TC) == SET)
         {
             busy[2] = 0;
-            if(usart_callback_table[2][1] != 0)
-                usart_callback_table[2][1]();
+						irq_handler(serial_irq_ids[NUM_UART3],TxIrq);
             USART_ClearITPendingBit(USART3, USART_IT_TC);
         }
     }
@@ -561,15 +525,13 @@ extern "C" {
     {
         if(USART_GetITStatus(UART4, USART_IT_RXNE) == SET)
         {
-            if(usart_callback_table[3][0] != 0)
-                usart_callback_table[3][0]();
+						irq_handler(serial_irq_ids[NUM_UART4],RxIrq);
             USART_ClearITPendingBit(UART4, USART_IT_RXNE);
         }
         if(USART_GetITStatus(UART4, USART_IT_TC) == SET)
         {
             busy[3] = 0;
-            if(usart_callback_table[3][1] != 0)
-                usart_callback_table[3][1]();
+						irq_handler(serial_irq_ids[NUM_UART4],TxIrq);
             USART_ClearITPendingBit(UART4, USART_IT_TC);
         }
     }
@@ -577,15 +539,13 @@ extern "C" {
     {
         if(USART_GetITStatus(UART5, USART_IT_RXNE) == SET)
         {
-            if(usart_callback_table[4][0] != 0)
-                usart_callback_table[4][0]();
+						irq_handler(serial_irq_ids[NUM_UART5],RxIrq);
             USART_ClearITPendingBit(UART5, USART_IT_RXNE);
         }
         if(USART_GetITStatus(UART5, USART_IT_TC) == SET)
         {
             busy[4] = 0;
-            if(usart_callback_table[4][1] != 0)
-                usart_callback_table[4][1]();
+						irq_handler(serial_irq_ids[NUM_UART5],TxIrq);
             USART_ClearITPendingBit(UART5, USART_IT_TC);
         }
     }
@@ -607,4 +567,14 @@ extern "C" {
     //		DMA_Cmd(DMA1_Channel2,DISABLE);
     //		DMA_ClearFlag(DMA1_FLAG_TC2);
     //	}
+		
+void serial_irq_handler(uint8_t index, uart_irq_handler handler, uint32_t id)
+{
+    irq_handler = handler;
+    serial_irq_ids[index] = id;
 }
+}
+
+
+
+

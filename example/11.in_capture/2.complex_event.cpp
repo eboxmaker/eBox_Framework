@@ -45,7 +45,7 @@ void setup()
     uart1.begin(115200);
 
     ic0.begin(1);//初始化输入捕获参数，p分频
-    ic0.attch_ic_interrupt(measure_0);//绑定捕获中断事件函数
+    ic0.attach(measure_0);//绑定捕获中断事件函数
     uart1.printf("get_detect_min_pulse_us = %d\r\n",ic0.get_detect_min_pulse_us());
     frq = 1000;
     pwm1.begin(frq, 30);

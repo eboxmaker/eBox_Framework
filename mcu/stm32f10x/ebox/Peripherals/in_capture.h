@@ -28,6 +28,7 @@
 #ifndef __IN_CAPTURE_H
 #define __IN_CAPTURE_H
 #include "common.h"
+#include "FunctionPointer.h"
 
 #define TIM_ICPOLARITY_FALLING TIM_ICPolarity_Falling
 #define TIM_ICPOLARITY_RISING  TIM_ICPolarity_Rising
@@ -84,7 +85,15 @@ public:
     bool        available();///<波形的测量完成
     
     //绑定中断
-    void        attch_ic_interrupt(void(*callback)(void));
+
+		
+	void attach(void (*fptr)(void));
+    template<typename T>
+    void attach(T* tptr, void (T::*mptr)(void)) {
+        _irq.attach(tptr, mptr);
+    }
+
+	static void _irq_handler( uint32_t id);
     
     uint32_t    get_timer_clock();
     uint32_t    get_timer_source_clock();
@@ -93,6 +102,9 @@ public:
     uint8_t     get_detect_min_pulse_us();
 
     uint8_t     polarity;
+		
+		
+
 private:
     Gpio        *capture_pin;
     TIM_TypeDef *TIMx;
@@ -113,5 +125,7 @@ private:
 
     uint16_t    (*_get_capture)(TIM_TypeDef *TIMx);
     void        (*_set_polarity)(TIM_TypeDef *TIMx, uint16_t TIM_OCPolarity); //设置为下降沿或者上升沿捕获
+protected:
+    FunctionPointer _irq;
 };
 #endif
