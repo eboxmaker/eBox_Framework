@@ -5,7 +5,7 @@
 class NRF24L01
 {
 public:
-    NRF24L01(GPIO *irq, GPIO *ce, GPIO *cs, SPI *spi);
+    NRF24L01(Gpio *irq, Gpio *ce, Gpio *cs, Spi *spi);
     void    begin(uint8_t dev_num);
     int     self_check();
 
@@ -19,10 +19,10 @@ public:
 
 
 private:
-    GPIO *irq;
-    GPIO *ce;
-    GPIO *cs;
-    SPI *spi;
+    Gpio *irq;
+    Gpio *ce;
+    Gpio *cs;
+    Spi *spi;
     SPI_CONFIG_TYPE spi_dev_nrf24l01;
 
     uint8_t rx_aw;

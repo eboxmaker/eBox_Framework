@@ -482,7 +482,7 @@ u8 SD::read_single_block(u32 sector, u8 *buffer)
 u8 SD::write_single_block(u32 sector,const  u8 *data)
 {
   u8 r1;
-  u16 i;
+//  u16 i;
   u32 retry;
   //设置为高速模式
 	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
@@ -608,7 +608,7 @@ u8 SD::read_multi_block(u32 sector, u8 *buffer, u8 count)
 u8 SD::write_multi_block(u32 sector,  const u8 *data, u8 count)
 {
   u8 r1;
-  u16 i;	 		 
+//  u16 i;	 		 
 	
 	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
 	spi->take_spi_right(&SPIDevSDCard);

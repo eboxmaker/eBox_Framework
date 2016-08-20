@@ -15,7 +15,7 @@
 一个简单的命令帧接收示例
 */
 #include "ebox.h"
-
+#include "bsp.h"
 
 
 u8 count;
@@ -30,16 +30,17 @@ void test()
 void test1()
 {
     count++;
-    PB8.toggle();
+    led1.toggle();
 }
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
     uart1.attach(test,RxIrq);
-    uart1.attach(test1,TxIrq);
-    PB8.mode(OUTPUT_PP);
-    PB8.reset();
+    uart1.attach(test1,TcIrq);
+    led1.begin();
+    
+
 }
 
 int main(void)

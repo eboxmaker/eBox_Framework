@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    led.h
+  * @file    bsp.cpp
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
@@ -16,22 +16,16 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __LED_H
-#define __LED_H
-#include "ebox.h"
 
-class Led
-{
+/* Includes ------------------------------------------------------------------*/
+#include "bsp.h"
 
-public:
-    Led(Gpio *pin,uint8_t high_on);
-    void begin();
-    void on();
-    void off();
-    void toggle();
-private:
-    Gpio *pin;
-    uint8_t high_on;
-};
-#endif
+Led     led1(&PB8,1);
+Led     led2(&PB9,1);
+Button  btn(&PA8, 1);
+W5500   w5500(&PC13, &PC14, &PC15, &spi2);
+SD      sd(&PB12, &spi2);
+Lcd     lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
+W25x16  flash(&PA15, &spi1);
+At24c02 ee(&i2c2);
+
