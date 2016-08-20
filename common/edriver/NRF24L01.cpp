@@ -8,7 +8,7 @@ void exti_callback()
 {
     uart1.printf("exti event");
 }
-NRF24L01::NRF24L01(GPIO *irq, GPIO *ce, GPIO *cs, SPI *spi)
+NRF24L01::NRF24L01(Gpio *irq, Gpio *ce, Gpio *cs, Spi *spi)
 {
     this->irq = irq;
     this->ce = ce;

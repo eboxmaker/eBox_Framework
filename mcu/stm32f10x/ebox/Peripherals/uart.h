@@ -55,7 +55,7 @@
 
 enum IrqType {
 		RxIrq = 0,
-		TxIrq
+		TcIrq
 };
 
 enum Uart_It_Index{
@@ -63,7 +63,7 @@ enum Uart_It_Index{
     NUM_UART2  = 1,
     NUM_UART3  = 2,
     NUM_UART4  = 3,
-	  NUM_UART5  = 4,	
+    NUM_UART5  = 4,	
 } ; 
 
 typedef void (*uart_irq_handler)(uint32_t id, IrqType type);

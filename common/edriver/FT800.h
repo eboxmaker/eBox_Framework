@@ -313,7 +313,7 @@
 class FT800
 {
 public:
-    FT800(GPIO *p_int_pin, GPIO *p_cs_pin, SOFTSPI *p_spi)
+    FT800(Gpio *p_int_pin, Gpio *p_cs_pin, SoftSpi *p_spi)
     {
         int_pin = p_int_pin;
         cs = p_cs_pin;
@@ -352,8 +352,8 @@ private:
     void _start(u32 addr);
 
 private:
-    GPIO *int_pin;
-    GPIO *cs;
-    SOFTSPI *spi;
+    Gpio *int_pin;
+    Gpio *cs;
+    SoftSpi *spi;
 };
 #endif

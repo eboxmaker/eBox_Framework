@@ -20,18 +20,21 @@
 #ifndef __LED_H
 #define __LED_H
 #include "ebox.h"
+#include "74hc595.h"
 
-class Led
+class LedSegment: public _74hc595
 {
 
 public:
-    Led(Gpio *pin,uint8_t high_on);
+    LedSegment(Gpio *dataPin, Gpio *sckPin, Gpio *rckPin): _74hc595(dataPin, sckPin, rckPin) {};
     void begin();
-    void on();
-    void off();
-    void toggle();
+    void show_time_HMS(uint8_t hour, uint8_t min, uint8_t sec);
+    void show_date_time(uint16_t year, uint8_t month, uint8_t date);
+    void show_date(u8 *buf);
+    void show_time(u8 *buf);
+
 private:
-    Gpio *pin;
-    uint8_t high_on;
+    uint8_t led_buf[8];
+
 };
 #endif

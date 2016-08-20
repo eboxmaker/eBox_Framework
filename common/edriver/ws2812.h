@@ -21,7 +21,7 @@ extern uint8_t led_Colors[LED_COUNT];						//Array of integers that will functio
 class WS2812
 {
 public:
-    WS2812(GPIO *p_pin)
+    WS2812(Gpio *p_pin)
     {
         pin = p_pin;
     }
@@ -39,7 +39,7 @@ public:
     void rainbow_Loop();
     void rainbow_Loop1();
 private:
-    GPIO *pin;
+    Gpio *pin;
 
 };
 #endif
