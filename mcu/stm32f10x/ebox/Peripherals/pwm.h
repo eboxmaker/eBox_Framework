@@ -57,7 +57,7 @@ public:
     float   get_accuracy();
 
 private:
-    Gpio *pwm_pin;
+    Gpio        *pwm_pin;
     TIM_TypeDef *TIMx;
     uint32_t    rcc;
     uint8_t     ch;
@@ -69,6 +69,7 @@ private:
     void init_info(Gpio *pwm_pin);
     void base_init(uint16_t Period, uint16_t Prescaler);
     void _set_duty(uint16_t duty);
+//-------------------------------------------------------------
 
 };
 void analog_write(Gpio *pwm_pin, uint16_t duty);

@@ -71,7 +71,7 @@ extern "C" {
         {
             millis_seconds++;
         }
-        return  millis_seconds * 1000 + (1000 - SysTick->VAL / 72);
+        return  (millis_seconds * 1000 + (1000 - (SysTick->VAL / cpu.clock.core)*1000000));
     }
     uint64_t millis( void )
     {
@@ -119,12 +119,15 @@ extern "C" {
     }
 	static void get_system_clock(cpu_clock_t *clock)
     {
-        SystemCoreClockUpdate();
-        clock->core = SystemCoreClock;
-        clock->hclk = clock->core;
-        clock->pclk2 = clock->core;
-        clock->pclk1 = clock->core;
-          
+        RCC_ClocksTypeDef RCC_ClocksStatus;
+        
+        SystemCoreClockUpdate();                
+        RCC_GetClocksFreq(&RCC_ClocksStatus);
+        
+        clock->core = RCC_ClocksStatus.SYSCLK_Frequency;
+        clock->hclk = RCC_ClocksStatus.HCLK_Frequency;
+        clock->pclk2 = RCC_ClocksStatus.PCLK2_Frequency;
+        clock->pclk1 = RCC_ClocksStatus.PCLK1_Frequency;       
     }
 
     
