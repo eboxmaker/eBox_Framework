@@ -18,27 +18,27 @@ public:
     }
     int         begin(uint8_t dev_num);
     uint8_t     init();
-    int         get_CID(u8 *cid_data);
-    int         get_CSD(u8 *csd_data);
+    int         get_CID(uint8_t *cid_data);
+    int         get_CSD(uint8_t *csd_data);
     uint64_t    get_capacity(void);
-    u8          read_single_block(u32 sector, u8 *buffer);
-    u8          write_single_block(u32 sector, const  u8 *data);
-    u8          read_multi_block(u32 sector, u8 *buffer, u8 count);
-    u8          write_multi_block(u32 sector,  const u8 *data, u8 count);
-    u8          read_bytes(unsigned long address, unsigned char *buf, unsigned int offset, unsigned int bytes);
+    uint8_t     read_single_block(uint32_t sector, uint8_t *buffer);
+    uint8_t     write_single_block(uint32_t sector, const  uint8_t *data);
+    uint8_t     read_multi_block(uint32_t sector, uint8_t *buffer, uint8_t count);
+    uint8_t     write_multi_block(uint32_t sector,  const uint8_t *data, uint8_t count);
+    uint8_t     read_bytes(unsigned long address, unsigned char *buf, unsigned int offset, unsigned int bytes);
 
 private:
     uint8_t     _wait(void);
-    uint8_t     _send_command(u8 cmd, u32 arg, u8 crc);
-    uint8_t     _send_command_no_deassert(u8 cmd, u32 arg, u8 crc);
-    int         _receive_data(u8 *data, u16 len, u8 release);
+    uint8_t     _send_command(uint8_t cmd, uint32_t arg, uint8_t crc);
+    uint8_t     _send_command_no_deassert(uint8_t cmd, uint32_t arg, uint8_t crc);
+    int         _receive_data(uint8_t *data, u16 len, uint8_t release);
 
 public:
-    u8  SD_Type; //SD卡的类型
+    uint8_t  SD_Type; //SD卡的类型
 
 private:
-    Gpio *cs;
-    Spi  *spi;
+    Gpio            *cs;
+    Spi             *spi;
     SPI_CONFIG_TYPE SPIDevSDCard;
 
 

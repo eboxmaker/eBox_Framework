@@ -49,7 +49,7 @@ void W25x16::read_id(uint16_t *id)
 
 }
 /***************************************************************
-函数名称 :  void SPI_Flash_Read(u8 *pBuffer,u32 ReadAddr,u16 NumByteToRead)
+函数名称 :  void SPI_Flash_Read(uint8_t *pBuffer,uint32_t ReadAddr,uint16_t NumByteToRead)
 功能描述 : 读取SPI FLASH， 在指定地址开始读取指定长度的数据
 输入参数 :
 			pBuffer:数据存储区
@@ -58,21 +58,21 @@ void W25x16::read_id(uint16_t *id)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::read(u8 *buf, u32 read_addr, u16 num_to_read)
+void W25x16::read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read)
 {
     spi->take_spi_right(&spi_dev_w25x16);
     cs->reset();
     spi->write(W25X_ReadData);         //发送读取命令
-    spi->write((u8)((read_addr) >> 16)); //发送24bit地址
-    spi->write((u8)((read_addr) >> 8));
-    spi->write((u8)read_addr);
+    spi->write((uint8_t)((read_addr) >> 16)); //发送24bit地址
+    spi->write((uint8_t)((read_addr) >> 8));
+    spi->write((uint8_t)read_addr);
     spi->read(buf, num_to_read);
     cs->set();
     spi->release_spi_right();
 
 }
 /***************************************************************
-函数名称 :  void SPI_Flash_Read(u8 *pBuffer,u32 ReadAddr,u16 NumByteToRead)
+函数名称 :  void SPI_Flash_Read(uint8_t *pBuffer,uint32_t ReadAddr,uint16_t NumByteToRead)
 功能描述 : 读取SPI FLASH， 在指定地址开始读取指定长度的数据
 输入参数 :
 			pBuffer:数据存储区
@@ -81,14 +81,14 @@ void W25x16::read(u8 *buf, u32 read_addr, u16 num_to_read)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::fast_read(u8 *buf, u32 read_addr, u16 num_to_read)
+void W25x16::fast_read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read)
 {
     spi->take_spi_right(&spi_dev_w25x16);
     cs->reset();
     spi->write(W25X_FastReadData);         //发送读取命令
-    spi->write((u8)((read_addr) >> 16)); //发送24bit地址
-    spi->write((u8)((read_addr) >> 8));
-    spi->write((u8)read_addr);
+    spi->write((uint8_t)((read_addr) >> 16)); //发送24bit地址
+    spi->write((uint8_t)((read_addr) >> 8));
+    spi->write((uint8_t)read_addr);
     spi->write(0xff);   //空字节
     spi->read(buf, num_to_read);
     cs->set();
@@ -96,7 +96,7 @@ void W25x16::fast_read(u8 *buf, u32 read_addr, u16 num_to_read)
 
 }
 /***************************************************************
-函数名称 : void SPI_Flash_Write(u8 *pBuffer,u32 WriteAddr,u16 NumByteToWrite)
+函数名称 : void SPI_Flash_Write(uint8_t *pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)
 功能描述 : 写SPI FLASH，在指定地址开始写入指定长度的数据，该函数带擦除操作!
 输入参数 :
 			pBuffer:数据存储区
@@ -105,13 +105,13 @@ void W25x16::fast_read(u8 *buf, u32 read_addr, u16 num_to_read)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::write(u8 *buf, u32 write_addr, u16 num_to_write)
+void W25x16::write(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write)
 {
 
-    u32 secpos;
-    u16 secoff;
-    u16 secremain;
-    u16 i;
+    uint32_t secpos;
+    uint16_t secoff;
+    uint16_t secremain;
+    uint16_t i;
     spi->take_spi_right(&spi_dev_w25x16);
 
     secpos = write_addr / 4096; //扇区地址 0~511 for w25x16
@@ -156,7 +156,7 @@ void W25x16::write(u8 *buf, u32 write_addr, u16 num_to_write)
 
 
 /***************************************************************
-函数名称 : void SPI_Flash_Write_Page(u8 *pBuffer,u32 WriteAddr,u16 NumByteToWrite)
+函数名称 : void SPI_Flash_Write_Page(uint8_t *pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)
 功能描述 : SPI在一页(0~65535)内写入少于256个字节的数据， 在指定地址开始写入最大256字节的数据
 输入参数 :
 			pBuffer:数据存储区
@@ -165,20 +165,20 @@ void W25x16::write(u8 *buf, u32 write_addr, u16 num_to_write)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::write_page(u8 *buf, u32 write_addr, u16 num_to_write)
+void W25x16::write_page(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write)
 {
     writeEnable();                  //SET WEL
     cs->reset();
     spi->write(W25X_PageProgram);      //发送写页命令
-    spi->write((u8)((write_addr) >> 16)); //发送24bit地址
-    spi->write((u8)((write_addr) >> 8));
-    spi->write((u8)write_addr);
+    spi->write((uint8_t)((write_addr) >> 16)); //发送24bit地址
+    spi->write((uint8_t)((write_addr) >> 8));
+    spi->write((uint8_t)write_addr);
     spi->write(buf, num_to_write);
     cs->set();
     _waitBusy();					   //等待写入结束
 }
 /***************************************************************
-函数名称 : void SPI_Flash_Write_NoCheck(u8 *pBuffer,u32 WriteAddr,u16 NumByteToWrite)
+函数名称 : void SPI_Flash_Write_NoCheck(uint8_t *pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)
 功能描述 :  无检验写SPI FLASH，必须确保所写的地址范围内的数据全部为0XFF,否则在非0XFF处写入的数据将失败!具有自动换页功能，
 			在指定地址开始写入指定长度的数据,但是要确保地址不越界!
 输入参数 :
@@ -188,9 +188,9 @@ void W25x16::write_page(u8 *buf, u32 write_addr, u16 num_to_write)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::write_no_check(u8 *buf, u32 write_addr, u16 num_to_write)
+void W25x16::write_no_check(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write)
 {
-    u16 pageremain;
+    uint16_t pageremain;
     pageremain = 256 - write_addr % 256; //单页剩余的字节数
     if(num_to_write <= pageremain)pageremain = num_to_write; //不大于256个字节
     while(1)
@@ -209,28 +209,28 @@ void W25x16::write_no_check(u8 *buf, u32 write_addr, u16 num_to_write)
     };
 }
 /***************************************************************
-函数名称 : void SPI_Flash_Write(u8 *pBuffer,u32 WriteAddr,u16 NumByteToWrite)
+函数名称 : void SPI_Flash_Write(uint8_t *pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)
 功能描述 : 擦除一个扇区，擦除一个山区的最少时间:150ms
 输入参数 : Dst_Addr:扇区地址 0~511 for w25x16
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::erase_sector(u32 dst_addr)
+void W25x16::erase_sector(uint32_t dst_addr)
 {
     dst_addr *= 4096;
     writeEnable();                  //SET WEL
     _waitBusy();
     cs->reset();
     spi->write(W25X_SectorErase);      //发送扇区擦除指令
-    spi->write((u8)((dst_addr) >> 16)); //发送24bit地址
-    spi->write((u8)((dst_addr) >> 8));
-    spi->write((u8)dst_addr);
+    spi->write((uint8_t)((dst_addr) >> 16)); //发送24bit地址
+    spi->write((uint8_t)((dst_addr) >> 8));
+    spi->write((uint8_t)dst_addr);
     cs->set();
     _waitBusy();   				   //等待擦除完成
 
 }
 /***************************************************************
-函数名称 : void SPI_Flash_Write(u8 *pBuffer,u32 WriteAddr,u16 NumByteToWrite)
+函数名称 : void SPI_Flash_Write(uint8_t *pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)
 功能描述 :  擦除整个芯片
 			整片擦除时间:
 			W25X16:25s
@@ -281,7 +281,7 @@ void W25x16::wakeUp(void)
     cs->set();
 }
 /***************************************************************
-函数名称 :  u8 SPI_Flash_ReadSR(void)
+函数名称 :  uint8_t SPI_Flash_ReadSR(void)
 功能描述 : 读取W25X16的状态寄存器
 				BIT7  6   5   4   3   2   1   0
 				SPR   RV  TB BP2 BP1 BP0 WEL BUSY
@@ -295,9 +295,9 @@ void W25x16::wakeUp(void)
 输出参数 : 无
 返回值   : byte	寄存器状态
 ***************************************************************/
-u8 W25x16::readSR(void)
+uint8_t W25x16::readSR(void)
 {
-    u8 byte = 0;
+    uint8_t byte = 0;
     cs->reset();
     spi->write(W25X_ReadStatusReg);    //发送读取状态寄存器命令
     byte = spi->read();
@@ -306,13 +306,13 @@ u8 W25x16::readSR(void)
 }
 
 /***************************************************************
-函数名称 :  void SPI_FLASH_Write_SR(u8 sr)
+函数名称 :  void SPI_FLASH_Write_SR(uint8_t sr)
 功能描述 : 写SPI_FLASH状态寄存器， 只有SPR,TB,BP2,BP1,BP0(bit 7,5,4,3,2)可以写!!!
 输入参数 : sr:状态
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::writeSR(u8 sr)
+void W25x16::writeSR(uint8_t sr)
 {
     cs->reset();
     spi->write(W25X_WriteStatusReg);   //发送写取状态寄存器命令

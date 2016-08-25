@@ -227,7 +227,7 @@ void NRF24L01::set_crc(bool crco, bool enable)
 
 int NRF24L01::self_check()
 {
-    u8 buf[5] = {0XA5, 0XA5, 0XA5, 0XA5, 0XA5};
+    uint8_t buf[5] = {0XA5, 0XA5, 0XA5, 0XA5, 0XA5};
     int ret;
     spi->take_spi_right(&spi_dev_nrf24l01);
     cs->reset();

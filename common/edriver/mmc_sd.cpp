@@ -25,15 +25,15 @@ int SD::begin(uint8_t dev_num)
 * Description    : 等待SD卡Ready
 * Input          : None
 * Output         : None
-* Return         : u8 
+* Return         : uint8_t 
 *                   0： 成功
 *                   other：失败
 *******************************************************************************/
 
 uint8_t SD::_wait(void)
 {
-  u8 r1 = 0;
-  u32 retry=0;
+  uint8_t r1 = 0;
+  uint32_t retry=0;
   do
   {
     r1 = spi->read();
@@ -46,13 +46,13 @@ uint8_t SD::_wait(void)
 /*******************************************************************************
 * Function Name  : SD_SendCommand
 * Description    : 向SD卡发送一个命令
-* Input          : u8 cmd   命令 
-*                  u32 arg  命令参数
-*                  u8 crc   crc校验值
+* Input          : uint8_t cmd   命令 
+*                  uint32_t arg  命令参数
+*                  uint8_t crc   crc校验值
 * Output         : None
-* Return         : u8 r1 SD卡返回的响应
+* Return         : uint8_t r1 SD卡返回的响应
 *******************************************************************************/
-uint8_t SD::_send_command(u8 cmd, u32 arg,u8 crc)
+uint8_t SD::_send_command(uint8_t cmd, uint32_t arg,uint8_t crc)
 {
   unsigned char r1 = 0;
   unsigned int Retry = 0;
@@ -64,10 +64,10 @@ uint8_t SD::_send_command(u8 cmd, u32 arg,u8 crc)
 	
   /* 发送命令序列 */
   spi->write(cmd | 0x40);                      
-  spi->write((u8)(arg >> 24));//参数[31..24]
-  spi->write((u8)(arg >> 16));//参数[23..16]
-  spi->write((u8)(arg >> 8));//参数[15..8]
-  spi->write((u8)arg);    //参数[7..0]
+  spi->write((uint8_t)(arg >> 24));//参数[31..24]
+  spi->write((uint8_t)(arg >> 16));//参数[23..16]
+  spi->write((uint8_t)(arg >> 8));//参数[15..8]
+  spi->write((uint8_t)arg);    //参数[7..0]
   spi->write(crc);
     
   //等待响应，或超时退出
@@ -87,13 +87,13 @@ uint8_t SD::_send_command(u8 cmd, u32 arg,u8 crc)
 /*******************************************************************************
 * Function Name  : SD_SendCommand_NoDeassert
 * Description    : 向SD卡发送一个命令(结束是不失能片选，还有后续数据传来）
-* Input          : u8 cmd   命令 
-*                  u32 arg  命令参数
-*                  u8 crc   crc校验值
+* Input          : uint8_t cmd   命令 
+*                  uint32_t arg  命令参数
+*                  uint8_t crc   crc校验值
 * Output         : None
-* Return         : u8 r1 SD卡返回的响应
+* Return         : uint8_t r1 SD卡返回的响应
 *******************************************************************************/
-uint8_t SD::_send_command_no_deassert(u8 cmd, u32 arg,u8 crc)
+uint8_t SD::_send_command_no_deassert(uint8_t cmd, uint32_t arg,uint8_t crc)
 {
   unsigned char r1 = 0;
   unsigned int Retry = 0;
@@ -105,10 +105,10 @@ uint8_t SD::_send_command_no_deassert(u8 cmd, u32 arg,u8 crc)
   
   /* 发送命令序列 */
   spi->write(cmd | 0x40);                      
-  spi->write((u8)(arg >> 24));//参数[31..24]
-  spi->write((u8)(arg >> 16));//参数[23..16]
-  spi->write((u8)(arg >> 8));//参数[15..8]
-  spi->write((u8)arg);    //参数[7..0]
+  spi->write((uint8_t)(arg >> 24));//参数[31..24]
+  spi->write((uint8_t)(arg >> 16));//参数[23..16]
+  spi->write((uint8_t)(arg >> 8));//参数[15..8]
+  spi->write((uint8_t)arg);    //参数[7..0]
   spi->write(crc);
   
   //等待响应，或超时退出
@@ -125,17 +125,17 @@ uint8_t SD::_send_command_no_deassert(u8 cmd, u32 arg,u8 crc)
 * Description    : 初始化SD卡
 * Input          : None
 * Output         : None
-* Return         : u8 
+* Return         : uint8_t 
 *                  0：NO_ERR
 *                  1：TIME_OUT
 *                  99：NO_CARD
 *******************************************************************************/
 uint8_t SD::init()
 {
-  u16 i = 0;      // 用来循环计数
-  u8 r1 = 0;      // 存放SD卡的返回值
-  u16 retry = 0;  // 用来进行超时计数
-  u8 buff[6];
+  uint16_t i = 0;      // 用来循环计数
+  uint8_t r1 = 0;      // 存放SD卡的返回值
+  uint16_t retry = 0;  // 用来进行超时计数
+  uint8_t buff[6];
 	
 	SPIDevSDCard.prescaler = SPI_CLOCK_DIV256;
 	spi->begin(&SPIDevSDCard);
@@ -276,18 +276,18 @@ uint8_t SD::init()
 /*******************************************************************************
 * Function Name  : SD_ReceiveData
 * Description    : 从SD卡中读回指定长度的数据，放置在给定位置
-* Input          : u8 *data(存放读回数据的内存>len)
-*                  u16 len(数据长度）
-*                  u8 release(传输完成后是否释放总线CS置高 0：不释放 1：释放）
+* Input          : uint8_t *data(存放读回数据的内存>len)
+*                  uint16_t len(数据长度）
+*                  uint8_t release(传输完成后是否释放总线CS置高 0：不释放 1：释放）
 * Output         : None
-* Return         : u8 
+* Return         : uint8_t 
 *                  0：NO_ERR
 *                  other：错误信息
 *******************************************************************************/
-int SD::_receive_data(u8 *data, u16 len, u8 release)
+int SD::_receive_data(uint8_t *data, uint16_t len, uint8_t release)
 {
-  u16 retry;
-  u8 r1;
+  uint16_t retry;
+  uint8_t r1;
   // 启动一次传输
   cs->reset();
   //等待SD卡发回数据起始令牌0xFE
@@ -326,16 +326,16 @@ int SD::_receive_data(u8 *data, u16 len, u8 release)
 /*******************************************************************************
 * Function Name  : SD_GetCID
 * Description    : 获取SD卡的CID信息，包括制造商信息
-* Input          : u8 *cid_data(存放CID的内存，至少16Byte）
+* Input          : uint8_t *cid_data(存放CID的内存，至少16Byte）
 * Output         : None
-* Return         : u8 
+* Return         : uint8_t 
 *                  0：NO_ERR
 *                  1：TIME_OUT
 *                  other：错误信息
 *******************************************************************************/
-int SD::get_CID(u8 *cid_data)
+int SD::get_CID(uint8_t *cid_data)
 {
-  u8 r1;
+  uint8_t r1;
 	
 	spi->take_spi_right(&SPIDevSDCard);
 
@@ -350,16 +350,16 @@ int SD::get_CID(u8 *cid_data)
 /*******************************************************************************
 * Function Name  : SD_GetCSD
 * Description    : 获取SD卡的CSD信息，包括容量和速度信息
-* Input          : u8 *cid_data(存放CID的内存，至少16Byte）
+* Input          : uint8_t *cid_data(存放CID的内存，至少16Byte）
 * Output         : None
-* Return         : u8 
+* Return         : uint8_t 
 *                  0：NO_ERR
 *                  1：TIME_OUT
 *                  other：错误信息
 *******************************************************************************/
-int SD::get_CSD(u8 *csd_data)
+int SD::get_CSD(uint8_t *csd_data)
 {
-  u8 r1;
+  uint8_t r1;
 
 	spi->take_spi_right(&SPIDevSDCard);
   //发CMD9命令，读CSD
@@ -376,16 +376,16 @@ int SD::get_CSD(u8 *csd_data)
 * Description    : 获取SD卡的容量（字节）
 * Input          : None
 * Output         : None
-* Return         : u32 capacity 
+* Return         : uint32_t capacity 
 *                   0： 取容量出错 
 *******************************************************************************/
 uint64_t SD::get_capacity(void)
 {
-  u8 csd[16];
+  uint8_t csd[16];
   uint64_t Capacity;
-  u8 r1;
-  u16 i;
-  u16 temp;
+  uint8_t r1;
+  uint16_t i;
+  uint16_t temp;
 	spi->take_spi_right(&SPIDevSDCard);
 
   //取CSD信息，如果期间出错，返回0
@@ -393,8 +393,8 @@ uint64_t SD::get_capacity(void)
   //如果为SDHC卡，按照下面方式计算
   if((csd[0]&0xC0)==0x40)
   {									  
-    Capacity=((u32)csd[8])<<8;
-    Capacity+=(u32)csd[9]+1;	 
+    Capacity=((uint32_t)csd[8])<<8;
+    Capacity+=(uint32_t)csd[9]+1;	 
     Capacity = (Capacity)*1024;//得到扇区数
     Capacity*=512;//得到字节数			   
   }
@@ -417,7 +417,7 @@ uint64_t SD::get_capacity(void)
       temp*=2;
       r1--;
     }
-    Capacity = ((u32)(i+1))*((u32)temp);	 
+    Capacity = ((uint32_t)(i+1))*((uint32_t)temp);	 
     // READ_BL_LEN
     i = csd[5]&0x0f;
     //BLOCK_LEN
@@ -428,7 +428,7 @@ uint64_t SD::get_capacity(void)
       i--;
     }
     //The final result
-    Capacity *= (u32)temp;//字节为单位 	  
+    Capacity *= (uint32_t)temp;//字节为单位 	  
   }
 
 		spi->release_spi_right();	
@@ -438,16 +438,16 @@ uint64_t SD::get_capacity(void)
 /*******************************************************************************
 * Function Name  : SD_ReadSingleBlock
 * Description    : 读SD卡的一个block
-* Input          : u32 sector 取地址（sector值，非物理地址） 
-*                  u8 *buffer 数据存储地址（大小至少512byte） 
+* Input          : uint32_t sector 取地址（sector值，非物理地址） 
+*                  uint8_t *buffer 数据存储地址（大小至少512byte） 
 * Output         : None
-* Return         : u8 r1 
+* Return         : uint8_t r1 
 *                   0： 成功
 *                   other：失败
 *******************************************************************************/
-u8 SD::read_single_block(u32 sector, u8 *buffer)
+uint8_t SD::read_single_block(uint32_t sector, uint8_t *buffer)
 {
-  u8 r1;
+  uint8_t r1;
 
   //设置为高速模式
   SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
@@ -472,18 +472,18 @@ u8 SD::read_single_block(u32 sector, u8 *buffer)
 /*******************************************************************************
 * Function Name  : SD_WriteSingleBlock
 * Description    : 写入SD卡的一个block
-* Input          : u32 sector 扇区地址（sector值，非物理地址） 
-*                  u8 *buffer 数据存储地址（大小至少512byte） 
+* Input          : uint32_t sector 扇区地址（sector值，非物理地址） 
+*                  uint8_t *buffer 数据存储地址（大小至少512byte） 
 * Output         : None
-* Return         : u8 r1 
+* Return         : uint8_t r1 
 *                   0： 成功
 *                   other：失败
 *******************************************************************************/
-u8 SD::write_single_block(u32 sector,const  u8 *data)
+uint8_t SD::write_single_block(uint32_t sector,const  uint8_t *data)
 {
-  u8 r1;
-//  u16 i;
-  u32 retry;
+  uint8_t r1;
+//  uint16_t i;
+  uint32_t retry;
   //设置为高速模式
 	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
 	spi->take_spi_right(&SPIDevSDCard);
@@ -552,17 +552,17 @@ u8 SD::write_single_block(u32 sector,const  u8 *data)
 /*******************************************************************************
 * Function Name  : SD_ReadMultiBlock
 * Description    : 读SD卡的多个block
-* Input          : u32 sector 取地址（sector值，非物理地址） 
-*                  u8 *buffer 数据存储地址（大小至少512byte）
-*                  u8 count 连续读count个block
+* Input          : uint32_t sector 取地址（sector值，非物理地址） 
+*                  uint8_t *buffer 数据存储地址（大小至少512byte）
+*                  uint8_t count 连续读count个block
 * Output         : None
-* Return         : u8 r1 
+* Return         : uint8_t r1 
 *                   0： 成功
 *                   other：失败
 *******************************************************************************/
-u8 SD::read_multi_block(u32 sector, u8 *buffer, u8 count)
+uint8_t SD::read_multi_block(uint32_t sector, uint8_t *buffer, uint8_t count)
 {
-  u8 r1;	 			 
+  uint8_t r1;	 			 
 	
 	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
 	spi->take_spi_right(&SPIDevSDCard);
@@ -597,18 +597,18 @@ u8 SD::read_multi_block(u32 sector, u8 *buffer, u8 count)
 /*******************************************************************************
 * Function Name  : SD_WriteMultiBlock
 * Description    : 写入SD卡的N个block
-* Input          : u32 sector 扇区地址（sector值，非物理地址） 
-*                  u8 *buffer 数据存储地址（大小至少512byte）
-*                  u8 count 写入的block数目
+* Input          : uint32_t sector 扇区地址（sector值，非物理地址） 
+*                  uint8_t *buffer 数据存储地址（大小至少512byte）
+*                  uint8_t count 写入的block数目
 * Output         : None
-* Return         : u8 r1 
+* Return         : uint8_t r1 
 *                   0： 成功
 *                   other：失败
 *******************************************************************************/
-u8 SD::write_multi_block(u32 sector,  const u8 *data, u8 count)
+uint8_t SD::write_multi_block(uint32_t sector,  const uint8_t *data, uint8_t count)
 {
-  u8 r1;
-//  u16 i;	 		 
+  uint8_t r1;
+//  uint16_t i;	 		 
 	
 	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
 	spi->take_spi_right(&SPIDevSDCard);
@@ -678,18 +678,18 @@ u8 SD::write_multi_block(u32 sector,  const u8 *data, u8 count)
 /*******************************************************************************
 * Function Name  : SD_Read_Bytes
 * Description    : 在指定扇区,从offset开始读出bytes个字节
-* Input          : u32 address 扇区地址（sector值，非物理地址） 
-*                  u8 *buf     数据存储地址（大小<=512byte）
-*                  u16 offset  在扇区里面的偏移量
-                   u16 bytes   要读出的字节数
+* Input          : uint32_t address 扇区地址（sector值，非物理地址） 
+*                  uint8_t *buf     数据存储地址（大小<=512byte）
+*                  uint16_t offset  在扇区里面的偏移量
+                   uint16_t bytes   要读出的字节数
 * Output         : None
-* Return         : u8 r1 
+* Return         : uint8_t r1 
 *                   0： 成功
 *                   other：失败
 *******************************************************************************/
-u8 SD::read_bytes(unsigned long address,unsigned char *buf,unsigned int offset,unsigned int bytes)
+uint8_t SD::read_bytes(unsigned long address,unsigned char *buf,unsigned int offset,unsigned int bytes)
 {
-  u8 r1;u16 i=0;  
+  uint8_t r1;uint16_t i=0;  
 	
 	spi->take_spi_right(&SPIDevSDCard);
 

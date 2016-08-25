@@ -26,7 +26,7 @@
   * @brief common
   * @{
   */
-extern u16 AD_value[];
+extern uint16_t AD_value[];
 
 
 /** @defgroup commonº¯Êý

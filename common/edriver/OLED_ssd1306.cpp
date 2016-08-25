@@ -223,8 +223,8 @@ void OLED_SSD1306::show_string(uint8_t x, uint8_t y, uint8_t *chr)
 ***********************************************************/
 void OLED_SSD1306::show_num(uint8_t x, uint8_t y, uint32_t num, uint8_t len, uint8_t size)
 {
-    u8 t, temp;
-    u8 enshow = 0;
+    uint8_t t, temp;
+    uint8_t enshow = 0;
     for(t = 0; t < len; t++)
     {
         temp = (num / oled_pow(10, len - t - 1)) % 10;
@@ -251,7 +251,7 @@ void OLED_SSD1306::show_num(uint8_t x, uint8_t y, uint32_t num, uint8_t len, uin
 ***********************************************************/
 void OLED_SSD1306::show_chinese(uint8_t x, uint8_t y, uint8_t no)
 {
-    u8 t, adder = 0;
+    uint8_t t, adder = 0;
     set_xy(x, y);
     for(t = 0; t < 16; t++)
     {
@@ -274,7 +274,7 @@ void OLED_SSD1306::show_chinese(uint8_t x, uint8_t y, uint8_t no)
 *   返回结果：
 *   备    注：
 ***********************************************************/
-void OLED_SSD1306::draw_bmp(u16 x0, u16 y0, u16 x1, u16 y1, const unsigned char BMP[])
+void OLED_SSD1306::draw_bmp(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, const unsigned char BMP[])
 {
     unsigned int j = 0;
     unsigned char x, y;

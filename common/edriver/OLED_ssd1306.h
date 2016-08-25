@@ -108,13 +108,13 @@ public:
     void draw_point(uint8_t x, uint8_t y, uint8_t t);
     void fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t dot);
     void show_chinese(uint8_t x, uint8_t y, uint8_t no);
-    void draw_bmp(u16 x0, u16 y0, u16 x1, u16 y1, const unsigned char BMP[]);
+    void draw_bmp(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, const unsigned char BMP[]);
 
 private:
     void write_data(uint8_t dat);	//OLED写数据
     void write_cmd(uint8_t cmd);	//OLED写命令
     void set_xy(uint16_t x, uint16_t y);	// OLED 设置坐标
-    u32 oled_pow(uint8_t m, uint8_t n);	//m^n
+    uint32_t oled_pow(uint8_t m, uint8_t n);	//m^n
 
     Gpio *cs_pin;	//片选
     Gpio *res_pin;

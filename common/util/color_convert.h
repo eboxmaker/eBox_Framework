@@ -29,7 +29,7 @@ typedef enum
 } COLOR_TYPE;
 typedef struct
 {
-    u8 data[100][3];
+    uint8_t data[100][3];
     COLOR_TYPE color_type;
 } COLOR_BUF;
 

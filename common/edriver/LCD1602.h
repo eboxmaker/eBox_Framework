@@ -43,7 +43,7 @@ public:
     void printf(uint8_t row, uint8_t col, const char *fmt, ...);
     void test(void);
     //基本控制函数
-    void back_light(u8 i);
+    void back_light(uint8_t i);
     void shift_left();
     void shift_right(void);
     void clear(void);

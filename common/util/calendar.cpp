@@ -31,7 +31,7 @@ void Calendar::begin()
 }
 
 //GPS接收数据后执行,将GPS接收的数据更新时钟
-void Calendar::sec_process(u8 *date,u8 *time,u8 timezone_flag,u8 sec_flag)
+void Calendar::sec_process(uint8_t *date,uint8_t *time,uint8_t timezone_flag,uint8_t sec_flag)
 {
 	set_date(date);
 	set_time(time);
@@ -70,7 +70,7 @@ void Calendar::set(uint8_t year,uint8_t mon,uint8_t date,uint8_t hour,uint8_t mi
 	date_to_str(dt);
 };
 
-void Calendar::set_time(u8 *time)
+void Calendar::set_time(uint8_t *time)
 {
 
 	dt.hour		= uint8_t ((time[0]-0x30)*10 + (time[1]-0x30));
@@ -78,7 +78,7 @@ void Calendar::set_time(u8 *time)
 	dt.sec		= uint8_t ((time[4]-0x30)*10 + (time[5]-0x30));
 	time_to_str(dt);
 };
-void Calendar::set_date(u8 *date)
+void Calendar::set_date(uint8_t *date)
 {
 	dt.year		= uint8_t ((date[5]-0x30) + (date[4]-0x30)*10);
 	dt.month	= uint8_t ((date[3]-0x30) + (date[2]-0x30)*10);
@@ -164,7 +164,7 @@ int	Calendar::dt_changed(date_time_t &_dt)
 
 //使用基姆拉尔森计算公式
 //把一月和二月看成上一年的十三月和十四月
-void Calendar::get_week(u16 year,u8 month,u8 date,u8 &_week)
+void Calendar::get_week(uint16_t year,uint8_t month,uint8_t date,uint8_t &_week)
 {	
 		year += 2000;
     if(month==1||month==2) {
@@ -208,7 +208,7 @@ uint8_t Calendar::alarm_check_only_time()
 	}
 	return alarm;
 }
-void Calendar::alarm_enable(u8 enable)
+void Calendar::alarm_enable(uint8_t enable)
 {
 
 	_alarm_enable = enable;
@@ -216,9 +216,9 @@ void Calendar::alarm_enable(u8 enable)
 void Calendar::update_cutdown()
 {
 	int i = 0;
-	u32 diff_days;
-	u32 diff_sec;
-	u8 h,m,s;
+	uint32_t diff_days;
+	uint32_t diff_sec;
+	uint8_t h,m,s;
 	if(dt.year > alarm_dt.year)
     {
 		//stop
@@ -312,9 +312,9 @@ void Calendar::update_cutdown()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void Calendar::swap(u16 *a,u16 *b)
+void Calendar::swap(uint16_t *a,uint16_t *b)
 {
-	u16 temp;
+	uint16_t temp;
 	temp=*a;
 	*a=*b;
 	*b=temp;
@@ -322,31 +322,31 @@ void Calendar::swap(u16 *a,u16 *b)
 
 //根据给定的日期算出他是该年的第几天
 //1月1号算第一天
-u16 Calendar::day_in_year(date_time_t &_dt)
+uint16_t Calendar::day_in_year(date_time_t &_dt)
 {
-	u16 temp_year;	
-	u16 temp_month;	
-	u16 temp_day;	
+	uint16_t temp_year;	
+	uint16_t temp_month;	
+	uint16_t temp_day;	
 	
 	temp_year 	= _dt.year + 2000; 
 	temp_month	= _dt.month;	
 	temp_day    = _dt.date;
 	
 	
-	u8 DAY[12]={31,28,31,30,31,30,31,31,30,31,30,31};
+	uint8_t DAY[12]={31,28,31,30,31,30,31,31,30,31,30,31};
 	if(is_leap_year(temp_year))
 			DAY[1] = 29;
-	for(u8 i=0; i<temp_month - 1; ++i)
+	for(uint8_t i=0; i<temp_month - 1; ++i)
 	{
 			temp_day += DAY[i];
 	}
 	return temp_day;		
 }
-u16	Calendar::days_between_2_date(date_time_t &dt_current,date_time_t &dt_target)
+uint16_t	Calendar::days_between_2_date(date_time_t &dt_current,date_time_t &dt_target)
 {
-	u16 temp_year_c,temp_year_t;	
-	u16 temp_month_c,temp_month_t;	
-	u16 temp_day_c,temp_day_t;	
+	uint16_t temp_year_c,temp_year_t;	
+	uint16_t temp_month_c,temp_month_t;	
+	uint16_t temp_day_c,temp_day_t;	
 	
 	temp_year_c = dt_current.year + 2000; 
 	temp_year_t = dt_target.year + 2000; 
@@ -363,7 +363,7 @@ u16	Calendar::days_between_2_date(date_time_t &dt_current,date_time_t &dt_target
 	}
 	else if(temp_year_c == temp_year_t)
 	{
-		u16 c_day,t_day;
+		uint16_t c_day,t_day;
 		c_day = day_in_year(dt_current);
 		t_day = day_in_year(dt_target);
 		return t_day > c_day ? t_day - c_day : c_day - t_day;
@@ -377,7 +377,7 @@ u16	Calendar::days_between_2_date(date_time_t &dt_current,date_time_t &dt_target
 			swap(&temp_month_c,&temp_month_t);
 			swap(&temp_day_c,&temp_day_t);		
 		}
-		u16 d1,d2,d3;
+		uint16_t d1,d2,d3;
 		if(is_leap_year(temp_year_c))
 		{
 				d1 = 366 - day_in_year(dt_current);
@@ -396,13 +396,13 @@ u16	Calendar::days_between_2_date(date_time_t &dt_current,date_time_t &dt_target
 		return d1+d2+d3;
 	}
 }
-u32	Calendar::sec_in_day(date_time_t &_dt)
+uint32_t	Calendar::sec_in_day(date_time_t &_dt)
 {
 	return _dt.hour*3600 + _dt.min*60 + _dt.sec;
 }
-u32 Calendar::seconds_between_2_time(date_time_t &dt1,date_time_t &dt2)
+uint32_t Calendar::seconds_between_2_time(date_time_t &dt1,date_time_t &dt2)
 {
-	u32 temp_sec1,temp_sec2;
+	uint32_t temp_sec1,temp_sec2;
 
 	temp_sec1 = sec_in_day(dt1);
 	temp_sec2 = sec_in_day(dt2);
@@ -411,14 +411,14 @@ u32 Calendar::seconds_between_2_time(date_time_t &dt1,date_time_t &dt2)
 	else
 		return temp_sec2 - temp_sec1;
 }
-void Calendar::sec_to_time(u32 sec_source,u8 &hour,u8 &min,u8 &sec)
+void Calendar::sec_to_time(uint32_t sec_source,uint8_t &hour,uint8_t &min,uint8_t &sec)
 {
 	hour	= sec_source/3600;
 	min		= (sec_source%3600)/60;
 	sec		= (sec_source%3600)%60;
 }
 
-u8 Calendar::is_leap_year(u16 _year)
+uint8_t Calendar::is_leap_year(uint16_t _year)
 {
 	if(_year%4==0) //必须能被4整除
 	{ 

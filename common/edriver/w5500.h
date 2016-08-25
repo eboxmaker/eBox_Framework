@@ -33,9 +33,9 @@ typedef int8_t 			SOCKET;
 
 #define	MAX_SOCK_NUM		8	/**< Maxmium number of socket  */
 
-static u8 I_STATUS[MAX_SOCK_NUM];
-static u16 SSIZE[MAX_SOCK_NUM]; /**< Max Tx buffer size by each channel */
-static u16 RSIZE[MAX_SOCK_NUM]; /**< Max Rx buffer size by each channel */
+static uint8_t I_STATUS[MAX_SOCK_NUM];
+static uint16_t SSIZE[MAX_SOCK_NUM]; /**< Max Tx buffer size by each channel */
+static uint16_t RSIZE[MAX_SOCK_NUM]; /**< Max Rx buffer size by each channel */
 
 class W5500
 {
@@ -54,76 +54,76 @@ public:
         this->int_pin = int_pin;
         this->spi     = spi;
     }
-    void begin(uint8_t dev_num,u8 *mac);
-    void begin(uint8_t dev_num, u8 *mac, u8 *ip, u8 *subnet, u8 *gateway, u8 *dns);
+    void begin(uint8_t dev_num,uint8_t *mac);
+    void begin(uint8_t dev_num, uint8_t *mac, uint8_t *ip, uint8_t *subnet, uint8_t *gateway, uint8_t *dns);
     void reset();
 
-    void send_data_processing(SOCKET s, u8 *data, u16 len);
-    void recv_data_processing(SOCKET s, u8 *data, u16 len);
+    void send_data_processing(SOCKET s, uint8_t *data, uint16_t len);
+    void recv_data_processing(SOCKET s, uint8_t *data, uint16_t len);
 
-    void write(u32 addrbsb, u8 data);
-    u8   read (u32 addrbsb);
-    u16  write(u32 addrbsb, u8 *buf, u16 len);
-    u16  read (u32 addrbsb, u8 *buf, u16 len);
-    void sysinit( u8  *tx_size, u8  *rx_size  );
+    void write(uint32_t addrbsb, uint8_t data);
+    uint8_t   read (uint32_t addrbsb);
+    uint16_t  write(uint32_t addrbsb, uint8_t *buf, uint16_t len);
+    uint16_t  read (uint32_t addrbsb, uint8_t *buf, uint16_t len);
+    void sysinit( uint8_t  *tx_size, uint8_t  *rx_size  );
 
 
-    u8 getISR(SOCKET s);
-    void putISR(SOCKET s, u8 val);
-    u16 getRxMAX(SOCKET s);
-    u16 getTxMAX(SOCKET s);
+    uint8_t getISR(SOCKET s);
+    void putISR(SOCKET s, uint8_t val);
+    uint16_t getRxMAX(SOCKET s);
+    uint16_t getTxMAX(SOCKET s);
 
     //通用寄存器
-    void setSHAR(u8 *addr );//mac
-    void setSIPR(u8 *addr );//ip
-    void setSUBR(u8 *addr );//mask
-    void setGAR(u8 *addr );	//gateway
+    void setSHAR(uint8_t *addr );//mac
+    void setSIPR(uint8_t *addr );//ip
+    void setSUBR(uint8_t *addr );//mask
+    void setGAR(uint8_t *addr );	//gateway
 
-    void getSHAR(u8  *addr );//mac
-    void getSIPR(u8  *addr);//ip
-    void getSUBR(u8  *addr);//mask
-    void getGWIP(u8  *addr);//gateway
-    void getGAR(u8  *addr);//gateway
+    void getSHAR(uint8_t  *addr );//mac
+    void getSIPR(uint8_t  *addr);//ip
+    void getSUBR(uint8_t  *addr);//mask
+    void getGWIP(uint8_t  *addr);//gateway
+    void getGAR(uint8_t  *addr);//gateway
 
-    void getMAC(u8  *addr );//mac
-    void getIP(u8  *addr);//ip
-    void getSubnet(u8  *addr);//mask
-    void getGateway(u8  *addr);//gateway
+    void getMAC(uint8_t  *addr );//mac
+    void getIP(uint8_t  *addr);//ip
+    void getSubnet(uint8_t  *addr);//mask
+    void getGateway(uint8_t  *addr);//gateway
 
-    void setMR(u8 val);
+    void setMR(uint8_t val);
 
-    void setRTR(u16 timeout);
-    void setRCR(u8 retry);
+    void setRTR(uint16_t timeout);
+    void setRCR(uint8_t retry);
 
     //中断屏蔽寄存器
-    void setIMR(u8 val);
-    void setSIMR(u8 val);
+    void setIMR(uint8_t val);
+    void setSIMR(uint8_t val);
     //清除中断标志位
-    void setIR(u8 mask);
-    void setSIR(u8 mask);
+    void setIR(uint8_t mask);
+    void setSIR(uint8_t mask);
     //获取中断状态寄存器
-    u8   getIR( void );
-    u8   getSIR( void );
+    uint8_t   getIR( void );
+    uint8_t   getSIR( void );
 
     //socket寄存器
     //中断屏蔽寄存器
-    void setSn_IMR(SOCKET s, u8 mask);
-    u8   getSn_IMR(SOCKET s);
+    void setSn_IMR(SOCKET s, uint8_t mask);
+    uint8_t   getSn_IMR(SOCKET s);
     //获取中断状态寄存器
-    u8   getSn_IR(SOCKET s);
+    uint8_t   getSn_IR(SOCKET s);
     //清除中断标志位
-    void setSn_IR(SOCKET s, u8 val);
+    void setSn_IR(SOCKET s, uint8_t val);
 
-    void setSn_MSS(SOCKET s, u16 Sn_MSSR);
-    void setSn_TTL(SOCKET s, u8 ttl);
+    void setSn_MSS(SOCKET s, uint16_t Sn_MSSR);
+    void setSn_TTL(SOCKET s, uint8_t ttl);
 
     //获取远端IP和端口
-    void getSn_DIPR(SOCKET s, u8 *ip);
-    u16 getSn_DPORT(SOCKET s);
+    void getSn_DIPR(SOCKET s, uint8_t *ip);
+    uint16_t getSn_DPORT(SOCKET s);
 
-    u8      getSn_SR(SOCKET s);
-    u16     get_tx_free_size(SOCKET s);
-    u16     get_rx_recv_size(SOCKET s);
+    uint8_t      getSn_SR(SOCKET s);
+    uint16_t     get_tx_free_size(SOCKET s);
+    uint16_t     get_rx_recv_size(SOCKET s);
 
 
 

@@ -27,27 +27,27 @@
 class UDPMessage
 {
 public:
-    u8 *buf;
-    u16 len;
-    u8 *rIP;
-    u16 rPort;
+    uint8_t *buf;
+    uint16_t len;
+    uint8_t *rIP;
+    uint16_t rPort;
 };
 
 class UDP
 {
 public:
-    u8 begin(SOCKET ps, uint16_t port);
-    u16 send(UDPMessage *msg);
-    u16 sendto(u8 *rIP, u16 rPort, u8 *buf, u16 len);
-    u16 recv(u8 *buf);
-    u8  close();
+    uint8_t begin(SOCKET ps, uint16_t port);
+    uint16_t send(UDPMessage *msg);
+    uint16_t sendto(uint8_t *rIP, uint16_t rPort, uint8_t *buf, uint16_t len);
+    uint16_t recv(uint8_t *buf);
+    uint8_t  close();
 
 public:
-    u8 remoteIP[4];/*配置服务器的IP地址*/
-    u16 remotePort;/*定义计算机的一个端口并初始化*/
-    u16 localPort;/*定义本地的一个端口并初始化*/
+    uint8_t remoteIP[4];/*配置服务器的IP地址*/
+    uint16_t remotePort;/*定义计算机的一个端口并初始化*/
+    uint16_t localPort;/*定义本地的一个端口并初始化*/
     SOCKET s;
-    u8 recvFlag;
+    uint8_t recvFlag;
 
 
 };

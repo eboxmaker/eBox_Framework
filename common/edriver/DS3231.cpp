@@ -27,14 +27,14 @@ void DS3231::begin(uint32_t speed)
 }
 uint8_t DS3231::bcd_to_dec(uint8_t bcd_code)
 {
-    u8 temp, dec;
+    uint8_t temp, dec;
     temp = (bcd_code >> 4) * 10;
     dec = (bcd_code & 0x0f) + temp;
     return dec;
 }
 uint8_t DS3231::dec_to_bcd(uint8_t dec)
 {
-    u8 temp, temp2, bcd;
+    uint8_t temp, temp2, bcd;
     temp = dec / 10;
     temp2 = dec % 10;
 
@@ -68,12 +68,12 @@ void DS3231::get_date(char *buf)
     i2c->read_byte(DS3231_ADDRESS, DS3231_DAY, tmpbuf, 3);				//ÈÕÆÚ
     i2c->release_i2c_right();
 
-    buf[0] = u8( (tmpbuf[0] >> 4) + 0x30);
-    buf[1] = u8( (tmpbuf[0] & 0x0f) + 0x30);
-    buf[2] = u8( (tmpbuf[1] >> 4) + 0x30);
-    buf[3] = u8( (tmpbuf[1] & 0x0f) + 0x30);
-    buf[4] = u8( (tmpbuf[2] >> 4) + 0x30);
-    buf[5] = u8( (tmpbuf[2] & 0x0f) + 0x30);
+    buf[0] = uint8_t( (tmpbuf[0] >> 4) + 0x30);
+    buf[1] = uint8_t( (tmpbuf[0] & 0x0f) + 0x30);
+    buf[2] = uint8_t( (tmpbuf[1] >> 4) + 0x30);
+    buf[3] = uint8_t( (tmpbuf[1] & 0x0f) + 0x30);
+    buf[4] = uint8_t( (tmpbuf[2] >> 4) + 0x30);
+    buf[5] = uint8_t( (tmpbuf[2] & 0x0f) + 0x30);
     buf[6] = '\0';
 }
 void DS3231::get_time(char *buf)
@@ -84,12 +84,12 @@ void DS3231::get_time(char *buf)
     i2c->read_byte(DS3231_ADDRESS, DS3231_SECOND, tmpbuf, 3);
     i2c->release_i2c_right();
 
-    buf[0] = u8( (tmpbuf[2] >> 4) + 0x30);
-    buf[1] = u8( (tmpbuf[2] & 0x0f) + 0x30);
-    buf[2] = u8( (tmpbuf[1] >> 4) + 0x30);
-    buf[3] = u8( (tmpbuf[1] & 0x0f) + 0x30);
-    buf[4] = u8( (tmpbuf[0] >> 4) + 0x30);
-    buf[5] = u8( (tmpbuf[0] & 0x0f) + 0x30);
+    buf[0] = uint8_t( (tmpbuf[2] >> 4) + 0x30);
+    buf[1] = uint8_t( (tmpbuf[2] & 0x0f) + 0x30);
+    buf[2] = uint8_t( (tmpbuf[1] >> 4) + 0x30);
+    buf[3] = uint8_t( (tmpbuf[1] & 0x0f) + 0x30);
+    buf[4] = uint8_t( (tmpbuf[0] >> 4) + 0x30);
+    buf[5] = uint8_t( (tmpbuf[0] & 0x0f) + 0x30);
     buf[6] = '\0';
 
 

@@ -212,7 +212,7 @@ void Lcd1602::disp_string(uint8_t row, uint8_t col, char str[])
 void Lcd1602::printf(const char *fmt, ...)
 {
     char buf[16];
-    u8 i = 0;
+    uint8_t i = 0;
     va_list va_params;
     va_start(va_params, fmt);
     vsprintf(buf, fmt, va_params);
@@ -226,7 +226,7 @@ void Lcd1602::printf(const char *fmt, ...)
 void Lcd1602::printf(uint8_t row, uint8_t col, const char *fmt, ...)
 {
     char buf[16];
-    u8 i = 0;
+    uint8_t i = 0;
     va_list va_params;
     va_start(va_params, fmt);
     vsprintf(buf, fmt, va_params);
@@ -349,7 +349,7 @@ void Lcd1602::flicker_screen(void)
     wcmd(0x0C);//¿ªÏÔÊ¾
     lcd_delay(0x3fffff);
 }
-void Lcd1602::back_light(u8 i)
+void Lcd1602::back_light(uint8_t i)
 {
     if(i == 1)
         led->set();
