@@ -389,19 +389,17 @@ uint32_t InCapture::get_timer_source_clock()
     uint32_t temp = 0;
     uint32_t timer_clock = 0x00;
     
-    RCC_ClocksTypeDef RCC_ClocksStatus;
-    RCC_GetClocksFreq(&RCC_ClocksStatus);
     if ((uint32_t)this->TIMx == TIM1_BASE)
     {
-        timer_clock = RCC_ClocksStatus.PCLK2_Frequency;
+        timer_clock = cpu.clock.pclk2;
     }
     else
     {
         temp = RCC->CFGR;
         if(temp & 0x00000400)//检测PCLK是否进行过分频，如果进行过分频则定时器的频率为PCLK1的两倍
-            timer_clock = RCC_ClocksStatus.PCLK1_Frequency * 2;
+            timer_clock = cpu.clock.pclk1 * 2;
         else
-            timer_clock = RCC_ClocksStatus.PCLK1_Frequency ;
+            timer_clock = cpu.clock.pclk1 ;
     }
     return timer_clock;
 }

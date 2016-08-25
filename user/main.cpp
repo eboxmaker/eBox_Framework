@@ -11,52 +11,24 @@
   ******************************************************************************
  */
 
-/*
-一个简单的命令帧接收示例
-*/
+
 #include "ebox.h"
-#include "bsp.h"
-
-
-u8 count;
-
-void test()
-{
-    uint8_t c;
-    c = uart1.receive();
-    uart1.put_char(c);
-}
-
-void test1()
-{
-    count++;
-    led1.toggle();
-}
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
-    uart1.attach(test,RxIrq);
-    uart1.attach(test1,TcIrq);
-    led1.begin();
-    
-
+    PB8.mode(OUTPUT_PP);
 }
-
 int main(void)
 {
-
     setup();
-
     while(1)
     {
-        uart1.printf("uart is ok ! count = %d\r\n", count);
-        delay_ms(1000);
-    }
-
+        PB8.set();
+        delay_ms(1);
+        PB8.reset();
+        delay_ms(1);
+   }
 
 }
-
-
 
 

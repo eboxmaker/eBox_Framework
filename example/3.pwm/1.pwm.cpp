@@ -29,6 +29,10 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
+    uart1.printf("core:%d\r\n",cpu.clock.core);
+    uart1.printf("hclk:%d\r\n",cpu.clock.hclk);
+    uart1.printf("pclk1:%d\r\n",cpu.clock.pclk1);
+    uart1.printf("pclk2:%d\r\n",cpu.clock.pclk2);
     pwm1.begin(1000, 500);
     pwm1.set_oc_polarity(1);
     uart1.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
@@ -48,7 +52,7 @@ int main(void)
         if(x >= PI)x = 0;
         y = 2000 - (sin(x) + 1) * 1000;
 
-        pwm1.set_duty(y);
+        //pwm1.set_duty(y);
         delay_ms(10);
     }
 

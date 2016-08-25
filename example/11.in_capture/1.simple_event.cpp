@@ -43,9 +43,16 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
+    uart1.printf("core:%d\r\n",cpu.clock.core);
+    uart1.printf("hclk:%d\r\n",cpu.clock.hclk);
+    uart1.printf("pclk1:%d\r\n",cpu.clock.pclk1);
+    uart1.printf("pclk2:%d\r\n",cpu.clock.pclk2);
 
     ic0.begin(1);//初始化输入捕获参数，p分频
     ic0.attach(measure_0);//绑定捕获中断事件函数
+    uart1.printf("timer source:%d\r\n",ic0.get_timer_source_clock());
+    uart1.printf("max frq:%d\r\n",ic0.get_detect_max_frq());
+    
     frq = 10000;
     pwm1.begin(frq, 500);
 
