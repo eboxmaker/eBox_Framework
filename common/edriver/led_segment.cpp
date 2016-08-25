@@ -71,7 +71,7 @@ void LedSegment::show_date_time(uint16_t year, uint8_t month, uint8_t date)
 ∏Ò Ω£∫ddmmyy
 			261015
 *********************************/
-void LedSegment::show_date(u8 *buf)
+void LedSegment::show_date(uint8_t *buf)
 {
     int i = 0;
     //for( int i = 0; i < 8; i++)
@@ -88,7 +88,7 @@ void LedSegment::show_date(u8 *buf)
     write(led_buf, 8, MSB_FIRST);
     update();
 }
-void LedSegment::show_time(u8 *buf)
+void LedSegment::show_time(uint8_t *buf)
 {
     int i = 0;
     //for( int i = 0; i < 8; i++)

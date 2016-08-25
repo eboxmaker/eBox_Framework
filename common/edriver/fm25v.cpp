@@ -34,7 +34,7 @@ void FM25V::begin(uint8_t dev_num)
 
 void FM25V::read_id (uint16_t *ID)
 {
-    u8 pp[2];
+    uint8_t pp[2];
     *ID=0;
     spi->take_spi_right (&spi_dev_FM25V);
     cs->reset();
@@ -83,7 +83,7 @@ void FM25V::wakeUp(void)
 }  
 
 /***************************************************************
-函数名称 :  void SPI_Flash_Read(u8 *pBuffer,u32 ReadAddr,u16 NumByteToRead)   
+函数名称 :  void SPI_Flash_Read(uint8_t *pBuffer,uint32_t ReadAddr,uint16_t NumByteToRead)   
 功能描述 : 读取SPI FLASH， 在指定地址开始读取指定长度的数据
 输入参数 : 
 			pBuffer:数据存储区
@@ -92,21 +92,21 @@ void FM25V::wakeUp(void)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void FM25V::read(u8 *buf,u32 read_addr,u16 num_to_read)
+void FM25V::read(uint8_t *buf,uint32_t read_addr,uint16_t num_to_read)
 {
     
      spi->take_spi_right(&spi_dev_FM25V );  
      cs->reset(); 
      spi->write(READ);
-	 spi->write((u8)((read_addr)>>16));    
-	 spi->write((u8)((read_addr)>>8));   
-	 spi->write((u8)read_addr);   
+	 spi->write((uint8_t)((read_addr)>>16));    
+	 spi->write((uint8_t)((read_addr)>>8));   
+	 spi->write((uint8_t)read_addr);   
      spi->read(buf,num_to_read);
      cs->set(); 
      spi->release_spi_right();
 }
 /***************************************************************
-函数名称 :  void SPI_Flash_Read(u8 *pBuffer,u32 ReadAddr,u16 NumByteToRead)   
+函数名称 :  void SPI_Flash_Read(uint8_t *pBuffer,uint32_t ReadAddr,uint16_t NumByteToRead)   
 功能描述 : 读取SPI FLASH， 在指定地址开始读取指定长度的数据
 输入参数 : 
 			pBuffer:数据存储区
@@ -115,14 +115,14 @@ void FM25V::read(u8 *buf,u32 read_addr,u16 num_to_read)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void FM25V::fast_read(u8 *buf,u32 read_addr,u16 num_to_read)   
+void FM25V::fast_read(uint8_t *buf,uint32_t read_addr,uint16_t num_to_read)   
 { 
 	 spi->take_spi_right(&spi_dev_FM25V);
 	 cs->reset();
 	 spi->write(FSTRD);           
-	 spi->write((u8)((read_addr)>>16));      
-	 spi->write((u8)((read_addr)>>8));   
-	 spi->write((u8)read_addr);   
+	 spi->write((uint8_t)((read_addr)>>16));      
+	 spi->write((uint8_t)((read_addr)>>8));   
+	 spi->write((uint8_t)read_addr);   
 	 spi->write(0xff);   
 	 spi->read(buf,num_to_read);
 	 cs->set();
@@ -132,7 +132,7 @@ void FM25V::fast_read(u8 *buf,u32 read_addr,u16 num_to_read)
 
 
 /***************************************************************
-函数名称 : void SPI_Flash_Write(u8 *pBuffer,u32 WriteAddr,u16 NumByteToWrite)     
+函数名称 : void SPI_Flash_Write(uint8_t *pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)     
 功能描述 : 写SPI FLASH，在指定地址开始写入指定长度的数据，该函数带擦除操作!
 输入参数 : 
 			pBuffer:数据存储区
@@ -141,15 +141,15 @@ void FM25V::fast_read(u8 *buf,u32 read_addr,u16 num_to_read)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void FM25V::write(u8 *buf,u32 write_addr,u16 num_to_write)   
+void FM25V::write(uint8_t *buf,uint32_t write_addr,uint16_t num_to_write)   
 { 
 	 spi->take_spi_right(&spi_dev_FM25V);
      FM25V::writeEnable();
      cs->reset();
 	 spi->write(WRITE);           
-	 spi->write((u8)((write_addr)>>16));    
-	 spi->write((u8)((write_addr)>>8));   
-	 spi->write((u8)write_addr); 
+	 spi->write((uint8_t)((write_addr)>>16));    
+	 spi->write((uint8_t)((write_addr)>>8));   
+	 spi->write((uint8_t)write_addr); 
 	 spi->write(buf,num_to_write);
 	 cs->set();    
      FM25V::writeEnable();
@@ -158,7 +158,7 @@ void FM25V::write(u8 *buf,u32 write_addr,u16 num_to_write)
 }
 
 /***************************************************************
-函数名称 :  u8 SPI_Flash_ReadSR(void)   
+函数名称 :  uint8_t SPI_Flash_ReadSR(void)   
 功能描述 : 读取W25X16的状态寄存器
 				BIT7  6   5   4   3   2   1   0
 				WREN  0   0   0  BP2 BP1 WEL  0
@@ -171,9 +171,9 @@ void FM25V::write(u8 *buf,u32 write_addr,u16 num_to_write)
 输出参数 : 无
 返回值   : byte	寄存器状态
 ***************************************************************/
-u8 FM25V::readSR(void)  
+uint8_t FM25V::readSR(void)  
 {  
-	u8 byte=0;   
+	uint8_t byte=0;   
     spi->take_spi_right(&spi_dev_FM25V);
 	cs->reset();
 	 spi->write(RDSR);      
@@ -185,13 +185,13 @@ u8 FM25V::readSR(void)
 } 
 
 /***************************************************************
-函数名称 :  void SPI_FLASH_Write_SR(u8 sr)   
+函数名称 :  void SPI_FLASH_Write_SR(uint8_t sr)   
 功能描述 : 写SPI_FLASH状态寄存器， 只有WREN BP2 BP1 (bit 7,4,3)可以写!!!
 输入参数 : sr:状态
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void FM25V::writeSR(u8 sr)   
+void FM25V::writeSR(uint8_t sr)   
 {   
     spi->take_spi_right(&spi_dev_FM25V);
     writeEnable();    

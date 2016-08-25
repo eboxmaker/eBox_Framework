@@ -21,16 +21,16 @@
 #include "w5500.h"
 #include "string.h"
 
-void W5500::begin(uint8_t dev_num,u8 *mac)
+void W5500::begin(uint8_t dev_num,uint8_t *mac)
 {
     uint8_t ip_0[4]={0,};
     begin(dev_num,mac,ip_0,ip_0,ip_0,ip_0);
 }
 
-void W5500::begin(uint8_t dev_num, u8 *mac, u8 *ip, u8 *subnet, u8 *gateway, u8 *dns)
+void W5500::begin(uint8_t dev_num, uint8_t *mac, uint8_t *ip, uint8_t *subnet, uint8_t *gateway, uint8_t *dns)
 {
-    u8 txsize[MAX_SOCK_NUM] = {2, 2, 2, 2, 2, 2, 2, 2};
-    u8 rxsize[MAX_SOCK_NUM] = {2, 2, 2, 2, 2, 2, 2, 2};
+    uint8_t txsize[MAX_SOCK_NUM] = {2, 2, 2, 2, 2, 2, 2, 2};
+    uint8_t rxsize[MAX_SOCK_NUM] = {2, 2, 2, 2, 2, 2, 2, 2};
 
 
     spi_dev_w5500.dev_num = dev_num;
@@ -84,7 +84,7 @@ void W5500::reset()
 
 }
 
-void W5500::write(u32 addrbsb, u8 data)
+void W5500::write(uint32_t addrbsb, uint8_t data)
 {
 
     spi->take_spi_right(&spi_dev_w5500);
@@ -97,9 +97,9 @@ void W5500::write(u32 addrbsb, u8 data)
     spi->release_spi_right();
 
 }
-u8  W5500::read(u32 addrbsb)
+uint8_t  W5500::read(uint32_t addrbsb)
 {
-    u8 data = 0;
+    uint8_t data = 0;
     spi->take_spi_right(&spi_dev_w5500);
     cs->reset();                          // CS=0, SPI start
     spi->write( (addrbsb & 0x00FF0000) >> 16); // Address byte 1
@@ -111,7 +111,7 @@ u8  W5500::read(u32 addrbsb)
     return data;
 
 }
-u16 W5500::write(u32 addrbsb, u8 *buf, u16 len)
+uint16_t W5500::write(uint32_t addrbsb, uint8_t *buf, uint16_t len)
 {
     spi->take_spi_right(&spi_dev_w5500);
     cs->reset();                               // CS=0, SPI start
@@ -125,7 +125,7 @@ u16 W5500::write(u32 addrbsb, u8 *buf, u16 len)
     return len;
 
 }
-u16 W5500::read(u32 addrbsb, u8 *buf, u16 len)
+uint16_t W5500::read(uint32_t addrbsb, uint8_t *buf, uint16_t len)
 {
     spi->take_spi_right(&spi_dev_w5500);
     cs->reset();                               // CS=0, SPI start
@@ -160,7 +160,7 @@ other 3 channels couldn't be used, for there's no available memory.\n
 If two 4KBytes memory are assigned to two each channels, \n
 other 2 channels couldn't be used, for there's no available memory.\n
 */
-void W5500::sysinit( u8  *tx_size, u8  *rx_size  )
+void W5500::sysinit( uint8_t  *tx_size, uint8_t  *rx_size  )
 {
     int16_t i = 0;
     int16_t ssum, rsum;
@@ -239,20 +239,20 @@ void W5500::sysinit( u8  *tx_size, u8  *rx_size  )
 }
 
 
-u8 W5500::getISR(SOCKET s)
+uint8_t W5500::getISR(SOCKET s)
 {
     return I_STATUS[s];
 }
-void W5500::putISR(SOCKET s, u8 val)
+void W5500::putISR(SOCKET s, uint8_t val)
 {
     I_STATUS[s] = val;
 }
 
-u16 W5500::getRxMAX(SOCKET s)
+uint16_t W5500::getRxMAX(SOCKET s)
 {
     return RSIZE[s];
 }
-u16 W5500::getTxMAX(SOCKET s)
+uint16_t W5500::getTxMAX(SOCKET s)
 {
     return SSIZE[s];
 }
@@ -264,7 +264,7 @@ u16 W5500::getTxMAX(SOCKET s)
 @brief  This function sets up MAC address.
 */
 void W5500::setSHAR(
-    u8  *addr  /**< a pointer to a 6 -byte array responsible to set the MAC address. */
+    uint8_t  *addr  /**< a pointer to a 6 -byte array responsible to set the MAC address. */
 )
 {
     write(SHAR0, addr, 6);
@@ -273,7 +273,7 @@ void W5500::setSHAR(
 @brief  This function sets up Source IP address.
 */
 void W5500::setSIPR(
-    u8  *addr  /**< a pointer to a 4 -byte array responsible to set the Source IP address. */
+    uint8_t  *addr  /**< a pointer to a 4 -byte array responsible to set the Source IP address. */
 )
 {
     write(SIPR0, addr, 4);
@@ -281,7 +281,7 @@ void W5500::setSIPR(
 /**
 @brief  It sets up SubnetMask address
 */
-void W5500::setSUBR(u8  *addr)
+void W5500::setSUBR(uint8_t  *addr)
 {
     write(SUBR0, addr, 4);
 }
@@ -289,7 +289,7 @@ void W5500::setSUBR(u8  *addr)
 @brief  This function sets up gateway IP address.
 */
 void W5500::setGAR(
-    u8  *addr  /**< a pointer to a 4 -byte array responsible to set the Gateway IP address. */
+    uint8_t  *addr  /**< a pointer to a 4 -byte array responsible to set the Gateway IP address. */
 )
 {
     write(GAR0, addr, 4);
@@ -299,55 +299,55 @@ void W5500::setGAR(
 
 
 
-void W5500::getMAC(u8  *addr )//mac
+void W5500::getMAC(uint8_t  *addr )//mac
 {
     read(SHAR0, addr, 6);
 }
-void  W5500::getIP(u8  *addr)//ip
+void  W5500::getIP(uint8_t  *addr)//ip
 {
     read(SIPR0, addr, 4);
 }
-void  W5500::getSubnet(u8  *addr)//mask
+void  W5500::getSubnet(uint8_t  *addr)//mask
 {
     read(SUBR0, addr, 4);
 }
-void W5500::getGateway(u8  *addr)//gateway
+void W5500::getGateway(uint8_t  *addr)//gateway
 {
     read(GAR0, addr, 4);
 }
 
 
-void W5500::getSHAR(u8  *addr )//mac
+void W5500::getSHAR(uint8_t  *addr )//mac
 {
     read(SHAR0, addr, 6);
 }
-void  W5500::getSIPR(u8  *addr)//ip
+void  W5500::getSIPR(uint8_t  *addr)//ip
 {
     read(SIPR0, addr, 4);
 }
-void  W5500::getSUBR(u8  *addr)//mask
+void  W5500::getSUBR(uint8_t  *addr)//mask
 {
     read(SUBR0, addr, 4);
 }
-void W5500::getGWIP(u8  *addr)//gateway
+void W5500::getGWIP(uint8_t  *addr)//gateway
 {
     read(GAR0, addr, 4);
 }
-void  W5500::getGAR(u8  *addr)//gateway
+void  W5500::getGAR(uint8_t  *addr)//gateway
 {
     read(GAR0, addr, 4);
 }
 
 
-void W5500::setMR(u8 val)
+void W5500::setMR(uint8_t val)
 {
     write(MR, val);
 }
-void W5500::setIMR(u8 val)
+void W5500::setIMR(uint8_t val)
 {
     write(IMR, val);
 }
-void W5500::setSIMR(u8 val)
+void W5500::setSIMR(uint8_t val)
 {
     write(SIMR, val);
 
@@ -356,11 +356,11 @@ void W5500::setSIMR(u8 val)
 /**
 @brief  This function gets Interrupt register in common register.
  */
-u8 W5500::getIR( void )
+uint8_t W5500::getIR( void )
 {
     return read(IR);
 }
-u8 W5500::getSIR( void )
+uint8_t W5500::getSIR( void )
 {
     return read(SIR);
 }
@@ -371,10 +371,10 @@ u8 W5500::getSIR( void )
 If there is no response from the peer or delay in response then retransmission
 will be there as per RTR (Retry Time-value Register)setting
 */
-void W5500::setRTR(u16 timeout)
+void W5500::setRTR(uint16_t timeout)
 {
-    write(RTR0, (u8)((timeout & 0xff00) >> 8));
-    write(RTR1, (u8)(timeout & 0x00ff));
+    write(RTR0, (uint8_t)((timeout & 0xff00) >> 8));
+    write(RTR1, (uint8_t)(timeout & 0x00ff));
 }
 
 /**
@@ -383,7 +383,7 @@ void W5500::setRTR(u16 timeout)
 If there is no response from the peer or delay in response then recorded time
 as per RTR & RCR register seeting then time out will occur.
 */
-void W5500::setRCR(u8 retry)
+void W5500::setRCR(uint8_t retry)
 {
     write(WIZ_RCR, retry);
 }
@@ -394,22 +394,22 @@ void W5500::setRCR(u8 retry)
 If any bit in IMR is set as '0' then there is not interrupt signal though the bit is
 set in IR register.
 */
-void W5500::setIR(u8 val)
+void W5500::setIR(uint8_t val)
 {
     write(IR, val ); // must be setted 0x10.
 }
-void W5500::setSIR(u8 val)
+void W5500::setSIR(uint8_t val)
 {
     write(SIR, val ); // must be setted 0x10.
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-void W5500::setSn_IMR(SOCKET s, u8 mask)
+void W5500::setSn_IMR(SOCKET s, uint8_t mask)
 {
     write( Sn_IMR(s), mask);
 }
-u8 W5500::getSn_IMR(SOCKET s)
+uint8_t W5500::getSn_IMR(SOCKET s)
 {
     return read(Sn_IMR(s));
 }
@@ -417,13 +417,13 @@ u8 W5500::getSn_IMR(SOCKET s)
 /**
 @brief  This sets the maximum segment size of TCP in Active Mode), while in Passive Mode this is set by peer
 */
-void W5500::setSn_MSS(SOCKET s, u16 Sn_MSSR)
+void W5500::setSn_MSS(SOCKET s, uint16_t Sn_MSSR)
 {
-    write( Sn_MSSR0(s), (u8)((Sn_MSSR & 0xff00) >> 8));
-    write( Sn_MSSR1(s), (u8)(Sn_MSSR & 0x00ff));
+    write( Sn_MSSR0(s), (uint8_t)((Sn_MSSR & 0xff00) >> 8));
+    write( Sn_MSSR1(s), (uint8_t)(Sn_MSSR & 0x00ff));
 }
 
-void W5500::setSn_TTL(SOCKET s, u8 ttl)
+void W5500::setSn_TTL(SOCKET s, uint8_t ttl)
 {
     write( Sn_TTL(s) , ttl);
 }
@@ -432,7 +432,7 @@ void W5500::setSn_TTL(SOCKET s, u8 ttl)
 
 These below functions are used to read the Interrupt & Soket Status register
 */
-u8  W5500::getSn_IR(SOCKET s)
+uint8_t  W5500::getSn_IR(SOCKET s)
 {
     return read(Sn_IR(s));
 }
@@ -440,20 +440,20 @@ u8  W5500::getSn_IR(SOCKET s)
 /**
 @brief   get socket status
 */
-u8  W5500::getSn_SR(SOCKET s)
+uint8_t  W5500::getSn_SR(SOCKET s)
 {
     return read(Sn_SR(s));
 }
-void W5500::getSn_DIPR(SOCKET s, u8 *ip)
+void W5500::getSn_DIPR(SOCKET s, uint8_t *ip)
 {
     ip[0] = read(Sn_DIPR0(s));
     ip[1] = read(Sn_DIPR1(s));
     ip[2] = read(Sn_DIPR2(s));
     ip[3] = read(Sn_DIPR3(s));
 }
-u16 W5500::getSn_DPORT(SOCKET s)
+uint16_t W5500::getSn_DPORT(SOCKET s)
 {
-    u16 tmp;
+    uint16_t tmp;
     tmp = (read(Sn_DPORT0(s)) << 8) + read(Sn_DPORT1(s));
     return tmp;
 }
@@ -464,9 +464,9 @@ u16 W5500::getSn_DPORT(SOCKET s)
 This gives free buffer size of transmit buffer. This is the data size that user can transmit.
 User shuold check this value first and control the size of transmitting data
 */
-u16 W5500::get_tx_free_size(SOCKET s)
+uint16_t W5500::get_tx_free_size(SOCKET s)
 {
-    u16 val = 0, val1 = 0;
+    uint16_t val = 0, val1 = 0;
     do
     {
         val1 = read(Sn_TX_FSR0(s));
@@ -485,9 +485,9 @@ u16 W5500::get_tx_free_size(SOCKET s)
 
 This gives size of received data in receive buffer.
 */
-u16 W5500::get_rx_recv_size(SOCKET s)
+uint16_t W5500::get_rx_recv_size(SOCKET s)
 {
-    u16 val = 0, val1 = 0;
+    uint16_t val = 0, val1 = 0;
     do
     {
         val1 = read(Sn_RX_RSR0(s));
@@ -508,10 +508,10 @@ u16 W5500::get_rx_recv_size(SOCKET s)
 This function read the Tx write pointer register and after copy the data in buffer update the Tx write pointer
 register. User should read upper byte first and lower byte later to get proper value.
 */
-void W5500::send_data_processing(SOCKET s, u8 *data, u16 len)
+void W5500::send_data_processing(SOCKET s, uint8_t *data, uint16_t len)
 {
-    u16 ptr = 0;
-    u32 addrbsb = 0;
+    uint16_t ptr = 0;
+    uint32_t addrbsb = 0;
     if(len == 0)
     {
         //    printf("CH: %d Unexpected1 length 0\r\n", s);
@@ -522,12 +522,12 @@ void W5500::send_data_processing(SOCKET s, u8 *data, u16 len)
     ptr = read( Sn_TX_WR0(s) );
     ptr = ((ptr & 0x00ff) << 8) + read(Sn_TX_WR1(s));
 
-    addrbsb = ((u32)ptr << 8) + (s << 5) + 0x10;
+    addrbsb = ((uint32_t)ptr << 8) + (s << 5) + 0x10;
     write(addrbsb, data, len);
 
     ptr += len;
-    write( Sn_TX_WR0(s) , (u8)((ptr & 0xff00) >> 8));
-    write( Sn_TX_WR1(s), (u8)(ptr & 0x00ff));
+    write( Sn_TX_WR0(s) , (uint8_t)((ptr & 0xff00) >> 8));
+    write( Sn_TX_WR1(s), (uint8_t)(ptr & 0x00ff));
 }
 
 
@@ -538,10 +538,10 @@ This function read the Rx read pointer register
 and after copy the data from receive buffer update the Rx write pointer register.
 User should read upper byte first and lower byte later to get proper value.
 */
-void W5500::recv_data_processing(SOCKET s, u8 *data, u16 len)
+void W5500::recv_data_processing(SOCKET s, uint8_t *data, uint16_t len)
 {
-    u16 ptr = 0;
-    u32 addrbsb = 0;
+    uint16_t ptr = 0;
+    uint32_t addrbsb = 0;
 
     if(len == 0)
     {
@@ -552,15 +552,15 @@ void W5500::recv_data_processing(SOCKET s, u8 *data, u16 len)
     ptr = read( Sn_RX_RD0(s) );
     ptr = ((ptr & 0x00ff) << 8) + read( Sn_RX_RD1(s) );
 
-    addrbsb = ((u32)ptr << 8) + (s << 5) + 0x18;
+    addrbsb = ((uint32_t)ptr << 8) + (s << 5) + 0x18;
     read(addrbsb, data, len);
     ptr += len;
 
-    write( Sn_RX_RD0(s), (u8)((ptr & 0xff00) >> 8));
-    write( Sn_RX_RD1(s), (u8)(ptr & 0x00ff));
+    write( Sn_RX_RD0(s), (uint8_t)((ptr & 0xff00) >> 8));
+    write( Sn_RX_RD1(s), (uint8_t)(ptr & 0x00ff));
 }
 
-void W5500::setSn_IR(SOCKET s, u8 val)
+void W5500::setSn_IR(SOCKET s, uint8_t val)
 {
     write(Sn_IR(s), val);
 }

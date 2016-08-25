@@ -49,12 +49,12 @@ void At45db::read_id (uint16_t *ID)
 
 /**********************************************
 功能描述:从指定的位置开始连续读出数据，直到CS信号的上升沿
-参数输入：u16 page_addr:页地址（0~4095）
-          u16 byte_addr:字节地址（0~527）
-          u8 *buf:用于存放读出的数据
+参数输入：uint16_t page_addr:页地址（0~4095）
+          uint16_t byte_addr:字节地址（0~527）
+          uint8_t *buf:用于存放读出的数据
           unsigned long ByteNum:欲读出的数据字节数 
 ***********************************************/
-void At45db::read (u8 *buf,u16 page_addr,u16 byte_addr,unsigned long num_to_read)
+void At45db::read (uint8_t *buf,uint16_t page_addr,uint16_t byte_addr,unsigned long num_to_read)
 {
 //  unsigned long i;
   if(num_to_read<=2162688)//欲读取的数据在片内 ,范围：4096*528 Bytes
@@ -196,7 +196,7 @@ void At45db::buffer_MMPage_WithErase(unsigned char BufferNumber,unsigned int Pag
 
 
 /***************************************************************
-函数名称 :  u8 SPI_Flash_ReadSR(void)   
+函数名称 :  uint8_t SPI_Flash_ReadSR(void)   
 功能描述 : 读取W25X16的状态寄存器
 				BIT7  6   5   4   3   2   1   0
 		   RDY/BUSY COMP  device density  X   X
@@ -210,9 +210,9 @@ void At45db::buffer_MMPage_WithErase(unsigned char BufferNumber,unsigned int Pag
 输出参数 : 无
 返回值   : byte	寄存器状态
 ***************************************************************/
-u8 At45db::readSR(void)   
+uint8_t At45db::readSR(void)   
 {  
-	u8 byte=0;  
+	uint8_t byte=0;  
     spi->take_spi_right (&spi_dev_AT45DB);  
 	cs->reset();
 	spi->write(AT45DBX_CMDC_RD_STATUS_REG);    //发送读取状态寄存器命令    

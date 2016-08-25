@@ -42,12 +42,12 @@ class CAN
 public:
     CAN(CAN_TypeDef *CANx, Gpio *p_pin_rx, Gpio *p_pin_tx);
     void begin(BSP_CAN_BAUD bps);
-    void set_filter(u8 Fifo, u8 nCanType, u8 num, u32 ID, u32 Mask);
+    void set_filter(uint8_t Fifo, uint8_t nCanType, uint8_t num, u32 ID, u32 Mask);
     void interrupt(FunctionalState enable);
     void attach_interrupt(void (*callback_fun)(void));
 
-    u8   write(CanTxMsg *pCanMsg);
-    u8   read(CanRxMsg *pCanMsg, u16 WaitTime);
+    uint8_t   write(CanTxMsg *pCanMsg);
+    uint8_t   read(CanRxMsg *pCanMsg, uint16_t WaitTime);
 
 private:
     void set_bps(BSP_CAN_BAUD);

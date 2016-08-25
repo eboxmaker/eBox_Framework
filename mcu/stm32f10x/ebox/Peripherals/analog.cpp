@@ -49,7 +49,7 @@
   * @{
   */
   
-u16  AD_value[CH];///< 用来存放ADC转换结果，也是DMA的目标地址
+uint16_t  AD_value[CH];///< 用来存放ADC转换结果，也是DMA的目标地址
   
 /**
   * @}
@@ -130,8 +130,8 @@ void DMA_configuration(void)
     /* ADC1  DMA1 Channel Config */
     DMA_InitTypeDef DMA_InitStructure;
     DMA_DeInit(DMA1_Channel1);   //将DMA的通道1寄存器重设为缺省值
-    DMA_InitStructure.DMA_PeripheralBaseAddr =  (u32)&ADC1->DR;  //DMA外设ADC基地址
-    DMA_InitStructure.DMA_MemoryBaseAddr = (u32)&AD_value;  //DMA内存基地址
+    DMA_InitStructure.DMA_PeripheralBaseAddr =  (uint32_t)&ADC1->DR;  //DMA外设ADC基地址
+    DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)&AD_value;  //DMA内存基地址
     DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;  //内存作为数据传输的目的地
     DMA_InitStructure.DMA_BufferSize = CH;  //DMA通道的DMA缓存的大小
     DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;  //外设地址寄存器不变
@@ -221,7 +221,7 @@ uint16_t analog_read(Gpio *pin)
 */
 uint16_t analog_read_voltage(Gpio *pin)
 {
-    return (u16)(analog_read(pin) * 3300 / 4096); //求的结果扩大了1000倍，方便下面求出小数
+    return (uint16_t)(analog_read(pin) * 3300 / 4096); //求的结果扩大了1000倍，方便下面求出小数
 }
 
 /**

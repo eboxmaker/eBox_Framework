@@ -273,8 +273,8 @@ uint16_t Uart::receive()
 uint16_t Uart::dma_send_string(const char *str, uint16_t length)
 {
     DMA_DeInit(_DMA1_Channelx);   //将DMA的通道1寄存器重设为缺省值
-    _DMA1_Channelx->CPAR = (u32)&_USARTx->DR; //外设地址
-    _DMA1_Channelx->CMAR = (u32) str; //mem地址
+    _DMA1_Channelx->CPAR = (uint32_t)&_USARTx->DR; //外设地址
+    _DMA1_Channelx->CMAR = (uint32_t) str; //mem地址
     _DMA1_Channelx->CNDTR = length ; //传输长度
     _DMA1_Channelx->CCR = (0 << 14) | // 非存储器到存储器模式
                           (2 << 12) | // 通道优先级高

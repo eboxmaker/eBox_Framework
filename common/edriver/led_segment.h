@@ -30,8 +30,8 @@ public:
     void begin();
     void show_time_HMS(uint8_t hour, uint8_t min, uint8_t sec);
     void show_date_time(uint16_t year, uint8_t month, uint8_t date);
-    void show_date(u8 *buf);
-    void show_time(u8 *buf);
+    void show_date(uint8_t *buf);
+    void show_time(uint8_t *buf);
 
 private:
     uint8_t led_buf[8];

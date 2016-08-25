@@ -34,8 +34,8 @@ public:
     void begin();
     void clear(void);
     void set_xy(unsigned char X, unsigned char Y);
-    void back_led(u8 val);
-    void contrast(u8 val);
+    void back_led(uint8_t val);
+    void contrast(uint8_t val);
 
     void write_data(unsigned char dat);
     void write_cmd(unsigned char cmd);

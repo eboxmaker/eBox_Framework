@@ -36,11 +36,11 @@ int TCPCLIENT::begin(SOCKET ps, uint16_t port)
 }
 //链接远程服务器
 //返回1成功，0失败
-bool TCPCLIENT::connect(u8 *IP, uint16_t Port)
+bool TCPCLIENT::connect(uint8_t *IP, uint16_t Port)
 {
     int ret;
-    u8 i = 20;
-    u8 state;
+    uint8_t i = 20;
+    uint8_t state;
     remoteIP[0] = IP[0];
     remoteIP[1] = IP[1];
     remoteIP[2] = IP[2];
@@ -123,9 +123,9 @@ void TCPCLIENT::stop()
 //接收缓冲区所有内容
 //非阻塞
 //返回接收到数据的长度，0为空
-u16 TCPCLIENT::recv(u8 *buf)
+uint16_t TCPCLIENT::recv(uint8_t *buf)
 {
-    u16 len = 0;
+    uint16_t len = 0;
     if(connected())
     {
         len = available();/*len为已接收数据的大小*/
@@ -139,7 +139,7 @@ u16 TCPCLIENT::recv(u8 *buf)
 //读取特定长度
 //非阻塞
 //返回值 ：接收到的长度，0为没有数据
-u16 TCPCLIENT::recv(u8 *buf, uint16_t len)
+uint16_t TCPCLIENT::recv(uint8_t *buf, uint16_t len)
 {
     uint16_t ret = 0;
     uint16_t llen;
@@ -169,7 +169,7 @@ u16 TCPCLIENT::recv(u8 *buf, uint16_t len)
 }
 
 //返回发送数据的长度，0为发送失败
-u16 TCPCLIENT::send(u8 *buf, u16 len)
+uint16_t TCPCLIENT::send(uint8_t *buf, uint16_t len)
 {
     return _send(s, buf, len);
 }
@@ -177,8 +177,8 @@ u16 TCPCLIENT::send(u8 *buf, u16 len)
 int TCPSERVER::begin(SOCKET ps, uint16_t port)
 {
     int ret = 0;
-    u8 tmp;
-    u8 i = 20;
+    uint8_t tmp;
+    uint8_t i = 20;
 
     s = ps;
     localPort = port;
@@ -212,9 +212,9 @@ int TCPSERVER::begin(SOCKET ps, uint16_t port)
     }
     return ret;
 }
-u16 TCPSERVER::recv(u8 *buf)
+uint16_t TCPSERVER::recv(uint8_t *buf)
 {
-    u16 len = 0;
+    uint16_t len = 0;
 
     switch(socket_status(s)) /*获取socket0的状态*/
     {
@@ -253,7 +253,7 @@ void TCPSERVER::close()
 {
     _close(s);
 }
-u16 TCPSERVER::send(u8 *buf, u16 len)
+uint16_t TCPSERVER::send(uint8_t *buf, uint16_t len)
 {
     return _send(s, buf, len); /*W5200向Server发送数据*/
 }

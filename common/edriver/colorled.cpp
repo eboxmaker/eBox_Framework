@@ -34,7 +34,7 @@ void COLORLED::begin()
     b->set_oc_polarity(0);
 }
 
-void COLORLED::color_rgb(u8 r, u8 g, u8 b)
+void COLORLED::color_rgb(uint8_t r, uint8_t g, uint8_t b)
 {
 
     this->r->set_duty(r * 3);

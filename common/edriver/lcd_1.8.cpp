@@ -33,7 +33,7 @@
 
 //Lcd lcd(&PB13,&PB15,&PA13,&PA15,&PA14,&PA12);
 
-void Lcd::begin(u8 dev_num)
+void Lcd::begin(uint8_t dev_num)
 {
     cs->mode(OUTPUT_PP);
     led->mode(OUTPUT_PP);
@@ -55,7 +55,7 @@ void Lcd::soft_reset()
 }
 
 //向SPI总线传输一个8位数据
-//void  Lcd::spi_write_data(u8 Data)
+//void  Lcd::spi_write_data(uint8_t Data)
 //{
 //	unsigned char i=0;
 //	for(i=8;i>0;i--)
@@ -70,7 +70,7 @@ void Lcd::soft_reset()
 //	}
 //}
 //向液晶屏写一个8位指令
-void Lcd::write_index(u8 Index)
+void Lcd::write_index(uint8_t Index)
 {
     //SPI 写命令时序开始
     spi->take_spi_right(&config);
@@ -81,7 +81,7 @@ void Lcd::write_index(u8 Index)
     spi->release_spi_right();
 }
 //向液晶屏写一个8位数据
-void Lcd::write_data_8bit(u8 Data)
+void Lcd::write_data_8bit(uint8_t Data)
 {
     spi->take_spi_right(&config);
     cs->reset();
@@ -91,7 +91,7 @@ void Lcd::write_data_8bit(u8 Data)
     spi->release_spi_right();
 }
 //向液晶屏写一个16位数据
-void Lcd::write_data_16bit(u16 Data)
+void Lcd::write_data_16bit(uint16_t Data)
 {
     spi->take_spi_right(&config);
     cs->reset();
@@ -101,18 +101,18 @@ void Lcd::write_data_16bit(u16 Data)
     cs->set();
     spi->release_spi_right();
 }
-//u8 Lcd::read_8bit()
+//uint8_t Lcd::read_8bit()
 //{
-//    u8 data;
+//    uint8_t data;
 //    cs->reset();
 //    rs->set();
 //    data = spi->read();
 //    cs->set();
 //    return data;
 //}
-//u16 Lcd::read_16bit()
+//uint16_t Lcd::read_16bit()
 //{
-//    u8 data;
+//    uint8_t data;
 //    cs->reset();
 //    rs->set();
 //    data |= spi->read();
@@ -120,14 +120,14 @@ void Lcd::write_data_16bit(u16 Data)
 //    cs->set();
 //    return data;
 //}
-void Lcd::write_reg(u8 Index, u8 Data)
+void Lcd::write_reg(uint8_t Index, uint8_t Data)
 {
     write_index(Index);
     write_data_8bit(Data);
 }
-//u8 Lcd::read_reg(u8 Index)
+//uint8_t Lcd::read_reg(uint8_t Index)
 //{
-//    u8 data;
+//    uint8_t data;
 //    write_index(Index);
 //    data = read_8bit();
 //    return data;
@@ -270,7 +270,7 @@ void Lcd::off()
     write_index(0x28);//Display off
 
 }
-void Lcd::column_order(u8 order)
+void Lcd::column_order(uint8_t order)
 {
     write_index(0x36); //MX, MY, RGB mode
     if(order == 1)
@@ -282,7 +282,7 @@ void Lcd::column_order(u8 order)
     write_data_8bit(MADCTL);
 
 }
-void Lcd::row_order(u8 order)
+void Lcd::row_order(uint8_t order)
 {
     write_index(0x36); //MX, MY, RGB mode
     if(order == 1)
@@ -300,7 +300,7 @@ void Lcd::row_order(u8 order)
 入口参数：xy起点和终点
 返回值：无
 *************************************************/
-void Lcd::set_region(u16 x_start, u16 y_start, u16 x_end, u16 y_end)
+void Lcd::set_region(uint16_t x_start, uint16_t y_start, uint16_t x_end, uint16_t y_end)
 {
     write_index(0x2a);
     write_data_8bit(0x00);
@@ -323,7 +323,7 @@ void Lcd::set_region(u16 x_start, u16 y_start, u16 x_end, u16 y_end)
 入口参数：填充颜色COLOR
 返回值：无
 *************************************************/
-void Lcd::clear(u16 Color)
+void Lcd::clear(uint16_t Color)
 {
     unsigned int i;
     set_region(0, 0, X_MAX_PIXEL - 1, Y_MAX_PIXEL - 1);
@@ -339,7 +339,7 @@ void Lcd::clear(u16 Color)
 入口参数：xy坐标
 返回值：无
 *************************************************/
-void Lcd::set_xy(u16 x, u16 y)
+void Lcd::set_xy(uint16_t x, uint16_t y)
 {
     set_region(x, y, x, y);
 }
@@ -351,7 +351,7 @@ void Lcd::set_xy(u16 x, u16 y)
 入口参数：无
 返回值：无
 *************************************************/
-inline void Lcd::draw_point(u16 x, u16 y, u16 Data)
+inline void Lcd::draw_point(uint16_t x, uint16_t y, uint16_t Data)
 {
     set_region(x, y, x + 1, y + 1);
     write_data_16bit(Data);
@@ -361,9 +361,9 @@ inline void Lcd::draw_point(u16 x, u16 y, u16 Data)
  函数功能：读TFT某一点的颜色
  出口参数：color  点颜色值
 ******************************************/
-//u16 Lcd::read_point(u16 x,u16 y)
+//uint16_t Lcd::read_point(uint16_t x,uint16_t y)
 //{
-//  u16 data;
+//  uint16_t data;
 //  set_xy(x,y);
 
 //    write_index(0x2e);
@@ -408,8 +408,8 @@ void Lcd::draw_v_line(int x, int y0,  int y1)
 #include "color_convert.h"
 void Lcd::fill_rect(int x0, int y0,  int x1, int y1)
 {
-    u16 i = 0;
-    u8 dx, dy;
+    uint16_t i = 0;
+    uint8_t dx, dy;
     dx = x1 - x0 + 1;
     dy = y1 - y0 + 1;
 
@@ -419,10 +419,10 @@ void Lcd::fill_rect(int x0, int y0,  int x1, int y1)
         write_data_16bit(front_color);
     }
 }
-void Lcd::fill_rect(int x0, int y0,  int x1, int y1, u16 *bitmap)
+void Lcd::fill_rect(int x0, int y0,  int x1, int y1, uint16_t *bitmap)
 {
-    u16 i = 0;
-    u8 dx, dy;
+    uint16_t i = 0;
+    uint8_t dx, dy;
     dx = x1 - x0 + 1;
     dy = y1 - y0 + 1;
 
@@ -433,7 +433,7 @@ void Lcd::fill_rect(int x0, int y0,  int x1, int y1, u16 *bitmap)
     }
 
 }
-void Lcd::draw_circle(u16 x, u16 y, u16 r)
+void Lcd::draw_circle(uint16_t x, uint16_t y, uint16_t r)
 {
     //Bresenham算法
     unsigned short  a, b;
@@ -474,7 +474,7 @@ void Lcd::draw_circle(u16 x, u16 y, u16 r)
 
 }
 //画线函数，使用Bresenham 画线算法
-void Lcd::draw_line(u16 x0, u16 y0, u16 x1, u16 y1)
+void Lcd::draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
 {
     int dx,             // difference in x's
         dy,             // difference in y's
@@ -571,7 +571,7 @@ void Lcd::draw_line(u16 x0, u16 y0, u16 x1, u16 y1)
     } // end else |slope| > 1
 }
 
-void Lcd::h_disp_char8x16(u16 x, u16 y, u8 ch)
+void Lcd::h_disp_char8x16(uint16_t x, uint16_t y, uint8_t ch)
 {
     if(ch >= 0x20)ch -= 0x20;
     set_region(x, y, x + 8, y + 16);
@@ -586,7 +586,7 @@ void Lcd::h_disp_char8x16(u16 x, u16 y, u8 ch)
         }
     }
 }
-void Lcd::disp_char8x16(u16 x, u16 y, u8 ch)
+void Lcd::disp_char8x16(uint16_t x, uint16_t y, uint8_t ch)
 {
     unsigned char i, j;
     unsigned short k;
@@ -606,10 +606,10 @@ void Lcd::disp_char8x16(u16 x, u16 y, u8 ch)
         }
     x += 8;
 }
-void Lcd::printf(u16 x, u16 y, const char *fmt, ...)
+void Lcd::printf(uint16_t x, uint16_t y, const char *fmt, ...)
 {
     char buf[30];
-    u8 i = 0;
+    uint8_t i = 0;
     va_list va_params;
     va_start(va_params, fmt);
     vsprintf(buf, fmt, va_params);
@@ -625,7 +625,7 @@ void Lcd::printf(u16 x, u16 y, const char *fmt, ...)
         x += 8;
     }
 }
-void Lcd::draw_font_gbk16(u16 x, u16 y, u8 *s)
+void Lcd::draw_font_gbk16(uint16_t x, uint16_t y, uint8_t *s)
 {
     unsigned char i, j;
     unsigned short k, x0;

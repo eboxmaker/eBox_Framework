@@ -34,7 +34,7 @@ public:
         this->b_pin = b;
     }
     void begin();
-    void color_rgb(u8 r, u8 g, u8 b);
+    void color_rgb(uint8_t r, uint8_t g, uint8_t b);
     void color_hsl(int h, float s, float l);
     void color_hsl(COLOR_HSL &hsl);
 

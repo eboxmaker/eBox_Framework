@@ -38,7 +38,7 @@ void attach_eth_to_socket(void *e)
 int _socket(SOCKET s, int8_t protocol, uint16_t port, int8_t flag)
 {
     //   int ret = -3;
-    //	 u16 i;
+    //	 uint16_t i;
     if ( ((protocol & 0x0F) == Sn_MR_TCP) || ((protocol & 0x0F) == Sn_MR_UDP) || ((protocol & 0x0F) == Sn_MR_IPRAW) || \
             ((protocol & 0x0F) == Sn_MR_MACRAW) || (protocol & 0x0F) == Sn_MR_PPPOE)
     {

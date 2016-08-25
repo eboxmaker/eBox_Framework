@@ -52,30 +52,30 @@ public:
     }
     void begin(uint8_t dev_num);
     void read_id(uint16_t *id);
-    void read(u8 *buf, u32 read_addr, u16 num_to_read);
-    void fast_read(u8 *buf, u32 read_addr, u16 num_to_read);
-    void write(u8 *buf, u32 write_addr, u16 num_to_write);
+    void read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read);
+    void fast_read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read);
+    void write(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
 
-    void erase_sector(u32 dst_addr);
+    void erase_sector(uint32_t dst_addr);
     void erase_chip(void);
 
 
 private:
-    u8                  spi_flash_buf[4096];
+    uint8_t                  spi_flash_buf[4096];
     SPI_CONFIG_TYPE     spi_dev_w25x16;
     Gpio                *cs;
     Spi                 *spi;
 
-    u8   readSR(void);
+    uint8_t   readSR(void);
     void _waitBusy(void);
     void powerDown(void);
     void wakeUp(void);
-    void writeSR(u8 sr);
+    void writeSR(uint8_t sr);
     void writeEnable(void);
     void writeDisable(void);
 
-    void write_page(u8 *buf, u32 write_addr, u16 num_to_write);
-    void write_no_check(u8 *buf, u32 write_addr, u16 num_to_write);
+    void write_page(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
+    void write_no_check(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
 
 
 };

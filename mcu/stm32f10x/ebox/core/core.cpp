@@ -25,7 +25,7 @@ extern "C" {
 
     cpu_t cpu;
 
-    extern u16  AD_value[];
+    extern uint16_t  AD_value[];
 
     __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
 
@@ -95,7 +95,7 @@ extern "C" {
     __IO uint16_t systick_user_event_per_sec;//真实的值
     __IO uint16_t _systick_user_event_per_sec;//用于被millis_second取余数
 
-    void set_systick_user_event_per_sec(u16 frq)
+    void set_systick_user_event_per_sec(uint16_t frq)
     {
         _systick_user_event_per_sec = 1000 / frq;
         systick_user_event_per_sec = frq;
@@ -133,11 +133,11 @@ extern "C" {
     
     static void get_chip_info()
     {
-        cpu.chip_id[2] = *(__IO u32 *)(0X1FFFF7E8); //低字节
-        cpu.chip_id[1] = *(__IO u32 *)(0X1FFFF7EC); //
-        cpu.chip_id[0] = *(__IO u32 *)(0X1FFFF7F0); //高字节
+        cpu.chip_id[2] = *(__IO uint32_t *)(0X1FFFF7E8); //低字节
+        cpu.chip_id[1] = *(__IO uint32_t *)(0X1FFFF7EC); //
+        cpu.chip_id[0] = *(__IO uint32_t *)(0X1FFFF7F0); //高字节
 
-        cpu.flash_size = *(u16 *)(0x1FFFF7E0);   //芯片flash容量
+        cpu.flash_size = *(uint16_t *)(0x1FFFF7E0);   //芯片flash容量
     }
     
     uint32_t get_cpu_calculate_per_sec()

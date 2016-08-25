@@ -10,9 +10,9 @@ void attach_sd_to_fat(void* sd);
      
      
 int	MMC_disk_status(void);
-u8 MMC_disk_initialize(void);
-u8 MMC_disk_read(u8 *buffer,u32 sector, u8 count);
-u8 MMC_disk_write( const u8 *data,u32 sector,  u8 count);
+uint8_t MMC_disk_initialize(void);
+uint8_t MMC_disk_read(uint8_t *buffer,uint32_t sector, uint8_t count);
+uint8_t MMC_disk_write( const uint8_t *data,uint32_t sector,  uint8_t count);
      
 #ifdef __cplusplus
  }

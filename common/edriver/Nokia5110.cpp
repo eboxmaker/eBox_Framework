@@ -85,7 +85,7 @@ back_led        : 设置LCD背光
 输入参数：val：	1：on
 								0：off
 -----------------------------------------------------------------------*/
-void NOKIA5110::back_led(u8 val)
+void NOKIA5110::back_led(uint8_t val)
 {
     LCD_LED.write(val);
 }
@@ -95,7 +95,7 @@ contrast        : 设置LCD对比度
 
 输入参数：val：	0-255
 -----------------------------------------------------------------------*/
-void NOKIA5110::contrast(u8 val)
+void NOKIA5110::contrast(uint8_t val)
 {
     write_cmd(0xba);	// 设置偏置电压
 }
@@ -133,7 +133,7 @@ void NOKIA5110::disp_string(unsigned char X, unsigned char Y, const char *s)
 void NOKIA5110::printf(uint8_t row, uint8_t col, const char *fmt, ...)
 {
     char buf[16];
-    u8 i = 0;
+    uint8_t i = 0;
     va_list va_params;
     va_start(va_params, fmt);
     vsprintf(buf, fmt, va_params);

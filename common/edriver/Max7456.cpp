@@ -286,7 +286,7 @@ OSD::write(uint8_t c)
 void OSD::printf(const char *fmt, ...)
 {
     char buf[32];
-    u8 i;
+    uint8_t i;
     va_list va_params;
     va_start(va_params, fmt);
     vsprintf(buf, fmt, va_params);
