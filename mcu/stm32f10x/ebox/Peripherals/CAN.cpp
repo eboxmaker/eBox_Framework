@@ -1,20 +1,53 @@
-/*
-file   : can.cpp
-author : shentq
-version: V1.1
-date   : 2015/7/5
 
-Copyright 2015 shentq. All Rights Reserved.
+#include "CAN.h"
 
-Copyright Notice
-No part of this software may be used for any commercial activities by any form or means, without the prior written consent of shentq.
+callback_fun_type can_callback_table;
+static uint32_t can_irq_id;
+static can_irq_handler irq_handler;
 
-Disclaimer
-This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
-*/
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#include "can.h"
+void USB_LP_CAN1_RX0_IRQHandler(void)
+{
+		//can_callback_table();
+		irq_handler(can_irq_id);
+		CAN_FIFORelease(CAN1, CAN_FIFO0);	
+}
 
+void can_irq_init(can_irq_handler handler, uint32_t id)
+{
+		irq_handler = handler;
+		can_irq_id = id;
+}
+
+#ifdef __cplusplus
+}
+#endif
+
+void Can::attach_interrupt(void (*callback_fun)(void))
+{
+    can_callback_table = callback_fun;
+}
+
+void Can::interrupt(FunctionalState enable)
+{
+    if(enable == ENABLE)
+    {
+        CAN_ITConfig(CAN1, CAN_IT_FMP0, ENABLE);
+    }
+    else
+    {
+        CAN_ITConfig(CAN1, CAN_IT_FMP0, DISABLE);
+    }
+}
+
+Can::Can(Gpio *p_pin_rx, Gpio *p_pin_tx)
+{
+    this->pin_rx = p_pin_rx;
+    this->pin_tx = p_pin_tx;
+}
 
 
 const uint16_t CANBAUD[][4] =
@@ -31,39 +64,7 @@ const uint16_t CANBAUD[][4] =
     { CAN_SJW_1tq, CAN_BS1_3tq, CAN_BS2_5tq, 4 },       //1M
 };
 
-
-CAN::CAN(CAN_TypeDef *CANx, GPIO *p_pin_rx, GPIO *p_pin_tx)
-{
-    _CANx = CANx;
-    this->pin_rx = p_pin_rx;
-    this->pin_tx = p_pin_tx;
-}
-void CAN::begin(BSP_CAN_BAUD bps)
-{
-    u8 i;
-
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1 | RCC_APB1Periph_CAN2, ENABLE);
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
-
-    pin_rx->mode(INPUT_PU);
-    pin_tx->mode(AF_PP);
-
-    set_bps(bps);
-
-    CAN_ITConfig(_CANx, CAN_IT_FMP0, DISABLE);    //关闭FIFO0接收中断
-    CAN_ITConfig(_CANx, CAN_IT_FMP1, DISABLE);    //打开FIFO1接收中断
-
-
-    set_filter(CAN_FIFO0, CAN_ID_STD, 0, 1 << 5, 0xFFFFFFFF);
-    set_filter(CAN_FIFO0, CAN_ID_STD, 1, 1 << 5, 0xFFFFFFFF);
-    set_filter(CAN_FIFO1, CAN_ID_STD, 2, 1 << 5, 0xFFFFFFFF);
-
-    for(i = 0; i < 3; i++)CAN_CancelTransmit(_CANx, i);
-}
-
-
-
-void CAN::set_bps(BSP_CAN_BAUD bps)
+void Can::set_bps(BSP_CAN_BAUD bps)
 {
     CAN_InitTypeDef CAN_InitStructure;
 
@@ -80,43 +81,110 @@ void CAN::set_bps(BSP_CAN_BAUD bps)
     CAN_InitStructure.CAN_TXFP = DISABLE;
     CAN_InitStructure.CAN_Mode = CAN_Mode_Normal;
 
-    CAN_Init(_CANx, &CAN_InitStructure);
+    CAN_Init(CAN1, &CAN_InitStructure);
 }
 
-void CAN::set_filter(u8 Fifo, u8 nCanType, u8 num, u32 ID, u32 Mask)
+
+void Can::set_filter_idmask(u8 nCanType,u8 num,u32 ID,u32 mask)
 {
-    CAN_FilterInitTypeDef CAN_FilterInitStructure;
+		CAN_FilterInitTypeDef  CAN_FilterInitStructure;
 
-    CAN_FilterInitStructure.CAN_FilterMode = CAN_FilterMode_IdMask;
-    CAN_FilterInitStructure.CAN_FilterActivation = DISABLE;
-
-    if(nCanType == CAN_ID_STD)
-        CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_16bit;
-    else
-        CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_32bit;
-
-    CAN_FilterInitStructure.CAN_FilterFIFOAssignment = Fifo;
-    CAN_FilterInitStructure.CAN_FilterNumber = num;
-    CAN_FilterInitStructure.CAN_FilterIdHigh = ID >> 16;
-    CAN_FilterInitStructure.CAN_FilterIdLow = ID & 0xffff;
-    CAN_FilterInitStructure.CAN_FilterMaskIdHigh = Mask >> 16;
-    CAN_FilterInitStructure.CAN_FilterMaskIdLow = Mask & 0xffff;
-    CAN_FilterInit(&CAN_FilterInitStructure );
+		CAN_FilterInitStructure.CAN_FilterNumber=num;						
+		CAN_FilterInitStructure.CAN_FilterMode=CAN_FilterMode_IdMask;		
+    CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_32bit;
+	
+		if(nCanType == CAN_ID_STD)
+		{/* std id  */
+			CAN_FilterInitStructure.CAN_FilterIdHigh= ID<<5;
+			CAN_FilterInitStructure.CAN_FilterIdLow=0|CAN_ID_STD;
+		}
+		else
+		{
+		/* ext id  */
+			CAN_FilterInitStructure.CAN_FilterIdHigh= ((ID<<3)>>16) & 0xffff;
+			CAN_FilterInitStructure.CAN_FilterIdLow= ((ID<<3)& 0xffff) | CAN_ID_EXT;
+		}
+		
+		CAN_FilterInitStructure.CAN_FilterMaskIdHigh=(mask>>16)&0xffff;
+		CAN_FilterInitStructure.CAN_FilterMaskIdLow=mask&0xffff;
+		
+		CAN_FilterInitStructure.CAN_FilterFIFOAssignment=CAN_Filter_FIFO0 ;
+		CAN_FilterInitStructure.CAN_FilterActivation=ENABLE;
+		CAN_FilterInit(&CAN_FilterInitStructure);
 }
 
 
-u8 CAN::write(CanTxMsg *pCanMsg)
+void Can::set_filter_idlist(u8 nCanType,u8 num,u32 ID)
+{
+		CAN_FilterInitTypeDef  CAN_FilterInitStructure;
+
+		CAN_FilterInitStructure.CAN_FilterNumber=num;						
+		CAN_FilterInitStructure.CAN_FilterMode=CAN_FilterMode_IdList;	
+		CAN_FilterInitStructure.CAN_FilterScale=CAN_FilterScale_32bit;
+
+
+		
+		if(nCanType == CAN_ID_STD)
+		{/* std id  */
+			CAN_FilterInitStructure.CAN_FilterIdHigh= ID<<5;	
+			CAN_FilterInitStructure.CAN_FilterIdLow= 0|CAN_ID_STD;
+		}
+		else
+		{
+			/* ext id  */
+			CAN_FilterInitStructure.CAN_FilterIdHigh= ((ID<<3)>>16) & 0xffff;
+			CAN_FilterInitStructure.CAN_FilterIdLow= ((ID<<3)& 0xffff) | CAN_ID_EXT;				
+		}
+		
+		CAN_FilterInitStructure.CAN_FilterMaskIdHigh = 0;			//????16???????
+    CAN_FilterInitStructure.CAN_FilterMaskIdLow = 0;			//????16???????
+
+		CAN_FilterInitStructure.CAN_FilterFIFOAssignment=CAN_Filter_FIFO0 ;
+		CAN_FilterInitStructure.CAN_FilterActivation=ENABLE;
+		CAN_FilterInit(&CAN_FilterInitStructure);
+}
+
+void Can::begin(BSP_CAN_BAUD bps)
+{
+
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1 | RCC_APB1Periph_CAN2, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+
+    /*to do */
+    GPIO_PinRemapConfig(GPIO_Remap1_CAN1, ENABLE);
+
+    pin_rx->mode(INPUT_PU);
+    pin_tx->mode(AF_PP);
+
+
+
+    NVIC_InitTypeDef NVIC_InitStructure;
+    NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;	   //CAN1 RX0??
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;		   //?????0
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;			   //?????0
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+
+    set_bps(bps);
+	
+		for(u8 i=0;i<3;i++)CAN_CancelTransmit(CAN1,i);
+		
+		can_irq_init(Can::_irq_handler, (uint32_t)this);
+
+}
+
+u8 Can::write(CanTxMsg *pCanMsg)
 {
     u32 nTime = 0x3fff;
     u8 TMailbox;
 
-    TMailbox = CAN_Transmit(_CANx, pCanMsg);
+    TMailbox = CAN_Transmit(CAN1, pCanMsg);
 
-    while((CAN_TransmitStatus(_CANx, TMailbox) != CANTXOK) && (--nTime));
+    while((CAN_TransmitStatus(CAN1, TMailbox) != CANTXOK) && (--nTime));
 
     if(nTime == 0)
     {
-        CAN_CancelTransmit(_CANx, TMailbox);//发送错误时取消发送
+        CAN_CancelTransmit(CAN1, TMailbox);//发送错误时取消发送
         return false;
     }
     else
@@ -125,67 +193,23 @@ u8 CAN::write(CanTxMsg *pCanMsg)
     }
 }
 
-u8 CAN::read(CanRxMsg *pCanMsg, u16 WaitTime)
+void Can::read(CanRxMsg *pCanMsg)
 {
-    u32 ms;
+    CAN_Receive(CAN1, CAN_FIFO0, pCanMsg );
+}
 
-    ms = millis();
-    while(1)
-    {
-        if(CAN_MessagePending(_CANx, CAN_FIFO0) > 0)
-        {
-            CAN_Receive(_CANx, CAN_FIFO0, pCanMsg );
-            return true;
-        }
+u8 Can::available(void)
+{
+    return CAN_MessagePending(CAN1, CAN_FIFO0);
+}
 
-        if((ms + WaitTime) > millis())return false;
+void Can::attach(void (*fptr)(void)) {
+    if (fptr) {
+        _irq.attach(fptr);
     }
 }
 
-callback_fun_type can_callback_table[2];
-
-void CAN::attach_interrupt(void (*callback_fun)(void))
-{
-    switch((u32)_CANx)
-    {
-    case (u32)CAN1_BASE:
-        can_callback_table[0] = callback_fun;
-        break;
-    case (u32)CAN2_BASE:
-        can_callback_table[1] = callback_fun;
-        break;
-    }
+void Can::_irq_handler(uint32_t id) {
+    Can *handler = (Can*)id;
+    handler->_irq.call();
 }
-
-void CAN::interrupt(FunctionalState enable)
-{
-    if(enable == ENABLE)
-    {
-        CAN_ITConfig(_CANx, CAN_IT_FMP1, ENABLE);
-    }
-    else
-    {
-        CAN_ITConfig(_CANx, CAN_IT_FMP1, DISABLE);
-    }
-}
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-void CAN1_RX1_IRQHandler(void)
-{
-    can_callback_table[0]();
-    CAN_FIFORelease(CAN1, CAN_FIFO1);
-}
-
-void CAN2_RX1_IRQHandler(void)
-{
-    can_callback_table[1]();
-    CAN_FIFORelease(CAN2, CAN_FIFO1);
-}
-
-#ifdef __cplusplus
-}
-#endif
-
