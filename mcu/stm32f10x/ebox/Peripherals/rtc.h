@@ -21,6 +21,20 @@
 #ifndef __RTC_H
 #define __RTC_H
 #include "common.h"
+#include "FunctionPointer.h"
+
+enum Rtc_IrqType {
+		Sec_Irq = 0,
+		Alr_Irq = 1,
+		Ow_Irq = 2,
+};
+
+
+
+typedef void (*rtc_irq_handler)(uint32_t id, Rtc_IrqType type);
+
+
+
 /*
 	1.提供一个32位的循环计数,每秒加1.
 	2.一个中断源，三个中断事件
@@ -49,13 +63,35 @@ public:
     void set_counter(uint32_t count);
     void set_alarm(uint32_t count);
     uint32_t get_counter();
+    /** Attach a function to call whenever a serial interrupt is generated
+     *
+     *  @param fptr A pointer to a void function, or 0 to set as none
+     *  @param type Which serial interrupt to attach the member function to (Seriall::RxIrq for receive, TxIrq for transmit buffer empty)
+     */
+    void attach(void (*fptr)(void), Rtc_IrqType type=Sec_Irq);
 
+    /** Attach a member function to call whenever a serial interrupt is generated
+     *
+     *  @param tptr pointer to the object to call the member function on
+     *  @param mptr pointer to the member function to be called
+     *  @param type Which serial interrupt to attach the member function to (Seriall::RxIrq for receive, TxIrq for transmit buffer empty)
+     */
+    template<typename T>
+    void attach(T* tptr, void (T::*mptr)(void), Rtc_IrqType type=Sec_Irq) {
+        if((mptr != NULL) && (tptr != NULL)) {
+            _irq[type].attach(tptr, mptr);
+        }
+    }
+		
+		static void _irq_handler(uint32_t id, Rtc_IrqType irq_type);
 
 private:
     int    config(uint8_t flag);
     uint8_t is_config(uint16_t configFlag);
     void    set_config_flag(uint16_t configFlag);
     void    nvic(FunctionalState state);
+protected:
+    FunctionPointer _irq[3];
 };
 class RtcClock
 {
@@ -81,6 +117,21 @@ class RtcClock
        uint32_t count;
 };
 extern Rtc 	rtc;
+
+
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void rtc_irq_init(rtc_irq_handler handler, uint32_t id);
+
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif
 

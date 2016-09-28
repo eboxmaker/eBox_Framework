@@ -1,27 +1,11 @@
-/**
-  ******************************************************************************
-  * @file    can.h
-  * @author  shentq
-  * @version V1.2
-  * @date    2016/08/14
-  * @brief   
-  ******************************************************************************
-  * @attention
-  *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
-  * preliminary and is subject to change at any time without notice. shentq assumes
-  * no responsibility for any errors contained herein.
-  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
-  ******************************************************************************
-  */
-
-/* Define to prevent recursive inclusion -------------------------------------*/
 
 #ifndef __CAN_H
 #define __CAN_H
 
 #include "common.h"
+#include "FunctionPointer.h"
+
+typedef void (*can_irq_handler)(uint32_t id);
 
 typedef enum
 {
@@ -35,29 +19,54 @@ typedef enum
     BSP_CAN_500KBPS,                 // 波特率 500K 模式
     BSP_CAN_800KBPS,                 // 波特率 800K 模式
     BSP_CAN_1MBPS,                   // 波特率 1M模式
-} BSP_CAN_BAUD;
+}BSP_CAN_BAUD;
 
-class CAN
+class Can
 {
-public:
-    CAN(CAN_TypeDef *CANx, Gpio *p_pin_rx, Gpio *p_pin_tx);
-    void begin(BSP_CAN_BAUD bps);
-    void set_filter(uint8_t Fifo, uint8_t nCanType, uint8_t num, u32 ID, u32 Mask);
-    void interrupt(FunctionalState enable);
-    void attach_interrupt(void (*callback_fun)(void));
+    public:
+      	Can(Gpio* p_pin_rx, Gpio* p_pin_tx);
+				void begin(BSP_CAN_BAUD bps);
+				void set_filter(u8 Fifo,u8 nCanType,u8 num,u32 ID,u32 Mask);
+        void interrupt(FunctionalState enable);
+        void attach_interrupt(void (*callback_fun)(void));
+				void set_filter_idlist(u8 nCanType,u32 ID);
+				void set_filter_idmask(u8 nCanType,u8 num,u32 ID,u32 mask);
+				void set_filter_idlist(u8 nCanType,u8 num,u32 ID);
+				u8   write(CanTxMsg *pCanMsg);
+				void   read(CanRxMsg *pCanMsg);
+				u8	 available(void);
+    /** Attach a function to call whenever a serial interrupt is generated
+     *
+     *  @param fptr A pointer to a void function, or 0 to set as none
+     *  @param type Which serial interrupt to attach the member function to (Seriall::RxIrq for receive, TxIrq for transmit buffer empty)
+     */
+    void attach(void (*fptr)(void));
 
-    uint8_t   write(CanTxMsg *pCanMsg);
-    uint8_t   read(CanRxMsg *pCanMsg, uint16_t WaitTime);
+    /** Attach a member function to call whenever a serial interrupt is generated
+     *
+     *  @param tptr pointer to the object to call the member function on
+     *  @param mptr pointer to the member function to be called
+     *  @param type Which serial interrupt to attach the member function to (Seriall::RxIrq for receive, TxIrq for transmit buffer empty)
+     */
+    template<typename T>
+    void attach(T* tptr, void (T::*mptr)(void)) {
+        if((mptr != NULL) && (tptr != NULL)) {
+            _irq.attach(tptr, mptr);
+        }
+    }
+		
+		static void _irq_handler(uint32_t id);    
+    private:
+    	void set_bps(BSP_CAN_BAUD);
+    	
+    private:
+	    CAN_TypeDef* _CANx;
+        Gpio* pin_rx;           //arduino pin number
+        Gpio* pin_tx;           //arduino pin number    
 
-private:
-    void set_bps(BSP_CAN_BAUD);
-
-private:
-    CAN_TypeDef *_CANx;
-    Gpio *pin_rx;           //arduino pin number
-    Gpio *pin_tx;           //arduino pin number
-
-    BSP_CAN_BAUD _bps;
+        BSP_CAN_BAUD _bps;  
+protected:
+    FunctionPointer _irq;		
 };
 
 #endif

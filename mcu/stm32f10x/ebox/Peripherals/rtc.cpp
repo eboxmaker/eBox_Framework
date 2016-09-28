@@ -22,7 +22,9 @@
 #define RTC_CFG_FLAG 0XA5A5
 #include "ebox.h"
 Rtc rtc;
-callback_fun_type rtc_callback_table[3];//
+//callback_fun_type rtc_callback_table[3];//
+static uint32_t rtc_irq_id;
+static rtc_irq_handler irq_handler;
 
 int Rtc::begin(uint8_t clock_source)
 {
@@ -75,6 +77,8 @@ int Rtc::begin(uint8_t clock_source)
         
 		uart1.printf("\r\n step 3....");
 	}
+	
+		rtc_irq_init(Rtc::_irq_handler, (uint32_t)this);
     return ret;
 }
 int Rtc::config(uint8_t flag)
@@ -199,15 +203,15 @@ void Rtc::nvic(FunctionalState state)
 
 void Rtc::attach_sec_interrupt(void (*cb_fun)(void))
 {
-    rtc_callback_table[0] = cb_fun;
+   // rtc_callback_table[0] = cb_fun;
 }
 void Rtc::attach_alarm_interrupt(void (*cb_fun)(void))
 {
-    rtc_callback_table[1] = cb_fun;
+    //rtc_callback_table[1] = cb_fun;
 }
 void Rtc::attach_overflow_interrupt(void (*cb_fun)(void))
 {
-    rtc_callback_table[2] = cb_fun;
+   // rtc_callback_table[2] = cb_fun;
 }
 
 void Rtc::sec_interrupt(FunctionalState state)
@@ -247,6 +251,19 @@ void Rtc::overflow_interrupt(FunctionalState state)
          RTC->CRH &= ~(1<<2);
 }
 
+
+void Rtc::attach(void (*fptr)(void), Rtc_IrqType type) {
+    if (fptr) {
+        _irq[type].attach(fptr);
+    }
+}
+
+
+void Rtc::_irq_handler(uint32_t id, Rtc_IrqType irq_type) {
+    Rtc *handler = (Rtc*)id;
+    handler->_irq[irq_type].call();
+}
+
 uint32_t Rtc::get_counter()
 {
     return RTC_GetCounter();
@@ -256,18 +273,24 @@ extern "C" {
     {
         if (RTC_GetITStatus(RTC_IT_SEC) != RESET)
         {
-            rtc_callback_table[0]();
+						irq_handler(rtc_irq_id,Sec_Irq);
             RTC_ClearITPendingBit(RTC_IT_SEC);
         }
         if (RTC_GetITStatus(RTC_IT_ALR) != RESET)
         {
-            rtc_callback_table[1]();
+						irq_handler(rtc_irq_id,Alr_Irq);
             RTC_ClearITPendingBit(RTC_IT_ALR);
         }
         if (RTC_GetITStatus(RTC_IT_OW) != RESET)
         {
-            rtc_callback_table[2]();
+						irq_handler(rtc_irq_id,Ow_Irq);
             RTC_ClearITPendingBit(RTC_IT_OW);
         }
     }
+		
+		void rtc_irq_init(rtc_irq_handler handler, uint32_t id)
+		{
+				irq_handler = handler;
+				rtc_irq_id = id;
+		}
 }
