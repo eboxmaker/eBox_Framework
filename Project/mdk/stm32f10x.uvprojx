@@ -603,6 +603,11 @@
               <FilePath>..\..\mcu\stm32f10x\ebox\Peripherals\wdg.cpp</FilePath>
             </File>
             <File>
+              <FileName>CAN.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\mcu\stm32f10x\ebox\Peripherals\CAN.cpp</FilePath>
+            </File>
+            <File>
               <FileName>ebox_it.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\mcu\stm32f10x\ebox\core\ebox_it.cpp</FilePath>

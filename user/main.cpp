@@ -1,68 +1,51 @@
-/**
-  ******************************************************************************
-  * @file   : *.cpp
-  * @author : shentq
-  * @version: V1.2
-  * @date   : 2016/08/14
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
 
-  * @brief   ebox application example .
-  *
-  * Copyright 2016 shentq. All Rights Reserved.         
-  ******************************************************************************
- */
+Copyright 2015 shentq. All Rights Reserved.
+*/
 
-
+//STM32 RUN IN eBox
 #include "ebox.h"
+#include "can.h"
 
 
 
-
-uint32_t xx;
-uint8_t flag;
-Timer timer1(TIM1);
-
-void t2it()
-{
-    xx++;
-    if(xx == 1000)
-    {
-        flag = 1;
-        xx = 0;
-        PB8.write(!PB8.read());
-    }
-}
+CanTxMsg TxMessage;
+uint8_t data[8] = {1, 2, 3, 4, 5, 6, 7, 8};
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
+    can1.begin(BSP_CAN_500KBPS);
     PB8.mode(OUTPUT_PP);
-
-    timer1.begin(1000);
-    timer1.attach_interrupt(t2it);
-    timer1.interrupt(ENABLE);
-    timer1.start();
+    /* Transmit */
+    TxMessage.StdId = 0x321;
+    TxMessage.ExtId = 0x01;
+    TxMessage.RTR = CAN_RTR_DATA;
+    TxMessage.IDE = CAN_ID_STD;
+    TxMessage.DLC = 8;
+    int i = 0;
+    TxMessage.Data[i++] = 1;
+    TxMessage.Data[i++] = 2;
+    TxMessage.Data[i++] = 3;
+    TxMessage.Data[i++] = 4;
+    TxMessage.Data[i++] = 5;
+    TxMessage.Data[i++] = 6;
+    TxMessage.Data[i++] = 7;
+    TxMessage.Data[i++] = 8;
 }
-
-
 int main(void)
 {
     setup();
     while(1)
     {
-        if(flag == 1)
-        {
-            uart1.printf("\r\ntimer2 is triggered 1000 times !", xx);
-            flag = 0;
-        }
+        can1.write(&TxMessage);
+        delay_ms(1000);
+
     }
 
-
 }
-
-
-
-
-
-
 
 
