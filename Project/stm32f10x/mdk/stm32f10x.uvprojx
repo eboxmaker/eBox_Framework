@@ -578,14 +578,14 @@
               <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\softi2c.cpp</FilePath>
             </File>
             <File>
+              <FileName>spi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\spi.cpp</FilePath>
+            </File>
+            <File>
               <FileName>softspi.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\softspi.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>SPI.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\SPI.cpp</FilePath>
             </File>
             <File>
               <FileName>timer.cpp</FileName>
@@ -601,6 +601,11 @@
               <FileName>wdg.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\wdg.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>can.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\can.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_it.cpp</FileName>
