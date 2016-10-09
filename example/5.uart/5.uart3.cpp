@@ -68,7 +68,7 @@ void setup()
 {
     ebox_init();
     uart3.begin(9600);
-    uart3.attach(test);
+    uart3.attach(test,RxIrq);
 }
 
 float x, y;

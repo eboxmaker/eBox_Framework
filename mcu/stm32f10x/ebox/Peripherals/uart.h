@@ -89,7 +89,7 @@ public:
      *  @param fptr A pointer to a void function, or 0 to set as none
      *  @param type Which serial interrupt to attach the member function to (Seriall::RxIrq for receive, TxIrq for transmit buffer empty)
      */
-    void attach(void (*fptr)(void), IrqType type=RxIrq);
+    void attach(void (*fptr)(void), IrqType type);
 
     /** Attach a member function to call whenever a serial interrupt is generated
      *
@@ -98,7 +98,7 @@ public:
      *  @param type Which serial interrupt to attach the member function to (Seriall::RxIrq for receive, TxIrq for transmit buffer empty)
      */
     template<typename T>
-    void attach(T* tptr, void (T::*mptr)(void), IrqType type=RxIrq) {
+    void attach(T* tptr, void (T::*mptr)(void), IrqType type) {
         if((mptr != NULL) && (tptr != NULL)) {
             _irq[type].attach(tptr, mptr);
         }

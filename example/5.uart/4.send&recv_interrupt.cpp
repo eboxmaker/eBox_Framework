@@ -42,7 +42,7 @@ void setup()
     ebox_init();
     uart1.begin(115200);
     uart1.attach(test,RxIrq);
-    uart1.attach(test1,TxIrq);
+    uart1.attach(test1,TcIrq);
     PB8.mode(OUTPUT_PP);
     PB8.reset();
 }

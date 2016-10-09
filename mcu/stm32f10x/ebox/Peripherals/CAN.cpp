@@ -1,5 +1,5 @@
 
-#include "CAN.h"
+#include "can.h"
 
 callback_fun_type can_callback_table;
 static uint32_t can_irq_id;

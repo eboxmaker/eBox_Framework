@@ -72,7 +72,7 @@ extern SoftI2c si2c;
 extern SoftI2c si2c1;
 extern SoftI2c si2c2;
 
-extern CAN can1;
+extern Can can1;
 
 extern Gpio PA0;
 extern Gpio PA1;
