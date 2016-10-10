@@ -18,8 +18,8 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "timer.h"
-#include "timer_it.h"
+#include "ebox_timer.h"
+#include "ebox_timer_it.h"
 
 
 static tim_irq_handler irq_handler;

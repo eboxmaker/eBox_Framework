@@ -10,7 +10,6 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060183::V5.06 update 2 (build 183)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F103C8</Device>
@@ -125,6 +124,47 @@
             <HexOffset>0</HexOffset>
             <Oh166RecLen>16</Oh166RecLen>
           </OPTHX>
+          <Simulator>
+            <UseSimulator>0</UseSimulator>
+            <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
+            <RunToMain>1</RunToMain>
+            <RestoreBreakpoints>1</RestoreBreakpoints>
+            <RestoreWatchpoints>1</RestoreWatchpoints>
+            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
+            <RestoreFunctions>1</RestoreFunctions>
+            <RestoreToolbox>1</RestoreToolbox>
+            <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
+            <RestoreSysVw>1</RestoreSysVw>
+          </Simulator>
+          <Target>
+            <UseTarget>1</UseTarget>
+            <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
+            <RunToMain>1</RunToMain>
+            <RestoreBreakpoints>1</RestoreBreakpoints>
+            <RestoreWatchpoints>1</RestoreWatchpoints>
+            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
+            <RestoreFunctions>0</RestoreFunctions>
+            <RestoreToolbox>1</RestoreToolbox>
+            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreSysVw>1</RestoreSysVw>
+          </Target>
+          <RunDebugAfterBuild>0</RunDebugAfterBuild>
+          <TargetSelection>6</TargetSelection>
+          <SimDlls>
+            <CpuDll></CpuDll>
+            <CpuDllArguments></CpuDllArguments>
+            <PeripheralDll></PeripheralDll>
+            <PeripheralDllArguments></PeripheralDllArguments>
+            <InitializationFile></InitializationFile>
+          </SimDlls>
+          <TargetDlls>
+            <CpuDll></CpuDll>
+            <CpuDllArguments></CpuDllArguments>
+            <PeripheralDll></PeripheralDll>
+            <PeripheralDllArguments></PeripheralDllArguments>
+            <InitializationFile></InitializationFile>
+            <Driver>Segger\JL2CM3.dll</Driver>
+          </TargetDlls>
         </DebugOption>
         <Utilities>
           <Flash1>
@@ -189,7 +229,6 @@
             <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
-            <nSecure>0</nSecure>
             <RoSelD>3</RoSelD>
             <RwSelD>3</RwSelD>
             <CodeSel>0</CodeSel>
@@ -326,10 +365,6 @@
             <useXO>0</useXO>
             <v6Lang>0</v6Lang>
             <v6LangP>0</v6LangP>
-            <vShortEn>1</vShortEn>
-            <vShortWch>1</vShortWch>
-            <v6Lto>0</v6Lto>
-            <v6WtE>0</v6WtE>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -523,89 +558,89 @@
           <GroupName>ebox</GroupName>
           <Files>
             <File>
-              <FileName>common.cpp</FileName>
+              <FileName>ebox_core.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\core\common.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\core\ebox_core.cpp</FilePath>
             </File>
             <File>
-              <FileName>core.cpp</FileName>
+              <FileName>ebox_common.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\core\core.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\core\ebox_common.cpp</FilePath>
             </File>
             <File>
-              <FileName>analog.cpp</FileName>
+              <FileName>ebox_analog.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\analog.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_analog.cpp</FilePath>
             </File>
             <File>
-              <FileName>exti.cpp</FileName>
+              <FileName>ebox_can.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\exti.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_can.cpp</FilePath>
             </File>
             <File>
-              <FileName>gpio.cpp</FileName>
+              <FileName>ebox_exti.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\gpio.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_exti.cpp</FilePath>
             </File>
             <File>
-              <FileName>i2c.cpp</FileName>
+              <FileName>ebox_gpio.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\i2c.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_gpio.cpp</FilePath>
             </File>
             <File>
-              <FileName>iflash.cpp</FileName>
+              <FileName>ebox_i2c.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\iflash.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_i2c.cpp</FilePath>
             </File>
             <File>
-              <FileName>in_capture.cpp</FileName>
+              <FileName>ebox_iflash.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\in_capture.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_iflash.cpp</FilePath>
             </File>
             <File>
-              <FileName>pwm.cpp</FileName>
+              <FileName>ebox_in_capture.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\pwm.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_in_capture.cpp</FilePath>
             </File>
             <File>
-              <FileName>rtc.cpp</FileName>
+              <FileName>ebox_pwm.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\rtc.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_pwm.cpp</FilePath>
             </File>
             <File>
-              <FileName>softi2c.cpp</FileName>
+              <FileName>ebox_rtc.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\softi2c.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_rtc.cpp</FilePath>
             </File>
             <File>
-              <FileName>spi.cpp</FileName>
+              <FileName>ebox_softi2c.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\spi.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_softi2c.cpp</FilePath>
             </File>
             <File>
-              <FileName>softspi.cpp</FileName>
+              <FileName>ebox_softspi.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\softspi.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_softspi.cpp</FilePath>
             </File>
             <File>
-              <FileName>timer.cpp</FileName>
+              <FileName>ebox_spi.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\timer.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_spi.cpp</FilePath>
             </File>
             <File>
-              <FileName>uart.cpp</FileName>
+              <FileName>ebox_timer.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\uart.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_timer.cpp</FilePath>
             </File>
             <File>
-              <FileName>wdg.cpp</FileName>
+              <FileName>ebox_uart.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\wdg.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_uart.cpp</FilePath>
             </File>
             <File>
-              <FileName>can.cpp</FileName>
+              <FileName>ebox_wdg.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\can.cpp</FilePath>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_wdg.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_it.cpp</FileName>

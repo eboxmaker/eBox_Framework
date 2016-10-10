@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    wdg.cpp
+  * @file    dac.h
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
@@ -16,33 +16,18 @@
   ******************************************************************************
   */
 
+/* Define to prevent recursive inclusion -------------------------------------*/
 
-/* Includes ------------------------------------------------------------------*/#include "wdg.h"
-#include "math.h"
-void Iwdg::begin(uint16_t ms)
+#ifndef __DAC_H
+#define __DAC_H
+#include "ebox_common.h"
+class DACCLASS
 {
 
-    uint8_t pr;
-    uint16_t rlr;
-
-    for(pr = 1; pr < 6; pr++)
-    {
-        rlr = ms * 40 / (4 * pow(2.0, pr));
-        if(rlr <= 0x0fff) break;
-    }
-    if(pr == 5 || rlr > 0x0fff)
-    {
-        pr = 5;
-        rlr = 0xfff;
-    }
-
-    IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
-    IWDG_SetPrescaler(pr);
-    IWDG_SetReload(rlr);
-    IWDG_ReloadCounter();
-    IWDG_Enable();
-}
-void Iwdg::feed()
-{
-    IWDG_ReloadCounter();    /*reload*/
-}
+public:
+    DACCLASS(Gpio *pin);
+    void begin(uint16_t *buf1, uint16_t *buf2, uint16_t buf_size);
+private:
+    Gpio *pin;
+};
+#endif

@@ -21,7 +21,7 @@
 #ifndef __UARTX_H
 #define __UARTX_H
 
-#include "common.h"
+#include "ebox_common.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include "FunctionPointer.h"

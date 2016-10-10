@@ -21,7 +21,7 @@
 #ifndef __GTIMER_H
 #define __GTIMER_H
 
-#include "common.h"
+#include "ebox_common.h"
 #include "FunctionPointer.h"
 /*
 	1.Ö§³Ötim1,2,3,4,5,6,7

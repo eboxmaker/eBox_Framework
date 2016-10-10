@@ -18,7 +18,7 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "i2c.h"
+#include "ebox_i2c.h"
 
 
 I2c::I2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin)

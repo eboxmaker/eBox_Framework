@@ -19,7 +19,7 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __ANALOG_H
 #define __ANALOG_H
-#include "gpio.h"
+#include "ebox_gpio.h"
 
 void        ADC1_init(void);
 

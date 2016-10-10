@@ -2,7 +2,7 @@
 #ifndef __CAN_H
 #define __CAN_H
 
-#include "common.h"
+#include "ebox_common.h"
 #include "FunctionPointer.h"
 
 typedef void (*can_irq_handler)(uint32_t id);

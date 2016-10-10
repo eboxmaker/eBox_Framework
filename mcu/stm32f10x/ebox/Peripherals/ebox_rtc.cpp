@@ -18,7 +18,7 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "rtc.h"
+#include "ebox_rtc.h"
 #define RTC_CFG_FLAG 0XA5A5
 #include "ebox.h"
 Rtc rtc;

@@ -18,8 +18,8 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "in_capture.h"
-#include "timer_it.h"
+#include "ebox_in_capture.h"
+#include "ebox_timer_it.h"
 extern uint16_t t1_overflow_times ;
 extern uint16_t t2_overflow_times ;
 extern uint16_t t3_overflow_times ;

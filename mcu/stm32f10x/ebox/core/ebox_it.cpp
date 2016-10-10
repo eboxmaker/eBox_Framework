@@ -19,8 +19,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "common.h"
-#include "timer_it.h"
+#include "ebox_common.h"
+#include "ebox_timer_it.h"
 __IO uint16_t t1_overflow_times = 0;
 __IO uint16_t t2_overflow_times = 0;
 __IO uint16_t t3_overflow_times = 0;

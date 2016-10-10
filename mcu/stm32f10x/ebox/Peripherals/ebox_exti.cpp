@@ -18,7 +18,7 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "exti.h"
+#include "ebox_exti.h"
 
 /** @defgroup exti 
   * @brief exti driver modules
