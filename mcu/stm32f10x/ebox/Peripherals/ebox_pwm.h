@@ -21,7 +21,7 @@
 #ifndef __PWM_H
 #define __PWM_H
 
-#include "common.h"
+#include "ebox_common.h"
 /*
 	1.支持TIM2,3,4下的CH1-4通道。
 	2.可以随时调用pwm的参数修改函数。调用setfrq函数不会改变占空比,但是会影响同定时器下其他通道的工作。

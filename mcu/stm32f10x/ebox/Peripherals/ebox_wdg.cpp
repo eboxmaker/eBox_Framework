@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    wdg.h
+  * @file    wdg.cpp
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
@@ -16,28 +16,34 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
 
-#ifndef __WDG_H
-#define __WDG_H
-#include "common.h"
-
-/**
- * 初始化独立看门狗
-   基本计算方法
- * pr:分频数:0~7(只有低 3 位有效!)
- * 分频因子=4*2^pr.但最大值只能是 256!
- * rlr:重装载寄存器值:低 11 位有效.
- * 时间计算(大概):Tout=((4*2^prer)*rlr)/40 (ms).
-   本函数内部已经做了相关计算；
-    输入参数为ms；1000代表1000ms；请在1s内喂一次狗。否则将会复位
- */
-class Iwdg
+/* Includes ------------------------------------------------------------------*/
+#include "ebox_wdg.h"
+#include "math.h"
+void Iwdg::begin(uint16_t ms)
 {
-public:
-    Iwdg() {};
-    void begin(uint16_t ms);
-    void feed();
-};
 
-#endif
+    uint8_t pr;
+    uint16_t rlr;
+
+    for(pr = 1; pr < 6; pr++)
+    {
+        rlr = ms * 40 / (4 * pow(2.0, pr));
+        if(rlr <= 0x0fff) break;
+    }
+    if(pr == 5 || rlr > 0x0fff)
+    {
+        pr = 5;
+        rlr = 0xfff;
+    }
+
+    IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
+    IWDG_SetPrescaler(pr);
+    IWDG_SetReload(rlr);
+    IWDG_ReloadCounter();
+    IWDG_Enable();
+}
+void Iwdg::feed()
+{
+    IWDG_ReloadCounter();    /*reload*/
+}

@@ -19,7 +19,7 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "common.h"
+#include "ebox_common.h"
 #include "stdlib.h"
 
 /** @defgroup common 

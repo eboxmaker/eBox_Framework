@@ -21,7 +21,7 @@
 #ifndef __SPI_H
 #define __SPI_H
 
-#include "common.h"
+#include "ebox_common.h"
 //spi相关公共宏和声明//////////////////////////////////
 #define SPI_MODE0 0x02
 #define SPI_MODE1 0x00

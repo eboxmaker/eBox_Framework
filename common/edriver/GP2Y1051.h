@@ -23,7 +23,7 @@
 #define  __GP2Y1051_H
 
 #include "ebox.h"
-#include "uart.h"
+#include "ebox_uart.h"
 
 
 

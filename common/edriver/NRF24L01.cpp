@@ -1,5 +1,5 @@
 #include "NRF24L01.h"
-#include "exti.h"
+#include "ebox_exti.h"
 uint8_t tx_addr[TX_ADR_WIDTH] = {0x34, 0x43, 0x10, 0x10, 0x01}; //发送地址
 uint8_t rx_addr_0[RX_ADR_WIDTH] = {0x34, 0x43, 0x10, 0x10, 0x01}; //发送地址
 uint8_t rx_addr_1[RX_ADR_WIDTH] = {0x34, 0x43, 0x10, 0x10, 0x01}; //发送地址

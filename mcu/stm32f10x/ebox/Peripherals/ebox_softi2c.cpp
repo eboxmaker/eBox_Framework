@@ -18,7 +18,7 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "i2c.h"
+#include "ebox_i2c.h"
 
 SoftI2c::SoftI2c(Gpio *scl, Gpio *sda)
 {

@@ -21,7 +21,7 @@
 #ifndef __I2C_H
 #define __I2C_H
 
-#include "common.h"
+#include "ebox_common.h"
 
 /*
 	1.Ö§³ÖI2C1ºÍI2C2

@@ -18,7 +18,7 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "spi.h"
+#include "ebox_spi.h"
 
 SoftSpi::SoftSpi(Gpio *sck, Gpio *miso, Gpio *mosi)
 {

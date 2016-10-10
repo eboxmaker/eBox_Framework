@@ -30,9 +30,9 @@
 #define __COMMON_H
 
 
-#include "core.h" 
-#include "gpio.h"
-#include "analog.h"
+#include "ebox_core.h" 
+#include "ebox_gpio.h"
+#include "ebox_analog.h"
 
 #define EBOX_VERSION "1.2"
 

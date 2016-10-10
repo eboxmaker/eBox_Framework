@@ -20,7 +20,7 @@
 
 #ifndef __EXTI_H
 #define __EXTI_H
-#include "common.h"
+#include "ebox_common.h"
 #include "FunctionPointer.h"
 
 /*

@@ -18,7 +18,7 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "spi.h"
+#include "ebox_spi.h"
 
 
 Spi::Spi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)

@@ -12,7 +12,7 @@ No part of this software may be used for any commercial activities by any form o
 Disclaimer
 This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
 */
-#include "dac.h"
+#include "ebox_dac.h"
 
 uint32_t DualSine12bit[100];
 #define DAC_DHR12RD_Address      0x40007420 //0x40007420

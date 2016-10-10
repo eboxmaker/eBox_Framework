@@ -27,7 +27,7 @@
 
 #ifndef __IN_CAPTURE_H
 #define __IN_CAPTURE_H
-#include "common.h"
+#include "ebox_common.h"
 #include "FunctionPointer.h"
 
 #define TIM_ICPOLARITY_FALLING TIM_ICPolarity_Falling

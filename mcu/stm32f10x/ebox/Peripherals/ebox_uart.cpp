@@ -18,7 +18,7 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "uart.h"
+#include "ebox_uart.h"
 
 
 uint8_t busy[5];

@@ -18,7 +18,7 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "common.h"
+#include "ebox_common.h"
 #define systick_no_interrupt()  SysTick->CTRL &=0xfffffffd
 #define systick_interrupt()     SysTick->CTRL |=0x0002
 extern "C" {
