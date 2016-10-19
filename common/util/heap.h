@@ -26,20 +26,20 @@ extern "C"{
 
 /*内存分配配置*/
 #define EN_SRAM_IN                  (1)
-#define EN_SRAM_EX                  (1)
-#define EN_SRAM_CCM                 (1)
+#define EN_SRAM_EX                  (0)
+#define EN_SRAM_CCM                 (0)
 
 #ifndef EN_SRAM_IN
     #define EN_SRAM_IN              (1)
 #endif
 #ifndef EN_SRAM_EX
-    #define EN_SRAM_EX              (1)
+    #define EN_SRAM_EX              (0)
 #endif
 #ifndef EN_SRAM_CCM
-    #define EN_SRAM_CCM             (1)
+    #define EN_SRAM_CCM             (0)
 #endif
 
-#define COUT_OF_MEM                 (3)                 //有多少块内存填写1、2、3
+#define COUT_OF_MEM                 (1)                 //有多少块内存填写1、2、3
 
 //内存种类
 typedef enum
@@ -74,7 +74,7 @@ typedef enum
 	#define cfgAPPLICATION_ALLOCATED_HEAP 0          //内存池在外部文件定义还是在fMalloc.c中定义      
 #endif
 
-#define cfgTOTAL_HEAP_SIZE1		( ( size_t ) ( 10 * 1024 ) )//内部内存池大小
+#define cfgTOTAL_HEAP_SIZE1		( ( size_t ) ( 5 * 1024 ) )//内部内存池大小
 #define cfgTOTAL_HEAP_SIZE2		( ( size_t ) ( 500 * 1024 ) )//外部内存池大小
 #define cfgTOTAL_HEAP_SIZE3		( ( size_t ) ( 60 * 1024 ) )//CCM内存池大小
 

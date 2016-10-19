@@ -369,7 +369,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcu\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\mcu\stm32f10x\ebox;..\..\..\mcu\stm32f10x\ebox\core;..\..\..\mcu\stm32f10x\ebox\Peripherals;..\..\..\common\util;..\..\..\common\edriver;..\..\..\common\network;..\..\..\common\fat;..\..\..\common\edriver\WiFi;..\..\..\user</IncludePath>
+              <IncludePath>..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcu\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\mcu\stm32f10x\ebox;..\..\..\mcu\stm32f10x\ebox\core;..\..\..\mcu\stm32f10x\ebox\Peripherals;..\..\..\common\util;..\..\..\common\edriver;..\..\..\common\network;..\..\..\common\fat;..\..\..\common\edriver\WiFi;..\..\..\user;..\..\..\common\cJSON</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -697,6 +697,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\util\WString.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ebox_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\util\ebox_mem.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -946,6 +951,16 @@
               <FileName>bsp.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\bsp.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>cJSON</GroupName>
+          <Files>
+            <File>
+              <FileName>cJSON.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\cJSON\cJSON.c</FilePath>
             </File>
           </Files>
         </Group>

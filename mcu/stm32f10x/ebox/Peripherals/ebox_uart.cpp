@@ -19,12 +19,10 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_uart.h"
+#include "ebox_mem.h"
 
 
 uint8_t busy[5];
-
-
-
 
 static uint32_t serial_irq_ids[UART_NUM] = {0, 0, 0,0,0};
 
@@ -329,31 +327,6 @@ void Uart::put_string(const char *str, uint16_t length)
     }
 }
 
-/**
- *@name     void Uart::put_string(const char *str)
- *@brief    串口方式发送一个字节
- *@param    str：   要发送的字符串,直到遇到'\0'，如果没有'\0'，则按最大缓冲区计算
- *@retval   已发送的数据
-*/
-void Uart::put_string(const char *str)
-{
-    uint16_t i = 0;
-    uint16_t length = 0;
-
-    wait_busy();
-    set_busy();
-    while(str[i++] != '\0')
-    {
-        length++;
-        if(length >= UART_MAX_SEND_BUF)
-        {
-            length = UART_MAX_SEND_BUF;
-            break;
-        }
-    };
-    put_string(str, length);
-
-}
 
 /////////////////////////////////////////////////
 /**
@@ -366,12 +339,16 @@ void Uart::put_string(const char *str)
 void Uart::printf_length(const char *str, uint16_t length)
 {
     wait_busy();
+    ebox_free(uart_buf);
     set_busy();
-    if(length >= UART_MAX_SEND_BUF)
-        length = UART_MAX_SEND_BUF;
+    uart_buf = (char *)ebox_malloc(length);
+    if(uart_buf == NULL)
+    {
+        return ;
+    }
     for(int i = 0; i < length; i++)
-        send_buf[i] = *str++;
-    put_string(send_buf, length);
+        uart_buf[i] = *str++;
+    put_string(uart_buf, length);
 }
 
 /**
@@ -381,28 +358,30 @@ void Uart::printf_length(const char *str, uint16_t length)
             length：    缓冲区的长度
  *@retval   已发送的数据
 */
+
 void Uart::printf(const char *fmt, ...)
 {
-    uint16_t i = 0;
-    uint16_t length = 0;
+    size_t size1=128,size2=128;
 
     wait_busy();
+    ebox_free(uart_buf);
     set_busy();
     va_list va_params;
     va_start(va_params, fmt);
-    vsprintf(send_buf, fmt, va_params); //存在内存溢出的风险
-    va_end(va_params);
+    
+    do{
+        uart_buf = (char *)ebox_malloc(size2);
+        size1 = _vsnprintf(uart_buf, size2,fmt, va_params);
+        if(size1 == -1)
+            size2+=128;
+        ebox_free(uart_buf);
+    }while(size1 == -1);
 
-    while(send_buf[i++] != '\0')
-    {
-        length++;
-        if(length >= UART_MAX_SEND_BUF)
-        {
-            length = UART_MAX_SEND_BUF;
-            break;
-        }
-    };
-    put_string(send_buf, length);
+    uart_buf = (char *)ebox_malloc(size1);
+    vsprintf(uart_buf, fmt, va_params); //存在内存溢出的风险
+    va_end(va_params);
+    put_string(uart_buf, size1);
+
 }
 
 
@@ -463,6 +442,27 @@ void Uart::set_busy()
         break;
     }
 }
+//void Uart::clear_buf()
+//{
+//    switch((uint32_t)_USARTx)
+//    {
+//    case (uint32_t)USART1_BASE:
+//        ebox_free(uart_buf);
+//        break;
+//    case (uint32_t)USART2_BASE:
+//        busy[1] = 0;
+//        break;
+//    case (uint32_t)USART3_BASE:
+//        busy[2] = 0;
+//        break;
+//    case (uint32_t)UART4_BASE:
+//        busy[3] = 0;
+//        break;
+//    case (uint32_t)UART5_BASE:
+//        busy[4] = 0;
+//        break;
+//    }
+//}
 
 
 void Uart::attach(void (*fptr)(void), IrqType type) {
@@ -488,7 +488,8 @@ extern "C" {
         }
         if(USART_GetITStatus(USART1, USART_IT_TC) == SET)
         {
-            busy[0] = 0;
+            busy[0] = 0;   
+
 						irq_handler(serial_irq_ids[NUM_UART1],TcIrq);
             USART_ClearITPendingBit(USART1, USART_IT_TC);
         }
