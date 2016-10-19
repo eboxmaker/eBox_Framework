@@ -343,9 +343,7 @@ void Uart::printf_length(const char *str, uint16_t length)
     set_busy();
     uart_buf = (char *)ebox_malloc(length);
     if(uart_buf == NULL)
-    {
         return ;
-    }
     for(int i = 0; i < length; i++)
         uart_buf[i] = *str++;
     put_string(uart_buf, length);
@@ -371,13 +369,17 @@ void Uart::printf(const char *fmt, ...)
     
     do{
         uart_buf = (char *)ebox_malloc(size2);
+        if(uart_buf == NULL)
+            return ;
         size1 = _vsnprintf(uart_buf, size2,fmt, va_params);
-        if(size1 == -1)
+        if(size1 == -1  || size1 > size2)
+        {
             size2+=128;
-        ebox_free(uart_buf);
+            size1 = -1;
+            ebox_free(uart_buf);
+        }
     }while(size1 == -1);
 
-    uart_buf = (char *)ebox_malloc(size1);
     vsprintf(uart_buf, fmt, va_params); //存在内存溢出的风险
     va_end(va_params);
     put_string(uart_buf, size1);

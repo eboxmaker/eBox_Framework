@@ -12,6 +12,7 @@
  */
 
 
+#include "bsp.h"
 #include "ebox.h"
 #include "w25x16.h"
 #include <sfud.h>
@@ -30,6 +31,7 @@ uint8_t buff[10]={1,2,3,4,5,6,7,8,9,10};
 void setup()
 {
     ebox_init();
+    led1.begin();
     uart1.begin(115200);
     uart1.printf("test\r\n");
     if (sfud_init() == SFUD_SUCCESS) {
@@ -39,16 +41,18 @@ void setup()
 
 }
 
-
 int16_t tmp[7];
 uint16_t id;
 uint8_t rbuf[100];
-uint8_t wbuf[100];
+uint8_t wbuf[100]="--printf length\r\n";
+char *wptr;
 int main(void)
 {
     setup();
     while(1)
     {
+        led1.toggle();
+        delay_ms(1000);
     }
 }
 
