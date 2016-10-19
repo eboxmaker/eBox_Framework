@@ -33,6 +33,7 @@
 #include "ebox_core.h" 
 #include "ebox_gpio.h"
 #include "ebox_analog.h"
+#include "ebox_mem.h"
 
 #define EBOX_VERSION "2.0"
 

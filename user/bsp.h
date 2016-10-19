@@ -38,7 +38,6 @@ extern Lcd      lcd;
 extern W25x16   flash;
 extern At24c02  eeprom;
 
-#define led PB8;
 
 
 #endif

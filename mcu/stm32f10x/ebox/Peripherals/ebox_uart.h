@@ -48,7 +48,7 @@
  *@retval   None
 */
 //用户配置//////////////
-#define USE_DMA 1//开启dma，只有串口1，2，3支持,4和5不支持
+#define USE_DMA 0//开启dma，只有串口1，2，3支持,4和5不支持
 
 #define UART_NUM (5)
 
