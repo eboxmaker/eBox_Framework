@@ -67,6 +67,8 @@ public:
     void    config(SPI_CONFIG_TYPE *spi_config);
     uint8_t read_config(void);
 
+    uint8_t transfer(uint8_t data);
+
     int8_t  write(uint8_t data);
     int8_t  write(uint8_t *data, uint16_t data_length);
 
@@ -96,12 +98,16 @@ public:
     void    config(SPI_CONFIG_TYPE *spi_config);
     uint8_t read_config(void);
 
+    uint8_t transfer(uint8_t data);
+
+
     int8_t  write(uint8_t data);
     int8_t  write(uint8_t *data, uint16_t data_length);
 
     uint8_t read();
     int8_t  read(uint8_t *data);
     int8_t  read(uint8_t *rcvdata, uint16_t data_length);
+
 public:
     int8_t take_spi_right(SPI_CONFIG_TYPE *spi_config);
     int8_t release_spi_right(void);
@@ -122,7 +128,6 @@ private:
     uint8_t transfer1(uint8_t data);
     uint8_t transfer2(uint8_t data);
     uint8_t transfer3(uint8_t data);
-    uint8_t transfer(uint8_t data);
 };
 
 #endif

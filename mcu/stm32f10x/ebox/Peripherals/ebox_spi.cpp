@@ -96,6 +96,15 @@ uint8_t Spi::read_config(void)
     return current_dev_num;
 }
 
+uint8_t Spi::transfer(uint8_t data)
+{
+    while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+        ;
+    spi->DR = data;
+    while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+        ;
+    return spi->DR;
+}
 
 int8_t Spi::write(uint8_t data)
 {
