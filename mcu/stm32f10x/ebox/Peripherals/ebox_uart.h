@@ -49,7 +49,6 @@
 */
 //用户配置//////////////
 #define USE_DMA 1//开启dma，只有串口1，2，3支持,4和5不支持
-#define UART_MAX_SEND_BUF 128
 
 #define UART_NUM (5)
 
@@ -77,7 +76,6 @@ public:
     void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit);
 
     int 	put_char(uint16_t ch);
-    void 	put_string(const char *str);
     void    printf_length(const char *str, uint16_t length);
     void    printf(const char *fmt, ...); //需要注意缓冲区溢出
     void    wait_busy();
@@ -109,7 +107,7 @@ public:
 private:
     USART_TypeDef       *_USARTx;
     DMA_Channel_TypeDef *_DMA1_Channelx;
-    char                send_buf[UART_MAX_SEND_BUF];
+    char                *uart_buf;
     uint16_t            dma_send_string(const char *str, uint16_t length);
     void                put_string(const char *str, uint16_t length);
     void                set_busy();
