@@ -14,7 +14,6 @@
 
 #include "bsp.h"
 #include "ebox.h"
-#include "w25x16.h"
 #include <sfud.h>
  
 #define SFUD_DEMO_TEST_BUFFER_SIZE                     1024
@@ -23,10 +22,6 @@ static void sfud_demo(uint32_t addr, size_t size, uint8_t *data);
 
 static uint8_t sfud_demo_test_buf[SFUD_DEMO_TEST_BUFFER_SIZE];
 
-
-#include "ebox_spi_port.h"
-
-uint8_t buff[10]={1,2,3,4,5,6,7,8,9,10};
 
 void setup()
 {
@@ -41,11 +36,6 @@ void setup()
 
 }
 
-int16_t tmp[7];
-uint16_t id;
-uint8_t rbuf[100];
-uint8_t wbuf[100]="--printf length\r\n";
-char *wptr;
 int main(void)
 {
     setup();

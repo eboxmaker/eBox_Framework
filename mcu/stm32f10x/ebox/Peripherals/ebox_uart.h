@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    uart.h
   * @author  shentq
-  * @version V1.2
+  * @version V2.0
   * @date    2016/08/14
   * @brief   
   ******************************************************************************
@@ -29,27 +29,27 @@
 /*
 	1.支持串口1,2,3,4,5；
 	2.支持一个中断事件 rx_it
-	3.发送模式采用DMA自动发送模式，大大节省cpu占用。发送缓存最大为UART_MAX_SEND_BUF，
+	3.发送模式采用DMA自动发送模式，大大节省cpu占用。
 	4.支持强大的printf
 	5.暂时不支持引脚的remap
+    6.支持动态申请内存和释放内存。
     注意：
-        发送缓冲区溢出可能导致单片机出现异常，
-        串口4，5没有使用DMA；
+        串口4，5没有使用DMA；即使初始化时使用DMA，也不会产生任何影响
         串口发送，不能在no_interrupt下连续执行两次。
 */
-
 /**
- *@name     void    begin(uint32_t baud_rate,uint8_t data_bit,uint8_t parity,float stop_bit);
- *@brief    串口初始化函数，并带有更多配置参数
- *@param    baud_rate:  波特率，例如9600，115200，38400等等
- *          data_bit:   数据位数，只能输入8或者9
- *          parity:     检验位；0：无校验位，1奇校验，2偶校验
- *          stop_bit:   停止位；0.5,1,1.5,2四个可选参数
- *@retval   None
-*/
-//用户配置//////////////
-#define USE_DMA 0//开启dma，只有串口1，2，3支持,4和5不支持
+ * Modification History:
+ * -shentq                  -version 2.0(2016/10/19)
+ *  *串口使用动态内存
+ * -shentq                  -version 2.0(2016/10/20)
+ *  *修复一个动态内存申请错误
+ *  *修改使用DMA配置方式，删除宏定义配置方式，改用初始化参数配置
+ *  *增加初始化的一种接口，支持更复杂的初始化要求
+ */
 
+
+
+//用户配置//////////////
 #define UART_NUM (5)
 
 enum IrqType {
@@ -72,8 +72,8 @@ class Uart
 public:
     Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin);
 
-    void    begin(uint32_t baud_rate);
-    void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit);
+    void    begin(uint32_t baud_rate,uint8_t _use_dma = 1);
+    void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit,uint8_t _use_dma);
 
     int 	put_char(uint16_t ch);
     void    printf_length(const char *str, uint16_t length);
@@ -108,6 +108,7 @@ private:
     USART_TypeDef       *_USARTx;
     DMA_Channel_TypeDef *_DMA1_Channelx;
     char                *uart_buf;
+    uint8_t             use_dma;
     uint16_t            dma_send_string(const char *str, uint16_t length);
     void                put_string(const char *str, uint16_t length);
     void                set_busy();

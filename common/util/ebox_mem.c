@@ -2,7 +2,7 @@
 #include "heap.h"
 void *ebox_malloc(size_t sz)
 {
-   memMalloc(sz,SRAM_IN - 1);       
+   return memMalloc(sz,SRAM_IN - 1);       
 }
 void ebox_free(void *ptr)
 {

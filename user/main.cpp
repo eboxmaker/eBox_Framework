@@ -17,10 +17,10 @@
 #include <sfud.h>
  
 #define SFUD_DEMO_TEST_BUFFER_SIZE                     1024
+
 static void sfud_demo(uint32_t addr, size_t size, uint8_t *data);
+
 static uint8_t sfud_demo_test_buf[SFUD_DEMO_TEST_BUFFER_SIZE];
-
-
 
 
 void setup()
@@ -35,6 +35,7 @@ void setup()
     }
 
 }
+
 int main(void)
 {
     setup();

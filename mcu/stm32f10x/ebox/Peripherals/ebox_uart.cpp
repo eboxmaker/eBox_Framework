@@ -43,19 +43,36 @@ Uart::Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin)
     tx_pin->mode(AF_PP);
     rx_pin->mode(INPUT);
 }
-
 /**
- *@name     void Uart::begin(uint32_t baud_rate)
+ *@name     void Uart::begin(uint32_t baud_rate,uint8_t _use_dma)
  *@brief    串口初始化函数，除了波特率可控外，其他参数默认：8bit数据，1个停止位，无校验，无硬件控制流
  *@param    baud_rate:  波特率，例如9600，115200，38400等等
+ *@param    _use_dma:   是否使用DMA，默认值1：使用DMA，0：不适用DMA;
  *@retval   None
 */
-void Uart::begin(uint32_t baud_rate)
+void    Uart::begin(uint32_t baud_rate,uint8_t _use_dma)
 {
-    uint8_t index;
-		USART_InitTypeDef USART_InitStructure;
+    Uart::begin(baud_rate,8,0,1,_use_dma);
+}
 
-    if(USE_DMA == 1)
+
+/**
+ *@name     void    begin(uint32_t baud_rate,uint8_t data_bit,uint8_t parity,float stop_bit,uint8_t _use_dma);
+ *@brief    串口初始化函数，并带有更多配置参数
+ *@param    baud_rate:  波特率，例如9600，115200，38400等等
+ *          data_bit:   数据位数，只能输入8或者9
+ *          parity:     检验位；0：无校验位，1奇校验，2偶校验
+ *          stop_bit:   停止位；0.5,1,1.5,2四个可选参数
+ *          _use_dma:   是否使用DMA，默认值1：使用DMA，0：不适用DMA;
+ *@retval   None
+*/
+void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit,uint8_t _use_dma)
+{
+    uint8_t             index;
+    USART_InitTypeDef   USART_InitStructure;
+    
+    use_dma = _use_dma;
+    if(use_dma == 1)
         RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);	//使能DMA时钟
 
     switch((uint32_t)_USARTx)
@@ -92,63 +109,8 @@ void Uart::begin(uint32_t baud_rate)
     }
 
     serial_irq_handler(index, Uart::_irq_handler, (uint32_t)this);
-		
-    USART_InitStructure.USART_BaudRate = baud_rate;
-    USART_InitStructure.USART_Parity = USART_Parity_No;
-    USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-    USART_InitStructure.USART_StopBits = USART_StopBits_1;
-    USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-    USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-    USART_Init(_USARTx, &USART_InitStructure);
-
-    if((_USARTx == USART1 | _USARTx == USART2 | _USARTx == USART3) && (USE_DMA == 1) )
-        USART_DMACmd(_USARTx, USART_DMAReq_Tx, ENABLE);
-    USART_Cmd(_USARTx, ENABLE);
-    interrupt(ENABLE);
-}
-/**
- *@name     void    begin(uint32_t baud_rate,uint8_t data_bit,uint8_t parity,float stop_bit);
- *@brief    串口初始化函数，并带有更多配置参数
- *@param    baud_rate:  波特率，例如9600，115200，38400等等
- *          data_bit:   数据位数，只能输入8或者9
- *          parity:     检验位；0：无校验位，1奇校验，2偶校验
- *          stop_bit:   停止位；0.5,1,1.5,2四个可选参数
- *@retval   None
-*/
-void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit)
-{
-    USART_InitTypeDef USART_InitStructure;
-    if (USE_DMA == 1)
-        RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);	//使能DMA时钟
-
-    switch((uint32_t)_USARTx)
-    {
-    case (uint32_t)USART1_BASE:
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
-        _DMA1_Channelx = DMA1_Channel4;
-        break;
-
-    case (uint32_t)USART2_BASE:
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
-        _DMA1_Channelx = DMA1_Channel7;
-        break;
-
-    case (uint32_t)USART3_BASE:
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
-        _DMA1_Channelx = DMA1_Channel2;
-        break;
-
-#if defined (STM32F10X_HD)
-    case (uint32_t)UART4_BASE:
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4, ENABLE);
-        break;
-
-    case (uint32_t)UART5_BASE:
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, ENABLE);
-        break;
-#endif
-    }
-
+    
+    
     USART_InitStructure.USART_BaudRate = baud_rate;
     switch(data_bit)
     {
@@ -177,22 +139,23 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
         USART_InitStructure.USART_Parity = USART_Parity_No;
         break;
     }
-    if(parity == 0.5)
+    if(stop_bit == 0.5)
         USART_InitStructure.USART_StopBits = USART_StopBits_0_5;
-    else if(parity == 1)
+    else if(stop_bit == 1)
         USART_InitStructure.USART_StopBits = USART_StopBits_1;
-    else if(parity == 1.5)
+    else if(stop_bit == 1.5)
         USART_InitStructure.USART_StopBits = USART_StopBits_1_5;
-    else if(parity == 2)
+    else if(stop_bit == 2)
         USART_InitStructure.USART_StopBits = USART_StopBits_2;
-
+		
     USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
     USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
     USART_Init(_USARTx, &USART_InitStructure);
 
-    if((_USARTx == USART1 | _USARTx == USART2 | _USARTx == USART3) && (USE_DMA == 1) )
+    if((_USARTx == USART1 | _USARTx == USART2 | _USARTx == USART3) && (use_dma == 1) )
         USART_DMACmd(_USARTx, USART_DMAReq_Tx, ENABLE);
     USART_Cmd(_USARTx, ENABLE);
+    interrupt(ENABLE);
 }
 
 /**
@@ -313,7 +276,7 @@ int Uart::put_char(uint16_t ch)
 */
 void Uart::put_string(const char *str, uint16_t length)
 {
-    if((_USARTx == USART1 | _USARTx == USART2 | _USARTx == USART3 ) && (USE_DMA == 1))
+    if((_USARTx == USART1 | _USARTx == USART2 | _USARTx == USART3 ) && (use_dma == 1))
     {
         dma_send_string(str, length);
     }
@@ -359,7 +322,8 @@ void Uart::printf_length(const char *str, uint16_t length)
 
 void Uart::printf(const char *fmt, ...)
 {
-    size_t size1=128,size2=128;
+    int     size1 = 0;
+    size_t  size2 = 256;
 
     wait_busy();
     ebox_free(uart_buf);
@@ -444,28 +408,6 @@ void Uart::set_busy()
         break;
     }
 }
-//void Uart::clear_buf()
-//{
-//    switch((uint32_t)_USARTx)
-//    {
-//    case (uint32_t)USART1_BASE:
-//        ebox_free(uart_buf);
-//        break;
-//    case (uint32_t)USART2_BASE:
-//        busy[1] = 0;
-//        break;
-//    case (uint32_t)USART3_BASE:
-//        busy[2] = 0;
-//        break;
-//    case (uint32_t)UART4_BASE:
-//        busy[3] = 0;
-//        break;
-//    case (uint32_t)UART5_BASE:
-//        busy[4] = 0;
-//        break;
-//    }
-//}
-
 
 void Uart::attach(void (*fptr)(void), IrqType type) {
     if (fptr) {

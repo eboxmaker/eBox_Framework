@@ -15,6 +15,17 @@
   * <h2><center>&copy; Copyright 2016 shentq. All Rights Reserved.</center></h2>
   ******************************************************************************
   */
+  /*
+	1.支持ebox所有的SPI接口
+	2.支持单条总线挂载多个FLASH
+	3.支持多条总线挂载多少个FLASH
+*/
+
+/**
+ * Modification History:
+ * -shentq                  -version 1.0(2016/10/20)
+ *  *删除全局缓冲区变量，改用动态申请内存
+ */
 
 #include "stdio.h"
 #include "stdlib.h"
@@ -75,7 +86,6 @@ struct flash_port flash_port_table[]=
 /***************************************************************************/
 char log_buf[256];
 
-//void sfud_log_debug(const char *file, const long line, const char *format, ...);
 static sfud_err     spi_write_read(const sfud_spi *spi, const uint8_t *write_buf, size_t write_size, uint8_t *read_buf,size_t read_size);
 static void         spi_lock(const sfud_spi *spi) ;
 static void         spi_unlock(const sfud_spi *spi) ;
