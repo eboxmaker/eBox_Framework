@@ -19,7 +19,7 @@
 #include "esp8266_tcp.h"
 
 
-#if 0
+#if 1
 #define TCP_DEBUG(...) uart1.printf(__VA_ARGS__)
 #else
 #define  TCP_DEBUG(...)
@@ -59,6 +59,14 @@ bool WIFI_TCP::connect(char *remote_ip, uint32_t remote_port, uint32_t local_por
     return wifi->create_TCP(remote_ip, remote_port, local_port);
 }
 
+bool WIFI_TCP::connected()
+{
+    if(wifi->get_IP_status() == WIFI_CONNECTED)
+        return true;
+    else
+        return false;
+
+}
 /**
 	* tcp send data.
 	*
@@ -81,7 +89,10 @@ uint16_t WIFI_TCP::send(uint8_t *buf, uint16_t len)
     }
     return len;
 }
-
+int WIFI_TCP::available()
+{
+    return wifi->available();
+}
 /**
 	* tcp read data.
 	*
@@ -96,7 +107,29 @@ uint16_t WIFI_TCP::read(uint8_t *buf)
     len = wifi->read(buf);
 
     return len;
-
+}
+/**
+	* read buffer until match ch
+    * @note must Coordinate available() use;!!!!!!!!!!!!
+	* @param buf - buffer to read .
+	* @retval >0 - read length.
+	* @retval 0 - failure.
+*/
+uint16_t WIFI_TCP::read_until(uint8_t *buf,char ch)
+{
+    int len = 0;
+    char c;
+    while(1){
+        if(available()){
+            buf[len] = wifi->read_one();
+            if(buf[len] == ch){
+                len++;
+                break;
+            }
+            len++;
+        }
+    }
+    return len;
 }
 
 /**
@@ -152,7 +185,6 @@ uint16_t WIFI_TCP::read(uint8_t *mux_id, uint8_t *buf)
     uint16_t len = 0;
     len = wifi->read(mux_id, buf);
     return len;
-
 }
 
 

@@ -43,6 +43,7 @@ void setup()
 
 }
 
+//uint8_t bk_buf[]="{\"M\":\"checkin\",\"ID\":\"" + DEVICEID + "\",\"K\":\"" + APIKEY + "\"}\n";
 int main(void)
 {
     int ret;
