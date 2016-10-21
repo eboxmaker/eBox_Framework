@@ -156,6 +156,8 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
         USART_DMACmd(_USARTx, USART_DMAReq_Tx, ENABLE);
     USART_Cmd(_USARTx, ENABLE);
     interrupt(ENABLE);
+USART_ClearITPendingBit(_USARTx, USART_IT_TC);
+USART_ClearFlag(USART2,USART_FLAG_TC); 
 }
 
 /**
@@ -170,8 +172,8 @@ void Uart::interrupt(FunctionalState enable)
 
     USART_ITConfig(_USARTx, USART_IT_RXNE, enable);
     USART_ITConfig(_USARTx, USART_IT_TC, enable);
-    USART_ClearITPendingBit(_USARTx, USART_IT_TC);
-
+USART_ClearITPendingBit(_USARTx, USART_IT_TC);
+USART_ClearFlag(USART2,USART_FLAG_TC); 
     switch((uint32_t)_USARTx)
     {
     case (uint32_t)USART1_BASE:
@@ -360,22 +362,53 @@ void Uart::printf(const char *fmt, ...)
 */
 void Uart::wait_busy()
 {
+    uint32_t last=millis();
     switch((uint32_t)_USARTx)
     {
     case (uint32_t)USART1_BASE:
-        while(busy[0] == 1);
+        while(busy[0] == 1 ){
+            if(USART_GetITStatus(USART1, USART_IT_TC) == SET){
+                irq_handler(serial_irq_ids[NUM_UART1],TcIrq);
+                USART_ClearITPendingBit(USART1, USART_IT_TC);
+                break;
+            }
+        }
         break;
     case (uint32_t)USART2_BASE:
-        while(busy[1] == 1);
+        while(busy[1] == 1 ){
+            if(USART_GetITStatus(USART2, USART_IT_TC) == SET){
+                irq_handler(serial_irq_ids[NUM_UART1],TcIrq);
+                USART_ClearITPendingBit(USART1, USART_IT_TC);
+                break;
+            }
+        }
         break;
     case (uint32_t)USART3_BASE:
-        while(busy[2] == 1);
+        while(busy[2] == 1 ){
+            if(USART_GetITStatus(USART3, USART_IT_TC) == SET){
+                irq_handler(serial_irq_ids[NUM_UART1],TcIrq);
+                USART_ClearITPendingBit(USART1, USART_IT_TC);
+                break;
+            }
+        }
         break;
     case (uint32_t)UART4_BASE:
-        while(busy[3] == 1);
+        while(busy[3] == 1 ){
+            if(USART_GetITStatus(UART4, USART_IT_TC) == SET){
+                irq_handler(serial_irq_ids[NUM_UART1],TcIrq);
+                USART_ClearITPendingBit(USART1, USART_IT_TC);
+                break;
+            }
+        }
         break;
     case (uint32_t)UART5_BASE:
-        while(busy[4] == 1);
+        while(busy[4] == 1 ){
+            if(USART_GetITStatus(UART5, USART_IT_TC) == SET){
+                irq_handler(serial_irq_ids[NUM_UART1],TcIrq);
+                USART_ClearITPendingBit(USART1, USART_IT_TC);
+                break;
+            }
+        }
         break;
     }
 }

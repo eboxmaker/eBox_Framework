@@ -24,6 +24,17 @@
 
 #define RX_BUFFER_SIZE 1024
 #define NET_DATA_BUFFER_SIZE 1024
+typedef enum {
+    WIFI_NO_SHIELD        = 255,   // for compatibility with WiFi Shield library
+    WIFI_IDLE_STATUS      = 0,
+    WIFI_NO_SSID_AVAIL    = 1,
+    WIFI_SCAN_COMPLETED   = 2,
+    WIFI_CONNECTED        = 3,
+    WIFI_CONNECT_FAILED   = 4,
+    WIFI_CONNECTION_LOST  = 5,
+    WIFI_DISCONNECTED     = 6
+} WIFI_STATUS_T;
+
 
 typedef enum
 {
@@ -40,8 +51,6 @@ typedef enum
     CMD_MODE = 1,
     TRANSPARENT_MODE = 2
 } WIFI_MODE_T;
-
-
 typedef enum
 {
     NEED_PLUS = 0,
@@ -70,6 +79,7 @@ public:
 
     ////顶层读写函数/////////////////////////////////////////////////////////////////////
     int         available();
+    char        read_one();
     uint16_t	read(unsigned char *buf);//返回长度信息
     uint16_t	read(uint8_t *mux_id, unsigned char *buf); //返回长度信息
     bool        send(const uint8_t *buffer, uint32_t len);
@@ -90,10 +100,10 @@ public:
     bool query_sta_netmask(char *msg);
     bool set_SoftAP_param(char *ssid, char *pwd, uint8_t chl = 7, uint8_t ecn = 4);
     bool get_joined_DeviceIP(char *list);
-    bool get_IP_status(char *list);
     bool get_local_IP(char *list);
     bool enable_MUX(void);
     bool disable_MUX(void);
+    WIFI_STATUS_T get_IP_status();
 
 
     bool create_TCP(char *addr, uint32_t port, uint32_t loca_port);
