@@ -20,9 +20,9 @@
 */
 
 #include "WString.h"
-
 #define strlen_P strlen
 #define strcpy_P strcpy
+#define PGM_P const char *
 /*********************************************/
 /*  Constructors                             */
 /*********************************************/
@@ -45,7 +45,7 @@ String::String(const __FlashStringHelper *pstr)
 	*this = pstr;
 }
 
-#ifdef __GXX_EXPERIMENTAL_CXX0X__
+#if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 String::String(String &&rval)
 {
 	init();
@@ -187,15 +187,15 @@ String & String::copy(const __FlashStringHelper *pstr, unsigned int length)
 		return *this;
 	}
 	len = length;
-	strcpy_P(buffer, (char *)pstr);
+	strcpy_P(buffer, (PGM_P)pstr);
 	return *this;
 }
 
-#ifdef __GXX_EXPERIMENTAL_CXX0X__
+#if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 void String::move(String &rhs)
 {
 	if (buffer) {
-		if (capacity >= rhs.len) {
+		if (rhs && capacity >= rhs.len) {
 			strcpy(buffer, rhs.buffer);
 			len = rhs.len;
 			rhs.len = 0;
@@ -223,7 +223,7 @@ String & String::operator = (const String &rhs)
 	return *this;
 }
 
-#ifdef __GXX_EXPERIMENTAL_CXX0X__
+#if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 String & String::operator = (String &&rval)
 {
 	if (this != &rval) move(rval);
@@ -247,7 +247,7 @@ String & String::operator = (const char *cstr)
 
 String & String::operator = (const __FlashStringHelper *pstr)
 {
-	if (pstr) copy(pstr, strlen_P((char *)pstr));
+	if (pstr) copy(pstr, strlen_P((PGM_P)pstr));
 	else invalidate();
 
 	return *this;
@@ -742,6 +742,11 @@ long String::toInt(void) const
 
 float String::toFloat(void) const
 {
-	if (buffer) return float(atof(buffer));
+	return float(toDouble());
+}
+
+double String::toDouble(void) const
+{
+	if (buffer) return atof(buffer);
 	return 0;
 }

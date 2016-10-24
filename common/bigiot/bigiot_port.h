@@ -12,7 +12,7 @@ public:
             WIFI_TCP::begin(); 
             return true;
         };
-        bool connect(String *remote_ip, uint32_t remote_port, uint16_t local_port);  
+        bool connect(const char *remote_ip, uint32_t remote_port, uint16_t local_port);  
         bool connected();
         uint16_t available();
         uint16_t read_until(uint8_t *buf,char ch);

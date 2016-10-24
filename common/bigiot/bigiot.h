@@ -26,15 +26,15 @@ public:
             BigIotPort::begin(); 
             return EOK;
         };
-        bool connect(String *remote_ip, uint32_t remote_port, uint16_t local_port);        
-        bool login(String *device_id,String *apikey);
-        bool logout(String *device_id,String *apikey);
-        bool realtime_data(String *device_id,String *data_id,uint32_t val);
-        bool get_server_time(String *date_time);
-        bool say(BIGIOT_USER_TYPE type,String *id,String *msg,String *sign = NULL);
-        bool active_alert(String *msg,BIGIOT_ALERT_TYPE type);
+        bool connect(const char *remote_ip, uint32_t remote_port, uint16_t local_port);        
+        bool login(const char *device_id,const char *apikey);
+        bool logout(const char *device_id,const char *apikey);
+        bool realtime_data(const char *device_id,const char *data_id,uint32_t val);
+        bool get_server_time(const char *date_time);
+        bool say(BIGIOT_USER_TYPE type,const char *id,const char *msg,const char *sign = NULL);
+        bool active_alert(const char *msg,BIGIOT_ALERT_TYPE type);
         bool quarry_status();
-        bool quarry_is_online(String *id_list);
+        bool quarry_is_online(const char *id_list);
         void process_message(uint8_t *buf);
         
         

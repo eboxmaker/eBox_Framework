@@ -1,8 +1,9 @@
 #include "bigiot_port.h"
 
-bool BigIotPort::connect(String *remote_ip, uint32_t remote_port, uint16_t local_port)
+
+bool BigIotPort::connect(const char *remote_ip, uint32_t remote_port, uint16_t local_port)
 {
-    return WIFI_TCP::connect(( char *)remote_ip->c_str(),remote_port,local_port);
+    return WIFI_TCP::connect((char *)remote_ip,remote_port,local_port);
 }
 bool BigIotPort::connected()
 {
