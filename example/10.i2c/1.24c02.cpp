@@ -14,6 +14,8 @@
 
 #include "ebox.h"
 #include "at24c02.h"
+#define EEPROM_write(address, p) {int i = 0; byte *pp = (byte*)&(p);for(; i < sizeof(p); i++) EEPROM.write(address+i, pp[i]);}
+#define EEPROM_read(address, p)  {int i = 0; byte *pp = (byte*)&(p);for(; i < sizeof(p); i++) pp[i]=EEPROM.read(address+i);}
 
 At24c02 ee(&i2c2);
 uint8_t data;

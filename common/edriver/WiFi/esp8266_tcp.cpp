@@ -67,6 +67,11 @@ bool WIFI_TCP::connected()
         return false;
 
 }
+bool WIFI_TCP::disconnect()
+{
+    return wifi->release_TCP();
+}
+
 /**
 	* tcp send data.
 	*

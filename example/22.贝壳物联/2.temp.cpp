@@ -26,17 +26,17 @@ uint16_t    local_port = 4321;
 //用户、设备接口
 String  USERID          = "897"; 
 String  DEVICEID        = "904"; 
-String  APIKEY          = "c6c5ef884"; 
+String  APIKEY          = "2571fd146"; 
 //实时数据接口
 String  DATA_ID         = "839";
 String  TEMPERATURE_ID  = "847";
 String  HUMIDITY_ID     = "848";
 ///////////////////////////////////
-#define postingInterval 10000
 String  temp;
 uint8_t     recv_buf[1024] = {0};
 uint16_t    len = 0;
 uint32_t    count = 0;
+
 void setup()
 {
     ebox_init();
@@ -52,55 +52,46 @@ void setup()
 int main(void)
 {
     int ret;
-
-    uint32_t last_time= 0;
-    uint32_t last_rt_time = 0;
-    uint32_t last_get_time = 0;
-    uint32_t lastCheckInTime = 0;
+    uint32_t last_time=millis();
+    uint32_t last_time1=millis();
+    uint32_t last_time2=millis();
     setup();
-
 
     while(1)
     {
-        if(!bigiot.connected()){
-            if(!bigiot.connect(&HOST, remote_port, local_port)){
-                uart1.printf("\nTCP connect failed!");
-                return 0;
-            }else{
-                uart1.printf("\nTCP connecte success!");
-            }
+        if(bigiot.online == true && bigiot.connected()){
 
-                
-        }
-        
-        if(millis() - lastCheckInTime > postingInterval || lastCheckInTime==0) {
-            lastCheckInTime = millis();
-            bigiot.login(&DEVICEID,&APIKEY);            
-        }   
-        if(bigiot.available())
             bigiot.process_message(recv_buf);
-        
-        if(bigiot.connected()){
-
-            if(millis() - last_rt_time > 4000 || last_rt_time == 0){
-                last_rt_time = millis();
+            if(millis() - last_time > 4000){
+                last_time = millis();
+                String user("897");
                 String msg(random(100));
-                ret = bigiot.say(BIGIOT_USER,&USERID,&msg);
+                ret = bigiot.say(BIGIOT_USER,&user,&msg);
                 ret = bigiot.realtime_data(&DEVICEID,&TEMPERATURE_ID, random(100));
             }
-            if(millis() - last_get_time > 11000 || last_get_time == 0){
-                last_get_time = millis();
+            if(millis() - last_time2 > 11000){
+                last_time2 = millis();
                 ret =  bigiot.get_server_time(&temp); 
-                        bigiot.quarry_status();
             }        
+        }else{
+            ret = bigiot.connect(&HOST, remote_port, local_port);
+            ret = bigiot.login(&DEVICEID,&APIKEY);           
+            if(bigiot.online == false && bigiot.connected()){
+                last_time=millis();
+                ret = bigiot.logout(&DEVICEID,&APIKEY);
+                while(millis() - last_time < 10000){
+                    uart1.printf("%d\n",10 - (millis() - last_time)/1000);
+                    delay_ms(1000);
+                }
+
+            }
+        }
+        if(millis() - last_time1 > 1000)
+        {
+            last_time1 = millis();
+            uart1.printf("free:%d\n",ebox_get_free());
         
         }
-//        if(millis() - last_time > 1000)
-//        {
-//            last_time = millis();
-//            uart1.printf("\nfree:%d",ebox_get_free());
-//        
-//        }
 
 
         

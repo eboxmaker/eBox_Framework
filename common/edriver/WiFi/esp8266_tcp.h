@@ -29,6 +29,7 @@ public:
 
     bool        connect(char *remote_ip, uint32_t remote_port, uint32_t local_port);
     bool        connected();
+    bool        disconnect();
     int         available();
     uint16_t    send(uint8_t *buf, uint16_t len);
     uint16_t    read(uint8_t *buf);

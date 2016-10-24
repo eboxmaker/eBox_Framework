@@ -29,7 +29,7 @@ char password[] = "dvmaster456";
 
 
 #if 1
-#define ESP_DEBUG(...) uart1.printf(__VA_ARGS__)
+#define ESP_DEBUG(...) uart1.printf("[ESP]"),uart1.printf(__VA_ARGS__)
 #else
 #define  ESP_DEBUG(...)
 #endif
@@ -1700,6 +1700,9 @@ bool ESP8266::set_AT_CIPSEND_single(const uint8_t *buffer, uint32_t len)
         }
         else
             ret = false;
+    }else{
+        ESP_DEBUG("SEND TIMEOUT!");
+        ret = false;
     }
 
     if (state == 1)
