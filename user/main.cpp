@@ -15,37 +15,34 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "bigiot.h"
 //WIFI_TCP tcp(&wifi);
 
+char *out;
 
 BigIot bigiot(&wifi);
 
-#define HOST    "www.bigiot.net"
-uint16_t    remote_port = 8181;
-uint16_t    local_port = 4321;
-//用户、设备接口
+#define     HOST            "www.bigiot.net"
+#define     postingInterval 5000
+uint16_t    remote_port     = 8181;
+uint16_t    local_port      = 4321;
 //用户、设备接口
 #define  USERID     "897"
-#define  DEVICEID   "904"
-#define  APIKEY     "c6c5ef884"
+#define  DEVICEID   "931"
+#define  APIKEY     "af1a1fde7"
 //实时数据接口
-#define  DATA_ID        "839"
-#define  TEMPERATURE_ID "847"
-#define  HUMIDITY_ID    "848"
+#define  DATA_ID        "865"
+#define  TEMPERATURE_ID "866"
+#define  HUMIDITY_ID    "867"
 
 ///////////////////////////////////
-#define postingInterval 10000
 uint8_t     recv_buf[1024] = {0};
 uint16_t    len = 0;
 uint32_t    count = 0;
+char *make_data();
+
 void setup()
 {
-    String teststr = "{111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111116789012345}";
     ebox_init();
     uart1.begin(115200);
     uart1.printf("-------------------------------\r\n");
-    uart1.printf("\ntest :%s",teststr.c_str());
-    uart1.printf("\ntest :len:%d",teststr.length());
-    uart1.printf("\ntest :end with }?:%d\n",teststr.endsWith("}"));
-
 
     PB8.mode(OUTPUT_PP);
     wifi.begin(&PA4, &uart2, 115200);
@@ -60,7 +57,7 @@ int main(void)
     uint32_t last_time= 0;
     uint32_t last_rt_time = 0;
     uint32_t last_get_time = 0;
-    uint32_t lastCheckInTime = 0;
+    uint32_t last_login_time = 0;
     setup();
 
 
@@ -73,31 +70,27 @@ int main(void)
             }else{
                 uart1.printf("\nTCP connecte success!");
             }
-
-                
         }
         
-        if(millis() - lastCheckInTime > postingInterval || lastCheckInTime==0) {
-            lastCheckInTime = millis();
-            bigiot.login(DEVICEID,APIKEY);            
+        if(millis() - last_login_time > postingInterval || last_login_time==0) {
+            last_login_time = millis();
+            bigiot.send_login(DEVICEID,APIKEY);            
         }   
         if(bigiot.available())
             bigiot.process_message(recv_buf);
         
-        if(bigiot.connected()){
+        if(bigiot.is_online()){
 
             if(millis() - last_rt_time > 4000 || last_rt_time == 0){
                 last_rt_time = millis();
-                const char msg[] = "123";                
-                ret = bigiot.say(BIGIOT_USER,USERID,msg);
-                ret = bigiot.realtime_data(DEVICEID,TEMPERATURE_ID, random(100));
-                ret = bigiot.realtime_data(DEVICEID,HUMIDITY_ID, random(100));
+                ret = bigiot.send_say(BIGIOT_USER,USERID,"say something");
+                out = make_data();
+                ret = bigiot.send_realtime_data(DEVICEID,(char *)out);
             }
             if(millis() - last_get_time > 11000 || last_get_time == 0){
                 last_get_time = millis();
-                char msg[10];                
-                ret =  bigiot.get_server_time(msg); 
-                        bigiot.quarry_status();
+                ret =  bigiot.send_query_server_time(); 
+                ret =  bigiot.send_query_status();
             }        
         
         }
@@ -114,6 +107,25 @@ int main(void)
 
 }
 
+char *make_data()
+{
+    cJSON * pJsonRoot = NULL;
+    pJsonRoot = cJSON_CreateObject();
+    if(NULL == pJsonRoot){
+        return NULL;
+    }
+    cJSON_AddNumberToObject(pJsonRoot, "865", random(100));
+    cJSON_AddNumberToObject(pJsonRoot, "866", random(100));
+    cJSON_AddNumberToObject(pJsonRoot, "867", random(100));
+
+    char *p;
+    p = cJSON_PrintUnformatted(pJsonRoot);
+    if(NULL == p){
+        cJSON_Delete(pJsonRoot);
+        return NULL;
+    }
+    return p;
+}
 
 
 
