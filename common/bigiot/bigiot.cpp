@@ -2,55 +2,57 @@
 
 #if 1
 #define BIG_DEBUG(...) uart1.printf("\n[BIGIOT]:");uart1.printf(__VA_ARGS__)
+#define BIG_SEND(...) uart1.printf("\n[BIG SEND]:");uart1.printf(__VA_ARGS__)
 #define BIG_RECV(...) uart1.printf("\n[BIG RECV]:");uart1.printf(__VA_ARGS__)
 #else
 #define BIG_DEBUG(...)
 #define BIG_RECV(...) 
 #endif
 
-bool BigIot::connect(const char *remote_ip, uint32_t remote_port, uint16_t local_port)
+bool BigIot::send_connect(const char *remote_ip, uint32_t remote_port, uint16_t local_port)
 {
-    uint32_t last_time = millis();
-    uint8_t buf[512]={0};
-    uint16_t len = 0;
     bool ret;
-    
     ret = BigIotPort::connect(remote_ip,remote_port,local_port);
-    BIG_DEBUG("TCP connecting...");
-
-    
+    if(ret){
+        BIG_DEBUG("TCP connecting...");
+    }else{
+        BIG_DEBUG("TCP connect failed!");
+    }
     return ret;
-
 }    
 
-bool BigIot::login(const char *device_id,const char *apikey)
+bool BigIot::send_login(const char *device_id,const char *apikey)
 {
     String str_device_id(device_id);
     String str_apikey(apikey);
 
     bool ret;
-    uint16_t len = 0;
-    uint8_t buf[512]={0};
-    uint32_t last_time = millis();
     String msg="{\"M\":\"checkin\",\"ID\":\"" + str_device_id + "\",\"K\":\"" + str_apikey + "\"}\n";
     ret = send((uint8_t*)msg.c_str(),msg.length());
-    BIG_DEBUG("LOGIN:%s",msg.c_str());
-    BIG_DEBUG("LOGIN......");
-    
-    return online;
+    if(ret){
+        BIG_SEND("[%s]",msg.c_str());
+        BIG_DEBUG("LOGIN......");
+    }else{
+        BIG_DEBUG("login cmd send error!");
+    }
+    return ret;
 
 }
-bool BigIot::logout(const char *device_id,const char *apikey)
+bool BigIot::send_logout(const char *device_id,const char *apikey)
 {
 
     String str_device_id(device_id);
     String str_apikey(apikey);
     bool ret;
-    uint32_t last_time = millis();
+    
     String msg="{\"M\":\"checkout\",\"ID\":\""+str_device_id+"\",\"K\":\""+str_apikey+"\"}\n";
-    BIG_DEBUG("logout......");
     ret = send((uint8_t*)msg.c_str(),msg.length());
-    BIG_DEBUG("LOGOUT:%s",msg.c_str());
+    if(ret){
+        BIG_SEND("[%s]",msg.c_str());
+        BIG_DEBUG("logout......");
+    }else{
+        BIG_DEBUG("logout cmd send error!");
+    }
     delay_ms(500);
     disconnect();
     delay_ms(500);
@@ -58,45 +60,28 @@ bool BigIot::logout(const char *device_id,const char *apikey)
     if( (!connected()))
     {
         online = false;
-        BIG_DEBUG("logout success!");
-        
+        BIG_DEBUG("logout success!");        
     }
-   
-    return online;
+    return ret;
 
 }
-bool BigIot::realtime_data(const char *device_id,const char *data_id,uint32_t val)
+
+bool BigIot::send_realtime_data(const char *device_id,char *val_list)
 {
     String str_device_id(device_id);
-    String str_data_id(data_id);
-    String VAL(val);
+    String str_buf(val_list);
     bool ret;
-    String str = "{\"M\":\"update\",\"ID\":" + str_device_id + ",\"V\":{\"" + str_data_id + "\":" + VAL + "}}\n";
+    String str = "{\"M\":\"update\",\"ID\":" + str_device_id + ",\"V\":" + str_buf +"}\n";
     ret = send((uint8_t *)str.c_str(), str.length());
-    BIG_DEBUG("real time data:%s",str.c_str());
     if(ret){
-        return true;
+        BIG_SEND("[%s]",str.c_str());
+    }else{
+        BIG_DEBUG("realtime_data cmd send failed!");        
     }
-    else{
-        return false;
-    }
+    return ret;
 }
 
-bool BigIot::get_server_time(const char *date_time)
-{
-    bool ret;
-    String str = "{\"M\":\"time\",\"F\":\"Y-m-d H:i:s\"}\n";
-    ret = send((uint8_t *)str.c_str(), str.length());
-    BIG_DEBUG("get server time:%s",str.c_str());
-    if(ret){
-        return true;
-
-    }
-    else{
-        return false;
-    }
-}
-bool BigIot::active_alert(const char *msg,BIGIOT_ALERT_TYPE type)
+bool BigIot::send_active_alert(const char *msg,BIGIOT_ALERT_TYPE type)
 {
     String str_msg(msg);
     bool ret;
@@ -118,51 +103,55 @@ bool BigIot::active_alert(const char *msg,BIGIOT_ALERT_TYPE type)
     }
     String str = "{\"M\":\"alert\",\"C\":\""+str_msg+"\",\"B\":\""+_type+"}\n";
     ret = send((uint8_t *)str.c_str(), str.length());
-    BIG_DEBUG("get server time:%s",str.c_str());
     if(ret){
-        return true;
-
+        BIG_SEND("[%s]",str.c_str());
+    }else{
+        BIG_DEBUG("alert cmd send failed!");                
     }
-    else{
-        return false;
-    }
-
+    return ret;
 }
-bool BigIot::quarry_status()
+bool BigIot::send_query_server_time()
+{
+    bool ret;
+    String str = "{\"M\":\"time\",\"F\":\"Y-m-d H:i:s\"}\n";
+    ret = send((uint8_t *)str.c_str(), str.length());
+    if(ret){
+        BIG_SEND("[%s]",str.c_str());
+    }else{
+        BIG_DEBUG("query server time cmd send failed!");                
+    }
+    return ret;
+}
+bool BigIot::send_query_status()
 {
     bool ret;
     String str = "{\"M\":\"status\"}\n";
     ret = send((uint8_t *)str.c_str(), str.length());
-    BIG_DEBUG("quarry status!");
     if(ret){
-        return true;
-
+        BIG_SEND("[%s]",str.c_str());
+    }else{
+        BIG_DEBUG("query status cmd send failed!");                        
     }
-    else{
-        return false;
-    }
-
+    return ret;
 }
-bool BigIot::quarry_is_online(const char *id_list)
+bool BigIot::send_query_is_online(const char *id_list)
 {
     String str_id_list(id_list);
     
     bool ret;
     String str = "{\"M\":\"isOL\",\"ID\":[\""+ str_id_list +"\"]}\n";
     ret = send((uint8_t *)str.c_str(), str.length());
-    BIG_DEBUG("get server time:%s",str.c_str());
     if(ret){
-        return true;
-
+        BIG_SEND("[%s]",str.c_str());
+    }else{
+        BIG_DEBUG("query is online cmd send failed!");                        
     }
-    else{
-        return false;
-    }
+    return ret;
 
 }
 
 
-bool BigIot::say(BIGIOT_USER_TYPE type,const char *id,const char *msg,const char *sign)
+bool BigIot::send_say(BIGIOT_USER_TYPE type,const char *id,const char *msg,const char *sign)
 {
     String str_id(id);
     String str_msg(msg);
@@ -187,29 +176,34 @@ bool BigIot::say(BIGIOT_USER_TYPE type,const char *id,const char *msg,const char
         }
     }
    ret = send((uint8_t *)str.c_str(), str.length());
-    BIG_DEBUG("SAY:%s",str.c_str());
     if(ret){
-        return true;
+        BIG_SEND("[%s]",str.c_str());
+    }else{
+        BIG_DEBUG("say cmd send failed!");                                
     }
-    else{
-        return false;
-    }
+    return ret;
 }
+bool BigIot::is_online()
+{
+    if(online)return true;
+    else return false;
+}
+
 void BigIot::process_message(uint8_t *buf)
 {
     uint16_t len=0;
     
+    if(millis() - last_login_time > 60000)online = false;
+    
     len = read_until(buf,'\n');
     if(len > 0){
         buf[len -1 ] = '\0';
+        BIG_RECV("[%s],buf len =%d",(const char *)buf,len);
         String str=(const char *)buf;
-        BIG_RECV("==%s==,buf len =%d",(const char *)buf,len);
         if(str.startsWith("{") && str.endsWith("}")){
-            BIG_DEBUG("str:[%s],str len=%d",str.c_str(),str.length());
             cJSON * pJson =cJSON_Parse((const char*)buf);
             cJSON * method = cJSON_GetObjectItem(pJson, "M");
             String M = method->valuestring;
-            BIG_DEBUG("M:[%s]",M.c_str());
             if(M == "say"){
                 cJSON * content = cJSON_GetObjectItem(pJson, "C");
                 cJSON * client_id = cJSON_GetObjectItem(pJson, "ID");
@@ -228,18 +222,21 @@ void BigIot::process_message(uint8_t *buf)
                 cJSON * content = cJSON_GetObjectItem(pJson, "T");
                 String T = content->valuestring;
                 BIG_DEBUG(T.c_str());
-            
             }
             if(M == "checkinok"){
+                last_login_time = millis();
                 BIG_DEBUG("device checkin ok!");
                 online = true;
             }
             cJSON_Delete(pJson);
             cJSON_Delete(method);
+            /*
+            add more code...
+            */
         }else{
-            BIG_DEBUG("recv data error!!!");
-            
+            BIG_DEBUG("recv data error!!!");            
         }
-    }
-    
+    }    
 }
+
+
