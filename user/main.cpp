@@ -26,7 +26,7 @@ uint16_t    local_port      = 4321;
 //用户、设备接口
 #define  USERID     "897"
 #define  DEVICEID   "931"
-#define  APIKEY     "af1a1fde7"
+#define  APIKEY     "d28fa984b"
 //实时数据接口
 #define  DATA_ID        "865"
 #define  TEMPERATURE_ID "866"
@@ -42,6 +42,11 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
+    uart1.printf("-------------------------------\r\n");
+    uart1.printf("-------------------------------\r\n");
+    uart1.printf("-------------------------------\r\n");
+    uart1.printf("-------------------------------\r\n");
+    uart1.printf("-------------------------------\r\n");
     uart1.printf("-------------------------------\r\n");
 
     PB8.mode(OUTPUT_PP);
@@ -66,7 +71,6 @@ int main(void)
         if(!bigiot.connected()){
             if(!bigiot.connect(HOST, remote_port, local_port)){
                 uart1.printf("\nTCP connect failed!");
-                return 0;
             }else{
                 uart1.printf("\nTCP connecte success!");
             }
@@ -86,6 +90,7 @@ int main(void)
                 ret = bigiot.send_say(BIGIOT_USER,USERID,"say something");
                 out = make_data();
                 ret = bigiot.send_realtime_data(DEVICEID,(char *)out);
+                ebox_free(out);
             }
             if(millis() - last_get_time > 11000 || last_get_time == 0){
                 last_get_time = millis();
@@ -94,12 +99,12 @@ int main(void)
             }        
         
         }
-//        if(millis() - last_time > 1000)
-//        {
-//            last_time = millis();
-//            uart1.printf("\nfree:%d",ebox_get_free());
-//        
-//        }
+        if(millis() - last_time > 1000)
+        {
+            last_time = millis();
+            uart1.printf("\nfree:%d",ebox_get_free());
+        
+        }
 
 
         
@@ -124,6 +129,7 @@ char *make_data()
         cJSON_Delete(pJsonRoot);
         return NULL;
     }
+        cJSON_Delete(pJsonRoot);
     return p;
 }
 

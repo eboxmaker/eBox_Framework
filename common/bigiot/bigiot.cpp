@@ -1,3 +1,23 @@
+/**
+  ******************************************************************************
+  * @file    bigiot.cpp
+  * @author  shentq
+  * @version V0.1
+  * @date    2016/10/26
+  * @brief   
+  ******************************************************************************
+  * @attention
+  *
+  * No part of this software may be used for any commercial activities by any form 
+  * or means, without the prior written consent of shentq. This specification is 
+  * preliminary and is subject to change at any time without notice. shentq assumes
+  * no responsibility for any errors contained herein.
+  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
+  ******************************************************************************
+  */
+
+
+/* Includes ------------------------------------------------------------------*/
 #include "bigiot.h"
 
 #if 1
@@ -146,6 +166,7 @@ bool BigIot::send_query_is_online(const char *id_list)
     }else{
         BIG_DEBUG("query is online cmd send failed!");                        
     }
+    
     return ret;
 
 }
@@ -193,7 +214,10 @@ void BigIot::process_message(uint8_t *buf)
 {
     uint16_t len=0;
     
-    if(millis() - last_login_time > 60000)online = false;
+    if(millis() - last_login_time > 60000){
+        BIG_DEBUG("offline!!!!");
+        online = false;
+    }
     
     len = read_until(buf,'\n');
     if(len > 0){
@@ -227,6 +251,17 @@ void BigIot::process_message(uint8_t *buf)
                 last_login_time = millis();
                 BIG_DEBUG("device checkin ok!");
                 online = true;
+            }
+            if(M == "checked")
+            {
+                last_login_time = millis();
+                BIG_DEBUG("device checkin ok!");
+                online = true;
+            
+            }else if(M == "connected")
+            {
+                BIG_DEBUG("device connected but checkin error!");
+                online = false;
             }
             cJSON_Delete(pJson);
             cJSON_Delete(method);
