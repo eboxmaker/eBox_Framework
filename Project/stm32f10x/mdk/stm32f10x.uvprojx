@@ -832,6 +832,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\w5500.cpp</FilePath>
             </File>
+            <File>
+              <FileName>si4432.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\si4432.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1033,21 +1038,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>user</GroupName>
-          <Files>
-            <File>
-              <FileName>main.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\main.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>bsp.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\bsp.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>BigIOT</GroupName>
           <Files>
             <File>
@@ -1059,6 +1049,21 @@
               <FileName>bigiot_port.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\common\bigiot\bigiot_port.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>user</GroupName>
+          <Files>
+            <File>
+              <FileName>main.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\main.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>bsp.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\bsp.cpp</FilePath>
             </File>
           </Files>
         </Group>
