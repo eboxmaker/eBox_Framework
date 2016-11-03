@@ -215,7 +215,7 @@ void ebox_printf(const char *fmt , ... )
         }
     }while(ret == -1);
     va_end(va_params);
-    uart1.printf_length((const char*)buf, ret);
+    uart1.write((const char*)buf, ret);
     //uart1.printf(" ====%d===", ebox_get_free());
     //uart1.wait_busy();
     ebox_free(buf);

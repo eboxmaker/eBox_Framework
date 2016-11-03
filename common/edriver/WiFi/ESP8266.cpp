@@ -133,7 +133,7 @@ void net_data_state_process(char c)
 void ESP8266::get_char(void)
 {
     char c;
-    c = uart->receive();
+    c = uart->read();
     last_time = millis();
     if(wifi_mode == TRANSPARENT_MODE)
     {
@@ -1709,7 +1709,7 @@ bool ESP8266::set_AT_CIPSEND_single(const uint8_t *buffer, uint32_t len)
     {
         clear_rx_cdm_buffer();
         //       uart->put_string((char *)buffer,len);
-        uart->printf_length((const char *)buffer, len);
+        uart->write((const char *)buffer, len);
         if(wait_cmd("SEND OK", TIMEOUT_TIME) == RECEIVED)
         {
             if(search_str(rx_cmd_buf, "SEND OK") != -1) //
@@ -1758,10 +1758,8 @@ bool ESP8266::set_AT_CIPSEND_multiple(uint8_t mux_id, const uint8_t *buffer, uin
     if (state == 1)
     {
         clear_rx_cdm_buffer();
-        for (uint32_t i = 0; i < len; i++)
-        {
-            uart->put_char(buffer[i]);
-        }
+        uart->write(buffer,len);
+
         if(wait_cmd("SEND OK", TIMEOUT_TIME) == RECEIVED)
         {
             if(search_str(rx_cmd_buf, "SEND OK") != -1) //

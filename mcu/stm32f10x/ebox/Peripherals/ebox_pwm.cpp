@@ -55,14 +55,20 @@ void Pwm::base_init(uint16_t period, uint16_t prescaler)
 
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 
-    RCC_APB1PeriphClockCmd(rcc, ENABLE);
+    if(rcc == RCC_APB2Periph_TIM1 ||  rcc == RCC_APB2Periph_TIM8 )
+    {
+        RCC_APB2PeriphClockCmd(rcc, ENABLE);
+        TIM_CtrlPWMOutputs(TIMx,ENABLE); 
+    }
+    else    
+        RCC_APB1PeriphClockCmd(rcc, ENABLE);
     TIM_TimeBaseStructure.TIM_Period = this->period - 1; //ARR
     TIM_TimeBaseStructure.TIM_Prescaler = prescaler - 1;
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; //
     TIM_TimeBaseInit(TIMx, &TIM_TimeBaseStructure);
+    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 
     TIM_ARRPreloadConfig(TIMx, ENABLE);
-
     TIM_Cmd(TIMx, ENABLE); //
 
 }
@@ -72,6 +78,7 @@ void Pwm::init_info(Gpio *pwm_pin)
     {
         switch(pwm_pin->pin)
         {
+        //TIM2
         case GPIO_Pin_0:
             TIMx = TIM2;
             rcc = RCC_APB1Periph_TIM2;
@@ -92,7 +99,8 @@ void Pwm::init_info(Gpio *pwm_pin)
             rcc = RCC_APB1Periph_TIM2;
             ch = TIMxCH4;//irq = TIM2_IRQn;
             break;
-
+        
+        //TIM3
         case GPIO_Pin_6:
             TIMx = TIM3;
             rcc = RCC_APB1Periph_TIM3;
@@ -103,15 +111,27 @@ void Pwm::init_info(Gpio *pwm_pin)
             rcc = RCC_APB1Periph_TIM3;
             ch = TIMxCH2;//irq = TIM3_IRQn;
             break;
+        
+        //TIM1
+        case GPIO_Pin_8:
+            TIMx = TIM1;
+            rcc = RCC_APB2Periph_TIM1;
+            ch = TIMxCH1;//irq = TIM4_IRQn;
+            break;
+        case GPIO_Pin_9:
+            TIMx = TIM1;
+            rcc = RCC_APB2Periph_TIM1;
+            ch = TIMxCH2;//irq = TIM4_IRQn;
+            break;
         case GPIO_Pin_10:
-            TIMx = TIM3;
-            rcc = RCC_APB1Periph_TIM3;
-            ch = TIMxCH3;//irq = TIM3_IRQn;
+            TIMx = TIM1;
+            rcc = RCC_APB2Periph_TIM1;
+            ch = TIMxCH3;//irq = TIM4_IRQn;
             break;
         case GPIO_Pin_11:
-            TIMx = TIM3;
-            rcc = RCC_APB1Periph_TIM3;
-            ch = TIMxCH4;//irq = TIM3_IRQn;
+            TIMx = TIM1;
+            rcc = RCC_APB2Periph_TIM1;
+            ch = TIMxCH4;//irq = TIM4_IRQn;
             break;
         }
     }
@@ -119,6 +139,7 @@ void Pwm::init_info(Gpio *pwm_pin)
     {
         switch(pwm_pin->pin)
         {
+        //TIM4
         case GPIO_Pin_6:
             TIMx = TIM4;
             rcc = RCC_APB1Periph_TIM4;
@@ -138,6 +159,18 @@ void Pwm::init_info(Gpio *pwm_pin)
             TIMx = TIM4;
             rcc = RCC_APB1Periph_TIM4;
             ch = TIMxCH4;//irq = TIM4_IRQn;
+            break;
+        
+        //TIM3
+        case GPIO_Pin_0:
+            TIMx = TIM3;
+            rcc = RCC_APB1Periph_TIM3;
+            ch = TIMxCH3;//irq = TIM3_IRQn;
+            break;
+        case GPIO_Pin_1:
+            TIMx = TIM3;
+            rcc = RCC_APB1Periph_TIM3;
+            ch = TIMxCH4;//irq = TIM3_IRQn;
             break;
         }
     }
@@ -210,7 +243,6 @@ void Pwm::_set_duty(uint16_t duty)
     pulse = (uint16_t) (( percent  * period ));
 
     TIM_OCInitTypeDef  TIM_OCInitStructure;
-
     TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
     TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
     TIM_OCInitStructure.TIM_OCPolarity = oc_polarity;

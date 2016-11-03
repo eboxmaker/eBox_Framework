@@ -29,6 +29,8 @@ static uint32_t serial_irq_ids[UART_NUM] = {0, 0, 0,0,0};
 static uart_irq_handler irq_handler;
 
 
+
+
 /**
  *@name     Uart::Uart(USART_TypeDef *USARTx,Gpio *tx_pin,Gpio *rx_pin)
  *@brief    串口的构造函数
@@ -161,6 +163,90 @@ USART_ClearFlag(USART2,USART_FLAG_TC);
 }
 
 /**
+ *@name     size_t Uart::write(uint8_t c)
+ *@brief    串口方式发送一个字节
+ *@param    ch：    要发送的字符
+ *@retval   已发送的数据
+*/
+size_t Uart::write(uint8_t c)
+{
+    while(USART_GetFlagStatus(_USARTx, USART_FLAG_TXE) == RESET);//单字节等待，等待寄存器空
+    USART_SendData(_USARTx, c);
+    return 1;
+}
+
+/**
+ *@name     size_t Uart::write(const uint8_t *buffer, size_t size)
+ *@brief    串口方式发送一个缓冲区
+ *@param    buffer:   缓冲区指针
+            size：    缓冲区大小
+ *@retval   已发送的数据
+*/
+size_t Uart::write(const uint8_t *buffer, size_t size)
+{
+    wait_busy();
+    if(uart_buf != NULL)
+        ebox_free(uart_buf);
+    set_busy();
+    uart_buf = (char *)ebox_malloc(size);
+    if(uart_buf == NULL)
+        return 0;
+    for(int i = 0; i < size; i++)
+        uart_buf[i] = *buffer++;
+    _write(uart_buf, size);
+	return size;
+}
+/**
+ *@name     uint16_t Uart::read()
+ *@brief    串口接收数据，此函数只能在用户接收中断中调用
+ *@param    NONE
+ *@retval   串口所接收到的数据
+*/
+uint16_t Uart::read()
+{
+    return (uint16_t)(_USARTx->DR & (uint16_t)0x01FF);
+}
+/**
+ *@name     int Uart::put_char(uint16_t ch)
+ *@brief    串口方式发送一个字节
+ *@param    str：       要发送的字符串，数据缓冲区
+            length：    缓冲区的长度
+ *@retval   已发送的数据
+*/
+
+void Uart::printf(const char *fmt, ...)
+{
+    int     size1 = 0;
+    size_t  size2 = 256;
+
+    wait_busy();
+    if(uart_buf != NULL)
+        ebox_free(uart_buf);
+    set_busy();
+    va_list va_params;
+    va_start(va_params, fmt);
+    
+    do{
+        uart_buf = (char *)ebox_malloc(size2);
+        if(uart_buf == NULL)
+            return ;
+        size1 = _vsnprintf(uart_buf, size2,fmt, va_params);
+        if(size1 == -1  || size1 > size2)
+        {
+            size2+=128;
+            size1 = -1;
+            ebox_free(uart_buf);
+        }
+    }while(size1 == -1);
+
+    vsprintf(uart_buf, fmt, va_params); 
+    va_end(va_params);
+    _write(uart_buf, size1);
+
+}
+///////////////////////////////////////////////////////////////
+
+/**
  *@name     void Uart::interrupt(FunctionalState enable)
  *@brief    串口中断控制函数
  *@param    enable:  ENABLE使能串口的发送完成和接收中断；DISABLE：关闭这两个中断
@@ -215,16 +301,6 @@ USART_ClearFlag(USART2,USART_FLAG_TC);
 }
 
 
-/**
- *@name     uint16_t Uart::receive()
- *@brief    串口接收数据，此函数只能在用户接收中断中调用
- *@param    NONE
- *@retval   串口所接收到的数据
-*/
-uint16_t Uart::receive()
-{
-    return (uint16_t)(_USARTx->DR & (uint16_t)0x01FF);
-}
 
 /**
  *@name     uint16_t Uart::dma_send_string(const char *str,uint16_t length)
@@ -256,27 +332,27 @@ uint16_t Uart::dma_send_string(const char *str, uint16_t length)
     return length;
 }
 
-/**
- *@name     int Uart::put_char(uint16_t ch)
- *@brief    串口方式发送一个字节
- *@param    ch：    要发送的字符
- *@retval   已发送的数据
-*/
-int Uart::put_char(uint16_t ch)
-{
-    while(USART_GetFlagStatus(_USARTx, USART_FLAG_TXE) == RESET);//单字节等待，等待寄存器空
-    USART_SendData(_USARTx, ch);
-    return ch;
-}
+///**
+// *@name     int Uart::put_char(uint16_t ch)
+// *@brief    串口方式发送一个字节
+// *@param    ch：    要发送的字符
+// *@retval   已发送的数据
+//*/
+//int Uart::put_char(uint16_t ch)
+//{
+//    while(USART_GetFlagStatus(_USARTx, USART_FLAG_TXE) == RESET);//单字节等待，等待寄存器空
+//    USART_SendData(_USARTx, ch);
+//    return ch;
+//}
 
 /**
- *@name     void Uart::put_string(const char *str,uint16_t length)
+ *@name     void Uart::_write(const char *str,uint16_t length)
  *@brief    串口方式发送字符串，缓冲区数据
  *@param    str：       要发送的字符串，数据缓冲区
             length：    缓冲区的长度
  *@retval   NONE
 */
-void Uart::put_string(const char *str, uint16_t length)
+void Uart::_write(const char *str, uint16_t length)
 {
     if((_USARTx == USART1 | _USARTx == USART2 | _USARTx == USART3 ) && (use_dma == 1))
     {
@@ -293,66 +369,8 @@ void Uart::put_string(const char *str, uint16_t length)
 }
 
 
-/////////////////////////////////////////////////
-/**
- *@name     int Uart::put_char(uint16_t ch)
- *@brief    串口方式发送一个字节
- *@param    str：       要发送的字符串，数据缓冲区
-            length：    缓冲区的长度
- *@retval   已发送的数据
-*/
-void Uart::printf_length(const char *str, uint16_t length)
-{
-    wait_busy();
-    if(uart_buf != NULL)
-        ebox_free(uart_buf);
-    set_busy();
-    uart_buf = (char *)ebox_malloc(length);
-    if(uart_buf == NULL)
-        return ;
-    for(int i = 0; i < length; i++)
-        uart_buf[i] = *str++;
-    put_string(uart_buf, length);
-}
 
-/**
- *@name     int Uart::put_char(uint16_t ch)
- *@brief    串口方式发送一个字节
- *@param    str：       要发送的字符串，数据缓冲区
-            length：    缓冲区的长度
- *@retval   已发送的数据
-*/
 
-void Uart::printf(const char *fmt, ...)
-{
-    int     size1 = 0;
-    size_t  size2 = 256;
-
-    wait_busy();
-    if(uart_buf != NULL)
-        ebox_free(uart_buf);
-    set_busy();
-    va_list va_params;
-    va_start(va_params, fmt);
-    
-    do{
-        uart_buf = (char *)ebox_malloc(size2);
-        if(uart_buf == NULL)
-            return ;
-        size1 = _vsnprintf(uart_buf, size2,fmt, va_params);
-        if(size1 == -1  || size1 > size2)
-        {
-            size2+=128;
-            size1 = -1;
-            ebox_free(uart_buf);
-        }
-    }while(size1 == -1);
-
-    vsprintf(uart_buf, fmt, va_params); //存在内存溢出的风险
-    va_end(va_params);
-    put_string(uart_buf, size1);
-
-}
 
 
 /**
@@ -467,16 +485,16 @@ extern "C" {
     {
         if(USART_GetITStatus(USART1, USART_IT_RXNE) == SET)
         {
-						irq_handler(serial_irq_ids[NUM_UART1],RxIrq);
+            irq_handler(serial_irq_ids[NUM_UART1],RxIrq);
             USART_ClearITPendingBit(USART1, USART_IT_RXNE);
         }
         if(USART_GetITStatus(USART1, USART_IT_TC) == SET)
         {
             busy[0] = 0;   
 
-						irq_handler(serial_irq_ids[NUM_UART1],TcIrq);
+            irq_handler(serial_irq_ids[NUM_UART1],TcIrq);
             USART_ClearITPendingBit(USART1, USART_IT_TC);
-        }
+        }        
     }
     void USART2_IRQHandler(void)
     {

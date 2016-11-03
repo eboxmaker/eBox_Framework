@@ -112,11 +112,78 @@ void Gpio::mode(PIN_MODE mode)
         break;
     }
 
-    if(mode == AF_OD || mode == AF_PP)
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
 
+
+    switch((uint8_t)mode)
+    {
+        /*analog input mode
+        */
+        case AIN:
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;break;
+        
+        /* digital input mode
+        */
+        case INPUT:
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;break;
+        
+        case INPUT_PD:
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;break;
+            
+        case INPUT_PU:
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;break;
+        
+        /*digital output mode
+        */
+        case OUTPUT_OD:
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;break;
+            
+        case OUTPUT_OD_PU:
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;break;
+            
+        case OUTPUT_OD_PD:
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;break;
+            
+        case OUTPUT_PP:
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;break;
+        
+        case OUTPUT_PP_PU:
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;break;
+        
+        case OUTPUT_PP_PD:
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;break;
+        
+        
+        /*af mode
+        */
+        case AF_OD:
+            RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;break;
+            
+        case AF_OD_PU:
+            RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;break;
+            
+        case AF_OD_PD:
+            RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;break;
+            
+        case AF_PP:
+            RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;break;
+        
+        case AF_PP_PU:
+            RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;break;
+        
+        case AF_PP_PD:
+            RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;break;
+        /* if parament is other mode,set as INPUT mode
+        */
+       default:
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;break;
+    }
     GPIO_InitStructure.GPIO_Pin = this->pin;
-    GPIO_InitStructure.GPIO_Mode = (GPIOMode_TypeDef)mode;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(this->port, &GPIO_InitStructure);   //³õÊ¼»¯GPIOC¶Ë¿Ú
 }
