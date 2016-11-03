@@ -35,14 +35,14 @@ void GP2Y1051::get_data(int8_t *buf)
     while(1)
     {
 
-        readnum = usart_port->receive();
+        readnum = usart_port->read();
 
         if( readnum == 0xAA)
         {
 
             for(i = 0; i < 6; i++)
             {
-                tmpbuf[i] = usart_port->receive();
+                tmpbuf[i] = usart_port->read();
             }
 
             readnum = tmpbuf[0] + tmpbuf[1] + tmpbuf[2] + tmpbuf[3];

@@ -24,6 +24,7 @@
 #include "ebox_common.h"
 #include <stdio.h>
 #include <stdarg.h>
+#include "print.h"
 #include "FunctionPointer.h"
 
 /*
@@ -67,27 +68,34 @@ enum Uart_It_Index{
 
 typedef void (*uart_irq_handler)(uint32_t id, IrqType type);
 
-class Uart
+class Uart:public Print
 {
 public:
     Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin);
 
+    //initial uart
     void    begin(uint32_t baud_rate,uint8_t _use_dma = 1);
     void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit,uint8_t _use_dma);
 
-    int 	put_char(uint16_t ch);
-    void    printf_length(const char *str, uint16_t length);
-    void    printf(const char *fmt, ...); //需要注意缓冲区溢出
+    //write method
+    virtual size_t  write(uint8_t c);
+    virtual size_t  write(const uint8_t *buffer, size_t size);
+    using   Print::write;
+
+    //read method
+    uint16_t    read();
+
+    //user addation method
+    void    printf(const char *fmt, ...); 
     void    wait_busy();
-
-    uint16_t    receive();
-
     /** Attach a function to call whenever a serial interrupt is generated
      *
      *  @param fptr A pointer to a void function, or 0 to set as none
      *  @param type Which serial interrupt to attach the member function to (Seriall::RxIrq for receive, TxIrq for transmit buffer empty)
      */
+    //attach user event
     void attach(void (*fptr)(void), IrqType type);
+    
 
     /** Attach a member function to call whenever a serial interrupt is generated
      *
@@ -110,7 +118,7 @@ private:
     char                *uart_buf;
     uint8_t             use_dma;
     uint16_t            dma_send_string(const char *str, uint16_t length);
-    void                put_string(const char *str, uint16_t length);
+    void                _write(const char *str, uint16_t length);
     void                set_busy();
     void                interrupt(FunctionalState enable);
 

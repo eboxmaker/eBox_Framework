@@ -23,7 +23,7 @@
 #include "ebox.h"
 #include "math.h"
 
-Pwm pwm1(&PA11);
+Pwm pwm1(&PA0);
 Pwm pwm2(&PA1);
 
 void setup()
@@ -31,21 +31,20 @@ void setup()
     ebox_init();
     uart1.begin(115200);
     uart1.printf("core:%d\r\n",cpu.clock.core);
-    uart1.printf("core:%d\r\n",cpu.clock.core);
     uart1.printf("hclk:%d\r\n",cpu.clock.hclk);
     uart1.printf("pclk1:%d\r\n",cpu.clock.pclk1);
     uart1.printf("pclk2:%d\r\n",cpu.clock.pclk2);
     
-    pwm1.begin(1000, 900);
+    pwm1.begin(1000, 500);
     pwm1.set_oc_polarity(1);
     pwm2.begin(1000, 800);
     pwm2.set_oc_polarity(1);
-
+	GPIO_PinRemapConfig(GPIO_PartialRemap1_TIM2, ENABLE);
+	PA15.mode(AF_PP);
+	PB3.mode(AF_PP);  
     
     uart1.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
     uart1.printf("max frq = %f\r\n",pwm1.get_accuracy());
-    uart1.printf("max frq = %dKhz\r\n",pwm2.get_max_frq()/1000);
-    uart1.printf("max frq = %f\r\n",pwm2.get_accuracy());
     PB9.mode(OUTPUT_PP);
 }
 
@@ -56,7 +55,6 @@ int main(void)
 {
     setup();
 
-    
     while(1)
     {
         PB9.toggle();
