@@ -71,7 +71,7 @@ extern "C" {
         {
             millis_seconds++;
         }
-        return  (millis_seconds * 1000 + (1000 - (SysTick->VAL / cpu.clock.core)*1000000));
+        return  (millis_seconds * 1000 + (1000 - (SysTick->VAL)/(cpu.clock.core/1000000)));
     }
     uint64_t millis( void )
     {
