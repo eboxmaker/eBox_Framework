@@ -19,6 +19,7 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
+    PB8.mode(OUTPUT_PP);
 
 }
 int main(void)
@@ -31,28 +32,10 @@ int main(void)
     uart1.printf("\r\n");
     while(1)
     {
-        switch (sensor.read())
-        {
-        case Dht11::OK:
-            uart1.printf("Humidity: %d\%% \r\n", sensor.getHumidity());
-
-            uart1.printf("Temperature: %d'C \r\n ", sensor.getTemperature());
-            break;
-
-        case Dht11::ERROR_CHECKSUM:
-            uart1.printf("Checksum error\r\n");
-            break;
-
-        case Dht11::ERROR_TIMEOUT:
-            uart1.printf("Timeout error\r\n");
-            break;
-
-        default:
-            uart1.printf("Unknown error\r\n");
-            break;
-        }
-
-        delay_ms(1000);
+        PB8.set();
+        delay_us(50);
+        PB8.reset();
+        delay_us(50);
     }
 }
 
