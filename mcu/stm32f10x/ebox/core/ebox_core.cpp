@@ -28,6 +28,7 @@ extern "C" {
     extern uint16_t  AD_value[];
 
     __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
+    __IO uint16_t micro_para;
 
 
     void ebox_init(void)
@@ -41,6 +42,7 @@ extern "C" {
 
         SysTick_Config(cpu.clock.core/1000);//  每隔 1ms产生一次中断
         SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);//systemticks clock；
+        micro_para = cpu.clock.core/1000000;//减少micros函数计算量
         
         
         //统计cpu计算能力//////////////////
@@ -64,14 +66,19 @@ extern "C" {
         random_seed(AD_value[0]);//初始化随机数种子
 
     }
-
+    
     uint64_t micros(void)
     {
+        uint64_t micro;
         if((SysTick->CTRL & (1 << 16)) && (__get_PRIMASK())) //如果此时屏蔽了所有中断且发生了systick溢出，需要对millis_secend进行补偿
         {
             millis_seconds++;
         }
-        return  (millis_seconds * 1000 + (1000 - (SysTick->VAL)/(cpu.clock.core/1000000)));
+        no_interrupts();
+//        micro = (millis_seconds * 1000 + (1000 - (SysTick->VAL)/(cpu.clock.core/1000000)));
+        micro = (millis_seconds * 1000 + (1000 - (SysTick->VAL)/(micro_para)));
+        interrupts();
+        return  micro;
     }
     uint64_t millis( void )
     {
