@@ -38,7 +38,7 @@ public:
     Exti(Gpio *exti_pin, EXTITrigger_TypeDef trigger);
     void begin();
     void attach_interrupt(void (*callback_fun)(void));
-    void interrupt(FunctionalState enable);
+    void interrupt(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
 
     static void _irq_handler( uint32_t id);
     void attach(void (*fptr)(void));

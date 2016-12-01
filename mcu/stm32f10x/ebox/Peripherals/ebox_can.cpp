@@ -31,8 +31,16 @@ void Can::attach_interrupt(void (*callback_fun)(void))
     can_callback_table = callback_fun;
 }
 
-void Can::interrupt(FunctionalState enable)
+void Can::interrupt(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
 {
+    if(preemption_priority > 4)preemption_priority = 4;
+    if(sub_priority > 4)sub_priority = 4;
+    NVIC_InitTypeDef NVIC_InitStructure;
+    NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;	   //CAN1 RX0??
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;		   //?????0
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;			   //?????0
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
     if(enable == ENABLE)
     {
         CAN_ITConfig(CAN1, CAN_IT_FMP0, ENABLE);
@@ -158,12 +166,6 @@ void Can::begin(BSP_CAN_BAUD bps)
 
 
 
-    NVIC_InitTypeDef NVIC_InitStructure;
-    NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;	   //CAN1 RX0??
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;		   //?????0
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;			   //?????0
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
 
     set_bps(bps);
 	

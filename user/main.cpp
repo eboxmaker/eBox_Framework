@@ -1,19 +1,42 @@
-/*
-file   : *.cpp
-author : shentq
-version: V1.0
-date   : 2015/7/5
+/**
+  ******************************************************************************
+  * @file    .cpp
+  * @author  shentq
+  * @version V1.2
+  * @date    2016/08/14
+  * @brief   
+  ******************************************************************************
+  * @attention
+  *
+  * No part of this software may be used for any commercial activities by any form 
+  * or means, without the prior written consent of shentq. This specification is 
+  * preliminary and is subject to change at any time without notice. shentq assumes
+  * no responsibility for any errors contained herein.
+  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
+  ******************************************************************************
+  */
 
-Copyright 2015 shentq. All Rights Reserved.
-*/
 
-//STM32 RUN IN eBox
-
+/* Includes ------------------------------------------------------------------*/
 
 #include "ebox.h"
-#include "dht11.h"
 
-Dht11 sensor(&PB2);
+
+Timer timer2(TIM2);
+
+void t2it()
+{
+    PB8.toggle();  
+}
+class Test 
+{
+    public:
+    void event() 
+    {
+        PB8.toggle();
+    }
+};
+Test test;
 
 void setup()
 {
@@ -21,23 +44,30 @@ void setup()
     uart1.begin(115200);
     PB8.mode(OUTPUT_PP);
 
+    timer2.begin(1);
+    //timer2.attach(t2it);
+    timer2.attach(&test,&Test::event);
+    timer2.interrupt(ENABLE,1);
+    timer2.start();
+    uart1.printf("\r\ntimer clock       = %dMhz", timer2.get_timer_source_clock()/1000000);
+    uart1.printf("\r\nmax interrupt frq = %dKhz", timer2.get_max_frq()/1000);
 }
+
+
 int main(void)
 {
     setup();
-
-    uart1.printf("DHT11 TEST PROGRAM \r\n");
-    uart1.printf("LIBRARY VERSION: ");
-    uart1.printf(Dht11::VERSION);
-    uart1.printf("\r\n");
     while(1)
     {
-        PB8.set();
-        delay_us(50);
-        PB8.reset();
-        delay_us(50);
+
     }
+
+
 }
+
+
+
+
 
 
 

@@ -113,16 +113,18 @@ void Exti::begin()
  *          
  * @return  NONE
  */ 
-void Exti::interrupt(FunctionalState enable)
+void Exti::interrupt(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
 {
+    if(preemption_priority > 4)preemption_priority = 4;
+    if(sub_priority > 4)sub_priority = 4;
     NVIC_InitTypeDef NVIC_InitStructure;
 
     /* Configure one bit for preemption priority */
     //  NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);//使用全局控制值
 
     NVIC_InitStructure.NVIC_IRQChannel = irq;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
     NVIC_InitStructure.NVIC_IRQChannelCmd = enable;
     NVIC_Init(&NVIC_InitStructure);
 

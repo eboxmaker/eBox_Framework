@@ -94,8 +94,17 @@ void Timer::reset_frq(uint32_t frq)
     start();
 }
 
-void Timer::interrupt(FunctionalState enable)
+void Timer::interrupt(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
 {
+    if(preemption_priority > 4)preemption_priority = 4;
+    if(sub_priority > 4)sub_priority = 4;
+    NVIC_InitTypeDef NVIC_InitStructure;
+    
+    NVIC_InitStructure.NVIC_IRQChannel = nvic_ch;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
     TIM_ClearITPendingBit(_TIMx , TIM_FLAG_Update);//必须加，否则开启中断会立即产生一次中断
     TIM_ITConfig(_TIMx, TIM_IT_Update, enable);
 }
@@ -111,7 +120,6 @@ void Timer::stop(void)
 }
 void Timer::base_init(uint16_t period, uint16_t prescaler)
 {
-    NVIC_InitTypeDef NVIC_InitStructure;
 
 
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
@@ -122,32 +130,32 @@ void Timer::base_init(uint16_t period, uint16_t prescaler)
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
         //此处和通用定时器不一样 控制定时器溢出多少次产生一次中断
         TIM_TimeBaseStructure.TIM_RepetitionCounter = 0 ;
-        NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;//
+        nvic_ch = TIM1_UP_IRQn;//
         break;
     case (uint32_t)TIM2_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-        NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
+        nvic_ch = TIM2_IRQn;//
         break;
     case (uint32_t)TIM3_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
-        NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;//
+        nvic_ch = TIM3_IRQn;//
         break;
     case (uint32_t)TIM4_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
-        NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;//
+        nvic_ch = TIM4_IRQn;//
         break;
 #if defined (STM32F10X_HD)
     case (uint32_t)TIM5_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE);
-        NVIC_InitStructure.NVIC_IRQChannel = TIM5_IRQn;//
+        nvic_ch = TIM5_IRQn;//
         break;
     case (uint32_t)TIM6_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6, ENABLE);
-        NVIC_InitStructure.NVIC_IRQChannel = TIM6_IRQn;//
+        nvic_ch = TIM6_IRQn;//
         break;
     case (uint32_t)TIM7_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM7, ENABLE);
-        NVIC_InitStructure.NVIC_IRQChannel = TIM7_IRQn;//
+        nvic_ch = TIM7_IRQn;//
         break;
 #endif
     }
@@ -161,10 +169,6 @@ void Timer::base_init(uint16_t period, uint16_t prescaler)
     TIM_TimeBaseInit(_TIMx, &TIM_TimeBaseStructure);
     TIM_ARRPreloadConfig(_TIMx, ENABLE);	//控制ARR寄存器是否使用影子寄存器
 
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;//
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;//
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
 
 }
 void Timer::set_reload(uint16_t auto_reload)
