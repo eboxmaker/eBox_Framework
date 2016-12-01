@@ -252,52 +252,54 @@ void Uart::printf(const char *fmt, ...)
  *@param    enable:  ENABLE使能串口的发送完成和接收中断；DISABLE：关闭这两个中断
  *@retval   None
 */
-void Uart::interrupt(FunctionalState enable)
+void Uart::interrupt(FunctionalState enable,uint8_t preemption_priority, uint8_t sub_priority)
 {
+    if(preemption_priority > 4)preemption_priority = 4;
+    if(sub_priority > 4)sub_priority = 4;
     NVIC_InitTypeDef NVIC_InitStructure;
 
-    USART_ITConfig(_USARTx, USART_IT_RXNE, enable);
-    USART_ITConfig(_USARTx, USART_IT_TC, enable);
-USART_ClearITPendingBit(_USARTx, USART_IT_TC);
-USART_ClearFlag(USART2,USART_FLAG_TC); 
+    USART_ClearITPendingBit(_USARTx, USART_IT_TC);
+    USART_ClearFlag(USART2,USART_FLAG_TC); 
     switch((uint32_t)_USARTx)
     {
     case (uint32_t)USART1_BASE:
         NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
-        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-        NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
+        NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
         NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
         break;
 
     case (uint32_t)USART2_BASE:
         NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
-        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-        NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
+        NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
         NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
         break;
 
     case (uint32_t)USART3_BASE:
         NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
-        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-        NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
+        NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
         NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
         break;
 #if defined (STM32F10X_HD)
     case (uint32_t)UART4_BASE:
         NVIC_InitStructure.NVIC_IRQChannel = UART4_IRQn;
-        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-        NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
+        NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
         NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
         break;
     case (uint32_t)UART5_BASE:
         NVIC_InitStructure.NVIC_IRQChannel = UART5_IRQn;
-        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-        NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
+        NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
         NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
         break;
 #endif
     }
     NVIC_Init(&NVIC_InitStructure);
+    USART_ITConfig(_USARTx, USART_IT_RXNE, enable);
+    USART_ITConfig(_USARTx, USART_IT_TC, enable);
 }
 
 

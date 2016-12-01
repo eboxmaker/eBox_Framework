@@ -120,7 +120,7 @@ private:
     uint16_t            dma_send_string(const char *str, uint16_t length);
     void                _write(const char *str, uint16_t length);
     void                set_busy();
-    void                interrupt(FunctionalState enable);
+    void                interrupt(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
 
 protected:
     FunctionPointer _irq[2];
