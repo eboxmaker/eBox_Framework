@@ -163,4 +163,4 @@ SoftI2c si2c1(&PB6, &PB7);
 SoftI2c si2c2(&PB10, &PB11);
 
 //can
-Can can1(&PA11, &PA12);
+//Can can1(&PA11, &PA12);
