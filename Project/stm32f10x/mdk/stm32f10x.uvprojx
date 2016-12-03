@@ -334,7 +334,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcu\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\mcu\stm32f10x\ebox;..\..\..\mcu\stm32f10x\ebox\core;..\..\..\mcu\stm32f10x\ebox\Peripherals;..\..\..\common\util;..\..\..\common\edriver;..\..\..\common\network;..\..\..\common\fat;..\..\..\common\edriver\WiFi;..\..\..\user;..\..\..\common\cJSON;..\..\..\common\edriver\SFUD\sfud\inc;..\..\..\common\edriver\SFUD\ebox;..\..\..\common\bigiot</IncludePath>
+              <IncludePath>..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcu\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\mcu\stm32f10x\ebox;..\..\..\mcu\stm32f10x\ebox\core;..\..\..\mcu\stm32f10x\ebox\Peripherals;..\..\..\common\util;..\..\..\common\edriver;..\..\..\common\network;..\..\..\common\fat;..\..\..\common\edriver\WiFi;..\..\..\user;..\..\..\common\cJSON;..\..\..\common\edriver\SFUD\sfud\inc;..\..\..\common\edriver\SFUD\ebox;..\..\..\common\bigiot;..\..\..\common\usb_device_stack\USBDevice;..\..\..\common\usb_device_stack\USBHID</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -536,11 +536,6 @@
               <FileName>ebox_analog.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_analog.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_can.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_can.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_exti.cpp</FileName>
@@ -875,189 +870,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>fat</GroupName>
-          <Files>
-            <File>
-              <FileName>wrapperdiskio.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\fat\wrapperdiskio.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>diskio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\fat\diskio.c</FilePath>
-            </File>
-            <File>
-              <FileName>ff.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\fat\ff.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>wifi</GroupName>
-          <Files>
-            <File>
-              <FileName>ESP8266.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\WiFi\ESP8266.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>esp8266_tcp.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\WiFi\esp8266_tcp.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>esp8266_udp.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\WiFi\esp8266_udp.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>cJSON</GroupName>
-          <Files>
-            <File>
-              <FileName>cJSON.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\cJSON\cJSON.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>sfud</GroupName>
-          <Files>
-            <File>
-              <FileName>sfud.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\edriver\SFUD\sfud\src\sfud.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>2</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>0</v6Lto>
-                    <v6WtE>0</v6WtE>
-                    <VariousControls>
-                      <MiscControls>-C99</MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>sfud_sfdp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\edriver\SFUD\sfud\src\sfud_sfdp.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>2</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>0</v6Lto>
-                    <v6WtE>0</v6WtE>
-                    <VariousControls>
-                      <MiscControls>-C99</MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>ebox_sfud_port.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\SFUD\ebox\ebox_sfud_port.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>BigIOT</GroupName>
-          <Files>
-            <File>
-              <FileName>bigiot.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\bigiot\bigiot.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>bigiot_port.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\bigiot\bigiot_port.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>user</GroupName>
           <Files>
             <File>
@@ -1069,6 +881,41 @@
               <FileName>bsp.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\bsp.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>USBDevice</GroupName>
+          <Files>
+            <File>
+              <FileName>usb_regs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBDevice\usb_regs.c</FilePath>
+            </File>
+            <File>
+              <FileName>USBDevice.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBDevice\USBDevice.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>USBHAL_STM32F1.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBDevice\USBHAL_STM32F1.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>USBHID</GroupName>
+          <Files>
+            <File>
+              <FileName>USBHID.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBHID\USBHID.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>USBMouse.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBHID\USBMouse.cpp</FilePath>
             </File>
           </Files>
         </Group>
