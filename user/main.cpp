@@ -20,10 +20,6 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "ebox.h"
-#include "USBmouse.h"
-#include "USBHID.h"
-
-USBMouse mouse;
 
 Timer timer2(TIM2);
 
@@ -62,7 +58,6 @@ int main(void)
     setup();
     while(1)
     {
-			mouse.move(20, 0);
 			delay_ms(500);
     }
 
