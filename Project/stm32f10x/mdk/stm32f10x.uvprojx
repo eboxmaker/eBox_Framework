@@ -884,41 +884,6 @@
             </File>
           </Files>
         </Group>
-        <Group>
-          <GroupName>USBDevice</GroupName>
-          <Files>
-            <File>
-              <FileName>usb_regs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBDevice\usb_regs.c</FilePath>
-            </File>
-            <File>
-              <FileName>USBDevice.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBDevice\USBDevice.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>USBHAL_STM32F1.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBDevice\USBHAL_STM32F1.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>USBHID</GroupName>
-          <Files>
-            <File>
-              <FileName>USBHID.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBHID\USBHID.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>USBMouse.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBHID\USBMouse.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
       </Groups>
     </Target>
   </Targets>

@@ -66,6 +66,10 @@ extern "C" {
         random_seed(AD_value[0]);//初始化随机数种子
 
     }
+    void ebox_reset()
+    {
+        NVIC_SystemReset();
+    }
     
     uint64_t micros(void)
     {
