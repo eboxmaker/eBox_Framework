@@ -442,6 +442,15 @@ int USBKeyboard::_putc(int c) {
     return keyCode(c, keymap[c].modifier);
 }
 
+void USBKeyboard::printf(const char *str)
+{
+	while(*str != '\0')
+	{
+	   _putc(*str);
+		 str++;
+	}
+}
+
 bool USBKeyboard::keyCode(uint8_t key, uint8_t modifier) {
     // Send a simulated keyboard keypress. Returns true if successful.
     HID_REPORT report;

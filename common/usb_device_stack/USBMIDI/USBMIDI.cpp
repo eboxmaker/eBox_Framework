@@ -170,7 +170,7 @@ uint8_t * USBMIDI::stringIproductDesc() {
     static uint8_t stringIproductDescriptor[] = {
         0x16,                                                       //bLength
         STRING_DESCRIPTOR,                                          //bDescriptorType 0x03
-        'M',0,'b',0,'e',0,'d',0,' ',0,'A',0,'u',0,'d',0,'i',0,'o',0 //bString iProduct - Mbed Audio
+        'e',0,'b',0,'o',0,'x',0,' ',0,'A',0,'u',0,'d',0,'i',0,'o',0 //bString iProduct - Mbed Audio
     };
     return stringIproductDescriptor;
 }

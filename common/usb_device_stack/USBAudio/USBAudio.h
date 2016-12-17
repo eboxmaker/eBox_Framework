@@ -23,7 +23,7 @@
 #include "USBEndpoints.h"
 #include "USBDescriptor.h"
 #include "USBDevice_Types.h"
-
+#include "ebox.h"
 #include "USBDevice.h"
 
 
