@@ -25,7 +25,7 @@
 
 #include "USBMouse.h"
 #include "USBKeyboard.h"
-#include "Stream.h"
+//#include "Stream.h"
 #include "USBHID.h"
 
 /**
@@ -67,7 +67,7 @@
  * }
  * @endcode
  */
-class USBMouseKeyboard: public USBHID, public Stream
+class USBMouseKeyboard: public USBHID
 {
     public:
 
@@ -204,7 +204,7 @@ class USBMouseKeyboard: public USBHID, public Stream
         */
         virtual bool EPINT_OUT_callback();
 
-
+				void printf(const char *str);
     private:
         bool mouseWrite(int8_t x, int8_t y, uint8_t buttons, int8_t z);
         MOUSE_TYPE mouse_type;

@@ -10,12 +10,11 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060183::V5.06 update 2 (build 183)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F103C8</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F1xx_DFP.2.1.0</PackID>
+          <PackID>Keil.STM32F1xx_DFP.1.1.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x5000) IROM(0x08000000,0x10000) CPUTYPE("Cortex-M3") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -125,6 +124,47 @@
             <HexOffset>0</HexOffset>
             <Oh166RecLen>16</Oh166RecLen>
           </OPTHX>
+          <Simulator>
+            <UseSimulator>0</UseSimulator>
+            <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
+            <RunToMain>1</RunToMain>
+            <RestoreBreakpoints>1</RestoreBreakpoints>
+            <RestoreWatchpoints>1</RestoreWatchpoints>
+            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
+            <RestoreFunctions>1</RestoreFunctions>
+            <RestoreToolbox>1</RestoreToolbox>
+            <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
+            <RestoreSysVw>1</RestoreSysVw>
+          </Simulator>
+          <Target>
+            <UseTarget>1</UseTarget>
+            <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
+            <RunToMain>1</RunToMain>
+            <RestoreBreakpoints>1</RestoreBreakpoints>
+            <RestoreWatchpoints>1</RestoreWatchpoints>
+            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
+            <RestoreFunctions>0</RestoreFunctions>
+            <RestoreToolbox>1</RestoreToolbox>
+            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreSysVw>1</RestoreSysVw>
+          </Target>
+          <RunDebugAfterBuild>0</RunDebugAfterBuild>
+          <TargetSelection>6</TargetSelection>
+          <SimDlls>
+            <CpuDll></CpuDll>
+            <CpuDllArguments></CpuDllArguments>
+            <PeripheralDll></PeripheralDll>
+            <PeripheralDllArguments></PeripheralDllArguments>
+            <InitializationFile></InitializationFile>
+          </SimDlls>
+          <TargetDlls>
+            <CpuDll></CpuDll>
+            <CpuDllArguments></CpuDllArguments>
+            <PeripheralDll></PeripheralDll>
+            <PeripheralDllArguments></PeripheralDllArguments>
+            <InitializationFile></InitializationFile>
+            <Driver>Segger\JL2CM3.dll</Driver>
+          </TargetDlls>
         </DebugOption>
         <Utilities>
           <Flash1>
@@ -189,7 +229,6 @@
             <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
-            <nSecure>0</nSecure>
             <RoSelD>3</RoSelD>
             <RwSelD>3</RwSelD>
             <CodeSel>0</CodeSel>
@@ -326,15 +365,11 @@
             <useXO>0</useXO>
             <v6Lang>0</v6Lang>
             <v6LangP>0</v6LangP>
-            <vShortEn>1</vShortEn>
-            <vShortWch>1</vShortWch>
-            <v6Lto>0</v6Lto>
-            <v6WtE>0</v6WtE>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcu\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\mcu\stm32f10x\ebox;..\..\..\mcu\stm32f10x\ebox\core;..\..\..\mcu\stm32f10x\ebox\Peripherals;..\..\..\common\util;..\..\..\common\edriver;..\..\..\common\network;..\..\..\common\fat;..\..\..\common\edriver\WiFi;..\..\..\user;..\..\..\common\cJSON;..\..\..\common\edriver\SFUD\sfud\inc;..\..\..\common\edriver\SFUD\ebox;..\..\..\common\bigiot;..\..\..\common\usb_device_stack\USBDevice;..\..\..\common\usb_device_stack\USBHID</IncludePath>
+              <IncludePath>..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcu\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\mcu\stm32f10x\ebox;..\..\..\mcu\stm32f10x\ebox\core;..\..\..\mcu\stm32f10x\ebox\Peripherals;..\..\..\common\util;..\..\..\common\edriver;..\..\..\common\network;..\..\..\common\fat;..\..\..\common\edriver\WiFi;..\..\..\user;..\..\..\common\cJSON;..\..\..\common\edriver\SFUD\sfud\inc;..\..\..\common\edriver\SFUD\ebox;..\..\..\common\bigiot;..\..\..\common\usb_device_stack\USBDevice;..\..\..\common\usb_device_stack\USBHID;..\..\..\common\usb_device_stack\USBAudio;..\..\..\common\usb_device_stack\USBMIDI;..\..\..\common\usb_device_stack\USBMSD;..\..\..\common\usb_device_stack\USBSerial</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -873,14 +908,79 @@
           <GroupName>user</GroupName>
           <Files>
             <File>
+              <FileName>bsp.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\bsp.cpp</FilePath>
+            </File>
+            <File>
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\main.cpp</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>usb_device</GroupName>
+          <Files>
             <File>
-              <FileName>bsp.cpp</FileName>
+              <FileName>USBAudio.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\user\bsp.cpp</FilePath>
+              <FilePath>..\..\..\common\usb_device_stack\USBAudio\USBAudio.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>USBDevice.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBDevice\USBDevice.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>USBHAL_STM32F1.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBDevice\USBHAL_STM32F1.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>usb_regs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBDevice\usb_regs.c</FilePath>
+            </File>
+            <File>
+              <FileName>USBHID.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBHID\USBHID.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>USBKeyboard.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBHID\USBKeyboard.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>USBMouse.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBHID\USBMouse.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>USBMouseKeyboard.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBHID\USBMouseKeyboard.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>USBMIDI.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBMIDI\USBMIDI.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>USBMSD.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBMSD\USBMSD.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>USBCDC.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBSerial\USBCDC.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>USBSerial.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\usb_device_stack\USBSerial\USBSerial.cpp</FilePath>
             </File>
           </Files>
         </Group>

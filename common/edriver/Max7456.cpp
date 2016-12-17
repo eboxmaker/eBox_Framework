@@ -286,7 +286,7 @@ OSD::write(uint8_t c)
 void OSD::printf(const char *fmt, ...)
 {
     char buf[32];
-    uint8_t i;
+    uint8_t i=0;
     va_list va_params;
     va_start(va_params, fmt);
     vsprintf(buf, fmt, va_params);
@@ -328,7 +328,7 @@ OSD::control(uint8_t ctrl)
 void
 OSD::write_NVM(int font_count, uint8_t *character_bitmap)
 {
-    uint8_t x;
+    uint8_t x,ret;
     uint8_t char_address_hi;
     //uint8_t char_address_lo;
     uint8_t screen_char;
@@ -361,7 +361,17 @@ OSD::write_NVM(int font_count, uint8_t *character_bitmap)
     spi->write(WRITE_nvr);
 
     // wait until bit 5 in the status register returns to 0 (12ms)
-    while (( spi->write(MAX7456_STAT_reg_read) & STATUS_reg_nvr_busy) != 0x00);
+  //while (( spi->write(MAX7456_STAT_reg_read) & STATUS_reg_nvr_busy) != 0x00);
+ 
+		while(1)
+		{
+			spi->write(MAX7456_STAT_reg_read);
+			ret = spi->read();
+			if((ret & STATUS_reg_nvr_busy) ==0)
+			{
+				break;
+			}	
+		}
 
     spi->write(MAX7456_VM0_reg); // turn on screen next vertical
     spi->write(MAX7456_ENABLE_display_vert);

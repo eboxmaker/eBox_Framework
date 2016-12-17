@@ -629,14 +629,14 @@ bool USBMouseKeyboard::scroll(int8_t z) {
 bool USBMouseKeyboard::doubleClick() {
     if (!click(MOUSE_LEFT))
         return false;
-    wait(0.1);
+//    wait(0.1);
     return click(MOUSE_LEFT);
 }
 
 bool USBMouseKeyboard::click(uint8_t button) {
     if (!update(0, 0, button, 0))
         return false;
-    wait(0.01);
+//    wait(0.01);
     return update(0, 0, 0, 0);
 }
 
@@ -652,6 +652,15 @@ bool USBMouseKeyboard::release(uint8_t button_) {
 
 int USBMouseKeyboard::_putc(int c) {
     return keyCode(c, keymap[c].modifier);
+}
+
+void USBMouseKeyboard::printf(const char *str)
+{
+	while(*str != '\0')
+	{
+	   _putc(*str);
+		 str++;
+	}
 }
 
 bool USBMouseKeyboard::keyCode(uint8_t key, uint8_t modifier) {
@@ -704,3 +713,5 @@ bool USBMouseKeyboard::mediaControl(MEDIA_KEY key) {
 
     return send(&report);
 }
+
+

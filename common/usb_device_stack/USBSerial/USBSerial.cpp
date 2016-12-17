@@ -44,6 +44,21 @@ bool USBSerial::writeBlock(uint8_t * buf, uint16_t size) {
     return true;
 }
 
+void USBSerial::printf(const char *fmt, ...)
+{
+    char buf[128];
+    uint8_t i=0;
+    va_list va_params;
+    va_start(va_params, fmt);
+    vsprintf(buf, fmt, va_params);
+    va_end(va_params);
+
+    while(buf[i] != '\0')
+    {
+       _putc(buf[i++]);
+    }
+}
+
 
 
 bool USBSerial::EPBULK_OUT_callback() {

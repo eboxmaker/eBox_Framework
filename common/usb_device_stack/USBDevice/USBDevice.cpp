@@ -17,7 +17,6 @@
 */
 
 #include "stdint.h"
-
 #include "USBEndpoints.h"
 #include "USBDevice.h"
 #include "USBDescriptor.h"
@@ -963,7 +962,7 @@ uint8_t * USBDevice::stringImanufacturerDesc() {
     static uint8_t stringImanufacturerDescriptor[] = {
         0x12,                                            /*bLength*/
         STRING_DESCRIPTOR,                               /*bDescriptorType 0x03*/
-        'm',0,'b',0,'e',0,'d',0,'.',0,'o',0,'r',0,'g',0, /*bString iManufacturer - mbed.org*/
+        'e',0,'b',0,'o',0,'x',0,'.',0,'o',0,'r',0,'g',0, /*bString iManufacturer - mbed.org*/
     };
     return stringImanufacturerDescriptor;
 }

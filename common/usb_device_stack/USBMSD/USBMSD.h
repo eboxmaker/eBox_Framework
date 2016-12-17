@@ -24,7 +24,6 @@
 #include "USBEndpoints.h"
 #include "USBDescriptor.h"
 #include "USBDevice_Types.h"
-
 #include "USBDevice.h"
 
 /**
@@ -196,7 +195,7 @@ private:
         uint8_t  LUN;
         uint8_t  CBLength;
         uint8_t  CB[16];
-    } PACKED CBW;
+    } __attribute__ ((packed)) CBW;
 
     // Bulk-only CSW
     typedef struct {
@@ -204,7 +203,7 @@ private:
         uint32_t Tag;
         uint32_t DataResidue;
         uint8_t  Status;
-    } PACKED CSW;
+    } __attribute__ ((packed)) CSW;
 
     //state of the bulk-only state machine
     Stage stage;
