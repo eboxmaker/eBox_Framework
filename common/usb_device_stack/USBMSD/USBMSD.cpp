@@ -17,7 +17,9 @@
 */
 
 #include "stdint.h"
+#include "string.h"
 #include "USBMSD.h"
+#include "ebox_mem.h"
 
 #define DISK_OK         0x00
 #define NO_INIT         0x01
@@ -120,8 +122,8 @@ bool USBMSD::connect(bool blocking) {
     if (BlockCount > 0) {
         BlockSize = MemorySize / BlockCount;
         if (BlockSize != 0) {
-            free(page);
-            page = (uint8_t *)malloc(BlockSize * sizeof(uint8_t));
+            ebox_free(page);
+            page = (uint8_t *)ebox_malloc(BlockSize * sizeof(uint8_t));
             if (page == NULL)
                 return false;
         }
@@ -137,7 +139,7 @@ bool USBMSD::connect(bool blocking) {
 void USBMSD::disconnect() {
     USBDevice::disconnect();
     //De-allocate MSD page size:
-    free(page);
+    ebox_free(page);
     page = NULL;
 }
 
@@ -602,7 +604,7 @@ uint8_t * USBMSD::stringIproductDesc() {
     static uint8_t stringIproductDescriptor[] = {
         0x12,                                           //bLength
         STRING_DESCRIPTOR,                              //bDescriptorType 0x03
-        'M',0,'b',0,'e',0,'d',0,' ',0,'M',0,'S',0,'D',0 //bString iProduct - Mbed Audio
+        'e',0,'b',0,'o',0,'x',0,' ',0,'M',0,'S',0,'D',0 //bString iProduct - Mbed Audio
     };
     return stringIproductDescriptor;
 }

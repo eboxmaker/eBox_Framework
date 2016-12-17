@@ -147,6 +147,10 @@ bool USBHID::USBCallback_request() {
                 transfer->direction = HOST_TO_DEVICE;
                 transfer->notify = true;
                 success = true;
+								break;
+						 case SET_IDLE :
+							  success = true;
+								break;
             default:
                 break;
         }

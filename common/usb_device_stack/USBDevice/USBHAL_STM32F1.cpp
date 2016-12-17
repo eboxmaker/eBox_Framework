@@ -16,6 +16,16 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+/**
+  ******************************************************************************
+  * @file    USBHAL_STM32F1.cpp
+  * @modifer  link
+  * @version V1.0
+  * @date    2016/12/14
+  * @brief   port form mbed usb device stack
+  ******************************************************************************
+  */
+
 #include "stm32f10x.h"
 #include "USBHAL.h"
 #include "usb_regs.h"
@@ -30,7 +40,7 @@
 /* IMR_MSK */
 /* mask defining which events has to be handled */
 /* by the device application software */
-#define IMR_MSK (CNTR_CTRM | CNTR_RESETM )
+#define IMR_MSK (CNTR_CTRM | CNTR_RESETM | CNTR_SOFM )
 
 
 
@@ -40,6 +50,7 @@ static volatile int epComplete = 0;
 
 static u16  wInterrupt_Mask;
 volatile u16 wIstr;  /* ISTR register last read value */
+volatile int bIntPackSOF = 0;  /* SOFs received between 2 consecutive packets */
 
 /* 4 endpoins reserved  4*8(0x20)bytes for buffer description table*/
 static volatile uint32_t bufferEnd = 0x20;
@@ -296,6 +307,7 @@ uint32_t USBHAL::EP0getReadResult(uint8_t *buffer) {
 
 void USBHAL::EP0write(uint8_t *buffer, uint32_t size) {
     endpointWrite(EP0IN, buffer, size);
+//		printf("w%d\n\r",size);
 }
 
 void USBHAL::EP0getWriteResult(void) {
@@ -339,7 +351,6 @@ EP_STATUS USBHAL::endpointWrite(uint8_t endpoint, uint8_t *data, uint32_t size) 
 		UserToPMABufferCopy(data, GetEPTxAddr(epIndex), size);
 		SetEPTxCount(epIndex, size);
     SetEPTxValid(epIndex);
-
     epComplete &= ~(1 << endpoint);
 	
     return EP_PENDING;
@@ -404,12 +415,13 @@ void USBHAL::usbisr(void) {
 	  	if (wIstr & ISTR_SOF & wInterrupt_Mask)
   	{
     	_SetISTR((u16)CLR_SOF);
+			bIntPackSOF++;  //帧指针加一
+			SOF(bIntPackSOF);
 
     }			
 		  	if (wIstr & ISTR_ESOF & wInterrupt_Mask)
   	{
     	_SetISTR((u16)CLR_ESOF); //帧期望标志
-			
 		}
 		
 		
@@ -431,7 +443,7 @@ void USBHAL::usbisr(void) {
       /* Decode and service control endpoint interrupt */
       /* calling related service routine */
       /* (Setup0_Process, In0_Process, Out0_Process) */
-
+			
 
       /* DIR bit = origin of the interrupt */
 
@@ -453,8 +465,8 @@ void USBHAL::usbisr(void) {
           usb_address = 0;
 		
         }
-				
-          return;
+				  
+				return;
       }
       else
       {
