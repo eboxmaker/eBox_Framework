@@ -16,6 +16,16 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+/**
+  ******************************************************************************
+  * @file    USBHAL_STM32F1.cpp
+  * @modifer  link
+  * @version V1.0
+  * @date    2016/12/14
+  * @brief   port form mbed usb device stack
+  ******************************************************************************
+  */
+
 #ifndef USBBUSINTERFACE_H
 #define USBBUSINTERFACE_H
 

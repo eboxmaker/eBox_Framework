@@ -18,6 +18,7 @@
 
 #include "stdint.h"
 #include "USBCDC.h"
+#include "ebox.h"
 
 static uint8_t cdc_line_coding[7]= {0x80, 0x25, 0x00, 0x00, 0x00, 0x00, 0x08};
 
@@ -63,7 +64,7 @@ bool USBCDC::USBCallback_request(void) {
                 if (transfer->setup.wValue & CLS_DTR) {
                     terminal_connected = true;
                 } else {
-                    terminal_connected = false;
+                    terminal_connected = true;//debug by link false->true
                 }
                 success = true;
                 break;
@@ -86,8 +87,8 @@ void USBCDC::USBCallback_requestCompleted(uint8_t *buf, uint32_t length) {
     /* Process class-specific requests */
     if (transfer->setup.bmRequestType.Type == CLASS_TYPE) {
         if (transfer->setup.bRequest == CDC_SET_LINE_CODING) {
-            if (memcmp(cdc_line_coding, buf, 7)) {
-                memcpy(cdc_line_coding, buf, 7);
+            if (ebox_memcmp(cdc_line_coding, buf, 7)) {
+                ebox_memcpy(cdc_line_coding, buf, 7);
 
                 int baud = buf[0] + (buf[1] << 8)
                          + (buf[2] << 16) + (buf[3] << 24);

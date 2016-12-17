@@ -20,7 +20,7 @@
 #define USBKEYBOARD_H
 
 #include "USBHID.h"
-#include "Stream.h"
+//#include "Stream.h"
 
 /* Modifiers */
 enum MODIFIER_KEY {
@@ -89,7 +89,7 @@ enum FUNCTION_KEY {
  *
  * @endcode
  */
-class USBKeyboard: public USBHID, public Stream {
+class USBKeyboard: public USBHID {
 public:
 
     /**
@@ -161,6 +161,9 @@ public:
     * @returns status of lock keys
     */
     uint8_t lockStatus();
+		
+		
+		void printf(const char *str);
 
 protected:
     /*

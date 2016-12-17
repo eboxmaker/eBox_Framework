@@ -20,7 +20,7 @@
 #define USBSERIAL_H
 
 #include "USBCDC.h"
-#include "Stream.h"
+#include "ebox.h"
 #include "CircBuffer.h"
 
 
@@ -44,7 +44,7 @@
 * }
 * @endcode
 */
-class USBSerial: public USBCDC, public Stream {
+class USBSerial: public USBCDC {
 public:
 
     /**
@@ -110,6 +110,10 @@ public:
     * @returns true if successfull
     */
     bool writeBlock(uint8_t * buf, uint16_t size);
+		
+		
+		
+		void printf(const char *fmt, ...);
 
     /**
      *  Attach a member function to call when a packet is received.
