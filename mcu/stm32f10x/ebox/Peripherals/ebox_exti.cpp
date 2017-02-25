@@ -41,7 +41,7 @@
   */
 static exti_irq_handler irq_handler;
 static uint32_t exti_irq_ids[16];
- int exti_irq_init(uint8_t index,exti_irq_handler handler,uint32_t id)
+int exti_irq_init(uint8_t index,exti_irq_handler handler,uint32_t id)
 {
  exti_irq_ids[index] = id;
  irq_handler =  handler;

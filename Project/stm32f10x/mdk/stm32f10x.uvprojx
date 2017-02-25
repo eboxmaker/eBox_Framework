@@ -14,7 +14,7 @@
         <TargetCommonOption>
           <Device>STM32F103C8</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F1xx_DFP.1.1.0</PackID>
+          <PackID>Keil.STM32F1xx_DFP.2.1.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x5000) IROM(0x08000000,0x10000) CPUTYPE("Cortex-M3") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -647,6 +647,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\mcu\stm32f10x\ebox\object.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ebox_can.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_can.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -916,71 +921,6 @@
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\main.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>usb_device</GroupName>
-          <Files>
-            <File>
-              <FileName>USBAudio.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBAudio\USBAudio.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>USBDevice.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBDevice\USBDevice.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>USBHAL_STM32F1.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBDevice\USBHAL_STM32F1.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>usb_regs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBDevice\usb_regs.c</FilePath>
-            </File>
-            <File>
-              <FileName>USBHID.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBHID\USBHID.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>USBKeyboard.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBHID\USBKeyboard.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>USBMouse.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBHID\USBMouse.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>USBMouseKeyboard.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBHID\USBMouseKeyboard.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>USBMIDI.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBMIDI\USBMIDI.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>USBMSD.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBMSD\USBMSD.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>USBCDC.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBSerial\USBCDC.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>USBSerial.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\usb_device_stack\USBSerial\USBSerial.cpp</FilePath>
             </File>
           </Files>
         </Group>
