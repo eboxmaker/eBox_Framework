@@ -20,7 +20,9 @@ uint8_t data[8];
 
 void test()
 {
-    uart1.printf("can rx interrupt");
+    can1.read(&RxMessage);
+    uart1.printf("Rx:sender:0x%x\n",RxMessage.StdId);
+    uart1.printf("Rx:%s\n",RxMessage.Data);
 }
 void setup()
 {
@@ -29,8 +31,10 @@ void setup()
     uart1.begin(115200);
     uart1.printf("can rx test\r\n");
     can1.begin(BSP_CAN_500KBPS);
-    can1.set_filter_idmask(CAN_ID_STD,0,0x321,0XFFFFFFFF);
-    //can1.set_filter_idlist(CAN_ID_STD,0,0X320);
+    can1.set_filter_idmask(CAN_ID_STD,0,0,0);
+    //can1.set_filter_idlist(CAN_ID_STD,0,0X321);
+    can1.attach(test);
+    can1.interrupt(ENABLE);
 
 }
 int main(void)
@@ -40,12 +44,12 @@ int main(void)
     {
         delay_ms(100);
         PB7.toggle();
-        if(can1.available())
-        {
-            can1.read(&RxMessage);
-            uart1.printf("Rx:%s\n",RxMessage.Data);
-
-        }
+//        if(can1.available())
+//        {
+//            can1.read(&RxMessage);
+//            uart1.printf("Rx:sender:0x%x\n",RxMessage.StdId);
+//            uart1.printf("Rx:%s\n",RxMessage.Data);
+//        }
     }
 
 }

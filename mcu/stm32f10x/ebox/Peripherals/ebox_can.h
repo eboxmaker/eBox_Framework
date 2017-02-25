@@ -6,7 +6,8 @@
 #include "FunctionPointer.h"
 
  /**
- *@brief    CAN接收消息使用过滤器方式以及其设置
+ *@brief    CAN目前只支持了CAN1接收消息使用过滤器方式以及其设置
+ 
  基本使用方法1：发送
     -1.初始化    
         can1.begin(BSP_CAN_500KBPS);
@@ -15,7 +16,8 @@
         IDE(和前面的Id对应),DCL(数据长度),Data(数据内容)
     -3.发送数据        
          can1.write(&TxMessage);
-基本使用方法2：接收
+         
+基本使用方法2：查询接收
     -1.初始化    
         can1.begin(BSP_CAN_500KBPS);
     -2.设置过滤器
@@ -28,7 +30,16 @@
             can1.read(&RxMessage);
             uart1.printf("Rx:%s\n",RxMessage.Data);
         }
-
+基本使用方法3：中断接收
+    -1.初始化    
+        can1.begin(BSP_CAN_500KBPS);
+    -2.设置过滤器
+        --1.掩码模式 can1.set_filter_idmask(CAN_ID_STD,0,0x321,0XFFFFFFFF);
+        或者
+        --2.列表模式 can1.set_filter_idlist(CAN_ID_STD,0,0X321);
+    -3.绑定中断处理函数并允许中断
+        can1.attach(test);
+        can1.interrupt(ENABLE);
 */
 
 
@@ -52,15 +63,39 @@ class Can
 {
     public:
       	Can(Gpio* p_pin_rx, Gpio* p_pin_tx);
+    
         void    begin(BSP_CAN_BAUD bps);
-        void    set_filter(u8 Fifo,u8 nCanType,u8 num,u32 ID,u32 Mask);
+    
         void    interrupt(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
-        void    attach_interrupt(void (*callback_fun)(void));
-        void    set_filter_idlist(u8 nCanType,u32 ID);
-        void    set_filter_idmask(u8 nCanType,u8 num,u32 ID,u32 mask);
+    
+        /**
+         *@brief    CAN接收消息使用过滤器方式以及其设置
+         *@param    nCanType：CAN_ID_STD或者CAN_ID_EXT
+         *@param    num：0-13  过滤器组编号
+         *@param    ID：类似于网络的IP
+         *@param    mask：类似于网络的子网掩码
+         *@retval   NONE
+        */
+        void    set_filter_idmask(u8 nCanType,u8 num,u32 ID,u32 mask);    
+    
+        /**
+        *@brief     CAN接收消息使用列表的方式只接收指定ID的数据，其等效于
+                    将子网掩码全部设置成1.
+        *@param     nCanType：CAN_ID_STD或者CAN_ID_EXT
+        *@param     num：0-13  过滤器组编号
+        *@param     ID：消息帧头ID筛选设置
+        *@retval    NONE
+        */
         void    set_filter_idlist(u8 nCanType,u8 num,u32 ID);
+
         u8      write(CanTxMsg *pCanMsg);
+        
         void    read(CanRxMsg *pCanMsg);
+        
+        /**
+         *@brief    返回CAN接收FIFO中的消息数目，最大为3，如果超过3则会导致数据丢失
+         *@retval   FIFO中的消息数量
+        */
         u8      available(void);
         /** Attach a function to call whenever a serial interrupt is generated
          *
