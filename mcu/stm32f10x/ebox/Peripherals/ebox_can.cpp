@@ -1,7 +1,6 @@
 
 #include "ebox_can.h"
 
-callback_fun_type can_callback_table;
 static uint32_t can_irq_id;
 static can_irq_handler irq_handler;
 
@@ -11,25 +10,20 @@ extern "C" {
 
 void USB_LP_CAN1_RX0_IRQHandler(void)
 {
-		//can_callback_table();
-		irq_handler(can_irq_id);
-		CAN_FIFORelease(CAN1, CAN_FIFO0);	
+    irq_handler(can_irq_id);
+    CAN_FIFORelease(CAN1, CAN_FIFO0);	
 }
 
 void can_irq_init(can_irq_handler handler, uint32_t id)
 {
-		irq_handler = handler;
-		can_irq_id = id;
+    irq_handler = handler;
+    can_irq_id = id;
 }
 
 #ifdef __cplusplus
 }
 #endif
 
-void Can::attach_interrupt(void (*callback_fun)(void))
-{
-    can_callback_table = callback_fun;
-}
 
 void Can::interrupt(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
 {
@@ -56,7 +50,6 @@ Can::Can(Gpio *p_pin_rx, Gpio *p_pin_tx)
     this->pin_rx = p_pin_rx;
     this->pin_tx = p_pin_tx;
 }
-
 
 const uint16_t CANBAUD[][4] =
 {
@@ -103,30 +96,30 @@ void Can::set_bps(BSP_CAN_BAUD bps)
 */
 void Can::set_filter_idmask(u8 nCanType,u8 num,u32 ID,u32 mask)
 {
-		CAN_FilterInitTypeDef  CAN_FilterInitStructure;
+    CAN_FilterInitTypeDef  CAN_FilterInitStructure;
 
-		CAN_FilterInitStructure.CAN_FilterNumber=num;						
-		CAN_FilterInitStructure.CAN_FilterMode=CAN_FilterMode_IdMask;		
+    CAN_FilterInitStructure.CAN_FilterNumber=num;						
+    CAN_FilterInitStructure.CAN_FilterMode=CAN_FilterMode_IdMask;		
     CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_32bit;
-	
-		if(nCanType == CAN_ID_STD)
-		{/* std id  */
-			CAN_FilterInitStructure.CAN_FilterIdHigh= ID<<5;
-			CAN_FilterInitStructure.CAN_FilterIdLow=0|CAN_ID_STD;
-		}
-		else
-		{
-		/* ext id  */
-			CAN_FilterInitStructure.CAN_FilterIdHigh= ((ID<<3)>>16) & 0xffff;
-			CAN_FilterInitStructure.CAN_FilterIdLow= ((ID<<3)& 0xffff) | CAN_ID_EXT;
-		}
-		
-		CAN_FilterInitStructure.CAN_FilterMaskIdHigh=(mask>>16)&0xffff;
-		CAN_FilterInitStructure.CAN_FilterMaskIdLow=mask&0xffff;
-		
-		CAN_FilterInitStructure.CAN_FilterFIFOAssignment=CAN_Filter_FIFO0 ;
-		CAN_FilterInitStructure.CAN_FilterActivation=ENABLE;
-		CAN_FilterInit(&CAN_FilterInitStructure);
+
+    if(nCanType == CAN_ID_STD)
+    {/* std id  */
+        CAN_FilterInitStructure.CAN_FilterIdHigh= ID<<5;
+        CAN_FilterInitStructure.CAN_FilterIdLow=0|CAN_ID_STD;
+    }
+    else
+    {
+    /* ext id  */
+        CAN_FilterInitStructure.CAN_FilterIdHigh= ((ID<<3)>>16) & 0xffff;
+        CAN_FilterInitStructure.CAN_FilterIdLow= ((ID<<3)& 0xffff) | CAN_ID_EXT;
+    }
+
+    CAN_FilterInitStructure.CAN_FilterMaskIdHigh=(mask>>16)&0xffff;
+    CAN_FilterInitStructure.CAN_FilterMaskIdLow=mask&0xffff;
+
+    CAN_FilterInitStructure.CAN_FilterFIFOAssignment=CAN_Filter_FIFO0 ;
+    CAN_FilterInitStructure.CAN_FilterActivation=ENABLE;
+    CAN_FilterInit(&CAN_FilterInitStructure);
 }
 
  /**
@@ -139,55 +132,50 @@ void Can::set_filter_idmask(u8 nCanType,u8 num,u32 ID,u32 mask)
 */
 void Can::set_filter_idlist(u8 nCanType,u8 num,u32 ID)
 {
-		CAN_FilterInitTypeDef  CAN_FilterInitStructure;
+    CAN_FilterInitTypeDef  CAN_FilterInitStructure;
 
-		CAN_FilterInitStructure.CAN_FilterNumber=num;						
-		CAN_FilterInitStructure.CAN_FilterMode=CAN_FilterMode_IdList;	
-		CAN_FilterInitStructure.CAN_FilterScale=CAN_FilterScale_32bit;
+    CAN_FilterInitStructure.CAN_FilterNumber=num;						
+    CAN_FilterInitStructure.CAN_FilterMode=CAN_FilterMode_IdList;	
+    CAN_FilterInitStructure.CAN_FilterScale=CAN_FilterScale_32bit;
+    
+    if(nCanType == CAN_ID_STD)
+    {/* std id  */
+        CAN_FilterInitStructure.CAN_FilterIdHigh= ID<<5;	
+        CAN_FilterInitStructure.CAN_FilterIdLow= 0|CAN_ID_STD;
+    }
+    else
+    {
+        /* ext id  */
+        CAN_FilterInitStructure.CAN_FilterIdHigh= ((ID<<3)>>16) & 0xffff;
+        CAN_FilterInitStructure.CAN_FilterIdLow= ((ID<<3)& 0xffff) | CAN_ID_EXT;				
+    }
+    
+    CAN_FilterInitStructure.CAN_FilterMaskIdHigh = 0;			
+    CAN_FilterInitStructure.CAN_FilterMaskIdLow = 0;			
 
-
-		
-		if(nCanType == CAN_ID_STD)
-		{/* std id  */
-			CAN_FilterInitStructure.CAN_FilterIdHigh= ID<<5;	
-			CAN_FilterInitStructure.CAN_FilterIdLow= 0|CAN_ID_STD;
-		}
-		else
-		{
-			/* ext id  */
-			CAN_FilterInitStructure.CAN_FilterIdHigh= ((ID<<3)>>16) & 0xffff;
-			CAN_FilterInitStructure.CAN_FilterIdLow= ((ID<<3)& 0xffff) | CAN_ID_EXT;				
-		}
-		
-		CAN_FilterInitStructure.CAN_FilterMaskIdHigh = 0;			//????16???????
-    CAN_FilterInitStructure.CAN_FilterMaskIdLow = 0;			//????16???????
-
-		CAN_FilterInitStructure.CAN_FilterFIFOAssignment=CAN_Filter_FIFO0 ;
-		CAN_FilterInitStructure.CAN_FilterActivation=ENABLE;
-		CAN_FilterInit(&CAN_FilterInitStructure);
+    CAN_FilterInitStructure.CAN_FilterFIFOAssignment=CAN_Filter_FIFO0 ;
+    CAN_FilterInitStructure.CAN_FilterActivation=ENABLE;
+    CAN_FilterInit(&CAN_FilterInitStructure);
 }
 
 void Can::begin(BSP_CAN_BAUD bps)
 {
 
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1 | RCC_APB1Periph_CAN2, ENABLE);
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
 
     /*to do */
-    GPIO_PinRemapConfig(GPIO_Remap1_CAN1, ENABLE);
-
+    if(pin_rx->id == PB8_ID && pin_tx->id == PB9_ID )
+    {
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+        GPIO_PinRemapConfig(GPIO_Remap1_CAN1, ENABLE);
+    }
     pin_rx->mode(INPUT_PU);
     pin_tx->mode(AF_PP);
 
-
-
-
     set_bps(bps);
-	
-		for(u8 i=0;i<3;i++)CAN_CancelTransmit(CAN1,i);
-		
-		can_irq_init(Can::_irq_handler, (uint32_t)this);
-
+    for(u8 i=0;i<3;i++)
+        CAN_CancelTransmit(CAN1,i);
+    can_irq_init(Can::_irq_handler, (uint32_t)this);
 }
 
 u8 Can::write(CanTxMsg *pCanMsg)
