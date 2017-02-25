@@ -1,9 +1,36 @@
-
 #ifndef __CAN_H
 #define __CAN_H
 
+
 #include "ebox_common.h"
 #include "FunctionPointer.h"
+
+ /**
+ *@brief    CAN接收消息使用过滤器方式以及其设置
+ 基本使用方法1：发送
+    -1.初始化    
+        can1.begin(BSP_CAN_500KBPS);
+    -2.设置CanTxMsg帧信息： 
+        StdId/ExtId(标准/拓展ID),RTR(数据帧/远程帧),
+        IDE(和前面的Id对应),DCL(数据长度),Data(数据内容)
+    -3.发送数据        
+         can1.write(&TxMessage);
+基本使用方法2：接收
+    -1.初始化    
+        can1.begin(BSP_CAN_500KBPS);
+    -2.设置过滤器
+        --1.掩码模式 can1.set_filter_idmask(CAN_ID_STD,0,0x321,0XFFFFFFFF);
+        或者
+        --2.列表模式 can1.set_filter_idlist(CAN_ID_STD,0,0X321);
+    -3.查询是否有数据接收到，如果接收到，然后用户可以自行处理
+        if(can1.available())
+        {
+            can1.read(&RxMessage);
+            uart1.printf("Rx:%s\n",RxMessage.Data);
+        }
+
+*/
+
 
 typedef void (*can_irq_handler)(uint32_t id);
 

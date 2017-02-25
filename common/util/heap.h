@@ -74,7 +74,7 @@ typedef enum
 	#define cfgAPPLICATION_ALLOCATED_HEAP 0          //内存池在外部文件定义还是在fMalloc.c中定义      
 #endif
 
-#define cfgTOTAL_HEAP_SIZE1		( ( size_t ) ( 10000 ) )//内部内存池大小
+#define cfgTOTAL_HEAP_SIZE1		( ( size_t ) ( 5000 ) )//内部内存池大小
 #define cfgTOTAL_HEAP_SIZE2		( ( size_t ) ( 500 * 1024 ) )//外部内存池大小
 #define cfgTOTAL_HEAP_SIZE3		( ( size_t ) ( 60 * 1024 ) )//CCM内存池大小
 

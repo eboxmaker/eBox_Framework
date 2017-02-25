@@ -93,6 +93,14 @@ void Can::set_bps(BSP_CAN_BAUD bps)
 }
 
 
+ /**
+ *@brief    CAN接收消息使用过滤器方式以及其设置
+ *@param    nCanType：CAN_ID_STD或者CAN_ID_EXT
+ *@param    num：0-13  过滤器组编号
+ *@param    ID：类似于网络的IP
+ *@param    mask：类似于网络的子网掩码
+ *@retval   NONE
+*/
 void Can::set_filter_idmask(u8 nCanType,u8 num,u32 ID,u32 mask)
 {
 		CAN_FilterInitTypeDef  CAN_FilterInitStructure;
@@ -121,7 +129,14 @@ void Can::set_filter_idmask(u8 nCanType,u8 num,u32 ID,u32 mask)
 		CAN_FilterInit(&CAN_FilterInitStructure);
 }
 
-
+ /**
+ *@brief    CAN接收消息使用列表的方式只接收指定ID的数据，其等效于
+            将子网掩码全部设置成1.
+ *@param    nCanType：CAN_ID_STD或者CAN_ID_EXT
+ *@param    num：0-13  过滤器组编号
+ *@param    ID：消息帧头ID筛选设置
+ *@retval   NONE
+*/
 void Can::set_filter_idlist(u8 nCanType,u8 num,u32 ID)
 {
 		CAN_FilterInitTypeDef  CAN_FilterInitStructure;
