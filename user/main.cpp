@@ -14,42 +14,47 @@
  
 #include "ebox.h"
 #include "bsp.h"
-CanRxMsg RxMessage;
-uint8_t data[8];
+#include "list.h"
 
-
-void test()
-{
-    can1.read(&RxMessage);
-    uart1.printf("Rx:sender:0x%x\n",RxMessage.StdId);
-    uart1.printf("Rx:%s\n",RxMessage.Data);
-}
+List l;
+Node x;
+int table[10]={1,2};
 void setup()
 {
     ebox_init();
     PB7.mode(OUTPUT_PP);
     uart1.begin(115200);
-    uart1.printf("can rx test\r\n");
-    can1.begin(BSP_CAN_500KBPS);
-    can1.set_filter_idmask(CAN_ID_STD,0,0,0);
-    //can1.set_filter_idlist(CAN_ID_STD,0,0X321);
-    can1.attach(test);
-    can1.interrupt(ENABLE);
-
+    x.data = table;
 }
+    int *p;
+    Node *node;
 int main(void)
 {
     setup();
+    uart1.printf("%d\n",node);
+     node = l.head;
+   for(int i = 0; i < 10; i++)
+        table[i] = i;
+    node = l.head;
+    for(int i = 0; i < 10; i++)
+    {
+        l.insert(node,&table[i]);
+        uart1.printf("l.head = 0x%x\n",l.head);
+        uart1.printf("l.head->next = 0x%x\n",l.head->next);
+        node = l.next(node);
+        uart1.printf("l.head = 0x%x\n",l.head);
+        uart1.printf("node = 0x%x\n",node);
+        uart1.printf("l.size = %d\n",l.list_size);
+    }
+    
+    node = l.head;
     while(1)
     {
-        delay_ms(100);
-        PB7.toggle();
-//        if(can1.available())
-//        {
-//            can1.read(&RxMessage);
-//            uart1.printf("Rx:sender:0x%x\n",RxMessage.StdId);
-//            uart1.printf("Rx:%s\n",RxMessage.Data);
-//        }
+        p = (int *)l.data(node);
+        uart1.printf("table[0] = %d\n",*p);
+        node = l.next(node);
+        if(node == NULL)
+            while(1);
     }
 
 }
