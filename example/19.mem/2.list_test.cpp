@@ -40,33 +40,18 @@ int main(void)
     }
     l.remove(5);
     l.insert(6,&table[5]);
-    l.modify_node(7,&table[2]);
-    l.swap(5,6);
-//    l.clear();
 
     while(1)
     {
-        if((p = (int *)l.data(count)) != NULL)
+        p = (int *)l.data(count);
+        uart1.printf("table[%d] = %d\n",count,*p);
+        count++;
+        if(count == l.size())
         {
-            uart1.printf("table[%d] = %d\n",count,*p);
-            count++;
-        }
-        else
-            uart1.printf("DATA NULL\n",count,*p);
-
-        if(count >= l.size())
-        {
-            
-            if((node = l.head()) != NULL)
-                uart1.printf("head.data = %d\n",*((int *)node->data));
-            else
-                uart1.printf("head NULL\n",count,*p);
-            
-            if((node = l.tail()) != NULL)
-                uart1.printf("tail.data = %d\n",*((int *)node->data));
-            else
-                uart1.printf("tail NULL\n",count,*p);
-                
+            node = l.head();
+            uart1.printf("head.data = %d\n",*((int *)node->data));
+            node = l.tail();
+            uart1.printf("tail.data = %d\n",*((int *)node->data));
             while(1);
         }
     }
