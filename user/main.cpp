@@ -31,16 +31,18 @@ void setup()
 int main(void)
 {
     setup();
-    uart1.printf("%d\n",node);
+    uart1.printf("test1\n",node);
+    uart1.printf("test2\n",node);
     for(int i = 0; i < 10; i++)
         table[i] = i;
     for(int i = 0; i < 10; i++)
     {
-        l.insert(i,&table[i]);
+        l.insert_tail(&table[i]);
     }
-    l.remove(5);
-    l.insert(6,&table[5]);
-    l.modify_node(7,&table[2]);
+//    l.remove(9);
+//    l.insert(2,&table[3]);
+//    l.insert(2,&table[5]);
+//    l.modify_node(7,&table[2]);
     l.swap(5,6);
 //    l.clear();
 
@@ -58,7 +60,9 @@ int main(void)
         {
             
             if((node = l.head()) != NULL)
+            {
                 uart1.printf("head.data = %d\n",*((int *)node->data));
+            }
             else
                 uart1.printf("head NULL\n",count,*p);
             

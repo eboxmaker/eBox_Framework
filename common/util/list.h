@@ -33,7 +33,9 @@ class List
 public:
 
     List(){_head = NULL;}
-    int  insert(int x,const void *data);
+    int  insert(int at,const void *data);
+    int  insert_head(const void *data);
+    int  insert_tail(const void *data);
     int  remove(int x);
     void *data(int x);
     Node *head();
