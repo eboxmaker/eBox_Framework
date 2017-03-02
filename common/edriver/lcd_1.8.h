@@ -19,13 +19,14 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 
 #include "ebox.h"
+#include "gui.h"
 typedef enum
 {
     ENABLE_BACK_COLOR = 0,
     DISABLE_BACK_COLOR = 1
 } TEXT_MODE_TYPE;
 
-class Lcd
+class Lcd: public Adafruit_GFX
 {
 public:
     uint8_t MADCTL;
@@ -33,7 +34,7 @@ public:
     u16 back_color;
     TEXT_MODE_TYPE text_mode;
 public:
-    Lcd(Gpio *cs, Gpio *led, Gpio *rs, Gpio *rst, Spi *spi)
+    Lcd(Gpio *cs, Gpio *led, Gpio *rs, Gpio *rst, Spi *spi,int16_t w, int16_t h): Adafruit_GFX(w, h)
     {
         this->cs = cs;
         this->led = led;
@@ -67,6 +68,15 @@ public:
 
 
     void draw_bitmap(const unsigned char *p); //œ‘ æ40*40 QQÕº∆¨
+    
+    virtual void    drawPixel(int16_t x, int16_t y, uint16_t color);
+//    virtual void    drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color) ;
+    virtual void    drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color) ;
+    virtual void    drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color) ;
+    virtual void    drawRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) ;
+    virtual void    fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) ;
+    virtual void    fillScreen(uint16_t color) ;
+    virtual void    invertDisplay(bool i);
 
 private:
     Gpio *cs;

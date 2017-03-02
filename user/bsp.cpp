@@ -25,7 +25,7 @@ Led     led2(&PB9,1);
 Button  btn(&PA8, 1);
 W5500   w5500(&PC13, &PC14, &PC15, &spi2);
 SD      sd(&PB12, &spi2);
-Lcd     lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
+//Lcd     lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
 //W25x16  flash(&PA15, &spi1);
 At24c02 eeprom(&i2c2);
 
