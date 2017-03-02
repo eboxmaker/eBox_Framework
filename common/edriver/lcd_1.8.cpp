@@ -716,4 +716,36 @@ void Lcd::draw_bitmap(const unsigned char *p) //œ‘ æ40*40 QQÕº∆¨
         }
     }
 }
+void Lcd::drawPixel(int16_t x, int16_t y, uint16_t color) {
+    set_region(x, y, x + 1, y + 1);
+    write_data_16bit(color);
+
+};
+//void Lcd::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color) {
+
+//};
+void Lcd::drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color) 
+{
+//void Lcd::draw_v_line(int x, int y0,  int y1)
+
+    set_region(x, y, x, y + h - 1);
+
+    while (h--)
+    {
+        write_data_16bit(color);
+    }
+};
+void Lcd::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color) {
+
+    set_region(x, y, x + w - 1, y);
+    while (w--)
+    {
+        write_data_16bit(color);
+    }
+
+};
+void Lcd::drawRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) {};
+void Lcd::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) {};
+void Lcd::fillScreen(uint16_t color) {};
+void Lcd::invertDisplay(bool i) {};
 

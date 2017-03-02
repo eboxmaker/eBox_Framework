@@ -334,7 +334,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcu\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\mcu\stm32f10x\ebox;..\..\..\mcu\stm32f10x\ebox\core;..\..\..\mcu\stm32f10x\ebox\Peripherals;..\..\..\common\util;..\..\..\common\edriver;..\..\..\common\network;..\..\..\common\fat;..\..\..\common\edriver\WiFi;..\..\..\user;..\..\..\common\cJSON;..\..\..\common\edriver\SFUD\sfud\inc;..\..\..\common\edriver\SFUD\ebox;..\..\..\common\bigiot;..\..\..\common\usb_device_stack\USBDevice;..\..\..\common\usb_device_stack\USBHID;..\..\..\common\usb_device_stack\USBAudio;..\..\..\common\usb_device_stack\USBMIDI;..\..\..\common\usb_device_stack\USBMSD;..\..\..\common\usb_device_stack\USBSerial</IncludePath>
+              <IncludePath>..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcu\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\mcu\stm32f10x\ebox;..\..\..\mcu\stm32f10x\ebox\core;..\..\..\mcu\stm32f10x\ebox\Peripherals;..\..\..\common\util;..\..\..\common\edriver;..\..\..\common\network;..\..\..\common\fat;..\..\..\common\edriver\WiFi;..\..\..\user;..\..\..\common\cJSON;..\..\..\common\edriver\SFUD\sfud\inc;..\..\..\common\edriver\SFUD\ebox;..\..\..\common\bigiot;..\..\..\common\usb_device_stack\USBDevice;..\..\..\common\usb_device_stack\USBHID;..\..\..\common\usb_device_stack\USBAudio;..\..\..\common\usb_device_stack\USBMIDI;..\..\..\common\usb_device_stack\USBMSD;..\..\..\common\usb_device_stack\USBSerial;..\..\..\common\gui</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -876,6 +876,16 @@
               <FileName>udp.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\common\network\udp.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>gui</GroupName>
+          <Files>
+            <File>
+              <FileName>gui.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\gui\gui.cpp</FilePath>
             </File>
           </Files>
         </Group>
