@@ -29,13 +29,14 @@ typedef struct _node
 class List
 {
     Node *_head;
+    Node *_tail;
     int  _size;
 public:
 
     List(){_head = NULL;}
-    int  insert(int at,const void *data);
-    int  insert_head(const void *data);
-    int  insert_tail(const void *data);
+    int  insert(int at,void *data);
+    int  insert_head(void *data);
+    int  insert_tail(void *data);
     int  remove(int x);
     void *data(int x);
     Node *head();

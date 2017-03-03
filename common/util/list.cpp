@@ -25,30 +25,25 @@
             可以是任意数据类型（可以使结构体，缓冲区，变量等）.
 */
 
-int List::insert_head(const void *data)
+int List::insert_head(void *data)
 {
     Node *node_new;
     if((node_new = (Node *)ebox_malloc(sizeof(Node))) == NULL )
         return -1;
     
-    node_new->data = (Node *)data;
-    node_new->next = NULL;
+    node_new->data = data;
+    node_new->next = _head;
+    _head = node_new;
     
     if(_size == 0)
     {
-        _head = node_new;    
-    }
-    else
-    {
-        node_new->next = _head;
-        _head = node_new;
-
+        _tail = node_new;
     }
     _size++;
     return 0;
 }
 
-int List::insert_tail(const void *data)
+int List::insert_tail(void *data)
 {
     Node *node_prev,*node_new;
     if((node_new = (Node *)ebox_malloc(sizeof(Node))) == NULL )
@@ -59,40 +54,37 @@ int List::insert_tail(const void *data)
     
     if(_size == 0)
     {
-        _head = node_new;    
+        _head = _tail = node_new;    
     }
     else
     {
-        node_prev = _head;
-        
-        while(NULL != node_prev->next)
-        {
-
-            node_prev = node_prev->next;
-        }
-        node_prev->next = node_new;
+        _tail->next = node_new;
+        _tail = node_new;
     }
     _size++;
     return 0;
 }
 
-int List::insert(int at,const void *data)
+int List::insert(int at,void *data)
 {
     Node *node_prev,*node_at,*node_new;
     int pos_at;
     int found = 0;
     if(is_empty() || at < 0 ) return -1;
+    //1、申请内存，填充数据
     if((node_new = (Node *)ebox_malloc(sizeof(Node))) == NULL )
         return -1;
     
-    node_new->data = (Node *)data;
+    node_new->data = data;
     node_new->next = NULL;
 
-    if(at == 0)
+    //2、查找位置
+    if(at == 0)//如果是0位置，表示在头插入
     {
+        //3、插入数据
         insert_head(data);   return 0; 
     }
-    else 
+    else //其他位置
     {
         node_prev = _head;
         node_at = node_prev->next;
@@ -109,15 +101,17 @@ int List::insert(int at,const void *data)
             node_at = node_at->next;
             pos_at++;    
         }
+        //3、插入数据
         
-        if(found)
+        if(found)//中间位置
         {
             node_new->next = node_at;
             node_prev->next = node_new;
         }
-        else
+        else//尾部位置
         {
             node_prev->next = node_new;
+            _tail = node_new;
         }
         _size++;
     }
@@ -197,13 +191,13 @@ Node* List::head()
 
 Node* List::tail()
 {
-    if(is_empty())return NULL;
-    Node *node_tail = _head;
-    while(NULL != node_tail->next)
-    {
-        node_tail = node_tail->next;
-    }
-    return node_tail;
+//    if(is_empty())return NULL;
+//    Node *node_tail = _head;
+//    while(NULL != node_tail->next)
+//    {
+//        node_tail = node_tail->next;
+//    }
+    return _tail;
 }
 
 int List::is_empty()

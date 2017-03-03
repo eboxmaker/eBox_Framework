@@ -744,8 +744,21 @@ void Lcd::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color) {
     }
 
 };
-void Lcd::drawRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) {};
-void Lcd::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) {};
+void Lcd::drawRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
+{
+
+    set_region(x, y, x + w - 1, y + h - 1);
+    for (int i = 0; i <= w * h; i++)
+    {
+        write_data_16bit(front_color);
+    }
+};
+void Lcd::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) {
+    set_region(x, y, x + w - 1, y + h - 1);
+    for (int i = 0; i <= w * h; i++)
+    {
+        write_data_16bit(front_color);
+    }};
 void Lcd::fillScreen(uint16_t color) {};
 void Lcd::invertDisplay(bool i) {};
 
