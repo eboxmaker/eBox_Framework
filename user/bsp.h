@@ -34,7 +34,7 @@ extern Led      led2;
 extern Button   btn;
 extern W5500    w5500;
 extern SD       sd;
-extern Lcd      lcd;
+//extern Lcd      lcd;
 extern W25x16   flash;
 extern At24c02  eeprom;
 

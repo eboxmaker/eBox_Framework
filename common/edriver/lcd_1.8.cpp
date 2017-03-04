@@ -54,213 +54,6 @@ void Lcd::soft_reset()
     write_index(0x01);//soft reset
 }
 
-//向SPI总线传输一个8位数据
-//void  Lcd::spi_write_data(uint8_t Data)
-//{
-//	unsigned char i=0;
-//	for(i=8;i>0;i--)
-//	{
-//		if(Data&0x80)
-//	  sda->set(); //输出数据
-//      else sda->reset();
-//
-//      scl->reset();
-//      scl->set();
-//      Data<<=1;
-//	}
-//}
-//向液晶屏写一个8位指令
-void Lcd::write_index(uint8_t Index)
-{
-    //SPI 写命令时序开始
-    spi->take_spi_right(&config);
-    cs->reset();
-    rs->reset();
-    spi->write(Index);
-    cs->set();
-    spi->release_spi_right();
-}
-//向液晶屏写一个8位数据
-void Lcd::write_data_8bit(uint8_t Data)
-{
-    spi->take_spi_right(&config);
-    cs->reset();
-    rs->set();
-    spi->write(Data);
-    cs->set();
-    spi->release_spi_right();
-}
-//向液晶屏写一个16位数据
-void Lcd::write_data_16bit(uint16_t Data)
-{
-    spi->take_spi_right(&config);
-    cs->reset();
-    rs->set();
-    spi->write(Data >> 8); 	//写入高8位数据
-    spi->write(Data); 			//写入低8位数据
-    cs->set();
-    spi->release_spi_right();
-}
-//uint8_t Lcd::read_8bit()
-//{
-//    uint8_t data;
-//    cs->reset();
-//    rs->set();
-//    data = spi->read();
-//    cs->set();
-//    return data;
-//}
-//uint16_t Lcd::read_16bit()
-//{
-//    uint8_t data;
-//    cs->reset();
-//    rs->set();
-//    data |= spi->read();
-//    data |= spi->read() << 8;
-//    cs->set();
-//    return data;
-//}
-void Lcd::write_reg(uint8_t Index, uint8_t Data)
-{
-    write_index(Index);
-    write_data_8bit(Data);
-}
-//uint8_t Lcd::read_reg(uint8_t Index)
-//{
-//    uint8_t data;
-//    write_index(Index);
-//    data = read_8bit();
-//    return data;
-//}
-void Lcd::reset(void)
-{
-    rst->reset();
-    delay_ms(1000);
-    rst->set();
-    delay_ms(50);
-}
-//Lcd Init For 1.44Inch Lcd Panel with ST7735R.
-void Lcd::init(void)
-{
-    reset(); //Reset before Lcd Init.
-
-    //Lcd Init For 1.44Inch Lcd Panel with ST7735R.
-    write_index(0x11);//Sleep exit
-    delay_ms (120);
-
-    //ST7735R Frame Rate
-    write_index(0xB1);
-    write_data_8bit(0x01);
-    write_data_8bit(0x2C);
-    write_data_8bit(0x2D);
-
-    write_index(0xB2);
-    write_data_8bit(0x01);
-    write_data_8bit(0x2C);
-    write_data_8bit(0x2D);
-
-    write_index(0xB3);
-    write_data_8bit(0x01);
-    write_data_8bit(0x2C);
-    write_data_8bit(0x2D);
-    write_data_8bit(0x01);
-    write_data_8bit(0x2C);
-    write_data_8bit(0x2D);
-
-    write_index(0xB4); //Column inversion
-    write_data_8bit(0x07);
-
-    //ST7735R Power Sequence
-    write_index(0xC0);
-    write_data_8bit(0xA2);
-    write_data_8bit(0x02);
-    write_data_8bit(0x84);
-    write_index(0xC1);
-    write_data_8bit(0xC5);
-
-    write_index(0xC2);
-    write_data_8bit(0x0A);
-    write_data_8bit(0x00);
-
-    write_index(0xC3);
-    write_data_8bit(0x8A);
-    write_data_8bit(0x2A);
-    write_index(0xC4);
-    write_data_8bit(0x8A);
-    write_data_8bit(0xEE);
-
-    write_index(0xC5); //VCOM
-    write_data_8bit(0x0E);
-
-    MADCTL = 0XC0;
-    write_index(0x36); //MX, MY, RGB mode
-    write_data_8bit(MADCTL);
-
-    //ST7735R Gamma Sequence
-    write_index(0xe0);
-    write_data_8bit(0x0f);
-    write_data_8bit(0x1a);
-    write_data_8bit(0x0f);
-    write_data_8bit(0x18);
-    write_data_8bit(0x2f);
-    write_data_8bit(0x28);
-    write_data_8bit(0x20);
-    write_data_8bit(0x22);
-    write_data_8bit(0x1f);
-    write_data_8bit(0x1b);
-    write_data_8bit(0x23);
-    write_data_8bit(0x37);
-    write_data_8bit(0x00);
-    write_data_8bit(0x07);
-    write_data_8bit(0x02);
-    write_data_8bit(0x10);
-
-    write_index(0xe1);
-    write_data_8bit(0x0f);
-    write_data_8bit(0x1b);
-    write_data_8bit(0x0f);
-    write_data_8bit(0x17);
-    write_data_8bit(0x33);
-    write_data_8bit(0x2c);
-    write_data_8bit(0x29);
-    write_data_8bit(0x2e);
-    write_data_8bit(0x30);
-    write_data_8bit(0x30);
-    write_data_8bit(0x39);
-    write_data_8bit(0x3f);
-    write_data_8bit(0x00);
-    write_data_8bit(0x07);
-    write_data_8bit(0x03);
-    write_data_8bit(0x10);
-
-    write_index(0x2a);
-    write_data_8bit(0x00);
-    write_data_8bit(0x00);
-    write_data_8bit(0x00);
-    write_data_8bit(0x7f);
-
-    write_index(0x2b);
-    write_data_8bit(0x00);
-    write_data_8bit(0x00);
-    write_data_8bit(0x00);
-    write_data_8bit(0x9f);
-
-    write_index(0xF0); //Enable test command
-    write_data_8bit(0x01);
-    write_index(0xF6); //Disable ram power save mode
-    write_data_8bit(0x00);
-
-    write_index(0x3A); //65k mode
-    write_data_8bit(0x05);
-
-    ///////////////////////////
-    write_index(0x0c);
-    write_data_8bit(0x00);
-    write_data_8bit(0x05);
-    /////////////////////////////////
-    write_index(0x29);//Display on
-}
-
 void Lcd::on()
 {
     write_index(0x29);//Display on
@@ -294,29 +87,7 @@ void Lcd::row_order(uint8_t order)
     write_data_8bit(MADCTL);
 
 }
-/*************************************************
-函数名：set_region
-功能：设置lcd显示区域，在此区域写点数据自动换行
-入口参数：xy起点和终点
-返回值：无
-*************************************************/
-void Lcd::set_region(uint16_t x_start, uint16_t y_start, uint16_t x_end, uint16_t y_end)
-{
-    write_index(0x2a);
-    write_data_8bit(0x00);
-    write_data_8bit(x_start + 2);
-    write_data_8bit(0x00);
-    write_data_8bit(x_end + 2);
 
-    write_index(0x2b);
-    write_data_8bit(0x00);
-    write_data_8bit(y_start + 1);
-    write_data_8bit(0x00);
-    write_data_8bit(y_end + 1);
-
-    write_index(0x2c);
-
-}
 /*************************************************
 函数名：Lcd_Clear
 功能：全屏清屏函数
@@ -345,34 +116,12 @@ void Lcd::set_xy(uint16_t x, uint16_t y)
 }
 
 
-/*************************************************
-函数名：LCD_DrawPoint
-功能：画一个点
-入口参数：无
-返回值：无
-*************************************************/
-inline void Lcd::draw_point(uint16_t x, uint16_t y, uint16_t Data)
+
+void Lcd::draw_pixel(u16 x, u16 y, u16 Data)
 {
     set_region(x, y, x + 1, y + 1);
     write_data_16bit(Data);
 }
-
-/*****************************************
- 函数功能：读TFT某一点的颜色
- 出口参数：color  点颜色值
-******************************************/
-//uint16_t Lcd::read_point(uint16_t x,uint16_t y)
-//{
-//  uint16_t data;
-//  set_xy(x,y);
-
-//    write_index(0x2e);
-
-//    data = read_16bit();
-
-//  return data;
-//}
-
 
 
 /*************************************************
@@ -381,12 +130,12 @@ inline void Lcd::draw_point(uint16_t x, uint16_t y, uint16_t Data)
 入口参数：无
 返回值：无
 *************************************************/
-void Lcd::draw_h_line(int x0, int y,  int x1)
+void Lcd::draw_h_line(int x0, int y0, int x1, uint16_t color)
 {
-    set_region(x0, y, x1, y);
+    set_region(x0, y0, x1, y0);
     for (; x0 <= x1; x0++)
     {
-        write_data_16bit(front_color);
+        write_data_16bit(color);
     }
 }
 
@@ -396,17 +145,16 @@ void Lcd::draw_h_line(int x0, int y,  int x1)
 入口参数：无
 返回值：无
 *************************************************/
-void Lcd::draw_v_line(int x, int y0,  int y1)
+void Lcd::draw_v_line(int x0, int y0,  int y1, uint16_t color)
 {
-    set_region(x, y0, x, y1);
+    set_region(x0, y0, x0, y1);
 
     for (; y0 <= y1; y0++)
     {
-        write_data_16bit(front_color);
+        write_data_16bit(color);
     }
 }
-#include "color_convert.h"
-void Lcd::fill_rect(int x0, int y0,  int x1, int y1)
+void Lcd::fill_rect(int x0, int y0,  int x1, int y1, uint16_t color)
 {
     uint16_t i = 0;
     uint8_t dx, dy;
@@ -416,7 +164,7 @@ void Lcd::fill_rect(int x0, int y0,  int x1, int y1)
     set_region(x0, y0, x1, y1);
     for (; i <= dx * dy; i++)
     {
-        write_data_16bit(front_color);
+        write_data_16bit(color);
     }
 }
 void Lcd::fill_rect(int x0, int y0,  int x1, int y1, uint16_t *bitmap)
@@ -433,48 +181,9 @@ void Lcd::fill_rect(int x0, int y0,  int x1, int y1, uint16_t *bitmap)
     }
 
 }
-void Lcd::draw_circle(uint16_t x, uint16_t y, uint16_t r)
-{
-    //Bresenham算法
-    unsigned short  a, b;
-    int c;
-    a = 0;
-    b = r;
-    c = 3 - 2 * r;
-    while (a < b)
-    {
-        draw_point(x + a, y + b, front_color); //        7
-        draw_point(x - a, y + b, front_color); //        6
-        draw_point(x + a, y - b, front_color); //        2
-        draw_point(x - a, y - b, front_color); //        3
-        draw_point(x + b, y + a, front_color); //        8
-        draw_point(x - b, y + a, front_color); //        5
-        draw_point(x + b, y - a, front_color); //        1
-        draw_point(x - b, y - a, front_color); //        4
 
-        if(c < 0) c = c + 4 * a + 6;
-        else
-        {
-            c = c + 4 * (a - b) + 10;
-            b -= 1;
-        }
-        a += 1;
-    }
-    if (a == b)
-    {
-        draw_point(x + a, y + b, front_color);
-        draw_point(x + a, y + b, front_color);
-        draw_point(x + a, y - b, front_color);
-        draw_point(x - a, y - b, front_color);
-        draw_point(x + b, y + a, front_color);
-        draw_point(x - b, y + a, front_color);
-        draw_point(x + b, y - a, front_color);
-        draw_point(x - b, y - a, front_color);
-    }
-
-}
 //画线函数，使用Bresenham 画线算法
-void Lcd::draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
+void Lcd::draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t color)
 {
     int dx,             // difference in x's
         dy,             // difference in y's
@@ -523,7 +232,7 @@ void Lcd::draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
         for (index = 0; index <= dx; index++) //要画的点数不会超过x距离
         {
             //画点
-            draw_point(x0, y0, front_color);
+            draw_pixel(x0, y0, color);
 
             // test if error has overflowed
             if (error >= 0) //是否需要增加y坐标值
@@ -551,7 +260,7 @@ void Lcd::draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
         for (index = 0; index <= dy; index++)
         {
             // set the pixel
-            draw_point(x0, y0, front_color);
+            draw_pixel(x0, y0, color);
 
             // test if error overflowed
             if (error >= 0)
@@ -570,7 +279,46 @@ void Lcd::draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
         } // end for
     } // end else |slope| > 1
 }
+void Lcd::draw_circle(uint16_t x, uint16_t y, uint16_t r, uint16_t color)
+{
+    unsigned short  a, b;
+    int c;
+    a = 0;
+    b = r;
+    c = 3 - 2 * r;
+    while (a < b)
+    {
+        draw_pixel(x + a, y + b, color); //        7
+        draw_pixel(x - a, y + b, color); //        6
+        draw_pixel(x + a, y - b, color); //        2
+        draw_pixel(x - a, y - b, color); //        3
+        draw_pixel(x + b, y + a, color); //        8
+        draw_pixel(x - b, y + a, color); //        5
+        draw_pixel(x + b, y - a, color); //        1
+        draw_pixel(x - b, y - a, color); //        4
 
+        if(c < 0) c = c + 4 * a + 6;
+        else
+        {
+            c = c + 4 * (a - b) + 10;
+            b -= 1;
+        }
+        a += 1;
+    }
+    if (a == b)
+    {
+        draw_pixel(x + a, y + b, color);
+        draw_pixel(x + a, y + b, color);
+        draw_pixel(x + a, y - b, color);
+        draw_pixel(x - a, y - b, color);
+        draw_pixel(x + b, y + a, color);
+        draw_pixel(x - b, y + a, color);
+        draw_pixel(x + b, y - a, color);
+        draw_pixel(x - b, y - a, color);
+    }
+
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////
 void Lcd::h_disp_char8x16(uint16_t x, uint16_t y, uint8_t ch)
 {
     if(ch >= 0x20)ch -= 0x20;
@@ -700,7 +448,7 @@ void Lcd::draw_bitmap(const unsigned char *p) //显示40*40 QQ图片
 {
     int i, j, k;
     unsigned char picH, picL;
-    clear(BLACK); //清屏
+    //clear(BLACK); //清屏
 
     for(k = 0; k < 4; k++)
     {
@@ -716,49 +464,209 @@ void Lcd::draw_bitmap(const unsigned char *p) //显示40*40 QQ图片
         }
     }
 }
-void Lcd::drawPixel(int16_t x, int16_t y, uint16_t color) {
+
+
+
+
+
+
+//向液晶屏写一个8位指令
+void Lcd::write_index(uint8_t Index)
+{
+    //SPI 写命令时序开始
+    spi->take_spi_right(&config);
+    cs->reset();
+    rs->reset();
+    spi->write(Index);
+    cs->set();
+    spi->release_spi_right();
+}
+//向液晶屏写一个8位数据
+void Lcd::write_data_8bit(uint8_t Data)
+{
+    spi->take_spi_right(&config);
+    cs->reset();
+    rs->set();
+    spi->write(Data);
+    cs->set();
+    spi->release_spi_right();
+}
+//向液晶屏写一个16位数据
+void Lcd::write_data_16bit(uint16_t Data)
+{
+    spi->take_spi_right(&config);
+    cs->reset();
+    rs->set();
+    spi->write(Data >> 8); 	//写入高8位数据
+    spi->write(Data); 			//写入低8位数据
+    cs->set();
+    spi->release_spi_right();
+}
+
+void Lcd::write_reg(uint8_t Index, uint8_t Data)
+{
+    write_index(Index);
+    write_data_8bit(Data);
+}
+/*************************************************
+函数名：set_region
+功能：设置lcd显示区域，在此区域写点数据自动换行
+入口参数：xy起点和终点
+返回值：无
+*************************************************/
+void Lcd::set_region(uint16_t x_start, uint16_t y_start, uint16_t x_end, uint16_t y_end)
+{
+    write_index(0x2a);
+    write_data_8bit(0x00);
+    write_data_8bit(x_start + 2);
+    write_data_8bit(0x00);
+    write_data_8bit(x_end + 2);
+
+    write_index(0x2b);
+    write_data_8bit(0x00);
+    write_data_8bit(y_start + 1);
+    write_data_8bit(0x00);
+    write_data_8bit(y_end + 1);
+
+    write_index(0x2c);
+
+}
+void Lcd::reset(void)
+{
+    rst->reset();
+    delay_ms(1000);
+    rst->set();
+    delay_ms(50);
+}
+//Lcd Init For 1.44Inch Lcd Panel with ST7735R.
+void Lcd::init(void)
+{
+    reset(); //Reset before Lcd Init.
+
+    //Lcd Init For 1.44Inch Lcd Panel with ST7735R.
+    write_index(0x11);//Sleep exit
+    delay_ms (120);
+
+    //ST7735R Frame Rate
+    write_index(0xB1);
+    write_data_8bit(0x01);
+    write_data_8bit(0x2C);
+    write_data_8bit(0x2D);
+
+    write_index(0xB2);
+    write_data_8bit(0x01);
+    write_data_8bit(0x2C);
+    write_data_8bit(0x2D);
+
+    write_index(0xB3);
+    write_data_8bit(0x01);
+    write_data_8bit(0x2C);
+    write_data_8bit(0x2D);
+    write_data_8bit(0x01);
+    write_data_8bit(0x2C);
+    write_data_8bit(0x2D);
+
+    write_index(0xB4); //Column inversion
+    write_data_8bit(0x07);
+
+    //ST7735R Power Sequence
+    write_index(0xC0);
+    write_data_8bit(0xA2);
+    write_data_8bit(0x02);
+    write_data_8bit(0x84);
+    write_index(0xC1);
+    write_data_8bit(0xC5);
+
+    write_index(0xC2);
+    write_data_8bit(0x0A);
+    write_data_8bit(0x00);
+
+    write_index(0xC3);
+    write_data_8bit(0x8A);
+    write_data_8bit(0x2A);
+    write_index(0xC4);
+    write_data_8bit(0x8A);
+    write_data_8bit(0xEE);
+
+    write_index(0xC5); //VCOM
+    write_data_8bit(0x0E);
+
+    MADCTL = 0XC0;
+    write_index(0x36); //MX, MY, RGB mode
+    write_data_8bit(MADCTL);
+
+    //ST7735R Gamma Sequence
+    write_index(0xe0);
+    write_data_8bit(0x0f);
+    write_data_8bit(0x1a);
+    write_data_8bit(0x0f);
+    write_data_8bit(0x18);
+    write_data_8bit(0x2f);
+    write_data_8bit(0x28);
+    write_data_8bit(0x20);
+    write_data_8bit(0x22);
+    write_data_8bit(0x1f);
+    write_data_8bit(0x1b);
+    write_data_8bit(0x23);
+    write_data_8bit(0x37);
+    write_data_8bit(0x00);
+    write_data_8bit(0x07);
+    write_data_8bit(0x02);
+    write_data_8bit(0x10);
+
+    write_index(0xe1);
+    write_data_8bit(0x0f);
+    write_data_8bit(0x1b);
+    write_data_8bit(0x0f);
+    write_data_8bit(0x17);
+    write_data_8bit(0x33);
+    write_data_8bit(0x2c);
+    write_data_8bit(0x29);
+    write_data_8bit(0x2e);
+    write_data_8bit(0x30);
+    write_data_8bit(0x30);
+    write_data_8bit(0x39);
+    write_data_8bit(0x3f);
+    write_data_8bit(0x00);
+    write_data_8bit(0x07);
+    write_data_8bit(0x03);
+    write_data_8bit(0x10);
+
+    write_index(0x2a);
+    write_data_8bit(0x00);
+    write_data_8bit(0x00);
+    write_data_8bit(0x00);
+    write_data_8bit(0x7f);
+
+    write_index(0x2b);
+    write_data_8bit(0x00);
+    write_data_8bit(0x00);
+    write_data_8bit(0x00);
+    write_data_8bit(0x9f);
+
+    write_index(0xF0); //Enable test command
+    write_data_8bit(0x01);
+    write_index(0xF6); //Disable ram power save mode
+    write_data_8bit(0x00);
+
+    write_index(0x3A); //65k mode
+    write_data_8bit(0x05);
+
+    ///////////////////////////
+    write_index(0x0c);
+    write_data_8bit(0x00);
+    write_data_8bit(0x05);
+    /////////////////////////////////
+    write_index(0x29);//Display on
+}
+/*************************************************
+函数名：LCD_DrawPoint
+功能：画一个点
+入口参数：无
+返回值：无
+*************************************************/
+inline void Lcd::draw_point(uint16_t x, uint16_t y, uint16_t Data)
+{
     set_region(x, y, x + 1, y + 1);
-    write_data_16bit(color);
-
-};
-//void Lcd::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color) {
-
-//};
-void Lcd::drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color) 
-{
-//void Lcd::draw_v_line(int x, int y0,  int y1)
-
-    set_region(x, y, x, y + h - 1);
-
-    while (h--)
-    {
-        write_data_16bit(color);
-    }
-};
-void Lcd::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color) {
-
-    set_region(x, y, x + w - 1, y);
-    while (w--)
-    {
-        write_data_16bit(color);
-    }
-
-};
-void Lcd::drawRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color)
-{
-
-    set_region(x, y, x + w - 1, y + h - 1);
-    for (int i = 0; i <= w * h; i++)
-    {
-        write_data_16bit(front_color);
-    }
-};
-void Lcd::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) {
-    set_region(x, y, x + w - 1, y + h - 1);
-    for (int i = 0; i <= w * h; i++)
-    {
-        write_data_16bit(front_color);
-    }};
-void Lcd::fillScreen(uint16_t color) {};
-void Lcd::invertDisplay(bool i) {};
-
+    write_data_16bit(Data);
+}
