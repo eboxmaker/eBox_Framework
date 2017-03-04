@@ -887,6 +887,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\gui\gui.cpp</FilePath>
             </File>
+            <File>
+              <FileName>lcd_port.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\gui\lcd_port.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
