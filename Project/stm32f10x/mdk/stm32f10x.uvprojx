@@ -892,6 +892,21 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\gui\lcd_port.cpp</FilePath>
             </File>
+            <File>
+              <FileName>Font8_ASCII.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\gui\Font8_ASCII.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Font16_ASCII.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\gui\Font16_ASCII.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Font32_ASCII.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\gui\Font32_ASCII.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

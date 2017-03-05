@@ -36,12 +36,15 @@ void setup()
     lcd.begin(1);
     
     
+    gui.begin();
     gui.fill_screen(RED);
-    gui.fill_rect(50,50,70,70);
+//    gui.fill_rect(50,50,70,70);
     
-    
+    uart1.printf("w:%d\n",gui.width());
+    uart1.printf("h:%d\n",gui.height());
+//    
 
-    
+//    
     gui.set_color(BLUE);
     gui.draw_line(1,1,100,100);
     gui.draw_v_line(100,100,126);
@@ -63,34 +66,24 @@ void setup()
     
     gui.draw_round_rect(0,50,100,40,10);
     gui.fill_round_rect(0,50,100,40,10);
-//    lcd.column_order(1);
-//    lcd.row_order(1);
 
-//    lcd.front_color = RED;
-//    lcd.back_color = BLACK;
-//    hsv.s = 1;
-//    hsv.v = 0.5;
-//    hsv.h = 0;
+    gui.set_text_mode(LCD_TEXTMODE_TRANS);
+    gui.set_font(&GUI_Font32_ASCII);
+    gui.set_color(GREEN);
+    gui.set_back_color(BLACK);
 
-//    lcd.front_color = RED;
-//    if(index >= 0x50)index = 0x20;
-//    for(int i = 0; i < 160; i++)
-//    {
-//        hsv.h = i * 36 / 16;
-//        hsv.h %= 360;
-//        HSV_to_RGB(hsv, rgb);
-//        rgb_to_565(rgb, _color[i]);
-//        lcd.front_color = _color[i];
-//        lcd.draw_h_line(0, i, 128);
-//    }
-//    lcd.disp_char8x16(0, 0, index++);
+    gui.set_cursor(0,0);
+    gui.disp_string("sheSHE");
+    gui.set_font(&GUI_Font8_ASCII);
+    gui.set_color(GREEN);
+    gui.set_back_color(BLACK);
+    gui.set_cursor(60,100);
+    gui.disp_char('%');
+    gui.set_cursor(80,100);
+    gui.disp_char('!');
+    gui.set_cursor(100,100);
+    gui.disp_char('B');
 
-//    lcd.printf(2, 2, "1231asddfgdsfgthkfhddddj2nhd");
-
-
-//    lcd.front_color = GREEN;
-//    lcd.draw_circle(50, 50, 50);
-//    lcd.draw_line(64, 50, r, 100);
 
 
 }

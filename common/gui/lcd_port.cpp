@@ -1,17 +1,57 @@
 #include "lcd_port.h"
 
+#define LCD_ROTATION 2
 #define GUI_Optimize 1
+
 #ifndef _swap_int16_t
 #define _swap_int16_t(a, b) { int16_t t = a; a = b; b = t; };
 #endif
 
-LcdPort::LcdPort(Lcd *_lcd)
+LcdPort::LcdPort(Lcd *_lcd,int16_t w, int16_t h)
 {
     lcd = _lcd;
+    #if LCD_ROTATION == 0 || LCD_ROTATION > 3 //正向
+        _width = w;
+        _height = h;
+    #elif LCD_ROTATION == 1//顺时针旋转90度
+        _width = h;
+        _height = w;
+    #elif LCD_ROTATION == 2//顺时针旋转180度
+        _width = w;
+        _height = h;
+    #elif LCD_ROTATION == 3//顺时针旋转270度
+        _width = h;
+        _height = w;
+    #endif
+}
+void LcdPort::begin()
+{
+    #if LCD_ROTATION == 0 || LCD_ROTATION > 3 //正向
+       lcd->column_order(1);
+       lcd->row_order(1);
+    #elif LCD_ROTATION == 1//顺时针旋转90度.
+       lcd->column_order(0);
+       lcd->row_order(1);
+    #elif LCD_ROTATION == 2//顺时针旋转180度
+       lcd->column_order(0);
+       lcd->row_order(0);
+    #elif LCD_ROTATION == 3//顺时针旋转270度
+       lcd->column_order(1);
+       lcd->row_order(0);
+    #endif
 }
 void LcdPort::dev_draw_pixel(int16_t x, int16_t y, uint16_t color)
 {
-    lcd->draw_pixel(x,y,color);
+    #if LCD_ROTATION == 0 || LCD_ROTATION > 3 //正向
+        lcd->draw_pixel(x,y,color);
+    #elif LCD_ROTATION == 1//顺时针旋转90度
+        lcd->draw_pixel(y,x,color);
+    #elif LCD_ROTATION == 2//顺时针旋转180度
+        lcd->draw_pixel(x,y,color);
+    #elif LCD_ROTATION == 3//顺时针旋转270度
+        lcd->draw_pixel(y,x,color);
+    #endif
+
 }
 void LcdPort::dev_draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color)
 {
@@ -112,6 +152,5 @@ void LcdPort::dev_fill_screen(uint16_t color)
 void LcdPort::invertDisplay(bool i) 
 {
 //    lcd->drawPixel(x,y,color);
-
 }
 
