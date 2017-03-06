@@ -60,6 +60,10 @@ void GUI::fill_rect(int16_t x0, int16_t y0, int16_t x1, int16_t y1)
 {
     dev_fill_fect(x0,y0,x1,y1,this->color);
 }
+void GUI::fill_screen(uint16_t color) 
+{
+    dev_fill_screen(color);
+}
 
 void GUI::draw_circle(int16_t x0, int16_t y0, int16_t r)
 {
@@ -442,73 +446,57 @@ void GUI::fill_triangle(int16_t x0, int16_t y0,
 */
 void GUI::set_font(const GUI_FONT *font)
 {
-    this->font = (GUI_FONT *)font;
+    this->current_font = (GUI_FONT *)font;
 
+}
+void GUI::set_text_style(uint8_t style)
+{
+    this->text_style = style;
 }
 void GUI::set_text_mode(uint8_t mode)
 {   
     draw_mode = mode;
 }
-
-void GUI::disp_char(char c)
+////½âÂë//////////////////////////////
+void GUI::char_index_of_font(uint16_t code,const GUI_FONT_PROP **font_list,uint16_t *index)
 {
-	uint32_t index, row ,col, mask;
-	uint8_t tmp;
-    const GUI_CHARINFO *p;
-    uint8_t byte_per_line;
-    p = &font->list->paCharInfo[c - font->list->First];
-    byte_per_line = p->BytesPerLine;
+    uint16_t tmp;
+    uint16_t count;
+    const GUI_FONT_PROP *pList;
+    pList = current_font->list;
     
-	for(row = 0; row < font->YSize; row++){   
-        for( index = 0; index < byte_per_line; index++){
-            tmp = p->pData[byte_per_line * row + index];
-            for(mask = 0x80, col = 0; col < 8 ; mask >>= 1, col++){	
-                switch(draw_mode)
-                {
-                    case LCD_DRAWMODE_NORMAL:
-                        if(mask & tmp)
-                            draw_pixel(cursor_x,cursor_y);
-                        else
-                            dev_draw_pixel(cursor_x,cursor_y,back_color);
-                        break;
-                    case LCD_DRAWMODE_XOR:
-                        if(mask & tmp)
-                            draw_pixel(cursor_x,cursor_y);
-                        break;
-                    case LCD_DRAWMODE_TRANS:
-                        if(mask & tmp)
-                            draw_pixel(cursor_x,cursor_y);
-                        break;
-                    case LCD_DRAWMODE_REV:
-                        if(mask & tmp)
-                            dev_draw_pixel(cursor_x,cursor_y,back_color);
-                        else
-                            draw_pixel(cursor_x,cursor_y);
-                        break;
-
-                }
-                cursor_x++;
-            }
+    while(pList != NULL)
+    {
+        if(code >= pList->First && code <= pList->Last)
+        {
+            *font_list = pList;
+            *index = code - pList->First;
+            break;
         }
-            cursor_x-=byte_per_line * 8;
-            cursor_y++;
+        else
+        {
+            *font_list = current_font->list;
+            *index = 0; 
+            pList=pList->pNext;
+        }
     }
-    cursor_y-=font->YDist;
-    cursor_x+=p->XDist;
+
 
 }
+
 void GUI::disp_index(const GUI_FONT_PROP *font_list,uint16_t index)
 {
 	uint32_t count, row ,col, mask;
 	uint8_t tmp;
-    const GUI_CHARINFO *p;
+    const GUI_CHARINFO *pCharInfo;
     uint8_t byte_per_line;
-    p = &font_list->paCharInfo[index];
-    byte_per_line = p->BytesPerLine;
+    if((font_list == NULL) || (index > (font_list->Last - font_list->First + 1)))return;
+    pCharInfo = &font_list->paCharInfo[index];
+    byte_per_line = pCharInfo->BytesPerLine;
     
-	for(row = 0; row < font->YSize; row++){   
+	for(row = 0; row < current_font->YSize; row++){   
         for( count = 0; count < byte_per_line; count++){
-            tmp = p->pData[byte_per_line * row + count];
+            tmp = pCharInfo->pData[byte_per_line * row + count];
             for(mask = 0x80, col = 0; col < 8 ; mask >>= 1, col++){	
                 switch(draw_mode)
                 {
@@ -540,78 +528,47 @@ void GUI::disp_index(const GUI_FONT_PROP *font_list,uint16_t index)
             cursor_x-=byte_per_line * 8;
             cursor_y++;
     }
-    cursor_y-=font->YDist;
-    cursor_x+=p->XDist;
+    cursor_y-=current_font->YDist;
+    cursor_x+=pCharInfo->XSize;
 }
 
-void GUI::unicode_encoder(uint16_t unicode,const GUI_FONT_PROP **font_list,uint16_t *index)
-{
-    uint16_t tmp;
-    uint16_t count;
-    const GUI_FONT_PROP *p;
-    p = font->list;
-    
-    while(1)
-    {
-        if(unicode >= p->First && unicode <= p->Last)
-        {
-            *font_list = p;
-            *index = unicode - p->First;
-            break;
-        }
-        else
-            p=p->pNext;
-    }
-        
-}
-
-void GUI::disp_unicode(uint16_t c)
+void GUI::disp_char(uint16_t ch)
 {
     const GUI_FONT_PROP *font_list;
     uint16_t index;
-    unicode_encoder(c,&font_list,&index);
+    char_index_of_font(ch,&font_list,&index);
     disp_index(font_list,index);
 }
-void GUI::disp_char_at(char c,uint16_t x,uint16_t y)
+void GUI::disp_char_at(uint16_t ch,uint16_t x,uint16_t y)
 {
     set_cursor(x,y);
-    disp_char(c);
+    disp_char(ch);
 }
-void GUI::disp_chars(char c,uint16_t count)
+void GUI::disp_chars(uint16_t ch,uint16_t count)
 {
     while(count--)
-        disp_char(c);
+        disp_char(ch);
 }
 void GUI::disp_string(const char *str)
 {
-    uint16_t unicode = 0;
-    uint16_t tmp;
-    uint16_t count;
-    
-    const GUI_FONT_PROP *p;
-    p = font->list;
-
+    uint16_t ch = 0;
     while(*str)
     {
-        if(*str < 0x7e)
-            disp_unicode(*str++);
-        else
-        {
-            
-            unicode = (*str++)<<8;
-            unicode += *str++;
-            disp_unicode(unicode);
-        
+        if(*str < 0x7e)//ÊÇ×ÖÄ¸
+            disp_char(*str++);
+        else//ºº×Ö
+        {            
+            ch = (*str++)<<8;
+            ch += *str++;
+            disp_char(ch);        
         }
     }
 }
 void GUI::disp_string_at(const char *str,uint16_t x,uint16_t y)
 {
     set_cursor(x,y);
-    while(*str)
-        disp_char(*str++);
+    disp_string(str);
 }
-
 
 
 /*********************************************************************
@@ -621,10 +578,7 @@ void GUI::disp_string_at(const char *str,uint16_t x,uint16_t y)
 **********************************************************************
 */
 
-void GUI::fill_screen(uint16_t color) 
-{
-    dev_fill_screen(color);
-}
+
 
 void GUI::set_color(uint32_t color)
 {
