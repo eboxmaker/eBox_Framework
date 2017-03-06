@@ -15,7 +15,7 @@
  
  
 /* char:     code:0x0020 */
-unsigned char acFontHZ_0020[16] = { 
+const unsigned char acFontHZ_0020[16] = { 
   ________,
   ________,
   ________,
@@ -35,7 +35,7 @@ unsigned char acFontHZ_0020[16] = {
 };
 
 /* char: !   code:0x0021 */
-unsigned char acFontHZ_0021[16] = { 
+const unsigned char acFontHZ_0021[16] = { 
   ________,
   ________,
   _X______,
@@ -55,7 +55,7 @@ unsigned char acFontHZ_0021[16] = {
 };
 
 /* char: "   code:0x0022 */
-unsigned char acFontHZ_0022[16] = { 
+const unsigned char acFontHZ_0022[16] = { 
   ________,
   ________,
   _X__X___,
@@ -75,7 +75,7 @@ unsigned char acFontHZ_0022[16] = {
 };
 
 /* char: #   code:0x0023 */
-unsigned char acFontHZ_0023[16] = { 
+const unsigned char acFontHZ_0023[16] = { 
   ________,
   ________,
   __X__X__,
@@ -95,7 +95,7 @@ unsigned char acFontHZ_0023[16] = {
 };
 
 /* char: $   code:0x0024 */
-unsigned char acFontHZ_0024[16] = { 
+const unsigned char acFontHZ_0024[16] = { 
   ________,
   ________,
   ___X____,
@@ -115,7 +115,7 @@ unsigned char acFontHZ_0024[16] = {
 };
 
 /* char: %   code:0x0025 */
-unsigned char acFontHZ_0025[16] = { 
+const unsigned char acFontHZ_0025[16] = { 
   ________,
   ________,
   __XX____,
@@ -135,7 +135,7 @@ unsigned char acFontHZ_0025[16] = {
 };
 
 /* char: &   code:0x0026 */
-unsigned char acFontHZ_0026[16] = { 
+const unsigned char acFontHZ_0026[16] = { 
   ________,
   ________,
   __X_____,
@@ -155,7 +155,7 @@ unsigned char acFontHZ_0026[16] = {
 };
 
 /* char: '   code:0x0027 */
-unsigned char acFontHZ_0027[16] = { 
+const unsigned char acFontHZ_0027[16] = { 
   ________,
   ________,
   _X______,
@@ -175,7 +175,7 @@ unsigned char acFontHZ_0027[16] = {
 };
 
 /* char: (   code:0x0028 */
-unsigned char acFontHZ_0028[16] = { 
+const unsigned char acFontHZ_0028[16] = { 
   ________,
   ________,
   __X_____,
@@ -195,7 +195,7 @@ unsigned char acFontHZ_0028[16] = {
 };
 
 /* char: )   code:0x0029 */
-unsigned char acFontHZ_0029[16] = { 
+const unsigned char acFontHZ_0029[16] = { 
   ________,
   ________,
   _X______,
@@ -215,7 +215,7 @@ unsigned char acFontHZ_0029[16] = {
 };
 
 /* char: *   code:0x002A */
-unsigned char acFontHZ_002A[16] = { 
+const unsigned char acFontHZ_002A[16] = { 
   ________,
   ________,
   ________,
@@ -235,7 +235,7 @@ unsigned char acFontHZ_002A[16] = {
 };
 
 /* char: +   code:0x002B */
-unsigned char acFontHZ_002B[16] = { 
+const unsigned char acFontHZ_002B[16] = { 
   ________,
   ________,
   ________,
@@ -255,7 +255,7 @@ unsigned char acFontHZ_002B[16] = {
 };
 
 /* char: ,   code:0x002C */
-unsigned char acFontHZ_002C[16] = { 
+const unsigned char acFontHZ_002C[16] = { 
   ________,
   ________,
   ________,
@@ -275,7 +275,7 @@ unsigned char acFontHZ_002C[16] = {
 };
 
 /* char: -   code:0x002D */
-unsigned char acFontHZ_002D[16] = { 
+const unsigned char acFontHZ_002D[16] = { 
   ________,
   ________,
   ________,
@@ -295,7 +295,7 @@ unsigned char acFontHZ_002D[16] = {
 };
 
 /* char: .   code:0x002E */
-unsigned char acFontHZ_002E[16] = { 
+const unsigned char acFontHZ_002E[16] = { 
   ________,
   ________,
   ________,
@@ -315,7 +315,7 @@ unsigned char acFontHZ_002E[16] = {
 };
 
 /* char: /   code:0x002F */
-unsigned char acFontHZ_002F[16] = { 
+const unsigned char acFontHZ_002F[16] = { 
   ________,
   ________,
   ____X___,
@@ -335,7 +335,7 @@ unsigned char acFontHZ_002F[16] = {
 };
 
 /* char: 0   code:0x0030 */
-unsigned char acFontHZ_0030[16] = { 
+const unsigned char acFontHZ_0030[16] = { 
   ________,
   ________,
   __XXX___,
@@ -355,7 +355,7 @@ unsigned char acFontHZ_0030[16] = {
 };
 
 /* char: 1   code:0x0031 */
-unsigned char acFontHZ_0031[16] = { 
+const unsigned char acFontHZ_0031[16] = { 
   ________,
   ________,
   ___X____,
@@ -375,7 +375,7 @@ unsigned char acFontHZ_0031[16] = {
 };
 
 /* char: 2   code:0x0032 */
-unsigned char acFontHZ_0032[16] = { 
+const unsigned char acFontHZ_0032[16] = { 
   ________,
   ________,
   __XXX___,
@@ -395,7 +395,7 @@ unsigned char acFontHZ_0032[16] = {
 };
 
 /* char: 3   code:0x0033 */
-unsigned char acFontHZ_0033[16] = { 
+const unsigned char acFontHZ_0033[16] = { 
   ________,
   ________,
   __XXX___,
@@ -415,7 +415,7 @@ unsigned char acFontHZ_0033[16] = {
 };
 
 /* char: 4   code:0x0034 */
-unsigned char acFontHZ_0034[16] = { 
+const unsigned char acFontHZ_0034[16] = { 
   ________,
   ________,
   ____X___,
@@ -435,7 +435,7 @@ unsigned char acFontHZ_0034[16] = {
 };
 
 /* char: 5   code:0x0035 */
-unsigned char acFontHZ_0035[16] = { 
+const unsigned char acFontHZ_0035[16] = { 
   ________,
   ________,
   _XXXXX__,
@@ -455,7 +455,7 @@ unsigned char acFontHZ_0035[16] = {
 };
 
 /* char: 6   code:0x0036 */
-unsigned char acFontHZ_0036[16] = { 
+const unsigned char acFontHZ_0036[16] = { 
   ________,
   ________,
   __XXX___,
@@ -475,7 +475,7 @@ unsigned char acFontHZ_0036[16] = {
 };
 
 /* char: 7   code:0x0037 */
-unsigned char acFontHZ_0037[16] = { 
+const unsigned char acFontHZ_0037[16] = { 
   ________,
   ________,
   _XXXXX__,
@@ -495,7 +495,7 @@ unsigned char acFontHZ_0037[16] = {
 };
 
 /* char: 8   code:0x0038 */
-unsigned char acFontHZ_0038[16] = { 
+const unsigned char acFontHZ_0038[16] = { 
   ________,
   ________,
   __XXX___,
@@ -515,7 +515,7 @@ unsigned char acFontHZ_0038[16] = {
 };
 
 /* char: 9   code:0x0039 */
-unsigned char acFontHZ_0039[16] = { 
+const unsigned char acFontHZ_0039[16] = { 
   ________,
   ________,
   __XXX___,
@@ -535,7 +535,7 @@ unsigned char acFontHZ_0039[16] = {
 };
 
 /* char: :   code:0x003A */
-unsigned char acFontHZ_003A[16] = { 
+const unsigned char acFontHZ_003A[16] = { 
   ________,
   ________,
   ________,
@@ -555,7 +555,7 @@ unsigned char acFontHZ_003A[16] = {
 };
 
 /* char: ;   code:0x003B */
-unsigned char acFontHZ_003B[16] = { 
+const unsigned char acFontHZ_003B[16] = { 
   ________,
   ________,
   ________,
@@ -575,7 +575,7 @@ unsigned char acFontHZ_003B[16] = {
 };
 
 /* char: <   code:0x003C */
-unsigned char acFontHZ_003C[16] = { 
+const unsigned char acFontHZ_003C[16] = { 
   ________,
   ________,
   ________,
@@ -595,7 +595,7 @@ unsigned char acFontHZ_003C[16] = {
 };
 
 /* char: =   code:0x003D */
-unsigned char acFontHZ_003D[16] = { 
+const unsigned char acFontHZ_003D[16] = { 
   ________,
   ________,
   ________,
@@ -615,7 +615,7 @@ unsigned char acFontHZ_003D[16] = {
 };
 
 /* char: >   code:0x003E */
-unsigned char acFontHZ_003E[16] = { 
+const unsigned char acFontHZ_003E[16] = { 
   ________,
   ________,
   ________,
@@ -635,7 +635,7 @@ unsigned char acFontHZ_003E[16] = {
 };
 
 /* char: ?   code:0x003F */
-unsigned char acFontHZ_003F[16] = { 
+const unsigned char acFontHZ_003F[16] = { 
   ________,
   ________,
   __XXX___,
@@ -655,7 +655,7 @@ unsigned char acFontHZ_003F[16] = {
 };
 
 /* char: @   code:0x0040 */
-unsigned char acFontHZ_0040[32] = { 
+const unsigned char acFontHZ_0040[32] = { 
   ________,________,
   ________,________,
   ____XXXX,________,
@@ -675,7 +675,7 @@ unsigned char acFontHZ_0040[32] = {
 };
 
 /* char: A   code:0x0041 */
-unsigned char acFontHZ_0041[16] = { 
+const unsigned char acFontHZ_0041[16] = { 
   ________,
   ________,
   ___X____,
@@ -695,7 +695,7 @@ unsigned char acFontHZ_0041[16] = {
 };
 
 /* char: B   code:0x0042 */
-unsigned char acFontHZ_0042[16] = { 
+const unsigned char acFontHZ_0042[16] = { 
   ________,
   ________,
   _XXXX___,
@@ -715,7 +715,7 @@ unsigned char acFontHZ_0042[16] = {
 };
 
 /* char: C   code:0x0043 */
-unsigned char acFontHZ_0043[16] = { 
+const unsigned char acFontHZ_0043[16] = { 
   ________,
   ________,
   __XXXX__,
@@ -735,7 +735,7 @@ unsigned char acFontHZ_0043[16] = {
 };
 
 /* char: D   code:0x0044 */
-unsigned char acFontHZ_0044[16] = { 
+const unsigned char acFontHZ_0044[16] = { 
   ________,
   ________,
   _XXXX___,
@@ -755,7 +755,7 @@ unsigned char acFontHZ_0044[16] = {
 };
 
 /* char: E   code:0x0045 */
-unsigned char acFontHZ_0045[16] = { 
+const unsigned char acFontHZ_0045[16] = { 
   ________,
   ________,
   _XXXXX__,
@@ -775,7 +775,7 @@ unsigned char acFontHZ_0045[16] = {
 };
 
 /* char: F   code:0x0046 */
-unsigned char acFontHZ_0046[16] = { 
+const unsigned char acFontHZ_0046[16] = { 
   ________,
   ________,
   _XXXXX__,
@@ -795,7 +795,7 @@ unsigned char acFontHZ_0046[16] = {
 };
 
 /* char: G   code:0x0047 */
-unsigned char acFontHZ_0047[16] = { 
+const unsigned char acFontHZ_0047[16] = { 
   ________,
   ________,
   __XXXX__,
@@ -815,7 +815,7 @@ unsigned char acFontHZ_0047[16] = {
 };
 
 /* char: H   code:0x0048 */
-unsigned char acFontHZ_0048[16] = { 
+const unsigned char acFontHZ_0048[16] = { 
   ________,
   ________,
   _X____X_,
@@ -835,7 +835,7 @@ unsigned char acFontHZ_0048[16] = {
 };
 
 /* char: I   code:0x0049 */
-unsigned char acFontHZ_0049[16] = { 
+const unsigned char acFontHZ_0049[16] = { 
   ________,
   ________,
   _X______,
@@ -855,7 +855,7 @@ unsigned char acFontHZ_0049[16] = {
 };
 
 /* char: J   code:0x004A */
-unsigned char acFontHZ_004A[16] = { 
+const unsigned char acFontHZ_004A[16] = { 
   ________,
   ________,
   ___X____,
@@ -875,7 +875,7 @@ unsigned char acFontHZ_004A[16] = {
 };
 
 /* char: K   code:0x004B */
-unsigned char acFontHZ_004B[16] = { 
+const unsigned char acFontHZ_004B[16] = { 
   ________,
   ________,
   _X___X__,
@@ -895,7 +895,7 @@ unsigned char acFontHZ_004B[16] = {
 };
 
 /* char: L   code:0x004C */
-unsigned char acFontHZ_004C[16] = { 
+const unsigned char acFontHZ_004C[16] = { 
   ________,
   ________,
   _X______,
@@ -915,7 +915,7 @@ unsigned char acFontHZ_004C[16] = {
 };
 
 /* char: M   code:0x004D */
-unsigned char acFontHZ_004D[32] = { 
+const unsigned char acFontHZ_004D[32] = { 
   ________,________,
   ________,________,
   _X_____X,________,
@@ -935,7 +935,7 @@ unsigned char acFontHZ_004D[32] = {
 };
 
 /* char: N   code:0x004E */
-unsigned char acFontHZ_004E[16] = { 
+const unsigned char acFontHZ_004E[16] = { 
   ________,
   ________,
   _X____X_,
@@ -955,7 +955,7 @@ unsigned char acFontHZ_004E[16] = {
 };
 
 /* char: O   code:0x004F */
-unsigned char acFontHZ_004F[16] = { 
+const unsigned char acFontHZ_004F[16] = { 
   ________,
   ________,
   __XXXX__,
@@ -975,7 +975,7 @@ unsigned char acFontHZ_004F[16] = {
 };
 
 /* char: P   code:0x0050 */
-unsigned char acFontHZ_0050[16] = { 
+const unsigned char acFontHZ_0050[16] = { 
   ________,
   ________,
   _XXXXX__,
@@ -995,7 +995,7 @@ unsigned char acFontHZ_0050[16] = {
 };
 
 /* char: Q   code:0x0051 */
-unsigned char acFontHZ_0051[16] = { 
+const unsigned char acFontHZ_0051[16] = { 
   ________,
   ________,
   __XXXX__,
@@ -1015,7 +1015,7 @@ unsigned char acFontHZ_0051[16] = {
 };
 
 /* char: R   code:0x0052 */
-unsigned char acFontHZ_0052[16] = { 
+const unsigned char acFontHZ_0052[16] = { 
   ________,
   ________,
   _XXXXX__,
@@ -1035,7 +1035,7 @@ unsigned char acFontHZ_0052[16] = {
 };
 
 /* char: S   code:0x0053 */
-unsigned char acFontHZ_0053[16] = { 
+const unsigned char acFontHZ_0053[16] = { 
   ________,
   ________,
   __XXX___,
@@ -1055,7 +1055,7 @@ unsigned char acFontHZ_0053[16] = {
 };
 
 /* char: T   code:0x0054 */
-unsigned char acFontHZ_0054[16] = { 
+const unsigned char acFontHZ_0054[16] = { 
   ________,
   ________,
   _XXXXX__,
@@ -1075,7 +1075,7 @@ unsigned char acFontHZ_0054[16] = {
 };
 
 /* char: U   code:0x0055 */
-unsigned char acFontHZ_0055[16] = { 
+const unsigned char acFontHZ_0055[16] = { 
   ________,
   ________,
   _X____X_,
@@ -1095,7 +1095,7 @@ unsigned char acFontHZ_0055[16] = {
 };
 
 /* char: V   code:0x0056 */
-unsigned char acFontHZ_0056[16] = { 
+const unsigned char acFontHZ_0056[16] = { 
   ________,
   ________,
   X_____X_,
@@ -1115,7 +1115,7 @@ unsigned char acFontHZ_0056[16] = {
 };
 
 /* char: W   code:0x0057 */
-unsigned char acFontHZ_0057[32] = { 
+const unsigned char acFontHZ_0057[32] = { 
   ________,________,
   ________,________,
   X_______,__X_____,
@@ -1135,7 +1135,7 @@ unsigned char acFontHZ_0057[32] = {
 };
 
 /* char: X   code:0x0058 */
-unsigned char acFontHZ_0058[16] = { 
+const unsigned char acFontHZ_0058[16] = { 
   ________,
   ________,
   X_____X_,
@@ -1155,7 +1155,7 @@ unsigned char acFontHZ_0058[16] = {
 };
 
 /* char: Y   code:0x0059 */
-unsigned char acFontHZ_0059[16] = { 
+const unsigned char acFontHZ_0059[16] = { 
   ________,
   ________,
   X_____X_,
@@ -1175,7 +1175,7 @@ unsigned char acFontHZ_0059[16] = {
 };
 
 /* char: Z   code:0x005A */
-unsigned char acFontHZ_005A[16] = { 
+const unsigned char acFontHZ_005A[16] = { 
   ________,
   ________,
   XXXXXXX_,
@@ -1195,7 +1195,7 @@ unsigned char acFontHZ_005A[16] = {
 };
 
 /* char: [   code:0x005B */
-unsigned char acFontHZ_005B[16] = { 
+const unsigned char acFontHZ_005B[16] = { 
   ________,
   ________,
   _XX_____,
@@ -1215,7 +1215,7 @@ unsigned char acFontHZ_005B[16] = {
 };
 
 /* char: \   code:0x005C */
-unsigned char acFontHZ_005C[16] = { 
+const unsigned char acFontHZ_005C[16] = { 
   ________,
   ________,
   _X______,
@@ -1235,7 +1235,7 @@ unsigned char acFontHZ_005C[16] = {
 };
 
 /* char: ]   code:0x005D */
-unsigned char acFontHZ_005D[16] = { 
+const unsigned char acFontHZ_005D[16] = { 
   ________,
   ________,
   _XX_____,
@@ -1255,7 +1255,7 @@ unsigned char acFontHZ_005D[16] = {
 };
 
 /* char: ^   code:0x005E */
-unsigned char acFontHZ_005E[16] = { 
+const unsigned char acFontHZ_005E[16] = { 
   ________,
   ___X____,
   __X_X___,
@@ -1275,7 +1275,7 @@ unsigned char acFontHZ_005E[16] = {
 };
 
 /* char: _   code:0x005F */
-unsigned char acFontHZ_005F[16] = { 
+const unsigned char acFontHZ_005F[16] = { 
   ________,
   ________,
   ________,
@@ -1295,7 +1295,7 @@ unsigned char acFontHZ_005F[16] = {
 };
 
 /* char: `   code:0x0060 */
-unsigned char acFontHZ_0060[16] = { 
+const unsigned char acFontHZ_0060[16] = { 
   ________,
   ________,
   _X______,
@@ -1315,7 +1315,7 @@ unsigned char acFontHZ_0060[16] = {
 };
 
 /* char: a   code:0x0061 */
-unsigned char acFontHZ_0061[16] = { 
+const unsigned char acFontHZ_0061[16] = { 
   ________,
   ________,
   ________,
@@ -1335,7 +1335,7 @@ unsigned char acFontHZ_0061[16] = {
 };
 
 /* char: b   code:0x0062 */
-unsigned char acFontHZ_0062[16] = { 
+const unsigned char acFontHZ_0062[16] = { 
   ________,
   ________,
   _X______,
@@ -1355,7 +1355,7 @@ unsigned char acFontHZ_0062[16] = {
 };
 
 /* char: c   code:0x0063 */
-unsigned char acFontHZ_0063[16] = { 
+const unsigned char acFontHZ_0063[16] = { 
   ________,
   ________,
   ________,
@@ -1375,7 +1375,7 @@ unsigned char acFontHZ_0063[16] = {
 };
 
 /* char: d   code:0x0064 */
-unsigned char acFontHZ_0064[16] = { 
+const unsigned char acFontHZ_0064[16] = { 
   ________,
   ________,
   _____X__,
@@ -1395,7 +1395,7 @@ unsigned char acFontHZ_0064[16] = {
 };
 
 /* char: e   code:0x0065 */
-unsigned char acFontHZ_0065[16] = { 
+const unsigned char acFontHZ_0065[16] = { 
   ________,
   ________,
   ________,
@@ -1415,7 +1415,7 @@ unsigned char acFontHZ_0065[16] = {
 };
 
 /* char: f   code:0x0066 */
-unsigned char acFontHZ_0066[16] = { 
+const unsigned char acFontHZ_0066[16] = { 
   ________,
   ________,
   __X_____,
@@ -1435,7 +1435,7 @@ unsigned char acFontHZ_0066[16] = {
 };
 
 /* char: g   code:0x0067 */
-unsigned char acFontHZ_0067[16] = { 
+const unsigned char acFontHZ_0067[16] = { 
   ________,
   ________,
   ________,
@@ -1455,7 +1455,7 @@ unsigned char acFontHZ_0067[16] = {
 };
 
 /* char: h   code:0x0068 */
-unsigned char acFontHZ_0068[16] = { 
+const unsigned char acFontHZ_0068[16] = { 
   ________,
   ________,
   _X______,
@@ -1475,7 +1475,7 @@ unsigned char acFontHZ_0068[16] = {
 };
 
 /* char: i   code:0x0069 */
-unsigned char acFontHZ_0069[16] = { 
+const unsigned char acFontHZ_0069[16] = { 
   ________,
   ________,
   _X______,
@@ -1495,7 +1495,7 @@ unsigned char acFontHZ_0069[16] = {
 };
 
 /* char: j   code:0x006A */
-unsigned char acFontHZ_006A[16] = { 
+const unsigned char acFontHZ_006A[16] = { 
   ________,
   ________,
   _X______,
@@ -1515,7 +1515,7 @@ unsigned char acFontHZ_006A[16] = {
 };
 
 /* char: k   code:0x006B */
-unsigned char acFontHZ_006B[16] = { 
+const unsigned char acFontHZ_006B[16] = { 
   ________,
   ________,
   _X______,
@@ -1535,7 +1535,7 @@ unsigned char acFontHZ_006B[16] = {
 };
 
 /* char: l   code:0x006C */
-unsigned char acFontHZ_006C[16] = { 
+const unsigned char acFontHZ_006C[16] = { 
   ________,
   ________,
   _X______,
@@ -1555,7 +1555,7 @@ unsigned char acFontHZ_006C[16] = {
 };
 
 /* char: m   code:0x006D */
-unsigned char acFontHZ_006D[16] = { 
+const unsigned char acFontHZ_006D[16] = { 
   ________,
   ________,
   ________,
@@ -1575,7 +1575,7 @@ unsigned char acFontHZ_006D[16] = {
 };
 
 /* char: n   code:0x006E */
-unsigned char acFontHZ_006E[16] = { 
+const unsigned char acFontHZ_006E[16] = { 
   ________,
   ________,
   ________,
@@ -1595,7 +1595,7 @@ unsigned char acFontHZ_006E[16] = {
 };
 
 /* char: o   code:0x006F */
-unsigned char acFontHZ_006F[16] = { 
+const unsigned char acFontHZ_006F[16] = { 
   ________,
   ________,
   ________,
@@ -1615,7 +1615,7 @@ unsigned char acFontHZ_006F[16] = {
 };
 
 /* char: p   code:0x0070 */
-unsigned char acFontHZ_0070[16] = { 
+const unsigned char acFontHZ_0070[16] = { 
   ________,
   ________,
   ________,
@@ -1635,7 +1635,7 @@ unsigned char acFontHZ_0070[16] = {
 };
 
 /* char: q   code:0x0071 */
-unsigned char acFontHZ_0071[16] = { 
+const unsigned char acFontHZ_0071[16] = { 
   ________,
   ________,
   ________,
@@ -1655,7 +1655,7 @@ unsigned char acFontHZ_0071[16] = {
 };
 
 /* char: r   code:0x0072 */
-unsigned char acFontHZ_0072[16] = { 
+const unsigned char acFontHZ_0072[16] = { 
   ________,
   ________,
   ________,
@@ -1675,7 +1675,7 @@ unsigned char acFontHZ_0072[16] = {
 };
 
 /* char: s   code:0x0073 */
-unsigned char acFontHZ_0073[16] = { 
+const unsigned char acFontHZ_0073[16] = { 
   ________,
   ________,
   ________,
@@ -1695,7 +1695,7 @@ unsigned char acFontHZ_0073[16] = {
 };
 
 /* char: t   code:0x0074 */
-unsigned char acFontHZ_0074[16] = { 
+const unsigned char acFontHZ_0074[16] = { 
   ________,
   ________,
   ________,
@@ -1715,7 +1715,7 @@ unsigned char acFontHZ_0074[16] = {
 };
 
 /* char: u   code:0x0075 */
-unsigned char acFontHZ_0075[16] = { 
+const unsigned char acFontHZ_0075[16] = { 
   ________,
   ________,
   ________,
@@ -1735,7 +1735,7 @@ unsigned char acFontHZ_0075[16] = {
 };
 
 /* char: v   code:0x0076 */
-unsigned char acFontHZ_0076[16] = { 
+const unsigned char acFontHZ_0076[16] = { 
   ________,
   ________,
   ________,
@@ -1755,7 +1755,7 @@ unsigned char acFontHZ_0076[16] = {
 };
 
 /* char: w   code:0x0077 */
-unsigned char acFontHZ_0077[16] = { 
+const unsigned char acFontHZ_0077[16] = { 
   ________,
   ________,
   ________,
@@ -1775,7 +1775,7 @@ unsigned char acFontHZ_0077[16] = {
 };
 
 /* char: x   code:0x0078 */
-unsigned char acFontHZ_0078[16] = { 
+const unsigned char acFontHZ_0078[16] = { 
   ________,
   ________,
   ________,
@@ -1795,7 +1795,7 @@ unsigned char acFontHZ_0078[16] = {
 };
 
 /* char: y   code:0x0079 */
-unsigned char acFontHZ_0079[16] = { 
+const unsigned char acFontHZ_0079[16] = { 
   ________,
   ________,
   ________,
@@ -1815,7 +1815,7 @@ unsigned char acFontHZ_0079[16] = {
 };
 
 /* char: z   code:0x007A */
-unsigned char acFontHZ_007A[16] = { 
+const unsigned char acFontHZ_007A[16] = { 
   ________,
   ________,
   ________,
@@ -1835,7 +1835,7 @@ unsigned char acFontHZ_007A[16] = {
 };
 
 /* char: {   code:0x007B */
-unsigned char acFontHZ_007B[16] = { 
+const unsigned char acFontHZ_007B[16] = { 
   ________,
   ___X____,
   __X_____,
@@ -1855,7 +1855,7 @@ unsigned char acFontHZ_007B[16] = {
 };
 
 /* char: |   code:0x007C */
-unsigned char acFontHZ_007C[16] = { 
+const unsigned char acFontHZ_007C[16] = { 
   ________,
   ________,
   _X______,
@@ -1875,7 +1875,7 @@ unsigned char acFontHZ_007C[16] = {
 };
 
 /* char: }   code:0x007D */
-unsigned char acFontHZ_007D[16] = { 
+const unsigned char acFontHZ_007D[16] = { 
   ________,
   _X______,
   __X_____,
@@ -1895,7 +1895,7 @@ unsigned char acFontHZ_007D[16] = {
 };
 
 /* char: ~   code:0x007E */
-unsigned char acFontHZ_007E[16] = { 
+const unsigned char acFontHZ_007E[16] = { 
   ________,
   ________,
   ________,
@@ -1915,7 +1915,7 @@ unsigned char acFontHZ_007E[16] = {
 };
 
 /* char:    code:0x007F */
-unsigned char acFontHZ_007F[16] = { 
+const unsigned char acFontHZ_007F[16] = { 
   ________,
   ________,
   ________,
@@ -1935,7 +1935,7 @@ unsigned char acFontHZ_007F[16] = {
 };
 
 /* char: ?   code:0xC7BF */
-unsigned char acFontHZ_C7BF[32] = { 
+const unsigned char acFontHZ_C7BF[32] = { 
   ______XX,XXX_____,
   _XXX__X_,__X_____,
   ___X__X_,__X_____,
@@ -1955,7 +1955,7 @@ unsigned char acFontHZ_C7BF[32] = {
 };
 
 /* char: ?   code:0xC9EA */
-unsigned char acFontHZ_C9EA[32] = { 
+const unsigned char acFontHZ_C9EA[32] = { 
   ______X_,________,
   ______X_,________,
   __XXXXXX,XXX_____,
@@ -1975,7 +1975,7 @@ unsigned char acFontHZ_C9EA[32] = {
 };
 
 /* char: ?   code:0xCDAC */
-unsigned char acFontHZ_CDAC[32] = { 
+const unsigned char acFontHZ_CDAC[32] = { 
   ________,________,
   __XXXXXX,XXXX____,
   __X_____,___X____,
@@ -1995,105 +1995,105 @@ unsigned char acFontHZ_CDAC[32] = {
 };
 
 GUI_CHARINFO GUI_FontHZ_16x16_CharInfo[99] = {
-  { 3, 16, 1, (unsigned char *)&acFontHZ_0020 }, /*0:  */
-  { 3, 16, 1, (unsigned char *)&acFontHZ_0021 }, /*1: !*/
-  { 5, 16, 1, (unsigned char *)&acFontHZ_0022 }, /*2: "*/
-  { 7, 16, 1, (unsigned char *)&acFontHZ_0023 }, /*3: #*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0024 }, /*4: $*/
-  { 8, 16, 1, (unsigned char *)&acFontHZ_0025 }, /*5: %*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0026 }, /*6: &*/
-  { 2, 16, 1, (unsigned char *)&acFontHZ_0027 }, /*7: '*/
-  { 3, 16, 1, (unsigned char *)&acFontHZ_0028 }, /*8: (*/
-  { 3, 16, 1, (unsigned char *)&acFontHZ_0029 }, /*9: )*/
-  { 4, 16, 1, (unsigned char *)&acFontHZ_002A }, /*10: **/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_002B }, /*11: +*/
-  { 3, 16, 1, (unsigned char *)&acFontHZ_002C }, /*12: ,*/
-  { 3, 16, 1, (unsigned char *)&acFontHZ_002D }, /*13: -*/
-  { 3, 16, 1, (unsigned char *)&acFontHZ_002E }, /*14: .*/
-  { 5, 16, 1, (unsigned char *)&acFontHZ_002F }, /*15: /*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0030 }, /*16: 0*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0031 }, /*17: 1*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0032 }, /*18: 2*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0033 }, /*19: 3*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0034 }, /*20: 4*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0035 }, /*21: 5*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0036 }, /*22: 6*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0037 }, /*23: 7*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0038 }, /*24: 8*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0039 }, /*25: 9*/
-  { 3, 16, 1, (unsigned char *)&acFontHZ_003A }, /*26: :*/
-  { 3, 16, 1, (unsigned char *)&acFontHZ_003B }, /*27: ;*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_003C }, /*28: <*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_003D }, /*29: =*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_003E }, /*30: >*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_003F }, /*31: ?*/
-  { 11, 16, 2, (unsigned char *)&acFontHZ_0040 }, /*32: @*/
-  { 7, 16, 1, (unsigned char *)&acFontHZ_0041 }, /*33: A*/
-  { 7, 16, 1, (unsigned char *)&acFontHZ_0042 }, /*34: B*/
-  { 7, 16, 1, (unsigned char *)&acFontHZ_0043 }, /*35: C*/
-  { 8, 16, 1, (unsigned char *)&acFontHZ_0044 }, /*36: D*/
-  { 7, 16, 1, (unsigned char *)&acFontHZ_0045 }, /*37: E*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0046 }, /*38: F*/
-  { 8, 16, 1, (unsigned char *)&acFontHZ_0047 }, /*39: G*/
-  { 8, 16, 1, (unsigned char *)&acFontHZ_0048 }, /*40: H*/
-  { 3, 16, 1, (unsigned char *)&acFontHZ_0049 }, /*41: I*/
-  { 5, 16, 1, (unsigned char *)&acFontHZ_004A }, /*42: J*/
-  { 7, 16, 1, (unsigned char *)&acFontHZ_004B }, /*43: K*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_004C }, /*44: L*/
-  { 9, 16, 2, (unsigned char *)&acFontHZ_004D }, /*45: M*/
-  { 8, 16, 1, (unsigned char *)&acFontHZ_004E }, /*46: N*/
-  { 8, 16, 1, (unsigned char *)&acFontHZ_004F }, /*47: O*/
-  { 7, 16, 1, (unsigned char *)&acFontHZ_0050 }, /*48: P*/
-  { 8, 16, 1, (unsigned char *)&acFontHZ_0051 }, /*49: Q*/
-  { 8, 16, 1, (unsigned char *)&acFontHZ_0052 }, /*50: R*/
-  { 7, 16, 1, (unsigned char *)&acFontHZ_0053 }, /*51: S*/
-  { 7, 16, 1, (unsigned char *)&acFontHZ_0054 }, /*52: T*/
-  { 8, 16, 1, (unsigned char *)&acFontHZ_0055 }, /*53: U*/
-  { 7, 16, 1, (unsigned char *)&acFontHZ_0056 }, /*54: V*/
-  { 11, 16, 2, (unsigned char *)&acFontHZ_0057 }, /*55: W*/
-  { 7, 16, 1, (unsigned char *)&acFontHZ_0058 }, /*56: X*/
-  { 7, 16, 1, (unsigned char *)&acFontHZ_0059 }, /*57: Y*/
-  { 7, 16, 1, (unsigned char *)&acFontHZ_005A }, /*58: Z*/
-  { 3, 16, 1, (unsigned char *)&acFontHZ_005B }, /*59: [*/
-  { 5, 16, 1, (unsigned char *)&acFontHZ_005C }, /*60: \*/
-  { 3, 16, 1, (unsigned char *)&acFontHZ_005D }, /*61: ]*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_005E }, /*62: ^*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_005F }, /*63: _*/
-  { 3, 16, 1, (unsigned char *)&acFontHZ_0060 }, /*64: `*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0061 }, /*65: a*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0062 }, /*66: b*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0063 }, /*67: c*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0064 }, /*68: d*/
-  { 6, 6, 1, (unsigned char *)&acFontHZ_0065 }, /*69: e*/
-  { 3, 16, 1, (unsigned char *)&acFontHZ_0066 }, /*70: f*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0067 }, /*71: g*/
-  { 6, 6, 1, (unsigned char *)&acFontHZ_0068 }, /*72: h*/
-  { 2, 16, 1, (unsigned char *)&acFontHZ_0069 }, /*73: i*/
-  { 2, 16, 1, (unsigned char *)&acFontHZ_006A }, /*74: j*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_006B }, /*75: k*/
-  { 2, 16, 1, (unsigned char *)&acFontHZ_006C }, /*76: l*/
-  { 8, 16, 1, (unsigned char *)&acFontHZ_006D }, /*77: m*/
-  { 6, 6, 1, (unsigned char *)&acFontHZ_006E }, /*78: n*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_006F }, /*79: o*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0070 }, /*80: p*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0071 }, /*81: q*/
-  { 3, 16, 1, (unsigned char *)&acFontHZ_0072 }, /*82: r*/
-  { 5, 5, 1, (unsigned char *)&acFontHZ_0073 }, /*83: s*/
-  { 3, 16, 1, (unsigned char *)&acFontHZ_0074 }, /*84: t*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0075 }, /*85: u*/
-  { 6, 16, 1, (unsigned char *)&acFontHZ_0076 }, /*86: v*/
-  { 8, 16, 1, (unsigned char *)&acFontHZ_0077 }, /*87: w*/
-  { 5, 16, 1, (unsigned char *)&acFontHZ_0078 }, /*88: x*/
-  { 5, 16, 1, (unsigned char *)&acFontHZ_0079 }, /*89: y*/
-  { 5, 16, 1, (unsigned char *)&acFontHZ_007A }, /*90: z*/
-  { 4, 16, 1, (unsigned char *)&acFontHZ_007B }, /*91: {*/
-  { 2, 16, 1, (unsigned char *)&acFontHZ_007C }, /*92: |*/
-  { 4, 16, 1, (unsigned char *)&acFontHZ_007D }, /*93: }*/
-  { 7, 16, 1, (unsigned char *)&acFontHZ_007E }, /*94: ~*/
-  { 3, 16, 1, (unsigned char *)&acFontHZ_007F }, /*95: */
-  { 16, 12, 2, (unsigned char *)&acFontHZ_C7BF }, /*96: ?*/
-  { 16, 12, 2, (unsigned char *)&acFontHZ_C9EA }, /*97: ?*/
-  { 16, 12, 2, (unsigned char *)&acFontHZ_CDAC }, /*98: ?*/
+  { 3, 16, 1, acFontHZ_0020 }, /*0:  */
+  { 3, 16, 1, acFontHZ_0021 }, /*1: !*/
+  { 5, 16, 1, acFontHZ_0022 }, /*2: "*/
+  { 7, 16, 1, acFontHZ_0023 }, /*3: #*/
+  { 6, 16, 1, acFontHZ_0024 }, /*4: $*/
+  { 8, 16, 1, acFontHZ_0025 }, /*5: %*/
+  { 6, 16, 1, acFontHZ_0026 }, /*6: &*/
+  { 2, 16, 1, acFontHZ_0027 }, /*7: '*/
+  { 3, 16, 1, acFontHZ_0028 }, /*8: (*/
+  { 3, 16, 1, acFontHZ_0029 }, /*9: )*/
+  { 4, 16, 1, acFontHZ_002A }, /*10: **/
+  { 6, 16, 1, acFontHZ_002B }, /*11: +*/
+  { 3, 16, 1, acFontHZ_002C }, /*12: ,*/
+  { 3, 16, 1, acFontHZ_002D }, /*13: -*/
+  { 3, 16, 1, acFontHZ_002E }, /*14: .*/
+  { 5, 16, 1, acFontHZ_002F }, /*15: /*/
+  { 6, 16, 1, acFontHZ_0030 }, /*16: 0*/
+  { 6, 16, 1, acFontHZ_0031 }, /*17: 1*/
+  { 6, 16, 1, acFontHZ_0032 }, /*18: 2*/
+  { 6, 16, 1, acFontHZ_0033 }, /*19: 3*/
+  { 6, 16, 1, acFontHZ_0034 }, /*20: 4*/
+  { 6, 16, 1, acFontHZ_0035 }, /*21: 5*/
+  { 6, 16, 1, acFontHZ_0036 }, /*22: 6*/
+  { 6, 16, 1, acFontHZ_0037 }, /*23: 7*/
+  { 6, 16, 1, acFontHZ_0038 }, /*24: 8*/
+  { 6, 16, 1, acFontHZ_0039 }, /*25: 9*/
+  { 3, 16, 1, acFontHZ_003A }, /*26: :*/
+  { 3, 16, 1, acFontHZ_003B }, /*27: ;*/
+  { 6, 16, 1, acFontHZ_003C }, /*28: <*/
+  { 6, 16, 1, acFontHZ_003D }, /*29: =*/
+  { 6, 16, 1, acFontHZ_003E }, /*30: >*/
+  { 6, 16, 1, acFontHZ_003F }, /*31: ?*/
+  { 11, 16, 2, acFontHZ_0040 }, /*32: @*/
+  { 7, 16, 1, acFontHZ_0041 }, /*33: A*/
+  { 7, 16, 1, acFontHZ_0042 }, /*34: B*/
+  { 7, 16, 1, acFontHZ_0043 }, /*35: C*/
+  { 8, 16, 1, acFontHZ_0044 }, /*36: D*/
+  { 7, 16, 1, acFontHZ_0045 }, /*37: E*/
+  { 6, 16, 1, acFontHZ_0046 }, /*38: F*/
+  { 8, 16, 1, acFontHZ_0047 }, /*39: G*/
+  { 8, 16, 1, acFontHZ_0048 }, /*40: H*/
+  { 3, 16, 1, acFontHZ_0049 }, /*41: I*/
+  { 5, 16, 1, acFontHZ_004A }, /*42: J*/
+  { 7, 16, 1, acFontHZ_004B }, /*43: K*/
+  { 6, 16, 1, acFontHZ_004C }, /*44: L*/
+  { 9, 16, 2, acFontHZ_004D }, /*45: M*/
+  { 8, 16, 1, acFontHZ_004E }, /*46: N*/
+  { 8, 16, 1, acFontHZ_004F }, /*47: O*/
+  { 7, 16, 1, acFontHZ_0050 }, /*48: P*/
+  { 8, 16, 1, acFontHZ_0051 }, /*49: Q*/
+  { 8, 16, 1, acFontHZ_0052 }, /*50: R*/
+  { 7, 16, 1, acFontHZ_0053 }, /*51: S*/
+  { 7, 16, 1, acFontHZ_0054 }, /*52: T*/
+  { 8, 16, 1, acFontHZ_0055 }, /*53: U*/
+  { 7, 16, 1, acFontHZ_0056 }, /*54: V*/
+  { 11, 16, 2, acFontHZ_0057 }, /*55: W*/
+  { 7, 16, 1, acFontHZ_0058 }, /*56: X*/
+  { 7, 16, 1, acFontHZ_0059 }, /*57: Y*/
+  { 7, 16, 1, acFontHZ_005A }, /*58: Z*/
+  { 3, 16, 1, acFontHZ_005B }, /*59: [*/
+  { 5, 16, 1, acFontHZ_005C }, /*60: \*/
+  { 3, 16, 1, acFontHZ_005D }, /*61: ]*/
+  { 6, 16, 1, acFontHZ_005E }, /*62: ^*/
+  { 6, 16, 1, acFontHZ_005F }, /*63: _*/
+  { 3, 16, 1, acFontHZ_0060 }, /*64: `*/
+  { 6, 16, 1, acFontHZ_0061 }, /*65: a*/
+  { 6, 16, 1, acFontHZ_0062 }, /*66: b*/
+  { 6, 16, 1, acFontHZ_0063 }, /*67: c*/
+  { 6, 16, 1, acFontHZ_0064 }, /*68: d*/
+  { 6, 6, 1, acFontHZ_0065 }, /*69: e*/
+  { 3, 16, 1, acFontHZ_0066 }, /*70: f*/
+  { 6, 16, 1, acFontHZ_0067 }, /*71: g*/
+  { 6, 6, 1, acFontHZ_0068 }, /*72: h*/
+  { 2, 16, 1, acFontHZ_0069 }, /*73: i*/
+  { 2, 16, 1, acFontHZ_006A }, /*74: j*/
+  { 6, 16, 1, acFontHZ_006B }, /*75: k*/
+  { 2, 16, 1, acFontHZ_006C }, /*76: l*/
+  { 8, 16, 1, acFontHZ_006D }, /*77: m*/
+  { 6, 6, 1, acFontHZ_006E }, /*78: n*/
+  { 6, 16, 1, acFontHZ_006F }, /*79: o*/
+  { 6, 16, 1, acFontHZ_0070 }, /*80: p*/
+  { 6, 16, 1, acFontHZ_0071 }, /*81: q*/
+  { 3, 16, 1, acFontHZ_0072 }, /*82: r*/
+  { 5, 5, 1, acFontHZ_0073 }, /*83: s*/
+  { 3, 16, 1, acFontHZ_0074 }, /*84: t*/
+  { 6, 16, 1, acFontHZ_0075 }, /*85: u*/
+  { 6, 16, 1, acFontHZ_0076 }, /*86: v*/
+  { 8, 16, 1, acFontHZ_0077 }, /*87: w*/
+  { 5, 16, 1, acFontHZ_0078 }, /*88: x*/
+  { 5, 16, 1, acFontHZ_0079 }, /*89: y*/
+  { 5, 16, 1, acFontHZ_007A }, /*90: z*/
+  { 4, 16, 1, acFontHZ_007B }, /*91: {*/
+  { 2, 16, 1, acFontHZ_007C }, /*92: |*/
+  { 4, 16, 1, acFontHZ_007D }, /*93: }*/
+  { 7, 16, 1, acFontHZ_007E }, /*94: ~*/
+  { 3, 16, 1, acFontHZ_007F }, /*95: */
+  { 16, 12, 2, acFontHZ_C7BF }, /*96: ?*/
+  { 16, 12, 2, acFontHZ_C9EA }, /*97: ?*/
+  { 16, 12, 2, acFontHZ_CDAC }, /*98: ?*/
 };
 
 GUI_FONT_PROP GUI_FontHZ_16x16_Prop4 = {

@@ -16,15 +16,9 @@
 #include "lcd_1.8.h"
 #include "color_convert.h"
 #include "gui.h"
-COLOR_HSV hsv;
-COLOR_RGB rgb;
 
 Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
 GUI gui(&lcd,128,160);
-
-u8 index = 0x20;
-u8 r;
-u16 _color[3600];
 
 void setup()
 {
@@ -83,9 +77,7 @@ void setup()
     gui.set_back_color(BLACK);
     gui.set_cursor(60,100);
     gui.disp_char('%');
-    gui.set_cursor(80,100);
     gui.disp_char('!');
-    gui.set_cursor(100,100);
     gui.disp_char('B');
 
 
