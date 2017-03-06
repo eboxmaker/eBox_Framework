@@ -497,6 +497,81 @@ void GUI::disp_char(char c)
     cursor_x+=p->XDist;
 
 }
+void GUI::disp_index(const GUI_FONT_PROP *font_list,uint16_t index)
+{
+	uint32_t count, row ,col, mask;
+	uint8_t tmp;
+    const GUI_CHARINFO *p;
+    uint8_t byte_per_line;
+    p = &font_list->paCharInfo[index];
+    byte_per_line = p->BytesPerLine;
+    
+	for(row = 0; row < font->YSize; row++){   
+        for( count = 0; count < byte_per_line; count++){
+            tmp = p->pData[byte_per_line * row + count];
+            for(mask = 0x80, col = 0; col < 8 ; mask >>= 1, col++){	
+                switch(draw_mode)
+                {
+                    case LCD_DRAWMODE_NORMAL:
+                        if(mask & tmp)
+                            draw_pixel(cursor_x,cursor_y);
+                        else
+                            dev_draw_pixel(cursor_x,cursor_y,back_color);
+                        break;
+                    case LCD_DRAWMODE_XOR:
+                        if(mask & tmp)
+                            draw_pixel(cursor_x,cursor_y);
+                        break;
+                    case LCD_DRAWMODE_TRANS:
+                        if(mask & tmp)
+                            draw_pixel(cursor_x,cursor_y);
+                        break;
+                    case LCD_DRAWMODE_REV:
+                        if(mask & tmp)
+                            dev_draw_pixel(cursor_x,cursor_y,back_color);
+                        else
+                            draw_pixel(cursor_x,cursor_y);
+                        break;
+
+                }
+                cursor_x++;
+            }
+        }
+            cursor_x-=byte_per_line * 8;
+            cursor_y++;
+    }
+    cursor_y-=font->YDist;
+    cursor_x+=p->XDist;
+}
+
+void GUI::unicode_encoder(uint16_t unicode,const GUI_FONT_PROP **font_list,uint16_t *index)
+{
+    uint16_t tmp;
+    uint16_t count;
+    const GUI_FONT_PROP *p;
+    p = font->list;
+    
+    while(1)
+    {
+        if(unicode >= p->First && unicode <= p->Last)
+        {
+            *font_list = p;
+            *index = unicode - p->First;
+            break;
+        }
+        else
+            p=p->pNext;
+    }
+        
+}
+
+void GUI::disp_unicode(uint16_t c)
+{
+    const GUI_FONT_PROP *font_list;
+    uint16_t index;
+    unicode_encoder(c,&font_list,&index);
+    disp_index(font_list,index);
+}
 void GUI::disp_char_at(char c,uint16_t x,uint16_t y)
 {
     set_cursor(x,y);
@@ -509,8 +584,26 @@ void GUI::disp_chars(char c,uint16_t count)
 }
 void GUI::disp_string(const char *str)
 {
+    uint16_t unicode = 0;
+    uint16_t tmp;
+    uint16_t count;
+    
+    const GUI_FONT_PROP *p;
+    p = font->list;
+
     while(*str)
-        disp_char(*str++);
+    {
+        if(*str < 0x7e)
+            disp_unicode(*str++);
+        else
+        {
+            
+            unicode = (*str++)<<8;
+            unicode += *str++;
+            disp_unicode(unicode);
+        
+        }
+    }
 }
 void GUI::disp_string_at(const char *str,uint16_t x,uint16_t y)
 {

@@ -68,12 +68,17 @@ void setup()
     gui.fill_round_rect(0,50,100,40,10);
 
     gui.set_text_mode(LCD_TEXTMODE_TRANS);
-    gui.set_font(&GUI_Font32_ASCII);
+    gui.set_font(&GUI_FontHZ16X16);
     gui.set_color(GREEN);
     gui.set_back_color(BLACK);
 
+
     gui.set_cursor(0,0);
-    gui.disp_string("sheSHE");
+//    gui.disp_unicode(0xC9EA);
+    gui.disp_string("shenÉêÍ¬Ç¿");
+//    gui.disp_index(gui.font->list->pNext,0);
+//    gui.disp_index(gui.font->list->pNext->pNext,0);
+//    gui.disp_index(gui.font->list->pNext->pNext->pNext,0);
     gui.set_font(&GUI_Font8_ASCII);
     gui.set_color(GREEN);
     gui.set_back_color(BLACK);
