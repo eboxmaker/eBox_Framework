@@ -28,8 +28,6 @@ u16 _color[3600];
 
 void setup()
 {
-    uint16_t c;
-    uint8_t d;
     ebox_init();
     PB8.mode(OUTPUT_PP);
     uart1.begin(115200);
@@ -38,7 +36,6 @@ void setup()
     
     gui.begin();
     gui.fill_screen(RED);
-//    gui.fill_rect(50,50,70,70);
     
     uart1.printf("w:%d\n",gui.width());
     uart1.printf("h:%d\n",gui.height());
@@ -71,14 +68,16 @@ void setup()
     gui.set_font(&GUI_FontHZ16X16);
     gui.set_color(GREEN);
     gui.set_back_color(BLACK);
-
-
     gui.set_cursor(0,0);
-//    gui.disp_unicode(0xC9EA);
-    gui.disp_string("shen申同强");
-//    gui.disp_index(gui.font->list->pNext,0);
-//    gui.disp_index(gui.font->list->pNext->pNext,0);
-//    gui.disp_index(gui.font->list->pNext->pNext->pNext,0);
+    gui.disp_string("shen申t同强");
+    
+    gui.set_text_mode(LCD_TEXTMODE_NORMAL);
+    gui.set_font(&GUI_Font32_ASCII);
+    gui.set_color(GREEN);
+    gui.set_back_color(BLACK);
+    gui.set_cursor(0,16);
+    gui.disp_string("shen申tQL同强");
+    
     gui.set_font(&GUI_Font8_ASCII);
     gui.set_color(GREEN);
     gui.set_back_color(BLACK);

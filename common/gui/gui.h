@@ -66,7 +66,6 @@ extern const GUI_FONT GUI_Font16_ASCII;
 extern const GUI_FONT GUI_Font32_ASCII;
 extern const GUI_FONT GUI_FontHZ16X16;
 
-
 /*************************************
  * GUI API
 *************************************/
@@ -78,11 +77,11 @@ class GUI : public  LcdPort
         uint8_t  draw_mode;
         uint8_t  text_style;
         uint8_t rotation;
+        GUI_FONT *current_font;
 
     public:
-        GUI_FONT *font;
         GUI(Lcd *_lcd,int16_t w, int16_t h):LcdPort(_lcd,w,h){
-            draw_mode = LCD_DRAWMODE_REV;
+            draw_mode = LCD_DRAWMODE_NORMAL;
             rotation = 0;
         }; 
         void begin(){LcdPort::begin();};
@@ -93,6 +92,8 @@ class GUI : public  LcdPort
         void draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1);
         void draw_rect(int16_t x, int16_t y, int16_t x1, int16_t y1);    
         void fill_rect(int16_t x0, int16_t y0, int16_t x1, int16_t y1);
+        void fill_screen(uint16_t color) ;
+        
         void draw_circle(int16_t x0, int16_t y0, int16_t r);
         void fill_circle(int16_t x0, int16_t y0, int16_t r);
         void draw_circle_helper(int16_t x0, int16_t y0, int16_t r, uint8_t cornername);
@@ -101,16 +102,19 @@ class GUI : public  LcdPort
         void fill_round_rect(int16_t x0, int16_t y0, int16_t w, int16_t h, int16_t radius);
         void draw_triangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2);
         void fill_triangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2);
-            
+        
         //text
+        //设置字体
         void set_font(const GUI_FONT *font);
-        void unicode_encoder(uint16_t unicode,const GUI_FONT_PROP **font_list,uint16_t *index);
-        void disp_index(const GUI_FONT_PROP *font_list,uint16_t index);
+        void set_text_style(uint8_t style);    
         void set_text_mode(uint8_t mode);    
-        void disp_char(char c);
-        void disp_unicode(uint16_t c);
-        void disp_chars(char c,uint16_t cun);
-        void disp_char_at(char c,uint16_t x,uint16_t y);
+        
+        //解码转换,打印字符等函数
+        void char_index_of_font(uint16_t code,const GUI_FONT_PROP **font_list,uint16_t *index);
+        void disp_index(const GUI_FONT_PROP *font_list,uint16_t index);
+        void disp_char(uint16_t ch);
+        void disp_chars(uint16_t ch,uint16_t cun);
+        void disp_char_at(uint16_t ch,uint16_t x,uint16_t y);
         void disp_string(const char *str);
         void disp_string_at(const char *str,uint16_t x,uint16_t y);
      
@@ -118,8 +122,6 @@ class GUI : public  LcdPort
         void set_color(uint32_t color);
         void set_back_color(uint32_t back_color);    
         void set_cursor(uint16_t x,uint16_t y);
-        void set_rotation(uint8_t r);
-        void fill_screen(uint16_t color) ;
         void set_draw_mode(uint8_t mode); 
         
         //get info
@@ -127,74 +129,6 @@ class GUI : public  LcdPort
         int16_t width(void);
 
 };
-//    virtual void    invertDisplay(bool i) ;
-  void
-
-    drawBitmap(int16_t x, int16_t y, const uint8_t *bitmap,
-      int16_t w, int16_t h, uint16_t color),
-    drawBitmap(int16_t x, int16_t y, const uint8_t *bitmap,
-      int16_t w, int16_t h, uint16_t color, uint16_t bg),
-    drawBitmap(int16_t x, int16_t y, uint8_t *bitmap,
-      int16_t w, int16_t h, uint16_t color),
-    drawBitmap(int16_t x, int16_t y, uint8_t *bitmap,
-      int16_t w, int16_t h, uint16_t color, uint16_t bg),
-    drawXBitmap(int16_t x, int16_t y, const uint8_t *bitmap,
-      int16_t w, int16_t h, uint16_t color),
-    drawChar(int16_t x, int16_t y, unsigned char c, uint16_t color,
-      uint16_t bg, uint8_t size),
-    setCursor(int16_t x, int16_t y),
-    setTextColor(uint16_t c),
-    setTextColor(uint16_t c, uint16_t bg),
-    setTextSize(uint8_t s),
-    setTextWrap(bool w),
-    setRotation(uint8_t r),
-    cp437(bool x=true),
-    //setFont(const GFXfont *f = NULL),
-    getTextBounds(char *string, int16_t x, int16_t y,
-      int16_t *x1, int16_t *y1, uint16_t *w, uint16_t *h),
-    getTextBounds(const __FlashStringHelper *s, int16_t x, int16_t y,
-      int16_t *x1, int16_t *y1, uint16_t *w, uint16_t *h);
-
-
-//  uint8_t getRotation(void) const;
-
-//  // get current cursor position (get rotation safe maximum values, using: width() for x, height() for y)
-//  int16_t getCursorX(void) const;
-//  int16_t getCursorY(void) const;
-//  protected:
-
-//  uint16_t
-//    textcolor, textbgcolor;
-//  uint8_t
-//    textsize,
-//    rotation;
-//  bool
-//    wrap,   // If set, 'wrap' text at right edge of display
-//    _cp437; // If set, use correct CP437 charset (default is off)
-//  GFXfont
-//    *gfxFont;
-
-//};
-
-//struct GUI_FONT {
-//  GUI_DISPCHAR*     pfDispChar; 
-//  GUI_GETCHARDISTX* pfGetCharDistX; 
-//  GUI_GETFONTINFO*  pfGetFontInfo; 
-//  GUI_ISINFONT*     pfIsInFont;
-//  const tGUI_ENC_APIList* pafEncode;
-//  U8 YSize;
-//  U8 YDist;
-//  U8 XMag;
-//  U8 YMag;
-//  union {
-//    const void          GUI_UNI_PTR * pFontData;
-//    const GUI_FONT_MONO GUI_UNI_PTR * pMono;
-//    const GUI_FONT_PROP GUI_UNI_PTR * pProp;
-//  } p;
-//  U8 Baseline;
-//  U8 LHeight;     /* height of a small lower case character (a,x) */
-//  U8 CHeight;     /* height of a small upper case character (A,X) */
-//};
 
 #define	________	0x0
 #define	_______X	0x1
