@@ -64,6 +64,7 @@ typedef struct _tFont
 extern const GUI_FONT GUI_Font8_ASCII;
 extern const GUI_FONT GUI_Font16_ASCII;
 extern const GUI_FONT GUI_Font32_ASCII;
+extern const GUI_FONT GUI_FontHZ16X16;
 
 
 /*************************************
@@ -76,10 +77,10 @@ class GUI : public  LcdPort
         uint16_t color, back_color;
         uint8_t  draw_mode;
         uint8_t  text_style;
-        GUI_FONT *font;
         uint8_t rotation;
 
     public:
+        GUI_FONT *font;
         GUI(Lcd *_lcd,int16_t w, int16_t h):LcdPort(_lcd,w,h){
             draw_mode = LCD_DRAWMODE_REV;
             rotation = 0;
@@ -103,8 +104,11 @@ class GUI : public  LcdPort
             
         //text
         void set_font(const GUI_FONT *font);
+        void unicode_encoder(uint16_t unicode,const GUI_FONT_PROP **font_list,uint16_t *index);
+        void disp_index(const GUI_FONT_PROP *font_list,uint16_t index);
         void set_text_mode(uint8_t mode);    
         void disp_char(char c);
+        void disp_unicode(uint16_t c);
         void disp_chars(char c,uint16_t cun);
         void disp_char_at(char c,uint16_t x,uint16_t y);
         void disp_string(const char *str);

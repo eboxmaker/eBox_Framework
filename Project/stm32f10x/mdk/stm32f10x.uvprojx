@@ -907,6 +907,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\gui\Font32_ASCII.cpp</FilePath>
             </File>
+            <File>
+              <FileName>Font16_HZ.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\gui\Font16_HZ.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
