@@ -60,11 +60,11 @@ void setup()
 
     gui.set_text_mode(LCD_TEXTMODE_TRANS);
     gui.set_font(&GUI_FontHZ16X16);
-    gui.set_color(GUI_LIGHTBLUE);
+    gui.set_color(GREEN);
     gui.set_back_color(BLACK);
     gui.set_cursor(0,0);
     gui.disp_string("she1n…ÍtÕ¨«ø");
-    gui.printf("\ncpu:%d",cpu.clock.core);
+    gui.printf("\nc…Íccpu:%d",cpu.clock.core);
     
     gui.set_text_mode(LCD_TEXTMODE_NORMAL);
     gui.set_font(&GUI_Font32_ASCII);
