@@ -493,7 +493,9 @@ void GUI::disp_index(const GUI_FONT_PROP *font_list,uint16_t index)
     if((font_list == NULL) || (index > (font_list->Last - font_list->First + 1)))return;
     pCharInfo = &font_list->paCharInfo[index];
     byte_per_line = pCharInfo->BytesPerLine;
-    
+    #if TEXT_AUTORELINE 
+        if(cursor_x + pCharInfo->XSize > _width)cursor_x = 0,cursor_y+=current_font->YSize;
+    #endif
 	for(row = 0; row < current_font->YSize; row++){   
         for( count = 0; count < byte_per_line; count++){
             tmp = pCharInfo->pData[byte_per_line * row + count];
@@ -536,6 +538,16 @@ void GUI::disp_char(uint16_t ch)
 {
     const GUI_FONT_PROP *font_list;
     uint16_t index;
+    if(ch == '\n')
+    {
+        set_cursor(0,cursor_y+current_font->YSize);
+        return;
+    }
+    if(ch == '\r')
+    {
+        set_cursor(0,cursor_y);
+        return;
+    }
     char_index_of_font(ch,&font_list,&index);
     disp_index(font_list,index);
 }
@@ -570,6 +582,35 @@ void GUI::disp_string_at(const char *str,uint16_t x,uint16_t y)
     disp_string(str);
 }
 
+void GUI::printf(const char *fmt, ...)
+{
+    char buf[30];
+    uint8_t i = 0;
+    va_list va_params;
+    va_start(va_params, fmt);
+    vsprintf(buf, fmt, va_params);
+    va_end(va_params);
+    while(buf[i] != '\0')
+    {
+        disp_char(buf[i++]);
+    }
+ 
+}
+    
+void GUI::printf(u16 x, u16 y, const char *fmt, ...)
+{
+    char buf[30];
+    uint8_t i = 0;
+    va_list va_params;
+    va_start(va_params, fmt);
+    vsprintf(buf, fmt, va_params);
+    va_end(va_params);
+    set_cursor(x,y);
+    while(buf[i] != '\0')
+    {
+        disp_char(buf[i++]);
+    }
+}
 
 /*********************************************************************
 *

@@ -2,6 +2,8 @@
 #define __GUI_H
 #include "ebox.h"
 #include "lcd_port.h"
+
+#define TEXT_AUTORELINE 1
 #define RED  	0xf800
 #define GREEN	0x07e0
 #define BLUE 	0x001f
@@ -11,6 +13,35 @@
 #define GRAY0   0xEF7D   	//»ÒÉ«0 3165 00110 001011 00101
 #define GRAY1   0x8410      	//»ÒÉ«1      00000 000000 00000
 #define GRAY2   0x4208      	//»ÒÉ«2  1111111111011111
+
+//#define GUI_BLUE          0xFF0000
+//#define GUI_GREEN         0x00FF00
+//#define GUI_RED           0x0000FF
+//#define GUI_CYAN          0xFFFF00
+//#define GUI_MAGENTA       0xFF00FF
+//#define GUI_YELLOW        0x00FFFF
+//#define GUI_LIGHTBLUE     0xFF8080
+//#define GUI_LIGHTGREEN    0x80FF80
+//#define GUI_LIGHTRED      0x8080FF
+//#define GUI_LIGHTCYAN     0xFFFF80
+//#define GUI_LIGHTMAGENTA  0xFF80FF
+//#define GUI_LIGHTYELLOW   0x80FFFF
+//#define GUI_DARKBLUE      0x800000
+//#define GUI_DARKGREEN     0x008000
+//#define GUI_DARKRED       0x000080
+//#define GUI_DARKCYAN      0x808000
+//#define GUI_DARKMAGENTA   0x800080
+//#define GUI_DARKYELLOW    0x008080
+//#define GUI_WHITE         0xFFFFFF
+//#define GUI_LIGHTGRAY     0xD3D3D3
+//#define GUI_GRAY          0x808080
+//#define GUI_DARKGRAY      0x404040
+//#define GUI_BLACK         0x000000
+
+//#define GUI_BROWN         0x2A2AA5
+
+//#define GUI_INVALID_COLOR 0xFFFFFFF      /* Invalid color - more than 24 bits */
+
 //u16 LCD_BGR2RGB(u16 c);
 //void Gui_Circle(u16 X,u16 Y,u16 R,u16 fc); 
 //void Gui_DrawLine(u16 x0, u16 y0,u16 x1, u16 y1,u16 Color);  
@@ -117,7 +148,9 @@ class GUI : public  LcdPort
         void disp_char_at(uint16_t ch,uint16_t x,uint16_t y);
         void disp_string(const char *str);
         void disp_string_at(const char *str,uint16_t x,uint16_t y);
-     
+        void printf(const char *fmt, ...);
+        void printf(u16 x, u16 y, const char *fmt, ...);
+        
         //settings     
         void set_color(uint32_t color);
         void set_back_color(uint32_t back_color);    

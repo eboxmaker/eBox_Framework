@@ -60,17 +60,18 @@ void setup()
 
     gui.set_text_mode(LCD_TEXTMODE_TRANS);
     gui.set_font(&GUI_FontHZ16X16);
-    gui.set_color(GREEN);
+    gui.set_color(GUI_LIGHTBLUE);
     gui.set_back_color(BLACK);
     gui.set_cursor(0,0);
-    gui.disp_string("shen申t同强");
+    gui.disp_string("she1n申t同强");
+    gui.printf("\ncpu:%d",cpu.clock.core);
     
     gui.set_text_mode(LCD_TEXTMODE_NORMAL);
     gui.set_font(&GUI_Font32_ASCII);
     gui.set_color(GREEN);
     gui.set_back_color(BLACK);
-    gui.set_cursor(0,16);
-    gui.disp_string("shen申tQL同强");
+    gui.disp_string("shentQL");
+    gui.printf("asdf\nd%d",2);
     
     gui.set_font(&GUI_Font8_ASCII);
     gui.set_color(GREEN);
