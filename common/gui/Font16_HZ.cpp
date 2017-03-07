@@ -2091,9 +2091,9 @@ GUI_CHARINFO GUI_FontHZ_16x16_CharInfo[99] = {
   { 4, 16, 1, acFontHZ_007D }, /*93: }*/
   { 7, 16, 1, acFontHZ_007E }, /*94: ~*/
   { 3, 16, 1, acFontHZ_007F }, /*95: */
-  { 16, 12, 2, acFontHZ_C7BF }, /*96: ?*/
-  { 16, 12, 2, acFontHZ_C9EA }, /*97: ?*/
-  { 16, 12, 2, acFontHZ_CDAC }, /*98: ?*/
+  { 13, 13, 2, acFontHZ_C7BF }, /*96: ?*/
+  { 12, 12, 2, acFontHZ_C9EA }, /*97: ?*/
+  { 13, 13, 2, acFontHZ_CDAC }, /*98: ?*/
 };
 
 GUI_FONT_PROP GUI_FontHZ_16x16_Prop4 = {

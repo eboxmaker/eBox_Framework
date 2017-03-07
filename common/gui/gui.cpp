@@ -592,7 +592,15 @@ void GUI::printf(const char *fmt, ...)
     va_end(va_params);
     while(buf[i] != '\0')
     {
-        disp_char(buf[i++]);
+        if(buf[i] < 0x7e)//ÊÇ×ÖÄ¸
+            disp_char(buf[i++]);
+        else//ºº×Ö
+        {        
+            uint16_t tmp;
+            tmp = buf[i++];
+            tmp = (tmp<<8) + buf[i++];
+            disp_char(tmp);        
+        }
     }
  
 }
@@ -608,7 +616,15 @@ void GUI::printf(u16 x, u16 y, const char *fmt, ...)
     set_cursor(x,y);
     while(buf[i] != '\0')
     {
-        disp_char(buf[i++]);
+        if(buf[i] < 0x7e)//ÊÇ×ÖÄ¸
+            disp_char(buf[i++]);
+        else//ºº×Ö
+        {        
+            uint16_t tmp;
+            tmp = buf[i++];
+            tmp = (tmp<<8) + buf[i++];
+            disp_char(tmp);        
+        }
     }
 }
 
