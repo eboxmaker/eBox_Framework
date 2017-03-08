@@ -94,6 +94,7 @@ typedef struct _tFont
 *************************************/
 extern const GUI_FONT GUI_Font8_ASCII;
 extern const GUI_FONT GUI_Font16_ASCII;
+extern const GUI_FONT GUI_Font24_ASCII;
 extern const GUI_FONT GUI_Font32_ASCII;
 extern const GUI_FONT GUI_FontHZ16X16;
 
