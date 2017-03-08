@@ -1,6 +1,6 @@
 #include "lcd_port.h"
 
-#define LCD_ROTATION 0
+#define LCD_ROTATION 1
 #define GUI_Optimize 1
 
 #ifndef _swap_int16_t
