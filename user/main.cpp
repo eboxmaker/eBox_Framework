@@ -16,10 +16,12 @@
 #include "lcd_1.8.h"
 #include "color_convert.h"
 #include "gui.h"
-
+#include "crc16.h"
 Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
 GUI gui(&lcd,128,160);
-
+uint8_t buf[]={03,03,00,00,00,01};
+//    
+    uint16_t tmp ;
 void setup()
 {
     ebox_init();
@@ -34,7 +36,8 @@ void setup()
     uart1.printf("w:%d\n",gui.width());
     uart1.printf("h:%d\n",gui.height());
 //    
-
+     tmp = crc16(buf,6);
+    uart1.printf("crc:%x\n",tmp);
 //    
     gui.set_color(WHITE);
     gui.set_font(&GUI_Font16_ASCII);
