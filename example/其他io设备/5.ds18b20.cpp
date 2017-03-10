@@ -20,8 +20,9 @@ void setup()
     int ret;
     ebox_init();
     uart1.begin(115200);
-    ds.begin();
-    uart1.printf("%d\n",ds.is_exist());
+    PB8.mode(OUTPUT_PP);
+    ret = ds.begin();
+    uart1.printf("%d\n",ret);
     
 }
 int main(void)
@@ -30,11 +31,8 @@ int main(void)
     setup();
     while(1)
     {
-        if(ds.is_exist() == 1)
-        {
-            temper = ds.get_temp();
-            uart1.printf("%f\n",temper);
-        }
+        temper = ds.get_temp();
+        uart1.printf("%f\n",temper);
         delay_ms(1000);
 
     }

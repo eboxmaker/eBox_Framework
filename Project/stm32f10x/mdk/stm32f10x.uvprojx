@@ -680,9 +680,9 @@
               <FilePath>..\..\..\common\util\list.cpp</FilePath>
             </File>
             <File>
-              <FileName>crc16.c</FileName>
+              <FileName>crc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\common\util\crc16.c</FilePath>
+              <FilePath>..\..\..\common\util\crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -853,6 +853,11 @@
               <FileName>si4432.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\si4432.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ds18b20.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\ds18b20.cpp</FilePath>
             </File>
           </Files>
         </Group>
