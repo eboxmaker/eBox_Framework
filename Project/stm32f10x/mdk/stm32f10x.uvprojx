@@ -859,6 +859,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\ds18b20.cpp</FilePath>
             </File>
+            <File>
+              <FileName>sx1278.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\sx1278.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
