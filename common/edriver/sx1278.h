@@ -199,21 +199,26 @@ typedef struct packet {
   uint8_t destination[8];
   const char* data;
 }LoraPack;
-
-class Lora
+typedef enum {DEFAULT,TXING,TXREADY}LoraState;
+class Lora 
 {
     public:
-        Lora(Gpio *cs, Gpio *rst, Gpio *int_pin, Spi *spi)
+        LoraState state;
+        Lora(Gpio *cs, Gpio *rst, Spi *spi)
         {
             this->cs      = cs;
             this->rst_pin = rst;
-            this->int_pin = int_pin;
             this->spi     = spi;
+            state = DEFAULT;
         }
         void begin(uint8_t dev_num,uint8_t bw, uint8_t cr, uint8_t sf);
         
-        int tx(packet* pack);
-        packet* rx(uint8_t mode = SX1278_RXSINGLE, uint8_t packetLength = 0);
+        void enttry_tx();
+        void tx_packet(packet* pack);
+        void tc_evnet();
+
+        void enttry_rx();
+        void rx_packet(packet* p);
 
         void setMode(uint8_t mode);
         void setPacketSource(packet* pack, uint8_t* address);
@@ -252,7 +257,6 @@ class Lora
     private:
         Gpio *cs;
         Gpio *rst_pin;
-        Gpio *int_pin;
         SPI_CONFIG_TYPE spi_config;
         Spi *spi;
 };
