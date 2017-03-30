@@ -18,36 +18,60 @@
 #include "bsp.h"
 #include "sx1278.h"
 
-Lora lora(&PA4,&PA2,&PA3,&spi1);
+Lora lora(&PA4,&PA2,&spi1);
+
+Exti ex1(&PA3,EXTI_Trigger_Rising);
+Exti ex2(&PB0,EXTI_Trigger_Rising);
+
 uint8_t sf;
 LoraPack package;
-const char buf[8]={1,2,3,4,5,6,7,8};
+const char buf[8]={'1','8','3','4','5','6','7','\0'};
+
+void test()
+{
+//    lora.tc_evnet();
+//    uart1.printf("tx over\n");
+    lora.rx_packet(&package);
+    uart1.printf("%s\n",package.data);
+}
+void timeout()
+{
+  uart1.printf("timeout\n");
+  lora.clearIRQFlags();
+}
 void setup()
 {
     int ret;
     ebox_init();
     uart1.begin(115200);
-    lora.begin(1,SX1278_BW_9,SX1278_CR_4_5,SX1278_SF_6);
-    sf = lora.readRegister(SX1278_REG_VERSION);
-    uart1.printf("SF = 0x%x\n",sf);
-
+    lora.begin(1,SX1278_BW_6,SX1278_CR_4_5,SX1278_SF_9);
+    
+    ex1.begin();
+    ex1.attach(test);
+    ex2.begin();
+    ex2.attach(timeout);
+    
     package.data = buf;
     for(int i = 0; i < 8; i ++)
         package.source[i] =0; 
     for(int i = 0; i < 8; i ++)
         package.destination[i] =0; 
+//    lora.enttry_tx();
+    lora.enttry_rx();
 }
+uint32_t last;
 int main(void)
 {
     float temper;
     setup();
     while(1)
     {
-//        lora.tx(&package);
-//        delay_ms(500);
-//        uart1.printf("asdf\n");
-        package = *lora.rx(SX1278_RXSINGLE,8);
-        uart1.printf("asdf\n");
+//        if(lora.state == TXREADY)
+//        {
+//            uart1.println((uint32_t)(millis() - last));
+//            last = millis();
+//            lora.tx_packet(&package);
+//        }
     }
 
 }

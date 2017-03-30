@@ -9,7 +9,6 @@ void Lora::begin(uint8_t dev_num,uint8_t bw, uint8_t cr, uint8_t sf)
     
     cs->mode(OUTPUT_PP);
     rst_pin->mode(OUTPUT_PP);
-    int_pin->mode(INPUT_PU);
 
     cs->set();
     rst_pin->reset();
@@ -20,17 +19,76 @@ void Lora::begin(uint8_t dev_num,uint8_t bw, uint8_t cr, uint8_t sf)
     config(bw,cr,sf);
     delay_ms(100);
 }
-int Lora::tx(packet* pack) {
+void Lora::config(uint8_t bw, uint8_t cr, uint8_t sf) {
+    //1,复位引脚复位
+    //2.延时100ms
+    //3.进入sleepmode
+    //4.启动外部晶振
+    //5.进入lora模式
+    //6.设置载波频率
+    setMode(SX1278_SLEEP);
+    uart1.printf("SX1278_REG_OP_MODE:0x%x\n",readRegister(SX1278_REG_OP_MODE));
+    setRegValue(SX1278_REG_OP_MODE, SX1278_LORA, 7, 7);//进入lora模式
+    uart1.printf("SX1278_REG_OP_MODE:0x%x\n",readRegister(SX1278_REG_OP_MODE));
+
+    //6.设置载波频率
+    setRegValue(SX1278_REG_FRF_MSB, SX1278_FRF_MSB);
+    setRegValue(SX1278_REG_FRF_MID, SX1278_FRF_MID);
+    setRegValue(SX1278_REG_FRF_LSB, SX1278_FRF_LSB);
+    uart1.printf("SX1278_REG_FRF_MSB:0x%x\n",readRegister(SX1278_REG_FRF_MSB));
+    uart1.printf("SX1278_REG_FRF_MID:0x%x\n",readRegister(SX1278_REG_FRF_MID));
+    uart1.printf("SX1278_REG_FRF_LSB:0x%x\n",readRegister(SX1278_REG_FRF_LSB));
+
+    //7。输出功率设置    
+    setRegValue(SX1278_REG_PA_CONFIG, SX1278_PA_SELECT_BOOST | SX1278_MAX_POWER | SX1278_OUTPUT_POWER);
+    uart1.printf("SX1278_REG_PA_CONFIG:0x%x\n",readRegister(SX1278_REG_PA_CONFIG));
+
+    //8。设置PA的过流保护（关闭），电流微调默认0x0b
+    setRegValue(SX1278_REG_OCP, SX1278_OCP_OFF | SX1278_OCP_TRIM, 5, 0);
+    uart1.printf("SX1278_REG_OCP:0x%x\n",readRegister(SX1278_REG_OCP));
+
+
+    //9.LNA 增益设置001，最大增益
+    setRegValue(SX1278_REG_LNA, SX1278_LNA_GAIN_1 | SX1278_LNA_BOOST_HF_ON);
+
+    if(sf == SX1278_SF_6) {
+        setRegValue(SX1278_REG_MODEM_CONFIG_1, bw | cr | SX1278_HEADER_IMPL_MODE);
+        setRegValue(SX1278_REG_MODEM_CONFIG_2, SX1278_SF_6 | SX1278_TX_MODE_SINGLE | SX1278_RX_CRC_MODE_ON | SX1278_RX_TIMEOUT_MSB);
+        //lora模式下无效
+//        setRegValue(SX1278_REG_DETECT_OPTIMIZE, SX1278_DETECT_OPTIMIZE_SF_6, 2, 0);
+//        setRegValue(SX1278_REG_DETECTION_THRESHOLD, SX1278_DETECTION_THRESHOLD_SF_6);
+    } else {
+        setRegValue(SX1278_REG_MODEM_CONFIG_2, sf | SX1278_TX_MODE_SINGLE | SX1278_RX_CRC_MODE_ON | SX1278_RX_TIMEOUT_MSB);
+        setRegValue(SX1278_REG_MODEM_CONFIG_1, bw | cr | SX1278_HEADER_EXPL_MODE);
+        //lora模式下无效
+//        setRegValue(SX1278_REG_DETECT_OPTIMIZE, SX1278_DETECT_OPTIMIZE_SF_7_12, 2, 0);
+//        setRegValue(SX1278_REG_DETECTION_THRESHOLD, SX1278_DETECTION_THRESHOLD_SF_7_12);
+    }
+
+    setRegValue(SX1278_REG_SYMB_TIMEOUT_LSB, 0xff);
+    
+    setRegValue(SX1278_REG_PREAMBLE_MSB, 0);
+    setRegValue(SX1278_REG_PREAMBLE_LSB, 16);
+
+    setMode(SX1278_STANDBY);
+}
+
+void Lora::enttry_tx() {
+    uart1.printf("MODE:0x%x\n",readRegister(SX1278_REG_OP_MODE));
   setMode(SX1278_STANDBY);
+    uart1.printf("MODE:0x%x\n",readRegister(SX1278_REG_OP_MODE));
   setRegValue(SX1278_REG_PA_DAC, SX1278_PA_BOOST_ON, 2, 0);
   setRegValue(SX1278_REG_HOP_PERIOD, SX1278_HOP_PERIOD_OFF);
   setRegValue(SX1278_REG_DIO_MAPPING_1, SX1278_DIO0_TX_DONE, 7, 6);
   clearIRQFlags();
   setRegValue(SX1278_REG_IRQ_FLAGS_MASK, SX1278_MASK_IRQ_FLAG_TX_DONE);
-  
+  state = TXREADY;
+}
+void Lora::tx_packet(packet* pack)
+{
   uint8_t packetLength = getPacketLength(pack);
-  if(packetLength > 256) {
-    return -1;
+  if(packetLength > 255) {
+    return ;
   }
   setRegValue(SX1278_REG_PAYLOAD_LENGTH, packetLength);
   setRegValue(SX1278_REG_FIFO_TX_BASE_ADDR, SX1278_FIFO_TX_BASE_ADDR_MAX);
@@ -41,59 +99,54 @@ int Lora::tx(packet* pack) {
   writeRegisterBurstStr(SX1278_REG_FIFO, pack->data, packetLength - 16);
   
   setMode(SX1278_TX);
-  while(!int_pin->read());
-  clearIRQFlags();
-  
-  return 0;
+  state = TXING;
 }
 
-packet* Lora::rx(uint8_t mode, uint8_t packetLength) {
-  setMode(SX1278_STANDBY);
-  if(mode == SX1278_RXSINGLE) {
+void Lora::tc_evnet()
+{
+    state=TXREADY;
+  clearIRQFlags();  
+}
+
+void Lora::enttry_rx() {
+    setMode(SX1278_STANDBY);
     setRegValue(SX1278_REG_PA_DAC, SX1278_PA_BOOST_OFF);
     setRegValue(SX1278_REG_HOP_PERIOD, SX1278_HOP_PERIOD_MAX);
     setRegValue(SX1278_REG_DIO_MAPPING_1, SX1278_DIO0_RX_DONE | SX1278_DIO1_RX_TIMEOUT, 7, 5);
+    setRegValue(SX1278_REG_IRQ_FLAGS_MASK, (SX1278_MASK_IRQ_FLAG_RX_TIMEOUT & SX1278_MASK_IRQ_FLAG_RX_DONE));
     clearIRQFlags();
-    setRegValue(SX1278_REG_IRQ_FLAGS_MASK, (SX1278_MASK_IRQ_FLAG_PAYLOAD_CRC_ERROR & SX1278_MASK_IRQ_FLAG_VALID_HEADER));
     
     setRegValue(SX1278_REG_FIFO_RX_BASE_ADDR, SX1278_FIFO_RX_BASE_ADDR_MAX);
     setRegValue(SX1278_REG_FIFO_ADDR_PTR, SX1278_FIFO_RX_BASE_ADDR_MAX);
-    
-    setMode(SX1278_RXSINGLE);
-    while(!int_pin->read()) {
-      if(int_pin->read()) {
-        return NULL;
-      }
-    }
-    
-    if(readRegister(SX1278_REG_IRQ_FLAGS)) {
-      return NULL;
-    }
-    
+    setMode(SX1278_RXCONTINUOUS); 
+}
+void Lora::rx_packet(packet* p)
+{
+    uint8_t packetLength;
     uint8_t sf = getRegValue(SX1278_REG_MODEM_CONFIG_2, 7, 4) & B00001111;
     if(sf != SX1278_SF_6) {
       packetLength = getRegValue(SX1278_REG_RX_NB_BYTES);
     }
-    
-    packet* pack = new packet;
-    const char* data = new char[packetLength - 16];
+    else
+    {
+        packetLength = 21;
+    }
     
     for(uint8_t i = 0; i < 8; i++) {
-      pack->source[i] = readRegister(SX1278_REG_FIFO);
+      p->source[i] = readRegister(SX1278_REG_FIFO);
     }
     for(uint8_t i = 0; i < 8; i++) {
-      pack->destination[i] = readRegister(SX1278_REG_FIFO);
+      p->destination[i] = readRegister(SX1278_REG_FIFO);
     }
-    data = readRegisterBurstStr(SX1278_REG_FIFO, packetLength - 16);
-    pack->data = data;
+    p->data = readRegisterBurstStr(SX1278_REG_FIFO, packetLength - 16);
     
-    return(pack);
-  } else if (mode == SX1278_RXCONTINUOUS) {
-    
-  }
-  
-  return NULL;
+    //重新初始化FIFO地址
+    setRegValue(SX1278_REG_FIFO_RX_BASE_ADDR, SX1278_FIFO_RX_BASE_ADDR_MAX);
+    setRegValue(SX1278_REG_FIFO_ADDR_PTR, SX1278_FIFO_RX_BASE_ADDR_MAX);
+    //清控中断标志位
+    clearIRQFlags();
 }
+
 void Lora::setMode(uint8_t mode) {
   setRegValue(SX1278_REG_OP_MODE, mode, 2, 0);
 }
@@ -165,37 +218,6 @@ const char* Lora::getPacketData(packet* pack) {
   return(pack->data);
 }
 
-void Lora::config(uint8_t bw, uint8_t cr, uint8_t sf) {
-  setMode(SX1278_SLEEP);
-  
-  setRegValue(SX1278_REG_OP_MODE, SX1278_LORA, 7, 7);
-  
-  setRegValue(SX1278_REG_FRF_MSB, SX1278_FRF_MSB);
-  setRegValue(SX1278_REG_FRF_MID, SX1278_FRF_MID);
-  setRegValue(SX1278_REG_FRF_LSB, SX1278_FRF_LSB);
-  
-  setRegValue(SX1278_REG_PA_CONFIG, SX1278_PA_SELECT_BOOST | SX1278_MAX_POWER | SX1278_OUTPUT_POWER);
-  setRegValue(SX1278_REG_OCP, SX1278_OCP_ON | SX1278_OCP_TRIM, 5, 0);
-  setRegValue(SX1278_REG_LNA, SX1278_LNA_GAIN_1 | SX1278_LNA_BOOST_HF_ON);
-  
-  if(sf == SX1278_SF_6) {
-    setRegValue(SX1278_REG_MODEM_CONFIG_2, SX1278_SF_6 | SX1278_TX_MODE_SINGLE | SX1278_RX_CRC_MODE_ON | SX1278_RX_TIMEOUT_MSB);
-    setRegValue(SX1278_REG_MODEM_CONFIG_1, bw | cr | SX1278_HEADER_IMPL_MODE);
-    setRegValue(SX1278_REG_DETECT_OPTIMIZE, SX1278_DETECT_OPTIMIZE_SF_6, 2, 0);
-    setRegValue(SX1278_REG_DETECTION_THRESHOLD, SX1278_DETECTION_THRESHOLD_SF_6);
-  } else {
-    setRegValue(SX1278_REG_MODEM_CONFIG_2, sf | SX1278_TX_MODE_SINGLE | SX1278_RX_CRC_MODE_ON | SX1278_RX_TIMEOUT_MSB);
-    setRegValue(SX1278_REG_MODEM_CONFIG_1, bw | cr | SX1278_HEADER_EXPL_MODE);
-    setRegValue(SX1278_REG_DETECT_OPTIMIZE, SX1278_DETECT_OPTIMIZE_SF_7_12, 2, 0);
-    setRegValue(SX1278_REG_DETECTION_THRESHOLD, SX1278_DETECTION_THRESHOLD_SF_7_12);
-  }
-  
-  setRegValue(SX1278_REG_SYMB_TIMEOUT_LSB, SX1278_RX_TIMEOUT_LSB);
-  setRegValue(SX1278_REG_PREAMBLE_MSB, SX1278_PREAMBLE_LENGTH_MSB);
-  setRegValue(SX1278_REG_PREAMBLE_LSB, SX1278_PREAMBLE_LENGTH_LSB);
-  
-  setMode(SX1278_STANDBY);
-}
 
 uint8_t Lora::setRegValue(uint8_t reg, uint8_t value, uint8_t msb, uint8_t lsb) {
   if((msb > 7) || (lsb > 7)) {
