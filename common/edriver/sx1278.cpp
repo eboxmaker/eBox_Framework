@@ -65,7 +65,7 @@ void Lora::config(uint8_t bw, uint8_t cr, uint8_t sf) {
 //        setRegValue(SX1278_REG_DETECTION_THRESHOLD, SX1278_DETECTION_THRESHOLD_SF_7_12);
     }
 
-    setRegValue(SX1278_REG_SYMB_TIMEOUT_LSB, 0xff);
+    setRegValue(SX1278_REG_SYMB_TIMEOUT_LSB, 0x0f);
     
     setRegValue(SX1278_REG_PREAMBLE_MSB, 0);
     setRegValue(SX1278_REG_PREAMBLE_LSB, 16);
@@ -96,7 +96,7 @@ void Lora::tx_packet(packet* pack)
   
   writeRegisterBurst(SX1278_REG_FIFO, pack->source, 8);
   writeRegisterBurst(SX1278_REG_FIFO, pack->destination, 8);
-  writeRegisterBurstStr(SX1278_REG_FIFO, pack->data, packetLength - 16);
+  writeRegisterBurst(SX1278_REG_FIFO, pack->data, packetLength - 16);
   
   setMode(SX1278_TX);
   state = TXING;
@@ -138,11 +138,12 @@ void Lora::rx_packet(packet* p)
     for(uint8_t i = 0; i < 8; i++) {
       p->destination[i] = readRegister(SX1278_REG_FIFO);
     }
-    p->data = readRegisterBurstStr(SX1278_REG_FIFO, packetLength - 16);
-    
+    readRegisterBurst(SX1278_REG_FIFO, p->data,packetLength - 16);
+    uart1.printf("SX1278_REG_FIFO_RX_CURRENT_ADDR:0x%x\n",readRegister(SX1278_REG_FIFO_RX_CURRENT_ADDR));
+
     //重新初始化FIFO地址
-    setRegValue(SX1278_REG_FIFO_RX_BASE_ADDR, SX1278_FIFO_RX_BASE_ADDR_MAX);
-    setRegValue(SX1278_REG_FIFO_ADDR_PTR, SX1278_FIFO_RX_BASE_ADDR_MAX);
+//    setRegValue(SX1278_REG_FIFO_RX_BASE_ADDR, SX1278_FIFO_RX_BASE_ADDR_MAX);
+//    setRegValue(SX1278_REG_FIFO_ADDR_PTR, SX1278_FIFO_RX_BASE_ADDR_MAX);
     //清控中断标志位
     clearIRQFlags();
 }
@@ -155,68 +156,15 @@ void Lora::setPacketSource(packet* pack, uint8_t* address) {
     pack->source[i] = address[i];
   }
 }
-void Lora::setPacketSourceStr(packet* pack, const char* address) {
-  for(uint8_t i = 0; i < 8; i++) {
-    pack->source[i] = (parseByte(address[3*i]) << 4) | parseByte(address[3*i + 1]);
-  }
-}
-
-uint8_t* Lora::getPacketSource(packet* pack) {
-  uint8_t src[24];
-  for(uint8_t i = 0; i < 8; i++) {
-    src[i] = pack->source[i];
-  }
-  return(src);
-}
-
-const char* Lora::getPacketSourceStr(packet* pack) {
-  char* src = new char[24];
-  for(uint8_t i = 0; i < 8; i++) {
-    src[3*i] = reparseChar(pack->source[i] >> 4);
-    src[3*i+1] = reparseChar(pack->source[i] & 0x0F);
-    src[3*i+2] = ':';
-  }
-  src[23] = '\0';
-  return(src);
-}
-
 void Lora::setPacketDestination(packet* pack, uint8_t* address) {
   for(uint8_t i = 0; i < 8; i++) {
     pack->destination[i] = address[i];
   }
 }
-
-void Lora::setPacketDestinationStr(packet* pack, const char* address) {
-  for(uint8_t i = 0; i < 8; i++) {
-    pack->destination[i] = (parseByte(address[3*i]) << 4) | parseByte(address[3*i + 1]);
-  }
-}
-
-uint8_t* Lora::getPacketDestination(packet* pack) {
-  uint8_t dest[24];
-  for(uint8_t i = 0; i < 8; i++) {
-    dest[i] = pack->destination[i];
-  }
-  return(dest);
-}
-const char* Lora::getPacketDestinationStr(packet* pack) {
-  char* dest = new char[24];
-  for(uint8_t i = 0; i < 8; i++) {
-    dest[3*i] = reparseChar(pack->destination[i] >> 4);
-    dest[3*i+1] = reparseChar(pack->destination[i] & 0x0F);
-    dest[3*i+2] = ':';
-  }
-  dest[23] = '\0';
-  return(dest);
-}
-
 void Lora::setPacketData(packet* pack, const char* data) {
-  pack->data = data;
+  pack->data = (uint8_t *)data;
 }
 
-const char* Lora::getPacketData(packet* pack) {
-  return(pack->data);
-}
 
 
 uint8_t Lora::setRegValue(uint8_t reg, uint8_t value, uint8_t msb, uint8_t lsb) {
@@ -242,30 +190,15 @@ void Lora::clearIRQFlags(void) {
   writeRegister(SX1278_REG_IRQ_FLAGS, B11111111);
 }
 
-uint8_t* Lora::readRegisterBurst(uint8_t reg, uint8_t numBytes) {
-  uint8_t* inBytes = new uint8_t[numBytes];
+void Lora::readRegisterBurst(uint8_t reg, uint8_t* data, uint8_t numBytes){
   spi->take_spi_right(&spi_config);
   cs->reset();
   spi->transfer(reg | SX1278_READ);
   for(uint8_t i = 0; i< numBytes; i++) {
-    inBytes[i] = spi->transfer(reg);
+    data[i] = spi->transfer(reg);
   }
   cs->set();
   spi->release_spi_right();
-  return(inBytes);
-}
-
-const char* Lora::readRegisterBurstStr(uint8_t reg, uint8_t numBytes) {
-  char* inBytes = new char[numBytes];
-  spi->take_spi_right(&spi_config);
-  cs->reset();
-  spi->transfer(reg | SX1278_READ);
-  for(uint8_t i = 0; i< numBytes; i++) {
-    inBytes[i] = spi->transfer(reg);
-  }
-  cs->set();
-  spi->release_spi_right();
-  return(inBytes);
 }
 
 void Lora::writeRegisterBurst(uint8_t reg, uint8_t* data, uint8_t numBytes) {
@@ -279,16 +212,6 @@ void Lora::writeRegisterBurst(uint8_t reg, uint8_t* data, uint8_t numBytes) {
   spi->release_spi_right();
 }
 
-void Lora::writeRegisterBurstStr(uint8_t reg, const char* data, uint8_t numBytes) {
-  spi->take_spi_right(&spi_config);
-  cs->reset();
-  spi->transfer(reg | SX1278_WRITE);
-  for(uint8_t i = 0; i< numBytes; i++) {
-    spi->transfer(data[i]);
-  }
-  cs->set();
-  spi->release_spi_right();
-}
 
 uint8_t Lora::readRegister(uint8_t reg) {
     uint8_t inByte;
@@ -314,31 +237,10 @@ void Lora::generateLoRaAdress(void) {
    // EEPROM.write(i, (uint8_t)random(0, 256));
   }
 }
-
 uint8_t Lora::getPacketLength(packet* pack) {
   for(uint8_t i = 0; i < 240; i++) {
     if(pack->data[i] == '\0') {
       return(i + 17);
     }
   }
-}
-
-uint8_t Lora::parseByte(char c) {
-  if((c >= 48) && (c <= 57)) {
-    return(c - 48);
-  } else if((c >= 65) && (c <= 70)) {
-    return(c - 55);
-  } else if((c >= 97) && (c <= 102)) {
-    return(c - 87);
-  }
-  return 0;
-}
-
-char Lora::reparseChar(uint8_t b) {
-  if((b >= 0) && (b <= 9)) {
-    return(b + 48);
-  } else if((b >= 10) && (b <= 16)) {
-    return(b + 55);
-  }
-  return 0;
 }
