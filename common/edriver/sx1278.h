@@ -197,7 +197,7 @@
 typedef struct packet {
   uint8_t source[8];
   uint8_t destination[8];
-  const char* data;
+  uint8_t* data;
 }LoraPack;
 typedef enum {DEFAULT,TXING,TXREADY}LoraState;
 class Lora 
@@ -212,6 +212,7 @@ class Lora
             state = DEFAULT;
         }
         void begin(uint8_t dev_num,uint8_t bw, uint8_t cr, uint8_t sf);
+        void config(uint8_t bw, uint8_t cr, uint8_t sf);
         
         void enttry_tx();
         void tx_packet(packet* pack);
@@ -222,38 +223,23 @@ class Lora
 
         void setMode(uint8_t mode);
         void setPacketSource(packet* pack, uint8_t* address);
-        void setPacketSourceStr(packet* pack, const char* address);
-        uint8_t* getPacketSource(packet* pack);
-        const char* getPacketSourceStr(packet* pack);
-        
         void setPacketDestination(packet* pack, uint8_t* address);
-        void setPacketDestinationStr(packet* pack, const char* address);
-        uint8_t* getPacketDestination(packet* pack);
-        const char* getPacketDestinationStr(packet* pack);
-        
         void setPacketData(packet* pack, const char* data);
-        const char* getPacketData(packet* pack);
         
-        
-        
-        
-        void config(uint8_t bw, uint8_t cr, uint8_t sf);
+                
         uint8_t setRegValue(uint8_t reg, uint8_t value, uint8_t msb = 7, uint8_t lsb = 0); //TODO: add msb/lsb value check
         uint8_t getRegValue(uint8_t reg, uint8_t msb = 7, uint8_t lsb = 0);
         void clearIRQFlags(void);
         
-        uint8_t* readRegisterBurst(uint8_t reg, uint8_t numBytes);
-        const char* readRegisterBurstStr(uint8_t reg, uint8_t numBytes);
+        void readRegisterBurst(uint8_t reg, uint8_t* data, uint8_t numBytes);
         void writeRegisterBurst(uint8_t reg, uint8_t* data, uint8_t numBytes);
-        void writeRegisterBurstStr(uint8_t reg, const char* data, uint8_t numBytes);
          
         uint8_t readRegister(uint8_t reg);
         void writeRegister(uint8_t reg, uint8_t data);
         
         void generateLoRaAdress(void);
         uint8_t getPacketLength(packet* pack);
-        uint8_t parseByte(char c);
-        char reparseChar(uint8_t b);
+
     private:
         Gpio *cs;
         Gpio *rst_pin;

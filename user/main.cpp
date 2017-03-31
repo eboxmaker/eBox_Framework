@@ -25,12 +25,15 @@ Exti ex2(&PB0,EXTI_Trigger_Rising);
 
 uint8_t sf;
 LoraPack package;
-const char buf[8]={'1','8','3','4','5','6','7','\0'};
+uint8_t buf[8]={'1','8','3','4','5','6','7','\0'};
 
 void test()
 {
+//    PB8.toggle();
 //    lora.tc_evnet();
 //    uart1.printf("tx over\n");
+
+    PB9.toggle();
     lora.rx_packet(&package);
     uart1.printf("%s\n",package.data);
 }
@@ -43,6 +46,8 @@ void setup()
 {
     int ret;
     ebox_init();
+    PB8.mode(OUTPUT_PP);
+    PB9.mode(OUTPUT_PP);
     uart1.begin(115200);
     lora.begin(1,SX1278_BW_6,SX1278_CR_4_5,SX1278_SF_9);
     
@@ -62,7 +67,7 @@ void setup()
 uint32_t last;
 int main(void)
 {
-    float temper;
+    int temp;
     setup();
     while(1)
     {
@@ -71,6 +76,9 @@ int main(void)
 //            uart1.println((uint32_t)(millis() - last));
 //            last = millis();
 //            lora.tx_packet(&package);
+//            temp++;
+//            temp%=10;
+//            buf[0] = 0x30+temp;
 //        }
     }
 
