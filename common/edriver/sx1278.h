@@ -194,12 +194,12 @@
 //SX1278_REG_FIFO_RX_BASE_ADDR
 #define SX1278_FIFO_RX_BASE_ADDR_MAX                  B00000000  //  7     0     allocate the entire FIFO buffer for RX only
 
-typedef struct packet {
-  uint8_t source[8];
-  uint8_t destination[8];
-  uint8_t* data;
-}LoraPack;
-typedef enum {DEFAULT,TXING,TXREADY}LoraState;
+
+typedef enum {
+    DEFAULT,
+    TXING,
+    TXREADY
+}LoraState;
 class Lora 
 {
     public:
@@ -215,21 +215,20 @@ class Lora
         void config(uint8_t bw, uint8_t cr, uint8_t sf);
         
         void enttry_tx();
-        void tx_packet(packet* pack);
-        void tc_evnet();
+        void write(uint8_t* pBuffer,uint8_t len);
 
         void enttry_rx();
-        void rx_packet(packet* p);
+        void read(uint8_t* p,uint8_t *len);
+
+        void evnet_tc();
+        void evnet_timeout();
 
         void setMode(uint8_t mode);
-        void setPacketSource(packet* pack, uint8_t* address);
-        void setPacketDestination(packet* pack, uint8_t* address);
-        void setPacketData(packet* pack, const char* data);
+        void clearIRQFlags(void);
         
                 
         uint8_t setRegValue(uint8_t reg, uint8_t value, uint8_t msb = 7, uint8_t lsb = 0); //TODO: add msb/lsb value check
         uint8_t getRegValue(uint8_t reg, uint8_t msb = 7, uint8_t lsb = 0);
-        void clearIRQFlags(void);
         
         void readRegisterBurst(uint8_t reg, uint8_t* data, uint8_t numBytes);
         void writeRegisterBurst(uint8_t reg, uint8_t* data, uint8_t numBytes);
@@ -237,8 +236,6 @@ class Lora
         uint8_t readRegister(uint8_t reg);
         void writeRegister(uint8_t reg, uint8_t data);
         
-        void generateLoRaAdress(void);
-        uint8_t getPacketLength(packet* pack);
 
     private:
         Gpio *cs;
