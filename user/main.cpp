@@ -14,43 +14,130 @@
 #include "ebox.h"
 #include "bsp.h"
 #include "sx1278.h"
+#include "radio.h"
 
 
-#define TXMODE 1
+#define BUFFER_SIZE                                 9 // Define the payload size here
 
+
+static uint16_t BufferSize = BUFFER_SIZE;			// RF buffer size
+static uint8_t Buffer[BUFFER_SIZE];					// RF buffer
+
+static uint8_t EnableMaster = false; 				// Master/Slave selection
+
+tRadioDriver *Radio = NULL;
+
+const uint8_t PingMsg[] = "PING";
+const uint8_t PongMsg[] = "PONG";
+/*
+ * Manages the master operation
+ */
+void OnMaster( void )
+{
+    uint8_t i;
+    
+    switch( Radio->Process( ) )
+    {
+    case RF_RX_TIMEOUT:
+        // Send the next PING frame
+        Buffer[0] = 'P';
+        Buffer[1] = 'I';
+        Buffer[2] = 'N';
+        Buffer[3] = 'G';
+        for( i = 4; i < BufferSize; i++ )
+        {
+            Buffer[i] = i - 4;
+        }
+        Radio->SetTxPacket( Buffer, BufferSize );
+        break;
+    case RF_RX_DONE:
+        Radio->GetRxPacket( Buffer, ( uint16_t* )&BufferSize );
+    
+        if( BufferSize > 0 )
+        {
+            if( strncmp( ( const char* )Buffer, ( const char* )PongMsg, 4 ) == 0 )
+            {
+                // Indicates on a LED that the received frame is a PONG
+                //LedToggle( LED_GREEN );
+                PB8.toggle();
+
+                // Send the next PING frame            
+                Buffer[0] = 'P';
+                Buffer[1] = 'I';
+                Buffer[2] = 'N';
+                Buffer[3] = 'G';
+                // We fill the buffer with numbers for the payload 
+                for( i = 4; i < BufferSize; i++ )
+                {
+                    Buffer[i] = i - 4;
+                }
+                Radio->SetTxPacket( Buffer, BufferSize );
+            }
+            else if( strncmp( ( const char* )Buffer, ( const char* )PingMsg, 4 ) == 0 )
+            { // A master already exists then become a slave
+                EnableMaster = false;
+                //LedOff( LED_RED );
+                PB9.reset();
+            }
+        }            
+        break;
+    case RF_TX_DONE:
+        // Indicates on a LED that we have sent a PING
+        //LedToggle( LED_RED );
+        PB9.toggle();
+        Radio->StartRx( );
+        break;
+    default:
+        break;
+    }
+}
+/*
+ * Manages the slave operation
+ */
+void OnSlave( void )
+{
+    uint8_t i;
+
+    switch( Radio->Process( ) )
+    {
+    case RF_RX_DONE:
+        Radio->GetRxPacket( Buffer, ( uint16_t* )&BufferSize );
+    
+        if( BufferSize > 0 )
+        {
+            if( strncmp( ( const char* )Buffer, ( const char* )PingMsg, 4 ) == 0 )
+            {
+                // Indicates on a LED that the received frame is a PING
+                //LedToggle( LED_GREEN );
+                PB8.toggle();
+
+               // Send the reply to the PONG string
+                Buffer[0] = 'P';
+                Buffer[1] = 'O';
+                Buffer[2] = 'N';
+                Buffer[3] = 'G';
+                // We fill the buffer with numbers for the payload 
+                for( i = 4; i < BufferSize; i++ )
+                {
+                    Buffer[i] = i - 4;
+                }
+
+                Radio->SetTxPacket( Buffer, BufferSize );
+            }
+        }
+        break;
+    case RF_TX_DONE:
+        // Indicates on a LED that we have sent a PONG
+        //LedToggle( LED_RED );
+        PB9.toggle();
+        Radio->StartRx( );
+        break;
+    default:
+        break;
+    }
+}
 Lora lora(&PA4,&PA2,&spi1);
 
-Exti ex1(&PA3,EXTI_Trigger_Rising);
-Exti ex2(&PB0,EXTI_Trigger_Rising);
-
-
-uint8_t buf[8]={'1','2','3','4','5','6','7','8'};
-
-
-void test()
-{
-#if TXMODE
-    PB8.toggle();
-    lora.evnet_tc();
-    uart1.printf("tx over\n");
-#else
-    uint8_t len;
-    PB9.toggle();
-    lora.read(buf,&len);
-    uart1.write("====\n");
-    uart1.write(buf,len);
-		for(int i = 0;i < 8; i++)
-		{
-			buf[i] = 0;
-		}
-    uart1.write("\n====\n");
-#endif
-}
-void timeout()
-{
-  uart1.printf("timeout\n");
-  lora.clearIRQFlags();
-}
 void setup()
 {
     int ret;
@@ -58,18 +145,30 @@ void setup()
     PB8.mode(OUTPUT_PP);
     PB9.mode(OUTPUT_PP);
     uart1.begin(115200);
-    lora.begin(1,SX1278_BW_6,SX1278_CR_4_5,SX1278_SF_10);
+//    lora.begin(1,SX1278_BW_6,SX1278_CR_4_5,SX1278_SF_12);
+//    
+//    ex1.begin();
+//    ex1.attach(test);
+//    ex2.begin();
+//    ex2.attach(timeout);
+//    
+//    #if TXMODE
+//        lora.enttry_tx();
+//    #else
+//        lora.enttry_rx();
+//    #endif
     
-    ex1.begin();
-    ex1.attach(test);
-    ex2.begin();
-    ex2.attach(timeout);
+    Radio = RadioDriverInit( );
+    Radio->Init( );
+    Radio->StartRx( );
+     uart1.printf("SX1278_REG_FRF_MSB:0x%x\n",lora.readRegister(SX1278_REG_FRF_MSB));
+     uart1.printf("SX1278_REG_FRF_MID:0x%x\n",lora.readRegister(SX1278_REG_FRF_MID));
+     uart1.printf("SX1278_REG_FRF_LSB:0x%x\n",lora.readRegister(SX1278_REG_FRF_LSB));
     
-    #if TXMODE
-        lora.enttry_tx();
-    #else
-        lora.enttry_rx();
-    #endif
+    uart1.printf("SX1278_REG_MODEM_CONFIG_2:0x%x\n",lora.readRegister(SX1278_REG_MODEM_CONFIG_2));
+    
+    
+    
 }
 uint32_t last;
 uint8_t temp;
@@ -77,36 +176,32 @@ int main(void)
 {
     int temp;
     setup();
-    while(1)
+    while( 1 )
     {
-        #if TXMODE
-        if(lora.state == TXREADY)
+        if( EnableMaster == true )
         {
-            uart1.printf("tx time:%dms\n",(uint32_t)(millis() - last));
-            last = millis();
-            lora.write(buf,8);
-            temp++;
-            temp%=10;
-            buf[0] = 0x30+temp;
+            OnMaster( );
         }
-        if(millis() - last > 5000)
-        {            
-            last = millis();
-            temp = lora.readRegister(SX1278_REG_IRQ_FLAGS);
-            uart1.printf("temp:0x%x\n",temp);
-            lora.clearIRQFlags();
-            lora.state = TXREADY;
-        }
-        //delay_ms(500);
-        #else
-        if(millis() - last > 5000)
-        {            
-            last = millis();
-            lora.enttry_rx();
-        }
-				
+        else
+        {
+            OnSlave( );
+        }    
+#if( PLATFORM == SX12xxEiger ) && ( USE_UART == 1 )
 
-        #endif
+        UartProcess( );
+        
+        {
+            uint8_t data = 0;
+            if( UartGetChar( &data ) == UART_OK )
+            {
+                UartPutChar( data );
+            }
+        }
+#endif        
     }
+#ifdef __GNUC__
+    return 0;
+#endif
+
 
 }
