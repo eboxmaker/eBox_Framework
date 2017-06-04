@@ -121,7 +121,7 @@ bool BigIot::send_active_alert(const char *msg,BIGIOT_ALERT_TYPE type)
             _type = "email";
             break;   
     }
-    String str = "{\"M\":\"alert\",\"C\":\""+str_msg+"\",\"B\":\""+_type+"}\n";
+    String str = "{\"M\":\"alert\",\"C\":\""+str_msg+"\",\"B\":\""+_type+"\"}\n";
     ret = send((uint8_t *)str.c_str(), str.length());
     if(ret){
         BIG_SEND("[%s]",str.c_str());
