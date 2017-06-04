@@ -200,8 +200,6 @@ uint16_t WIFI_TCP::read(uint8_t *mux_id, uint8_t *buf)
 */
 uint8_t WIFI_TCP::read_onebyte(void)
 {
-    return 0;
-    //    return wifi->net_buf.read();
-
+    return wifi->read_one();
 }
 
