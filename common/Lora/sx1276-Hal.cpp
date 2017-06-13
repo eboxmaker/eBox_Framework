@@ -30,11 +30,11 @@
 #define NSS_PIN PA4
 
 #define DIO0_PIN PA3
-#define DIO1_PIN PB1
-#define DIO2_PIN PB2
-#define DIO3_PIN PB3
-#define DIO4_PIN PB4
-#define DIO5_PIN PB5
+#define DIO1_PIN PB2
+#define DIO2_PIN PB3
+#define DIO3_PIN PB4
+#define DIO4_PIN PB5
+#define DIO5_PIN PB6
 
 SPI_CONFIG_TYPE sx1276_spi_config;
 void SX1276InitIo( void )

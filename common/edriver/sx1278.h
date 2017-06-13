@@ -236,7 +236,8 @@ class Lora
         uint8_t readRegister(uint8_t reg);
         void writeRegister(uint8_t reg, uint8_t data);
         
-
+        void        setRFFrequency(uint32_t freq);
+        uint32_t    getRFFrequency( void );
     private:
         Gpio *cs;
         Gpio *rst_pin;
