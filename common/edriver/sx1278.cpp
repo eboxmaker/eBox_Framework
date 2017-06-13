@@ -5,6 +5,10 @@
 #else
 #define  LORA_DBG(...)
 #endif
+
+#define XTAL_FREQ               26000000
+#define FREQ_STEP               49.59106
+
 void Lora::begin(uint8_t dev_num,uint8_t bw, uint8_t cr, uint8_t sf)
 {
     spi_config.dev_num = dev_num;
@@ -37,9 +41,7 @@ void Lora::config(uint8_t bw, uint8_t cr, uint8_t sf) {
     LORA_DBG("SX1278_REG_OP_MODE:0x%x\n",readRegister(SX1278_REG_OP_MODE));
 
     //6.ÉèÖÃÔØ²¨ÆµÂÊ
-    setRegValue(SX1278_REG_FRF_MSB, SX1278_FRF_MSB);
-    setRegValue(SX1278_REG_FRF_MID, SX1278_FRF_MID);
-    setRegValue(SX1278_REG_FRF_LSB, SX1278_FRF_LSB);
+	setRFFrequency(433000000);
     LORA_DBG("SX1278_REG_FRF_MSB:0x%x\n",readRegister(SX1278_REG_FRF_MSB));
     LORA_DBG("SX1278_REG_FRF_MID:0x%x\n",readRegister(SX1278_REG_FRF_MID));
     LORA_DBG("SX1278_REG_FRF_LSB:0x%x\n",readRegister(SX1278_REG_FRF_LSB));
@@ -236,3 +238,22 @@ void Lora::writeRegister(uint8_t reg, uint8_t data) {
     spi->release_spi_right();    
 }
 
+void Lora::setRFFrequency(uint32_t freq)
+{
+    freq = ( uint32_t )( ( double )freq / ( double )FREQ_STEP );
+    setRegValue(SX1278_REG_FRF_MSB, ( freq >> 16 ) & 0xFF );
+    setRegValue(SX1278_REG_FRF_MID, ( freq >> 8 ) & 0xFF );
+    setRegValue(SX1278_REG_FRF_LSB, freq & 0xFF);
+}
+uint32_t Lora::getRFFrequency( void )
+{
+    uint8_t tempMSB,tempMID,tempLSB;
+    uint32_t tempFrq;
+    tempMSB = getRegValue( SX1278_REG_FRF_MSB);
+    tempMID = getRegValue( SX1278_REG_FRF_MID);
+    tempLSB = getRegValue( SX1278_REG_FRF_LSB);
+    tempFrq = ( ( uint32_t )tempMSB << 16 ) | ( ( uint32_t )tempMID << 8 ) | ( ( uint32_t )tempLSB );
+    tempFrq = ( uint32_t )( ( double )tempFrq * ( double )FREQ_STEP );
+
+    return tempFrq;
+}

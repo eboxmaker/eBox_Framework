@@ -39,8 +39,8 @@
 /*!
  * SX1276 definitions
  */
-#define XTAL_FREQ                                   32000000
-#define FREQ_STEP                                   61.03515625
+#define XTAL_FREQ               26000000
+#define FREQ_STEP               49.59106
 
 extern tLoRaSettings LoRaSettings;
 
