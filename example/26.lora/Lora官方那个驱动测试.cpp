@@ -15,6 +15,7 @@
 #include "bsp.h"
 #include "sx1278.h"
 #include "radio.h"
+#include "sx1276-lora.h"
 
 
 #define BUFFER_SIZE                                 9 // Define the payload size here
@@ -79,12 +80,14 @@ void OnMaster( void )
                 //LedOff( LED_RED );
                 PB9.reset();
             }
+            
+            uart1.printf("RSSI::%3.2F\r\n",SX1276LoRaGetPacketRssi());
         }            
         break;
     case RF_TX_DONE:
         // Indicates on a LED that we have sent a PING
         //LedToggle( LED_RED );
-        PB9.toggle();
+        //PB9.toggle();
         Radio->StartRx( );
         break;
     default:
@@ -124,12 +127,13 @@ void OnSlave( void )
 
                 Radio->SetTxPacket( Buffer, BufferSize );
             }
+            uart1.printf("RSSI::%3.2F\r\n",SX1276LoRaGetPacketRssi());
         }
         break;
     case RF_TX_DONE:
         // Indicates on a LED that we have sent a PONG
         //LedToggle( LED_RED );
-        PB9.toggle();
+       // PB9.toggle();
         Radio->StartRx( );
         break;
     default:

@@ -20,6 +20,9 @@
  */
 #ifndef __SX1276_LORA_H__
 #define __SX1276_LORA_H__
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
 /*!
  * SX1276 LoRa General parameters definition
@@ -918,5 +921,7 @@ void SX1276LoRaSetRFState( uint8_t state );
  *                                   RF_TX_DONE, RF_TX_TIMEOUT]
  */
 uint32_t SX1276LoRaProcess( void );
-
+#ifdef __cplusplus
+}
+#endif
 #endif //__SX1276_LORA_H__
