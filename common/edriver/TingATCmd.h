@@ -51,12 +51,12 @@ class Ting
     
         CMD_ERR_T set_addr(uint16_t addr);
         CMD_ERR_T get_addr(uint16_t *addr);
-        void set_dest();
-        void get_dest();
+        CMD_ERR_T set_dest(uint16_t addr);
+        CMD_ERR_T get_dest(uint16_t *addr);
         void config();
         void get_version();
-        void sleep();
-        void wakeup();
+        CMD_ERR_T sleep();
+        CMD_ERR_T wakeup();
         void get_rssi();
         CMD_ERR_T set_pb0();
         CMD_ERR_T clear_pb0();
@@ -67,12 +67,12 @@ class Ting
         void set_pc4();
         void clear_pc4();
         void read_pc4();
-        void send();
+        CMD_ERR_T send(uint8_t *ptr,uint8_t len);
         void read();
         
         CMD_STATE_T wait_ack(uint16_t timeout);
         void update_cmd_err();
-        void debug_cmd_err();
+        void debug_cmd_err(const char *str);
         uint16_t find_str(uint8_t *s_str, uint8_t *p_str, uint16_t count, uint16_t &seek);
         int search_str(char *source, const char *target);
         

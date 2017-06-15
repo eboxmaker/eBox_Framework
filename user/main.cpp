@@ -16,6 +16,7 @@
 #include "tingATCmd.h"
 
 Ting ting;
+uint8_t sendBuf[10]={'1','2','3','4','5','6','7','8','9','0'};
 
 void setup()
 {
@@ -23,9 +24,12 @@ void setup()
     uart1.begin(115200);
     ting.begin(&PA1,&uart3,115200);
     uart1.printf("start\r\n");
+    //ting.set_addr(0xffff);
+    //ting.set_dest(0xffff);
 }
 uint16_t addr1;
 uint16_t addr;
+
 int main(void)
 {
     setup();
@@ -33,11 +37,12 @@ int main(void)
     {
         //ting.test();
        /// delay_ms(100);
-        //ting.set_addr(++addr1);
-        //uart1.printf("addr:%d\r\n",addr1);
-        ting.get_addr(&addr);
-        uart1.printf("addr:%d\r\n",addr);
-        delay_ms(500);
+        ting.sleep();
+        delay_ms(2000);
+        ting.wakeup();
+        //delay_ms(1000);
+        delay_ms(2000);
+
     }
 
 }
