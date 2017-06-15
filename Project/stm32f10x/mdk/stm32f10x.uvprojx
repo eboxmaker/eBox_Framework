@@ -10,6 +10,7 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pCCUsed>5060183::V5.06 update 2 (build 183)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F103C8</Device>
@@ -124,47 +125,6 @@
             <HexOffset>0</HexOffset>
             <Oh166RecLen>16</Oh166RecLen>
           </OPTHX>
-          <Simulator>
-            <UseSimulator>0</UseSimulator>
-            <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
-            <RunToMain>1</RunToMain>
-            <RestoreBreakpoints>1</RestoreBreakpoints>
-            <RestoreWatchpoints>1</RestoreWatchpoints>
-            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
-            <RestoreFunctions>1</RestoreFunctions>
-            <RestoreToolbox>1</RestoreToolbox>
-            <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
-          </Simulator>
-          <Target>
-            <UseTarget>1</UseTarget>
-            <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
-            <RunToMain>1</RunToMain>
-            <RestoreBreakpoints>1</RestoreBreakpoints>
-            <RestoreWatchpoints>1</RestoreWatchpoints>
-            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
-            <RestoreFunctions>0</RestoreFunctions>
-            <RestoreToolbox>1</RestoreToolbox>
-            <RestoreTracepoints>1</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-          </Target>
-          <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>6</TargetSelection>
-          <SimDlls>
-            <CpuDll></CpuDll>
-            <CpuDllArguments></CpuDllArguments>
-            <PeripheralDll></PeripheralDll>
-            <PeripheralDllArguments></PeripheralDllArguments>
-            <InitializationFile></InitializationFile>
-          </SimDlls>
-          <TargetDlls>
-            <CpuDll></CpuDll>
-            <CpuDllArguments></CpuDllArguments>
-            <PeripheralDll></PeripheralDll>
-            <PeripheralDllArguments></PeripheralDllArguments>
-            <InitializationFile></InitializationFile>
-            <Driver>Segger\JL2CM3.dll</Driver>
-          </TargetDlls>
         </DebugOption>
         <Utilities>
           <Flash1>
@@ -229,6 +189,7 @@
             <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
+            <nSecure>0</nSecure>
             <RoSelD>3</RoSelD>
             <RwSelD>3</RwSelD>
             <CodeSel>0</CodeSel>
@@ -365,6 +326,10 @@
             <useXO>0</useXO>
             <v6Lang>0</v6Lang>
             <v6LangP>0</v6LangP>
+            <vShortEn>1</vShortEn>
+            <vShortWch>1</vShortWch>
+            <v6Lto>0</v6Lto>
+            <v6WtE>0</v6WtE>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -897,165 +862,10 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\sx1278.cpp</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>network</GroupName>
-          <Files>
             <File>
-              <FileName>socket.cpp</FileName>
+              <FileName>TingATCmd.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\common\network\socket.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>dhcp.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\network\dhcp.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>dns.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\network\dns.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>tcp.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\network\tcp.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>udp.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\network\udp.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>gui</GroupName>
-          <Files>
-            <File>
-              <FileName>gui.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\gui\gui.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>lcd_port.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\gui\lcd_port.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font8_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\gui\Font8_ASCII.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font16_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\gui\Font16_ASCII.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font32_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\gui\Font32_ASCII.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font16_HZ.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\gui\Font16_HZ.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font24_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\gui\Font24_ASCII.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>FreeModbus</GroupName>
-          <Files>
-            <File>
-              <FileName>mbascii.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\FreeModbus\modbus\ascii\mbascii.c</FilePath>
-            </File>
-            <File>
-              <FileName>mbfunccoils.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\FreeModbus\modbus\functions\mbfunccoils.c</FilePath>
-            </File>
-            <File>
-              <FileName>mbfuncdiag.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\FreeModbus\modbus\functions\mbfuncdiag.c</FilePath>
-            </File>
-            <File>
-              <FileName>mbfuncdisc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\FreeModbus\modbus\functions\mbfuncdisc.c</FilePath>
-            </File>
-            <File>
-              <FileName>mbfuncholding.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\FreeModbus\modbus\functions\mbfuncholding.c</FilePath>
-            </File>
-            <File>
-              <FileName>mbfuncinput.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\FreeModbus\modbus\functions\mbfuncinput.c</FilePath>
-            </File>
-            <File>
-              <FileName>mbfuncother.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\FreeModbus\modbus\functions\mbfuncother.c</FilePath>
-            </File>
-            <File>
-              <FileName>mbutils.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\FreeModbus\modbus\functions\mbutils.c</FilePath>
-            </File>
-            <File>
-              <FileName>mbcrc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\FreeModbus\modbus\rtu\mbcrc.c</FilePath>
-            </File>
-            <File>
-              <FileName>mbrtu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\FreeModbus\modbus\rtu\mbrtu.c</FilePath>
-            </File>
-            <File>
-              <FileName>mbtcp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\FreeModbus\modbus\tcp\mbtcp.c</FilePath>
-            </File>
-            <File>
-              <FileName>mb.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\FreeModbus\modbus\mb.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>FreeModbus_port</GroupName>
-          <Files>
-            <File>
-              <FileName>portevent.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\FreeModbus\port\portevent.c</FilePath>
-            </File>
-            <File>
-              <FileName>FreeModbus.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\FreeModbus\port\FreeModbus.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>portserial.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\FreeModbus\port\portserial.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>porttimer.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\FreeModbus\port\porttimer.cpp</FilePath>
+              <FilePath>..\..\..\common\edriver\TingATCmd.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1071,51 +881,6 @@
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\main.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>menu.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\menu\menu.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Lora</GroupName>
-          <Files>
-            <File>
-              <FileName>radio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\Lora\radio.c</FilePath>
-            </File>
-            <File>
-              <FileName>sx1276.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\Lora\sx1276.c</FilePath>
-            </File>
-            <File>
-              <FileName>sx1276-Fsk.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\Lora\sx1276-Fsk.c</FilePath>
-            </File>
-            <File>
-              <FileName>sx1276-FskMisc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\Lora\sx1276-FskMisc.c</FilePath>
-            </File>
-            <File>
-              <FileName>sx1276-LoRa.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\Lora\sx1276-LoRa.c</FilePath>
-            </File>
-            <File>
-              <FileName>sx1276-LoRaMisc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\common\Lora\sx1276-LoRaMisc.c</FilePath>
-            </File>
-            <File>
-              <FileName>sx1276-Hal.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\Lora\sx1276-Hal.cpp</FilePath>
             </File>
           </Files>
         </Group>
