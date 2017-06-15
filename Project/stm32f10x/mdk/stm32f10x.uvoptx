@@ -181,9 +181,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>60</LineNumber>
+          <LineNumber>107</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134231144</Address>
+          <Address>134231396</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -192,14 +192,14 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\..\..\common\edriver\TingATCmd.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../common/edriver/TingATCmd.cpp\60</Expression>
+          <Expression>\\ebox\../../../common/edriver/TingATCmd.cpp\107</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>95</LineNumber>
+          <LineNumber>76</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134231308</Address>
+          <Address>134231500</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -208,12 +208,28 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\..\..\common\edriver\TingATCmd.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../common/edriver/TingATCmd.cpp\95</Expression>
+          <Expression>\\ebox\../../../common/edriver/TingATCmd.cpp\76</Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>104</LineNumber>
+          <LineNumber>48</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134229532</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\..\common\util\util.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\ebox\../../../common/util/util.cpp\48</Expression>
+        </Bp>
+        <Bp>
+          <Number>3</Number>
+          <Type>0</Type>
+          <LineNumber>77</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -227,9 +243,9 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>3</Number>
+          <Number>4</Number>
           <Type>0</Type>
-          <LineNumber>31</LineNumber>
+          <LineNumber>33</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -268,6 +284,11 @@
           <count>4</count>
           <WinNumber>1</WinNumber>
           <ItemText>rx_cmd_buf</ItemText>
+        </Ww>
+        <Ww>
+          <count>5</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>buf</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
