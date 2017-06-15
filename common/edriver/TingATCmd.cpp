@@ -15,7 +15,7 @@ void Ting::rx_evend()
     //uart1.write(c);
     
     rx_cmd_buf[rx_count] = c;
-    if(rx_count++ > 100)
+    if(rx_count++ > RX_BUFFER_SIZE)
         rx_count = 0;
     cmd_state = RECEIVING;
 
@@ -25,8 +25,8 @@ bool Ting::begin(Gpio *rst, Uart *uart, uint32_t baud)
 
     this->uart = uart;
     this->rst = rst;
-    this->rst->mode(INPUT);
-   // sys_reset();
+    this->rst->mode(OUTPUT_PP);
+    sys_reset();
 
     this->uart->begin(baud);
     this->uart->attach(this,&Ting::rx_evend,RxIrq);
@@ -39,7 +39,7 @@ void Ting::sys_reset()
     rst->reset();
     delay_ms(10);
     rst->set();
-    delay_ms(50);
+    delay_ms(500);
 }
 
 void Ting::test()
@@ -51,7 +51,7 @@ CMD_ERR_T Ting::set_addr(uint16_t addr)
 {
     uart->printf("AT+ADDR=%x\r\n",addr);
     wait_ack(1000);
-    debug_cmd_err();
+    debug_cmd_err("SET ADDR");
     clear_rx_cdm_buffer();
 
     return cmd_err;
@@ -70,29 +70,98 @@ CMD_ERR_T Ting::get_addr(uint16_t *addr)
     buf[4] = '\0';
     *addr = ATOI32(buf,16);
     
-    debug_cmd_err();
+    debug_cmd_err("GET ADDR");
     clear_rx_cdm_buffer();
     return cmd_err;
+}
+CMD_ERR_T Ting::set_dest(uint16_t addr)
+{
+    uart->printf("AT+DEST=%x\r\n",addr);
+    wait_ack(1000);
+    debug_cmd_err("SET DEST");
+    clear_rx_cdm_buffer();
+
+    return cmd_err;
+}
+CMD_ERR_T Ting::get_dest(uint16_t *addr)
+{
+    char buf[5];
+
+    uart->printf("AT+DEST?\r\n");
+    wait_ack(1000);
+    
+    buf[0] = rx_cmd_buf[0];
+    buf[1] = rx_cmd_buf[1];
+    buf[2] = rx_cmd_buf[2];
+    buf[3] = rx_cmd_buf[3];
+    buf[4] = '\0';
+    *addr = ATOI32(buf,16);
+    
+    debug_cmd_err("GET DEST");
+    clear_rx_cdm_buffer();
+    return cmd_err;
+}
+CMD_ERR_T Ting::sleep()
+{
+    uart->printf("AT+DEST=1\r\n");
+    wait_ack(1000);
+    debug_cmd_err("SLEEP");
+    clear_rx_cdm_buffer();
+
+    return cmd_err;
+}
+CMD_ERR_T Ting::wakeup()
+{
+    uart->printf("AT+DEST=0\r\n");
+    wait_ack(1000);
+    debug_cmd_err("WAKEUP");
+    clear_rx_cdm_buffer();
+
+    return cmd_err;
+}
+CMD_ERR_T Ting::send(uint8_t *ptr,uint8_t len)
+{
+    uart->printf("AT+SEND=%d\r\n",len);
+    wait_ack(2000);
+    debug_cmd_err("SEND");
+    clear_rx_cdm_buffer();
+
+    uart->write(ptr,len);
+    debug_cmd_err("DATA");
+    wait_ack(2000);
+
+    clear_rx_cdm_buffer();
+    return cmd_err;
+
 }
 
 
 CMD_ERR_T Ting::set_pb0()
 {
-    uart->printf("AT+PB\r\n");
+    uart->printf("AT+PB0=1\r\n");
     wait_ack(1000);
-    debug_cmd_err();
+    debug_cmd_err("SET PB0");
     clear_rx_cdm_buffer();
     return cmd_err;
 
 }
 CMD_ERR_T Ting::clear_pb0()
 {
-    uart->printf("AT+PB0\r\n");
+    uart->printf("AT+PB0=0\r\n");
     wait_ack(1000);
-    debug_cmd_err();
+    debug_cmd_err("CLR PB0");
     clear_rx_cdm_buffer();
     return cmd_err;
 }
+CMD_ERR_T  Ting::read_pb0()
+{
+    uart->printf("AT+PB0?\r\n");
+    wait_ack(1000);
+    debug_cmd_err("READ PB0");
+    clear_rx_cdm_buffer();
+    return cmd_err;
+}
+
 CMD_STATE_T Ting::wait_ack(uint16_t timeout)
 {
     uint32_t time = millis();
@@ -159,34 +228,34 @@ void Ting::update_cmd_err()
         cmd_err = ERR_NO_ACK;
     }
 }
-void Ting::debug_cmd_err()
+void Ting::debug_cmd_err(const char *str)
 {
     
     switch(cmd_err)
     {
     case ERR_OK:
-        TING_DEBUG("OK\r\n");
+        TING_DEBUG("%s:OK\r\n",str);
        break;
     case ERR_CMD:
-        TING_DEBUG("ERR:CMD\r\n");
+        TING_DEBUG("%s:ERR:CMD\r\n",str);
        break;
     case ERR_CPU_BUSY:
-        TING_DEBUG("ERR:CPU_BUSY\r\n");
+        TING_DEBUG("%s:ERR:CPU_BUSY\r\n",str);
        break;
     case ERR_RF_BUSY:
-        TING_DEBUG("ERR:RF_BUSY\r\n");
+        TING_DEBUG("%s:ERR:RF_BUSY\r\n",str);
        break;
     case ERR_SYMBLE:
-        TING_DEBUG("ERR:SYMBLE\r\n");
+        TING_DEBUG("%s:ERR:SYMBLE\r\n",str);
        break;
     case ERR_PARA:
-        TING_DEBUG("ERR:PARA\r\n");
+        TING_DEBUG("%s:ERR:PARA\r\n",str);
        break;
     case ERR_NONE:
-        TING_DEBUG("ERR:NONE\r\n");
+        TING_DEBUG("%s:ERR:NONE\r\n",str);
        break;
     default :
-        TING_DEBUG("default\r\n");
+        TING_DEBUG("%s:default\r\n");
        break;
     }
 }
