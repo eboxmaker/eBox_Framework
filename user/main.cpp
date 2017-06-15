@@ -24,6 +24,8 @@ void setup()
     ting.begin(&PA1,&uart3,115200);
     uart1.printf("start\r\n");
 }
+uint16_t addr1;
+uint16_t addr;
 int main(void)
 {
     setup();
@@ -31,7 +33,10 @@ int main(void)
     {
         //ting.test();
        /// delay_ms(100);
-        ting.get_addr();
+        //ting.set_addr(++addr1);
+        //uart1.printf("addr:%d\r\n",addr1);
+        ting.get_addr(&addr);
+        uart1.printf("addr:%d\r\n",addr);
         delay_ms(500);
     }
 

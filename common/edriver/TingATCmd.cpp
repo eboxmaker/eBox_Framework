@@ -1,5 +1,5 @@
 #include "tingatcmd.h"
-
+#include "util.h"
 #if 1
 #define TING_DEBUG(...) uart1.printf("[Ting]"),uart1.printf(__VA_ARGS__)
 #else
@@ -56,14 +56,26 @@ CMD_ERR_T Ting::set_addr(uint16_t addr)
 
     return cmd_err;
 }
-CMD_ERR_T Ting::get_addr()
+CMD_ERR_T Ting::get_addr(uint16_t *addr)
 {
+    char buf[5];
+
     uart->printf("AT+ADDR?\r\n");
     wait_ack(1000);
+    
+    buf[0] = rx_cmd_buf[0];
+    buf[1] = rx_cmd_buf[1];
+    buf[2] = rx_cmd_buf[2];
+    buf[3] = rx_cmd_buf[3];
+    buf[4] = '\0';
+    *addr = ATOI32(buf,16);
+    
     debug_cmd_err();
     clear_rx_cdm_buffer();
     return cmd_err;
 }
+
+
 CMD_ERR_T Ting::set_pb0()
 {
     uart->printf("AT+PB\r\n");

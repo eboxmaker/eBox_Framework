@@ -50,7 +50,7 @@ class Ting
         void test();
     
         CMD_ERR_T set_addr(uint16_t addr);
-        CMD_ERR_T get_addr();
+        CMD_ERR_T get_addr(uint16_t *addr);
         void set_dest();
         void get_dest();
         void config();
