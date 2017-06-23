@@ -49,26 +49,30 @@ class Ting
         void rx_evend();
         void test();
     
+        CMD_ERR_T config(sLoRaSettings *settings);
+        CMD_ERR_T soft_rst();
+        CMD_ERR_T get_version(char *msg,uint8_t *len);
+        CMD_ERR_T idle();
+        CMD_ERR_T sleep();
+        CMD_ERR_T wakeup();
+        CMD_ERR_T rx();
+        CMD_ERR_T rssi(char *msg,uint8_t *len);
         CMD_ERR_T set_addr(uint16_t addr);
         CMD_ERR_T get_addr(uint16_t *addr);
         CMD_ERR_T set_dest(uint16_t addr);
         CMD_ERR_T get_dest(uint16_t *addr);
-        void config();
-        void get_version();
-        CMD_ERR_T sleep();
-        CMD_ERR_T wakeup();
-        void get_rssi();
+        CMD_ERR_T send(uint8_t *ptr,uint8_t len);
+        void read();
+
         CMD_ERR_T set_pb0();
         CMD_ERR_T clear_pb0();
         CMD_ERR_T read_pb0();
-        void set_pd0();
-        void clear_pd0();
-        void read_pd0();
-        void set_pc4();
-        void clear_pc4();
-        void read_pc4();
-        CMD_ERR_T send(uint8_t *ptr,uint8_t len);
-        void read();
+        CMD_ERR_T set_pd0();
+        CMD_ERR_T clear_pd0();
+        CMD_ERR_T read_pd0();
+        CMD_ERR_T pwm1(uint8_t prescaler,uint16_t period,uint16_t pulse);
+        CMD_ERR_T pwm2(uint8_t prescaler,uint16_t period,uint16_t pulse);
+
         
         CMD_STATE_T wait_ack(uint16_t timeout);
         void update_cmd_err();

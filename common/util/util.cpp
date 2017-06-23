@@ -200,6 +200,9 @@ int find_str(uint8_t *s_str, uint8_t *p_str, uint16_t count, uint16_t &seek)
     }
     return 0;
 }
+
+//查找字符串
+//查找两个字符串中间的字符串，count1,count2分别是两个字符串出现的第几次
 uint16_t get_str(char *source, const char *begin, uint16_t count1, const char *end, uint16_t count2, char *out)
 {
     uint16_t i;
@@ -220,6 +223,8 @@ uint16_t get_str(char *source, const char *begin, uint16_t count1, const char *e
     return length;
 
 }
+//查找字符串
+//查找在第count个begin字符串之后length长的字符串
 uint16_t get_str(char *source, const char *begin, uint16_t count, uint16_t length, char *out)
 {
     uint16_t i = 0;
@@ -234,7 +239,8 @@ uint16_t get_str(char *source, const char *begin, uint16_t count, uint16_t lengt
     }
     return length;
 }
-
+//查找字符串
+//查找从开始到length中间的字符串
 uint16_t get_str(char *source, char *out, uint16_t length)
 {
     uint16_t i = 0;
@@ -244,4 +250,23 @@ uint16_t get_str(char *source, char *out, uint16_t length)
     }
     out[i] = '\0';
     return length;
+}
+//查找字符串
+//查找从开始到第count个end之间的字符串
+uint16_t get_str(char *source, const char *end, uint16_t count, char *out)
+{
+    uint16_t i;
+    uint16_t len;
+    uint16_t index = 0;
+    uint16_t length = 0;
+    len = find_str((uint8_t *)source, (uint8_t *)end, count, index);
+    length = index;
+    if((len != 0) && (len != 0))
+    {
+        for( i = 0; i < length; i++)
+            out[i] = source[i];
+        out[i] = '\0';
+    }
+    return length;
+
 }
