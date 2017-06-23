@@ -26,12 +26,12 @@ bool Ting::begin(Gpio *rst, Uart *uart, uint32_t baud)
     this->uart = uart;
     this->rst = rst;
     this->rst->mode(OUTPUT_PP);
-    sys_reset();
 
     this->uart->begin(baud);
     this->uart->attach(this,&Ting::rx_evend,RxIrq);
     clear_rx_cdm_buffer();
 
+    sys_reset();
     return true;
 }
 void Ting::sys_reset()
@@ -39,14 +39,80 @@ void Ting::sys_reset()
     rst->reset();
     delay_ms(10);
     rst->set();
-    delay_ms(500);
+    delay_ms(1000);
+}
+CMD_ERR_T Ting::config(sLoRaSettings *settings)
+{
+
 }
 
 void Ting::test()
 {
     //sys_reset();
-    uart->printf("AT+VER?\r\n");
+    uart->printf("AT\r\n");
 }
+CMD_ERR_T Ting::soft_rst()
+{
+    uart->printf("AT+RST\r\n");
+    wait_ack(1000);
+    debug_cmd_err("RST");
+    clear_rx_cdm_buffer();
+    //delay_ms(500);
+    return cmd_err;
+}
+CMD_ERR_T Ting::get_version(char *msg,uint8_t *len)
+{
+    uart->printf("AT+VER?\r\n");
+    wait_ack(1000);
+    *len = get_str(rx_cmd_buf, "OK", 1, msg);    
+    debug_cmd_err("VERSION");
+    clear_rx_cdm_buffer();
+    return cmd_err;
+}
+CMD_ERR_T Ting::idle()
+{
+    uart->printf("AT+IDLE\r\n");
+    wait_ack(1000);
+    debug_cmd_err("IDLE");
+    clear_rx_cdm_buffer();
+    return cmd_err;
+}
+CMD_ERR_T Ting::sleep()
+{
+    uart->printf("AT+SLEEP=1\r\n");
+    wait_ack(1000);
+    debug_cmd_err("SLEEP");
+    clear_rx_cdm_buffer();
+    return cmd_err;
+}
+CMD_ERR_T Ting::wakeup()
+{
+    uart->printf("AT+DEST=0\r\n");
+    wait_ack(1000);
+    debug_cmd_err("WAKEUP");
+    clear_rx_cdm_buffer();
+
+    return cmd_err;
+}
+CMD_ERR_T Ting::rx()
+{
+    uart->printf("AT+RX\r\n");
+    wait_ack(1000);
+    debug_cmd_err("RX");
+    clear_rx_cdm_buffer();
+
+    return cmd_err;
+}
+CMD_ERR_T Ting::rssi(char *msg,uint8_t *len)
+{
+    uart->printf("AT+RSSI?\r\n");
+    wait_ack(1000);
+    *len = get_str(rx_cmd_buf, "OK", 1, msg);    
+    debug_cmd_err("RSSI");
+    clear_rx_cdm_buffer();
+    return cmd_err;
+}
+
 CMD_ERR_T Ting::set_addr(uint16_t addr)
 {
     uart->printf("AT+ADDR=%x\r\n",addr);
@@ -101,24 +167,7 @@ CMD_ERR_T Ting::get_dest(uint16_t *addr)
     clear_rx_cdm_buffer();
     return cmd_err;
 }
-CMD_ERR_T Ting::sleep()
-{
-    uart->printf("AT+DEST=1\r\n");
-    wait_ack(1000);
-    debug_cmd_err("SLEEP");
-    clear_rx_cdm_buffer();
 
-    return cmd_err;
-}
-CMD_ERR_T Ting::wakeup()
-{
-    uart->printf("AT+DEST=0\r\n");
-    wait_ack(1000);
-    debug_cmd_err("WAKEUP");
-    clear_rx_cdm_buffer();
-
-    return cmd_err;
-}
 CMD_ERR_T Ting::send(uint8_t *ptr,uint8_t len)
 {
     uart->printf("AT+SEND=%d\r\n",len);
@@ -162,6 +211,48 @@ CMD_ERR_T  Ting::read_pb0()
     return cmd_err;
 }
 
+CMD_ERR_T Ting::set_pd0()
+{
+    uart->printf("AT+PD0=1\r\n");
+    wait_ack(1000);
+    debug_cmd_err("SET PD0");
+    clear_rx_cdm_buffer();
+    return cmd_err;
+
+}
+CMD_ERR_T Ting::clear_pd0()
+{
+    uart->printf("AT+PD0=0\r\n");
+    wait_ack(1000);
+    debug_cmd_err("CLR PD0");
+    clear_rx_cdm_buffer();
+    return cmd_err;
+}
+CMD_ERR_T  Ting::read_pd0()
+{
+    uart->printf("AT+PD0?\r\n");
+    wait_ack(1000);
+    debug_cmd_err("READ PD0");
+    clear_rx_cdm_buffer();
+    return cmd_err;
+}
+
+CMD_ERR_T Ting::pwm1(uint8_t prescaler,uint16_t period,uint16_t pulse)
+{
+    uart->printf("AT+PWM1=%d,%d,%d\r\n",prescaler,period,pulse);
+    wait_ack(1000);
+    debug_cmd_err("READ PD0");
+    clear_rx_cdm_buffer();
+    return cmd_err;
+}
+CMD_ERR_T Ting::pwm2(uint8_t prescaler,uint16_t period,uint16_t pulse)
+{
+    uart->printf("AT+PWM2=%d,%d,%d\r\n",prescaler,period,pulse);
+    wait_ack(1000);
+    debug_cmd_err("READ PD0");
+    clear_rx_cdm_buffer();
+    return cmd_err;
+}
 CMD_STATE_T Ting::wait_ack(uint16_t timeout)
 {
     uint32_t time = millis();

@@ -17,15 +17,15 @@
 
 Ting ting;
 uint8_t sendBuf[10]={'1','2','3','4','5','6','7','8','9','0'};
-
+uint8_t len;
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
     ting.begin(&PA1,&uart3,115200);
     uart1.printf("start\r\n");
-    //ting.set_addr(0xffff);
-    //ting.set_dest(0xffff);
+    ting.set_addr(0xffff);
+    ting.set_dest(0xffff);
 }
 uint16_t addr1;
 uint16_t addr;
@@ -37,11 +37,23 @@ int main(void)
     {
         //ting.test();
        /// delay_ms(100);
-        ting.sleep();
-        delay_ms(2000);
-        ting.wakeup();
+        //ting.test();
+        //ting.sleep();
+        for(int i = 0; i < 2; i++)
+        {
+            ting.pwm1(1,2,i);
+            ting.pwm2(1,2,2 - i);
+            
+        delay_ms(100);
+
+        }
+                // ting.set_pb0();
+
+        //ting.clear_pd0();
+              //   ting.clear_pb0();
+
+
         //delay_ms(1000);
-        delay_ms(2000);
 
     }
 

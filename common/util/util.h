@@ -49,4 +49,5 @@ int         find_str(uint8_t *s_str, uint8_t *p_str, uint16_t count, uint16_t &s
 uint16_t    get_str(char *source, const char *begin, uint16_t count1, const char *end, uint16_t count2, char *out);
 uint16_t    get_str(char *source, const char *begin, uint16_t count, uint16_t length, char *out);
 uint16_t    get_str(char *source, char *out, uint16_t length);
+uint16_t    get_str(char *source, const char *end, uint16_t count, char *out);
 #endif
