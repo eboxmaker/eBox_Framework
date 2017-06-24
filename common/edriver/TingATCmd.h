@@ -1,4 +1,23 @@
+/**
+  ******************************************************************************
+  * @file    tingATCmd.h
+  * @author  shentq
+  * @version V0.3
+  * @date    2017/06/25
+  * @brief   
+  ******************************************************************************
+  * @attention
+  *
+  * No part of this software may be used for any commercial activities by any form 
+  * or means, without the prior written consent of shentq. This specification is 
+  * preliminary and is subject to change at any time without notice. shentq assumes
+  * no responsibility for any errors contained herein.
+  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
+  ******************************************************************************
+  */
 
+
+/* Includes ------------------------------------------------------------------*/
 #include "ebox.h"
 #include "ringbuf.h"
 
@@ -59,13 +78,10 @@ class Ting
 {
     public:
         tLoRaSettings LoRaSettings;
-        bool begin(Gpio *rst,Gpio *wakeup, Uart *uart, uint32_t baud);
-        void hard_reset();
-        CMD_ERR_T soft_rst();
-
-        void rx_evend();
+        bool      begin(Gpio *rst,Gpio *wakeup, Uart *uart, uint32_t baud);
+        void      hard_reset();
+        CMD_ERR_T soft_reset();
         CMD_ERR_T test();
-    
         CMD_ERR_T config(sLoRaSettings *settings);
         CMD_ERR_T get_version(char *msg,uint8_t *len);
         CMD_ERR_T idle();
@@ -77,9 +93,10 @@ class Ting
         CMD_ERR_T get_addr(uint16_t *addr);
         CMD_ERR_T set_dest(uint16_t addr);
         CMD_ERR_T get_dest(uint16_t *addr);
+        CMD_ERR_T save();    
         CMD_ERR_T send(uint8_t *ptr,uint8_t len);
-        uint8_t available();
-        uint8_t read(uint8_t *buf);
+        uint8_t   available();
+        uint8_t   read(uint8_t *buf,uint8_t len);
 
         CMD_ERR_T set_pb0();
         CMD_ERR_T clear_pb0();
@@ -90,30 +107,33 @@ class Ting
         CMD_ERR_T pwm1(uint8_t prescaler,uint16_t period,uint16_t pulse);
         CMD_ERR_T pwm2(uint8_t prescaler,uint16_t period,uint16_t pulse);
 
-        CMD_ERR_T wait_ack(char *target,uint16_t timeout);
-        CMD_ERR_T wait_ack(uint16_t timeout);
-        CMD_STATE_T wait_rx_timeout();
-        CMD_ERR_T update_cmd_err();
-        void debug_cmd_err(const char *str);
-        uint16_t find_str(uint8_t *s_str, uint8_t *p_str, uint16_t count, uint16_t &seek);
-        int search_str(char *source, const char *target);
-        
-        CMD_STATE_T cmd_state;
-        CMD_ERR_T   cmd_err;
-        uint32_t last_rx_event_time;
-        uint8_t rx_count;
-        void    clear_rx_cdm_buffer(void); //清空AT命令缓冲区
-        void    data_process(char c);
     private:
-        uint8_t     data_buf[DATA_BUFFER_SIZE];
-        char        source_addr_buf[5];
-        char        len_buf[3];
-        uint16_t    source_addr;
-        uint8_t     data_len;
-
-        RINGBUF     pDataBuf;//用于接收网络数据的环形缓冲区
-        char        rx_cmd_buf[CMD_BUFFER_SIZE];
-
+        void        rx_evend();//接收中断事件处理
+        void        data_process(char c);//接收中断事件处理->之接收到的数据
+    
+        void        clear_rx_cdm_buffer(void); //清空AT命令缓冲区
+        CMD_ERR_T   wait_ack(uint16_t timeout);//等待命令回复
+        CMD_ERR_T   update_cmd_err();//解析命令错误意义
+        void        debug_cmd_err(const char *str);//调试输出命令错误信息
+    
+        int search_str(char *source, const char *target);
+    private:
+        //接收数据相关变量
+        DATA_STATE_T    data_state;
+        uint8_t         data_count;
+        uint8_t         data_buf[DATA_BUFFER_SIZE];
+        RINGBUF         pDataBuf;//用于接收网络数据的环形缓冲区
+        char            source_addr_buf[5];
+        char            len_buf[3];
+        uint16_t        source_addr;
+        uint8_t         data_len;
+        //命令相关变量
+        char            rx_cmd_buf[CMD_BUFFER_SIZE];
+        uint32_t        last_rx_event_time;
+        uint8_t         rx_count;
+        CMD_STATE_T     cmd_state;
+        CMD_ERR_T       cmd_err;
+        //硬件接口
         Gpio    *rst;
         Gpio    *_wakeup;
         Uart    *uart; /* The UART to communicate with ESP8266 */
