@@ -1,3 +1,23 @@
+/**
+  ******************************************************************************
+  * @file    tingATCmd.cpp
+  * @author  shentq
+  * @version V0.3
+  * @date    2017/06/25
+  * @brief   
+  ******************************************************************************
+  * @attention
+  *
+  * No part of this software may be used for any commercial activities by any form 
+  * or means, without the prior written consent of shentq. This specification is 
+  * preliminary and is subject to change at any time without notice. shentq assumes
+  * no responsibility for any errors contained herein.
+  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
+  ******************************************************************************
+  */
+  
+
+/* Includes ------------------------------------------------------------------*/
 #include "tingatcmd.h"
 #include "util.h"
 #if 1
@@ -5,8 +25,7 @@
 #else
 #define  TING_DEBUG(...)
 #endif
-DATA_STATE_T data_state;
-uint8_t data_count;
+
 void Ting::data_process(char c)
 {
 
@@ -88,13 +107,14 @@ void Ting::data_process(char c)
             break;            
             
         case NEED_DATA:
-            if(data_count < data_len)
+            data_count++;
+            if(data_count <= data_len )
             {
                 pDataBuf.write(c);
-                data_count++;
             }
-            else
+            if(data_count >= (data_len + 2))//接收模组多发送的\r\n的结束符号
             {
+                clear_rx_cdm_buffer();//清除不该出现在命令缓冲区的数据
                 data_state = NEED_PLUS;
             }
             break;  
@@ -109,8 +129,6 @@ void Ting::rx_evend()
     uint8_t c;
     c = uart->read();
     last_rx_event_time = millis();
-    PB8.toggle();
-    //uart1.write(c);
     
     rx_cmd_buf[rx_count] = c;
     if(rx_count++ > CMD_BUFFER_SIZE)
@@ -134,9 +152,9 @@ bool Ting::begin(Gpio *rst,Gpio *wakeup, Uart *uart, uint32_t baud)
 
     this->uart->begin(baud);
     this->uart->attach(this,&Ting::rx_evend,RxIrq);
-    clear_rx_cdm_buffer();
 
     hard_reset();
+    clear_rx_cdm_buffer();
     return true;
 }
 void Ting::hard_reset()
@@ -146,15 +164,39 @@ void Ting::hard_reset()
     rst->set();
     delay_ms(1000);
 }
-
+CMD_ERR_T Ting::soft_reset()
+{
+    uart->printf("AT+RST\r\n");
+    wait_ack(1000);
+    debug_cmd_err("RST");
+    clear_rx_cdm_buffer();
+    return cmd_err;
+}
 CMD_ERR_T Ting::config(sLoRaSettings *settings)
 {
-
+    uart->printf("AT+CFG=%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n",
+    settings->RFFrequency,
+    settings->Power,
+    settings->SignalBw,
+    settings->SpreadingFactor,
+    settings->ErrorCoding,
+    settings->CrcOn,
+    settings->ImplicitHeaderOn,
+    settings->RxSingleOn,
+    settings->FreqHopOn,
+    settings->HopPeriod,
+    settings->RxPacketTimeout,
+    settings->PayloadLength,
+    settings->PreambleLength
+    );
+    wait_ack(2000);
+    debug_cmd_err("config");
+    clear_rx_cdm_buffer();
+    return cmd_err;
 }
 
 CMD_ERR_T Ting::test()
 {
-    //sys_reset();
     uart->printf("AT\r\n");
     wait_ack(1000);
     debug_cmd_err("TEST");
@@ -162,15 +204,7 @@ CMD_ERR_T Ting::test()
     return cmd_err;
 
 }
-CMD_ERR_T Ting::soft_rst()
-{
-    uart->printf("AT+RST\r\n");
-    wait_ack(1000);
-    debug_cmd_err("RST");
-    clear_rx_cdm_buffer();
-    //delay_ms(500);
-    return cmd_err;
-}
+
 CMD_ERR_T Ting::get_version(char *msg,uint8_t *len)
 {
     uart->printf("AT+VER?\r\n");
@@ -220,7 +254,7 @@ CMD_ERR_T Ting::rssi(char *msg,uint8_t *len)
 {
     uart->printf("AT+RSSI?\r\n");
     wait_ack(1000);
-    *len = get_str(rx_cmd_buf, "OK", 1, msg);    
+    *len = get_str(rx_cmd_buf, "\r\nOK", 1, msg);    
     debug_cmd_err("RSSI");
     clear_rx_cdm_buffer();
     return cmd_err;
@@ -280,6 +314,15 @@ CMD_ERR_T Ting::get_dest(uint16_t *addr)
     clear_rx_cdm_buffer();
     return cmd_err;
 }
+CMD_ERR_T Ting::save()
+{
+    uart->printf("AT+SAVE\r\n");
+    wait_ack(1000);
+    debug_cmd_err("SAVE");
+    clear_rx_cdm_buffer();
+
+    return cmd_err;
+}
 
 CMD_ERR_T Ting::send(uint8_t *ptr,uint8_t len)
 {
@@ -289,7 +332,6 @@ CMD_ERR_T Ting::send(uint8_t *ptr,uint8_t len)
         clear_rx_cdm_buffer();
         uart->write(ptr,len);
         wait_ack(10000);
-        uart1.printf("SEND OK\r\n");
         clear_rx_cdm_buffer();
         
     }
@@ -369,9 +411,17 @@ CMD_ERR_T Ting::pwm2(uint8_t prescaler,uint16_t period,uint16_t pulse)
     clear_rx_cdm_buffer();
     return cmd_err;
 }
-uint8_t Ting::read(uint8_t *buf)
+uint8_t Ting::available()
 {
-    uint16_t len = pDataBuf.available();
+    return pDataBuf.available();
+}
+
+uint8_t Ting::read(uint8_t *buf,uint8_t len)
+{
+    if( len > pDataBuf.available())
+    {
+        len = pDataBuf.available();
+    }
     if(len > 0)
     {
         for(int i = 0; i < len; i++)
@@ -499,49 +549,11 @@ void Ting::clear_rx_cdm_buffer(void) //清空AT命令缓冲区
     rx_count = 0;
 }
 
-uint16_t Ting::find_str(uint8_t *s_str, uint8_t *p_str, uint16_t count, uint16_t &seek)
-{
-    uint16_t _count = 1;
-    uint16_t len = 0;
-    seek = 0;
-    uint8_t *temp_str = NULL;
-    uint8_t *temp_ptr = NULL;
-    uint8_t *temp_char = NULL;
-    if(0 == s_str || 0 == p_str)
-        return 0;
-    for(temp_str = s_str; *temp_str != '\0'; temp_str++)	 //依次查找字符串
-    {
-        temp_char = temp_str; //指向当前字符串
-        //比较
-        for(temp_ptr = p_str; *temp_ptr != '\0'; temp_ptr++)
-        {
-            if(*temp_ptr != *temp_char)
-            {
-                len = 0;
-                break;
-            }
-            temp_char++;
-            len++;
-        }
-        if(*temp_ptr == '\0') //出现了所要查找的字符，退出
-        {
-            if(_count == count)
-                return len;
-            else
-            {
-                _count++;
-                len = 0;
-            }
-        }
-        seek++;  //当前偏移量加1
-    }
-    return 0;
-}
 int Ting::search_str(char *source, const char *target)
 {
     uint16_t seek = 0;
     uint16_t len;
-    len = this->find_str((uint8_t *)source, (uint8_t *)target, 1, seek);
+    len = find_str((uint8_t *)source, (uint8_t *)target, 1, seek);
     if(len == 0)
         return -1;
     else

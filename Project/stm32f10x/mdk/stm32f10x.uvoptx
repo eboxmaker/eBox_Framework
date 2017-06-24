@@ -181,9 +181,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>109</LineNumber>
+          <LineNumber>265</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134231088</Address>
+          <Address>134232344</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -192,44 +192,12 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\..\..\common\edriver\TingATCmd.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../common/edriver/TingATCmd.cpp\109</Expression>
+          <Expression>\\ebox\../../../common/edriver/TingATCmd.cpp\265</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>105</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134231076</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\common\edriver\TingATCmd.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../common/edriver/TingATCmd.cpp\105</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>94</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\..\common\edriver\TingATCmd.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>98</LineNumber>
+          <LineNumber>262</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -253,6 +221,11 @@
           <count>1</count>
           <WinNumber>1</WinNumber>
           <ItemText>ting</ItemText>
+        </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>buf</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
