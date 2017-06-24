@@ -1,6 +1,9 @@
 
 #include "ebox.h"
-#define RX_BUFFER_SIZE 100
+#include "ringbuf.h"
+
+#define CMD_BUFFER_SIZE 100
+#define DATA_BUFFER_SIZE 255
 typedef struct sLoRaSettings
 {
     uint32_t RFFrequency;
@@ -39,18 +42,31 @@ typedef enum
     ERR_NONE,
     ERR_NO_ACK,
 } CMD_ERR_T;
-
+typedef enum
+{
+    NEED_PLUS = 0,
+    NEED_L ,
+    NEED_R ,
+    NEED_DOT1 ,
+    NEED_SADDR_DATA,
+    NEED_DOT2 ,
+    NEED_LEN_DATA,
+    NEED_DOT3 ,
+    NEED_DATA ,
+    STATE_ERROR ,
+} DATA_STATE_T;
 class Ting
 {
     public:
         tLoRaSettings LoRaSettings;
-        bool begin(Gpio *rst, Uart *uart, uint32_t baud);
-        void sys_reset();
+        bool begin(Gpio *rst,Gpio *wakeup, Uart *uart, uint32_t baud);
+        void hard_reset();
+        CMD_ERR_T soft_rst();
+
         void rx_evend();
-        void test();
+        CMD_ERR_T test();
     
         CMD_ERR_T config(sLoRaSettings *settings);
-        CMD_ERR_T soft_rst();
         CMD_ERR_T get_version(char *msg,uint8_t *len);
         CMD_ERR_T idle();
         CMD_ERR_T sleep();
@@ -62,7 +78,8 @@ class Ting
         CMD_ERR_T set_dest(uint16_t addr);
         CMD_ERR_T get_dest(uint16_t *addr);
         CMD_ERR_T send(uint8_t *ptr,uint8_t len);
-        void read();
+        uint8_t available();
+        uint8_t read(uint8_t *buf);
 
         CMD_ERR_T set_pb0();
         CMD_ERR_T clear_pb0();
@@ -73,9 +90,10 @@ class Ting
         CMD_ERR_T pwm1(uint8_t prescaler,uint16_t period,uint16_t pulse);
         CMD_ERR_T pwm2(uint8_t prescaler,uint16_t period,uint16_t pulse);
 
-        
-        CMD_STATE_T wait_ack(uint16_t timeout);
-        void update_cmd_err();
+        CMD_ERR_T wait_ack(char *target,uint16_t timeout);
+        CMD_ERR_T wait_ack(uint16_t timeout);
+        CMD_STATE_T wait_rx_timeout();
+        CMD_ERR_T update_cmd_err();
         void debug_cmd_err(const char *str);
         uint16_t find_str(uint8_t *s_str, uint8_t *p_str, uint16_t count, uint16_t &seek);
         int search_str(char *source, const char *target);
@@ -85,12 +103,19 @@ class Ting
         uint32_t last_rx_event_time;
         uint8_t rx_count;
         void    clear_rx_cdm_buffer(void); //清空AT命令缓冲区
-
+        void    data_process(char c);
     private:
-        uint8_t data_buf[255];
-        char rx_cmd_buf[RX_BUFFER_SIZE];
+        uint8_t     data_buf[DATA_BUFFER_SIZE];
+        char        source_addr_buf[5];
+        char        len_buf[3];
+        uint16_t    source_addr;
+        uint8_t     data_len;
+
+        RINGBUF     pDataBuf;//用于接收网络数据的环形缓冲区
+        char        rx_cmd_buf[CMD_BUFFER_SIZE];
 
         Gpio    *rst;
-        Uart   *uart; /* The UART to communicate with ESP8266 */
+        Gpio    *_wakeup;
+        Uart    *uart; /* The UART to communicate with ESP8266 */
 
 };

@@ -5,7 +5,105 @@
 #else
 #define  TING_DEBUG(...)
 #endif
+DATA_STATE_T data_state;
+uint8_t data_count;
+void Ting::data_process(char c)
+{
 
+    switch((uint8_t)data_state)
+    {
+        case NEED_PLUS:
+            if(c == '+')
+                data_state = NEED_L;
+            else
+                data_state = NEED_PLUS;
+            break;
+        case NEED_L:
+            if(c == 'L')
+                data_state = NEED_R;
+            else
+                data_state = NEED_PLUS;
+            break;            
+        case NEED_R:
+            if(c == 'R')
+                data_state = NEED_DOT1;
+            else
+                data_state = NEED_PLUS;
+            break;        
+        case NEED_DOT1:
+            if(c == ',')
+            {
+                data_count = 0;//初始化计数器
+                data_state = NEED_SADDR_DATA;
+            }
+            else
+                data_state = NEED_PLUS;
+            break;            
+        case NEED_SADDR_DATA:
+            source_addr_buf[data_count] = c;
+            data_count++;
+            if(data_count ==4)
+            {
+                source_addr_buf[4] = '\0';
+                source_addr = ATOI32(source_addr_buf,16);
+
+                data_state = NEED_DOT2;
+            }
+            else
+                data_state = NEED_SADDR_DATA;
+            break;            
+        case NEED_DOT2:
+            if(c == ',')
+            {
+                data_count = 0;//初始化计数器
+                data_state = NEED_LEN_DATA;
+            }
+            else
+                data_state = NEED_PLUS;
+            break;            
+        case NEED_LEN_DATA:
+            len_buf[data_count] = c;
+            data_count++;
+            if(data_count == 2)
+            {
+                len_buf[2] = '\0';
+                data_len = ATOI32(len_buf,16);
+                data_state = NEED_DOT3;
+
+            }
+            else
+            {
+                data_state = NEED_LEN_DATA;
+
+            }
+            break;            
+        case NEED_DOT3:
+            if(c == ',')
+            {
+                data_count = 0;//初始化计数器
+                data_state = NEED_DATA;
+            }
+            else
+                data_state = NEED_PLUS;
+            break;            
+            
+        case NEED_DATA:
+            if(data_count < data_len)
+            {
+                pDataBuf.write(c);
+                data_count++;
+            }
+            else
+            {
+                data_state = NEED_PLUS;
+            }
+            break;  
+        default:
+            uart1.write('x');
+            data_state = NEED_PLUS;
+            break;
+    }
+}
 void Ting::rx_evend()
 {
     uint8_t c;
@@ -15,41 +113,54 @@ void Ting::rx_evend()
     //uart1.write(c);
     
     rx_cmd_buf[rx_count] = c;
-    if(rx_count++ > RX_BUFFER_SIZE)
+    if(rx_count++ > CMD_BUFFER_SIZE)
         rx_count = 0;
     cmd_state = RECEIVING;
+    data_process(c);
 
 }
-bool Ting::begin(Gpio *rst, Uart *uart, uint32_t baud)
+bool Ting::begin(Gpio *rst,Gpio *wakeup, Uart *uart, uint32_t baud)
 {
 
     this->uart = uart;
     this->rst = rst;
+    this->_wakeup = wakeup;
     this->rst->mode(OUTPUT_PP);
+    this->_wakeup->mode(OUTPUT_PP);
+    this->rst->set();
+    this->_wakeup->set();
+    pDataBuf.begin(data_buf, DATA_BUFFER_SIZE); //初始化环形缓冲区
+
 
     this->uart->begin(baud);
     this->uart->attach(this,&Ting::rx_evend,RxIrq);
     clear_rx_cdm_buffer();
 
-    sys_reset();
+    hard_reset();
     return true;
 }
-void Ting::sys_reset()
+void Ting::hard_reset()
 {
     rst->reset();
     delay_ms(10);
     rst->set();
     delay_ms(1000);
 }
+
 CMD_ERR_T Ting::config(sLoRaSettings *settings)
 {
 
 }
 
-void Ting::test()
+CMD_ERR_T Ting::test()
 {
     //sys_reset();
     uart->printf("AT\r\n");
+    wait_ack(1000);
+    debug_cmd_err("TEST");
+    clear_rx_cdm_buffer();
+    return cmd_err;
+
 }
 CMD_ERR_T Ting::soft_rst()
 {
@@ -87,8 +198,10 @@ CMD_ERR_T Ting::sleep()
 }
 CMD_ERR_T Ting::wakeup()
 {
-    uart->printf("AT+DEST=0\r\n");
+    _wakeup->reset();
+    delay_ms(1);
     wait_ack(1000);
+    _wakeup->set();
     debug_cmd_err("WAKEUP");
     clear_rx_cdm_buffer();
 
@@ -171,15 +284,18 @@ CMD_ERR_T Ting::get_dest(uint16_t *addr)
 CMD_ERR_T Ting::send(uint8_t *ptr,uint8_t len)
 {
     uart->printf("AT+SEND=%d\r\n",len);
-    wait_ack(2000);
-    debug_cmd_err("SEND");
-    clear_rx_cdm_buffer();
+    if(wait_ack(2000) == ERR_OK)
+    {
+        clear_rx_cdm_buffer();
+        uart->write(ptr,len);
+        wait_ack(10000);
+        uart1.printf("SEND OK\r\n");
+        clear_rx_cdm_buffer();
+        
+    }
+    else
+        clear_rx_cdm_buffer();
 
-    uart->write(ptr,len);
-    debug_cmd_err("DATA");
-    wait_ack(2000);
-
-    clear_rx_cdm_buffer();
     return cmd_err;
 
 }
@@ -241,7 +357,7 @@ CMD_ERR_T Ting::pwm1(uint8_t prescaler,uint16_t period,uint16_t pulse)
 {
     uart->printf("AT+PWM1=%d,%d,%d\r\n",prescaler,period,pulse);
     wait_ack(1000);
-    debug_cmd_err("READ PD0");
+    debug_cmd_err("PWM1");
     clear_rx_cdm_buffer();
     return cmd_err;
 }
@@ -249,11 +365,29 @@ CMD_ERR_T Ting::pwm2(uint8_t prescaler,uint16_t period,uint16_t pulse)
 {
     uart->printf("AT+PWM2=%d,%d,%d\r\n",prescaler,period,pulse);
     wait_ack(1000);
-    debug_cmd_err("READ PD0");
+    debug_cmd_err("PWM2");
     clear_rx_cdm_buffer();
     return cmd_err;
 }
-CMD_STATE_T Ting::wait_ack(uint16_t timeout)
+uint8_t Ting::read(uint8_t *buf)
+{
+    uint16_t len = pDataBuf.available();
+    if(len > 0)
+    {
+        for(int i = 0; i < len; i++)
+        {
+            buf[i] = pDataBuf.read();
+        }
+    }
+    else
+    {
+        buf[0] = 0;
+        len = 0;
+    }
+    return len;
+}
+
+CMD_ERR_T Ting::wait_ack(uint16_t timeout)
 {
     uint32_t time = millis();
     cmd_state = WAITING;
@@ -266,18 +400,16 @@ CMD_STATE_T Ting::wait_ack(uint16_t timeout)
             TING_DEBUG("cmd TIMEOUT\r\n");
             break;
         }
-        update_cmd_err();
-        if(cmd_err != ERR_NO_ACK)
+        if(update_cmd_err() != ERR_NO_ACK)
         {
             cmd_state = RECEIVED;
             break;
         }
     }
-
-    return cmd_state;
-
+    return cmd_err;
 }
-void Ting::update_cmd_err()
+
+CMD_ERR_T Ting::update_cmd_err()
 {
     if(search_str(rx_cmd_buf, "OK") != -1)
     {
@@ -314,10 +446,16 @@ void Ting::update_cmd_err()
         while(millis() - last_rx_event_time < 2);//等待所有字节接收完成
         cmd_err = ERR_NONE;
     }
+    else if(search_str(rx_cmd_buf, "WakeUp") != -1)
+    {
+        while(millis() - last_rx_event_time < 2);//等待所有字节接收完成
+        cmd_err = ERR_OK;
+    }
     else 
     {
         cmd_err = ERR_NO_ACK;
     }
+    return cmd_err;
 }
 void Ting::debug_cmd_err(const char *str)
 {
@@ -354,7 +492,7 @@ void Ting::debug_cmd_err(const char *str)
 void Ting::clear_rx_cdm_buffer(void) //清空AT命令缓冲区
 {
     uint16_t i;
-    for(i = 0; i < RX_BUFFER_SIZE; i++)
+    for(i = 0; i < CMD_BUFFER_SIZE; i++)
     {
         rx_cmd_buf[i] = 0;
     }
