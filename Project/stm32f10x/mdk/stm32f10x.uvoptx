@@ -181,9 +181,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>265</LineNumber>
+          <LineNumber>143</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134232344</Address>
+          <Address>134233594</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -192,12 +192,28 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\..\..\common\edriver\TingATCmd.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../common/edriver/TingATCmd.cpp\265</Expression>
+          <Expression>\\ebox\../../../common/edriver/TingATCmd.cpp\143</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>262</LineNumber>
+          <LineNumber>304</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134232350</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\..\common\edriver\TingATCmd.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\ebox\../../../common/edriver/TingATCmd.cpp\304</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>306</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -226,6 +242,11 @@
           <count>2</count>
           <WinNumber>1</WinNumber>
           <ItemText>buf</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>atHead</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

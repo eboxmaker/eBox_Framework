@@ -24,9 +24,10 @@ char msg[10];
 uint8_t msg_len;
 
 uint8_t is_sender = 0;
+uint16_t addr1;
+uint16_t addr;
 
-
-tLoRaSettings LoRaSettings =
+tLoRaSettings xLoRaSettings =
 {
     433000000,        // RFFrequency
     20,               // Power
@@ -61,28 +62,63 @@ void setup()
     uart1.begin(115200);
     ting.begin(&PA1,&PA8,&uart3,115200);
     uart1.printf("start\r\n");
-    ting.config(&LoRaSettings);
+    ting.config(&xLoRaSettings);
     ting.set_addr(0xffff);
     ting.set_dest(0xffff);
+    ting.get_addr(&addr);
+    uart1.println(addr);
+    ting.get_dest(&addr);
+    uart1.println(addr);
+
     ting.rx();
-    ting.pwm1(1,200,180);
-    ting.pwm2(1,200,20);
+    ting.pwm1(0,1600,1000);
+    ting.pwm2(0,1600,200);
+        ting.save();
 
 }
-uint16_t addr1;
-uint16_t addr;
+
 
 int main(void)
 {
     setup();
     while(1)
     {
-        if(is_sender == 1)
+
+        if(ting.is_rx_timeout())
         {
-            if(ting.send(send_buf,10) == ERR_OK)
-                uart1.printf("SEND OK\r\n");
+            uart1.printf("timeout\r\n");
+                ting.rx();
+
         }
-        else
+//      ting.sleep();
+//      ting.wakeup();
+//      ting.get_version(msg,&msg_len);
+//      uart1.write(msg,msg_len);
+
+//rssi test
+//      ting.rssi(msg,&msg_len);
+//      uart1.write(msg,msg_len);
+//get addr test
+//      ting.set_addr(65534);
+//      get addr test
+//      ting.get_addr(&addr);
+//      uart1.println(addr);
+//        
+//      ting.set_dest(60534);
+//      //get addr test
+//      ting.get_dest(&addr);
+//      uart1.println(addr);
+
+//      if(ting.send(send_buf,10) == ERR_OK)
+//          uart1.printf("SEND OK\r\n");
+
+            
+//      if(is_sender == 1)
+//      {
+//      if(ting.send(send_buf,10) == ERR_OK)
+//      uart1.printf("SEND OK\r\n");
+//      }
+//      else
         {
             len = ting.available();
             if(len >= 10)
@@ -95,8 +131,11 @@ int main(void)
 
                 ting.rssi(msg,&msg_len);
                 uart1.write(msg,msg_len);
+                ting.rx();
+
             }
         }
+
 
     }
 
