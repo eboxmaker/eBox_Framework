@@ -20,20 +20,25 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "ebox.h"
+
 uint32_t xx;
 Exti ex(&PA8, EXTI_Trigger_Falling);
-void exit()
+class Test 
 {
-    xx++;
-    uart1.printf("\r\nxx = %d", xx);
-}
+    public:
+    void event() 
+    {
+        PB8.toggle();
+    }
+};
+Test test;
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
     PB8.mode(OUTPUT_PP);
     ex.begin();
-    ex.attach(exit);
+    ex.attach(&test,&Test::event);
     ex.interrupt(ENABLE);
 }
 int main(void)
@@ -44,3 +49,12 @@ int main(void)
         ;
     }
 }
+
+
+
+
+
+
+
+
+
