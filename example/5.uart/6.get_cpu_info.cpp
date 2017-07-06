@@ -60,12 +60,7 @@ int main(void)
     while(1)
     {
         PB9.toggle();
-//        x = x + PI * 0.01;
-//        if(x >= PI)x = 0;
-//        y = 2000 - (sin(x) + 1) * 1000;
-
-//        pwm1.set_duty(y);
-        delay_ms(10);
+        delay_ms(200);
     }
 
 }
