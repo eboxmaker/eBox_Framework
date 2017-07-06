@@ -157,9 +157,10 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     if((_USARTx == USART1 || _USARTx == USART2 || _USARTx == USART3) && (use_dma == 1) )
         USART_DMACmd(_USARTx, USART_DMAReq_Tx, ENABLE);
     USART_Cmd(_USARTx, ENABLE);
-    interrupt(ENABLE);
-USART_ClearITPendingBit(_USARTx, USART_IT_TC);
-USART_ClearFlag(USART2,USART_FLAG_TC); 
+    interrupt(RxIrq,ENABLE);
+    interrupt(TcIrq,ENABLE);
+    USART_ClearITPendingBit(_USARTx, USART_IT_TC);
+    USART_ClearFlag(USART2,USART_FLAG_TC); 
 }
 
 /**
@@ -252,7 +253,7 @@ void Uart::printf(const char *fmt, ...)
  *@param    enable:  ENABLE使能串口的发送完成和接收中断；DISABLE：关闭这两个中断
  *@retval   None
 */
-void Uart::interrupt(FunctionalState enable,uint8_t preemption_priority, uint8_t sub_priority)
+void Uart::interrupt(IrqType type, FunctionalState enable,uint8_t preemption_priority, uint8_t sub_priority)
 {
     if(preemption_priority > 4)preemption_priority = 4;
     if(sub_priority > 4)sub_priority = 4;
@@ -298,8 +299,10 @@ void Uart::interrupt(FunctionalState enable,uint8_t preemption_priority, uint8_t
 #endif
     }
     NVIC_Init(&NVIC_InitStructure);
-    USART_ITConfig(_USARTx, USART_IT_RXNE, enable);
-    USART_ITConfig(_USARTx, USART_IT_TC, enable);
+    if(type == RxIrq)
+        USART_ITConfig(_USARTx, USART_IT_RXNE, enable);
+    if(type == TcIrq)
+        USART_ITConfig(_USARTx, USART_IT_TC, ENABLE);//禁止关闭发送完成中断
 }
 
 

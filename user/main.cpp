@@ -1,144 +1,70 @@
 /**
   ******************************************************************************
-  * @file   : *.cpp
-  * @author : shentq
-  * @version: V1.2
-  * @date   : 2016/08/14
-
+  * @file    pwm.cpp
+  * @author  shentq
+  * @version V1.2
+  * @date    2016/08/14
   * @brief   ebox application example .
-  *
-  * Copyright 2016 shentq. All Rights Reserved.         
   ******************************************************************************
- */
+  * @attention
+  *
+  * No part of this software may be used for any commercial activities by any form 
+  * or means, without the prior written consent of shentq. This specification is 
+  * preliminary and is subject to change at any time without notice. shentq assumes
+  * no responsibility for any errors contained herein.
+  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
+  ******************************************************************************
+  */
+
+
+/* Includes ------------------------------------------------------------------*/
 
 
 #include "ebox.h"
-#include "tingATCmd.h"
+#include "math.h"
 
-Ting ting;
-uint8_t send_buf[10]={'1','2','3','4','5','6','7','8','9','0'};
-uint8_t recv_buf[10];
-uint8_t len;
+Pwm pwm1(&PA11);
+Pwm pwm2(&PA1);
 
-char msg[10];
-uint8_t msg_len;
-
-uint8_t is_sender = 0;
-uint16_t addr1;
-uint16_t addr;
-
-tLoRaSettings xLoRaSettings =
-{
-    433000000,        // RFFrequency
-    20,               // Power
-    6,                // SignalBw [0: 7.8kHz, 1: 10.4 kHz, 2: 15.6 kHz, 3: 20.8 kHz, 4: 31.2 kHz,
-                      // 5: 41.6 kHz, 6: 62.5 kHz, 7: 125 kHz, 8: 250 kHz, 9: 500 kHz, other: Reserved]
-    10,                // SpreadingFactor [6: 64, 7: 128, 8: 256, 9: 512, 10: 1024, 11: 2048, 12: 4096  chips]
-    1,                // ErrorCoding [1: 4/5, 2: 4/6, 3: 4/7, 4: 4/8]
-    true,             // CrcOn [0: OFF, 1: ON]
-    false,            // ImplicitHeaderOn [0: OFF, 1: ON]
-    false,                // RxSingleOn [0: Continuous, 1 Single]
-    false,                // FreqHopOn [0: OFF, 1: ON]
-    4,                // HopPeriod Hops every frequency hopping period symbols
-    //100,              // TxPacketTimeout
-    3000,              // RxPacketTimeout
-    8,              // PayloadLength (used for implicit header mode)
-    4,                  //PreambleLength(4-x)
-};
 void setup()
 {
     ebox_init();
-    PA2.mode(INPUT_PD);
-    PA3.mode(INPUT_PD);
-    PB2.mode(INPUT);
-    PB3.mode(INPUT);
-    PB4.mode(INPUT);
-    PB5.mode(INPUT);
-    PB6.mode(INPUT);
-    PA4.mode(INPUT);
-    PA5.mode(INPUT);
-    PA6.mode(INPUT);
-    PA7.mode(INPUT);
     uart1.begin(115200);
-    ting.begin(&PA1,&PA8,&uart3,115200);
-    uart1.printf("start\r\n");
-    ting.config(&xLoRaSettings);
-    ting.set_addr(0xffff);
-    ting.set_dest(0xffff);
-    ting.get_addr(&addr);
-    uart1.println(addr);
-    ting.get_dest(&addr);
-    uart1.println(addr);
+    uart1.printf("core:%d\r\n",cpu.clock.core);
+    uart1.printf("core:%d\r\n",cpu.clock.core);
+    uart1.printf("hclk:%d\r\n",cpu.clock.hclk);
+    uart1.printf("pclk1:%d\r\n",cpu.clock.pclk1);
+    uart1.printf("pclk2:%d\r\n",cpu.clock.pclk2);
+    
+    pwm1.begin(1000, 900);
+    pwm1.set_oc_polarity(1);
+    pwm2.begin(1000, 800);
+    pwm2.set_oc_polarity(1);
 
-    ting.rx();
-    ting.pwm1(0,1600,1000);
-    ting.pwm2(0,1600,200);
-        ting.save();
-
+    
+    uart1.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
+    uart1.printf("max frq = %f\r\n",pwm1.get_accuracy());
+    uart1.printf("max frq = %dKhz\r\n",pwm2.get_max_frq()/1000);
+    uart1.printf("max frq = %f\r\n",pwm2.get_accuracy());
+    PB9.mode(OUTPUT_PP);
 }
 
+float x;
+uint16_t y;
 
 int main(void)
 {
     setup();
+
+    
     while(1)
     {
-
-        if(ting.is_rx_timeout())
-        {
-            uart1.printf("timeout\r\n");
-                ting.rx();
-
-        }
-//      ting.sleep();
-//      ting.wakeup();
-//      ting.get_version(msg,&msg_len);
-//      uart1.write(msg,msg_len);
-
-//rssi test
-//      ting.rssi(msg,&msg_len);
-//      uart1.write(msg,msg_len);
-//get addr test
-//      ting.set_addr(65534);
-//      get addr test
-//      ting.get_addr(&addr);
-//      uart1.println(addr);
-//        
-//      ting.set_dest(60534);
-//      //get addr test
-//      ting.get_dest(&addr);
-//      uart1.println(addr);
-
-//      if(ting.send(send_buf,10) == ERR_OK)
-//          uart1.printf("SEND OK\r\n");
-
-            
-//      if(is_sender == 1)
-//      {
-//      if(ting.send(send_buf,10) == ERR_OK)
-//      uart1.printf("SEND OK\r\n");
-//      }
-//      else
-        {
-            len = ting.available();
-            if(len >= 10)
-            {
-                ting.read(recv_buf,len);
-                
-                uart1.println("recv data:");
-                uart1.write(recv_buf,len);
-                uart1.println();
-
-                ting.rssi(msg,&msg_len);
-                uart1.write(msg,msg_len);
-                ting.rx();
-
-            }
-        }
-
-
+        PB9.toggle();
+        delay_ms(200);
     }
 
 }
+
+
 
 
