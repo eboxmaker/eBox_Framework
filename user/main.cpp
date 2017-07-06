@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    pwm.cpp
+  * @file    .cpp
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   ebox application example .
+  * @brief   
   ******************************************************************************
   * @attention
   *
@@ -19,51 +19,55 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-
 #include "ebox.h"
-#include "math.h"
 
-Pwm pwm1(&PA11);
-Pwm pwm2(&PA1);
+
+Timer timer1(TIM1);
+
+void t2it()
+{
+    PB8.toggle();  
+}
+class Test 
+{
+    public:
+    void event() 
+    {
+        PB8.toggle();
+    }
+};
+Test test;
 
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    uart1.printf("core:%d\r\n",cpu.clock.core);
-    uart1.printf("core:%d\r\n",cpu.clock.core);
-    uart1.printf("hclk:%d\r\n",cpu.clock.hclk);
-    uart1.printf("pclk1:%d\r\n",cpu.clock.pclk1);
-    uart1.printf("pclk2:%d\r\n",cpu.clock.pclk2);
-    
-    pwm1.begin(1000, 900);
-    pwm1.set_oc_polarity(1);
-    pwm2.begin(1000, 800);
-    pwm2.set_oc_polarity(1);
+    PB8.mode(OUTPUT_PP);
 
-    
-    uart1.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
-    uart1.printf("max frq = %f\r\n",pwm1.get_accuracy());
-    uart1.printf("max frq = %dKhz\r\n",pwm2.get_max_frq()/1000);
-    uart1.printf("max frq = %f\r\n",pwm2.get_accuracy());
-    PB9.mode(OUTPUT_PP);
+    timer1.begin(1);
+    //timer1.attach(t2it);
+    timer1.attach(&test,&Test::event);
+    timer1.interrupt(ENABLE);
+    timer1.start();
+    uart1.printf("\r\ntimer clock       = %dMhz", timer1.get_timer_source_clock()/1000000);
+    uart1.printf("\r\nmax interrupt frq = %dKhz", timer1.get_max_frq()/1000);
 }
 
-float x;
-uint16_t y;
 
 int main(void)
 {
     setup();
-
-    
     while(1)
     {
-        PB9.toggle();
-        delay_ms(200);
+
     }
 
+
 }
+
+
+
+
 
 
 
