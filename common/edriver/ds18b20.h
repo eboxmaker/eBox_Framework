@@ -1,9 +1,7 @@
 #ifndef __DS18B20_H
 #define __DS18B20_H 
 #include "ebox.h" 
-#include "crc.h"
-                                      
-             
+                                     
 class Ds18b20
 {
     public:

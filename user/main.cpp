@@ -1,74 +1,57 @@
-/**
-  ******************************************************************************
-  * @file    .cpp
-  * @author  shentq
-  * @version V1.2
-  * @date    2016/08/14
-  * @brief   
-  ******************************************************************************
-  * @attention
-  *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
-  * preliminary and is subject to change at any time without notice. shentq assumes
-  * no responsibility for any errors contained herein.
-  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
-  ******************************************************************************
-  */
+/*
+file   : *.cpp
+author : shentq
+version: V1.1
+date   : 2016/03/26
 
+Copyright 2016 shentq. All Rights Reserved.
+*/
 
-/* Includes ------------------------------------------------------------------*/
-
+//STM32 RUN IN eBox
 #include "ebox.h"
 
 
-Timer timer1(TIM1);
-
-void t2it()
+void mem_test()
 {
-    PB8.toggle();  
+    String str1;
+    String str2;
+    char *ptr;
+    
+    uart1.printf("free size = %d\r\n",ebox_get_free());
+    ptr = (char *)ebox_malloc(128);
+    uart1.printf("free size = %d\r\n",ebox_get_free());
+
+    str1 = "123";
+    str2 = "456\r\n";
+    str1 += str2;
+    
+    memcpy(ptr,str1.c_str(),8);
+    
+    uart1.printf("str1 = %s\r\n",str1.c_str());
+    uart1.write(ptr,8);
+    uart1.printf("ptr point= 0x%x\r\n",ptr);
+    ebox_free(ptr);
+    uart1.printf("ptr point = %d\r\n",ptr);
+    uart1.printf("free size = %d\r\n",ebox_get_free());
+
 }
-class Test 
-{
-    public:
-    void event() 
-    {
-        PB8.toggle();
-    }
-};
-Test test;
-
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    PB8.mode(OUTPUT_PP);
-
-    timer1.begin(1);
-    //timer1.attach(t2it);
-    timer1.attach(&test,&Test::event);
-    timer1.interrupt(ENABLE);
-    timer1.start();
-    uart1.printf("\r\ntimer clock       = %dMhz", timer1.get_timer_source_clock()/1000000);
-    uart1.printf("\r\nmax interrupt frq = %dKhz", timer1.get_max_frq()/1000);
+    uart1.printf("ok \r\n");   
 }
-
-
 int main(void)
 {
     setup();
-    while(1)
-    {
 
+    mem_test();
+    while(1)
+    {     				
+				
+		delay_ms(1000);
     }
 
-
 }
-
-
-
-
-
-
 
 

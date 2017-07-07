@@ -20,7 +20,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "color_convert.h"
 #include "math.h"
-#include "util.h"
 
 void RGB_to_HSL(/*[in]*/const COLOR_RGB &rgb, /*[out]*/COLOR_HSL &hsl)
 {

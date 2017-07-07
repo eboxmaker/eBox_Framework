@@ -1,11 +1,10 @@
-
 /**
   ******************************************************************************
-  * @file    list.h
+  * @file    common.h
   * @author  shentq
-  * @version V1.0
-  * @date    2017/03/02
-  * @brief   List单向链表
+  * @version V1.2
+  * @date    2016/08/14
+  * @brief   
   ******************************************************************************
   * @attention
   *
@@ -16,35 +15,22 @@
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
   ******************************************************************************
   */
-#ifndef __LIST_H
-#define __LIST_H
-#include "ebox.h"
+/**
+ * Modification History:
+ * -shentq                  -version 1.2(2016/08/17)
+ *      *分离了GPIO、analog和common的耦合关系
+ *      *增加了date_time_t类型
+ *      *删除了sys的，将其移至core
+ *      *删除了parallel_gpio的，将其移至edriver
+ */
 
-typedef struct _node
-{
- void           *data;
- struct _node   *next;
-}Node;
+/* Define to prevent recursive inclusion -------------------------------------*/
 
-class List
-{
-    Node *_head;
-    Node *_tail;
-    int  _size;
-public:
+#ifndef __RANDOM_H
+#define __RANDOM_H
 
-    List(){_head = NULL;}
-    int  insert(int at,void *data);
-    int  insert_head(void *data);
-    int  insert_tail(void *data);
-    int  remove(int x);
-    void *data(int x);
-    Node *head();
-    Node *tail();
-    int  is_empty();
-    int  clear();
-    int  modify_node(int x,void *data);
-    int  swap(int x,int y);
-    int  size(){return _size;}
-};
+void            random_seed(unsigned int seed);
+unsigned int    random();
+unsigned int    random(unsigned int max);
+unsigned int    random(unsigned int min, unsigned int max);
 #endif

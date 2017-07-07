@@ -20,7 +20,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_common.h"
-#include "stdlib.h"
 
 /** @defgroup common 
   * @brief common
@@ -32,55 +31,6 @@ extern uint16_t AD_value[];
 /** @defgroup common函数
   * @{
   */
-
-
-/**
- * @brief   
- * 
- * @param   
- *          
- *          
- *          
- * @retval  NONE
- */
-void random_seed(uint16_t seed)
-{
-    srand(seed);
-}
-
-/**
- * @brief   产生一个0~65535的随机数
- * @param   NONE
- * @retval  0~65535随机数结果
- */
-uint16_t random()
-{
-    return rand();
-}
-/**
- * @brief   产生一个小于某个值得随机数
- * @param   max:随机数的最大值，此值比产生的最大值大1.
- * @retval  随机数结果
- */
-uint16_t random(uint16_t max)
-{
-    return (rand() % max);
-}
-
-/**
- * @name    
- * @brief   
- * 
- * @param   
- *          
- *          
- *          
- * @retval  NONE
- */
-uint16_t random(uint16_t min, uint16_t max)
-{
-    return (min + rand() % (max - min));
-}
 /**
  *@brief    Gpio按照时钟连续输出一个u8类型的数据，用于串行通信。
  *@param    data_pin：  数据输入引脚

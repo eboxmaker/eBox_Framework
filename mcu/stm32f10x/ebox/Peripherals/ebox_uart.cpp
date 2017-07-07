@@ -19,7 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_uart.h"
-#include "ebox_mem.h"
 
 
 uint8_t busy[5];

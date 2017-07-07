@@ -21,8 +21,9 @@ extern "C"{
     
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f10x.h"
+#include "mcu_core.h"
 #include <stdlib.h>
+
 
 /*内存分配配置*/
 #define EN_SRAM_IN                  (1)
@@ -59,7 +60,7 @@ typedef enum
 }MemType_t;
 
 #ifndef OS_ENTER_CRITICAL
-    #define OS_ENTER_CRITICAL()                         //填写操作系统相关代码
+    #define OS_ENTER_CRITICAL()                no_interrupts()         //填写操作系统相关代码
 #endif
 
 #ifndef OS_EXIT_CRITICAL
