@@ -10,4 +10,4 @@
 本项目使用MDK 5编译
 
 # 论坛支持
-www.eboxmaker.com
+bbs.eboxmaker.com

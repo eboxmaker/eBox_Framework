@@ -20,12 +20,10 @@
 #ifndef __DHCP_H
 #define __DHCP_H
 #include "socket.h"
+#include "ebox_common.h"
 
 #define USE_HEAP 1
 
-#ifdef USE_HEAP
-    #include "heap.h"
-#endif
 
 
 

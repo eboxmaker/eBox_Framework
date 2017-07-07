@@ -15,7 +15,7 @@ This specification is preliminary and is subject to change at any time without n
 
 
 #include "os.h"
-#include "core.h"
+#include "mcu_core.h"
 
 
 /******************空闲任务信息*******************/

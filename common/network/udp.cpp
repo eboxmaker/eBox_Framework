@@ -43,6 +43,7 @@ uint16_t UDP::recv(uint8_t *buf)
     uint16_t len = 0;
     if((len = recv_available(s)) > 0)
     {
+        uart1.println(len);
         len = _recvfrom(s, buf, len, remoteIP, &remotePort); /*W5500接收计算机发送来的数据*/
         recvFlag = 0;
     }

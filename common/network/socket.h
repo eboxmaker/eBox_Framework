@@ -86,21 +86,20 @@ extern bool     client_connecte_event(SOCKET s);
 
 extern bool     get_local_dns(uint8_t *dns);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//util
 
-char		*inet_ntoa(unsigned long addr);
-char		*inet_ntoa_pad(unsigned long addr);
-void		inet_addr_(unsigned char *addr, unsigned char *ip);
-char		VerifyIPAddress_orig(char *src	);
-char		VerifyIPAddress(char *src, uint8_t *ip);
+char		        *inet_ntoa(unsigned long addr);
+char		        *inet_ntoa_pad(unsigned long addr);
+void		        inet_addr_(unsigned char *addr, unsigned char *ip);
+char		        VerifyIPAddress_orig(char *src	);
+char		        VerifyIPAddress(char *src, uint8_t *ip);
 unsigned long		GetDestAddr(SOCKET s);
 unsigned int		GetDestPort(SOCKET s);
 uint16_t					htons(uint16_t hostshort);
 unsigned long		htonl(unsigned long hostlong);
 unsigned long		ntohs(unsigned short netshort);
 unsigned long		ntohl(unsigned long netlong);
-int8_t					CheckDestInLocal(uint32_t destip);
-SOCKET					getSocket(	unsigned char status,	SOCKET start);
+int8_t              CheckDestInLocal(uint32_t destip);
+SOCKET              getSocket(	unsigned char status,	SOCKET start);
 unsigned short	checksum(unsigned char *src, unsigned int len);
 #ifndef NO_USE_SOCKUTIL_FUNC
 uint32_t	GetIPAddress(void);
