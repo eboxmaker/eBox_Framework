@@ -1,5 +1,5 @@
-#include "ebox_mem.h"
-#include "heap.h"
+#include "../mem/ebox_mem.h"
+#include "mcu_mem.h"//需要根据不同的硬件或者内内存管理单元接口
 void *ebox_malloc(size_t sz)
 {
    return memMalloc(sz,SRAM_IN - 1);       
@@ -9,7 +9,7 @@ void ebox_free(void *ptr)
    memFree(ptr,SRAM_IN - 1);
    ptr = NULL;
 }
-size_t ebox_get_free()
+size_t ebox_get_free(void)
 {
     return memGetFreeHeapSize(SRAM_IN - 1);
 }

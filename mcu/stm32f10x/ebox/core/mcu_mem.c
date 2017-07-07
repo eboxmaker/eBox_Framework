@@ -5,14 +5,14 @@
  * 
  * DESCRIPTION: - 参照FreeRTOS的heap_4.c做的内存分配
  *     Input the description of file:
- * Author: 负西弱
+ * Author: 
  * date:2015/12/22
  * 转载网址：http://www.amobbs.com/forum.php?mod=viewthread&tid=5640384&highlight=%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86
  * 
  * modification history
  *   ...
  ******************************************************************************/
-#include "heap.h"
+#include "mcu_mem.h"
 
 //内存池大小
 size_t cfgTOTAL_HEAP_SIZE[] = {

@@ -66,7 +66,7 @@ extern "C" {
         random_seed(AD_value[0]);//初始化随机数种子
 
     }
-    void ebox_reset()
+    void ebox_reset(void)
     {
         NVIC_SystemReset();
     }
@@ -151,7 +151,7 @@ extern "C" {
         cpu.flash_size = *(uint16_t *)(0x1FFFF7E0);   //芯片flash容量
     }
     
-    uint32_t get_cpu_calculate_per_sec()
+    uint32_t get_cpu_calculate_per_sec(void)
     {
         return cpu.ability;
     }

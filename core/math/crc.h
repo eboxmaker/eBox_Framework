@@ -4,7 +4,7 @@
  extern "C" {
 #endif
 
-#include "ebox_core.h"
+#include "mcu_core.h"
 
 uint16_t crc16( uint8_t * pucFrame, uint16_t usLen );
 uint8_t  crc8 (uint8_t *p,uint16_t n);

@@ -40,10 +40,7 @@
 #include "ebox_dac.h"
 #include "ebox_wdg.h"
 
-
-
 #include "stdio.h"
-#include "ebox_mem.h"
 
 
 ////////系统debug支持////////////////////////////////////////////////////////////////

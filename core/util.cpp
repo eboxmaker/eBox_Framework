@@ -19,7 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "util.h"
-#include "ebox.h"
 
 
 
@@ -268,5 +267,4 @@ uint16_t get_str(char *source, const char *end, uint16_t count, char *out)
         out[i] = '\0';
     }
     return length;
-
 }

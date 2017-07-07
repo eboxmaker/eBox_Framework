@@ -19,7 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "tingatcmd.h"
-#include "util.h"
 #if 1
 #define TING_DEBUG(...) uart1.printf("[Ting]"),uart1.printf(__VA_ARGS__)
 #else

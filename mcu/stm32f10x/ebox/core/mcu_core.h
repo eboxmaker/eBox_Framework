@@ -69,8 +69,8 @@ typedef void (*callback_fun_type)(void);
 extern __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
 
 void ebox_init(void); //ebox系统初始化
-void ebox_reset();
-uint32_t get_cpu_calculate_per_sec();//获取cpu在不跑操作系统的情况下的计算能力。用于统计cpu绝对使用率
+void ebox_reset(void);
+uint32_t get_cpu_calculate_per_sec(void);//获取cpu在不跑操作系统的情况下的计算能力。用于统计cpu绝对使用率
 
 uint64_t micros(void);//获取系统当前运行了多长时间。单位：us
 uint64_t millis(void);//获取系统当前运行了多长时间。单位：ms
@@ -81,7 +81,7 @@ void attach_systick_user_event(void (*callback_fun)(void));//绑定systick中断调用
 
 
 static void get_system_clock(cpu_clock_t *clock);
-static void get_chip_info();
+static void get_chip_info(void);
 
 #ifdef __cplusplus
 }

@@ -9,7 +9,7 @@ extern "C"{
 
 void    *ebox_malloc(size_t sz);
 void    ebox_free(void *ptr);
-size_t  ebox_get_free();
+size_t  ebox_get_free(void);
 int ebox_memcmp(const void * cs,const void * ct, size_t count);
 void *ebox_memcpy(void * dst, const void *src, size_t count);    
 #define ebox_free_1(pv)    memFree(pv,0)

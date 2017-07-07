@@ -17,6 +17,7 @@
   ******************************************************************************
   */
 #include "list.h"
+#include "../core/mem/ebox_mem.h"
 /**
  *@brief    List单向链表
             本数据链表采用尾插法创建链表，数据起始位置为0。结束位置为size() - 1；
@@ -45,7 +46,7 @@ int List::insert_head(void *data)
 
 int List::insert_tail(void *data)
 {
-    Node *node_prev,*node_new;
+    Node *node_new;
     if((node_new = (Node *)ebox_malloc(sizeof(Node))) == NULL )
         return -1;
     
@@ -120,7 +121,7 @@ int List::insert(int at,void *data)
 
 int  List::remove(int at)
 {
-    Node *node_prev,*node_at,*e;
+    Node *node_prev,*node_at;
     int pos_at;
     int found = 0;
     if(is_empty() || at < 0 ) return -1;

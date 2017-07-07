@@ -19,7 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox.h"
-#include "ringbuf.h"
 
 #define CMD_BUFFER_SIZE 100
 #define DATA_BUFFER_SIZE 255
