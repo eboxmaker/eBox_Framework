@@ -18,9 +18,8 @@
 
 
 /* Includes ------------------------------------------------------------------*/
+#include "ebox_common.h"
 #include "socket.h"
-#include "util.h"
-#include "string.h"
 #include "w5500.h"
 static uint16_t local_port;
 
@@ -474,7 +473,7 @@ char *inet_ntoa_pad(unsigned long addr)
 }
 
 
-/*
+
 void inet_addr_(unsigned char* addr,unsigned char *ip)
 {
 	int i;
@@ -495,7 +494,7 @@ void inet_addr_(unsigned char* addr,unsigned char *ip)
 		nexttok = NULL;
 	}
 }
-*/
+
 /**
 @brief	Verify dotted notation IP address string
 @return 	success - 1, fail - 0

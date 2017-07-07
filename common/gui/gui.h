@@ -4,6 +4,7 @@
 #include "lcd_port.h"
 
 #define TEXT_AUTORELINE 1
+
 #define RED  	0xf800
 #define GREEN	0x07e0
 #define BLUE 	0x001f

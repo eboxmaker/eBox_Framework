@@ -1,6 +1,6 @@
 
 #include "ebox.h"
-#include "os.h"
+#include "../os/ebox_os/os.h"
 
 
 #define TASK_1_STK_SIZE 128
@@ -20,7 +20,7 @@ void task_2();
 void task_3();
 
 
-float cpu;
+float cpu_usage;
 INT16U mem;
 u8 task2count = 0;
 
@@ -28,8 +28,8 @@ void setup()
 {
     ebox_init();
 
-    uart1.begin(9600);
-    uart1.printf("\r\nuart1 9600 ok!");
+    uart1.begin(115200);
+    uart1.printf("\r\nuart1 115200 ok!");
     uart1.printf("\r\ncpu:%d", get_cpu_calculate_per_sec());
     PB8.mode(OUTPUT_PP);
     os_init();
@@ -44,16 +44,17 @@ void task_1()
 {
     while(1)
     {
+        uart1.printf("Task 1 Running!!!\r\n");
         PB8 = !PB8;
-        os_time_delay(1000);
+        os_time_delay(500);
     }
 }
 void task_2()
 {
     while(1)
     {
+        uart1.printf("Task 2 Running!!!\r\n");
         task2count++;
-        delay_ms(100);
         os_time_delay(1000);
     }
 
@@ -63,9 +64,9 @@ void task_3()
     while(1)
     {
         uart1.printf("Task 3 Running!!!\r\n");
-        cpu = os_get_cpu_usage();
+        cpu_usage = os_get_cpu_usage();
         mem = os_get_stack_max_usage(TASK_1_STK, TASK_1_STK_SIZE);
-        uart1.printf("cpu = %0.2f%%\r\n", cpu);
+        uart1.printf("cpu = %0.2f%%\r\n", cpu_usage);
         uart1.printf("mem = %02d%%\r\n", mem);
         os_time_delay(1000);
     }

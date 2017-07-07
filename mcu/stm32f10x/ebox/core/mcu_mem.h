@@ -64,7 +64,7 @@ typedef enum
 #endif
 
 #ifndef OS_EXIT_CRITICAL
-    #define OS_EXIT_CRITICAL()                            //填写操作系统相关代码
+    #define OS_EXIT_CRITICAL()                 interrupts()           //填写操作系统相关代码
 #endif
 
 #ifndef cfgUSE_MALLOC_FAILED_HOOK

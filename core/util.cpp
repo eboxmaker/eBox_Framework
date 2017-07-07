@@ -140,27 +140,6 @@ uint32_t swapl(uint32_t l32)//½»»»¸ßµÍ×Ö½Ú
     return ret;
 }
 
-
-void inet_addr_(unsigned char *addr, unsigned char *ip)
-{
-    int i;
-    //	u_long inetaddr = 0;
-    char taddr[30];
-    char *nexttok;
-    char num;
-    strcpy(taddr, (char *)addr);
-
-    nexttok = taddr;
-    for(i = 0; i < 4 ; i++)
-    {
-        nexttok = strtok(nexttok, ".");
-        if(nexttok[0] == '0' && nexttok[1] == 'x') num = ATOI(nexttok + 2, 0x10);
-        else num = ATOI(nexttok, 10);
-
-        ip[i] = num;
-        nexttok = NULL;
-    }
-}
 int find_str(uint8_t *s_str, uint8_t *p_str, uint16_t count, uint16_t &seek)
 {
     uint16_t _count = 1;

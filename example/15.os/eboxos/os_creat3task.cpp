@@ -1,6 +1,6 @@
 
 #include "ebox.h"
-#include "os.h"
+#include "../os/ebox_os/os.h"
 
 
 #define TASK_1_STK_SIZE 128
@@ -20,7 +20,6 @@ void task_2();
 void task_3();
 
 
-float cpu;
 INT16U mem;
 u8 task2count = 0;
 
@@ -29,7 +28,7 @@ void setup()
     ebox_init();
     os_init();
 
-    uart1.begin(9600);
+    uart1.begin(115200);
     uart1.printf("\r\nuart1 9600 ok!");
 
     uart1.printf("\r\nos≥ı ºªØ!");
@@ -60,7 +59,7 @@ void task_2()
     {
         PB9 = !PB9;
         uart1.printf("Task 2 Running!!!\r\n", task2count);
-        os_time_delay(250);
+        os_time_delay(750);
     }
 
 }
@@ -70,7 +69,7 @@ void task_3()
     {
         PB10 = !PB10;
         uart1.printf("Task 3 Running!!!\r\n");
-        os_time_delay(100);
+        os_time_delay(1000);
     }
 
 }

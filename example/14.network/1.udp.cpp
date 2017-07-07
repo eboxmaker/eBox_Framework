@@ -22,18 +22,17 @@ u8 gw[4] = {192, 168, 1, 1}; /*定义gateway变量*/
 u8 dns[4] = {192, 168, 1, 1}; /*定dns变量*/
 
 u8 ip[6];
-u8 buf[100];
+u8 buf[100]={'1'};
 
 W5500 w5500(&PC13, &PC14, &PC15, &spi2);
 
 UDP udp1;
-UDP udp2;
 
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    uart1.printf("\r\nuart1 9600 ok!");
+    uart1.printf("\r\nuart1 115200 ok!");
 
     w5500.begin(2, mac, lip, sub, gw, dns);
 
@@ -49,19 +48,20 @@ void setup()
     uart1.printf("GW : %d.%d.%d.%d\r\n", ip[0], ip[1], ip[2], ip[3]);
     uart1.printf("Network is ready.\r\n");
 
-    if(udp1.begin(0, 30000) == 0)
+    if(udp1.begin(0, 3000) == 0)
         uart1.printf("\r\nudp1 server creat ok! listen on 30000");
-    if(udp2.begin(1, 30001) == 0)
-        uart1.printf("\r\nudp2 server creat ok! listen on 30001");
+
 
 }
 u16 len;
+uint8_t remot_ip[4]={192,168,1,105};
 int main(void)
 {
     setup();
 
     while(1)
     {
+        udp1.sendto(remot_ip,777,buf,1);
 
         if(udp1.recv(buf))
         {
@@ -72,16 +72,7 @@ int main(void)
             uart1.printf((const char *)buf);
             udp1.sendto(udp1.remoteIP, udp1.remotePort, buf, 100);
         }
-        if(udp2.recv(buf))
-        {
-            uart1.printf("\r\n============================");
-            uart1.printf("\r\n本地端口:%d", udp2.localPort );
-            uart1.printf("\r\n消息来源:%d.%d.%d.%d:%d", udp2.remoteIP[0], udp2.remoteIP[1], udp2.remoteIP[2], udp2.remoteIP[3], udp2.remotePort);
-            uart1.printf("\r\n数据内容:");
-            uart1.printf((const char *)buf);
-            udp2.sendto(udp2.remoteIP, udp2.remotePort, buf, 100);
-        }
-
+        delay_ms(1000);
     }
 
 

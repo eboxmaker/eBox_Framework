@@ -758,7 +758,7 @@ int DHCP::param_init(void)
     memset(DHCP_REAL_SIP,0,sizeof(net.subnet));
 
 #if USE_HEAP
-    pRIPMSG     = (RIP_MSG*)mem_malloc(1024,1);         // Pointer for the DHCP message
+    pRIPMSG     = (RIP_MSG*)ebox_malloc(1024);         // Pointer for the DHCP message
     if(pRIPMSG == NULL)
         return EPARA;
 #else
@@ -816,9 +816,9 @@ int DHCP::begin(uint8_t mac[])
             break;
     }
     #if USE_HEAP
-   DHCP_DBG("--mem:%u\r\n",mem_get_free_size());
-        mem_free(pRIPMSG,1);
-   DHCP_DBG("--mem:%d\r\n",mem_get_free_size());
+   DHCP_DBG("--mem:%u\r\n",ebox_get_free());
+        ebox_free(pRIPMSG);
+   DHCP_DBG("--mem:%d\r\n",ebox_get_free());
     #endif
         
     return ret;
