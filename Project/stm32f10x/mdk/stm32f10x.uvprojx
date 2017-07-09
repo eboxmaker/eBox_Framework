@@ -110,12 +110,12 @@
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
           <SimDllArguments> -REMAP</SimDllArguments>
-          <SimDlgDll>DARMSTM.DLL</SimDlgDll>
-          <SimDlgDllArguments>-pSTM32F103C8</SimDlgDllArguments>
+          <SimDlgDll>DCM.DLL</SimDlgDll>
+          <SimDlgDllArguments>-pCM3</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
-          <TargetDllArguments> -REMAP</TargetDllArguments>
-          <TargetDlgDll>DARMSTM.DLL</TargetDlgDll>
-          <TargetDlgDllArguments>-pSTM32F103C8</TargetDlgDllArguments>
+          <TargetDllArguments></TargetDllArguments>
+          <TargetDlgDll>TCM.DLL</TargetDlgDll>
+          <TargetDlgDllArguments>-pCM3</TargetDlgDllArguments>
         </DllOption>
         <DebugOption>
           <OPTHX>
@@ -137,7 +137,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3>"" ()</Flash3>
+          <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -960,12 +960,17 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>dspLib</GroupName>
+          <GroupName>DSP</GroupName>
           <Files>
             <File>
               <FileName>arm_common_tables.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\common\DSPLib\Source\CommonTables\arm_common_tables.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_sin_f32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\DSPLib\Source\FastMathFunctions\arm_sin_f32.c</FilePath>
             </File>
             <File>
               <FileName>arm_cfft_radix4_f32.c</FileName>
@@ -996,6 +1001,71 @@
               <FileName>arm_cfft_radix4_q31.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\common\DSPLib\Source\TransformFunctions\arm_cfft_radix4_q31.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_sin_q15.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\DSPLib\Source\FastMathFunctions\arm_sin_q15.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_sin_q31.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\DSPLib\Source\FastMathFunctions\arm_sin_q31.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_sqrt_q15.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\DSPLib\Source\FastMathFunctions\arm_sqrt_q15.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_sqrt_q31.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\DSPLib\Source\FastMathFunctions\arm_sqrt_q31.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_q15_to_float.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\DSPLib\Source\SupportFunctions\arm_q15_to_float.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_float_to_q15.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\DSPLib\Source\SupportFunctions\arm_float_to_q15.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_float_to_q7.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\DSPLib\Source\SupportFunctions\arm_float_to_q7.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_q7_to_q15.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\DSPLib\Source\SupportFunctions\arm_q7_to_q15.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_q31_to_float.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\DSPLib\Source\SupportFunctions\arm_q31_to_float.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_float_to_q31.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\DSPLib\Source\SupportFunctions\arm_float_to_q31.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_cmplx_mag_squared_f32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\DSPLib\Source\ComplexMathFunctions\arm_cmplx_mag_squared_f32.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_cmplx_mag_f32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\DSPLib\Source\ComplexMathFunctions\arm_cmplx_mag_f32.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_max_f32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\DSPLib\Source\StatisticsFunctions\arm_max_f32.c</FilePath>
             </File>
           </Files>
         </Group>
