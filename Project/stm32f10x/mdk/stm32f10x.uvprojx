@@ -702,6 +702,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\apps\color_convert.cpp</FilePath>
             </File>
+            <File>
+              <FileName>EventGpio.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\apps\EventGpio.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

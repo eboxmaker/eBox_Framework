@@ -65,11 +65,9 @@ void task_2()
         {
             uart1.printf("------Task 2 suspend!--------\r\n");
             os_task_suspend(TASK2_PRIO);
-
         }
         os_time_delay(1000);
     }
-
 }
 void task_3()
 {
@@ -78,20 +76,14 @@ void task_3()
         uart1.printf("Task 3 Running!!!\r\n");
         os_time_delay(1000);
     }
-
 }
 
 int main(void)
 {
-
     setup();
-
     while(1)
     {
-
     }
-
-
 }
 
 

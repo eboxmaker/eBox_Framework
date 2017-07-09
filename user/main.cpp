@@ -1,99 +1,79 @@
+/**
+  ******************************************************************************
+  * @file   : *.cpp
+  * @author : shentq
+  * @version: V1.2
+  * @date   : 2016/08/14
 
+  * @brief   ebox application example .
+  *
+  * Copyright 2016 shentq. All Rights Reserved.         
+  ******************************************************************************
+ */
+ 
+ 
 #include "ebox.h"
-#include "../os/ebox_os/os.h"
+#include "EventGpio.h"
 
+void neg()
+{
+    uart1.println("neg");
+}
+void pos()
+{
+    uart1.println("pos");
+}
+void high()
+{
+    uart1.println("high");
 
-#define TASK_1_STK_SIZE 128
-#define TASK_2_STK_SIZE 128
-#define TASK_3_STK_SIZE 128
-
-static STACK_TypeDef TASK_1_STK[TASK_1_STK_SIZE];
-static STACK_TypeDef TASK_2_STK[TASK_2_STK_SIZE];
-static STACK_TypeDef TASK_3_STK[TASK_3_STK_SIZE];
-
-#define TASK1_PRIO 0
-#define TASK2_PRIO 1
-#define TASK3_PRIO 2
-
-void task_1();
-void task_2();
-void task_3();
-
-
-u8 task1count = 0;
-u8 task2count = 0;
-
+}
+void click()
+{
+    uart1.println("click");
+}
+void release()
+{
+    uart1.println("release");
+}
+void long_press()
+{
+    uart1.println("long");
+}
+void click1()
+{
+    uart1.println("click1");
+}
+void release1()
+{
+    uart1.println("release1");
+}
+void long_press1()
+{
+    uart1.println("long1");
+}
+EventGpio fungpio8(&PA8,0,0,0,0,click,release,0);
+EventGpio fungpio0(&PB1,0,0,0,neg,click1,release1,long_press1);
+FunHal axb;
 void setup()
 {
     ebox_init();
-    os_init();
-
     uart1.begin(115200);
-    uart1.printf("\r\nuart1 9600 ok!");
-
-    uart1.printf("\r\nos初始化!");
-
-    os_task_create(task_1, &TASK_1_STK[TASK_1_STK_SIZE - 1], TASK1_PRIO);
-    os_task_create(task_2, &TASK_2_STK[TASK_2_STK_SIZE - 1], TASK2_PRIO);
-    os_task_create(task_3, &TASK_3_STK[TASK_3_STK_SIZE - 1], TASK3_PRIO);
-    uart1.printf("\r\nos创建任务成功");
-
-    os_start();
-
+    fungpio8.begin(1);
+    fungpio0.begin(1);
+    axb.add(&fungpio0);
+    axb.add(&fungpio8);
 }
-void task_1()
-{
-    while(1)
-    {
-        task1count++;
-        uart1.printf("Task 1 Running!!!\r\n");
-        if(task1count % 10 == 0)
-        {
-            uart1.printf("------Task 2 Resumed!--------\r\n");
-            os_task_resume(TASK2_PRIO);
-        }
-        os_time_delay(1000);
-    }
-}
-void task_2()
-{
-    while(1)
-    {
-        task2count++;
-        uart1.printf("Task 2 Running!!!,runtimes = %d\r\n", task2count);
-        if(task2count % 5 == 0)
-        {
-            uart1.printf("------Task 2 suspend!--------\r\n");
-            os_task_suspend(TASK2_PRIO);
-
-        }
-        os_time_delay(1000);
-    }
-
-}
-void task_3()
-{
-    while(1)
-    {
-        uart1.printf("Task 3 Running!!!\r\n");
-        os_time_delay(1000);
-    }
-
-}
-
 int main(void)
 {
-
     setup();
 
     while(1)
     {
-
+        axb.process();
+        delay_ms(1);
     }
-
-
 }
-
 
 
 

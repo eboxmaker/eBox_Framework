@@ -2,7 +2,6 @@
 #include "ebox.h"
 #include "../os/ebox_os/os.h"
 
-
 #define TASK_1_STK_SIZE 128
 #define TASK_2_STK_SIZE 128
 #define TASK_3_STK_SIZE 128
@@ -18,7 +17,6 @@ static STACK_TypeDef TASK_3_STK[TASK_3_STK_SIZE];
 void task_1();
 void task_2();
 void task_3();
-
 
 float cpu_usage;
 INT16U mem;
@@ -57,7 +55,6 @@ void task_2()
         task2count++;
         os_time_delay(1000);
     }
-
 }
 void task_3()
 {
@@ -70,19 +67,13 @@ void task_3()
         uart1.printf("mem = %02d%%\r\n", mem);
         os_time_delay(1000);
     }
-
 }
 
 int main(void)
 {
     setup();
-
     while(1)
-    {
-
-    }
-
-
+    {    }
 }
 
 
