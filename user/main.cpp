@@ -26,7 +26,6 @@ void pos()
 void high()
 {
     uart1.println("high");
-
 }
 void click()
 {
@@ -52,17 +51,17 @@ void long_press1()
 {
     uart1.println("long1");
 }
-EventGpio fungpio8(&PA8,0,0,0,0,click,release,0);
-EventGpio fungpio0(&PB1,0,0,0,neg,click1,release1,long_press1);
-FunHal axb;
+EventGpio event_io_1(&PA8,0,0,0,0,click,release,0);
+EventGpio event_io_2(&PB1,0,0,0,neg,click1,release1,long_press1);
+EventManager io_manager;
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    fungpio8.begin(1);
-    fungpio0.begin(1);
-    axb.add(&fungpio0);
-    axb.add(&fungpio8);
+    event_io_1.begin(1);
+    event_io_2.begin(1);
+    io_manager.add(&event_io_1);
+    io_manager.add(&event_io_2);
 }
 int main(void)
 {
@@ -70,7 +69,7 @@ int main(void)
 
     while(1)
     {
-        axb.process();
+        io_manager.process();
         delay_ms(1);
     }
 }

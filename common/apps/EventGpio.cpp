@@ -109,7 +109,7 @@ void EventGpio::process()
     }
 }
 
-void FunHal::process()
+void EventManager::process()
 {
     int i=0;
     while(i < list.size())

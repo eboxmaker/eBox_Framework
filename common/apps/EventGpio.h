@@ -41,7 +41,7 @@ class EventGpio
         u8 first_state;
 } ;
 
-class FunHal
+class EventManager
 {
     public:
         void add(EventGpio *fun)
@@ -49,11 +49,6 @@ class FunHal
             list.insert_tail(fun);
         }
         void process();
-        void ReadGpio(EventGpio *fun)
-        {
-        
-        }
-    
     private:
        List list;
        EventGpio *te;
