@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
-  * @file    *.h
+  * @file    incapture.h
   * @author  shentq
-  * @version V1.2
-  * @date    2016/08/14
+  * @version V2.0
+  * @date    2017/07/23
   * @brief   
   ******************************************************************************
   * @attention
@@ -41,12 +41,9 @@
     拓展至2^32。大大提高测量范围，可以实现最高频率（1分频）测量周期低于120s的信号。
     如果使用2分频，可测量周期低于240s的信号。以此类推。
 5.关于分频系数和脉冲宽度测量的计算关系，要遵循一个原则：在不溢出的情况下尽量使用低分频系数（高TIM时钟）去检测对象
-6.关于get_capture()和测量时间结果转换的关系；
-    时间(us)=get_capture()/(72/prescaler);
-    时间(ms)=get_capture()/(72000/prescaler);
-    时间(s)=get_capture()/(72000000/prescaler);
-    如果直接使用get_zone_time_us()方法则可直接得到一个计算好的值。可以省去手工计算的过程。
-    此处提供了两种获取边沿宽度的方法，一种是按定时器脉冲数，一种是按时间单位注意其区别。
+6.关于最窄脉宽的测量
+   由于STM32本身的速度限制，无法测量非常窄的脉宽。如果使用默认分频系数（1）则最窄脉宽为4us。
+   最窄脉宽受PWM的占空比和频率两个条件限制。
 
 
 7.如果使用某个定时器通道用于输入捕获，则该定时器所有通道都必须是输入捕获模式，不能再设置为其他工作模式
@@ -62,16 +59,15 @@ class InCapture
 {
 public:
     InCapture(Gpio *capture_pin);
-    void        begin();//使用默认参数，分频系数为1；最大量程为120s
-    void        begin(uint16_t prescaler = 1);
+    void        begin(uint16_t prescaler = 1);//使用默认参数，分频系数为1；最大量程为120s
     void        set_count(uint16_t count);
     void        set_polarity_falling();
     void        set_polarity_rising();
 
 
     //需要用户在中断中处理更精细的任务，处理状态机等事务，比如红外解码，超声波测距
-    uint32_t    get_capture();//
-    float       get_zone_time_us();//
+    uint32_t    get_capture();//不建议使用、后期使用下面新的函数代替
+    float       get_zone_time_us();//不建议使用、后期使用下面新的函数代替
 
     //波形的基本的测量工具
     void        complex_event();//适用于要求测量占空比的情况，但是最短脉宽不能低于4us****
@@ -85,8 +81,6 @@ public:
     bool        available();///<波形的测量完成
     
     //绑定中断
-
-		
 	void attach(void (*fptr)(void));
     template<typename T>
     void attach(T* tptr, void (T::*mptr)(void)) {
