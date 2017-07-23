@@ -31,10 +31,9 @@
 #include <limits.h>
 #include <ctype.h>
 #include "cJSON.h"
-
+#include "../../core/mem/ebox_mem.h"
 
 /*ebox 动态内存接口*/
-#include "ebox_mem.h"
 
 static const char *ep;
 
