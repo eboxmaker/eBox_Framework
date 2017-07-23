@@ -230,7 +230,7 @@ void Uart::printf(const char *fmt, ...)
         uart_buf = (char *)ebox_malloc(size2);
         if(uart_buf == NULL)
             return ;
-        size1 = _vsnprintf(uart_buf, size2,fmt, va_params);
+        size1 = vsnprintf(uart_buf, size2,fmt, va_params);
         if(size1 == -1  || size1 > size2)
         {
             size2+=128;
