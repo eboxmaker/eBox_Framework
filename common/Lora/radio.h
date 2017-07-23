@@ -23,7 +23,7 @@
 #ifdef __cplusplus
  extern "C" {
 #endif 
-#include "ebox_core.h"
+#include "mcu_core.h"
 /*!
  * SX1272 and SX1276 General parameters definition
  */

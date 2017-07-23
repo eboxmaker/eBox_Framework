@@ -1069,6 +1069,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>Jason</GroupName>
+          <Files>
+            <File>
+              <FileName>cJSON.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\common\cJSON\cJSON.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>

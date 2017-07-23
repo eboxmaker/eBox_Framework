@@ -239,7 +239,7 @@ void Uart::printf(const char *fmt, ...)
         }
     }while(size1 == -1);
 
-    vsprintf(uart_buf, fmt, va_params); 
+    //vsprintf(uart_buf, fmt, va_params); 
     va_end(va_params);
     _write(uart_buf, size1);
 
