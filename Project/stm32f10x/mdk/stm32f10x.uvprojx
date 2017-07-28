@@ -892,6 +892,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\TingATCmd.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ADS7816.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\ADS7816.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

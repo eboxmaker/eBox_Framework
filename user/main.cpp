@@ -1,80 +1,74 @@
 /**
   ******************************************************************************
-  * @file    *.cpp
-  * @author  shentq
-  * @version V1.2
-  * @date    2016/08/14
-  * @brief   
+  * @file   : *.cpp
+  * @author : shentq
+  * @version: V1.2
+  * @date   : 2016/08/14
+
+  * @brief   ebox application example .
+  *
+  * Copyright 2016 shentq. All Rights Reserved.         
   ******************************************************************************
-  * @attention
-  *
-  * Copyright 2015 shentq. All Rights Reserved.
-  *
-  * Copyright Notice
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq.
-  *
-  * @Disclaimer
-  * This specification is preliminary and is subject to change at any time without
-  * notice. shentq assumes no responsibility for any errors contained herein.
-  ******************************************************************************
-  */
+ */
 
 
-/* Includes ------------------------------------------------------------------*/
-/*
-输入捕获实验-测量周期和频率
-本例程为使用输入捕获模式测量一个PWM信号的周期和频率
-请将PA0和PB6使用跳线链接起来
-*/
 #include "ebox.h"
+#include "ads7816.h"
 
-InCapture ic0(&PA0);//创建一个输入捕获的对象
-Pwm pwm1(&PB6);//创建一个PWM输出对象
+Ads7816 adc(&PB3,&PB7,&PB4);//PB4是jtag引脚。不要用20pin的jlink去调试程序
+uint16_t val;
+float voltage;
 
-uint32_t frq =0;
-void measure_0()//输入捕获中断事件
-{
-  ic0.complex_event();
+void _485_tx_mode();
+void _485_rx_mode();
 
-}
-uint16_t p;
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
+    adc.begin();   
 
-    ic0.begin();//初始化输入捕获参数，分频系数使用默认值：1
-    ic0.attach(measure_0);//绑定捕获中断事件函数
-    uart1.printf("get_detect_min_pulse_us = %d\r\n",ic0.get_detect_min_pulse_us());
-    uart1.printf("123\r\n");
-    frq = 1000;
-    pwm1.begin(frq, 30);
-
+    //485
+    PA11.mode(OUTPUT_PP);
 }
-
 int main(void)
 {
     setup();
     while(1)
     {
-
-        if(ic0.available())
-        {              
-            uart1.printf("peroid    = %0.2fus\r\n",ic0.get_wave_peroid());
-            uart1.printf("frq(%d)= %0.2fhz\r\n",frq,ic0.get_wave_frq());
-            uart1.printf("high_duty = %0.2f%%\r\n", ic0.get_wave_high_duty());
-            uart1.printf("low duty  = %0.2f%%\r\n\r\n", ic0.get_wave_low_duty());
-        }
+        //串口直接输出，用于前期测试
+        val = adc.read();
+        uart1.printf("val = %x\r\n",val); //如果voltage不对，用示波器看这个值对不对
+        voltage = adc.read_voltage();//电压单位mv
+        uart1.printf("val = %f\r\n",voltage);
+        
         delay_ms(1000);
+        
+        
+        //485输出
+//        val = adc.read();
+//        _485_tx_mode();
+//        uart1.printf("val = %x\r\n",val); //如果voltage不对，用示波器看这个值对不对
+//        _485_rx_mode();
+//        voltage = adc.read_voltage();//电压单位mv
+//        _485_tx_mode();
+//        uart1.printf("val = %f\r\n",voltage);
+//        _485_rx_mode();
 
+//        delay_ms(1000);        
+        
     }
+
 }
 
-
-
-
-
-
+//485输出
+void _485_tx_mode()//如果不输出，将引脚设置翻转
+{
+    PA11.set();
+}
+void _485_rx_mode()
+{
+    PA11.reset();
+}
 
 
