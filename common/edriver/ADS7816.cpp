@@ -15,10 +15,7 @@ uint16_t Ads7816::read(void)
     cs->reset();
     delay_us(1);
 
-    clk->reset();
-    delay_us(1);//此处可测试删除来提升速度
-    clk->set(); 
-    delay_us(1);//此处可测试删除来提升速度
+
     clk->reset();
     delay_us(1);//此处可测试删除来提升速度
     clk->set(); 
@@ -28,11 +25,11 @@ uint16_t Ads7816::read(void)
     clk->set();
     delay_us(1);//此处可测试删除来提升速度
     
-    for(int i = 0; i < 11; i++)//下降沿读取数据
+    for(int i = 0; i < 12; i++)//下降沿读取数据
     {
         clk->reset();
         delay_us(1);//此处可测试删除来提升速度
-        val |= din->read() << i;//MSB格式
+        val |= din->read() << (11 - i);
         clk->set();
         delay_us(1);//此处可测试删除来提升速度
     }

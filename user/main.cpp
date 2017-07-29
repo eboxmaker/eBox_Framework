@@ -15,6 +15,8 @@
 #include "ebox.h"
 #include "ads7816.h"
 
+Timer timer2(TIM2);
+
 Ads7816 adc(&PB3,&PB7,&PB4);//PB4是jtag引脚。不要用20pin的jlink去调试程序
 uint16_t val;
 float voltage;
@@ -22,14 +24,27 @@ float voltage;
 void _485_tx_mode();
 void _485_rx_mode();
 
+void t2it()
+{
+        adc.read();
+        PA0.toggle();
+}
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    adc.begin();   
+    adc.begin(); 
+    
+    timer2.begin(1);
+    timer2.attach(t2it);
+    timer2.interrupt(ENABLE);
+    timer2.start();
 
     //485
     PA11.mode(OUTPUT_PP);
+    PA4.mode(OUTPUT_PP);
+    
+    PA0.mode(OUTPUT_PP);
 }
 int main(void)
 {
@@ -37,12 +52,8 @@ int main(void)
     while(1)
     {
         //串口直接输出，用于前期测试
-        val = adc.read();
-        uart1.printf("val = %x\r\n",val); //如果voltage不对，用示波器看这个值对不对
-        voltage = adc.read_voltage();//电压单位mv
-        uart1.printf("val = %f\r\n",voltage);
+
         
-        delay_ms(1000);
         
         
         //485输出
