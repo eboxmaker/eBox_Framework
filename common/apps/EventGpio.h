@@ -27,6 +27,7 @@ class EventGpio
         void (*event_click)();
         void (*event_release)();
         void (*event_long_press)();
+        
 
     private:
         Gpio *io;
@@ -41,17 +42,5 @@ class EventGpio
         u8 first_state;
 } ;
 
-class EventManager
-{
-    public:
-        void add(EventGpio *fun)
-        {   
-            list.insert_tail(fun);
-        }
-        void process();
-    private:
-       List list;
-       EventGpio *te;
 
-};
 #endif

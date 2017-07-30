@@ -23,11 +23,24 @@ float voltage;
 
 void _485_tx_mode();
 void _485_rx_mode();
+void adc_read_ch(uint8_t ch);
+
+uint8_t adc_ch;
+float   val_ch1;
+float   val_ch2;
+float   val_ch3;
+float   val_ch4;
+uint8_t ch1_updata_flag;
+uint8_t ch2_updata_flag;
+uint8_t ch3_updata_flag;
+uint8_t ch4_updata_flag;
 
 void t2it()
 {
-        adc.read();
-        PA0.toggle();
+    adc_ch++;
+    if(adc_ch >= 4)
+        adc_ch = 0;
+    adc_read_ch(adc_ch);
 }
 void setup()
 {
@@ -46,28 +59,20 @@ void setup()
     
     PA0.mode(OUTPUT_PP);
 }
+uint64_t last_updata_time;
 int main(void)
 {
     setup();
+    last_updata_time = millis();
     while(1)
     {
-        //串口直接输出，用于前期测试
-
-        
-        
-        
-        //485输出
-//        val = adc.read();
-//        _485_tx_mode();
-//        uart1.printf("val = %x\r\n",val); //如果voltage不对，用示波器看这个值对不对
-//        _485_rx_mode();
-//        voltage = adc.read_voltage();//电压单位mv
-//        _485_tx_mode();
-//        uart1.printf("val = %f\r\n",voltage);
-//        _485_rx_mode();
-
-//        delay_ms(1000);        
-        
+        if(millis() - last_updata_time >= 500)
+        {
+            last_updata_time = millis();            
+            _485_tx_mode();
+            uart1.printf("%4.2f,%4.2f,%4.2f,%4.2f",val_ch1,val_ch2,val_ch3,val_ch4);
+            _485_rx_mode();
+        }
     }
 
 }
@@ -82,4 +87,21 @@ void _485_rx_mode()
     PA11.reset();
 }
 
+void adc_read_ch(uint8_t ch)
+{
+    switch(ch)
+    {
+        case 0:
+            val_ch1 = adc.read_voltage();
+            ch2_updata_flag = 1;
+            break;
+        case 1:
+            val_ch2 = adc.read_voltage();
+            break;
+        default:
+            break;
+    }
+    
+    
+}
 
