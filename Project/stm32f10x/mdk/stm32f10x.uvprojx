@@ -707,6 +707,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\apps\EventGpio.cpp</FilePath>
             </File>
+            <File>
+              <FileName>EventIo.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\apps\EventIo.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -109,13 +109,3 @@ void EventGpio::process()
     }
 }
 
-void EventManager::process()
-{
-    int i=0;
-    while(i < list.size())
-    {
-        te = (EventGpio *)(list.data(i));
-        te->process();
-        i++;
-    }
-}
