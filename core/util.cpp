@@ -149,7 +149,7 @@ int find_str(uint8_t *s_str, uint8_t *p_str, uint16_t count, uint16_t &seek)
     uint8_t *temp_ptr = NULL;
     uint8_t *temp_char = NULL;
     if(0 == s_str || 0 == p_str)
-        return -2;
+        return 0;
     for(temp_str = s_str; *temp_str != '\0'; temp_str++)	 //依次查找字符串
     {
         temp_char = temp_str; //指向当前字符串
