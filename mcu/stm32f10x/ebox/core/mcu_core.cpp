@@ -74,14 +74,16 @@ extern "C" {
     uint64_t micros(void)
     {
         uint64_t micro;
-        if((SysTick->CTRL & (1 << 16)) && (__get_PRIMASK())) //如果此时屏蔽了所有中断且发生了systick溢出，需要对millis_secend进行补偿
-        {
+        uint32_t temp = __get_PRIMASK();//保存之前中断设置
+        no_interrupts();
+        if(SysTick->CTRL & (1 << 16))//发生了溢出
+        {    
+            if( __get_IPSR() ||  (temp) ) //如果此时屏蔽了所有中断或者被别的中断打断无法执行，systick中断函数，则需要对millis_secend进行补偿
             millis_seconds++;
         }
-        no_interrupts();
-//        micro = (millis_seconds * 1000 + (1000 - (SysTick->VAL)/(cpu.clock.core/1000000)));
         micro = (millis_seconds * 1000 + (1000 - (SysTick->VAL)/(micro_para)));
-        interrupts();
+        __set_PRIMASK(temp);//恢复之前中断设置
+        
         return  micro;
     }
     uint64_t millis( void )

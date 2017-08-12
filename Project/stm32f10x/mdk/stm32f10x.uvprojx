@@ -578,6 +578,11 @@
               <FilePath>..\..\..\core\util.cpp</FilePath>
             </File>
             <File>
+              <FileName>big_little.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\core\big_little.cpp</FilePath>
+            </File>
+            <File>
               <FileName>ebox_core_.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\core\ebox_core_.h</FilePath>
@@ -971,6 +976,16 @@
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\main.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>frame.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\frame.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gateWay.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\gateWay.cpp</FilePath>
             </File>
           </Files>
         </Group>
