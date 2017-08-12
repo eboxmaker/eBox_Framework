@@ -21,7 +21,12 @@ void t2it()
         delay_us(10);
         PB8.set();
         delay_us(10);
-  //  uart1.printf("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111123");
+    
+        uart1.printf("111");
+        delay_ms(100);
+        uart1.printf("222");
+        delay_ms(100);
+
 }
 
 void setup()
@@ -32,7 +37,7 @@ void setup()
     
     timer1.begin(1);
     timer1.attach(t2it);
-    timer1.interrupt(ENABLE);
+    timer1.interrupt(ENABLE,0,0);
     timer1.start();
     
 }
@@ -43,7 +48,9 @@ int main(void)
     while(1)
     {
 
-   ;
+        delay_ms(1000);
+
+   
     }
 
 }
