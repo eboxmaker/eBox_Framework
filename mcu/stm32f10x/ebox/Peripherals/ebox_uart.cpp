@@ -156,8 +156,8 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     if((_USARTx == USART1 || _USARTx == USART2 || _USARTx == USART3) && (use_dma == 1) )
         USART_DMACmd(_USARTx, USART_DMAReq_Tx, ENABLE);
     USART_Cmd(_USARTx, ENABLE);
-    interrupt(RxIrq,ENABLE);
-    interrupt(TcIrq,ENABLE);
+    interrupt(RxIrq,DISABLE);
+    interrupt(TcIrq,DISABLE);
     USART_ClearITPendingBit(_USARTx, USART_IT_TC);
     USART_ClearFlag(USART2,USART_FLAG_TC); 
 }
@@ -495,7 +495,6 @@ extern "C" {
         if(USART_GetITStatus(USART1, USART_IT_TC) == SET)
         {
             busy[0] = 0;   
-
             irq_handler(serial_irq_ids[NUM_UART1],TcIrq);
             USART_ClearITPendingBit(USART1, USART_IT_TC);
         }        
@@ -504,13 +503,13 @@ extern "C" {
     {
         if(USART_GetITStatus(USART2, USART_IT_RXNE) == SET)
         {
-						irq_handler(serial_irq_ids[NUM_UART2],RxIrq);
+            irq_handler(serial_irq_ids[NUM_UART2],RxIrq);
             USART_ClearITPendingBit(USART2, USART_IT_RXNE);
         }
         if(USART_GetITStatus(USART2, USART_IT_TC) == SET)
         {
             busy[1] = 0;
-						irq_handler(serial_irq_ids[NUM_UART2],TcIrq);
+            irq_handler(serial_irq_ids[NUM_UART2],TcIrq);
             USART_ClearITPendingBit(USART2, USART_IT_TC);
         }
     }
@@ -518,13 +517,13 @@ extern "C" {
     {
         if(USART_GetITStatus(USART3, USART_IT_RXNE) == SET)
         {
-						irq_handler(serial_irq_ids[NUM_UART3],RxIrq);
+            irq_handler(serial_irq_ids[NUM_UART3],RxIrq);
             USART_ClearITPendingBit(USART3, USART_IT_RXNE);
         }
         if(USART_GetITStatus(USART3, USART_IT_TC) == SET)
         {
             busy[2] = 0;
-						irq_handler(serial_irq_ids[NUM_UART3],TcIrq);
+            irq_handler(serial_irq_ids[NUM_UART3],TcIrq);
             USART_ClearITPendingBit(USART3, USART_IT_TC);
         }
     }
@@ -532,13 +531,13 @@ extern "C" {
     {
         if(USART_GetITStatus(UART4, USART_IT_RXNE) == SET)
         {
-						irq_handler(serial_irq_ids[NUM_UART4],RxIrq);
+            irq_handler(serial_irq_ids[NUM_UART4],RxIrq);
             USART_ClearITPendingBit(UART4, USART_IT_RXNE);
         }
         if(USART_GetITStatus(UART4, USART_IT_TC) == SET)
         {
             busy[3] = 0;
-						irq_handler(serial_irq_ids[NUM_UART4],TcIrq);
+            irq_handler(serial_irq_ids[NUM_UART4],TcIrq);
             USART_ClearITPendingBit(UART4, USART_IT_TC);
         }
     }
@@ -546,13 +545,13 @@ extern "C" {
     {
         if(USART_GetITStatus(UART5, USART_IT_RXNE) == SET)
         {
-						irq_handler(serial_irq_ids[NUM_UART5],RxIrq);
+            irq_handler(serial_irq_ids[NUM_UART5],RxIrq);
             USART_ClearITPendingBit(UART5, USART_IT_RXNE);
         }
         if(USART_GetITStatus(UART5, USART_IT_TC) == SET)
         {
             busy[4] = 0;
-						irq_handler(serial_irq_ids[NUM_UART5],TcIrq);
+            irq_handler(serial_irq_ids[NUM_UART5],TcIrq);
             USART_ClearITPendingBit(UART5, USART_IT_TC);
         }
     }

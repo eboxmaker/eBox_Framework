@@ -977,16 +977,6 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\user\main.cpp</FilePath>
             </File>
-            <File>
-              <FileName>frame.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\frame.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gateWay.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\gateWay.cpp</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
