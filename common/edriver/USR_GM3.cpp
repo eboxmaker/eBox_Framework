@@ -33,6 +33,9 @@ void UsrGm3::begin(uint32_t baud_rate)
     uart->begin(baud_rate);
     uart->attach(this,&UsrGm3::rx_event,RxIrq);
     rst->mode(OUTPUT_PP);
+    link->mode(INPUT);
+    linka->mode(INPUT);
+    linkb->mode(INPUT);
     hard_reset();
     memset(cmd_buf,0,256);
     cmd_count = 0;
@@ -52,16 +55,59 @@ void UsrGm3::soft_reset()
 {
 
 }
+LinkState_t UsrGm3::link_state()
+{
+    return (LinkState_t)link->read();
+}
+LinkState_t UsrGm3::linka_state()
+{
+    return (LinkState_t)linka->read();
+
+}
+LinkState_t UsrGm3::linkb_state()
+{
+    return (LinkState_t)linkb->read();
+
+}
+void UsrGm3::send(char *buf,uint16_t len)
+{
+    uart->write(buf,len);
+
+
+}
 
 void UsrGm3::at_cmd_go()
 {
     gm3_mode = CMD;
     at_3plus(); 
 }
+
+uint16_t UsrGm3::at_cmd_send(char *cmd,char *result)
+{
+    uint16_t result_len;
+    gm3_mode = CMD;
+    
+    uart->printf("%s",cmd);
+    result_len = wait_end(2000);
+    if(result_len != 0)
+    {
+        memcpy(result,cmd_buf,cmd_count+1);//+1,保证字符串结束符被正确拷贝
+    }
+    clear_cmd_buf();
+        gm3_mode = NET;
+
+    return cmd_count;
+
+}
+uint16_t UsrGm3::at_cmd_send(const char *cmd,char *result)
+{
+    return at_cmd_send((char *)cmd,result);
+}
 uint8_t UsrGm3::at_3plus()
 {
     uint8_t ret;
-    delay_ms(201);
+    gm3_mode = CMD;
+    delay_ms(301);
     uart->write("+++");
     if(wait("a",1000) == 1)
     {
@@ -78,110 +124,241 @@ uint8_t UsrGm3::at_3plus()
     }
     else
         ret = 0;
+    
     return ret;
 
 }
+//////////////////////////管理指令///////////////////////////////////////////
+void UsrGm3::h(){}
+void UsrGm3::z(){}
+    
+void UsrGm3::q_e()
+{
+    char temp[64];
+    uint16_t len;
+    len = at_cmd_send("AT+E?\r\n",temp);
+    GM3_DEBUG(temp);
+}
 
-void UsrGm3::set_wkmod(GM3Mode_t mode)
+void UsrGm3::entm()
+{
+    char result[64];
+    uint16_t len;
+    len = at_cmd_send((char*)"AT+ENTM\r\n",result);
+    gm3_mode = NET;
+    GM3_DEBUG("entm\r\n");
+    GM3_DEBUG(result);    
+
+}
+void UsrGm3::q_wkmod(){}
+void UsrGm3::q_calen(){}
+void UsrGm3::q_naten(){}
+void UsrGm3::q_uaten(){}
+void UsrGm3::q_cmdpw(){}
+void UsrGm3::q_cachen(){}
+void UsrGm3::q_stmsg(){}
+uint16_t UsrGm3::q_rstim()
+{
+    char result[64];
+    uint16_t ret;
+    at_cmd_send("AT+RSTIM?\r\n",result);
+    GM3_DEBUG(result);
+    get_str(result,":",1,"\r",2,result);
+    ret = ATOI(result,10);
+    return ret;
+}
+void UsrGm3::q_sleep()
+{
+    
+}
+uint16_t UsrGm3::q_sleeptim()
+{
+    char result[64];
+    uint16_t ret;
+    at_cmd_send("AT+SLEEPTIM?\r\n",result);
+    GM3_DEBUG(result);
+    get_str(result,":",1,"\r",2,result);
+    ret = ATOI(result,10);
+    return ret;
+} 
+    
+void UsrGm3::set_e(uint8_t enable)
 {
 
+}
+    
+void UsrGm3::set_wkmod(GM3Mode_t mode)
+{
+    char result[64];
     switch((uint8_t)mode)
     {
         case CMD:
-            uart->write("AT+WKMOD=\"CMD\"\r\n");
+            at_cmd_send("AT+WKMOD=\"CMD\"\r\n",result);
             break;
         case NET:
-            uart->write("AT+WKMOD=\"NET\"\r\n");
+            at_cmd_send("AT+WKMOD=\"NET\"\r\n",result);
             break;
         case SMS:
-            uart->write("AT+WKMOD=\"SMS\"\r\n");
+            at_cmd_send("AT+WKMOD=\"SMS\"\r\n",result);
             break;
         case HTTPD:
-            uart->write("AT+WKMOD=\"HTTPD\"\r\n");
+            at_cmd_send("AT+WKMOD=\"HTTPD\"\r\n",result);
             break;
     }
+    gm3_mode = mode;
     gm3_new_mode  = mode;
-    if(wait(1000) == 1)
-    {
-        GM3_DEBUG("WKMODE SET\r\n");
-        GM3_DEBUG(cmd_buf);
-    }
-    clear_cmd_buf();
+    GM3_DEBUG("WKMODE SET\r\n");
+    GM3_DEBUG(result);
 }
 
+void UsrGm3::set_calen(uint8_t enable){}
+void UsrGm3::set_naten(uint8_t enable){}
+void UsrGm3::set_uaten(uint8_t enable){}
+void UsrGm3::set_cmdpw(char *pwd){}
+void UsrGm3::set_cachen(uint8_t enable){}
+void UsrGm3::set_stmsg(char *msg){}
+void UsrGm3::set_rstim(uint16_t time)
+{
+    char result[64];
+    uint16_t ret;
+    sprintf(result,"AT+RSTIM=%d\r\n",time);
+    at_cmd_send(result,result);
+    GM3_DEBUG(result);
+}
+void UsrGm3::set_sleep(uint8_t enable)
+{
+    char result[64];
+    uint16_t ret;
+    if(enable == 1)
+        at_cmd_send("AT+SLEEP=\"on\"\r\n",result);
+    else
+        at_cmd_send("AT+SLEEP=\"off\"\r\n",result);
+    GM3_DEBUG(result);
+}
+void UsrGm3::set_sleeptim(uint16_t time)
+{
+    char result[64];
+    uint16_t ret;
+    sprintf(result,"AT+SLEEPTIM=%d\r\n",time);
+    at_cmd_send(result,result);
+    GM3_DEBUG(result);
+}     
+/////////////////////////////////////////////////////////////////////
+    
+    
+//////////////////配置参数指令///////////////////////////////////////        
+void UsrGm3::save()
+{
+    char result[64];
+    uint16_t len;
+    len = at_cmd_send((char*)"AT+S\r\n",result);
+    gm3_mode = gm3_new_mode;
+    GM3_DEBUG("save\r\n");
+    GM3_DEBUG(result);
+}
+void UsrGm3::reld(){}
+void UsrGm3::clear(){}
+void UsrGm3::cfgtf(){}
+/////////////////////////////////////////////////////////////////////
+
+//////////////////信息查询指令///////////////////////////////////////        
 void UsrGm3::q_version()
 {
-    uart->write("AT+VER?\r\n");
-    if(wait(1000) == 1)
-    {
-        GM3_DEBUG(cmd_buf);
-    }
-    clear_cmd_buf();
+    char temp[64];
+    uint16_t len;
+    len = at_cmd_send("AT+VER?\r\n",temp);
+    GM3_DEBUG(temp);
 }
-void UsrGm3::q_e()
+void UsrGm3::q_sn(){}
+void UsrGm3::q_iccid(){}
+void UsrGm3::q_imei(){}
+void UsrGm3::q_cnum(){}
+/////////////////////////////////////////////////////////////////////
+    
+//////////////////串口参数指令///////////////////////////////////////        
+void UsrGm3::q_uart(){}
+void UsrGm3::q_rfcen(){}
+void UsrGm3::set_uart(uint32_t baud,uint8_t parity,uint8_t data,uint8_t bits,uint8_t flow_ctr){}
+void UsrGm3::set_rfcen(uint8_t enable){}
+/////////////////////////////////////////////////////////////////////
+
+//////////////////网络指令///////////////////////////////////////        
+           
+void UsrGm3::q_apn(){}
+void UsrGm3::q_socka(){}
+void UsrGm3::q_sockb(){}
+void UsrGm3::q_sockaen(){}
+void UsrGm3::q_sockben(){}
+void UsrGm3::q_sockaals(){}
+void UsrGm3::q_sockbsl(){}
+void UsrGm3::q_sockalk()
 {
-    uart->write("AT+E?\r\n");
-    if(wait(1000) == 1)
-    {
-        GM3_DEBUG(cmd_buf);
-    }
-    clear_cmd_buf();
+    char result[64];
+    uint8_t ret = 0;
+    char temp[5];
+    at_cmd_send("AT+SOCKALK?\r\n",result);
+    GM3_DEBUG("SOCKALK  Q\r\n");
+    GM3_DEBUG(result); 
+    //get_str(result,"\"",1,"\"",2,temp);
+//    if(memcmp(temp,"on",2) == 0)
+//    {
+//        ret = 1;
+//    }
+//    else
+//        ret  = 0;
+//    return ret;  
 }
+void UsrGm3::q_sockblk(){}
+void UsrGm3::q_sockiden(){}
+void UsrGm3::set_apn(){}
+    
+void UsrGm3::set_socka(char* type,char *host,char *port)
+{
+    char result[64];
+    sprintf(result,"AT+SOCKA=\"%s\",\"%s\",%s\r\n",type,host,port);
+    at_cmd_send(result,result);
+    GM3_DEBUG("TCP\r\n");
+    GM3_DEBUG(result);
+}
+
+void UsrGm3::set_sockb(char* type, char *host,char *port){}
 
 void UsrGm3::set_sockaen(uint8_t enable)
 {
+    char result[64];
     if(enable == 1)
-        uart->write("AT+SOCKAEN=\"on\"\r\n");
+        at_cmd_send("AT+SOCKAEN=\"on\"\r\n",result);
     else
-        uart->write("AT+SOCKAEN=\"off\"\r\n");
-    if(wait(1000) == 1)
-    {
-        GM3_DEBUG("SA ENABLE\r\n");
-        GM3_DEBUG(cmd_buf);
-    }
-    clear_cmd_buf();
-}
-void UsrGm3::set_socka(char* type,char *host,char *port)
-{
-    uart->printf("AT+SOCKA=\"TCP\",\"%s\",%s\r\n",host,port);
-    if(wait(1000) == 1)
-    {
-        GM3_DEBUG("TCP\r\n");
-        GM3_DEBUG(cmd_buf);
-    }
-    clear_cmd_buf();
-}
-void UsrGm3::save()
-{
-    uart->write("AT+S\r\n");
-    if(wait(1000) == 1)
-    {
-        gm3_mode = gm3_new_mode;
-        GM3_DEBUG("SAVE\r\n");
-        GM3_DEBUG(cmd_buf);
+        at_cmd_send("AT+SOCKAEN=\"off\"\r\n",result);
+    GM3_DEBUG("SA ENABLE\r\n");
+    GM3_DEBUG(result);
 
-    }
-    clear_cmd_buf();
 }
+void UsrGm3::set_sockben(uint8_t enable){}
+void UsrGm3::set_sockaals(){}
+void UsrGm3::set_sockbsl(){}
+void UsrGm3::set_sockiden(){}
+/////////////////////////////////////////////////////////////////////
 
-//心跳包指令
+
+
+//////////////////////////心跳包指令///////////////////////////////////////////
 void UsrGm3::set_hearten(uint8_t enable)
 {
+    
+    char result[64];
+    uint16_t len;
     if(enable == 1)
-        uart->write("AT+HEARTEN=\"on\"\r\n");
+        len = at_cmd_send((char*)"AT+HEARTEN=\"on\"\r\n",result);
     else
-        uart->write("AT+HEARTEN=\"off\"\r\n");
-
-    if(wait(1000) == 1)
-    {
-        GM3_DEBUG("HEARTEN set\r\n");
-        GM3_DEBUG(cmd_buf);
-    }
-    clear_cmd_buf();
+        len = at_cmd_send((char*)"AT+HEARTEN=\"off\"\r\n",result);
+    GM3_DEBUG("hearten  set\r\n");
+    GM3_DEBUG(result);    
 }
 void UsrGm3::set_heartdt(char *data)
 {
-    char temp[41];
+    char result[64];
+    char temp[64];
     char *p = temp;
     while(*data != '\0')
     {
@@ -189,96 +366,75 @@ void UsrGm3::set_heartdt(char *data)
         p++;
         p++;        
     }
-    uart->printf("AT+HEARTDT=\"%s\"\r\n",temp);
+    sprintf(result,"AT+HEARTDT=\"%s\"\r\n",temp);
+    at_cmd_send(result,result);
+    GM3_DEBUG("heartdt  set\r\n");
+    GM3_DEBUG(result);    
 
-    if(wait(1000) == 1)
-    {
-        GM3_DEBUG("HEARTdt set\r\n");
-        GM3_DEBUG(cmd_buf);
-    }
-    clear_cmd_buf();
 }
 void UsrGm3::set_hearttp(HEARTTP_t type)
 {
+    char result[64];
     if(type == H_COM)
-        uart->write("AT+HEARTTP=\"COM\"\r\n");
+        at_cmd_send("AT+HEARTTP=\"COM\"\r\n",result);
     else
-        uart->write("AT+HEARTTP=\"NET\"\r\n");
+        at_cmd_send("AT+HEARTTP=\"NET\"\r\n",result);
+    GM3_DEBUG("hearttp  set\r\n");
+    GM3_DEBUG(result);    
 
-    if(wait(1000) == 1)
-    {
-        GM3_DEBUG("HEARTTP set\r\n");
-        GM3_DEBUG(cmd_buf);
-    }
-    clear_cmd_buf();
 }
 void UsrGm3::set_hearttm(uint8_t time)
 {
+    char result[64];
+    char temp[64];
+    sprintf(temp,"AT+HEARTTM=%d\r\n",time);
+    at_cmd_send(temp,result);
+    GM3_DEBUG("hearttm  set\r\n");
+    GM3_DEBUG(result); 
 
-    uart->printf("AT+HEARTTM=%d\r\n",time);
-
-    if(wait(1000) == 1)
-    {
-        GM3_DEBUG("HEARTTM set\r\n");
-        GM3_DEBUG(cmd_buf);
-    }
-    clear_cmd_buf();
 }
 uint8_t UsrGm3::q_hearten()
 {
+    char result[64];
     uint8_t ret = 0;
     char temp[5];
-    uart->write("AT+HEARTEN?\r\n");
-    if(wait(1000) == 1)
+    at_cmd_send("AT+HEARTEN?\r\n",result);
+    GM3_DEBUG("hearten  Q\r\n");
+    GM3_DEBUG(result); 
+    get_str(result,"\"",1,"\"",2,temp);
+    if(memcmp(temp,"on",2) == 0)
     {
-        GM3_DEBUG("hearten  Q\r\n");
-        GM3_DEBUG(cmd_buf);
-        get_str(cmd_buf,"\"",1,"\"",2,temp);
-        if(memcmp(temp,"on",2) == 0)
-        {
-            ret = 1;
-        }
-        else
-            ret  = 0;
+        ret = 1;
     }
-    clear_cmd_buf(); 
+    else
+        ret  = 0;
     return ret;    
 }
 void UsrGm3::q_heartdt(char *p)
 {
-    uart->write("AT+HEARTDT?\r\n");
-    if(wait(1000) == 1)
-    {
-        GM3_DEBUG("HEARTDT Q\r\n");
-        GM3_DEBUG(cmd_buf);
-        get_str(cmd_buf,"\"",1,"\"",2,p);
-
-    }
-    clear_cmd_buf();   
+    char result[64];
+    at_cmd_send("AT+HEARTDT?\r\n",result);
+    GM3_DEBUG("HEARTDT Q\r\n");
+    GM3_DEBUG(result);
+    get_str(result,"\"",1,"\"",2,p);
 }
 HEARTTP_t UsrGm3::q_hearttp()
 {
+    char result[64];
     HEARTTP_t ret;
-    uart->write("AT+HEARTTP?\r\n");
-    if(wait(1000) == 1)
-    {
-        GM3_DEBUG("HEARTDT Q\r\n");
-        GM3_DEBUG(cmd_buf);
-    }
-    clear_cmd_buf();   
+    at_cmd_send("AT+HEARTTP?\r\n",result);
+    GM3_DEBUG("HEARTDT Q\r\n");
+    GM3_DEBUG(result);
     return ret;
 }
 uint8_t UsrGm3::q_hearttm()
 {
-    uart->write("AT+HEARTTM?\r\n");
-    if(wait(1000) == 1)
-    {
-        GM3_DEBUG("HEARTTM Q\r\n");
-        GM3_DEBUG(cmd_buf);
-    }
-    clear_cmd_buf();   
+    char result[64];
+    at_cmd_send("AT+HEARTTM?\r\n",result);
+    GM3_DEBUG("HEARTTM Q\r\n");
+    GM3_DEBUG(result);
 }
-
+//////////////////////////////////////////////////////////////////////
 
 uint16_t UsrGm3::wait(const char *s, uint16_t timeout)
 {
@@ -326,6 +482,29 @@ uint16_t UsrGm3::wait( uint16_t timeout)
                     ret = 0;
                 else
                     ret = 1;
+                break;
+            }
+        }
+        
+        if(millis() - time > timeout)
+        {
+            ret = 0;
+            break;
+        }
+    }
+    return ret;
+}
+uint16_t UsrGm3::wait_end( uint16_t timeout)
+{
+    uint16_t ret;
+    uint64_t time = millis();
+    while(1)
+    {
+        if(cmd_count != 0)
+        {
+            if(millis() - last_rx_event_time > 5)
+            {
+                ret = cmd_count;
                 break;
             }
         }

@@ -39,6 +39,7 @@
 #include "../core/ringbuf.h"
 #include "../core/list.h"
 #include "../core/util.h"
+#include "../core/big_little.h"
 
 
 #define EBOX_VERSION "2.0"

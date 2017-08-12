@@ -24,6 +24,11 @@ typedef enum
     H_COM,
     H_NET,
 }HEARTTP_t;
+typedef enum
+{
+    DISCONNECTED = 0,
+    CONNECTED = 1,
+}LinkState_t;
 
 class UsrGm3
 {
@@ -31,18 +36,26 @@ class UsrGm3
         RINGBUF pNetBuf;//用于接收网络数据的环形缓冲区
 
     public:
-        UsrGm3(Uart *uart,Gpio *rst)
+        UsrGm3(Uart *uart,Gpio *rst,Gpio *link,Gpio *linka,Gpio *linkb)
         {
             gm3_mode = INIT;
             this->uart = uart;
             this->rst = rst;
-             
-        
+            this->link = link;
+            this->linka = linka;
+            this->linkb = linkb;
         }
         void begin(uint32_t baud_rate);
         void hard_reset();
         void soft_reset();
         void at_cmd_go();
+        uint16_t at_cmd_send(char *cmd,char *result);
+        uint16_t at_cmd_send(const char *cmd,char *result);
+        LinkState_t link_state();
+        LinkState_t linka_state();
+        LinkState_t linkb_state();
+        
+        void send(char *buf,uint16_t len);
 
 
 
@@ -58,9 +71,9 @@ class UsrGm3
         void q_cmdpw();
         void q_cachen();
         void q_stmsg();
-        void q_rstim();
+        uint16_t q_rstim();
         void q_sleep();
-        void q_sleeptim();   
+        uint16_t q_sleeptim();   
 
 
         void set_e(uint8_t enable);
@@ -71,9 +84,9 @@ class UsrGm3
         void set_cmdpw(char *pwd);
         void set_cachen(uint8_t enable);
         void set_stmsg(char *msg);
-        void set_rstim(uint8_t time);
+        void set_rstim(uint16_t time);
         void set_sleep(uint8_t enable);
-        void set_sleeptim(uint8_t time);          
+        void set_sleeptim(uint16_t time);          
         //配置参数指令
         void save();
         void reld();
@@ -141,12 +154,14 @@ class UsrGm3
         void rx_event();
         uint16_t wait(uint16_t timeout);
         uint16_t wait(const char *s,uint16_t timeout);
+        uint16_t wait_end( uint16_t timeout);
+
         uint8_t at_3plus();
         void clear_cmd_buf();
     
     private:
         Uart *uart;
-        Gpio *rst;
+        Gpio *rst,*linka,*linkb,*link;
         GM3Mode_t gm3_mode;
         GM3Mode_t gm3_new_mode;
         UartState_t u_state;
