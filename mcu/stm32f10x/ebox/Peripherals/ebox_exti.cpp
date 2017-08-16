@@ -89,7 +89,7 @@ void Exti::begin()
     init_info(exti_pin);
     exti_irq_init(this->pin_source,(&Exti::_irq_handler),(uint32_t)this);
 
-    exti_pin->mode(INPUT_PU);
+    exti_pin->mode(INPUT);
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
 
