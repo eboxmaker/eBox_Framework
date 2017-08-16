@@ -11,54 +11,17 @@ Copyright 2015 shentq. All Rights Reserved.
 
 
 #include "ebox.h"
-#include "math.h"
+#include "../common/apps/pid/pid_v1.h"
 
-double data[15][5] = {
-//   X1   X2    X3   X4    Y
-  { 316, 1536, 874, 981, 3894 },
-  { 385, 1771, 777, 1386, 4628 },
-  { 299, 1565, 678, 1672, 4569 },
-  { 326, 1970, 785, 1864, 5340 },
-  { 441, 1890, 785, 2143, 5449 },
-  { 460, 2050, 709, 2176, 5599 },
-  { 470, 1873, 673, 1769, 5010 },
-  { 504, 1955, 793, 2207, 5694 },
-  { 348, 2016, 968, 2251, 5792 },
-  { 400, 2199, 944, 2390, 6126 },
-  { 496, 1328, 749, 2287, 5025 },
-  { 497, 1920, 952, 2388, 5924 },
-  { 533, 1400, 1452, 2093, 5657 },
-  { 506, 1612, 1587, 2083, 6019 },
-  { 458, 1613, 1485, 2390, 6141 },
-};
+//Define Variables we'll be connecting to
+double Setpoint, Input, Output;
+
+//Specify the links and initial tuning parameters
+double Kp=0.01, Ki= 1000, Kd=0.01;
+PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd,P_ON_E, DIRECT);
 
 
-
-void display(double *dat, double *Answer, double *SquarePoor, int rows, int cols)
-{
-    double v, *p;
-    int i, j;
-    uart1.printf("回归方程式:    Y = %.5lf", Answer[0]);
-    for (i = 1; i < cols; i ++)
-        uart1.printf(" + %.5lf*X%d", Answer[i], i);
-    uart1.printf("\r\n");
-    uart1.printf("回归显著性检验: \r\n");
-    uart1.printf("回归平方和：%12.4lf  回归方差：%12.4lf \r\n", SquarePoor[0], SquarePoor[2]);
-    uart1.printf("剩余平方和：%12.4lf  剩余方差：%12.4lf \r\n", SquarePoor[1], SquarePoor[3]);
-    uart1.printf("离差平方和：%12.4lf  标准误差：%12.4lf \r\n", SquarePoor[0] + SquarePoor[1], sqrt(SquarePoor[3]));
-    uart1.printf("F   检  验：%12.4lf  相关系数：%12.4lf \r\n", SquarePoor[2] / SquarePoor[3],
-           sqrt(SquarePoor[0] / (SquarePoor[0] + SquarePoor[1])));
-    uart1.printf("剩余分析: \r\n");
-    uart1.printf("      观察值       估计值        剩余值      剩余平方 \r\n");
-    for (i = 0, p = dat; i < rows; i ++, p ++)
-    {
-        v = Answer[0];
-        for (j = 1; j < cols; j ++, p ++)
-            v += *p * Answer[j];
-        uart1.printf("%12.2lf%12.2lf%12.2lf%12.2lf \r\n", *p, v, *p - v, (*p - v) * (*p - v));
-    }
-    system("pause");
-}
+Pwm pwm(&PA2);
 
 
 void setup()
@@ -67,19 +30,40 @@ void setup()
     ebox_init();
     uart1.begin(115200);
     uart1.printf("\r\nuart1 115200 ok!\r\n");
+    PB1.mode(AIN);
+    pwm.begin(1000,500);
+    pwm.set_oc_polarity(0);//set output polarity after compare
+  //initialize the variables we're linked to
+  Input = analog_read(&PB1);
+  Setpoint = 350;
 
-    if (multiple_regression((double*)data, 15, 5, Answer, SquarePoor) == 0)
-        display((double*)data, Answer, SquarePoor, 15, 5);
+  //turn the PID on
+  myPID.SetMode(AUTOMATIC);
 }
 
 
 int main(void)
 {
+    static uint64_t last_time = millis();
+    static uint64_t last_time1 = millis();
     setup();
 
     while(1)
     {
+        if(millis() - last_time > 1)
+        {
+            last_time = millis();
+            Input =(analog_read(&PB1)>>3);
+            myPID.Compute();
+            pwm.set_duty(Output);
+        }
+        if(millis() - last_time1 > 20)
+        {
+            last_time1 = millis();
+            uart1.printf("in = %0.2f,\t out = %0.2f\r\n",Input,Output);
+        }                    
 
+        //delay_ms(100);
     }
 }
 

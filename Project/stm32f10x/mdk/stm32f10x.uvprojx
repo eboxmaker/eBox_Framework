@@ -722,6 +722,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\apps\EventIo.cpp</FilePath>
             </File>
+            <File>
+              <FileName>PID_v1.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\apps\PID\PID_v1.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
