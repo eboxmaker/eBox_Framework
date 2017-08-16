@@ -1,58 +1,46 @@
-/**
+ /**
   ******************************************************************************
-  * @file   : *.cpp
-  * @author : shentq
-  * @version: V1.2
-  * @date   : 2016/08/14
-
+  * @file    main.cpp
+  * @author  shentq
+  * @version V1.2
+  * @date    2016/08/14
   * @brief   ebox application example .
-  *
-  * Copyright 2016 shentq. All Rights Reserved.         
   ******************************************************************************
- */
+  * @attention
+  *
+  * No part of this software may be used for any commercial activities by any form 
+  * or means, without the prior written consent of shentq. This specification is 
+  * preliminary and is subject to change at any time without notice. shentq assumes
+  * no responsibility for any errors contained herein.
+  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
+  ******************************************************************************
+  */
 
+
+/* Includes ------------------------------------------------------------------*/
 
 #include "ebox.h"
-Timer timer1(TIM1);
-
-void t2it()
+uint32_t xx;
+Exti ex(&PB11, EXTI_Trigger_Falling);
+void exit()
 {
-        PB8.reset();
-        delay_us(10);
-        PB8.set();
-        delay_us(10);
-    
-        uart1.printf("111");
-        delay_ms(100);
-        uart1.printf("222");
-        delay_ms(100);
-
+    xx++;
+    uart1.printf("\r\nxx = %d", xx);
 }
-
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
     PB8.mode(OUTPUT_PP);
-    
-    timer1.begin(1);
-    timer1.attach(t2it);
-    timer1.interrupt(ENABLE,0,0);
-    timer1.start();
-    
+    ex.begin();
+    ex.attach(exit);
+    ex.interrupt(ENABLE);
 }
 int main(void)
 {
     setup();
-    //no_interrupts();
     while(1)
     {
-
-        delay_ms(1000);
-
-   
+        ;
     }
-
 }
-
-
