@@ -12,18 +12,77 @@ Copyright 2015 shentq. All Rights Reserved.
 
 #include "ebox.h"
 #include "../common/apps/pid/pid_v1.h"
+#include "math.h"
+#include <Filters.h>
 
-//Define Variables we'll be connecting to
-double Setpoint, Input, Output;
+float testFrequency = 50;                     // test signal frequency (Hz)
+float testAmplitude = 100;                   // test signal amplitude
+float testOffset = 100;
 
-//Specify the links and initial tuning parameters
-double Kp=0.01, Ki= 1000, Kd=0.01;
-PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd,P_ON_E, DIRECT);
+float windowLength = 20.0/testFrequency;     // how long to average the signal, for statistist
+
+float testSignalSigma = testAmplitude / sqrt(2.0);         // the RMS amplitude of the test signal
+float testSignal3dbSigma = testSignalSigma / sqrt(2.0);    // the RMS amplitude of the test signal, down -3db
+
+float printPeriod = 5.0;
 
 
-Pwm pwm(&PA2);
+// return the current time
+float time() {
+  return float( micros() ) * 1e-6;
+}
+void testOnePoleFilters() {
+  // filters are test with a sine wave input, keep track of those values here for a sanity check
+  RunningStatistics inputStats;                 // create statistics to look at the raw test signal
+  inputStats.setWindowSecs( windowLength );
+  
+  FilterOnePole filterOneLowpass( LOWPASS, testFrequency );   // create a one pole (RC) lowpass filter
+  RunningStatistics filterOneLowpassStats;                    // create running statistics to smooth these values
+  filterOneLowpassStats.setWindowSecs( windowLength );
+  
+  FilterOnePole filterOneHighpass( HIGHPASS, testFrequency );  // create a one pole (RC) highpass filter
+  RunningStatistics filterOneHighpassStats;                    // create running statistics to smooth these values
+  filterOneHighpassStats.setWindowSecs( windowLength );
+  
+  float startTime = time();
+  float nextPrintTime = time();
+  while( true ) {
+    // update all real time classes
+    float inputValue = testAmplitude + testAmplitude*sin( 2*PI * 10 * time() ) + testAmplitude*sin( 2*PI * 100 * time() );
 
+    // update the test value statistics
+    inputStats.input( inputValue);
+    
+    // update the one pole lowpass filter, and statistics
+    filterOneLowpass.input( inputValue );
+    filterOneLowpassStats.input( filterOneLowpass.output() );
+    
+    // update the one pole highpass filter, and statistics
+    filterOneHighpass.input( inputValue );
+    filterOneHighpassStats.input( filterOneHighpass.output() );
+    uart1.printf("%0.2f\t%0.2f\t%0.2f\r\n",inputValue,filterOneLowpass.output(),filterOneHighpass.output());
 
+//    if( time() > nextPrintTime ) {
+//      // display current values to the screen
+//      nextPrintTime += printPeriod;   // update the next print time
+//      
+//      uart1.print( "\n" );
+//      uart1.print( "time: " ); uart1.print( time() );
+//      
+//      // output values associated with the inputValue itsel
+//      uart1.print( "\tin: " ); uart1.print( inputStats.mean() ); uart1.print( " +/- " ); uart1.print( inputStats.sigma() );
+//      uart1.print( " (" ); uart1.print( testOffset ); uart1.print( " +/- " ); uart1.print( testSignalSigma ); uart1.print( ")" );
+//      
+//      // output values associated with the lowpassed value
+//      uart1.print( "\tLP1: " ); uart1.print( filterOneLowpassStats.mean() ); uart1.print( " +/- " ); uart1.print( filterOneLowpassStats.sigma() );
+//      uart1.print( " (" ); uart1.print( testOffset ); uart1.print( " +/- " ); uart1.print( testSignal3dbSigma ); uart1.print( ")" );
+
+//      // output values associated with the highpass value
+//      uart1.print( "\tHP1: " ); uart1.print( filterOneHighpassStats.mean() ); uart1.print( " +/- " ); uart1.print( filterOneHighpassStats.sigma() );
+//      uart1.print( " (" ); uart1.print( "0.0" ); uart1.print( " +/- " ); uart1.print( testSignal3dbSigma ); uart1.print( ")" );
+//    }
+  }
+}
 void setup()
 {
     double Answer[5], SquarePoor[4];
@@ -31,14 +90,7 @@ void setup()
     uart1.begin(115200);
     uart1.printf("\r\nuart1 115200 ok!\r\n");
     PB1.mode(AIN);
-    pwm.begin(1000,500);
-    pwm.set_oc_polarity(0);//set output polarity after compare
-  //initialize the variables we're linked to
-  Input = analog_read(&PB1);
-  Setpoint = 350;
-
-  //turn the PID on
-  myPID.SetMode(AUTOMATIC);
+    testOnePoleFilters();
 }
 
 
@@ -53,14 +105,11 @@ int main(void)
         if(millis() - last_time > 1)
         {
             last_time = millis();
-            Input =(analog_read(&PB1)>>3);
-            myPID.Compute();
-            pwm.set_duty(Output);
+
         }
         if(millis() - last_time1 > 20)
         {
             last_time1 = millis();
-            uart1.printf("in = %0.2f,\t out = %0.2f\r\n",Input,Output);
         }                    
 
         //delay_ms(100);
