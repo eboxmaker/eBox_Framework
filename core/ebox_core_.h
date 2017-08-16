@@ -36,6 +36,7 @@
 #include "../core/math/random.h"
 #include "../core/math/crc.h"
 #include "../core/math/math_misc.h"
+#include "../core/math/LinearRegression.h"
 #include "../core/ringbuf.h"
 #include "../core/list.h"
 #include "../core/util.h"

@@ -334,7 +334,7 @@
               <MiscControls></MiscControls>
               <Define>ARM_MATH_CM3</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcu\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\mcu\stm32f10x\ebox;..\..\..\mcu\stm32f10x\ebox\core;..\..\..\mcu\stm32f10x\ebox\Peripherals;..\..\..\common\edriver;..\..\..\common\network;..\..\..\common\fat;..\..\..\common\edriver\WiFi;..\..\..\user;..\..\..\common\cJSON;..\..\..\common\edriver\SFUD\sfud\inc;..\..\..\common\edriver\SFUD\ebox;..\..\..\common\bigiot;..\..\..\common\usb_device_stack\USBDevice;..\..\..\common\usb_device_stack\USBHID;..\..\..\common\usb_device_stack\USBAudio;..\..\..\common\usb_device_stack\USBMIDI;..\..\..\common\usb_device_stack\USBMSD;..\..\..\common\usb_device_stack\USBSerial;..\..\..\common\gui;..\..\..\common\FreeModbus\modbus\ascii;..\..\..\common\FreeModbus\modbus\include;..\..\..\common\FreeModbus\modbus\rtu;..\..\..\common\FreeModbus\modbus\tcp;..\..\..\common\FreeModbus\port;..\..\..\common\menu;..\..\..\common\Lora;..\..\..\common\apps;..\..\..\common\DSPLib\Include</IncludePath>
+              <IncludePath>..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcu\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\mcu\stm32f10x\ebox;..\..\..\mcu\stm32f10x\ebox\core;..\..\..\mcu\stm32f10x\ebox\Peripherals;..\..\..\common\edriver;..\..\..\common\network;..\..\..\common\fat;..\..\..\common\edriver\WiFi;..\..\..\user;..\..\..\common\cJSON;..\..\..\common\edriver\SFUD\sfud\inc;..\..\..\common\edriver\SFUD\ebox;..\..\..\common\bigiot;..\..\..\common\usb_device_stack\USBDevice;..\..\..\common\usb_device_stack\USBHID;..\..\..\common\usb_device_stack\USBAudio;..\..\..\common\usb_device_stack\USBMIDI;..\..\..\common\usb_device_stack\USBMSD;..\..\..\common\usb_device_stack\USBSerial;..\..\..\common\gui;..\..\..\common\FreeModbus\modbus\ascii;..\..\..\common\FreeModbus\modbus\include;..\..\..\common\FreeModbus\modbus\rtu;..\..\..\common\FreeModbus\modbus\tcp;..\..\..\common\FreeModbus\port;..\..\..\common\menu;..\..\..\common\Lora;..\..\..\common\apps;..\..\..\common\DSPLib\Include;..\..\..\common\OSC-master</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -581,6 +581,11 @@
               <FileName>big_little.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\core\big_little.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>LinearRegression.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\core\math\LinearRegression.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_core_.h</FileName>
