@@ -1,0 +1,25 @@
+﻿#######################################
+# Syntax Coloring Map For LPF Library
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+LPF	KEYWORD1
+
+#######################################
+# ky040
+#######################################
+Reset	KEYWORD2
+GetLastValue	KEYWORD2
+NextValue	KEYWORD2
+GetFilterGainInDB	KEYWORD2
+GetFrequencyForGain	KEYWORD2
+
+#######################################
+# Literals
+#######################################
+IS_BANDWIDTH_HZ	LITERAL1
+IS_ALPHA	LITERAL1
+

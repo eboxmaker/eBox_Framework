@@ -1,6 +1,5 @@
 #include "RunningStatistics.h"
 #include "FloatDefine.h"
-#include "math.h"
 
 RunningStatistics::RunningStatistics() {
   setWindowSecs( 1 );   // setup with one second average

@@ -121,7 +121,18 @@ char C2D(
 
     return (char)c;
 }
-
+void swap(float *a, float *b) 
+{
+	float temp = *a;
+	*a = *b;
+	*b = temp;
+}
+void swap(int *a, int *b) 
+{
+	int temp = *a;
+	*a = *b;
+	*b = temp;
+}
 uint16_t swaps(uint16_t i16)//½»»»¸ßµÍ×Ö½Ú
 {
     uint16_t ret = 0;
@@ -246,4 +257,55 @@ uint16_t get_str(char *source, const char *end, uint16_t count, char *out)
         out[i] = '\0';
     }
     return length;
+}
+float max(float *p,uint16_t len)
+{
+    
+return 0;
+}
+
+
+int partion(int arr[], int low, int high) {
+	int i = low-1;
+	int j = low;
+
+	int x = arr[high];
+
+	for (; j<high; j++) {
+		if (arr[j] < x)
+			swap(&arr[++i], &arr[j]);
+
+	}
+	swap(&arr[i+1], &arr[high]);
+
+	return i+1;
+}
+void quick_sort(int arr[], int low, int high) {
+	if (low >= high)
+		return;
+	int mid = partion(arr, low, high);
+	quick_sort(arr, low, mid-1);
+	quick_sort(arr, mid+1, high);
+}
+int partion(float arr[], int low, int high) {
+	int i = low-1;
+	int j = low;
+
+	int x = arr[high];
+
+	for (; j<high; j++) {
+		if (arr[j] < x)
+			swap(&arr[++i], &arr[j]);
+
+	}
+	swap(&arr[i+1], &arr[high]);
+
+	return i+1;
+}
+void quick_sort(float arr[], int low, int high) {
+	if (low >= high)
+		return;
+	int mid = partion(arr, low, high);
+	quick_sort(arr, low, mid-1);
+	quick_sort(arr, mid+1, high);
 }

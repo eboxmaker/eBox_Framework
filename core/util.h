@@ -46,4 +46,8 @@ uint16_t    get_str(char *source, const char *begin, uint16_t count1, const char
 uint16_t    get_str(char *source, const char *begin, uint16_t count, uint16_t length, char *out);
 uint16_t    get_str(char *source, char *out, uint16_t length);
 uint16_t    get_str(char *source, const char *end, uint16_t count, char *out);
+
+void quick_sort(int array[], int left, int right);
+void quick_sort(float arr[], int low, int high);
+
 #endif
