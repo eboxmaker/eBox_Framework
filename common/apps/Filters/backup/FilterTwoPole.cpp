@@ -1,8 +1,6 @@
 #include "FilterTwoPole.h"
+#include "math.h"
 
-#ifdef ARDUINO_SAM_DUE
-#define ARM_FLOAT
-#endif
 
 // The driven, damped harmonic oscillator equation is:
 // http://en.wikipedia.org/wiki/Harmonic_oscillator)
@@ -73,14 +71,14 @@ FilterTwoPole::FilterTwoPole( float frequency0, float qualityFactor, float xInit
 }
 
 void FilterTwoPole::setQ( float qualityFactor ) {
-//  // zero will result in divide by zero, upper value keeps it stable
-//  qualityFactor = constrain( qualityFactor, 1e-3, 1e3 );
+  // zero will result in divide by zero, upper value keeps it stable
+  qualityFactor = constrain( qualityFactor, 1e-3, 1e3 );
 
-//  Q = qualityFactor;
+  Q = qualityFactor;
 }
 
 void FilterTwoPole::setFrequency0( float f ) {
-//  W0 = TWO_PI*abs(f);
+  W0 = TWO_PI*abs(f);
 }
 
 void FilterTwoPole::setAsFilter( OSCILLATOR_TYPE ft, float frequency3db, float initialValue ) {
@@ -118,33 +116,33 @@ void FilterTwoPole::setAsFilter( OSCILLATOR_TYPE ft, float frequency3db, float i
 }
 
 float FilterTwoPole::input( float drive ) {
-//  Fprev = drive;                      // needed when using filter as a highpass
+  Fprev = drive;                      // needed when using filter as a highpass
 
-//  long now = micros();                      // get current time
-//  float dt = 1e-6*float(now - LastTimeUS);  // find dt
-//  LastTimeUS = now;                         // save the last time
-//  
-//  // constrain the dt 
-//  // if input has not been called frequently enough
-//  // the velocity and position can fly off to extremly high values
-//  // ... constraining the dt effectively "pauses" the motion during delays in updating
-//  // note this will result in an incorrect answer, but if dt is too large
-//  // the answer will be incorrect, regardless.
-//  dt = constrain( dt, 0, 1.0/W0 );
+  long now = micros();                      // get current time
+  float dt = 1e-6*float(now - LastTimeUS);  // find dt
+  LastTimeUS = now;                         // save the last time
+  
+  // constrain the dt 
+  // if input has not been called frequently enough
+  // the velocity and position can fly off to extremly high values
+  // ... constraining the dt effectively "pauses" the motion during delays in updating
+  // note this will result in an incorrect answer, but if dt is too large
+  // the answer will be incorrect, regardless.
+  dt = constrain( dt, 0, 1.0/W0 );
 
-//  float A = sq(W0)*drive - W0/Q*Vprev - sq(W0)*X; // *** compute acceleration
-//  float V = Vprev + A * dt;                       // step velocity
-//  Vavg = .5*(V+Vprev);
-//  X += Vavg * dt;                                 // step position, using average V to reduce error
-//                                                  // (trapezoidal integration)
+  float A = sqrt(W0)*drive - W0/Q*Vprev - sqrt(W0)*X; // *** compute acceleration
+  float V = Vprev + A * dt;                       // step velocity
+  Vavg = .5*(V+Vprev);
+  X += Vavg * dt;                                 // step position, using average V to reduce error
+                                                  // (trapezoidal integration)
 
-//  Vprev = V;                                      // save the last V
+  Vprev = V;                                      // save the last V
 
-//  // normally, this returns output
-//  // use it here to figure out how to return highpass
-//  
-//  //return Q/W0*Vavg;
-//  return output();
+  // normally, this returns output
+  // use it here to figure out how to return highpass
+  
+  //return Q/W0*Vavg;
+  return output();
 }
 
 float FilterTwoPole::output() {
@@ -156,53 +154,53 @@ float FilterTwoPole::output() {
 
 // as a measure for the energy of the oscillator, returns the maxium amplitude
 float FilterTwoPole::getMaxAmp() {
-//  // first, calculate the energy
-//  // E = 0.5*w0*x² + 0.5*v²/w0
-//  
-//  float E = 0.5 * W0 * sq(X) + 0.5 * sq(Vprev) / W0;
-//  
-//  // calculate use this to calculate max amplitude
-//  // E = 0.5*w0*x²
-//  // x = sqrt(2*E/w0)
-//#ifdef ARM_FLOAT
-//  return sqrtf(2.0*E/W0);
-//#else
-//  return sqrt(2.0*E/W0);
-//#endif
+  // first, calculate the energy
+  // E = 0.5*w0*x² + 0.5*v²/w0
+  
+  float E = 0.5 * W0 * sqrt(X) + 0.5 * sqrt(Vprev) / W0;
+  
+  // calculate use this to calculate max amplitude
+  // E = 0.5*w0*x²
+  // x = sqrt(2*E/w0)
+#ifdef ARM_FLOAT
+  return sqrtf(2.0*E/W0);
+#else
+  return sqrt(2.0*E/W0);
+#endif
 }
 
 void FilterTwoPole::print() {
-//  Serial.print(" X: ");        Serial.print( X );
-//  Serial.print(" Vprev: ");    Serial.print( Vprev );
-//  Serial.println("");
+  uart1.print(" X: ");        uart1.print( X );
+  uart1.print(" Vprev: ");    uart1.print( Vprev );
+  uart1.println("");
 }
 
 void FilterTwoPole::test() {
-//  float updateInterval = .1;
-//  float nextupdateTime = 1e-6*float(micros());
+  float updateInterval = .1;
+  float nextupdateTime = 1e-6*float(micros());
 
-//  float inputValue = 0;
-//  FilterTwoPole osc( 0.2, 4, 0);
+  float inputValue = 0;
+  FilterTwoPole osc( 0.2, 4, 0);
 
-//  while( true ) {
-//    float now = 1e-6*float(micros());
+  while( true ) {
+    float now = 1e-6*float(micros());
 
-//    // switch input values on a 20 second cycle
-//    if( round(now/50.0)-(now/50.0) < 0 )
-//      inputValue = 100;
-//    else
-//      inputValue = 150;
+    // switch input values on a 20 second cycle
+    if( round(now/50.0)-(now/50.0) < 0 )
+      inputValue = 100;
+    else
+      inputValue = 150;
 
-//    osc.input(inputValue);
+    osc.input(inputValue);
 
 //    analogWrite(10,osc.output() ); // hardcoded the dial pin
 
-//    if( now > nextupdateTime ) {
-//      nextupdateTime += updateInterval;
+    if( now > nextupdateTime ) {
+      nextupdateTime += updateInterval;
 
-//      Serial.print("inputValue: "); Serial.print( inputValue );
-//      Serial.print("\t output: "); Serial.print( osc.output() );
-//      Serial.println();
-//    }
-//  }
+      uart1.print("inputValue: "); uart1.print( inputValue );
+      uart1.print("\t output: "); uart1.print( osc.output() );
+      uart1.println();
+    }
+  }
 }

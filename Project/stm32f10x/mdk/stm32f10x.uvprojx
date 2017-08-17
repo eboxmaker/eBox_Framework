@@ -334,7 +334,7 @@
               <MiscControls></MiscControls>
               <Define>ARM_MATH_CM3</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcu\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\mcu\stm32f10x\ebox;..\..\..\mcu\stm32f10x\ebox\core;..\..\..\mcu\stm32f10x\ebox\Peripherals;..\..\..\common\edriver;..\..\..\common\network;..\..\..\common\fat;..\..\..\common\edriver\WiFi;..\..\..\user;..\..\..\common\cJSON;..\..\..\common\edriver\SFUD\sfud\inc;..\..\..\common\edriver\SFUD\ebox;..\..\..\common\bigiot;..\..\..\common\usb_device_stack\USBDevice;..\..\..\common\usb_device_stack\USBHID;..\..\..\common\usb_device_stack\USBAudio;..\..\..\common\usb_device_stack\USBMIDI;..\..\..\common\usb_device_stack\USBMSD;..\..\..\common\usb_device_stack\USBSerial;..\..\..\common\gui;..\..\..\common\FreeModbus\modbus\ascii;..\..\..\common\FreeModbus\modbus\include;..\..\..\common\FreeModbus\modbus\rtu;..\..\..\common\FreeModbus\modbus\tcp;..\..\..\common\FreeModbus\port;..\..\..\common\menu;..\..\..\common\Lora;..\..\..\common\apps;..\..\..\common\DSPLib\Include;..\..\..\common\OSC-master;..\..\..\common\Filters</IncludePath>
+              <IncludePath>..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcu\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\mcu\stm32f10x\ebox;..\..\..\mcu\stm32f10x\ebox\core;..\..\..\mcu\stm32f10x\ebox\Peripherals;..\..\..\common\edriver;..\..\..\common\network;..\..\..\common\fat;..\..\..\common\edriver\WiFi;..\..\..\user;..\..\..\common\cJSON;..\..\..\common\edriver\SFUD\sfud\inc;..\..\..\common\edriver\SFUD\ebox;..\..\..\common\bigiot;..\..\..\common\usb_device_stack\USBDevice;..\..\..\common\usb_device_stack\USBHID;..\..\..\common\usb_device_stack\USBAudio;..\..\..\common\usb_device_stack\USBMIDI;..\..\..\common\usb_device_stack\USBMSD;..\..\..\common\usb_device_stack\USBSerial;..\..\..\common\gui;..\..\..\common\FreeModbus\modbus\ascii;..\..\..\common\FreeModbus\modbus\include;..\..\..\common\FreeModbus\modbus\rtu;..\..\..\common\FreeModbus\modbus\tcp;..\..\..\common\FreeModbus\port;..\..\..\common\menu;..\..\..\common\Lora;..\..\..\common\apps;..\..\..\common\DSPLib\Include;..\..\..\common\OSC-master;..\..\..\common\apps\Filters\FirFilter</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -727,6 +727,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\apps\PID\PID_v1.cpp</FilePath>
             </File>
+            <File>
+              <FileName>FirFilter.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\apps\Filters\FirFilter\FirFilter.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -986,31 +991,6 @@
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\main.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>filters</GroupName>
-          <Files>
-            <File>
-              <FileName>FilterDerivative.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\Filters\FilterDerivative.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FilterOnePole.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\Filters\FilterOnePole.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FilterTwoPole.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\Filters\FilterTwoPole.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>RunningStatistics.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\Filters\RunningStatistics.cpp</FilePath>
             </File>
           </Files>
         </Group>
