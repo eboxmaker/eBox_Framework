@@ -35,6 +35,7 @@ enum windowType {RECTANGULAR, BARTLETT, HANNING, HAMMING, BLACKMAN};
                 CoefList = (int*) ebox_malloc (windowLength * sizeof(int));		// create array for coefficients
                 for(int i = 0; i < windowLength; i++)
                     CoefList[i] = 32767.0 *  (*p++);
+                ebox_free(&p);
             }
 
 			int * DataList;			// array for data	
