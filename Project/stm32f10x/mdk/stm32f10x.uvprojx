@@ -932,6 +932,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\USR_GM3.cpp</FilePath>
             </File>
+            <File>
+              <FileName>BMP280-3.3.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\BMP280-3.3.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
