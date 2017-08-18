@@ -35,7 +35,7 @@ void setup()
 	float sampFreq = 1000;
     
 	// Low and high pass filters
-	float transFreq1 = 20;
+	float transFreq1 = 5;
 	float transFreq2 = 70;
 
 
@@ -44,9 +44,9 @@ void setup()
     //该函数会根据前两个值得设定，计算出滤波器阶数。
 	fir.calculateKaiserParams(0.01, 10, sampFreq, &kaiserWindowLength, &beta);
 //	float *lpf = fir.create1TransSinc(kaiserWindowLength, transFreq1, sampFreq, LOW_PASS);
-	float *lpf = fir.create1TransSinc(kaiserWindowLength, transFreq1, sampFreq, HIGH_PASS);
+//	float *lpf = fir.create1TransSinc(kaiserWindowLength, transFreq1, sampFreq, HIGH_PASS);
 //	float *lpf = fir.create2TransSinc(kaiserWindowLength, transFreq1,transFreq2, sampFreq, BAND_PASS);
-//	float *lpf = fir.create2TransSinc(kaiserWindowLength, transFreq1,transFreq2, sampFreq, BAND_STOP);
+	float *lpf = fir.create2TransSinc(kaiserWindowLength, transFreq1,transFreq2, sampFreq, BAND_STOP);
 	float *lpf_kaiser = fir.createKaiserWindow(lpf, NULL, kaiserWindowLength, beta);
     uart1.printf("kaiserWindowLength = %d\r\n",kaiserWindowLength);
     uart1.printf("beta = %d\r\n",beta);
@@ -54,7 +54,7 @@ void setup()
     for(int i = 0; i < LEN;i++)
         in_signal[i] =50 + 10.0*sin( 2*PI *50* i * 1e-3) + 10.0*sin( 2*PI *10* i * 1e-3)   ;
 
-    uart1.printf("mem : %d\r\n",ebox_get_free());
+    uart1.printf("mem : %dbytes\r\n",10*1024 - ebox_get_free());
 }
 
 
