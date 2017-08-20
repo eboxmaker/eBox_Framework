@@ -149,7 +149,7 @@ void Calendar::add_one_day()
 	
 	get_week(dt.year,dt.month,dt.date,dt.week);
 }
-int	Calendar::dt_changed(date_time_t &_dt)
+int	Calendar::dt_changed(DateTime_t &_dt)
 {
 	int ret = 0;
 	
@@ -322,7 +322,7 @@ void Calendar::swap(uint16_t *a,uint16_t *b)
 
 //根据给定的日期算出他是该年的第几天
 //1月1号算第一天
-uint16_t Calendar::day_in_year(date_time_t &_dt)
+uint16_t Calendar::day_in_year(DateTime_t &_dt)
 {
 	uint16_t temp_year;	
 	uint16_t temp_month;	
@@ -342,7 +342,7 @@ uint16_t Calendar::day_in_year(date_time_t &_dt)
 	}
 	return temp_day;		
 }
-uint16_t	Calendar::days_between_2_date(date_time_t &dt_current,date_time_t &dt_target)
+uint16_t	Calendar::days_between_2_date(DateTime_t &dt_current,DateTime_t &dt_target)
 {
 	uint16_t temp_year_c,temp_year_t;	
 	uint16_t temp_month_c,temp_month_t;	
@@ -396,11 +396,11 @@ uint16_t	Calendar::days_between_2_date(date_time_t &dt_current,date_time_t &dt_t
 		return d1+d2+d3;
 	}
 }
-uint32_t	Calendar::sec_in_day(date_time_t &_dt)
+uint32_t	Calendar::sec_in_day(DateTime_t &_dt)
 {
 	return _dt.hour*3600 + _dt.min*60 + _dt.sec;
 }
-uint32_t Calendar::seconds_between_2_time(date_time_t &dt1,date_time_t &dt2)
+uint32_t Calendar::seconds_between_2_time(DateTime_t &dt1,DateTime_t &dt2)
 {
 	uint32_t temp_sec1,temp_sec2;
 
@@ -469,7 +469,7 @@ void Calendar::mon_2_add_one_day()
 	}
 }
 
-void Calendar::date_to_str(date_time_t &_dt)
+void Calendar::date_to_str(DateTime_t &_dt)
 {
 	date_string[0] = _dt.date/10 + 0x30;
 	date_string[1] = _dt.date%10 + 0x30;
@@ -480,7 +480,7 @@ void Calendar::date_to_str(date_time_t &_dt)
 	
 	date_string[6] = '\0';
 }
-void Calendar::time_to_str(date_time_t &_dt)
+void Calendar::time_to_str(DateTime_t &_dt)
 {
 	time_string[0] = _dt.hour/10 + 0x30;
 	time_string[1] = _dt.hour%10 + 0x30;

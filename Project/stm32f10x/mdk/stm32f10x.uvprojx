@@ -638,16 +638,6 @@
               <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_iflash.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_in_capture.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_in_capture.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_pwm.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_pwm.cpp</FilePath>
-            </File>
-            <File>
               <FileName>ebox_rtc.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_rtc.cpp</FilePath>
@@ -668,11 +658,6 @@
               <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_spi.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_timer.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_timer.cpp</FilePath>
-            </File>
-            <File>
               <FileName>ebox_uart.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_uart.cpp</FilePath>
@@ -686,6 +671,26 @@
               <FileName>ebox_can.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_can.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_timer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_timer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_pwm.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_pwm.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_in_capture.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_in_capture.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_encoder.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\mcu\stm32f10x\ebox\Peripherals\ebox_encoder.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_it.cpp</FileName>
@@ -936,6 +941,11 @@
               <FileName>BMP280-3.3.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\BMP280-3.3.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>TM1637.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\TM1637.cpp</FilePath>
             </File>
           </Files>
         </Group>

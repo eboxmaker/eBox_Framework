@@ -39,7 +39,7 @@ InCapture::InCapture(Gpio *capture_pin)
 void InCapture::begin(uint16_t prescaler )
 {
 	  uint8_t index;
-		capture_pin->mode(INPUT_PU);
+    capture_pin->mode(INPUT_PU);
     init_info(this->capture_pin);
 
     this->prescaler = prescaler;
@@ -68,31 +68,31 @@ void InCapture::begin(uint16_t prescaler )
     {
     case (uint32_t)TIM1_BASE:
         overflow_times = &t1_overflow_times;
-				if(ch== TIM_Channel_1) index = TIM1_IT_CC1;
-				if(ch== TIM_Channel_2) index = TIM1_IT_CC2;
-				if(ch== TIM_Channel_3) index = TIM1_IT_CC3;
-				if(ch== TIM_Channel_4) index = TIM1_IT_CC4;		
+        if(ch== TIM_Channel_1) index = TIM1_IT_CC1;
+        if(ch== TIM_Channel_2) index = TIM1_IT_CC2;
+        if(ch== TIM_Channel_3) index = TIM1_IT_CC3;
+        if(ch== TIM_Channel_4) index = TIM1_IT_CC4;		
         break;
     case (uint32_t)TIM2_BASE:
         overflow_times = &t2_overflow_times;
-				if(ch== TIM_Channel_1) index = TIM2_IT_CC1;
-				if(ch== TIM_Channel_2) index = TIM2_IT_CC2;
-				if(ch== TIM_Channel_3) index = TIM2_IT_CC3;
-				if(ch== TIM_Channel_4) index = TIM2_IT_CC4;	
+        if(ch== TIM_Channel_1) index = TIM2_IT_CC1;
+        if(ch== TIM_Channel_2) index = TIM2_IT_CC2;
+        if(ch== TIM_Channel_3) index = TIM2_IT_CC3;
+        if(ch== TIM_Channel_4) index = TIM2_IT_CC4;	
         break;
     case (uint32_t)TIM3_BASE:
         overflow_times = &t3_overflow_times;
-				if(ch== TIM_Channel_1) index = TIM3_IT_CC1;
-				if(ch== TIM_Channel_2) index = TIM3_IT_CC2;
-				if(ch== TIM_Channel_3) index = TIM3_IT_CC3;
-				if(ch== TIM_Channel_4) index = TIM3_IT_CC4;	
+        if(ch== TIM_Channel_1) index = TIM3_IT_CC1;
+        if(ch== TIM_Channel_2) index = TIM3_IT_CC2;
+        if(ch== TIM_Channel_3) index = TIM3_IT_CC3;
+        if(ch== TIM_Channel_4) index = TIM3_IT_CC4;	
         break;
     case (uint32_t)TIM4_BASE:
         overflow_times = &t4_overflow_times;
-				if(ch== TIM_Channel_1) index = TIM4_IT_CC1;
-				if(ch== TIM_Channel_2) index = TIM4_IT_CC2;
-				if(ch== TIM_Channel_3) index = TIM4_IT_CC3;
-				if(ch== TIM_Channel_4) index = TIM4_IT_CC4;	
+        if(ch== TIM_Channel_1) index = TIM4_IT_CC1;
+        if(ch== TIM_Channel_2) index = TIM4_IT_CC2;
+        if(ch== TIM_Channel_3) index = TIM4_IT_CC3;
+        if(ch== TIM_Channel_4) index = TIM4_IT_CC4;	
         break;
 
     }
@@ -111,9 +111,9 @@ void InCapture::base_init(uint16_t period, uint16_t prescaler)
     switch((uint32_t)this->TIMx)
     {
     case (uint32_t)TIM1_BASE:
-    			RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
-    			NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
-    			break;
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
+        NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
+        break;
     case (uint32_t)TIM2_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
         NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//

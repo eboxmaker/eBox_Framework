@@ -34,16 +34,7 @@
 #include "ebox_gpio.h"
 #include "ebox_analog.h"   
 
-typedef struct
-{
-	uint8_t year;
-	uint8_t month;
-	uint8_t date;
-	uint8_t hour;
-	uint8_t min;
-	uint8_t sec;
-	uint8_t week;
-}date_time_t;
+
 
 void        shift_out(Gpio *data_pin, Gpio *clock_pin, uint8_t bit_order, uint8_t val);
 uint8_t     shift_in(Gpio *data_pin, Gpio *clock_pin, uint8_t bit_order);
