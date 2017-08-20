@@ -38,7 +38,7 @@
 class Calendar
 {
 	public:
-		date_time_t dt;
+		DateTime_t dt;
 	
 		uint8_t time_string[7];//"hhmmss"
 		uint8_t date_string[7];//"ddmmyy"
@@ -62,7 +62,7 @@ class Calendar
                                 //2.如果系统提供秒中断服务，可使用秒中断驱动本函数，可实现整个日历的运行
 		void	add_one_day();//日期的矫正。
 	
-		int		dt_changed(date_time_t &_dt);//检测时间发生变化
+		int		dt_changed(DateTime_t &_dt);//检测时间发生变化
 	
 		
 	//获取某天是星期几
@@ -71,7 +71,7 @@ class Calendar
     
 	public:
         //倒计时、闹钟相关函数
-		date_time_t alarm_dt;
+		DateTime_t alarm_dt;
 		uint8_t cutdown_dddhhmmss_string[10];//"dddhhmmss"。倒计时的字符串
 		uint8_t cutdown_hhmmss_string[7];//"hhmmss"。倒计时的字符串
 
@@ -93,18 +93,18 @@ class Calendar
 		void	mon_1_3_5_7_8_10_12_add_one_day();//天的进位
 		void	mon_4_6_9_11_add_one_day();//天的进位
 		void	mon_2_add_one_day();//天的进位
-		void	date_to_str(date_time_t &_dt);//日期转换为ddmmyy格式的字符串
-		void	time_to_str(date_time_t &_dt);//时间转换为hhmmss格式的字符串
+		void	date_to_str(DateTime_t &_dt);//日期转换为ddmmyy格式的字符串
+		void	time_to_str(DateTime_t &_dt);//时间转换为hhmmss格式的字符串
 		///////倒计时计算相关的函数////////////////////////
 		uint8_t		_alarm_enable;
 		void	swap(u16 *a,u16 *b);//交换两个u16型变量的数据
-		u16		day_in_year(date_time_t &_dt);//日期是那年的第几天
-		u16		days_between_2_date(date_time_t &dt_current,date_time_t &dt_target);//两个日期之间的天数差
-		uint32_t		sec_in_day(date_time_t &_dt);//时间是当天的第几秒
-		uint32_t		seconds_between_2_time(date_time_t &dt1,date_time_t &dt2);//两个时间之间的秒数差
+		u16		day_in_year(DateTime_t &_dt);//日期是那年的第几天
+		u16		days_between_2_date(DateTime_t &dt_current,DateTime_t &dt_target);//两个日期之间的天数差
+		uint32_t		sec_in_day(DateTime_t &_dt);//时间是当天的第几秒
+		uint32_t		seconds_between_2_time(DateTime_t &dt1,DateTime_t &dt2);//两个时间之间的秒数差
 		void	sec_to_time(uint32_t sec_source,uint8_t &hour,uint8_t &min,uint8_t &sec);//秒转换成hms格式的时间
 		///////////////////////////////////////////////////////
-		date_time_t temp_dt;	//用于检测时间变化
+		DateTime_t temp_dt;	//用于检测时间变化
 };
 
 

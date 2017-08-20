@@ -43,7 +43,7 @@ uint8_t DS3231::dec_to_bcd(uint8_t dec)
     return bcd;
 }
 
-void	DS3231::get_date_time(date_time_t *t)
+void	DS3231::get_date_time(DateTime_t *t)
 {
     uint8_t buf[8];
     i2c->take_i2c_right(speed);
@@ -96,8 +96,8 @@ void DS3231::get_time(char *buf)
 }
 void	DS3231::set_time(void *dt)
 {
-    date_time_t tBCD;
-    date_time_t *t = (date_time_t *)dt;
+    DateTime_t tBCD;
+    DateTime_t *t = (DateTime_t *)dt;
 
     tBCD.week = dec_to_bcd(t->week);
     tBCD.year = dec_to_bcd(t->year);

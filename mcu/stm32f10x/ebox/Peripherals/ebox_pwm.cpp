@@ -61,7 +61,7 @@ void Pwm::base_init(uint16_t period, uint16_t prescaler)
         TIM_CtrlPWMOutputs(TIMx,ENABLE); 
     }
     else    
-        RCC_APB1PeriphClockCmd(rcc, ENABLE);
+    RCC_APB1PeriphClockCmd(rcc, ENABLE);
     TIM_TimeBaseStructure.TIM_Period = this->period - 1; //ARR
     TIM_TimeBaseStructure.TIM_Prescaler = prescaler - 1;
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; //

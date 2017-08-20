@@ -54,14 +54,14 @@ class DS3231
 {
 
 public:
-    date_time_t t;
+    DateTime_t t;
 public:
     DS3231(SoftI2c *i2c)
     {
         this->i2c = i2c;
     };
     void begin(uint32_t speed);
-    void get_date_time(date_time_t *t);
+    void get_date_time(DateTime_t *t);
     void get_time(char *buf);
     void get_date(char *buf);
 

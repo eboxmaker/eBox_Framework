@@ -73,4 +73,15 @@
 #define DEG_TO_RAD 0.017453292519943295769236907684886
 #define RAD_TO_DEG 57.295779513082320876798154814105
 
+typedef struct
+{
+	uint8_t year;
+	uint8_t month;
+	uint8_t date;
+	uint8_t hour;
+	uint8_t min;
+	uint8_t sec;
+	uint8_t week;
+}DateTime_t;
+
 #endif

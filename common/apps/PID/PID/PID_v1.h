@@ -11,9 +11,9 @@ class PID
   //Constants used in some of the functions below
   #define AUTOMATIC	1
   #define MANUAL	0
-  #define DIRECT  0
+  #define DIRECT  0     //设置控制方向
   #define REVERSE  1
-  #define P_ON_M 0
+  #define P_ON_M 0      //设置
   #define P_ON_E 1
 
   //commonly used functions **************************************************************************
