@@ -873,16 +873,6 @@
               <FilePath>..\..\..\common\edriver\NRF24L01.cpp</FilePath>
             </File>
             <File>
-              <FileName>OLED.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\OLED.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>OLED_ssd1306.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\OLED_ssd1306.cpp</FilePath>
-            </File>
-            <File>
               <FileName>parallel_gpio.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\parallel_gpio.cpp</FilePath>
@@ -946,6 +936,11 @@
               <FileName>TM1637.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\TM1637.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>OLED_0.96.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\OLED_0.96.cpp</FilePath>
             </File>
           </Files>
         </Group>

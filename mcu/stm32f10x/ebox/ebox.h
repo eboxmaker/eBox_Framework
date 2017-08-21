@@ -32,6 +32,7 @@
 #include "ebox_timer.h"
 #include "ebox_pwm.h"
 #include "ebox_in_capture.h"
+#include "ebox_encoder.h"
 #include "ebox_i2c.h"
 #include "ebox_spi.h"
 #include "ebox_uart.h"
@@ -39,6 +40,7 @@
 #include "ebox_iflash.h"
 #include "ebox_dac.h"
 #include "ebox_wdg.h"
+
 
 #include "stdio.h"
 

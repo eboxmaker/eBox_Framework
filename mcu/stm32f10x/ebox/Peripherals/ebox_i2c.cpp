@@ -285,8 +285,8 @@ int8_t I2c::take_i2c_right(uint32_t speed)
     {
         delay_ms(1);
     }
-    this->speed = speed;
-    config(this->speed);
+    if(this->speed != speed)
+        config(this->speed);
     busy = 1;
     return 0;
 }

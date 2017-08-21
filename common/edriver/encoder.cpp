@@ -20,11 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "encoder.h"
 
-
-
-
-
-Encoder::Encoder(Gpio *Apin, Gpio *Bpin)
+SoftEncoder::SoftEncoder(Gpio *Apin, Gpio *Bpin)
 {
 
     this->a_pin = Apin;
@@ -35,7 +31,7 @@ Encoder::Encoder(Gpio *Apin, Gpio *Bpin)
 
 
 }
-int Encoder::read_encoder()
+int SoftEncoder::read_encoder()
 {
     a_last_state = a_state;
     b_last_state = b_state;

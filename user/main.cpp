@@ -23,36 +23,19 @@
 #include "ebox.h"
 #include "math.h"
 #include "ebox_encoder.h"
-#include "pid_v1.h"
+#include "oled_0.96.h"
+#include "font.h"
+SoftI2c si2cx(&PB6, &PB7);
 
-//Define Variables we'll be connecting to
-double Setpoint, Input, Output;
-
-//Specify the links and initial tuning parameters
-double Kp=20, Ki= 1200, Kd=0.01;
-PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd,P_ON_E, DIRECT);
+//Oled oled(&i2c1);
+Oled oled(&si2cx);
 
 
-Encoder encoder(TIM4,&PB6,&PB7);
-float x;
-uint16_t y;
-Pwm pwm1(&PA0);
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    encoder.begin(3);
-    pwm1.begin(2000, 1000);
-    pwm1.set_oc_polarity(1);//set output polarity after compare
-    uart1.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
-    uart1.printf("max frq = %f\r\n",pwm1.get_accuracy());
-    
-    //initialize the variables we're linked to
-    Input = 0;
-    Setpoint = 35.5;
-
-    //turn the PID on
-    myPID.SetMode(AUTOMATIC);
+    oled.begin(400000);
 }
 int main(void)
 {
@@ -63,22 +46,19 @@ int main(void)
     float speed;
     while(1)
     {
+        last_time = millis();
+        oled.clear();
+        last_time1 = millis();
+        uart1.printf("%d\r\n",last_time1 - last_time);
 
-        if(millis() - last_time > 5)
-        {
-            last_time = millis();
-            Input  = encoder.read_speed()/4000;
-            pwm1.set_duty(Output);
-            uart1.printf("%0.2f\t%0.2f\r\n",Input,Output);
-        }
-            myPID.Compute();
-        if(millis() - last_time1 > 1000)
-        {
-            last_time1 = millis();
-            pwm1.set_duty(0);while(1);
-            //uart1.printf("%0.2f\t%0.2f\r\n",Input,Output);
-        }       
-        
+        oled.show_char(0,0,'X',8);
+        delay_ms(1000);
+        oled.draw_bmp(0,0,128,8,(u8*)BMP1);
+        delay_ms(1000);
+		oled.show_num(103,6,25,3,16);//显示ASCII字符的码值 
+        delay_ms(1000);
+		oled.show_chinese(0,4,0);//中
+        delay_ms(1000);
     }
 }
 
