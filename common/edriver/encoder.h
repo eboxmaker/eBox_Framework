@@ -21,11 +21,10 @@
 #ifndef __ENCODER_H
 #define __ENCODER_H
 #include "ebox.h"
-#include "button.h"
-class Encoder
+class SoftEncoder
 {
 public:
-    Encoder(Gpio *Apin, Gpio *Bpin);
+    SoftEncoder(Gpio *Apin, Gpio *Bpin);
     int read_encoder();
 
 

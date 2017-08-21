@@ -54,16 +54,16 @@ int8_t SoftI2c::config(uint32_t speed)
     switch(this->speed)
     {
     case 400000:
-        delay_times = 4;
+        delay_times = 0;
         break;
     case 300000:
-        delay_times = 8;
+        delay_times = 4;
         break;
     case 200000:
-        delay_times = 16;
+        delay_times = 8;
         break;
     case 100000:
-        delay_times = 32;
+        delay_times = 16;
         break;
     default:
         delay_times = this->speed;
