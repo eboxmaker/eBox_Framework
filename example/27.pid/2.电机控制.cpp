@@ -29,8 +29,8 @@
 double Setpoint, Input, Output;
 
 //Specify the links and initial tuning parameters
-double Kp=20, Ki= 1200, Kd=0.01;
-PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd,P_ON_E, DIRECT);
+double Kp=20, Ki= 550, Kd=0.1;
+PID myPID(&Input, &Output, &Setpoint);
 
 
 Encoder encoder(TIM4,&PB6,&PB7);
@@ -41,44 +41,45 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    encoder.begin(3);
+    encoder.begin(40000,3);
     pwm1.begin(2000, 1000);
     pwm1.set_oc_polarity(1);//set output polarity after compare
+    
+    //确定采样控制周期
+//    while(1)
+//    {         
+//        Input  = encoder.read_speed();
+//        uart1.printf("%0.2f\t%d\r\n",Input,millis());
+//        delay_ms(5);
+//    }
     uart1.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
     uart1.printf("max frq = %f\r\n",pwm1.get_accuracy());
     
     //initialize the variables we're linked to
     Input = 0;
-    Setpoint = 35.5;
+    Setpoint = 27.5;
 
     //turn the PID on
-    myPID.SetMode(AUTOMATIC);
+    myPID.begin(Kp, Ki, Kd, DIRECT,AUTOMATIC,5,0,1000);
 }
 int main(void)
 {
     static uint64_t last_time = millis();
     static uint64_t last_time1 = millis();
     setup();
-    uint16_t temp;
-    float speed;
+
     while(1)
     {
 
+        //设置采样和控制周期为5ms
         if(millis() - last_time > 5)
         {
             last_time = millis();
-            Input  = encoder.read_speed()/4000;
+            Input  = encoder.read_speed();
             pwm1.set_duty(Output);
             uart1.printf("%0.2f\t%0.2f\r\n",Input,Output);
         }
-            myPID.Compute();
-        if(millis() - last_time1 > 1000)
-        {
-            last_time1 = millis();
-            pwm1.set_duty(0);while(1);
-            //uart1.printf("%0.2f\t%0.2f\r\n",Input,Output);
-        }       
-        
+        myPID.Compute();      
     }
 }
 

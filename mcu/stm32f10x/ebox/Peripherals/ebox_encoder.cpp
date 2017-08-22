@@ -6,7 +6,7 @@ Encoder::Encoder(TIM_TypeDef *timer,Gpio *a,Gpio *b)
     this->a = a;
     this->b = b;
 }
-bool Encoder::begin(uint8_t mode)
+bool Encoder::begin(uint32_t pulse_per_circle,uint8_t mode)
 {
     a->mode(INPUT);
     b->mode(INPUT);
@@ -14,6 +14,7 @@ bool Encoder::begin(uint8_t mode)
     base_init(0xffff,1);
     set_encoder(mode);
     last_read_speed_time = 0;
+    this->pulse_per_circle = pulse_per_circle;
 }
 
 void Encoder::base_init(uint16_t period, uint16_t prescaler)
@@ -79,21 +80,27 @@ void Encoder::set_encoder(uint8_t mode)
 }
 
 
-float Encoder::read_speed()
+double Encoder::read_speed()
 {
+    
+    //采样值和rpm之间的关系
+    //rpm = (count * 60,000,000/delta_time)/pulse_per_circle
+    //delta_time = (now - last):单位us
     uint64_t now ;
-    float speed;
-    now = millis();
+    double speed;
+    now = micros();
     if(TIMx->CNT == 0)
         return 0;
     else
     {
-        double temp = TIMx->CNT;
+        double temp_count = TIMx->CNT;
         TIMx->CNT = 0;
         if(read_direction() == 0)
-            speed = temp * 6000 / (now - last_read_speed_time);
+        {
+            speed = (double)temp_count *  60000000/ (double)(now - last_read_speed_time) / pulse_per_circle;
+        }
         else
-            speed = (temp - 65536) * 6000 / (now - last_read_speed_time);
+            speed = (double)(temp_count - 65536) * 60000000 / (double)(now - last_read_speed_time) / pulse_per_circle;
 
     }
     last_read_speed_time = now;
