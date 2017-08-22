@@ -22,12 +22,32 @@
 
 #include "ebox.h"
 #include "font.h"
+
+//本程序适用eBox
+//              GND   电源地
+//              VCC   接5V或3.3v电源
+//              SCL   接PA5（SCL）
+//              SDA   接PA7（SDA）
+//              RES   接PB3 (RST)
+//              DC    接PB4 (RS)
+//              CS    接PB5 
+//              BL    接PB6
+
 typedef enum
 {
     ENABLE_BACK_COLOR = 0,
     DISABLE_BACK_COLOR = 1
 } TEXT_MODE_TYPE;
 
+#define RED  	0xf800
+#define GREEN	0x07e0
+#define BLUE 	0x001f
+#define WHITE	0xffff
+#define BLACK	0x0000
+#define YELLOW  0xFFE0
+#define GRAY0   0xEF7D   	//灰色0 3165 00110 001011 00101
+#define GRAY1   0x8410      	//灰色1      00000 000000 00000
+#define GRAY2   0x4208      	//灰色2  1111111111011111
 class Lcd
 {
 public:
