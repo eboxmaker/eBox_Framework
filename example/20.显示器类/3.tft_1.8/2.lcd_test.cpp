@@ -16,6 +16,16 @@
 #include "lcd_1.8.h"
 #include "color_convert.h"
 
+//本程序适用eBox
+//              GND   电源地
+//              VCC   接5V或3.3v电源
+//              SCL   接PA5（SCL）
+//              SDA   接PA7（SDA）
+//              RES   接PB3 (RST)
+//              DC    接PB4 (RS)
+//              CS    接PB5 
+//              BL    接PB6
+
 COLOR_HSV hsv;
 COLOR_RGB rgb;
 
@@ -51,7 +61,7 @@ void setup()
         HSV_to_RGB(hsv, rgb);
         rgb_to_565(rgb, _color[i]);
         lcd.front_color = _color[i];
-        lcd.draw_h_line(0, i, 128);
+        lcd.draw_h_line(0, i, 128,BLUE);
     }
     lcd.disp_char8x16(0, 0, index++);
 
@@ -59,8 +69,8 @@ void setup()
 
 
     lcd.front_color = GREEN;
-    lcd.draw_circle(50, 50, 50);
-    lcd.draw_line(64, 50, r, 100);
+    lcd.draw_circle(50, 50, 50,YELLOW);
+    lcd.draw_line(64, 50, r, 100,GREEN);
 
 
 }
