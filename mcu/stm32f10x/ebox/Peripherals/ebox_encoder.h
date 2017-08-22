@@ -9,8 +9,8 @@ class Encoder
     public:
         Encoder(TIM_TypeDef *timer,Gpio *a,Gpio *b);
         Encoder(TIM_TypeDef *timer,Gpio *a);
-        bool begin(uint8_t mode = TIM_EncoderMode_TI12);
-        float read_speed();//单位：pulse/second;
+        bool begin(uint32_t pulse_per_circle,uint8_t mode = TIM_EncoderMode_TI12);
+        double read_speed();//单位：pulse/second;
         uint16_t read_counter();
         bool read_direction();
 
@@ -24,6 +24,7 @@ class Encoder
         Gpio        *b;    
         uint16_t    period;
         uint64_t    last_read_speed_time;
+        uint32_t    pulse_per_circle;
 };
 
 #endif

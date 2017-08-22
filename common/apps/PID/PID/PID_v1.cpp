@@ -13,35 +13,35 @@
  *    The parameters specified here are those for for which we can't set up
  *    reliable defaults, so we need to have the user set them.
  ***************************************************************************/
-PID::PID(double* Input, double* Output, double* Setpoint,
-        double Kp, double Ki, double Kd, int POn, int ControllerDirection)
+PID::PID(double* Input, double* Output, double* Setpoint)
 {
     myOutput = Output;
     myInput = Input;
     mySetpoint = Setpoint;
+}
+
+//初始化PID控制器参数，使用POn = P_ON_E为默认值
+void PID::begin(double Kp, double Ki, double Kd, int ControllerDirection,
+                int Mode,unsigned long SampleTime,double outMin,double outMax)
+{
+    begin(Kp,Ki,Kd,P_ON_E,ControllerDirection,Mode,SampleTime,outMin,outMax);
+}
+
+
+//初始化PID控制器参数
+void PID::begin(double Kp, double Ki, double Kd, int POn, int ControllerDirection,
+                int Mode,unsigned long SampleTime,double outMin,double outMax)
+{
     inAuto = false;
-
-    PID::SetOutputLimits(0, 1000);				//default output limit corresponds to
+    this->SampleTime = SampleTime;//default Controller Sample Time is 0.1 seconds
+    SetOutputLimits(outMin,outMax);//default output limit corresponds to
 												//the arduino pwm limits
-
-    SampleTime = 5;							//default Controller Sample Time is 0.1 seconds
-
     PID::SetControllerDirection(ControllerDirection);
     PID::SetTunings(Kp, Ki, Kd, POn);
-
     lastTime = millis()-SampleTime;
+    SetMode(Mode);
+
 }
-
-/*Constructor (...)*********************************************************
- *    To allow backwards compatability for v1.1, or for people that just want
- *    to use Proportional on Error without explicitly saying so
- ***************************************************************************/
-
-PID::PID(double* Input, double* Output, double* Setpoint,double Kp, double Ki, double Kd, int ControllerDirection)
-{
-    PID(Input, Output, Setpoint, Kp, Ki, Kd, P_ON_E, ControllerDirection);
-}
-
 
 /* Compute() **********************************************************************
  *     This, as they say, is where the magic happens.  this function should be called
@@ -196,13 +196,13 @@ void PID::Initialize()
  ******************************************************************************/
 void PID::SetControllerDirection(int Direction)
 {
-   if(inAuto && Direction !=controllerDirection)
-   {
-	    kp = (0 - kp);
-      ki = (0 - ki);
-      kd = (0 - kd);
-   }
-   controllerDirection = Direction;
+    if(inAuto && Direction !=controllerDirection)
+    {
+        kp = (0 - kp);
+        ki = (0 - ki);
+        kd = (0 - kd);
+    }
+    controllerDirection = Direction;
 }
 
 /* Status Funcions*************************************************************

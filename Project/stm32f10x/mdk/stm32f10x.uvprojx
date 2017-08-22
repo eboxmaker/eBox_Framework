@@ -737,11 +737,6 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\apps\PID\PID\PID_v1.cpp</FilePath>
             </File>
-            <File>
-              <FileName>PID_AutoTune_v0.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\apps\PID\PID_AutoTune_v0\PID_AutoTune_v0.cpp</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
