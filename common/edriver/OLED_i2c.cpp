@@ -1,5 +1,5 @@
-#include "OLED_0.96.h"
-bool Oled::begin(uint32_t speed)
+#include "OLED_i2c.h"
+bool OledI2c::begin(uint32_t speed)
 {
     this->speed = speed;
     i2c->begin(speed);
@@ -40,14 +40,14 @@ bool Oled::begin(uint32_t speed)
     i2c->write_byte(SlaveAddr,0,0xAF);//--turn on oled panel
     i2c->release_i2c_right();
 }
-void Oled::write_cmd(uint8_t cmd)
+void OledI2c::write_cmd(uint8_t cmd)
 {
     i2c->take_i2c_right(speed);
     i2c->write_byte(SlaveAddr,0,cmd);//--turn on oled panel
     i2c->release_i2c_right();
 
 }
-void Oled::write_data(uint8_t data)
+void OledI2c::write_data(uint8_t data)
 {
     i2c->take_i2c_right(speed);
     i2c->write_byte(SlaveAddr,0x40,data);//--turn on oled panel
@@ -55,7 +55,7 @@ void Oled::write_data(uint8_t data)
 
 }
 //清屏函数,清完屏,整个屏幕是黑色的!和没点亮一样!!!	  
-void Oled::clear(void)  
+void OledI2c::clear(void)  
 {  
     u8 i,n;		    
     for(i=0;i<8;i++)  
@@ -67,7 +67,7 @@ void Oled::clear(void)
             write_data(0X00); 
     } //更新显示
 }
-void Oled::on(void)  
+void OledI2c::on(void)  
 {  
     u8 i,n;		    
     for(i=0;i<8;i++)  
@@ -84,37 +84,32 @@ void Oled::on(void)
 }
 
 //开启OLED显示    
-void Oled::display_on(void)
+void OledI2c::display_on(void)
 {
     write_cmd(0X8D);
     write_cmd(0X14);
     write_cmd(0XAF);
 }
 //关闭OLED显示     
-void Oled::display_off(void)
+void OledI2c::display_off(void)
 {
     write_cmd(0X8D);
     write_cmd(0X10);
     write_cmd(0XAE);
 }		   			 
 
-void Oled::set_pos(unsigned char x, unsigned char y) 
+void OledI2c::set_pos(unsigned char x, unsigned char y) 
 {
     write_cmd(0xb0+y);
     write_cmd(((x&0xf0)>>4)|0x10);
     write_cmd(x&0x0f); 
 }   
-void Oled::draw_point(u8 x,u8 y,u8 data)
-{
-
-}
-
 //在指定位置显示一个字符,包括部分字符
 //x:0~127
 //y:0~63
 //mode:0,反白显示;1,正常显示				 
 //size:选择字体 16/12 
-void Oled::show_char(u8 x,u8 y,u8 chr,u8 Char_Size)
+void OledI2c::show_char(u8 x,u8 y,u8 chr,u8 Char_Size)
 {      	
     unsigned char c=0,i=0;	
     c=chr-' ';//得到偏移后的值			
@@ -137,7 +132,7 @@ void Oled::show_char(u8 x,u8 y,u8 chr,u8 Char_Size)
     }
 }
 //显示一个字符号串
-void Oled::show_string(u8 x,u8 y, char *chr,u8 Char_Size)
+void OledI2c::show_string(u8 x,u8 y, char *chr,u8 Char_Size)
 {
 	unsigned char j=0;
 	while (chr[j]!='\0')
@@ -159,7 +154,7 @@ void Oled::show_string(u8 x,u8 y, char *chr,u8 Char_Size)
 //size:字体大小
 //mode:模式	0,填充模式;1,叠加模式
 //num:数值(0~4294967295);	 		  
-void Oled::show_num(u8 x,u8 y,u32 num,u8 len,u8 size2)
+void OledI2c::show_num(u8 x,u8 y,u32 num,u8 len,u8 size2)
 {         	
 	u8 t,temp;
 	u8 enshow=0;						   
@@ -180,7 +175,7 @@ void Oled::show_num(u8 x,u8 y,u32 num,u8 len,u8 size2)
 } 
 
 //显示汉字
-void Oled::show_chinese(u8 x,u8 y,u8 no)
+void OledI2c::show_chinese(u8 x,u8 y,u8 no)
 {      			    
 	u8 t,adder=0;
 	set_pos(x,y);	
@@ -200,7 +195,7 @@ void Oled::show_chinese(u8 x,u8 y,u8 no)
 /********************************************
 // fill_Picture
 ********************************************/
-void Oled::fill_picture(unsigned char fill_Data)
+void OledI2c::fill_picture(unsigned char fill_Data)
 {
 	unsigned char m,n;
 	for(m=0;m<8;m++)
@@ -216,7 +211,7 @@ void Oled::fill_picture(unsigned char fill_Data)
 	}
 }
 /***********功能描述：显示显示BMP图片128×64起始点坐标(x,y),x的范围0～127，y为页的范围0～7*****************/
-void Oled::draw_bmp(unsigned char x0, unsigned char y0,unsigned char x1, unsigned char y1,unsigned char BMP[])
+void OledI2c::draw_bmp(unsigned char x0, unsigned char y0,unsigned char x1, unsigned char y1,unsigned char BMP[])
 { 	
  unsigned int j=0;
  unsigned char x,y;

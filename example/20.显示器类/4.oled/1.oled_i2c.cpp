@@ -23,12 +23,11 @@
 #include "ebox.h"
 #include "math.h"
 #include "ebox_encoder.h"
-#include "oled_0.96.h"
+#include "oled_i2c.h"
 #include "font.h"
-SoftI2c si2cx(&PB6, &PB7);
 
-//Oled oled(&i2c1);
-Oled oled(&si2cx);
+SoftI2c si2cx(&PB6, &PB7);
+OledI2c oled(&si2cx);
 
 
 void setup()
@@ -51,8 +50,6 @@ int main(void)
         last_time1 = millis();
         uart1.printf("%d\r\n",last_time1 - last_time);
 
-        oled.show_char(0,0,'X',8);
-        delay_ms(1000);
         oled.draw_bmp(0,0,128,8,(u8*)BMP1);
         delay_ms(1000);
 		oled.show_num(103,6,25,3,16);//ÏÔÊ¾ASCII×Ö·ûµÄÂëÖµ 

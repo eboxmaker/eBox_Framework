@@ -18,22 +18,22 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "oled_ssd1306.h"
+#include "oled_4spi.h"
 #include "font.h"
 
 
 /**********************************************************
  *                    函 数 声 明 区                      *
  **********************************************************/
-OLED_SSD1306::OLED_SSD1306(Gpio *cs_pin, Gpio *res_pin, Gpio *dc_pin, Gpio *scl_pin, Gpio *sda_pin)
+Oled4Spi::Oled4Spi(Gpio *cs, Gpio *dc, Gpio *res,Gpio *scl_d0, Gpio *sda_d1)
 {
-    this->cs_pin	= cs_pin;
-    this->res_pin	= res_pin;
-    this->dc_pin	= dc_pin;
-    this->scl_pin	= scl_pin;
-    this->sda_pin	= sda_pin;
+    this->cs_pin	= cs;
+    this->res_pin	= res;
+    this->dc_pin	= dc;
+    this->scl_pin	= scl_d0;
+    this->sda_pin	= sda_d1;
 }
-void OLED_SSD1306::begin(void)	//初始化SSD1306
+void Oled4Spi::begin(void)	//初始化SSD1306
 {
     res_pin->mode(OUTPUT_PP);
     dc_pin->mode(OUTPUT_PP);
@@ -50,7 +50,7 @@ void OLED_SSD1306::begin(void)	//初始化SSD1306
 *   返回结果：
 *   备    注：
 ***********************************************************/
-void OLED_SSD1306::write_data(uint8_t dat)
+void Oled4Spi::write_data(uint8_t dat)
 {
     uint8_t i;
     dc_pin->set();
@@ -76,7 +76,7 @@ void OLED_SSD1306::write_data(uint8_t dat)
 *   返回结果：
 *   备    注：
 ***********************************************************/
-void OLED_SSD1306::write_cmd(uint8_t cmd)
+void Oled4Spi::write_cmd(uint8_t cmd)
 {
     uint8_t i;
     dc_pin->reset();
@@ -102,12 +102,20 @@ void OLED_SSD1306::write_cmd(uint8_t cmd)
 *   返回结果：
 *   备    注：
 ***********************************************************/
-void OLED_SSD1306::
-set_xy(uint16_t x, uint16_t y)
+void Oled4Spi::
+set_pos(uint16_t x, uint16_t y)
 {
     write_cmd(0xb0 + y);
     write_cmd(((x & 0xf0) >> 4) | 0x10);
     write_cmd((x & 0x0f) | 0x01);
+}
+void Oled4Spi::draw_point(uint8_t x,uint8_t y)
+{
+    uint8_t temp = 1 << (y % 8);
+    set_pos(x,y/8);
+    
+    write_data(temp);
+
 }
 
 /***********************************************************
@@ -117,7 +125,7 @@ set_xy(uint16_t x, uint16_t y)
 *   返回结果：
 *   备    注：清屏函数,清完屏,整个屏幕是黑色的!和没点亮一样!!!
 ***********************************************************/
-void OLED_SSD1306::clear(void)
+void Oled4Spi::clear(void)
 {
     uint8_t i, n;
     for(i = 0; i < 8; i++)
@@ -131,12 +139,12 @@ void OLED_SSD1306::clear(void)
 
 /***********************************************************
 *   函数名称：
-*   功能描述：   OLED_SSD1306开启显示
+*   功能描述：   Oled4Spi开启显示
 *   参数列表：
 *   返回结果：
 *   备    注：
 ***********************************************************/
-void OLED_SSD1306::display_on(void)
+void Oled4Spi::display_on(void)
 {
     write_cmd(0x8d);	//SET DCDC命令
     write_cmd(0X14);  //DCDC ON
@@ -145,12 +153,12 @@ void OLED_SSD1306::display_on(void)
 
 /***********************************************************
 *   函数名称：
-*   功能描述：   OLED_SSD1306关闭显示
+*   功能描述：   Oled4Spi关闭显示
 *   参数列表：
 *   返回结果：
 *   备    注：
 ***********************************************************/
-void OLED_SSD1306::display_off(void)
+void Oled4Spi::display_off(void)
 {
     write_cmd(0x8d);	//SET DCDC命令
     write_cmd(0X10);  //DCDC ON
@@ -164,7 +172,7 @@ void OLED_SSD1306::display_off(void)
 *   返回结果：
 *   备    注：在指定位置显示一个字符,包括部分字符
 ***********************************************************/
-void OLED_SSD1306::show_char(uint8_t x, uint8_t y, uint8_t chr)
+void Oled4Spi::show_char(uint8_t x, uint8_t y, uint8_t chr,u8 Char_Size)
 {
     unsigned char c = 0, i = 0;
     c = chr - ' '; //得到偏移后的值
@@ -173,18 +181,18 @@ void OLED_SSD1306::show_char(uint8_t x, uint8_t y, uint8_t chr)
         x = 0;
         y = y + 2;
     }
-    if(SIZE == 16)
+    if(Char_Size == 16)
     {
-        set_xy(x, y);
+        set_pos(x, y);
         for(i = 0; i < 8; i++)
             write_data(font8x16[c * 16 + i]);
-        set_xy(x, y + 1);
+        set_pos(x, y + 1);
         for(i = 0; i < 8; i++)
             write_data(font8x16[c * 16 + i + 8]);
     }
     else
     {
-        set_xy(x, y + 1);
+        set_pos(x, y + 1);
         for(i = 0; i < 6; i++)
             write_data(font6x8[c][i]);
     }
@@ -197,12 +205,12 @@ void OLED_SSD1306::show_char(uint8_t x, uint8_t y, uint8_t chr)
 *   返回结果：
 *   备    注：在指定位置显示一个字符串
 ***********************************************************/
-void OLED_SSD1306::show_string(uint8_t x, uint8_t y, uint8_t *chr)
+void Oled4Spi::show_string(uint8_t x, uint8_t y, char *chr,u8 Char_Size)
 {
     unsigned char j = 0;
     while (chr[j] != '\0')
     {
-        show_char(x, y, chr[j]);
+        show_char(x, y, chr[j],Char_Size);
         x += 8;
         if(x > 120)
         {
@@ -221,7 +229,7 @@ void OLED_SSD1306::show_string(uint8_t x, uint8_t y, uint8_t *chr)
 *   返回结果：
 *   备    注：在指定位置显示一个字符串
 ***********************************************************/
-void OLED_SSD1306::show_num(uint8_t x, uint8_t y, uint32_t num, uint8_t len, uint8_t size)
+void Oled4Spi::show_num(uint8_t x, uint8_t y, uint32_t num, uint8_t len, uint8_t size)
 {
     uint8_t t, temp;
     uint8_t enshow = 0;
@@ -232,13 +240,13 @@ void OLED_SSD1306::show_num(uint8_t x, uint8_t y, uint32_t num, uint8_t len, uin
         {
             if(temp == 0)
             {
-                show_char(x + (size / 2)*t, y, ' ');
+                show_char(x + (size / 2)*t, y, ' ',size);
                 continue;
             }
             else enshow = 1;
 
         }
-        show_char(x + (size / 2)*t, y, temp + '0');
+        show_char(x + (size / 2)*t, y, temp + '0',size);
     }
 }
 
@@ -249,16 +257,16 @@ void OLED_SSD1306::show_num(uint8_t x, uint8_t y, uint32_t num, uint8_t len, uin
 *   返回结果：
 *   备    注：在指定位置显示一个汉字
 ***********************************************************/
-void OLED_SSD1306::show_chinese(uint8_t x, uint8_t y, uint8_t no)
+void Oled4Spi::show_chinese(uint8_t x, uint8_t y, uint8_t no)
 {
     uint8_t t, adder = 0;
-    set_xy(x, y);
+    set_pos(x, y);
     for(t = 0; t < 16; t++)
     {
         write_data(Hzk[2 * no][t]);
         adder += 1;
     }
-    set_xy(x, y + 1);
+    set_pos(x, y + 1);
     for(t = 0; t < 16; t++)
     {
         write_data(Hzk[2 * no + 1][t]);
@@ -274,7 +282,7 @@ void OLED_SSD1306::show_chinese(uint8_t x, uint8_t y, uint8_t no)
 *   返回结果：
 *   备    注：
 ***********************************************************/
-void OLED_SSD1306::draw_bmp(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, const unsigned char BMP[])
+void Oled4Spi::draw_bmp(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, const unsigned char BMP[])
 {
     unsigned int j = 0;
     unsigned char x, y;
@@ -283,7 +291,7 @@ void OLED_SSD1306::draw_bmp(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, 
     else y = y1 / 8 + 1;
     for(y = y0; y < y1; y++)
     {
-        set_xy(x0, y);
+        set_pos(x0, y);
         for(x = x0; x < x1; x++)
         {
             write_data(BMP[j++]);
@@ -292,7 +300,7 @@ void OLED_SSD1306::draw_bmp(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, 
 }
 
 /*****************  m^n  ********************/
-uint32_t OLED_SSD1306::oled_pow(uint8_t m, uint8_t n)
+uint32_t Oled4Spi::oled_pow(uint8_t m, uint8_t n)
 {
     uint32_t result = 1;
     while(n--)result *= m;
@@ -301,12 +309,12 @@ uint32_t OLED_SSD1306::oled_pow(uint8_t m, uint8_t n)
 
 /***********************************************************
 *   函数名称：
-*   功能描述：   OLED_SSD1306初始化
+*   功能描述：   Oled4Spi初始化
 *   参数列表：
 *   返回结果：
 *   备    注：
 ***********************************************************/
-void OLED_SSD1306::init(void)
+void Oled4Spi::init(void)
 {
     res_pin->set();
     delay_ms(100);
@@ -345,6 +353,6 @@ void OLED_SSD1306::init(void)
 
     write_cmd(0xaf);	/*display ON*/
     clear();
-    set_xy(0, 0);
+    set_pos(0, 0);
 }
 

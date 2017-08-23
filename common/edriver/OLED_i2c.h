@@ -1,5 +1,5 @@
-#ifndef __OLED_0_96_H
-#define __OLED_0_96_H
+#ifndef __OLED_IIC_H
+#define __OLED_IIC_H
 
 #include "ebox.h"
 #include "font.h"
@@ -9,7 +9,6 @@
 
 
 #define OLED_MODE 0
-#define SIZE 8
 #define XLevelL		0x00
 #define XLevelH		0x10
 #define Max_Column	128
@@ -19,21 +18,21 @@
 #define Y_WIDTH 	64	 
 
 
-class Oled
+class OledI2c
 {
     public:
-        Oled(SoftI2c *i2c)
+        OledI2c(SoftI2c *i2c)
         {
             this->i2c = i2c;
             speed = 0;
         }
         bool begin(uint32_t speed);
+        
         void clear(void);
         void on(void);  
         void display_on(void);
         void display_off(void);
-        void draw_point(u8 x,u8 y,u8 t);
-        void set_pos(unsigned char x, unsigned char y) ;
+        
         void show_char(u8 x,u8 y,u8 chr,u8 Char_Size);
         void show_string(u8 x,u8 y,char  *chr,u8 Char_Size);
         void show_num(u8 x,u8 y,u32 num,u8 len,u8 size2);
@@ -48,6 +47,7 @@ class Oled
         uint32_t speed;
         void write_cmd(uint8_t cmd);
         void write_data(uint8_t data);
+        void set_pos(unsigned char x, unsigned char y) ;
 
 };
 
