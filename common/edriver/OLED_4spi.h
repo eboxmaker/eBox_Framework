@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    oled.h
+  * @file    oled_ssd1306.h
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
@@ -17,8 +17,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef _USE_OLED_H
-#define _USE_OLED_H
+#ifndef __OLED_SPI_H
+#define __OLED_SPI_H
 /*==================================================================
  *   声明库说明：
  *   版	     本：
@@ -26,7 +26,17 @@
  *   创建  日期：
  * ------------------------------------------------------------------
  *  硬件环境:
- *
+ *     	0.96寸oled，4线SPI,128*64,芯片:SSD1306
+ * 	OLED 4接口演示例程(STM32系列)
+ *             说明: SPI协议
+ *             ----------------------------------------------------------------
+ *              GND    接
+ *              VCC  接5V或3.3v电源
+ *              D0   接PB6(SCL)
+ *              D1   接PB7(SDA)
+ *              RES  接PB5
+ *              DC   接PB4
+ *              CS   接PB3
  *-------------------------------------------------------------------
  *  软件环境:
  *
@@ -78,53 +88,41 @@
 #define	Brightness	0xCF
 #define X_WIDTH		128
 #define Y_WIDTH		64
+#define SIZE		16
 
 
-/*--------------------------------------------------------*
- *                    动 作 宏 定 义                      *
- *--------------------------------------------------------*/
-
-
-/**********************************************************
- *                     结构体定义区                       *
- **********************************************************/
-class OLED
+class Oled4Spi
 {
 public:
-    OLED(Gpio *p_res_pin, Gpio *p_dc_pin, Gpio *p_scl_pin, Gpio *p_sda_pin);
+    Oled4Spi(Gpio *cs, Gpio *dc, Gpio *res, Gpio *scl_d0, Gpio *sda_d1);
     void begin();
-    void OLED_Fill(unsigned char bmp_dat);
-    void OLED_CLS(void);
-    void OLED_init(void);
-    void OLED_P6x8Str(unsigned char x, unsigned char y, unsigned char *ch);
-    void OLED_P8x16Str(unsigned char x, unsigned char y, unsigned char *ch);
-    void OLED_P16x16Ch(unsigned char x, unsigned char y, unsigned char N);
-    void Draw_BMP(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1, unsigned char *bmp);
-    void OLED_P6x8p(unsigned char x, unsigned char y, unsigned char *p, unsigned int len);
-    void OLED_f6x8int(unsigned char x, unsigned char y, unsigned int data);
-    void OLED_P16x32num(unsigned char x, unsigned char y, unsigned char *bnum);
-    void OLED_P8x16ASCII(unsigned char x, unsigned char y, unsigned char ch);
+
+    void init(void);
+    void clear(void);
+    void display_on(void);
+    void display_off(void);
+
+    void draw_point(uint8_t x,uint8_t y);
+
+    void show_char(uint8_t x, uint8_t y, uint8_t chr,u8 Char_Size);
+    void show_string(uint8_t x, uint8_t y, char *p,u8 Char_Size);
+    void show_num(uint8_t x, uint8_t y, uint32_t num, uint8_t len, uint8_t size);
+    void show_chinese(uint8_t x, uint8_t y, uint8_t no);
+
+    void fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t dot);
+    void draw_bmp(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, const unsigned char BMP[]);
 
 private:
-    void OLED_WrDat(unsigned char dat);
-    void OLED_WrCmd(unsigned char cmd);
-    void OLED_Set_Pos(unsigned char x, unsigned char y);
+    void write_data(uint8_t dat);	//OLED写数据
+    void write_cmd(uint8_t cmd);	//OLED写命令
+    void set_pos(uint16_t x, uint16_t y);	// OLED 设置坐标
+    uint32_t oled_pow(uint8_t m, uint8_t n);	//m^n
 
+    Gpio *cs_pin;	//片选
     Gpio *res_pin;
     Gpio *dc_pin;
-    Gpio *scl_pin;
-    Gpio *sda_pin;
+    Gpio *scl_pin;	//D0
+    Gpio *sda_pin;	//D1
 };
-
-
-/**********************************************************
- *                    全局变量声明区                      *
- **********************************************************/
-
-/**********************************************************
- *                    函 数 声 明 区                      *
- **********************************************************/
-
-
 #endif
 

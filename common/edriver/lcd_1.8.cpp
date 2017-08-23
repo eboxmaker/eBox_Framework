@@ -685,7 +685,7 @@ void Lcd::init(void)
 入口参数：无
 返回值：无
 *************************************************/
-inline void Lcd::draw_point(uint16_t x, uint16_t y, uint16_t Data)
+void Lcd::draw_point(uint16_t x, uint16_t y, uint16_t Data)
 {
     set_region(x, y, x + 1, y + 1);
     write_data_16bit(Data);
