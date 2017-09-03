@@ -947,6 +947,16 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\LTC2943.cpp</FilePath>
             </File>
+            <File>
+              <FileName>MCP23017.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\MCP23017.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>PCA9685.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\PCA9685.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
