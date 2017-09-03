@@ -49,25 +49,27 @@ typedef enum
 */
 typedef enum
 {
-    OUTPUT_PP    = 0x0,    
+    OUTPUT      = 0x00, 
+    
+    OUTPUT_PP   = 0x10,    
     OUTPUT_PP_PU    ,    
     OUTPUT_PP_PD    ,
     
-    OUTPUT_OD       ,
+    OUTPUT_OD   = 0x20,
     OUTPUT_OD_PU    ,
     OUTPUT_OD_PD    ,
     
-    AIN             ,
+    AIN         = 0x30,
     
-    INPUT           ,
+    INPUT       = 0x40,
     INPUT_PD        ,
     INPUT_PU        ,
     
-    AF_OD           ,
+    AF_OD       = 0x50,
     AF_OD_PU        ,   
     AF_OD_PD        ,
     
-    AF_PP           ,      
+    AF_PP       = 0x60,      
     AF_PP_PU        ,
     AF_PP_PD        ,
 }PIN_MODE;

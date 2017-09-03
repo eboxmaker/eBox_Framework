@@ -25,6 +25,7 @@
 #include "ebox_encoder.h"
 #include "oled_i2c.h"
 #include "font.h"
+#include "MCP23017.h"
 
 SoftI2c si2cx(&PB6, &PB7);
 OledI2c oled(&si2cx);
