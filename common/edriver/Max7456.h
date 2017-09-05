@@ -122,7 +122,7 @@ public:
 
 private:
     uint8_t start_col, start_row, col, row, video_mode, video_center;
-    SPI_CONFIG_TYPE spi_dev_max7456;
+    SpiConfig_t spi_dev_max7456;
     Gpio *cs;
     Spi *spi;
 };

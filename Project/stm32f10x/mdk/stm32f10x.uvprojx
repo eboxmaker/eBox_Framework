@@ -957,6 +957,26 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\PCA9685.cpp</FilePath>
             </File>
+            <File>
+              <FileName>TLC59711.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\TLC59711.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>INA219.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\INA219.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>AM2315.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\AM2315.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>TSL2561.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\TSL2561.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

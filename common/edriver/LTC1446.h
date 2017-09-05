@@ -35,7 +35,7 @@ public:
     void write(uint16_t _DACA, uint16_t _DACB);
 
 private:
-    SPI_CONFIG_TYPE spi_dev_LTC1446;
+    SpiConfig_t spi_dev_LTC1446;
     Gpio *cs;
     Spi *spi;
 };

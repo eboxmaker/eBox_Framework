@@ -39,7 +39,7 @@ bool Adafruit_BMP280::begin(uint8_t dev_num)
         cs->mode(OUTPUT_PP);
         cs->set();
         config.dev_num = dev_num;
-        config.bit_order = SPI_BITODER_MSB;
+        config.bit_order = MSB_FIRST;
         config.mode = SPI_MODE3;
         config.prescaler = SPI_CLOCK_DIV2;
 //      }

@@ -128,7 +128,7 @@ class At45db
         
 	private:
 		uint8_t                  spi_flash_buf[1024];
-		SPI_CONFIG_TYPE     spi_dev_AT45DB;
+		SpiConfig_t     spi_dev_AT45DB;
 		Gpio                *cs;
 		Spi                 *spi;
 

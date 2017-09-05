@@ -241,7 +241,7 @@ class Lora
     private:
         Gpio *cs;
         Gpio *rst_pin;
-        SPI_CONFIG_TYPE spi_config;
+        SpiConfig_t spi_config;
         Spi *spi;
 };
 #endif

@@ -274,7 +274,7 @@ int8_t SoftI2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t d
     int8_t ret = 0;
     start();
 
-    if (send_7bits_address(slave_address) == -1)
+    if (send_7bits_address(slave_address&0xfe) == -1)
         ret = -1;
 
     if (send_byte(reg_address) == -1)
@@ -304,7 +304,7 @@ int8_t SoftI2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *
     int8_t ret = 0;
     start();
 
-    if (send_7bits_address(slave_address) == -1)
+    if (send_7bits_address(slave_address&0xfe) == -1)
         ret = -1;
 
     if (send_byte(reg_address) == -1)
@@ -338,7 +338,7 @@ int8_t 	SoftI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *
     int8_t ret = 0;
     start();
 
-    if (send_7bits_address(slave_address) == -1)
+    if (send_7bits_address(slave_address&0xfe) == -1)
         ret = -1;
 
 
@@ -347,7 +347,7 @@ int8_t 	SoftI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *
 
     start();
 
-    if (send_byte(slave_address + 1) == -1)
+    if (send_byte(slave_address | 0x01) == -1)
         ret = -3;
 
     *data = receive_byte();
@@ -374,7 +374,7 @@ int8_t 	SoftI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *
 
     start();
 
-    if (send_7bits_address(slave_address) == -1)
+    if (send_7bits_address(slave_address&0xfe) == -1)
         ret = -1;
 
 
@@ -382,7 +382,7 @@ int8_t 	SoftI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *
         ret = -2;
 
     start();
-    if (send_7bits_address(slave_address + 1) == -1)
+    if (send_7bits_address(slave_address | 0x01) == -1)
         ret = -3;
 
     while(num_to_read)

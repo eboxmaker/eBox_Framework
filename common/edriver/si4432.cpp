@@ -43,7 +43,7 @@ void Si4432::begin(uint8_t dev_num)
     spi_dev_si4432.dev_num = dev_num;
     spi_dev_si4432.mode = SPI_MODE0;
     spi_dev_si4432.prescaler = SPI_CLOCK_DIV4;
-    spi_dev_si4432.bit_order = SPI_BITODER_MSB;
+    spi_dev_si4432.bit_order = MSB_FIRST;
     spi->begin(&spi_dev_si4432);
     cs->mode(OUTPUT_PP);
     cs->set();

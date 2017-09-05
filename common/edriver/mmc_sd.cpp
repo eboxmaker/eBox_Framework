@@ -11,7 +11,7 @@ int SD::begin(uint8_t dev_num)
 	SPIDevSDCard.dev_num = dev_num;
 	SPIDevSDCard.mode = SPI_MODE0;
 	SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
-	SPIDevSDCard.bit_order = SPI_BITODER_MSB;
+	SPIDevSDCard.bit_order = MSB_FIRST;
 		
 	cs->mode(OUTPUT_PP);
 	cs->set();

@@ -138,7 +138,7 @@ private:
     Gpio *cs;
     Gpio *rst_pin;
     Gpio *int_pin;
-    SPI_CONFIG_TYPE spi_dev_w5500;
+    SpiConfig_t spi_dev_w5500;
     Spi *spi;
 
 

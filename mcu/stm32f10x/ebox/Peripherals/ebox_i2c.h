@@ -46,7 +46,7 @@ public:
     int8_t take_i2c_right(uint32_t speed);
     int8_t release_i2c_right(void);
 
-private:
+public:
     int8_t start();
     int8_t stop();
     int8_t send_no_ack();
@@ -89,7 +89,7 @@ public:
     int8_t      take_i2c_right(uint32_t speed);
     int8_t      release_i2c_right(void);
 
-private:
+public:
     void 	start();
     void 	stop();
     int8_t 	send_ack();

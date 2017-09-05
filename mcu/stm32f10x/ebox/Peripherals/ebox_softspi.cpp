@@ -27,7 +27,7 @@ SoftSpi::SoftSpi(Gpio *sck, Gpio *miso, Gpio *mosi)
     this->mosi_pin = mosi;
 
 }
-void SoftSpi::begin(SPI_CONFIG_TYPE *spi_config)
+void SoftSpi::begin(SpiConfig_t *spi_config)
 {
 
     sck_pin->mode(OUTPUT_PP);
@@ -51,7 +51,7 @@ void SoftSpi::begin(SPI_CONFIG_TYPE *spi_config)
         break;
     }
 }
-void SoftSpi::config(SPI_CONFIG_TYPE *spi_config)
+void SoftSpi::config(SpiConfig_t *spi_config)
 {
     current_dev_num = spi_config->dev_num;
     mode = spi_config->mode;
@@ -102,7 +102,7 @@ uint8_t SoftSpi::transfer0(uint8_t data)
     //第二个是下降沿：输出数据；
     for (i = 0; i < 8; i++)
     {
-        if (bit_order == SPI_BITODER_LSB)
+        if (bit_order == LSB_FIRST)
         {
             RcvData |= miso_pin->read() << i;
             mosi_pin->write(!!(data & (1 << i)));
@@ -130,7 +130,7 @@ uint8_t SoftSpi::transfer1(uint8_t data)
     for (i = 0; i < 8; i++)
     {
         ///////////////////上升沿输出//////////
-        if (bit_order == SPI_BITODER_LSB)
+        if (bit_order == LSB_FIRST)
         {
             mosi_pin->write(!!(data & (1 << i)));
         }
@@ -169,7 +169,7 @@ uint8_t SoftSpi::transfer2(uint8_t data)
     {
         sck_pin->reset();
         delay_us(spi_delay);
-        if (bit_order == SPI_BITODER_LSB)
+        if (bit_order == LSB_FIRST)
         {
             RcvData |= miso_pin->read() << i;
             mosi_pin->write(!!(data & (1 << i)));
@@ -198,7 +198,7 @@ uint8_t SoftSpi::transfer3(uint8_t data)
         ///////////////////下降沿沿输出
         sck_pin->reset();
         delay_us(spi_delay);
-        if (bit_order == SPI_BITODER_LSB)
+        if (bit_order == LSB_FIRST)
         {
             mosi_pin->write(!!(data & (1 << i)));
         }
@@ -285,7 +285,7 @@ int8_t  SoftSpi::read(uint8_t *rcvdata, uint16_t data_length)
     return 0;
 }
 
-int8_t SoftSpi::take_spi_right(SPI_CONFIG_TYPE *spi_config)
+int8_t SoftSpi::take_spi_right(SpiConfig_t *spi_config)
 {
     while((busy == 1) && (spi_config->dev_num != read_config()))
         delay_ms(1);

@@ -36,7 +36,7 @@ void W5500::begin(uint8_t dev_num, uint8_t *mac, uint8_t *ip, uint8_t *subnet, u
     spi_dev_w5500.dev_num = dev_num;
     spi_dev_w5500.mode = SPI_MODE0;
     spi_dev_w5500.prescaler = SPI_CLOCK_DIV2;
-    spi_dev_w5500.bit_order = SPI_BITODER_MSB;
+    spi_dev_w5500.bit_order = MSB_FIRST;
 
     spi->begin(&spi_dev_w5500);
     cs->mode(OUTPUT_PP);

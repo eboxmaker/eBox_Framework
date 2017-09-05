@@ -114,7 +114,7 @@ class Adafruit_BMP280
   private:
     Gpio *cs;
     Spi *spi;
-    SPI_CONFIG_TYPE config;
+    SpiConfig_t config;
 
     void readCoefficients(void);
 //    uint8_t spixfer(uint8_t x);
