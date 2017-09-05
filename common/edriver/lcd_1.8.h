@@ -100,7 +100,7 @@ private:
     Gpio *rs;
     Gpio *rst;
     Spi  *spi;
-    SPI_CONFIG_TYPE config;
+    SpiConfig_t config;
 
     void reset(void);
     void init(void);

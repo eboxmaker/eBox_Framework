@@ -23,7 +23,7 @@ private:
     Gpio *ce;
     Gpio *cs;
     Spi *spi;
-    SPI_CONFIG_TYPE spi_dev_nrf24l01;
+    SpiConfig_t spi_dev_nrf24l01;
 
     uint8_t rx_aw;
 

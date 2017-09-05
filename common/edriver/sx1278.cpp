@@ -14,7 +14,7 @@ void Lora::begin(uint8_t dev_num,uint8_t bw, uint8_t cr, uint8_t sf)
     spi_config.dev_num = dev_num;
     spi_config.mode = SPI_MODE0;
     spi_config.prescaler = SPI_CLOCK_DIV16;
-    spi_config.bit_order = SPI_BITODER_MSB;
+    spi_config.bit_order = MSB_FIRST;
     
     cs->mode(OUTPUT_PP);
     rst_pin->mode(OUTPUT_PP);

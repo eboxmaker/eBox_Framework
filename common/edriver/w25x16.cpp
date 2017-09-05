@@ -26,7 +26,7 @@ void W25x16::begin(uint8_t dev_num)
     spi_dev_w25x16.dev_num = dev_num;
     spi_dev_w25x16.mode = SPI_MODE0;
     spi_dev_w25x16.prescaler = SPI_CLOCK_DIV4;
-    spi_dev_w25x16.bit_order = SPI_BITODER_MSB;
+    spi_dev_w25x16.bit_order = MSB_FIRST;
 
     spi->begin(&spi_dev_w25x16);
     cs->mode(OUTPUT_PP);

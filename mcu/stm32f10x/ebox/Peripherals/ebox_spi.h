@@ -22,31 +22,7 @@
 #define __SPI_H
 
 #include "ebox_common.h"
-//spi相关公共宏和声明//////////////////////////////////
-#define SPI_MODE0 0x02
-#define SPI_MODE1 0x00
-#define SPI_MODE2 0x03
-#define SPI_MODE3 0x01
 
-#define SPI_CLOCK_DIV2     SPI_BaudRatePrescaler_2
-#define SPI_CLOCK_DIV4     SPI_BaudRatePrescaler_4
-#define SPI_CLOCK_DIV8     SPI_BaudRatePrescaler_8
-#define SPI_CLOCK_DIV16    SPI_BaudRatePrescaler_16
-#define SPI_CLOCK_DIV32    SPI_BaudRatePrescaler_32
-#define SPI_CLOCK_DIV64    SPI_BaudRatePrescaler_64
-#define SPI_CLOCK_DIV128   SPI_BaudRatePrescaler_128
-#define SPI_CLOCK_DIV256   SPI_BaudRatePrescaler_256
-
-#define SPI_BITODER_MSB		SPI_FirstBit_MSB
-#define SPI_BITODER_LSB		SPI_FirstBit_LSB
-
-typedef struct
-{
-    uint8_t     dev_num;
-    uint8_t     mode;
-    uint16_t    prescaler;
-    uint16_t    bit_order;
-} SPI_CONFIG_TYPE;
 
 
 /*
@@ -63,8 +39,8 @@ class	Spi
 public:
     Spi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
 
-    void    begin (SPI_CONFIG_TYPE *spi_config);
-    void    config(SPI_CONFIG_TYPE *spi_config);
+    void    begin (SpiConfig_t *spi_config);
+    void    config(SpiConfig_t *spi_config);
     uint8_t read_config(void);
 
     uint8_t transfer(uint8_t data);
@@ -76,7 +52,7 @@ public:
     int8_t  read(uint8_t  *recv_data);
     int8_t  read(uint8_t *recv_data, uint16_t data_length);
 public:
-    int8_t take_spi_right(SPI_CONFIG_TYPE *spi_config);
+    int8_t take_spi_right(SpiConfig_t *spi_config);
     int8_t release_spi_right(void);
 private:
     uint8_t     current_dev_num;
@@ -94,8 +70,8 @@ class SoftSpi
 public:
     SoftSpi(Gpio *sck, Gpio *miso, Gpio *mosi);
 
-    void    begin(SPI_CONFIG_TYPE *spi_config);
-    void    config(SPI_CONFIG_TYPE *spi_config);
+    void    begin(SpiConfig_t *spi_config);
+    void    config(SpiConfig_t *spi_config);
     uint8_t read_config(void);
 
     uint8_t transfer(uint8_t data);
@@ -109,7 +85,7 @@ public:
     int8_t  read(uint8_t *rcvdata, uint16_t data_length);
 
 public:
-    int8_t take_spi_right(SPI_CONFIG_TYPE *spi_config);
+    int8_t take_spi_right(SpiConfig_t *spi_config);
     int8_t release_spi_right(void);
 
 private:
