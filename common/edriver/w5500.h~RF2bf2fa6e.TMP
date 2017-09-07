@@ -129,9 +129,9 @@ public:
 
     void attch_interruput_event(void (*callbackFun)(void))
     {
-        Exti ex(int_pin, FALLING);
+        Exti ex(int_pin, EXTI_Trigger_Falling);
         ex.begin();
-        ex.attach(callbackFun);
+        ex.attach_interrupt(callbackFun);
         ex.interrupt(ENABLE);
     }
 private:

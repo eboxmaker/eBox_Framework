@@ -1,6 +1,6 @@
-/**
+ /**
   ******************************************************************************
-  * @file    pwm.cpp
+  * @file    main.cpp
   * @author  shentq
   * @version V2.0
   * @date    2016/08/14
@@ -17,32 +17,32 @@
   */
 
 
-/* Includes ------------------------------------------------------------------*/
-
-
 #include "ebox.h"
-float x;
-uint16_t y;
-Pwm pwm1(&PB8);
+u8 count;
+void rx_event()
+{
+    uint8_t c;
+    c = uart1.read();
+    uart1.write(c);
+    PB8.toggle();
+}
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    pwm1.begin(1000, 500);
-    pwm1.set_oc_polarity(1);//set output polarity after compare
-    uart1.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
-    uart1.printf("max frq = %f\r\n",pwm1.get_accuracy());
+    uart1.attach(rx_event,RxIrq);
+    uart1.interrupt(RxIrq,ENABLE);
+    PB8.mode(OUTPUT_PP);
+    PB8.reset();
 }
+
 int main(void)
 {
     setup();
     while(1)
     {
-        x = x + PI * 0.01;
-        if(x >= PI)x = 0;
-        y = 2000 - (sin(x) + 1) * 1000;
-        pwm1.set_duty(y);
-        delay_ms(10);
+        uart1.printf("please enter a word to mcu\r\n", count);
+        delay_ms(1000);
     }
 }
 

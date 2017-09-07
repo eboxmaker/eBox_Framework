@@ -21,8 +21,7 @@
 
 #include "ebox.h"
 
-uint32_t xx;
-Exti ex(&PA8, EXTI_Trigger_Falling);
+Exti ex(&PA8, CHANGE);
 class Test 
 {
     public:

@@ -28,7 +28,7 @@
 #define  TCP_DBG(...)
 #endif
 
-int TCPCLIENT::begin(SOCKET ps, uint16_t port)
+int TCPClient::begin(SOCKET ps, uint16_t port)
 {
     s = ps;
     localPort = port;
@@ -36,7 +36,7 @@ int TCPCLIENT::begin(SOCKET ps, uint16_t port)
 }
 //链接远程服务器
 //返回1成功，0失败
-bool TCPCLIENT::connect(uint8_t *IP, uint16_t Port)
+bool TCPClient::connect(uint8_t *IP, uint16_t Port)
 {
     int ret;
     uint8_t i = 20;
@@ -88,13 +88,13 @@ bool TCPCLIENT::connect(uint8_t *IP, uint16_t Port)
     return false;
 }
 //返回socket状态
-uint8_t TCPCLIENT::status()
+uint8_t TCPClient::status()
 {
     return socket_status(s);
 }
 
 //返回接收缓冲区长度，0为空
-uint16_t TCPCLIENT::available()
+uint16_t TCPClient::available()
 {
     return recv_available(s);
 }
@@ -102,7 +102,7 @@ uint16_t TCPCLIENT::available()
 //判断链接是否可用
 //1:链接
 //0:断开
-bool TCPCLIENT::connected()
+bool TCPClient::connected()
 {
     uint8_t tmp = status();
     return !(tmp == SOCK_CLOSED || tmp == SOCK_LISTEN || tmp == SOCK_FIN_WAIT || \
@@ -110,7 +110,7 @@ bool TCPCLIENT::connected()
 }
 
 //按照标准的断开链接过程，断开链接
-void TCPCLIENT::stop()
+void TCPClient::stop()
 {
     uint32_t start = millis();
     _disconnect(s);
@@ -123,7 +123,7 @@ void TCPCLIENT::stop()
 //接收缓冲区所有内容
 //非阻塞
 //返回接收到数据的长度，0为空
-uint16_t TCPCLIENT::recv(uint8_t *buf)
+uint16_t TCPClient::recv(uint8_t *buf)
 {
     uint16_t len = 0;
     if(connected())
@@ -139,7 +139,7 @@ uint16_t TCPCLIENT::recv(uint8_t *buf)
 //读取特定长度
 //非阻塞
 //返回值 ：接收到的长度，0为没有数据
-uint16_t TCPCLIENT::recv(uint8_t *buf, uint16_t len)
+uint16_t TCPClient::recv(uint8_t *buf, uint16_t len)
 {
     uint16_t ret = 0;
     uint16_t llen;
@@ -169,12 +169,12 @@ uint16_t TCPCLIENT::recv(uint8_t *buf, uint16_t len)
 }
 
 //返回发送数据的长度，0为发送失败
-uint16_t TCPCLIENT::send(uint8_t *buf, uint16_t len)
+uint16_t TCPClient::send(uint8_t *buf, uint16_t len)
 {
     return _send(s, buf, len);
 }
 
-int TCPSERVER::begin(SOCKET ps, uint16_t port)
+int TCPServer::begin(SOCKET ps, uint16_t port)
 {
     int ret = 0;
     uint8_t tmp;
@@ -212,7 +212,7 @@ int TCPSERVER::begin(SOCKET ps, uint16_t port)
     }
     return ret;
 }
-uint16_t TCPSERVER::recv(uint8_t *buf)
+uint16_t TCPServer::recv(uint8_t *buf)
 {
     uint16_t len = 0;
 
@@ -249,11 +249,11 @@ uint16_t TCPSERVER::recv(uint8_t *buf)
     }
     return len;
 }
-void TCPSERVER::close()
+void TCPServer::close()
 {
     _close(s);
 }
-uint16_t TCPSERVER::send(uint8_t *buf, uint16_t len)
+uint16_t TCPServer::send(uint8_t *buf, uint16_t len)
 {
     return _send(s, buf, len); /*W5200向Server发送数据*/
 }

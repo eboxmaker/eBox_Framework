@@ -69,16 +69,17 @@
 #define true 0x1
 #define false 0x0
 
-#define HIGH 0x1
-#define LOW  0x0
+
 
 
 #define LSB_FIRST 0
 #define MSB_FIRST 1
 
-#define CHANGE 1
-#define FALLING 2
-#define RISING 3
+#define LOW     0
+#define HIGH    1
+#define CHANGE  2
+#define FALLING 3
+#define RISING  4
 
 #define PI 3.1415926535897932384626433832795
 #define HALF_PI 1.5707963267948966192313216916398

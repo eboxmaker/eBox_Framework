@@ -52,9 +52,6 @@ public:
 private:
     I2c *i2c;
     uint32_t speed;
-
-
-
 };
 
 #endif

@@ -76,13 +76,7 @@ int main(void)
             tcp.send(buf, len);
         }
 
-
-
-
-
-
     }
-
 
 }
 

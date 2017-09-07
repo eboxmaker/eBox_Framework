@@ -60,15 +60,16 @@ int exti_irq_init(uint8_t index,exti_irq_handler handler,uint32_t id)
  * @brief    Exti构造函数，实例化一个对象
  * @param    *pin: 指定的外部中断引脚PA0~PG15
  * @param    trigger: 引脚触发中的条件，可以是一下三种模式中的一种：
- *           - EXTI_Trigger_Rising: 上升沿触发中断
- *           - EXTI_Trigger_Falling: 下降沿触发中断
- *           - EXTI_Trigger_Rising_Falling: 上升沿和下降沿均触发中断
+ *           - RISING: 上升沿触发中断
+ *           - FALLING: 下降沿触发中断
+ *           - CHANGE: 上升沿和下降沿均触发中断
  * @return   NONE
  */
-Exti::Exti(Gpio *pin, EXTITrigger_TypeDef trigger)
+Exti::Exti(Gpio *pin, uint8_t trigger)
 {
 
-
+    
+    
     this->exti_pin = pin;
     this->trigger = trigger;
 
@@ -93,12 +94,23 @@ void Exti::begin()
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
 
+
     EXTI_InitTypeDef EXTI_InitStructure;
-    /* EXTI line(PB0) mode config */
+    switch(trigger)
+    {
+        case RISING:
+            EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //上升沿沿中断
+            break;
+        case FALLING:
+            EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; //下降沿中断
+            break;
+        case CHANGE:
+            EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling; //上升，下降沿都中断
+            break;
+    }
     GPIO_EXTILineConfig(port_source, pin_source);
     EXTI_InitStructure.EXTI_Line = exti_line;
     EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-    EXTI_InitStructure.EXTI_Trigger = trigger; //下降沿中断
     EXTI_InitStructure.EXTI_LineCmd = ENABLE;
     EXTI_Init(&EXTI_InitStructure);
     interrupt(ENABLE);

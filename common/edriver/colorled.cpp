@@ -21,7 +21,7 @@
 #include "colorled.h"
 
 
-void COLORLED::begin()
+void ColorLed::begin()
 {
     r = new Pwm(r_pin);
     g = new Pwm(g_pin);
@@ -34,7 +34,7 @@ void COLORLED::begin()
     b->set_oc_polarity(0);
 }
 
-void COLORLED::color_rgb(uint8_t r, uint8_t g, uint8_t b)
+void ColorLed::color_rgb(uint8_t r, uint8_t g, uint8_t b)
 {
 
     this->r->set_duty(r * 3);
@@ -42,7 +42,7 @@ void COLORLED::color_rgb(uint8_t r, uint8_t g, uint8_t b)
     this->b->set_duty(b * 3);
 
 }
-void COLORLED::color_hsl(int h, float s, float l)
+void ColorLed::color_hsl(int h, float s, float l)
 {
     COLOR_HSL hsl;
     COLOR_RGB rgb;
@@ -56,7 +56,7 @@ void COLORLED::color_hsl(int h, float s, float l)
     this->g->set_duty(rgb.g * 3.9);
     this->b->set_duty(rgb.b * 0.6);
 }
-void COLORLED::color_hsl(COLOR_HSL &hsl)
+void ColorLed::color_hsl(COLOR_HSL &hsl)
 {
     COLOR_RGB rgb;
 
@@ -67,7 +67,7 @@ void COLORLED::color_hsl(COLOR_HSL &hsl)
     this->b->set_duty(rgb.b * 0.6);
 
 }
-void COLORLED::color_hsv(int h, float s, float v)
+void ColorLed::color_hsv(int h, float s, float v)
 {
     COLOR_HSV hsv;
     COLOR_RGB rgb;
@@ -80,7 +80,7 @@ void COLORLED::color_hsv(int h, float s, float v)
     this->g->set_duty(rgb.g * 3.9);
     this->b->set_duty(rgb.b * 0.6);
 }
-void COLORLED::color_hsv(COLOR_HSV &hsv)
+void ColorLed::color_hsv(COLOR_HSV &hsv)
 {
     COLOR_RGB rgb;
 
