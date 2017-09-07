@@ -45,12 +45,12 @@ extern "C" {
         micro_para = cpu.clock.core/1000000;//减少micros函数计算量
         
         
-        //统计cpu计算能力//////////////////
         cpu.ability = 0;
         millis_seconds = 0;
+        //统计cpu计算能力//////////////////
         do
         {
-            cpu.ability++;//统计cpu计算能力
+            cpu.ability++;//统计cpu计算能力 
         }
         while(millis_seconds < 100);
         cpu.ability = cpu.ability * 10;

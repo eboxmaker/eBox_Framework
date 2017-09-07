@@ -26,18 +26,17 @@
 /*
 	1.提供一个io中断
 	*注意：stm32一个中断线EXTI_Linex只能连接到一个port的GPIO_Pin_x，即设置PA0为中断源之后就不能设置PB0，PC0等为中断源
-*/
+    trigger: 引脚触发中的条件，可以是一下三种模式中的一种：
+        - RISING: 上升沿触发中断
+        - FALLING: 下降沿触发中断
+        - CHANGE: 上升沿和下降沿均触发中断
+ */
 
-//EXTITrigger_TypeDef类型值
-//	EXTI_Trigger_Rising
-//	EXTI_Trigger_Falling
-//	EXTI_Trigger_Rising_Falling
 class Exti
 {
 public:
-    Exti(Gpio *exti_pin, EXTITrigger_TypeDef trigger);
+    Exti(Gpio *exti_pin, uint8_t  trigger);
     void begin();
-    void attach_interrupt(void (*callback_fun)(void));
     void interrupt(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
 
     static void _irq_handler( uint32_t id);
@@ -49,7 +48,7 @@ public:
 
 private:
     Gpio                *exti_pin;
-    EXTITrigger_TypeDef trigger;
+    uint8_t             trigger;
     uint8_t             port_source;
     uint8_t             pin_source;
     uint32_t            exti_line;

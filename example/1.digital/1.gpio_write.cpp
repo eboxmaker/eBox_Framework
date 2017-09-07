@@ -24,9 +24,10 @@ int main(void)
     while(1)
     {
         PB8.set();
+        delay_ms(500);
         PB8.reset();
+        delay_ms(500);
     }
-
 }
 
 

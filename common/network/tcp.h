@@ -22,7 +22,7 @@
 #include "socket.h"
 #include "w5500.h"
 
-class TCPCLIENT
+class TCPClient
 {
 public:
     int     begin(SOCKET ps, uint16_t port);
@@ -47,7 +47,7 @@ private:
 
 };
 
-class TCPSERVER
+class TCPServer
 {
 public:
     int begin(SOCKET ps, uint16_t port);
@@ -60,8 +60,5 @@ public:
     uint16_t remotePort;/*定义计算机的一个端口并初始化*/
 private:
     SOCKET s;
-
-
-
 };
 #endif

@@ -23,11 +23,11 @@
 #include "color_convert.h"
 
 
-class COLORLED
+class ColorLed
 {
 
 public:
-    COLORLED(Gpio *r, Gpio *g, Gpio *b)
+    ColorLed(Gpio *r, Gpio *g, Gpio *b)
     {
         this->r_pin = r;
         this->g_pin = g;

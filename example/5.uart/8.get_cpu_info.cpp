@@ -22,8 +22,7 @@
 
 #include "ebox.h"
 
-Pwm pwm1(&PA11);
-Pwm pwm2(&PA1);
+
 
 void setup()
 {
@@ -39,14 +38,11 @@ int main(void)
     uart1.printf("hclk:%d\r\n",cpu.clock.hclk);
     uart1.printf("pclk1:%d\r\n",cpu.clock.pclk1);
     uart1.printf("pclk2:%d\r\n",cpu.clock.pclk2);
-    pwm1.begin(1000, 900);
-    pwm1.set_oc_polarity(1);
-    pwm2.begin(1000, 800);
-    pwm2.set_oc_polarity(1);
-    uart1.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
-    uart1.printf("max frq = %f\r\n",pwm1.get_accuracy());
-    uart1.printf("max frq = %dKhz\r\n",pwm2.get_max_frq()/1000);
-    uart1.printf("max frq = %f\r\n",pwm2.get_accuracy());
+    uart1.printf("cpu id:0x%x %x %x\r\n",cpu.chip_id[0],cpu.chip_id[1],cpu.chip_id[2]);
+    uart1.printf("size:%dK\r\n",cpu.flash_size);
+    uart1.printf("company:%s\r\n",cpu.company);
+    uart1.printf("company:%dK times add per second\r\n",cpu.ability/1000);
+
     while(1)
     {
         PB9.toggle();
