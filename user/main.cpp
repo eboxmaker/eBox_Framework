@@ -1,44 +1,37 @@
-/**
-  ******************************************************************************
-  * @file   : *.cpp
-  * @author : shentq
-  * @version: V1.2
-  * @date   : 2016/08/14
-
-  * @brief   ebox application example .
-  *
-  * Copyright 2016 shentq. All Rights Reserved.
-  ******************************************************************************
- */
-
-
 #include "ebox.h"
-#include "WS2812B.h"
+#include "ADS8866.h"
 
+#include "calendar.h"
+Flash flash;//创建一个内部flash读写对象
 
-WS2812B ws2812b(&PA11);
+Calendar clock;
+
+Ads8866 adc(&PA0,&PA1,&PA2);
+uint8_t wbuf[10];
+uint8_t rbuf[10];
+
 
 void setup()
 {
     ebox_init();
-		ws2812b.initialize(8);
+    uart1.begin(115200);
+    adc.begin();
+    clock.begin();
+    clock.set       (17,12,8,18,41,00);
 }
 int main(void)
 {
     setup();
-		ws2812b.set_color(10,80,0,0);
-		ws2812b.set_color(20,70,0,1);
-		ws2812b.set_color(30,60,0,2);
-		ws2812b.set_color(40,50,0,3);
-		ws2812b.set_color(50,40,0,4);
-		ws2812b.set_color(60,30,0,5);
-		ws2812b.set_color(70,20,0,6);
-		ws2812b.set_color(80,10,0,7);
-		ws2812b.enable();
+
+    random_seed(10);
+    int i = 0 ;
     while(1)
     {
+        uart1.printf(clock.get_unix_timestamp_to_string().c_str());
+        uart1.printf("\t%1.3f\r\n",adc.read()*4.999/65536.0);
+
+        clock.sec_process();
+        i++;
         delay_ms(1000);
     }
 }
-
-
