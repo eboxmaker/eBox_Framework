@@ -1017,6 +1017,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\WS2812B.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ADS8866.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\ADS8866.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

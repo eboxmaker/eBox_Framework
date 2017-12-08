@@ -22,10 +22,6 @@
 #include "string.h"
 void Calendar::begin()
 {
-		memset(&time_string,0x00,sizeof(time_string));//清除
-		memset(&date_string,0x00,sizeof(date_string));//清除
-		memset(&cutdown_dddhhmmss_string,0x00,sizeof(cutdown_dddhhmmss_string));//清除	
-		memset(&cutdown_hhmmss_string,0x00,sizeof(cutdown_hhmmss_string));//清除	
 		memset(&dt,0x00,sizeof(dt));//清除	
 		memset(&alarm_dt,0x00,sizeof(alarm_dt));//清除	
 }
@@ -44,8 +40,7 @@ void Calendar::sec_process(uint8_t *date,uint8_t *time,uint8_t timezone_flag,uin
 	//秒中断输出到显示器上的时钟才是正确的
 	if(sec_flag == 1)
 		add_one_sec();
-	//更新倒计时字符串
-	update_cutdown();
+
 }
 
 
@@ -53,8 +48,6 @@ void Calendar::sec_process(uint8_t *date,uint8_t *time,uint8_t timezone_flag,uin
 void Calendar::sec_process()
 {
 	add_one_sec();
-	//更新倒计时字符串
-	update_cutdown();
 }
 
 void Calendar::set(uint8_t year,uint8_t mon,uint8_t date,uint8_t hour,uint8_t min,uint8_t sec)
@@ -66,8 +59,6 @@ void Calendar::set(uint8_t year,uint8_t mon,uint8_t date,uint8_t hour,uint8_t mi
 	dt.min 	= min;
 	dt.sec 	= sec;
 	get_week(dt.year,dt.month,dt.date,dt.week);
-	time_to_str(dt);
-	date_to_str(dt);
 };
 
 void Calendar::set_time(uint8_t *time)
@@ -76,7 +67,6 @@ void Calendar::set_time(uint8_t *time)
 	dt.hour		= uint8_t ((time[0]-0x30)*10 + (time[1]-0x30));
 	dt.min		= uint8_t ((time[2]-0x30)*10 + (time[3]-0x30));
 	dt.sec		= uint8_t ((time[4]-0x30)*10 + (time[5]-0x30));
-	time_to_str(dt);
 };
 void Calendar::set_date(uint8_t *date)
 {
@@ -84,7 +74,6 @@ void Calendar::set_date(uint8_t *date)
 	dt.month	= uint8_t ((date[3]-0x30) + (date[2]-0x30)*10);
 	dt.date		= uint8_t ((date[1]-0x30) + (date[0]-0x30)*10);
 	get_week(dt.year,dt.month,dt.date,dt.week);
-	date_to_str(dt);
 };
 void Calendar::timezone_adjust(uint8_t timezone)
 {
@@ -95,8 +84,7 @@ void Calendar::timezone_adjust(uint8_t timezone)
 		add_one_day();
 	}
 	get_week(dt.year,dt.month,dt.date,dt.week);
-	time_to_str(dt);
-	date_to_str(dt);
+
 
 }
 void Calendar::add_one_sec()
@@ -126,8 +114,7 @@ void Calendar::add_one_sec()
 	{
 		dt.sec ++;
 	}
-	time_to_str(dt);
-	date_to_str(dt);
+
 }
 void Calendar::add_one_day()
 {
@@ -160,6 +147,51 @@ int	Calendar::dt_changed(DateTime_t &_dt)
 	temp_dt = _dt;
 	
 	return ret;
+}
+DateTime_t  Calendar::get_time()
+{
+    return dt;
+}
+uint32_t Calendar::get_unix_timestamp()
+{
+    DateTime_t dt0 = {0};
+    uint32_t timestamp = 946656000;
+    uint16_t diff_days;
+    diff_days = days_between_2_date(dt0,dt);
+    
+    timestamp += seconds_between_2_time( dt0,dt) + (diff_days - 1)*3600*24;//两个时间之间的秒数差; 
+    return timestamp;
+}
+
+String Calendar::get_time_to_string()
+{
+    String str;
+    char buf[20];
+    sprintf(buf,"%02d%02d%02d",dt.hour,dt.min,dt.sec);
+    str = buf;
+    return str;
+}
+String Calendar::get_date_to_string()
+{
+    String str;
+    char buf[20];
+    sprintf(buf,"20%02d%02d%02d",dt.year,dt.month,dt.date);
+    str = buf;
+    return str;
+}
+String Calendar::get_date_time_to_string()
+{
+    String str;
+    char buf[20];
+    sprintf(buf,"20%02d%02d%02d%02d%02d%02d",dt.year,dt.month,dt.date,dt.hour,dt.min,dt.sec);
+    str = buf;
+    return str;
+
+}
+String Calendar::get_unix_timestamp_to_string()
+{
+    String str(get_unix_timestamp());
+    return str;
 }
 
 //使用基姆拉尔森计算公式
@@ -213,9 +245,10 @@ void Calendar::alarm_enable(uint8_t enable)
 
 	_alarm_enable = enable;
 }
-void Calendar::update_cutdown()
+String Calendar::get_cutdown_dddhhmmss_to_string()
 {
-	int i = 0;
+    String str;
+    char buf[11];
 	uint32_t diff_days;
 	uint32_t diff_sec;
 	uint8_t h,m,s;
@@ -288,29 +321,91 @@ void Calendar::update_cutdown()
         }		        
     }
 	sec_to_time(diff_sec,h,m,s);
-    i=0;
-	cutdown_dddhhmmss_string[9] = 0;
-	cutdown_dddhhmmss_string[i++] = diff_days/100      + 0x30;
-	cutdown_dddhhmmss_string[i++] = (diff_days%100)/10 + 0x30;
-	cutdown_dddhhmmss_string[i++] = (diff_days%100)%10 + 0x30;
-	cutdown_dddhhmmss_string[i++] = h/10 + 0x30;
-	cutdown_dddhhmmss_string[i++] = h%10 + 0x30;
-	cutdown_dddhhmmss_string[i++] = m/10 + 0x30;
-	cutdown_dddhhmmss_string[i++] = m%10 + 0x30;
-	cutdown_dddhhmmss_string[i++] = s/10 + 0x30;
-	cutdown_dddhhmmss_string[i++] = s%10 + 0x30;
-	cutdown_dddhhmmss_string[i++] = '\0';
-	i=0;
-	cutdown_hhmmss_string[i++] = h/10 + 0x30;
-	cutdown_hhmmss_string[i++] = h%10 + 0x30;
-	cutdown_hhmmss_string[i++] = m/10 + 0x30;
-	cutdown_hhmmss_string[i++] = m%10 + 0x30;
-	cutdown_hhmmss_string[i++] = s/10 + 0x30;
-	cutdown_hhmmss_string[i++] = s%10 + 0x30;
-	cutdown_hhmmss_string[i++] = '\0';
-
+    sprintf(buf,"%03d%02d%02d%02d",diff_days,h,m,s);
+    str = buf;
+    return str;
 }
+String Calendar::get_cutdown_hhmmss_to_string()
+{
 
+    String str;
+    char buf[11];
+	uint32_t diff_days;
+	uint32_t diff_sec;
+	uint8_t h,m,s;
+	if(dt.year > alarm_dt.year)
+    {
+		//stop
+		diff_days = 0;
+		diff_sec = 0;
+    }
+    else if(dt.year == alarm_dt.year)
+    {
+        if(day_in_year(dt) > day_in_year(alarm_dt))
+        {
+            //stop
+            diff_days = 0;
+            diff_sec = 0;
+        
+        }
+        if(day_in_year(dt) < day_in_year(alarm_dt))
+        {
+            if(sec_in_day(dt) <  sec_in_day(alarm_dt))
+            {
+                diff_days = days_between_2_date(dt,alarm_dt);
+                diff_sec = seconds_between_2_time(dt,alarm_dt);
+            }
+            else
+            {
+                diff_days = days_between_2_date(dt,alarm_dt);
+                diff_sec = seconds_between_2_time(dt,alarm_dt);
+                diff_days--;
+                diff_sec = 24*60*60 - diff_sec;
+            }		
+        }
+        if(day_in_year(dt) == day_in_year(alarm_dt))
+        {
+            diff_days = 0;
+            if(sec_in_day(dt) <  sec_in_day(alarm_dt))
+            {
+                diff_sec = seconds_between_2_time(dt,alarm_dt);
+            }
+            else
+            {
+                //stop
+                diff_sec = 0;
+            }
+        }
+    }
+    else if(dt.year < alarm_dt.year)
+    {
+        uint16_t year_days_reamain;
+        if(is_leap_year(dt.year) == 1)
+        {
+            year_days_reamain = 366 - day_in_year(dt);
+        }
+        else
+            year_days_reamain = 365 - day_in_year(dt);
+            
+        diff_days = year_days_reamain + day_in_year(alarm_dt);        
+        if(sec_in_day(dt) <  sec_in_day(alarm_dt))
+        {
+            diff_days = days_between_2_date(dt,alarm_dt);
+            diff_sec = seconds_between_2_time(dt,alarm_dt);
+        }
+        else
+        {
+            diff_days = days_between_2_date(dt,alarm_dt);
+            diff_sec = seconds_between_2_time(dt,alarm_dt);
+            diff_days--;
+            diff_sec = 24*60*60 - diff_sec;
+        }		        
+    }
+	sec_to_time(diff_sec,h,m,s);
+    sprintf(buf,"%02d%02d%02d",h,m,s);
+    str = buf;
+    return str;
+}
 //////////////////////////////////////////////////////////////////////////////
 void Calendar::swap(uint16_t *a,uint16_t *b)
 {
@@ -469,25 +564,3 @@ void Calendar::mon_2_add_one_day()
 	}
 }
 
-void Calendar::date_to_str(DateTime_t &_dt)
-{
-	date_string[0] = _dt.date/10 + 0x30;
-	date_string[1] = _dt.date%10 + 0x30;
-	date_string[2] = _dt.month/10 + 0x30;
-	date_string[3] = _dt.month%10 + 0x30;
-	date_string[4] = _dt.year/10 + 0x30;
-	date_string[5] = _dt.year%10 + 0x30;
-	
-	date_string[6] = '\0';
-}
-void Calendar::time_to_str(DateTime_t &_dt)
-{
-	time_string[0] = _dt.hour/10 + 0x30;
-	time_string[1] = _dt.hour%10 + 0x30;
-	time_string[2] = _dt.min/10 + 0x30;
-	time_string[3] = _dt.min%10 + 0x30;
-	time_string[4] = _dt.sec/10 + 0x30;
-	time_string[5] = _dt.sec%10 + 0x30;
-	
-	time_string[6] = '\0';
-}
