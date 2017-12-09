@@ -244,6 +244,7 @@ void Pwm::_set_duty(uint16_t duty)
 
     TIM_OCInitTypeDef  TIM_OCInitStructure;
     TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+    TIM_OCInitStructure.TIM_OutputNState = TIM_OutputState_Disable;
     TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
     TIM_OCInitStructure.TIM_OCPolarity = oc_polarity;
     TIM_OCInitStructure.TIM_Pulse = pulse;
