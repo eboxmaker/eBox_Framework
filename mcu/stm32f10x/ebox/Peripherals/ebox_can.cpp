@@ -27,8 +27,8 @@ void can_irq_init(can_irq_handler handler, uint32_t id)
 
 void Can::interrupt(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
 {
-    if(preemption_priority > 4)preemption_priority = 4;
-    if(sub_priority > 4)sub_priority = 4;
+    if(preemption_priority > 3)preemption_priority = 3;
+    if(sub_priority > 3)sub_priority = 3;
     NVIC_InitTypeDef NVIC_InitStructure;
     NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;	   //CAN1 RX0??
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;		   //?????0
