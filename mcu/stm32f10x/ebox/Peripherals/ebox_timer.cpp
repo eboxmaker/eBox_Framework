@@ -96,8 +96,8 @@ void Timer::reset_frq(uint32_t frq)
 
 void Timer::interrupt(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
 {
-    if(preemption_priority > 4)preemption_priority = 4;
-    if(sub_priority > 4)sub_priority = 4;
+    if(preemption_priority > 3)preemption_priority = 3;
+    if(sub_priority > 3)sub_priority = 3;
     NVIC_InitTypeDef NVIC_InitStructure;
     
     NVIC_InitStructure.NVIC_IRQChannel = nvic_ch;
