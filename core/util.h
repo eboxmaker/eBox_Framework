@@ -26,18 +26,14 @@
 #include <stdint.h>
 
 
+bool isspace(char c);
+bool isdigital(char c);
 
-
-
-
-uint16_t    ATOI(char *str, uint16_t base); 			/* Convert a string to integer number */
-uint32_t    ATOI32(char *str, uint16_t base); 			/* Convert a string to integer number */
-void        itoa(uint16_t n, uint8_t *str, uint8_t len);
+int         atoi(char *str, uint16_t base = 10); 			/* Convert a string to integer number */
 int         ValidATOI(char *str, int base, int *ret); 		/* Verify character string and Convert it to (hexa-)decimal. */
 char        C2D(uint8_t c); 					/* Convert a character to HEX */
 
-uint16_t    swaps(uint16_t i16);
-uint32_t    swapl(uint32_t l32);
+
 
 void        replacetochar(char *str, char oldchar, char newchar);
 
@@ -49,5 +45,18 @@ uint16_t    get_str(char *source, const char *end, uint16_t count, char *out);
 
 void quick_sort(int array[], int left, int right);
 void quick_sort(float arr[], int low, int high);
+
+template <class T>
+    void swap(T *a,T *b)
+    {
+        T temp;
+        temp = *a;
+        *a= *b;
+        *b = temp;
+    }
+uint16_t    swaps(uint16_t i16);
+uint32_t    swapl(uint32_t l32);
+
+
 
 #endif

@@ -164,7 +164,7 @@ uint16_t UsrGm3::q_rstim()
     at_cmd_send("AT+RSTIM?\r\n",result);
     GM3_DEBUG(result);
     get_str(result,":",1,"\r",2,result);
-    ret = ATOI(result,10);
+    ret = atoi(result,10);
     return ret;
 }
 void UsrGm3::q_sleep()
@@ -178,7 +178,7 @@ uint16_t UsrGm3::q_sleeptim()
     at_cmd_send("AT+SLEEPTIM?\r\n",result);
     GM3_DEBUG(result);
     get_str(result,":",1,"\r",2,result);
-    ret = ATOI(result,10);
+    ret = atoi(result,10);
     return ret;
 } 
     

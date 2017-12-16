@@ -9,15 +9,26 @@ Calendar clock;
 Ads8866 adc(&PA0,&PA1,&PA2);
 uint8_t wbuf[10];
 uint8_t rbuf[10];
+char strx[] = "165536";
+int a = 'a',b = 'b';
+int num;
 
 
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
+    uart1.println();
     adc.begin();
     clock.begin();
-    clock.set       (17,12,8,18,41,00);
+    clock.set(17,12,8,18,41,00);
+    
+    num = atoi(strx,10);
+    uart1.printf("%d\r\n",num);
+    swap(&a,&b);
+        uart1.printf("a= %c,b=%c",a,b);
+    while(1);
+
 }
 int main(void)
 {
