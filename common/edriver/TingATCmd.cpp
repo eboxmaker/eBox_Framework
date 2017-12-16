@@ -46,7 +46,7 @@ DATA_STATE_T Ting::data_process(char c)
             if(data_count ==4)
             {
                 source_addr_buf[4] = '\0';
-                source_addr = ATOI32(source_addr_buf,16);
+                source_addr = atoi(source_addr_buf,16);
 
                 data_state = NEED_DOT2;
             }
@@ -68,7 +68,7 @@ DATA_STATE_T Ting::data_process(char c)
             if(data_count == 2)
             {
                 len_buf[2] = '\0';
-                data_len = ATOI32(len_buf,16);
+                data_len = atoi(len_buf,16);
                 data_state = NEED_DOT3;
 
             }
@@ -349,7 +349,7 @@ CMD_ERR_T Ting::get_addr(uint16_t *addr)
     if(_wait_ack(1000) == MODE_AT_END)
     {
         get_str(rx_cmd_buf, ",", 1, ",OK\r\n", 1, buf);    
-        *addr = ATOI32(buf,16);
+        *addr = atoi(buf,16);
         update_cmd_err();
         debug_cmd_err("get addr");
     }
@@ -377,7 +377,7 @@ CMD_ERR_T Ting::get_dest(uint16_t *addr)
     if(_wait_ack(1000) == MODE_AT_END)
     {
         get_str(rx_cmd_buf, ",", 1, ",OK\r\n", 1, buf);    
-        *addr = ATOI32(buf,16);
+        *addr = atoi(buf,16);
         update_cmd_err();
         debug_cmd_err("get dest");
     }

@@ -487,8 +487,8 @@ void inet_addr_(unsigned char* addr,unsigned char *ip)
 	for(i = 0; i < 4 ; i++)
 	{
 		nexttok = strtok(nexttok,".");
-		if(nexttok[0] == '0' && nexttok[1] == 'x') num = ATOI(nexttok+2,0x10);
-		else num = ATOI(nexttok,10);
+		if(nexttok[0] == '0' && nexttok[1] == 'x') num = atoi(nexttok+2,0x10);
+		else num = atoi(nexttok,10);
 
 		ip[i] = num;
 		nexttok = NULL;

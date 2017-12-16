@@ -27,44 +27,51 @@
 @brief	CONVERT STRING INTO INTEGER
 @return	a integer number
 */
-uint16_t ATOI(
+
+bool isspace(char c)
+{
+    if(c == ' ')
+        return true;
+    else
+        return false;
+}
+bool isdigital(char c)
+{
+    if(c <= '9' && c >= '0')
+        return true;
+    else 
+        return false;
+
+}
+int atoi(
     char *str,	/**< is a pointer to convert */
     uint16_t base	/**< is a base value (must be in the range 2 - 16) */
 )
 {
-    unsigned int num = 0;
+    
+    int c;              /* current char */  
+    int total = 0;         /* current total */  
+    int sign;           /* if '-', then negative, otherwise positive */  
+
+    /* skip whitespace */  
+    while ( isspace((char)*str) )  
+            str++;  
+    
+    c = (int)(unsigned char)*str;  
+    sign = c;           /* save sign indication */  
+    if (c == '-' || c == '+')  
+        c = (int)(unsigned char)*str++;    /* skip sign */  
+        
     while (*str != 0)
-        num = num * base + C2D(*str++);
-    return num;
-}
-
-uint32_t ATOI32(
-    char *str,	/**< is a pointer to convert */
-    uint16_t base	/**< is a base value (must be in the range 2 - 16) */
-)
-{
-    uint32_t num = 0;
-    while (*str != 0)
-        num = num * base + C2D(*str++);
-    return num;
+        total = total * base + C2D(*str++);
+    if(sign == '-')
+        return -total;
+    else
+        return total;
 }
 
 
-void itoa(uint16_t n, uint8_t str[5], uint8_t len)
-{
 
-    uint8_t i = len - 1;
-
-    memset(str, 0x20, len);
-    do
-    {
-        str[i--] = n % 10 + '0';
-
-    }
-    while((n /= 10) > 0);
-
-    return;
-}
 /**
 @brief	CONVERT STRING INTO HEX OR DECIMAL
 @return	success - 1, fail - 0
@@ -85,7 +92,7 @@ int ValidATOI(
         else    return 0;
     }
 
-    *ret = ATOI(str, base);
+    *ret = atoi(str, base);
     return 1;
 }
 
@@ -121,18 +128,19 @@ char C2D(
 
     return (char)c;
 }
-void swap(float *a, float *b) 
-{
-	float temp = *a;
-	*a = *b;
-	*b = temp;
-}
-void swap(int *a, int *b) 
-{
-	int temp = *a;
-	*a = *b;
-	*b = temp;
-}
+
+//void swap(float *a, float *b) 
+//{
+//	float temp = *a;
+//	*a = *b;
+//	*b = temp;
+//}
+//void swap(int *a, int *b) 
+//{
+//	int temp = *a;
+//	*a = *b;
+//	*b = temp;
+//}
 uint16_t swaps(uint16_t i16)//½»»»¸ßµÍ×Ö½Ú
 {
     uint16_t ret = 0;
