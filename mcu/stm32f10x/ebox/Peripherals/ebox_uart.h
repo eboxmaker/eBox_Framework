@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    uart.h
   * @author  shentq
-  * @version V2.0
+  * @version V2.1
   * @date    2016/08/14
   * @brief   
   ******************************************************************************
@@ -21,9 +21,10 @@
 #ifndef __UARTX_H
 #define __UARTX_H
 
-#include "ebox_common.h"
+
 #include <stdio.h>
 #include <stdarg.h>
+#include "ebox_core.h"
 #include "FunctionPointer.h"
 
 /*

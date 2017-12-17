@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    ebox.h
   * @author  shentq
-  * @version V1.2
+  * @version V2.1
   * @date    2016/08/14
   * @brief   
   ******************************************************************************
@@ -23,10 +23,10 @@
 
 
 
-#include "ebox_common.h"
+#include "ebox_core.h"
 
-#include "ebox_port_spi.h"
 
+#include "ebox_gpio.h"
 #include "ebox_can.h"
 #include "ebox_exti.h"
 #include "ebox_timer.h"
@@ -61,12 +61,12 @@ extern Uart uart3;
 extern Uart uart4;
 extern Uart uart5;
 
-extern Spi spi1;
-extern Spi spi2;
+extern mcuSpi spi1;
+extern mcuSpi spi2;
 extern SoftSpi sspi1;
 
-extern I2c i2c1;
-extern I2c i2c2;
+extern mcuI2c i2c1;
+extern mcuI2c i2c2;
 extern SoftI2c si2c;
 extern SoftI2c si2c1;
 extern SoftI2c si2c2;

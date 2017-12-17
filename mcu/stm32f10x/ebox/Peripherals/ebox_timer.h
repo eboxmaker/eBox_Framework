@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    gtimer.h
   * @author  shentq
-  * @version V1.2
+  * @version V2.1
   * @date    2016/08/14
   * @brief   
   ******************************************************************************
@@ -21,7 +21,7 @@
 #ifndef __GTIMER_H
 #define __GTIMER_H
 
-#include "ebox_common.h"
+#include "ebox_core.h"
 #include "FunctionPointer.h"
 /*
 	1.Ö§³Ötim1,2,3,4,5,6,7

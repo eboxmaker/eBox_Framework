@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    dac.h
   * @author  shentq
-  * @version V1.2
+  * @version V2.1
   * @date    2016/08/14
   * @brief   
   ******************************************************************************
@@ -20,7 +20,7 @@
 
 #ifndef __DAC_H
 #define __DAC_H
-#include "ebox_common.h"
+#include "ebox_core.h"
 class DACCLASS
 {
 

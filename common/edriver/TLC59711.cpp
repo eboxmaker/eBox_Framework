@@ -128,5 +128,5 @@ bool Adafruit_TLC59711::begin() {
 //  } else {
 //    SPI.begin();
 //  }
-//  return true;
+  return true;
 }

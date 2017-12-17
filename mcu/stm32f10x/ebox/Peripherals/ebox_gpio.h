@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    gpio.h
   * @author  shentq
-  * @version V1.2
+  * @version V2.1
   * @date    2016/08/14
   * @brief   
   ******************************************************************************
@@ -27,13 +27,13 @@ class mcuGpio :public Gpio
 {
 public:
     mcuGpio(GPIO_TypeDef *port, uint16_t pin);
-    void mode(PIN_MODE mode);
-    void set();
-    void reset();
-    void write(uint8_t val);
-    void toggle();
-    void read(uint8_t *val);
-    uint8_t read(void);
+    virtual void mode(PIN_MODE mode);
+    virtual void set();
+    virtual void reset();
+    virtual void write(uint8_t val);
+    virtual void toggle();
+    virtual void read(uint8_t *val);
+    virtual uint8_t read(void);
 
     operator int();
     int operator =(mcuGpio&);

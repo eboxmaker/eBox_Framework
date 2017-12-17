@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    core.h
   * @author  shentq
-  * @version V1.2
+  * @version V2.1
   * @date    2016/08/14
   * @brief   此文件为ebox核心文件,提供了诸多非常重要的接口,可以被标准的c文件调用。
   ******************************************************************************
@@ -47,8 +47,9 @@
 
 #include "ebox_port_gpio.h"
 #include "ebox_port_spi.h"
+#include "ebox_port_i2c.h"
 
-#define EBOX_VERSION "2.0"
+#define EBOX_VERSION "2.1"
 
 
 /////////////////////////////////////////

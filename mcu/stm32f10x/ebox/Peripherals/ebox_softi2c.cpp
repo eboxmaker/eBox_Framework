@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    softi2c.cpp
   * @author  shentq
-  * @version V1.2
+  * @version V2.1
   * @date    2016/08/14
   * @brief   
   ******************************************************************************
@@ -48,7 +48,7 @@ void SoftI2c::begin(uint32_t speed)
  *
  * @return 0.
  */
-int8_t SoftI2c::config(uint32_t speed)
+void SoftI2c::config(uint32_t speed)
 {
     this->speed = speed;
     switch(this->speed)
@@ -69,7 +69,6 @@ int8_t SoftI2c::config(uint32_t speed)
         delay_times = this->speed;
         break;
     }
-    return 0;
 }
 
 /**
@@ -91,7 +90,7 @@ uint32_t SoftI2c::read_config()
  *
  * @return 无.
  */
-void SoftI2c::start()
+int8_t SoftI2c::start()
 {
     sda_pin->mode(OUTPUT_PP);
     sda_pin->set();
@@ -100,7 +99,7 @@ void SoftI2c::start()
     sda_pin->reset();
     delay_us(delay_times);
     scl_pin->reset();
-
+    return 0;
 }
 
 /**
@@ -110,7 +109,7 @@ void SoftI2c::start()
  *
  * @return 无.
  */
-void SoftI2c::stop()
+int8_t SoftI2c::stop()
 {
     sda_pin->mode(OUTPUT_PP);
     scl_pin->reset();
@@ -119,6 +118,7 @@ void SoftI2c::stop()
     scl_pin->set();
     delay_us(delay_times);
     sda_pin->set();
+    return 0;
 }
 
 /**
@@ -236,14 +236,16 @@ int8_t	SoftI2c::send_7bits_address(uint8_t slave_address)
 /**
  * @brief 接收数据.
  *
- * @param 无.
+ * @param 无.    
+
  *
  * @return 接收到的数据.
  */
-uint8_t SoftI2c::receive_byte(void)
+int8_t SoftI2c::receive_byte(uint8_t *data)
 {
     uint8_t i = 8;
     uint8_t byte = 0;
+    int8_t ret = 0;
     sda_pin->mode(INPUT_PU);
     while(i--)
     {
@@ -256,8 +258,8 @@ uint8_t SoftI2c::receive_byte(void)
     }
     scl_pin->reset();
     delay_us(delay_times);
-
-    return byte;
+    *data = byte;
+    return ret;
 }
 
 /**
@@ -350,7 +352,7 @@ int8_t 	SoftI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *
     if (send_byte(slave_address | 0x01) == -1)
         ret = -3;
 
-    *data = receive_byte();
+    receive_byte(data);
     send_no_ack();
     stop();
 
@@ -387,7 +389,7 @@ int8_t 	SoftI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *
 
     while(num_to_read)
     {
-        *data++ = receive_byte();
+        receive_byte(data++);
         num_to_read--;
         i++;
         if(num_to_read == 0)

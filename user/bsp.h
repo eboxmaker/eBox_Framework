@@ -40,52 +40,52 @@ extern At24c02  eeprom;
 
 
 
-class Father
-{
-    public:
-    Father(){};
+//class Father
+//{
+//    public:
+//    Father(){};
 
-    virtual bool    begin (uint8_t a)  = 0;
+//    virtual bool    begin (uint8_t a)  = 0;
 
-};
+//};
 
-class Chiled : public Father
-{
-public:
-    Chiled(){};
-    bool    begin (uint8_t a)
-    {
-        uart1.printf("chiled\r\n");
-        return true;
-    }
+//class Chiled : public Father
+//{
+//public:
+//    Chiled(){};
+//    bool    begin (uint8_t a)
+//    {
+//        uart1.printf("chiled\r\n");
+//        return true;
+//    }
 
-};
+//};
 
-class Chiled2 : public Father
-{
-public:
-    Chiled2(){};
-    bool    begin (uint8_t a)
-    {
-        uart1.printf("chiled2\r\n");
-        return true;
-    }
+//class Chiled2 : public Father
+//{
+//public:
+//    Chiled2(){};
+//    bool    begin (uint8_t a)
+//    {
+//        uart1.printf("chiled2\r\n");
+//        return true;
+//    }
 
-};
+//};
 
-class Test
-{
-    public :
-        Test(Father *p)
-        {
-            this->p = p;
-        }
-        void begin()
-        {
-            p->begin(1);
-        }
-  Father *p;
-};
+//class Test
+//{
+//    public :
+//        Test(Father *p)
+//        {
+//            this->p = p;
+//        }
+//        void begin()
+//        {
+//            p->begin(1);
+//        }
+//  Father *p;
+//};
 
 #endif
 

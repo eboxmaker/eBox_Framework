@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    ebox_it.cpp
   * @author  shentq
-  * @version V1.2
+  * @version V2.1
   * @date    2016/08/14
   * @brief   
   ******************************************************************************
@@ -19,7 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "ebox_common.h"
+#include "ebox_core.h"
 #include "ebox_timer_it.h"
 __IO uint16_t t1_overflow_times = 0;
 __IO uint16_t t2_overflow_times = 0;
