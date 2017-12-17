@@ -27,10 +27,10 @@ typedef struct
     uint8_t     prescaler;
     uint8_t     bit_order;
 } SpiConfig_t;
-class eBoxSpi
+class Spi
 {
     public:
-    eBoxSpi(){};
+    Spi(){};
 
     virtual void    begin (SpiConfig_t *spi_config)  = 0;
     virtual void    config(SpiConfig_t *spi_config)  = 0;

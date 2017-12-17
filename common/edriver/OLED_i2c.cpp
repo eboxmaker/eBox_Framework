@@ -39,6 +39,7 @@ bool OledI2c::begin(uint32_t speed)
     
     i2c->write_byte(SlaveAddr,0,0xAF);//--turn on oled panel
     i2c->release_i2c_right();
+    return true;
 }
 void OledI2c::write_cmd(uint8_t cmd)
 {

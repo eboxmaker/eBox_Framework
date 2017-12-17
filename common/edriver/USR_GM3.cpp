@@ -135,16 +135,14 @@ void UsrGm3::z(){}
 void UsrGm3::q_e()
 {
     char temp[64];
-    uint16_t len;
-    len = at_cmd_send("AT+E?\r\n",temp);
+    at_cmd_send("AT+E?\r\n",temp);
     GM3_DEBUG(temp);
 }
 
 void UsrGm3::entm()
 {
     char result[64];
-    uint16_t len;
-    len = at_cmd_send((char*)"AT+ENTM\r\n",result);
+    at_cmd_send((char*)"AT+ENTM\r\n",result);
     gm3_mode = NET;
     GM3_DEBUG("entm\r\n");
     GM3_DEBUG(result);    
@@ -220,7 +218,6 @@ void UsrGm3::set_stmsg(char *msg){}
 void UsrGm3::set_rstim(uint16_t time)
 {
     char result[64];
-    uint16_t ret;
     sprintf(result,"AT+RSTIM=%d\r\n",time);
     at_cmd_send(result,result);
     GM3_DEBUG(result);
@@ -228,7 +225,6 @@ void UsrGm3::set_rstim(uint16_t time)
 void UsrGm3::set_sleep(uint8_t enable)
 {
     char result[64];
-    uint16_t ret;
     if(enable == 1)
         at_cmd_send("AT+SLEEP=\"on\"\r\n",result);
     else
@@ -238,7 +234,6 @@ void UsrGm3::set_sleep(uint8_t enable)
 void UsrGm3::set_sleeptim(uint16_t time)
 {
     char result[64];
-    uint16_t ret;
     sprintf(result,"AT+SLEEPTIM=%d\r\n",time);
     at_cmd_send(result,result);
     GM3_DEBUG(result);
@@ -250,8 +245,7 @@ void UsrGm3::set_sleeptim(uint16_t time)
 void UsrGm3::save()
 {
     char result[64];
-    uint16_t len;
-    len = at_cmd_send((char*)"AT+S\r\n",result);
+    at_cmd_send((char*)"AT+S\r\n",result);
     gm3_mode = gm3_new_mode;
     GM3_DEBUG("save\r\n");
     GM3_DEBUG(result);
@@ -265,8 +259,7 @@ void UsrGm3::cfgtf(){}
 void UsrGm3::q_version()
 {
     char temp[64];
-    uint16_t len;
-    len = at_cmd_send("AT+VER?\r\n",temp);
+    at_cmd_send("AT+VER?\r\n",temp);
     GM3_DEBUG(temp);
 }
 void UsrGm3::q_sn(){}
@@ -294,7 +287,6 @@ void UsrGm3::q_sockbsl(){}
 void UsrGm3::q_sockalk()
 {
     char result[64];
-    uint8_t ret = 0;
     char temp[5];
     at_cmd_send("AT+SOCKALK?\r\n",result);
     GM3_DEBUG("SOCKALK  Q\r\n");
@@ -347,11 +339,10 @@ void UsrGm3::set_hearten(uint8_t enable)
 {
     
     char result[64];
-    uint16_t len;
     if(enable == 1)
-        len = at_cmd_send((char*)"AT+HEARTEN=\"on\"\r\n",result);
+        at_cmd_send((char*)"AT+HEARTEN=\"on\"\r\n",result);
     else
-        len = at_cmd_send((char*)"AT+HEARTEN=\"off\"\r\n",result);
+        at_cmd_send((char*)"AT+HEARTEN=\"off\"\r\n",result);
     GM3_DEBUG("hearten  set\r\n");
     GM3_DEBUG(result);    
 }
@@ -433,6 +424,7 @@ uint8_t UsrGm3::q_hearttm()
     at_cmd_send("AT+HEARTTM?\r\n",result);
     GM3_DEBUG("HEARTTM Q\r\n");
     GM3_DEBUG(result);
+    return 0;
 }
 //////////////////////////////////////////////////////////////////////
 

@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    incapture.h
   * @author  shentq
-  * @version V2.0
+  * @version V2.1
   * @date    2017/07/23
   * @brief   
   ******************************************************************************
@@ -27,7 +27,7 @@
 
 #ifndef __IN_CAPTURE_H
 #define __IN_CAPTURE_H
-#include "ebox_common.h"
+#include "ebox_core.h"
 #include "FunctionPointer.h"
 
 #define TIM_ICPOLARITY_FALLING TIM_ICPolarity_Falling

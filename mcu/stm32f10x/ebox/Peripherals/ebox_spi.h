@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    spi.h
   * @author  shentq
-  * @version V1.2
+  * @version V2.1
   * @date    2016/08/14
   * @brief   
   ******************************************************************************
@@ -21,7 +21,7 @@
 #ifndef __SPI_H
 #define __SPI_H
 
-#include "ebox_common.h"
+#include "ebox_core.h"
 #include "eBox_port_spi.h"
 
 
@@ -36,26 +36,26 @@
 		如果不释放总线会导致别的SPI设备一直处于等待的状态
 */
 //默认配置 空，只依靠结构体SPICONFIG来初始化
-class	Spi : public eBoxSpi
+class	mcuSpi : public Spi
 {
 public:
-    Spi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
+    mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
 
-    void    begin (SpiConfig_t *spi_config);
-    void    config(SpiConfig_t *spi_config);
-    uint8_t read_config(void);
+    virtual void    begin (SpiConfig_t *spi_config);
+    virtual void    config(SpiConfig_t *spi_config);
+    virtual uint8_t read_config(void);
 
-    uint8_t transfer(uint8_t data);
+    virtual uint8_t transfer(uint8_t data);
 
-    int8_t  write(uint8_t data);
-    int8_t  write(uint8_t *data, uint16_t data_length);
+    virtual int8_t  write(uint8_t data);
+    virtual int8_t  write(uint8_t *data, uint16_t data_length);
 
-    uint8_t read();
-    int8_t  read(uint8_t  *recv_data);
-    int8_t  read(uint8_t *recv_data, uint16_t data_length);
+    virtual uint8_t read();
+    virtual int8_t  read(uint8_t  *recv_data);
+    virtual int8_t  read(uint8_t *recv_data, uint16_t data_length);
 public:
-    int8_t take_spi_right(SpiConfig_t *spi_config);
-    int8_t release_spi_right(void);
+    virtual int8_t take_spi_right(SpiConfig_t *spi_config);
+    virtual int8_t release_spi_right(void);
 private:
     uint8_t     current_dev_num;
     SPI_TypeDef *spi;
@@ -67,28 +67,28 @@ private:
 				3.初期调试I2C设备建议使用SPI_CLOCK_DIV256。
 				4.函数接口和硬件SPI完全一样可以互相替换。
 */
-class SoftSpi: public eBoxSpi
+class SoftSpi: public Spi
 {
 public:
     SoftSpi(Gpio *sck, Gpio *miso, Gpio *mosi);
 
-    void    begin(SpiConfig_t *spi_config);
-    void    config(SpiConfig_t *spi_config);
-    uint8_t read_config(void);
+    virtual void    begin(SpiConfig_t *spi_config);
+    virtual void    config(SpiConfig_t *spi_config);
+    virtual uint8_t read_config(void);
 
-    uint8_t transfer(uint8_t data);
+    virtual uint8_t transfer(uint8_t data);
 
 
-    int8_t  write(uint8_t data);
-    int8_t  write(uint8_t *data, uint16_t data_length);
+    virtual int8_t  write(uint8_t data);
+    virtual int8_t  write(uint8_t *data, uint16_t data_length);
 
-    uint8_t read();
-    int8_t  read(uint8_t *data);
-    int8_t  read(uint8_t *rcvdata, uint16_t data_length);
+    virtual uint8_t read();
+    virtual int8_t  read(uint8_t *data);
+    virtual int8_t  read(uint8_t *rcvdata, uint16_t data_length);
 
 public:
-    int8_t take_spi_right(SpiConfig_t *spi_config);
-    int8_t release_spi_right(void);
+    virtual int8_t take_spi_right(SpiConfig_t *spi_config);
+    virtual int8_t release_spi_right(void);
 
 private:
     Gpio    *sck_pin;

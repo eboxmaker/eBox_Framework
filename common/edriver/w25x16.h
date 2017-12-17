@@ -45,7 +45,7 @@
 class W25x16
 {
 public:
-    W25x16(Gpio *cs, eBoxSpi *spi)
+    W25x16(Gpio *cs, Spi *spi)
     {
         this->cs  = cs;
         this->spi = spi;
@@ -61,21 +61,21 @@ public:
 
 
 private:
-    uint8_t                  spi_flash_buf[4096];
-    SpiConfig_t     spi_dev_w25x16;
-    Gpio                *cs;
-    eBoxSpi                 *spi;
+    uint8_t     spi_flash_buf[4096];
+    SpiConfig_t spi_dev_w25x16;
+    Gpio        *cs;
+    Spi         *spi;
 
-    uint8_t   readSR(void);
-    void _waitBusy(void);
-    void powerDown(void);
-    void wakeUp(void);
-    void writeSR(uint8_t sr);
-    void writeEnable(void);
-    void writeDisable(void);
+    uint8_t     readSR(void);
+    void        _waitBusy(void);
+    void        powerDown(void);
+    void        wakeUp(void);
+    void        writeSR(uint8_t sr);
+    void        writeEnable(void);
+    void        writeDisable(void);
 
-    void write_page(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
-    void write_no_check(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
+    void        write_page(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
+    void        write_no_check(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
 
 
 };

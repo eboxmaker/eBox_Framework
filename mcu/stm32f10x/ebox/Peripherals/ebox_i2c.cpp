@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    i2c.cpp
   * @author  shentq
-  * @version V1.2
+  * @version V2.1
   * @date    2016/08/14
   * @brief   
   ******************************************************************************
@@ -20,8 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_i2c.h"
 
-
-I2c::I2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin)
+mcuI2c::mcuI2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin)
 {
     busy = 0;
     this->I2Cx = I2Cx;
@@ -29,7 +28,7 @@ I2c::I2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin)
     this->sda_pin = sda_pin;
 
 }
-void  I2c::begin(uint32_t speed)
+void  mcuI2c::begin(uint32_t speed)
 {
     this->speed = speed;
     I2C_InitTypeDef I2C_InitStructure;
@@ -60,7 +59,7 @@ void  I2c::begin(uint32_t speed)
 
 }
 
-void I2c::config(uint32_t speed)
+void mcuI2c::config(uint32_t speed)
 {
     this->speed = speed;
     I2C_InitTypeDef I2C_InitStructure;
@@ -80,11 +79,11 @@ void I2c::config(uint32_t speed)
     I2C_AcknowledgeConfig(I2Cx, ENABLE);
 
 }
-uint32_t I2c::read_config()
+uint32_t mcuI2c::read_config()
 {
     return this->speed;
 }
-int8_t I2c::start()
+int8_t mcuI2c::start()
 {
     uint16_t times = 1000;
     int8_t err = 0;
@@ -101,19 +100,19 @@ int8_t I2c::start()
     }
     return err;
 }
-int8_t I2c::stop()
+int8_t mcuI2c::stop()
 {
     int8_t err = 0;
     I2C_GenerateSTOP(I2Cx, ENABLE);
     return err;
 }
-int8_t I2c::send_no_ack()
+int8_t mcuI2c::send_no_ack()
 {
     int8_t err = 0;
     I2C_AcknowledgeConfig(I2Cx, DISABLE);
     return err;
 }
-int8_t I2c::send_ack()
+int8_t mcuI2c::send_ack()
 {
     int8_t err = 0;
     I2C_AcknowledgeConfig(I2Cx, ENABLE);
@@ -121,7 +120,7 @@ int8_t I2c::send_ack()
 }
 
 
-int8_t I2c::send_byte(uint8_t data)
+int8_t mcuI2c::send_byte(uint8_t data)
 {
     uint16_t times = 1000;
     int8_t err = 0;
@@ -137,7 +136,7 @@ int8_t I2c::send_byte(uint8_t data)
     }
     return err;
 }
-int8_t I2c::send_7bits_address(uint8_t slave_address)
+int8_t mcuI2c::send_7bits_address(uint8_t slave_address)
 {
     uint16_t times = 5000;
     int8_t err = 0;
@@ -170,7 +169,7 @@ int8_t I2c::send_7bits_address(uint8_t slave_address)
     return err;
 
 }
-int8_t I2c::receive_byte(uint8_t *data)
+int8_t mcuI2c::receive_byte(uint8_t *data)
 {
     uint16_t times = 1000;
     int8_t err = 0;
@@ -188,7 +187,7 @@ int8_t I2c::receive_byte(uint8_t *data)
 }
 
 
-int8_t I2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t data)
+int8_t mcuI2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t data)
 {
     uint16_t err = 0;
 
@@ -201,7 +200,7 @@ int8_t I2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t data)
     return err;
 
 }
-int8_t I2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t num_to_write)
+int8_t mcuI2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t num_to_write)
 {
     uint16_t err = 0;
 
@@ -218,7 +217,7 @@ int8_t I2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data
     return err;
 
 }
-int8_t I2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data)
+int8_t mcuI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data)
 {
     start();
     send_7bits_address(slave_address);
@@ -233,7 +232,7 @@ int8_t I2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data)
     return 0;
 }
 
-int8_t I2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t num_to_read)
+int8_t mcuI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t num_to_read)
 {
     uint8_t i = 0;
     start();
@@ -260,7 +259,7 @@ int8_t I2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data,
     return i;
 }
 
-int8_t I2c::wait_dev_busy(uint8_t slave_address)
+int8_t mcuI2c::wait_dev_busy(uint8_t slave_address)
 {
     int8_t ret;
     uint8_t i = 0;
@@ -279,7 +278,7 @@ int8_t I2c::wait_dev_busy(uint8_t slave_address)
     while(ret != 0); //如果返回值不是0，继续等待
     return 0;
 }
-int8_t I2c::take_i2c_right(uint32_t speed)
+int8_t mcuI2c::take_i2c_right(uint32_t speed)
 {
     while(busy == 1)
     {
@@ -290,7 +289,7 @@ int8_t I2c::take_i2c_right(uint32_t speed)
     busy = 1;
     return 0;
 }
-int8_t I2c::release_i2c_right(void)
+int8_t mcuI2c::release_i2c_right(void)
 {
     busy = 0;
     return 0;

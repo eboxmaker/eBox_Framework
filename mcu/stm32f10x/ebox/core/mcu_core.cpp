@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    core.cpp
   * @author  shentq
-  * @version V1.2
+  * @version V2.1
   * @date    2016/08/14
   * @brief   
   ******************************************************************************
@@ -18,7 +18,8 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "ebox_common.h"
+#include "ebox_core.h"
+#include "ebox_analog.h"
 #define systick_no_interrupt()  SysTick->CTRL &=0xfffffffd
 #define systick_interrupt()     SysTick->CTRL |=0x0002
 extern "C" {
