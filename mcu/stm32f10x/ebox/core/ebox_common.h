@@ -30,14 +30,12 @@
 #define __COMMON_H
 
 #include "mcu_core.h" 
-#include "../core/ebox_core_.h"
+#include "../core/ebox_core.h"
 #include "ebox_gpio.h"
 #include "ebox_analog.h"   
 
 
 
-void        shift_out(Gpio *data_pin, Gpio *clock_pin, uint8_t bit_order, uint8_t val);
-uint8_t     shift_in(Gpio *data_pin, Gpio *clock_pin, uint8_t bit_order);
 
 
 #endif

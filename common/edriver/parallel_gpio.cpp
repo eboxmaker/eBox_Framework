@@ -77,14 +77,14 @@ void ParallelGpio::write(uint8_t data)
 uint8_t ParallelGpio::read()
 {
     uint8_t data = 0;
-    data |= *bit[0] << 0;
-    data |= *bit[1] << 1;
-    data |= *bit[2] << 2;
-    data |= *bit[3] << 3;
-    data |= *bit[4] << 4;
-    data |= *bit[5] << 5;
-    data |= *bit[6] << 6;
-    data |= *bit[7] << 7;
+    data |= bit[0]->read() << 0;
+    data |= bit[1]->read() << 1;
+    data |= bit[2]->read() << 2;
+    data |= bit[3]->read() << 3;
+    data |= bit[4]->read() << 4;
+    data |= bit[5]->read() << 5;
+    data |= bit[6]->read() << 6;
+    data |= bit[7]->read() << 7;
     return data;
 }
 

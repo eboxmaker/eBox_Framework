@@ -45,7 +45,7 @@
 class W25x16
 {
 public:
-    W25x16(Gpio *cs, Spi *spi)
+    W25x16(Gpio *cs, eBoxSpi *spi)
     {
         this->cs  = cs;
         this->spi = spi;
@@ -64,7 +64,7 @@ private:
     uint8_t                  spi_flash_buf[4096];
     SpiConfig_t     spi_dev_w25x16;
     Gpio                *cs;
-    Spi                 *spi;
+    eBoxSpi                 *spi;
 
     uint8_t   readSR(void);
     void _waitBusy(void);

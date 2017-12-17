@@ -25,7 +25,7 @@
  *@param    NONE
  *@retval   NONE
 */
-Gpio::Gpio(GPIO_TypeDef *port, uint16_t pin)
+mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
 {
     uint8_t temp1,temp2;
     this->port = port;
@@ -78,7 +78,7 @@ Gpio::Gpio(GPIO_TypeDef *port, uint16_t pin)
  *@param    mode:   PIN_MODE枚举变量类型
  *@retval   None
 */
-void Gpio::mode(PIN_MODE mode)
+void mcuGpio::mode(PIN_MODE mode)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -192,7 +192,7 @@ void Gpio::mode(PIN_MODE mode)
  *@param    NONE
  *@retval   NONE
 */
-void Gpio::set()
+void mcuGpio::set()
 {
     this->port->BSRR = this->pin;
 }
@@ -202,7 +202,7 @@ void Gpio::set()
  *@param    NONE
  *@retval   NONE
 */
-void Gpio::reset()
+void mcuGpio::reset()
 {
     this->port->BRR = this->pin;
 }
@@ -213,7 +213,7 @@ void Gpio::reset()
  *@param    val：1：输出高电平；0：输出低电平
  *@retval   NONE
 */
-void Gpio::write(uint8_t val)
+void mcuGpio::write(uint8_t val)
 {
     if(val == 0)
         this->port->BRR = this->pin;
@@ -227,7 +227,7 @@ void Gpio::write(uint8_t val)
  *@param    NONE
  *@retval   NONE
 */
-void Gpio::read(uint8_t *val)
+void mcuGpio::read(uint8_t *val)
 {
     *val = this->port->IDR & this->pin;
 }
@@ -238,7 +238,7 @@ void Gpio::read(uint8_t *val)
  *@param    NONE
  *@retval   返回引脚当前的电平状态
 */
-uint8_t Gpio::read(void)
+uint8_t mcuGpio::read(void)
 {
     if(this->port->IDR & this->pin)
         return 1;
@@ -250,24 +250,25 @@ uint8_t Gpio::read(void)
  *@param    NONE
  *@retval   NONE
 */
-void Gpio::toggle()
+void mcuGpio::toggle()
 {
     port->ODR ^= this->pin;
 }
 
-
-int Gpio::operator =(Gpio&) 
+int mcuGpio::operator =(mcuGpio&) 
 {
     return read();
 }
 
-Gpio::operator int()
+mcuGpio::operator int()
 {
     return read();
 }
 
-Gpio Gpio::operator= (int value)
+mcuGpio mcuGpio::operator= ( int value)
 {
     write(value);
-    return *this;
 }
+
+
+
