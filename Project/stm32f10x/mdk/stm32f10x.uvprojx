@@ -10,19 +10,18 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060183::V5.06 update 2 (build 183)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
-          <Device>STM32F103VE</Device>
+          <Device>STM32F103C8</Device>
           <Vendor>STMicroelectronics</Vendor>
           <PackID>Keil.STM32F1xx_DFP.2.1.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
-          <Cpu>IRAM(0x20000000,0x10000) IROM(0x08000000,0x80000) CPUTYPE("Cortex-M3") CLOCK(12000000) ELITTLE</Cpu>
+          <Cpu>IROM(0x08000000,0x10000) IRAM(0x20000000,0x5000) CPUTYPE("Cortex-M3") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F10x_512 -FS08000000 -FL080000 -FP0($$Device:STM32F103VE$Flash\STM32F10x_512.FLM))</FlashDriverDll>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F10x_128 -FS08000000 -FL020000 -FP0($$Device:STM32F103C8$Flash\STM32F10x_128.FLM))</FlashDriverDll>
           <DeviceId>0</DeviceId>
-          <RegisterFile>$$Device:STM32F103VE$Device\Include\stm32f10x.h</RegisterFile>
+          <RegisterFile>$$Device:STM32F103C8$Device\Include\stm32f10x.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -32,7 +31,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:STM32F103VE$SVD\STM32F103xx.svd</SFDFile>
+          <SFDFile>$$Device:STM32F103C8$SVD\STM32F103xx.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -125,6 +124,47 @@
             <HexOffset>0</HexOffset>
             <Oh166RecLen>16</Oh166RecLen>
           </OPTHX>
+          <Simulator>
+            <UseSimulator>0</UseSimulator>
+            <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
+            <RunToMain>1</RunToMain>
+            <RestoreBreakpoints>1</RestoreBreakpoints>
+            <RestoreWatchpoints>1</RestoreWatchpoints>
+            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
+            <RestoreFunctions>1</RestoreFunctions>
+            <RestoreToolbox>1</RestoreToolbox>
+            <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
+            <RestoreSysVw>1</RestoreSysVw>
+          </Simulator>
+          <Target>
+            <UseTarget>1</UseTarget>
+            <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
+            <RunToMain>1</RunToMain>
+            <RestoreBreakpoints>1</RestoreBreakpoints>
+            <RestoreWatchpoints>1</RestoreWatchpoints>
+            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
+            <RestoreFunctions>0</RestoreFunctions>
+            <RestoreToolbox>1</RestoreToolbox>
+            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreSysVw>1</RestoreSysVw>
+          </Target>
+          <RunDebugAfterBuild>0</RunDebugAfterBuild>
+          <TargetSelection>6</TargetSelection>
+          <SimDlls>
+            <CpuDll></CpuDll>
+            <CpuDllArguments></CpuDllArguments>
+            <PeripheralDll></PeripheralDll>
+            <PeripheralDllArguments></PeripheralDllArguments>
+            <InitializationFile></InitializationFile>
+          </SimDlls>
+          <TargetDlls>
+            <CpuDll></CpuDll>
+            <CpuDllArguments></CpuDllArguments>
+            <PeripheralDll></PeripheralDll>
+            <PeripheralDllArguments></PeripheralDllArguments>
+            <InitializationFile></InitializationFile>
+            <Driver>Segger\JL2CM3.dll</Driver>
+          </TargetDlls>
         </DebugOption>
         <Utilities>
           <Flash1>
@@ -137,7 +177,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3>"" ()</Flash3>
+          <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -189,7 +229,6 @@
             <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
-            <nSecure>0</nSecure>
             <RoSelD>3</RoSelD>
             <RwSelD>3</RwSelD>
             <CodeSel>0</CodeSel>
@@ -243,12 +282,12 @@
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0x5000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x80000</Size>
+                <Size>0x10000</Size>
               </IROM>
               <XRAM>
                 <Type>0</Type>
@@ -273,7 +312,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x80000</Size>
+                <Size>0x10000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -298,7 +337,7 @@
               <OCR_RVCT9>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0x5000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -326,15 +365,11 @@
             <useXO>0</useXO>
             <v6Lang>0</v6Lang>
             <v6LangP>0</v6LangP>
-            <vShortEn>1</vShortEn>
-            <vShortWch>1</vShortWch>
-            <v6Lto>0</v6Lto>
-            <v6WtE>0</v6WtE>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define>ARM_MATH_CM3</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcu\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\mcu\stm32f10x\ebox;..\..\..\mcu\stm32f10x\ebox\core;..\..\..\mcu\stm32f10x\ebox\Peripherals;..\..\..\common\edriver;..\..\..\common\network;..\..\..\common\fat;..\..\..\common\edriver\WiFi;..\..\..\user;..\..\..\common\cJSON;..\..\..\common\edriver\SFUD\sfud\inc;..\..\..\common\edriver\SFUD\ebox;..\..\..\common\bigiot;..\..\..\common\usb_device_stack\USBDevice;..\..\..\common\usb_device_stack\USBHID;..\..\..\common\usb_device_stack\USBAudio;..\..\..\common\usb_device_stack\USBMIDI;..\..\..\common\usb_device_stack\USBMSD;..\..\..\common\usb_device_stack\USBSerial;..\..\..\common\gui;..\..\..\common\FreeModbus\modbus\ascii;..\..\..\common\FreeModbus\modbus\include;..\..\..\common\FreeModbus\modbus\rtu;..\..\..\common\FreeModbus\modbus\tcp;..\..\..\common\FreeModbus\port;..\..\..\common\menu;..\..\..\common\Lora;..\..\..\common\apps;..\..\..\common\DSPLib\Include;..\..\..\common\OSC-master;..\..\..\common\apps\Filters\FirFilter;..\..\..\common\apps\PID\PID;..\..\..\common\apps\PID\PID_AutoTune_v0;..\..\..\common\lwip\lwip-2.0.3\src\include;..\..\..\common\lwip\arch;..\..\..\common\lwip</IncludePath>
+              <IncludePath>..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcu\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\mcu\stm32f10x\ebox;..\..\..\mcu\stm32f10x\ebox\core;..\..\..\mcu\stm32f10x\ebox\Peripherals;..\..\..\common\edriver;..\..\..\common\network;..\..\..\common\fat;..\..\..\common\edriver\WiFi;..\..\..\user;..\..\..\common\cJSON;..\..\..\common\edriver\SFUD\sfud\inc;..\..\..\common\edriver\SFUD\ebox;..\..\..\common\bigiot;..\..\..\common\usb_device_stack\USBDevice;..\..\..\common\usb_device_stack\USBHID;..\..\..\common\usb_device_stack\USBAudio;..\..\..\common\usb_device_stack\USBMIDI;..\..\..\common\usb_device_stack\USBMSD;..\..\..\common\usb_device_stack\USBSerial;..\..\..\common\gui;..\..\..\common\FreeModbus\modbus\ascii;..\..\..\common\FreeModbus\modbus\include;..\..\..\common\FreeModbus\modbus\rtu;..\..\..\common\FreeModbus\modbus\tcp;..\..\..\common\FreeModbus\port;..\..\..\common\menu;..\..\..\common\Lora;..\..\..\common\apps;..\..\..\common\DSPLib\Include;..\..\..\common\OSC-master;..\..\..\common\apps\Filters\FirFilter;..\..\..\common\apps\PID\PID;..\..\..\common\apps\PID\PID_AutoTune_v0;..\..\..\common\lwip\lwip-2.0.3\src\include;..\..\..\common\lwip\arch;..\..\..\common\lwip;..\..\..\core\port;..\..\..\core</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -588,9 +623,9 @@
               <FilePath>..\..\..\core\math\LinearRegression.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_core_.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\core\ebox_core_.h</FilePath>
+              <FileName>ebox_core.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\core\ebox_core.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -705,47 +740,27 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>ebox_apps</GroupName>
-          <Files>
-            <File>
-              <FileName>calendar.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\apps\calendar.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>color_convert.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\apps\color_convert.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>EventGpio.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\apps\EventGpio.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>EventIo.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\apps\EventIo.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FirFilter.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\apps\Filters\FirFilter\FirFilter.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>PID_v1.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\apps\PID\PID\PID_v1.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ebox_driver</GroupName>
+          <GroupName>edriver</GroupName>
           <Files>
             <File>
               <FileName>74HC595.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\74HC595.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ADS7816.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\ADS7816.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ADS8866.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\ADS8866.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>AM2315.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\AM2315.cpp</FilePath>
             </File>
             <File>
               <FileName>at24c02.cpp</FileName>
@@ -756,6 +771,11 @@
               <FileName>at45db.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\at45db.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>BMP280-3.3.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\BMP280-3.3.cpp</FilePath>
             </File>
             <File>
               <FileName>Button.cpp</FileName>
@@ -773,9 +793,19 @@
               <FilePath>..\..\..\common\edriver\dht11.cpp</FilePath>
             </File>
             <File>
+              <FileName>ds18b20.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\ds18b20.cpp</FilePath>
+            </File>
+            <File>
               <FileName>DS3231.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\DS3231.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>enc28j60.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\enc28j60.cpp</FilePath>
             </File>
             <File>
               <FileName>encoder.cpp</FileName>
@@ -791,6 +821,11 @@
               <FileName>GP2Y1051.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\GP2Y1051.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>INA219.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\INA219.cpp</FilePath>
             </File>
             <File>
               <FileName>ir_decoder.cpp</FileName>
@@ -843,9 +878,19 @@
               <FilePath>..\..\..\common\edriver\LTC1446.cpp</FilePath>
             </File>
             <File>
+              <FileName>LTC2943.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\LTC2943.cpp</FilePath>
+            </File>
+            <File>
               <FileName>Max7456.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\Max7456.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>MCP23017.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\MCP23017.cpp</FilePath>
             </File>
             <File>
               <FileName>mmc_sd.cpp</FileName>
@@ -868,39 +913,29 @@
               <FilePath>..\..\..\common\edriver\NRF24L01.cpp</FilePath>
             </File>
             <File>
+              <FileName>OLED_4spi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\OLED_4spi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>OLED_i2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\OLED_i2c.cpp</FilePath>
+            </File>
+            <File>
               <FileName>parallel_gpio.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\parallel_gpio.cpp</FilePath>
             </File>
             <File>
-              <FileName>TM1638.cpp</FileName>
+              <FileName>PCA9685.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\TM1638.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ultrasonic_wave.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\ultrasonic_wave.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>w25x16.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\w25x16.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>w5500.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\w5500.cpp</FilePath>
+              <FilePath>..\..\..\common\edriver\PCA9685.cpp</FilePath>
             </File>
             <File>
               <FileName>si4432.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\si4432.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ds18b20.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\ds18b20.cpp</FilePath>
             </File>
             <File>
               <FileName>sx1278.cpp</FileName>
@@ -913,19 +948,9 @@
               <FilePath>..\..\..\common\edriver\TingATCmd.cpp</FilePath>
             </File>
             <File>
-              <FileName>ADS7816.cpp</FileName>
+              <FileName>TLC59711.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\ADS7816.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>USR_GM3.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\USR_GM3.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>BMP280-3.3.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\BMP280-3.3.cpp</FilePath>
+              <FilePath>..\..\..\common\edriver\TLC59711.cpp</FilePath>
             </File>
             <File>
               <FileName>TM1637.cpp</FileName>
@@ -933,44 +958,9 @@
               <FilePath>..\..\..\common\edriver\TM1637.cpp</FilePath>
             </File>
             <File>
-              <FileName>OLED_4spi.cpp</FileName>
+              <FileName>TM1638.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\OLED_4spi.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>OLED_i2c.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\OLED_i2c.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>LTC2943.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\LTC2943.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>MCP23017.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\MCP23017.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>PCA9685.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\PCA9685.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>TLC59711.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\TLC59711.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>INA219.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\INA219.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>AM2315.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\AM2315.cpp</FilePath>
+              <FilePath>..\..\..\common\edriver\TM1638.cpp</FilePath>
             </File>
             <File>
               <FileName>TSL2561.cpp</FileName>
@@ -978,64 +968,59 @@
               <FilePath>..\..\..\common\edriver\TSL2561.cpp</FilePath>
             </File>
             <File>
+              <FileName>ultrasonic_wave.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\ultrasonic_wave.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>USR_GM3.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\USR_GM3.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>w25x16.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\w25x16.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>w5500.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\w5500.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ws2812.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\common\edriver\ws2812.cpp</FilePath>
+            </File>
+            <File>
               <FileName>WS2812B.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\common\edriver\WS2812B.cpp</FilePath>
             </File>
-            <File>
-              <FileName>ADS8866.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\edriver\ADS8866.cpp</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>network</GroupName>
+          <GroupName>app</GroupName>
           <Files>
             <File>
-              <FileName>dhcp.cpp</FileName>
+              <FileName>calendar.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\common\network\dhcp.cpp</FilePath>
+              <FilePath>..\..\..\common\apps\calendar.cpp</FilePath>
             </File>
             <File>
-              <FileName>dns.cpp</FileName>
+              <FileName>color_convert.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\common\network\dns.cpp</FilePath>
+              <FilePath>..\..\..\common\apps\color_convert.cpp</FilePath>
             </File>
             <File>
-              <FileName>socket.cpp</FileName>
+              <FileName>EventGpio.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\common\network\socket.cpp</FilePath>
+              <FilePath>..\..\..\common\apps\EventGpio.cpp</FilePath>
             </File>
             <File>
-              <FileName>tcp.cpp</FileName>
+              <FileName>EventIo.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\common\network\tcp.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>udp.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\common\network\udp.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>os</GroupName>
-          <Files>
-            <File>
-              <FileName>cpu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\os\ebox_os\cpu.c</FilePath>
-            </File>
-            <File>
-              <FileName>os.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\os\ebox_os\os.c</FilePath>
-            </File>
-            <File>
-              <FileName>os_cpu_a.asm</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\..\os\ebox_os\os_cpu_a.asm</FilePath>
+              <FilePath>..\..\..\common\apps\EventIo.cpp</FilePath>
             </File>
           </Files>
         </Group>

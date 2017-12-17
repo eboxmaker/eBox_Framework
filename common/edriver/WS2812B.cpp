@@ -128,106 +128,102 @@ void WS2812B::_set_duty(void)
  ----------------------------------------------------------*/
  void WS2812B::_init_info(Gpio *pwm_pin)
  {
-	 if(pwm_pin->port == GPIOA)
-	 {
-		 switch(pwm_pin->pin)
-		 {
-		 //TIM2
-		 case GPIO_Pin_0:
-			 TIMx = TIM2;
-			 rcc = RCC_APB1Periph_TIM2;
-			 ch = TIMxCH1;//irq = TIM2_IRQn;
-			 break;
-		 case GPIO_Pin_1:
-			 TIMx = TIM2;
-			 rcc = RCC_APB1Periph_TIM2;
-			 ch = TIMxCH2;//irq = TIM2_IRQn;
-			 break;
-		 case GPIO_Pin_2:
-			 TIMx = TIM2;
-			 rcc = RCC_APB1Periph_TIM2;
-			 ch = TIMxCH3;//irq = TIM2_IRQn;
-			 break;
-		 case GPIO_Pin_3:
-			 TIMx = TIM2;
-			 rcc = RCC_APB1Periph_TIM2;
-			 ch = TIMxCH4;//irq = TIM2_IRQn;
-			 break;
 
-		 //TIM3
-		 case GPIO_Pin_6:
-			 TIMx = TIM3;
-			 rcc = RCC_APB1Periph_TIM3;
-			 ch = TIMxCH1;//irq = TIM3_IRQn;
-			 break;
-		 case GPIO_Pin_7:
-			 TIMx = TIM3;
-			 rcc = RCC_APB1Periph_TIM3;
-			 ch = TIMxCH2;//irq = TIM3_IRQn;
-			 break;
+    switch((uint8_t)pwm_pin->id)
+    {
+    //TIM2
+    case PA0_ID:
+        TIMx = TIM2;
+        rcc = RCC_APB1Periph_TIM2;
+        ch = TIMxCH1;//irq = TIM2_IRQn;
+        break;
+    case PA1_ID:
+        TIMx = TIM2;
+        rcc = RCC_APB1Periph_TIM2;
+        ch = TIMxCH2;//irq = TIM2_IRQn;
+        break;
+    case PA2_ID:
+        TIMx = TIM2;
+        rcc = RCC_APB1Periph_TIM2;
+        ch = TIMxCH3;//irq = TIM2_IRQn;
+        break;
+    case PA3_ID:
+        TIMx = TIM2;
+        rcc = RCC_APB1Periph_TIM2;
+        ch = TIMxCH4;//irq = TIM2_IRQn;
+        break;
 
-		 //TIM1
-		 case GPIO_Pin_8:
-			 TIMx = TIM1;
-			 rcc = RCC_APB2Periph_TIM1;
-			 ch = TIMxCH1;//irq = TIM4_IRQn;
-			 break;
-		 case GPIO_Pin_9:
-			 TIMx = TIM1;
-			 rcc = RCC_APB2Periph_TIM1;
-			 ch = TIMxCH2;//irq = TIM4_IRQn;
-			 break;
-		 case GPIO_Pin_10:
-			 TIMx = TIM1;
-			 rcc = RCC_APB2Periph_TIM1;
-			 ch = TIMxCH3;//irq = TIM4_IRQn;
-			 break;
-		 case GPIO_Pin_11:
-			 TIMx = TIM1;
-			 rcc = RCC_APB2Periph_TIM1;
-			 ch = TIMxCH4;//irq = TIM4_IRQn;
-			 break;
-		 }
-	 }
-	 if(pwm_pin->port == GPIOB)
-	 {
-		 switch(pwm_pin->pin)
-		 {
-		 //TIM4
-		 case GPIO_Pin_6:
-			 TIMx = TIM4;
-			 rcc = RCC_APB1Periph_TIM4;
-			 ch = TIMxCH1;//irq = TIM4_IRQn;
-			 break;
-		 case GPIO_Pin_7:
-			 TIMx = TIM4;
-			 rcc = RCC_APB1Periph_TIM4;
-			 ch = TIMxCH2;//irq = TIM4_IRQn;
-			 break;
-		 case GPIO_Pin_8:
-			 TIMx = TIM4;
-			 rcc = RCC_APB1Periph_TIM4;
-			 ch = TIMxCH3;//irq = TIM4_IRQn;
-			 break;
-		 case GPIO_Pin_9:
-			 TIMx = TIM4;
-			 rcc = RCC_APB1Periph_TIM4;
-			 ch = TIMxCH4;//irq = TIM4_IRQn;
-			 break;
+    //TIM3
+    case PA6_ID:
+        TIMx = TIM3;
+        rcc = RCC_APB1Periph_TIM3;
+        ch = TIMxCH1;//irq = TIM3_IRQn;
+        break;
+    case PA7_ID:
+        TIMx = TIM3;
+        rcc = RCC_APB1Periph_TIM3;
+        ch = TIMxCH2;//irq = TIM3_IRQn;
 
-		 //TIM3
-		 case GPIO_Pin_0:
-			 TIMx = TIM3;
-			 rcc = RCC_APB1Periph_TIM3;
-			 ch = TIMxCH3;//irq = TIM3_IRQn;
-			 break;
-		 case GPIO_Pin_1:
-			 TIMx = TIM3;
-			 rcc = RCC_APB1Periph_TIM3;
-			 ch = TIMxCH4;//irq = TIM3_IRQn;
-			 break;
-		 }
-	 }
+    //TIM1
+    case PA8_ID:
+        TIMx = TIM1;
+        rcc = RCC_APB2Periph_TIM1;
+        ch = TIMxCH1;//irq = TIM4_IRQn;
+        break;
+    case PA9_ID:
+        TIMx = TIM1;
+        rcc = RCC_APB2Periph_TIM1;
+        ch = TIMxCH2;//irq = TIM4_IRQn;
+        break;
+    case PA10_ID:
+        TIMx = TIM1;
+        rcc = RCC_APB2Periph_TIM1;
+        ch = TIMxCH3;//irq = TIM4_IRQn;
+        break;
+    case PA11_ID:
+        TIMx = TIM1;
+        rcc = RCC_APB2Periph_TIM1;
+        ch = TIMxCH4;//irq = TIM4_IRQn;
+        break;
+
+
+
+    //TIM4
+    case PB6_ID:
+        TIMx = TIM4;
+        rcc = RCC_APB1Periph_TIM4;
+        ch = TIMxCH1;//irq = TIM4_IRQn;
+        break;
+    case PB7_ID:
+        TIMx = TIM4;
+        rcc = RCC_APB1Periph_TIM4;
+        ch = TIMxCH2;//irq = TIM4_IRQn;
+        break;
+    case PB8_ID:
+        TIMx = TIM4;
+        rcc = RCC_APB1Periph_TIM4;
+        ch = TIMxCH3;//irq = TIM4_IRQn;
+        break;
+    case PB9_ID:
+        TIMx = TIM4;
+        rcc = RCC_APB1Periph_TIM4;
+        ch = TIMxCH4;//irq = TIM4_IRQn;
+        break;
+
+    //TIM3
+    case PB0_ID:
+        TIMx = TIM3;
+        rcc = RCC_APB1Periph_TIM3;
+        ch = TIMxCH3;//irq = TIM3_IRQn;
+        break;
+    case PB1_ID:
+        TIMx = TIM3;
+        rcc = RCC_APB1Periph_TIM3;
+        ch = TIMxCH4;//irq = TIM3_IRQn;
+        break;
+
+    }
+	 
 
  }
 

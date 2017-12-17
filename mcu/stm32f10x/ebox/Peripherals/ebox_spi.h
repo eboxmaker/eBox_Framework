@@ -22,6 +22,8 @@
 #define __SPI_H
 
 #include "ebox_common.h"
+#include "eBox_port_spi.h"
+
 
 
 
@@ -34,7 +36,7 @@
 		如果不释放总线会导致别的SPI设备一直处于等待的状态
 */
 //默认配置 空，只依靠结构体SPICONFIG来初始化
-class	Spi
+class	Spi : public eBoxSpi
 {
 public:
     Spi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
@@ -65,7 +67,7 @@ private:
 				3.初期调试I2C设备建议使用SPI_CLOCK_DIV256。
 				4.函数接口和硬件SPI完全一样可以互相替换。
 */
-class SoftSpi
+class SoftSpi: public eBoxSpi
 {
 public:
     SoftSpi(Gpio *sck, Gpio *miso, Gpio *mosi);
@@ -105,5 +107,8 @@ private:
     uint8_t transfer2(uint8_t data);
     uint8_t transfer3(uint8_t data);
 };
+
+
+
 
 #endif

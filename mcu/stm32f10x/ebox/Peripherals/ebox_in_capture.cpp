@@ -177,75 +177,62 @@ void InCapture::base_init(uint16_t period, uint16_t prescaler)
 }
 void InCapture::init_info(Gpio *capture_pin)
 {
-    if(this->capture_pin->port == GPIOA)
+    switch((uint8_t)capture_pin->id)
     {
-        switch(this->capture_pin->pin)
-        {
-        case GPIO_Pin_0:
+        case PA0_ID :
             TIMx = TIM2;
             ch = TIM_Channel_1;//irq = TIM2_IRQn;
             break;
-        case GPIO_Pin_1:
+        case PA1_ID:
             TIMx = TIM2;
             ch = TIM_Channel_2;//irq = TIM2_IRQn;
             break;
-        case GPIO_Pin_2:
+        case PA2_ID:
             TIMx = TIM2;
             ch = TIM_Channel_3;//irq = TIM2_IRQn;
             break;
-        case GPIO_Pin_3:
+        case PA3_ID:
             TIMx = TIM2;
             ch = TIM_Channel_4;//irq = TIM2_IRQn;
-            break;
-
-        case GPIO_Pin_6:
+            break;        
+    
+        case PA6_ID:
             TIMx = TIM3;
             ch = TIM_Channel_1;//irq = TIM3_IRQn;
             break;
-        case GPIO_Pin_7:
+        case PA7_ID:
             TIMx = TIM3;
             ch = TIM_Channel_2;//irq = TIM3_IRQn;
             break;
-            //            case GPIO_Pin_10:
-            //				TIMx = TIM3;ch = TIM_Channel_3;//irq = TIM3_IRQn;
-            //				break;
-            //			case GPIO_Pin_11:
-            //				TIMx = TIM3;ch = TIM_Channel_4;//irq = TIM3_IRQn;
-            //				break;
-
-        }
-    }
-    if(this->capture_pin->port == GPIOB)
-    {
-        switch(this->capture_pin->pin)
-        {
-        case GPIO_Pin_0:
+        
+        
+        case PB0_ID:
             TIMx = TIM3;
             ch = TIM_Channel_3;//irq = TIM3_IRQn;
             break;
-        case GPIO_Pin_1:
+        case PB1_ID:
             TIMx = TIM3;
             ch = TIM_Channel_4;//irq = TIM3_IRQn;
             break;
 
-        case GPIO_Pin_6:
+        case PB6_ID:
             TIMx = TIM4;
             ch = TIM_Channel_1;//irq = TIM4_IRQn;
             break;
-        case GPIO_Pin_7:
+        case PB7_ID:
             TIMx = TIM4;
             ch = TIM_Channel_2;//irq = TIM4_IRQn;
             break;
-        case GPIO_Pin_8:
+        case PB8_ID:
             TIMx = TIM4;
             ch = TIM_Channel_3;//irq = TIM4_IRQn;
             break;
-        case GPIO_Pin_9:
+        case PB9_ID:
             TIMx = TIM4;
             ch = TIM_Channel_4;//irq = TIM4_IRQn;
             break;
-        }
     }
+    
 
 }
 

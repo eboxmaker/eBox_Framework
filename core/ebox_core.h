@@ -29,6 +29,7 @@
 #define __EBOX_CORE_H
 
     
+#include "../core/ebox_type.h"
 #include "../core/new.h"
 #include "../core/print.h"
 #include "../core/binary.h"
@@ -44,15 +45,11 @@
 #include "math.h"
 
 
+#include "ebox_port_gpio.h"
+#include "ebox_port_spi.h"
+
 #define EBOX_VERSION "2.0"
 
-#define EOK         0
-#define EWAIT       1
-#define EBUSY       2
-#define ETIMEOUT    3
-#define EPARA       4
-#define E2LONG      5
-#define EOTHER      128
 
 /////////////////////////////////////////
 
@@ -66,83 +63,12 @@
 #define bit_clear(value, bit) ((value) &= ~(1UL << (bit)))
 #define bit_write(value, bit, bitvalue) (bitvalue ? bit_set(value, bit) : bit_clear(value, bit))
 
-#define true 0x1
-#define false 0x0
+
+void        shift_out(Gpio *data_pin, Gpio *clock_pin, uint8_t bit_order, uint8_t val);
+uint8_t     shift_in(Gpio *data_pin, Gpio *clock_pin, uint8_t bit_order);
 
 
 
 
-#define LSB_FIRST 0
-#define MSB_FIRST 1
 
-#define LOW     0
-#define HIGH    1
-#define CHANGE  2
-#define FALLING 3
-#define RISING  4
-
-#define PI 3.1415926535897932384626433832795
-#define HALF_PI 1.5707963267948966192313216916398
-#define TWO_PI 6.283185307179586476925286766559
-#define DEG_TO_RAD 0.017453292519943295769236907684886
-#define RAD_TO_DEG 57.295779513082320876798154814105
-
-typedef union
-{
-    uint8_t byte[2];
-    uint16_t value;
-}DataU16_t; 
-
-typedef union
-{
-    uint8_t byte[4];
-    uint32_t value;
-}DataU32_t; 
-
-typedef union
-{
-    uint8_t byte[2];
-    int16_t value;
-}Data16_t; 
-
-typedef union
-{
-    uint8_t byte[4];
-    int32_t value;
-}Data32_t; 
-
-typedef struct
-{
-	uint8_t year;
-	uint8_t month;
-	uint8_t date;
-	uint8_t hour;
-	uint8_t min;
-	uint8_t sec;
-	uint8_t week;
-}DateTime_t;
-
-//spi相关公共宏和声明//////////////////////////////////
-#define SPI_MODE0 0
-#define SPI_MODE1 1
-#define SPI_MODE2 2
-#define SPI_MODE3 3
-
-#define SPI_CLOCK_DIV2     0
-#define SPI_CLOCK_DIV4     1
-#define SPI_CLOCK_DIV8     2
-#define SPI_CLOCK_DIV16    3
-#define SPI_CLOCK_DIV32    4
-#define SPI_CLOCK_DIV64    5
-#define SPI_CLOCK_DIV128   6
-#define SPI_CLOCK_DIV256   7
-
-
-typedef struct
-{
-    uint8_t     dev_num;
-    uint8_t     mode;
-    uint8_t     prescaler;
-    uint8_t     bit_order;
-} SpiConfig_t;
 #endif
