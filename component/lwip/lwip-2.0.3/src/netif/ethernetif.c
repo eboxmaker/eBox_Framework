@@ -46,7 +46,7 @@
 #include "lwip/opt.h"
 
 //#if 0 /* don't build, this is only a skeleton, see previous comment */
-#if 0 /* don't build, this is only a skeleton, see previous comment */
+#if 1 /* don't build, this is only a skeleton, see previous comment */
 
 #include "lwip/def.h"
 #include "lwip/mem.h"
@@ -56,6 +56,9 @@
 #include "lwip/ethip6.h"
 #include "lwip/etharp.h"
 #include "netif/ppp/pppoe.h"
+
+
+#include "eth_port.h"
 
 /* Define those to better describe your network interface. */
 #define IFNAME0 'e'
@@ -73,7 +76,7 @@ struct ethernetif {
 };
 
 /* Forward declarations. */
-static void  ethernetif_input(struct netif *netif);
+ void  ethernetif_input(struct netif *netif);
 
 /**
  * In this function, the hardware should be initialized.
@@ -91,9 +94,12 @@ low_level_init(struct netif *netif)
   netif->hwaddr_len = ETHARP_HWADDR_LEN;
 
   /* set MAC hardware address */
-  netif->hwaddr[0] = ;
-  ...
-  netif->hwaddr[5] = ;
+  netif->hwaddr[0] = 0x00;
+  netif->hwaddr[1] = 'R';
+  netif->hwaddr[2] = 'M';
+  netif->hwaddr[3] = 'N';
+  netif->hwaddr[4] = 'E';
+  netif->hwaddr[5] = 'T';
 
   /* maximum transfer unit */
   netif->mtu = 1500;
@@ -116,6 +122,8 @@ low_level_init(struct netif *netif)
 #endif /* LWIP_IPV6 && LWIP_IPV6_MLD */
 
   /* Do whatever else is needed to initialize interface. */
+    ENC28J60_Init(netif->hwaddr); // 初始化网卡
+
 }
 
 /**
@@ -140,7 +148,8 @@ low_level_output(struct netif *netif, struct pbuf *p)
   struct ethernetif *ethernetif = netif->state;
   struct pbuf *q;
 
-  initiate transfer();
+//  initiate transfer();
+  ENC28J60_InitSend(p->tot_len); // 初始化
 
 #if ETH_PAD_SIZE
   pbuf_header(p, -ETH_PAD_SIZE); /* drop the padding word */
@@ -150,10 +159,13 @@ low_level_output(struct netif *netif, struct pbuf *p)
     /* Send the data from the pbuf to the interface, one pbuf at a
        time. The size of the data in each pbuf is kept in the ->len
        variable. */
-    send data from(q->payload, q->len);
+//    send data from(q->payload, q->len);
+    ENC28J60_WriteBuf(q->payload, q->len); // 把内容放入缓冲区
+
   }
 
-  signal that packet should be sent();
+//  signal that packet should be sent();
+  ENC28J60_BeginSend(); // 开始发送
 
   MIB2_STATS_NETIF_ADD(netif, ifoutoctets, p->tot_len);
   if (((u8_t*)p->payload)[0] & 1) {
@@ -191,7 +203,7 @@ low_level_input(struct netif *netif)
 
   /* Obtain the size of the packet and put it into the "len"
      variable. */
-  len = ;
+  len = ENC28J60_GetPacketLength();
 
 #if ETH_PAD_SIZE
   len += ETH_PAD_SIZE; /* allow room for Ethernet padding */
@@ -217,9 +229,13 @@ low_level_input(struct netif *netif)
        * actually received size. In this case, ensure the tot_len member of the
        * pbuf is the sum of the chained pbuf len members.
        */
-      read data into(q->payload, q->len);
+//      read data into(q->payload, q->len);
+        ENC28J60_ReadBuf(q->payload, q->len); // 读取缓冲区中的内容
+
     }
-    acknowledge that packet has been read();
+//    acknowledge that packet has been read();
+        ENC28J60_EndReceive(); // 接收完成
+
 
     MIB2_STATS_NETIF_ADD(netif, ifinoctets, p->tot_len);
     if (((u8_t*)p->payload)[0] & 1) {
@@ -235,7 +251,9 @@ low_level_input(struct netif *netif)
 
     LINK_STATS_INC(link.recv);
   } else {
-    drop packet();
+//    drop packet();
+    ENC28J60_EndReceive(); // 丢弃数据包
+
     LINK_STATS_INC(link.memerr);
     LINK_STATS_INC(link.drop);
     MIB2_STATS_NETIF_INC(netif, ifindiscards);
@@ -253,7 +271,7 @@ low_level_input(struct netif *netif)
  *
  * @param netif the lwip network interface structure for this ethernetif
  */
-static void
+/*static*/ void
 ethernetif_input(struct netif *netif)
 {
   struct ethernetif *ethernetif;
