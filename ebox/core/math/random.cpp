@@ -71,3 +71,4 @@ unsigned int random(unsigned int min, unsigned int max)
 {
     return (min + rand() % (max - min));
 }
+

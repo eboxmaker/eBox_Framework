@@ -26,29 +26,37 @@
  *
  * This file is part of the lwIP TCP/IP stack.
  * 
- * Author: Adam Dunkels <adam@sics.se>
+ * Author: Simon Goldschmidt
  *
  */
-#ifndef __CC_H__
-#define __CC_H__
+#ifndef LWIP_HDR_LWIPOPTS_H
+#define LWIP_HDR_LWIPOPTS_H
 
-//typedef unsigned   char    u8_t;
-//typedef signed     char    s8_t;
-//typedef unsigned   short   u16_t;
-//typedef signed     short   s16_t;
-//typedef unsigned   long    u32_t;
-//typedef signed     long    s32_t;
+/* Prevent having to link sys_arch.c (we don't test the API layers in unit tests) */
+#define NO_SYS                          1
+#define SYS_LIGHTWEIGHT_PROT            0
+#define LWIP_NETCONN                    0
+#define LWIP_SOCKET                     0
 
-#define U16_F "hu"
-#define S16_F "hd"
-#define X16_F "hx"
-#define U32_F "lu"
-#define S32_F "ld"
-#define X32_F "lx"
+/* Enable DHCP to test it, disable UDP checksum to easier inject packets */
+#define LWIP_DHCP                       1
 
-#define PACK_STRUCT_BEGIN
-#define PACK_STRUCT_STRUCT
-#define PACK_STRUCT_END
-#define PACK_STRUCT_FIELD(x) x
+/* Minimal changes to opt.h required for tcp unit tests: */
+#define MEM_SIZE                        16000
+#define TCP_SND_QUEUELEN                40
+#define MEMP_NUM_TCP_SEG                TCP_SND_QUEUELEN
+#define TCP_SND_BUF                     (12 * TCP_MSS)
+#define TCP_WND                         (10 * TCP_MSS)
+#define LWIP_WND_SCALE                  1
+#define TCP_RCV_SCALE                   0
+#define PBUF_POOL_SIZE                  400 /* pbuf tests need ~200KByte */
 
-#endif /* __CC_H__ */
+/* Enable IGMP and MDNS for MDNS tests */
+#define LWIP_IGMP                       1
+#define LWIP_MDNS_RESPONDER             1
+#define LWIP_NUM_NETIF_CLIENT_DATA      (LWIP_MDNS_RESPONDER)
+
+/* Minimal changes to opt.h required for etharp unit tests: */
+#define ETHARP_SUPPORT_STATIC_ENTRIES   1
+
+#endif /* LWIP_HDR_LWIPOPTS_H */
