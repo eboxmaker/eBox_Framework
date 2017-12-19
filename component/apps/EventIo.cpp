@@ -1,7 +1,7 @@
 #include "eventio.h"
 
-
-void EventVar::process(void)
+template <class T>
+void EventVar<T>::process(void)
 {
     if(*io != state)
     {

@@ -623,14 +623,14 @@
               <FilePath>..\..\..\ebox\core\math\random.cpp</FilePath>
             </File>
             <File>
-              <FileName>printx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\printx.c</FilePath>
-            </File>
-            <File>
               <FileName>fifo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\ebox\core\fifo.c</FilePath>
+            </File>
+            <File>
+              <FileName>printx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\printx.c</FilePath>
             </File>
           </Files>
         </Group>

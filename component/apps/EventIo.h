@@ -34,24 +34,31 @@ class EventIo
 
 } ;
 
+template <class T>
 class EventVar :public EventIo
 {
     public:
-        EventVar(uint8_t *io,void (*pos_edge)(),void (*nag_edge)(),void (*changed)())
+        EventVar(void (*pos_edge)(),void (*nag_edge)(),void (*changed)())
         {
-            this->io = io;
-            state = *io;
+
             event_pos_edge = pos_edge;
             event_nag_edge = nag_edge;
             event_changed = changed;
+        }
+        void begin(T *io)
+        {
+            this->io = io;
+            state = *io;
         }
         virtual void process(void) ;
         void (*event_pos_edge)();
         void (*event_nag_edge)(); 
         void (*event_changed)();
     private:
-        uint8_t *io;
-        u8 state;
+        T *io;
+        T state;
+
+
 };
 
 

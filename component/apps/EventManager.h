@@ -3,8 +3,9 @@
 
 #include "ebox.h"
 
-#include "EventGpio.h"
+
 #include "EventIo.h"
+#include "EventGpio.h"
 
 class EventManager
 {
@@ -13,13 +14,14 @@ class EventManager
         {   
             list.insert_tail(handler);
         }
+        
         void process()
         {
             int i=0;
             while(i < list.size())
             {
                 te = (EventIo *)list.data(i);
-                te->process();
+                te->process();                
                 i++;
             }
         }
