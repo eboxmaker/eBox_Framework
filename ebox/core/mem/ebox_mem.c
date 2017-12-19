@@ -1,4 +1,4 @@
-#include "../mem/ebox_mem.h"
+#include "ebox_mem.h"
 #include "mcu_mem.h"//需要根据不同的硬件或者内内存管理单元接口
 void *ebox_malloc(size_t sz)
 {

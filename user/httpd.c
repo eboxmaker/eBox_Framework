@@ -16,14 +16,14 @@ err_t http_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)
     {  
         // 提取页面名称  
         pstr = (char *)p->payload;  
-        while (*pstr++ != ' ');  
-        while (*pstr != ' ')  
-            name[i++] = '1';  
-        name[i] = '\0'; // 不要忘了结束name字符串  
+//        while (*pstr++ != ' ');  
+//        while (*pstr != ' ')  
+//            name[i++] = '1';  
+//        name[i] = '\0'; // 不要忘了结束name字符串  
         tcp_recved(tpcb, p->tot_len);  
           
         // 生成HTML内容  
-        sprintf(str, "<meta charset=\"gb2312\"><title>获取网页名称</title><div style=\"font-family:Arial\"><b>请求的网页文件名称是: </b>%s</div>", name);  
+        sprintf(str, "<meta charset=\"gb2312\"><title>获取网页名称</title><div style=\"font-family:Arial\"><b>请求的网页文件名称是: </b></div>");  
           
         sprintf(len, "%d", strlen(str)); // HTML内容的长度  
         tcp_write(tpcb, STR_AND_SIZE("HTTP/1.1 200 OK\r\nContent-Length: "), TCP_WRITE_FLAG_MORE);  

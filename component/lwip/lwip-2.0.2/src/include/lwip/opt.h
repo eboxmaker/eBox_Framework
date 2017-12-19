@@ -2628,7 +2628,7 @@
  * ETHARP_DEBUG: Enable debugging in etharp.c.
  */
 #if !defined ETHARP_DEBUG || defined __DOXYGEN__
-#define ETHARP_DEBUG                    LWIP_DBG_OFF
+#define ETHARP_DEBUG                    LWIP_DBG_ON
 #endif
 
 /**
