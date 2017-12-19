@@ -1,9 +1,9 @@
 
-#include "../ebox/core/mem/ebox_mem.h"
-#include "printx.h"
+#include "ebox_mem.h"
+#include "ebox_printf.h"
 
 //extern struct my_fifo *x_ptr;
-struct my_fifo *uart_fifo_ptr;
+struct ebox_fifo *uart_fifo_ptr;
 
 
 void ebox_printf(const char *fmt, ...)
@@ -31,7 +31,7 @@ void ebox_printf(const char *fmt, ...)
     size1 = vsprintf(buf, fmt, va_params); 
     va_end(va_params);
 
-    my_fifo_put(uart_fifo_ptr,(unsigned char *)buf, size1);
+    ebox_fifo_put(uart_fifo_ptr,(unsigned char *)buf, size1);
     ebox_free(buf);
 
 }

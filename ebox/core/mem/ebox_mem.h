@@ -4,7 +4,6 @@
 extern "C"{
 #endif // __cplusplus
 
-    
 #include "stdio.h"
 
 void    *ebox_malloc(size_t sz);

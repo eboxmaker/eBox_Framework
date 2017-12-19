@@ -9,7 +9,7 @@ extern "C" {
 
 #include "fifo.h"
 
-extern struct my_fifo *uart_fifo_ptr;
+extern struct ebox_fifo *uart_fifo_ptr;
 void ebox_printf(const char *fmt, ...);
     
 #ifdef __cplusplus
