@@ -28,7 +28,7 @@
 #include "stdio.h"
 
 #include "fifo.h"
-#include "printx.h"
+#include "ebox_printf.h"
 struct my_fifo *x_ptr;
 
 
@@ -48,7 +48,7 @@ void init_http(void);
 void setup()
 {
     ebox_init();
-    uart_fifo_ptr = my_fifo_alloc(100);
+    uart_fifo_ptr = ebox_fifo_alloc(100);
     uart1.begin(115200);
     uart1.printf("being\r\n");
 
@@ -127,7 +127,7 @@ int main(void)
 
 
 
-        len = my_fifo_get(uart_fifo_ptr,buf,100);
+        len = ebox_fifo_get(uart_fifo_ptr,buf,100);
         if(len > 0 )
             uart1.write(buf,len);
     }

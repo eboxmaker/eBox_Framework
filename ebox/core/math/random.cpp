@@ -21,7 +21,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "../core/math/random.h"
+#include "random.h"
 #include "stdlib.h"
 
 /**
