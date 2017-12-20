@@ -35,6 +35,7 @@ bool Encoder::begin(uint32_t pulse_per_circle,uint8_t mode)
     set_encoder(mode);
     last_read_speed_time = 0;
     this->pulse_per_circle = pulse_per_circle;
+    return true;
 }
 
 void Encoder::base_init(uint16_t period, uint16_t prescaler)

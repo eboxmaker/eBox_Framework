@@ -13,62 +13,76 @@
  
  
 #include "ebox.h"
-#include "enc28j60.h"
-#include "ebox_printf.h"
-#include "lwip_process.h"
-struct udp_pcb *upcb;  
-ip_addr_t addr1;  
-struct pbuf *q = NULL;  
-const char* reply = "I'm here ! Are you There ? \n";  
+#include "lcd_1.8.h"
+#include "color_convert.h"
 
+//本程序适用eBox
+//              GND   电源地
+//              VCC   接5V或3.3v电源
+//              SCL   接PA5（SCL）
+//              SDA   接PA7（SDA）
+//              RES   接PB3 (RST)
+//              DC    接PB4 (RS)
+//              CS    接PB5 
+//              BL    接PB6
 
-void udp_send()
-{
-  
-   q = pbuf_alloc(PBUF_TRANSPORT, strlen(reply)+1, PBUF_RAM);
-    
-    q->payload = (void *) reply;
-    
-   IP4_ADDR(&addr1, 192,168,1,104);  
-   upcb = udp_new();  
-   // netconn_new();
-   udp_bind(upcb, IP_ADDR_ANY, 1000);  
-  
-   if(!q)  
-   {  
-     ebox_printf("out of PBUF_RAM\n");  
-   }  
-   else
-   {
-    ebox_printf("RAM IS OK\r\n");
-   }
-   
-}
+COLOR_HSV hsv;
+COLOR_RGB rgb;
 
+Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
+
+u8 index = 0x20;
+u8 r;
+u16 _color[3600];
 
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
-    uart1.printf("being\r\n");
-    lwip_init_app();
-    udp_send();
-}
+    PB8.mode(OUTPUT_PP);
+    lcd.begin(1);
+    lcd.clear(RED);
+    uart1.begin(9600);
 
-uint32_t last_time = 0;
+    lcd.column_order(1);
+    lcd.row_order(1);
+
+    lcd.front_color = RED;
+    lcd.back_color = BLACK;
+    hsv.s = 1;
+    hsv.v = 0.5;
+    hsv.h = 0;
+
+    lcd.front_color = RED;
+    if(index >= 0x50)index = 0x20;
+    for(int i = 0; i < 160; i++)
+    {
+        hsv.h = i * 36 / 16;
+        hsv.h %= 360;
+        HSV_to_RGB(hsv, rgb);
+        rgb_to_565(rgb, _color[i]);
+        lcd.front_color = _color[i];
+        lcd.draw_h_line(0, i, 128,BLUE);
+    }
+    lcd.disp_char8x16(0, 0, index++);
+
+    lcd.printf(2, 2, "1231asddfgdsfgthkfhddddj2nhd");
+
+
+    lcd.front_color = GREEN;
+    lcd.draw_circle(50, 50, 50,YELLOW);
+    lcd.draw_line(64, 50, r, 100,GREEN);
+
+
+}
 int main(void)
 {
     setup();
-
     while(1)
     {
-
-        if(millis() - last_time > 1000)
-        {
-            last_time = millis();
-            udp_sendto(upcb, q, &addr1, 8080);  
-        }
-   
-        lwip_process();
+        delay_ms(1000);
+        PB8.toggle();
     }
+
 }
+
+

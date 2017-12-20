@@ -23,6 +23,9 @@
 #include "ebox.h"
 #include "font.h"
 
+#define X_MAX_PIXEL	        128
+#define Y_MAX_PIXEL	        160
+
 //本程序适用eBox
 //              GND   电源地
 //              VCC   接5V或3.3v电源
@@ -48,7 +51,7 @@ typedef enum
 #define GRAY0   0xEF7D   	//灰色0 3165 00110 001011 00101
 #define GRAY1   0x8410      	//灰色1      00000 000000 00000
 #define GRAY2   0x4208      	//灰色2  1111111111011111
-class Lcd
+class Lcd 
 {
 public:
     uint8_t MADCTL;
@@ -63,6 +66,8 @@ public:
         this->rs = rs;
         this->rst = rst;
         this->spi = spi;
+        x = 0;
+        y = 0;
     }
     void begin(uint8_t dev_num);
     void soft_reset();
@@ -101,6 +106,7 @@ private:
     Gpio *rst;
     Spi  *spi;
     SpiConfig_t config;
+    uint16_t x,y;
 
     void reset(void);
     void init(void);

@@ -21,6 +21,7 @@
 #ifndef __GPIO_H
 #define __GPIO_H
 #include "ebox_core.h"
+#include "mcu_config.h"
 
 class mcuGpio :public Gpio
 {

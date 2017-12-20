@@ -21,9 +21,6 @@
 #ifndef __UARTX_H
 #define __UARTX_H
 
-
-#include <stdio.h>
-#include <stdarg.h>
 #include "ebox_core.h"
 #include "FunctionPointer.h"
 
@@ -86,7 +83,7 @@ public:
     uint16_t    read();
 
     //user addation method
-    void    printf(const char *fmt, ...); 
+//    void    printf(const char *fmt, ...); 
     void    wait_busy();
     /** Attach a function to call whenever a serial interrupt is generated
      *
@@ -119,7 +116,6 @@ private:
     char                *uart_buf;
     uint8_t             use_dma;
     uint16_t            dma_send_string(const char *str, uint16_t length);
-    void                _write(const char *str, uint16_t length);
     void                set_busy();
 
 protected:

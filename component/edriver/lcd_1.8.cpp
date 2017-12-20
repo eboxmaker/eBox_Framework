@@ -48,8 +48,7 @@
 #include "lcd_1.8.h"
 #include "font.h"
 
-#define X_MAX_PIXEL	        128
-#define Y_MAX_PIXEL	        160
+
 
 //Lcd lcd(&PB13,&PB15,&PA13,&PA15,&PA14,&PA12);
 
@@ -374,6 +373,7 @@ void Lcd::disp_char8x16(uint16_t x, uint16_t y, uint8_t ch)
         }
     x += 8;
 }
+
 void Lcd::printf(uint16_t x, uint16_t y, const char *fmt, ...)
 {
     char buf[30];
