@@ -5,6 +5,7 @@
 #endif
      
 #include "stm32f10x.h"
+#include "web_html.h"
 
 #include "lwip/etharp.h" // etharp_tmr函数所在的头文件
 #include "lwip/init.h" // lwip_init函数所在的头文件

@@ -13,80 +13,49 @@
  
  
 #include "ebox.h"
-#include "EventManager.h"
 #include "enc28j60.h"
-#include "lwip/etharp.h" // etharp_tmr函数所在的头文件
-#include "lwip/init.h" // lwip_init函数所在的头文件
-#include "lwip/priv/tcp_priv.h" // tcp_tmr函数所在的头文件
-#include "netif/ethernet.h" // ethernet_input函数所在头文件
-
-#include "eth_port.h"
-
-#include "httpd.h"
-#include <stdio.h>
-#include "ringbuf.h"
-#include "stdio.h"
-
-#include "fifo.h"
 #include "ebox_printf.h"
-struct my_fifo *x_ptr;
+#include "lwip_process.h"
+struct udp_pcb *upcb;  
+ip_addr_t addr1;  
+struct pbuf *q = NULL;  
+const char* reply = "I'm here ! Are you There ? \n";  
 
 
-extern Enc28j60 eth;
-
-// 这两个函数位于ethernetif.c中, 但没有头文件声明
-
-// 声明httptest.c中的函数
-void init_http(void);
-
-
-    struct ip4_addr ipaddr, netmask, gw;
-    struct netif enc28j60;
-    uint8_t cnt = 0;
+void udp_send()
+{
+  
+   q = pbuf_alloc(PBUF_TRANSPORT, strlen(reply)+1, PBUF_RAM);
     
+    q->payload = (void *) reply;
+    
+   IP4_ADDR(&addr1, 192,168,1,104);  
+   upcb = udp_new();  
+   // netconn_new();
+   udp_bind(upcb, IP_ADDR_ANY, 1000);  
+  
+   if(!q)  
+   {  
+     ebox_printf("out of PBUF_RAM\n");  
+   }  
+   else
+   {
+    ebox_printf("RAM IS OK\r\n");
+   }
+   
+}
+
 
 void setup()
 {
     ebox_init();
-    uart_fifo_ptr = ebox_fifo_alloc(100);
     uart1.begin(115200);
     uart1.printf("being\r\n");
-
-
-    
-    
-    // 配置定时器
-    RCC->APB1ENR = RCC_APB1ENR_TIM6EN;
-    TIM6->ARR = 2499; // 共2500个数, 2500*0.1ms=250ms
-    TIM6->PSC = 7199; // 72MHz/7200=10kHz -> 0.1ms
-    TIM6->CR1 = TIM_CR1_URS; // 防止UG=1时UIF置位
-    TIM6->EGR = TIM_EGR_UG; // 应用上述设置
-    TIM6->CR1 |= TIM_CR1_CEN; // 开定时器
-  
-    lwip_init();
-    IP4_ADDR(&ipaddr, 192, 168, 1, 220); // IP地址
-    IP4_ADDR(&netmask, 255, 255, 255, 0); // 子网掩码
-    IP4_ADDR(&gw, 192, 168, 1, 1); // 网关
-            uart1.printf("x");
-
-    netif_add(&enc28j60, &ipaddr, &netmask, &gw, NULL, ethernetif_init, ethernet_input);
-    netif_set_default(&enc28j60); // 设为默认网卡
-    netif_set_up(&enc28j60);
-    httpd_init(); // 初始化HTTP服务
-    
-    uart1.printf("%c",eth.read(MAADR0));
-    uart1.printf("%c",eth.read(MAADR1));
-    uart1.printf("%c",eth.read(MAADR2));
-    uart1.printf("%c",eth.read(MAADR3));
-    uart1.printf("%c",eth.read(MAADR4));
-    uart1.printf("%c",eth.read(MAADR5));
-
-
-    
+    lwip_init_app();
+    udp_send();
 }
 
-uint8_t buf[100];
-uint8_t len;
+uint32_t last_time = 0;
 int main(void)
 {
     setup();
@@ -94,42 +63,12 @@ int main(void)
     while(1)
     {
 
-       
-
-    if (eth.get_packet_num() != 0)
+        if(millis() - last_time > 1000)
         {
-//            GPIOA->ODR ^= GPIO_ODR_ODR8; // PA8上的LED灯闪烁表明系统正常工作
-            ethernetif_input(&enc28j60);
-            //ebox_printf("O");
+            last_time = millis();
+            udp_sendto(upcb, q, &addr1, 8080);  
         }
-        
-        // 若定时器溢出
-        if (TIM6->SR & TIM_SR_UIF)
-        {
-            //ebox_printf("x");
-            // 250ms
-            TIM6->SR &= ~TIM_SR_UIF; // 清除溢出标志
-            cnt++;
-            if (cnt >= 20)
-            {
-                // 250ms * 20 = 5s
-                GPIOA->ODR ^= GPIO_ODR_ODR8; // LED灯每5秒钟改变一次状态
-                cnt = 0;
-                etharp_tmr(); // ARP定时处理
-            }
-            tcp_tmr(); // TCP定时处理
-        }
-
-
-
-
-
-
-
-
-        len = ebox_fifo_get(uart_fifo_ptr,buf,100);
-        if(len > 0 )
-            uart1.write(buf,len);
+   
+        lwip_process();
     }
 }
-

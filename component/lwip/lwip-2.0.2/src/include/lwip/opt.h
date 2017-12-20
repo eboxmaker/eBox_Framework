@@ -1095,7 +1095,7 @@
  * LWIP_UDPLITE==1: Turn on UDP-Lite. (Requires LWIP_UDP)
  */
 #if !defined LWIP_UDPLITE || defined __DOXYGEN__
-#define LWIP_UDPLITE                    0
+#define LWIP_UDPLITE                    1
 #endif
 
 /**
@@ -1109,7 +1109,7 @@
  * LWIP_NETBUF_RECVINFO==1: append destination addr and port to every netbuf.
  */
 #if !defined LWIP_NETBUF_RECVINFO || defined __DOXYGEN__
-#define LWIP_NETBUF_RECVINFO            0
+#define LWIP_NETBUF_RECVINFO            1
 #endif
 /**
  * @}
@@ -2621,14 +2621,14 @@
  * @see debugging_levels
  */
 #if !defined LWIP_DBG_TYPES_ON || defined __DOXYGEN__
-#define LWIP_DBG_TYPES_ON               LWIP_DBG_ON
+#define LWIP_DBG_TYPES_ON               LWIP_DBG_OFF
 #endif
 
 /**
  * ETHARP_DEBUG: Enable debugging in etharp.c.
  */
 #if !defined ETHARP_DEBUG || defined __DOXYGEN__
-#define ETHARP_DEBUG                    LWIP_DBG_ON
+#define ETHARP_DEBUG                    LWIP_DBG_OFF
 #endif
 
 /**

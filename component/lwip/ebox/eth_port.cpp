@@ -6,9 +6,6 @@
 Enc28j60 eth(&spi1,&PA4,&PE1);
 
 
-
-
-
 void ebox_printf(const char *fmt, ...)
 {
 
