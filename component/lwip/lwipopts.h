@@ -17,7 +17,7 @@
 * NO_SYS_NO_TIMERS==1: Drop support for sys_timeout when NO_SYS==1
 * Mainly for compatibility to old versions.
 */
-#define NO_SYS_NO_TIMERS 1 // 这样就不需要定义sys_now函数
+#define NO_SYS_NO_TIMERS 0 // 这样就不需要定义sys_now函数
 
 /* ---------- Memory options ---------- */
 /* MEM_ALIGNMENT: should be set to the alignment of the CPU for which
@@ -104,18 +104,18 @@ turning this on does currently not work. */
 // Assertion "Struct packing not implemented correctly. Check your lwIP port." failed at line 345 in Library\lwip\core\init.c
 #define PACK_STRUCT_BEGIN __packed
 /*******************************************************************************************************************/
-#define LWIP_DEBUG 1
-#define LWIP_DBG_TYPES_ON LWIP_DBG_ON
+//#define LWIP_DEBUG 1
+#define LWIP_DBG_TYPES_ON LWIP_DBG_OFF
 
 /**
 * ETHARP_DEBUG: Enable debugging in etharp.c.
 */
-#define ETHARP_DEBUG LWIP_DBG_ON
+#define ETHARP_DEBUG LWIP_DBG_OFF
 
 /**
 * NETIF_DEBUG: Enable debugging in netif.c.
 */
-#define NETIF_DEBUG LWIP_DBG_ON
+#define NETIF_DEBUG LWIP_DBG_OFF
 
 /**
 * PBUF_DEBUG: Enable debugging in pbuf.c.
@@ -125,17 +125,17 @@ turning this on does currently not work. */
 /**
 * API_LIB_DEBUG: Enable debugging in api_lib.c.
 */
-#define API_LIB_DEBUG LWIP_DBG_ON
+#define API_LIB_DEBUG LWIP_DBG_OFF
 
 /**
 * API_MSG_DEBUG: Enable debugging in api_msg.c.
 */
-#define API_MSG_DEBUG LWIP_DBG_ON
+#define API_MSG_DEBUG LWIP_DBG_OFF
 
 /**
 * SOCKETS_DEBUG: Enable debugging in sockets.c.
 */
-#define SOCKETS_DEBUG LWIP_DBG_ON
+#define SOCKETS_DEBUG LWIP_DBG_OFF
 
 /**
 * ICMP_DEBUG: Enable debugging in icmp.c.
@@ -155,7 +155,7 @@ turning this on does currently not work. */
 /**
 * IP_DEBUG: Enable debugging for IP.
 */
-#define IP_DEBUG LWIP_DBG_ON
+#define IP_DEBUG LWIP_DBG_OFF
 
 /**
 * IP_REASS_DEBUG: Enable debugging in ip_frag.c for both frag & reass.

@@ -19,9 +19,7 @@ void Enc28j60::begin(uint8_t dev_num)
     config.prescaler = SPI_CLOCK_DIV2;
     config.bit_order = MSB_FIRST;
 
-    uart1.print("ad\r\n");
     spi->begin(&config);
-    uart1.print("ad\r\n");
     cs->mode(OUTPUT_PP);
     cs->set();
     rst->mode(OUTPUT_PP);
