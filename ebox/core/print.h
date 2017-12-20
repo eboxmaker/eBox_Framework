@@ -26,6 +26,8 @@
 #include "WString.h"
 #include "Printable.h"
 
+#include "ebox_mem.h"
+
 #define DEC 10
 #define HEX 16
 #define OCT 8
@@ -56,7 +58,10 @@ class Print
       return write((const uint8_t *)buffer, size);
     }
     
-    size_t print(const __FlashStringHelper *);
+    
+     size_t printf(const char *fmt, ...);
+    
+//    size_t print(const __FlashStringHelper *);
     size_t print(const String &);
     size_t print(const char[]);
     size_t print(char);

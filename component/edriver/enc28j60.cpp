@@ -162,8 +162,7 @@ uint8_t Enc28j60::read(uint8_t addr)
 }
 void Enc28j60::read_buf(uint8_t *p, uint16_t len)
 {
-    uint8_t data;
-    uint8_t first = 1;  
+//    uint8_t first = 1;  
     if (len == 0)  
         return;  
     cs->reset();

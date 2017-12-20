@@ -39,19 +39,50 @@ size_t Print::write(const uint8_t *buffer, size_t size)
   }
   return n;
 }
-#define PGM_P const char *
+//#define PGM_P const char *
 
-size_t Print::print(const __FlashStringHelper *ifsh)
+//size_t Print::print(const __FlashStringHelper *ifsh)
+//{
+//  PGM_P p = reinterpret_cast<PGM_P>(ifsh);
+//  size_t n = 0;
+//  while (1) {
+//    unsigned char c = *p++;
+//    if (c == 0) break;
+//    if (write(c)) n++;
+//    else break;
+//  }
+//  return n;
+//}
+#include "stdio.h"
+#include <stdarg.h>
+
+size_t Print::printf(const char *fmt, ...)
 {
-  PGM_P p = reinterpret_cast<PGM_P>(ifsh);
-  size_t n = 0;
-  while (1) {
-    unsigned char c = *p++;
-    if (c == 0) break;
-    if (write(c)) n++;
-    else break;
-  }
-  return n;
+    int     size1 = 0;
+    size_t  size2 = 64;
+    char *p;
+
+    va_list va_params;
+    va_start(va_params, fmt);
+    
+    do{
+        p = (char *)ebox_malloc(size2);
+        if(p == NULL)
+            return 0;
+        size1 = vsnprintf(p, size2,fmt, va_params);
+        if(size1 == -1  || size1 > size2)
+        {
+            size2+=64;
+            size1 = -1;
+            ebox_free(p);
+        }
+    }while(size1 == -1);
+
+    //vsprintf(uart_buf, fmt, va_params); 
+    va_end(va_params);
+    write(p, size1);
+    ebox_free(p);
+    return size1;
 }
 
 size_t Print::print(const String &s)

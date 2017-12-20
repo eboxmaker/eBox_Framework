@@ -147,7 +147,7 @@ uint32_t TSL2561::calculateLux(uint16_t ch0, uint16_t ch1)
   if (channel0 != 0) ratio1 = (channel1 << (TSL2561_LUX_RATIOSCALE+1)) / channel0;
 
   // round the ratio value
-  unsigned long ratio = (ratio1 + 1) >> 1;
+  long ratio = (ratio1 + 1) >> 1;
 
   unsigned int b, m;
 
@@ -187,7 +187,7 @@ uint32_t TSL2561::calculateLux(uint16_t ch0, uint16_t ch1)
     {b=TSL2561_LUX_B8T; m=TSL2561_LUX_M8T;}
 #endif
 
-  unsigned long temp;
+  long temp;
   temp = ((channel0 * b) - (channel1 * m));
 
   // do not allow negative lux value
@@ -255,7 +255,7 @@ uint16_t TSL2561::getLuminosity (uint8_t channel) {
 
 uint16_t TSL2561::read16(uint8_t reg)
 {
-  uint16_t x; uint16_t t;
+  uint16_t x; 
 
 //  Wire.beginTransmission(_addr);
 //#if ARDUINO >= 100

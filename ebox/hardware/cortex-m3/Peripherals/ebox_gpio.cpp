@@ -95,21 +95,26 @@ void mcuGpio::mode(PIN_MODE mode)
     case (uint32_t)GPIOC_BASE:
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
         break;
-
+#if (MCU_PIN_NUM >= 64)
     case (uint32_t)GPIOD_BASE:
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);
         break;
-
+#endif
+    
+#if (MCU_PIN_NUM >= 100)
     case (uint32_t)GPIOE_BASE:
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE, ENABLE);
         break;
+#endif
 
+#if (MCU_PIN_NUM >= 144)
     case (uint32_t)GPIOF_BASE:
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOF, ENABLE);
         break;
     case (uint32_t)GPIOG_BASE:
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOG, ENABLE);
         break;
+#endif
     }
 
 
@@ -268,6 +273,7 @@ mcuGpio::operator int()
 mcuGpio mcuGpio::operator= ( int value)
 {
     write(value);
+    return *this;
 }
 
 

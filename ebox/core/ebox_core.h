@@ -28,7 +28,9 @@
 #ifndef __EBOX_CORE_H
 #define __EBOX_CORE_H
 
-    
+#include "mcu_config.h"    
+
+
 #include "../core/ebox_type.h"
 #include "../core/new.h"
 #include "../core/print.h"

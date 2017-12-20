@@ -68,10 +68,10 @@ void ebox_fifo_free(struct ebox_fifo *fifo)
 
     /* first put the data starting from fifo->in to buffer end*/
     l = min(len, fifo->size - (fifo->in & (fifo->size -1)));
-    memcpy(fifo->buffer + (fifo->in & (fifo->size -1)), buffer, l);
+    ebox_memcpy(fifo->buffer + (fifo->in & (fifo->size -1)), buffer, l);
 
     /* then put the rest (if any) at the beginning of the buffer*/
-    memcpy(fifo->buffer, buffer + l, len - l);
+    ebox_memcpy(fifo->buffer, buffer + l, len - l);
 
     fifo->in += len;
 
@@ -90,10 +90,10 @@ unsigned int ebox_fifo_get(struct ebox_fifo *fifo,unsigned char *buffer, unsigne
 
     /* first get the data from fifo->out until the end of the buffer*/
     l = min(len, fifo->size - (fifo->out & (fifo->size -1)));
-    memcpy(buffer, fifo->buffer + (fifo->out & (fifo->size -1)), l);
+    ebox_memcpy(buffer, fifo->buffer + (fifo->out & (fifo->size -1)), l);
 
     /* then get the rest (if any) from the beginning of the buffer*/
-    memcpy(buffer + l, fifo->buffer, len - l);
+    ebox_memcpy(buffer + l, fifo->buffer, len - l);
 
     fifo->out += len;
 
