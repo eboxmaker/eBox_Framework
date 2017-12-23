@@ -6,6 +6,9 @@ extern "C"{
 
 #include "stdio.h"
 
+    
+    
+    
 void    *ebox_malloc(size_t sz);
 void    ebox_free(void *ptr);
 size_t  ebox_get_free(void);

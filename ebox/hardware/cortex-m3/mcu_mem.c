@@ -14,6 +14,10 @@
  ******************************************************************************/
 #include "mcu_mem.h"
 
+
+extern int Image$$RW_IRAM1$$ZI$$Limit;
+
+
 //内存池大小
 size_t cfgTOTAL_HEAP_SIZE[] = {
 #if (EN_SRAM_IN == 1)
@@ -394,7 +398,7 @@ void memPortInitialiseBlocks( void )
  * Input Parameters: 
  * Output Parameters: 
  * Returns Value: 
- * 
+ * (void*)&Image$$RW_IRAM1$$ZI$$Limit, (void*)0x20005000
  * Author: FuDongQiang @ 2015/12/22
  * 
  * modification history
@@ -405,11 +409,11 @@ static void memHeapInit(uint8_t memType)
     BlockLink_t *pxFirstFreeBlock;
     uint8_t *pucAlignedHeap;
     size_t uxAddress;
-    size_t xTotalHeapSize = cfgTOTAL_HEAP_SIZE[memType];
+    size_t xTotalHeapSize = (0x20005000 - (uint32_t)&Image$$RW_IRAM1$$ZI$$Limit);
 
 	/* Ensure the heap starts on a correctly aligned boundary. */
 	/*保证内存池首地址8字节对齐*/
-	uxAddress = ( size_t ) (memHeap[memType]);
+	uxAddress = ( size_t ) ((void*)&Image$$RW_IRAM1$$ZI$$Limit);
 
 	if( ( uxAddress & BYTE_ALIGNMENT_MASK ) != 0 )
 	{

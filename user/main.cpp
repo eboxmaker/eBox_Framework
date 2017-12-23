@@ -15,6 +15,12 @@
 #include "ebox.h"
 #include "lcd_1.8.h"
 #include "color_convert.h"
+#include "mcu_mem.h"
+#include "mem_test.h"
+#define BYTE_ALIGNMENT          (8)                 //字节对齐
+	#define BYTE_ALIGNMENT_MASK ( 0x00000007 )
+                                            
+extern int Image$$RW_IRAM1$$ZI$$Limit;
 
 //本程序适用eBox
 //              GND   电源地
@@ -30,14 +36,28 @@ COLOR_HSV hsv;
 COLOR_RGB rgb;
 
 Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
+#define ALIGN(size, align)      ((align + size - 1) & (~ (size - 1)))
+#define MEM_ALIGN(size)         ((8 + size - 1) & (~ (size - 1)))
 
+
+#define RT_ALIGN(size, align)           (((size) + (align) - 1) & ~((align) - 1))
+
+
+#define RT_ALIGN_DOWN(size, align)      ((size) & ~((align) - 1))
 u8 index = 0x20;
 u8 r;
-u16 _color[3600];
+u16 _color[3600] __attribute__((section("Region$$Table$$Base")));
 
+uint8_t *ptr;
 void setup()
 {
     ebox_init();
+    uart1.begin(115200);
+    ptr = (uint8_t *)ebox_malloc(1);
+    uart1.printf("%ld\r\n",123);
+    uart1.printf("%ld\r\n",MEM_ALIGN(31));
+    uart1.printf("%ld\r\n",MEM_ALIGN(1022));
+    while(1);
     PB8.mode(OUTPUT_PP);
     lcd.begin(1);
     lcd.clear(RED);
