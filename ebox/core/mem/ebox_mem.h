@@ -4,20 +4,23 @@
 extern "C"{
 #endif // __cplusplus
 
+#include "ebox_type.h"
+#include "mcu_config.h"
 #include "stdio.h"
 
+void    ebox_heap_init(void *begin_addr, void *end_addr);
+void    *ebox_malloc( size_t xWantedSize );
+void    ebox_free( void *ptr );
+size_t  ebox_get_free();
+size_t  ebox_get_sram_start_addr();
+size_t  ebox_get_sram_end_addr();
+
     
-    
-    
-void    *ebox_malloc(size_t sz);
-void    ebox_free(void *ptr);
-size_t  ebox_get_free(void);
 int ebox_memcmp(const void * cs,const void * ct, size_t count);
 void *ebox_memcpy(void * dst, const void *src, size_t count);    
-#define ebox_free_1(pv)    memFree(pv,0)
     
 #ifdef __cplusplus
-} // extern "C"
+} 
 #endif // __cplusplus
 
 #endif

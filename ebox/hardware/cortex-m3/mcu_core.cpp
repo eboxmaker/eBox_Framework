@@ -40,6 +40,14 @@ extern "C" {
         cpu.company[1] = 'T';
         cpu.company[2] = '\0';
 
+        
+        #ifdef __CC_ARM
+            ebox_heap_init((void*)STM32_SRAM_BEGIN, (void*)STM32_SRAM_END);
+        #elif __ICCARM__
+            rt_system_heap_init(__segment_end("HEAP"), (void*)STM32_SRAM_END);
+        #else
+            rt_system_heap_init((void*)&__bss_end, (void*)STM32_SRAM_END);
+        #endif
 
         SysTick_Config(cpu.clock.core/1000);//  每隔 1ms产生一次中断
         SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);//systemticks clock；
