@@ -185,16 +185,18 @@ size_t Uart::write(uint8_t c)
 size_t Uart::write(const uint8_t *buffer, size_t size)
 {
     wait_busy();
-    if(uart_buf != NULL)
-        ebox_free(uart_buf);
-    set_busy();
-    uart_buf = (char *)ebox_malloc(size);
-    if(uart_buf == NULL)
-        return 0;
-    for(int i = 0; i < size; i++)
-        uart_buf[i] = *buffer++;
     if((_USARTx == USART1 | _USARTx == USART2 | _USARTx == USART3 ) && (use_dma == 1))
     {
+        if(uart_buf != NULL)
+            ebox_free(uart_buf);
+        set_busy();
+        uart_buf = (char *)ebox_malloc(size);
+        if(uart_buf == NULL)
+        {
+            return 0;
+        }
+        for(int i = 0; i < size; i++)
+            uart_buf[i] = *buffer++;
         dma_send_string(uart_buf, size);
     }
     else
@@ -202,7 +204,7 @@ size_t Uart::write(const uint8_t *buffer, size_t size)
         while(size--)
         {
             while(USART_GetFlagStatus(_USARTx, USART_FLAG_TXE) == RESET);//µ¥×Ö½ÚµÈ´ý£¬µÈ´ý¼Ä´æÆ÷¿Õ
-            USART_SendData(_USARTx, *uart_buf++);
+            USART_SendData(_USARTx, *buffer++);
         }
     }
 	return size;

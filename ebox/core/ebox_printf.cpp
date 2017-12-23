@@ -7,7 +7,7 @@ void ebox_printf(const char *fmt, ...)
 {
     char *buf;
     int     size1 = 0;
-    size_t  size2 = 256;
+    size_t  size2 = 32;
     va_list va_params;
 
     va_start(va_params, fmt);
@@ -19,15 +19,14 @@ void ebox_printf(const char *fmt, ...)
         size1 = vsnprintf(buf, size2,fmt, va_params);
         if(size1 == -1  || size1 > size2)
         {
-            size2+=128;
+            size2+=32;
             size1 = -1;
             ebox_free(buf);
         }
     }while(size1 == -1);
 
-    size1 = vsprintf(buf, fmt, va_params); 
     va_end(va_params);
-    uart1.printf(buf);
+    uart1.write(buf,size1);
     ebox_free(buf);
 
 }

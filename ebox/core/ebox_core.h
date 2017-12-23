@@ -29,6 +29,7 @@
 #define __EBOX_CORE_H
 
 #include "mcu_config.h"    
+#include "ebox_printf.h"
 
 
 #include "../core/ebox_type.h"

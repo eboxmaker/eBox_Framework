@@ -1,10 +1,6 @@
 #include "ebox_mem.h"
 
-typedef struct EBOX_BLOCK_LINK
-{
-	struct EBOX_BLOCK_LINK *nextFreeBlock;	/*<< The next free block in the list. */
-	size_t blockSize;						/*<< The size of the free block. */
-} eboxBlockLink_t;
+
 
 
 /* Block sizes must not get too small. */
@@ -72,6 +68,8 @@ void *ebox_malloc( size_t xWantedSize )
     eboxBlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
     void *pvReturn = NULL;
 
+    //__disable_irq();
+
     if( ( xWantedSize & BlockAllocatedBit ) == 0 )
     {
         
@@ -117,8 +115,13 @@ void *ebox_malloc( size_t xWantedSize )
             pxBlock->nextFreeBlock = NULL;
 
         }
-
+    //__enable_irq();
     }
+    if(pvReturn == NULL)
+    {
+        ebox_printf("bad mem malloc!!!\r\n");
+    }
+    
 	return pvReturn;
 }
 void ebox_free( void *pv )
@@ -236,28 +239,28 @@ static void _memInsertBlockIntoFreeList( eboxBlockLink_t *pxBlockToInsert)
 }
 size_t ebox_get_sram_start_addr()
 {
-    return (size_t)STM32_SRAM_BEGIN;
+    return (size_t)MEM_ALIGN((uint32_t)STM32_SRAM_BEGIN);
 }
 
 size_t ebox_get_sram_end_addr()
 {
-    return (size_t)STM32_SRAM_END;
+    return (size_t)MEM_ALIGN((uint32_t)STM32_SRAM_END);
 }
 
+uint16_t ebox_free_block_print()
+{
+    eboxBlockLink_t *p;
+    uint32_t temp;
+    int i = 0;
+    ebox_printf("----start----\r\n");
+    for(p = (eboxBlockLink_t *)( &(heap[0]) ); p != NULL; p = ( p->nextFreeBlock))
+    {
+        ebox_printf("free block %d: ",i++);
+        ebox_printf("0X%X\t|%x\t|\r\n",p,p->blockSize);
+    }
+    ebox_printf("----end-----\r\n");
 
-//void *ebox_malloc(size_t sz)
-//{
-//   return memMalloc(sz,SRAM_IN - 1);       
-//}
-//void ebox_free(void *ptr)
-//{
-//   memFree(ptr,SRAM_IN - 1);
-//   ptr = NULL;
-//}
-//size_t ebox_get_free(void)
-//{
-//    return memGetFreeHeapSize(SRAM_IN - 1);
-//}
+}
 
 
 /**
