@@ -65,5 +65,6 @@ typedef struct
 	uint8_t week;
 }DateTime_t;
 
+#define ALIGN(size, align)                  ((align + size - 1) & (~ (align - 1)))
 
 #endif
