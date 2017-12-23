@@ -7,6 +7,12 @@ extern "C"{
 #include "ebox_type.h"
 #include "mcu_config.h"
 #include "stdio.h"
+    
+typedef struct EBOX_BLOCK_LINK
+{
+	struct EBOX_BLOCK_LINK *nextFreeBlock;	/*<< The next free block in the list. */
+	size_t blockSize;						/*<< The size of the free block. */
+} eboxBlockLink_t;
 
 void    ebox_heap_init(void *begin_addr, void *end_addr);
 void    *ebox_malloc( size_t xWantedSize );
@@ -14,6 +20,7 @@ void    ebox_free( void *ptr );
 size_t  ebox_get_free();
 size_t  ebox_get_sram_start_addr();
 size_t  ebox_get_sram_end_addr();
+uint16_t ebox_free_block_print();
 
     
 int ebox_memcmp(const void * cs,const void * ct, size_t count);
