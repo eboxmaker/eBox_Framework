@@ -64,6 +64,7 @@ extern Uart uart5;
 extern mcuSpi spi1;
 extern mcuSpi spi2;
 extern SoftSpi sspi1;
+extern SoftSpi sspi2;
 
 extern mcuI2c i2c1;
 extern mcuI2c i2c2;
