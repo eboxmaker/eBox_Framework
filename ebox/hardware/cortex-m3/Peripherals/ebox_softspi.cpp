@@ -97,23 +97,33 @@ uint8_t SoftSpi::transfer0(uint8_t data)
     uint8_t i;
     uint8_t RcvData = 0 ;
 
-    //时钟空闲输出：0；
-    //第一个是上升沿：读取数据；
-    //第二个是下降沿：输出数据；
+    //CPOL = 0; CPHA = 0
+    //时钟空闲输出：0,第一个边沿（即上升沿）输出，之后采样；
+    //MOSI,在第一个时钟沿之前准备好输出数据
+    //MISO,主机在第一个时钟沿之后读取数据。
+
     for (i = 0; i < 8; i++)
     {
+        ///////////////////上升沿之前主机准备数据//////////
         if (bit_order == LSB_FIRST)
         {
-            RcvData |= miso_pin->read() << i;
             mosi_pin->write(!!(data & (1 << i)));
         }
         else
         {
-            RcvData |= (miso_pin->read() << (7 - i));
             mosi_pin->write(!!(data & (1 << (7 - i))));
         }
-        delay_us(spi_delay);
+        delay_us(spi_delay);//保持一段时间，保证主机信号到达从机
+        /////////////////上升沿之后主机接收数据（通知从机接收主机之前准备好的数据）////////////
         sck_pin->set();
+        if (bit_order == LSB_FIRST)
+        {
+            RcvData |= miso_pin->read() << i;
+        }
+        else
+        {
+            RcvData |= (miso_pin->read() << (7 - i));
+        }
         delay_us(spi_delay);
         sck_pin->reset();
     }
@@ -124,35 +134,36 @@ uint8_t SoftSpi::transfer1(uint8_t data)
     uint8_t i;
     uint8_t RcvData = 0 ;
 
-    //时钟空闲输出：0；
-    //第一个是上升沿：输出数据；
-    //第二个是下降沿：读取数据；
+    //CPOL = 0; CPHA = 1
+    //时钟空闲输出：0,第二个边沿（即下降沿）输出，之后采样；
+    //MOSI,在第二个时钟沿之前准备好输出数据
+    //MISO,主机在第二个时钟沿之后读取数据。
+
+
     for (i = 0; i < 8; i++)
     {
-        ///////////////////上升沿输出//////////
+        ///////////////////上升沿之后主机准备数据//////////
+        sck_pin->set();
         if (bit_order == LSB_FIRST)
         {
             mosi_pin->write(!!(data & (1 << i)));
         }
         else
         {
-            RcvData |= (miso_pin->read() << (7 - i));
             mosi_pin->write(!!(data & (1 << (7 - i))));
         }
-        delay_us(spi_delay);
-        sck_pin->set();
-        /////////////////下降沿采样////////////
-        delay_us(spi_delay);
+        delay_us(spi_delay);//保持一段时间，保证主机发送信号到达从机。
+        /////////////////下降沿之后主机接收数据（通知从机接收主机之前准备好的数据）////////////
         sck_pin->reset();
         if (bit_order == LSB_FIRST)
         {
-            mosi_pin->write(!!(data & (1 << i)));
+            RcvData |= miso_pin->read() << i;
         }
         else
         {
             RcvData |= (miso_pin->read() << (7 - i));
-            mosi_pin->write(!!(data & (1 << (7 - i))));
         }
+        delay_us(spi_delay);
     }
 
     return RcvData;
@@ -162,22 +173,31 @@ uint8_t SoftSpi::transfer2(uint8_t data)
     uint8_t i;
     uint8_t RcvData = 0 ;
 
-    //时钟空闲输出：1；
-    //第一个是下降沿：读取数据；
-    //第二个是上升沿：输出数据；
+     //CPOL = 1; CPHA = 0
+    //时钟空闲输出：1,第一个边沿（即下降沿）输出，之后采样；
+    //MOSI,主机在第一个时钟沿之前准备好输出数据
+    //MISO,主机在第一个时钟沿之后读取数据。
     for (i = 0; i < 8; i++)
     {
-        sck_pin->reset();
-        delay_us(spi_delay);
+        ///////////////////下降沿之前主机准备数据//////////
         if (bit_order == LSB_FIRST)
         {
-            RcvData |= miso_pin->read() << i;
             mosi_pin->write(!!(data & (1 << i)));
         }
         else
         {
-            RcvData |= (miso_pin->read() << (7 - i));
             mosi_pin->write(!!(data & (1 << (7 - i))));
+        }
+        delay_us(spi_delay);//保持一段时间，保证主机发送信号到达从机。
+        /////////////////下降沿之后主机接收数据（通知从机接收主机之前准备好的数据）////////////
+        sck_pin->reset();
+        if (bit_order == LSB_FIRST)
+        {
+            RcvData |= miso_pin->read() << i;
+        }
+        else
+        {
+            RcvData |= (miso_pin->read() << (7 - i));
         }
         delay_us(spi_delay);
         sck_pin->set();
@@ -190,35 +210,34 @@ uint8_t SoftSpi::transfer3(uint8_t data)
     uint8_t i;
     uint8_t RcvData = 0 ;
 
-    //时钟空闲输出：1；
-    //第一个是下降沿：输出数据；
-    //第二个是上升沿：读取数据；
+     //CPOL = 1; CPHA = 1
+    //时钟空闲输出：1,第二个边沿（即上升沿）输出，之后采样；
+    //MOSI,主机在第二个时钟沿之前准备好输出数据
+    //MISO,主机在第二个时钟沿之后读取数据。
     for (i = 0; i < 8; i++)
     {
-        ///////////////////下降沿沿输出
+        ///////////////////下降沿之后主机准备数据//////////
         sck_pin->reset();
-        delay_us(spi_delay);
         if (bit_order == LSB_FIRST)
         {
             mosi_pin->write(!!(data & (1 << i)));
         }
         else
         {
-            RcvData |= (miso_pin->read() << (7 - i));
             mosi_pin->write(!!(data & (1 << (7 - i))));
         }
-        /////////////////上升沿采样////////////
+        delay_us(spi_delay);//保持一段时间，保证主机发送信号到达从机。
+        /////////////////上升沿之后主机接收数据（通知从机接收主机之前准备好的数据）////////////
         sck_pin->set();
-        delay_us(spi_delay);
         if (bit_order == LSB_FIRST)
         {
-            mosi_pin->write(!!(data & (1 << i)));
+            RcvData |= miso_pin->read() << i;
         }
         else
         {
             RcvData |= (miso_pin->read() << (7 - i));
-            mosi_pin->write(!!(data & (1 << (7 - i))));
         }
+        delay_us(spi_delay);
     }
 
     return RcvData;

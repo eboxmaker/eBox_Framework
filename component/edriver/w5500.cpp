@@ -71,7 +71,7 @@ void W5500::begin(uint8_t dev_num, uint8_t *mac, uint8_t *ip, uint8_t *subnet, u
     sysinit(txsize, rxsize); /*初始化8个socket*/
     setRTR(2000);/*设置溢出时间值*/
     setRCR(3);/*设置最大重新发送次数*/
-    delay_ms(1000);//预留一定时间保证网卡获取相关网络信息
+    delay_ms(10);//预留一定时间保证网卡获取相关网络信息
 
 }
 

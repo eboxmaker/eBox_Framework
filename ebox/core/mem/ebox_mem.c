@@ -3,8 +3,6 @@
 
 
 
-/* Block sizes must not get too small. */
-#define _MINIMUM_BLOCK_SIZE	( ( size_t ) ( SIZEOF_STRUCT_MEM << 1 ) )
 
 #define BYTE_ALIGNMENT          (8)                 //字节对齐
 
@@ -12,11 +10,13 @@
 #define MEM_ALIGN_DOWN(size)    ((size) & ~((BYTE_ALIGNMENT) - 1))
 #define SIZEOF_STRUCT_MEM	    MEM_ALIGN(sizeof(eboxBlockLink_t))
 
+/* Block sizes must not get too small. */
+#define _MINIMUM_BLOCK_SIZE	( ( size_t ) ( SIZEOF_STRUCT_MEM << 1 ) )
 
 
 
-static eboxBlockLink_t heap[3];//记录了内存的起始位置
-static eboxBlockLink_t *end_block[3];//指向内存结尾最后的SIZEOF_STRUCT_MEM个字节
+static eboxBlockLink_t heap[3]={0,0,0};//记录了内存的起始位置
+static eboxBlockLink_t *end_block[3]={0,0,0};//指向内存结尾最后的SIZEOF_STRUCT_MEM个字节
 static size_t mem_size_aligned;//保存了内存总量有多大
 
 
@@ -25,7 +25,7 @@ static size_t FreeBytesRemaining; //表示当前未分配的内存堆大小
 static size_t BlockAllocatedBit = 0; //这个变量在第一次调用内存申请函数时被初始化,最高位被置1.根据CPU字长来设置。
 
 
-static void _memInsertBlockIntoFreeList( eboxBlockLink_t *pxBlockToInsert);
+static void insert_block_into_freeList( eboxBlockLink_t *pxBlockToInsert);
 
 void ebox_heap_init(void *begin_addr, void *end_addr)
 {
@@ -68,7 +68,14 @@ void *ebox_malloc( size_t xWantedSize )
     eboxBlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
     void *pvReturn = NULL;
 
-    //__disable_irq();
+    __disable_irq();
+    
+    if(end_block[0] == NULL)
+    {
+        ebox_heap_init(STM32_SRAM_BEGIN,(void *)STM32_SRAM_END);
+    }
+        
+        
 
     if( ( xWantedSize & BlockAllocatedBit ) == 0 )
     {
@@ -100,7 +107,7 @@ void *ebox_malloc( size_t xWantedSize )
                 single block. */
                 pxNewBlockLink->blockSize = pxBlock->blockSize - xWantedSize;
                 pxBlock->blockSize = xWantedSize;
-                _memInsertBlockIntoFreeList(  pxNewBlockLink  );
+                insert_block_into_freeList(  pxNewBlockLink  );
 
             }
             FreeBytesRemaining -= pxBlock->blockSize;
@@ -115,7 +122,7 @@ void *ebox_malloc( size_t xWantedSize )
             pxBlock->nextFreeBlock = NULL;
 
         }
-    //__enable_irq();
+    __enable_irq();
     }
     if(pvReturn == NULL)
     {
@@ -152,7 +159,7 @@ void ebox_free( void *pv )
 					/* Add this block to the list of free blocks. */
 					FreeBytesRemaining += pxLink->blockSize;
 					//traceFREE( pv, pxLink->blockSize );
-					_memInsertBlockIntoFreeList( ( ( eboxBlockLink_t * ) pxLink ) );
+					insert_block_into_freeList( ( ( eboxBlockLink_t * ) pxLink ) );
 				}
 			}
 			else
@@ -171,7 +178,7 @@ size_t ebox_get_free(  )
 }
 
 
-static void _memInsertBlockIntoFreeList( eboxBlockLink_t *pxBlockToInsert)
+static void insert_block_into_freeList( eboxBlockLink_t *pxBlockToInsert)
 {
     eboxBlockLink_t *pxIterator;
     uint8_t *puc;
