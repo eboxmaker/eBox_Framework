@@ -697,6 +697,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\object.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ebox_slave_spi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_slave_spi.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
