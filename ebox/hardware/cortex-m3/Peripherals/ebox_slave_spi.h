@@ -10,7 +10,7 @@ public:
 
      void    begin ();
      void    config(SpiConfig_t *spi_config);
-    void    interrupt(FunctionalState enable,uint8_t preemption_priority, uint8_t sub_priority);
+    void    interrupt(FunctionalState enable,uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
 
     void    enable_dma_send(uint8_t *buffer,uint16_t len);
     void    enable_dma_recv(uint8_t *buffer,uint16_t len);
@@ -36,7 +36,7 @@ public:
 //public:
 //    virtual int8_t take_spi_right(SpiConfig_t *spi_config);
 //    virtual int8_t release_spi_right(void);
-
+    uint8_t dma_buf[10];
 private:
     SPI_TypeDef *spi;
     uint8_t     busy;
