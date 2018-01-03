@@ -26,7 +26,7 @@ void setup()
     config.dev_num = 0;
     config.bit_order = SPI_FirstBit_MSB;
     config.mode = SPI_MODE0;
-    config.prescaler = SPI_BaudRatePrescaler_4;
+    config.prescaler = SPI_BaudRatePrescaler_32;
     
     spi1.begin(&config);
 
