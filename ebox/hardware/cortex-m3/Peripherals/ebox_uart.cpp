@@ -81,30 +81,30 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     case (uint32_t)USART1_BASE:
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
         _DMA1_Channelx = DMA1_Channel4;
-				index = NUM_UART1;
+        index = NUM_UART1;
         break;
 
     case (uint32_t)USART2_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
         _DMA1_Channelx = DMA1_Channel7;
-				index = NUM_UART2;
+        index = NUM_UART2;
         break;
 
     case (uint32_t)USART3_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
         _DMA1_Channelx = DMA1_Channel2;
-				index = NUM_UART3;
+        index = NUM_UART3;
         break;
 
 #if defined (STM32F10X_HD)
     case (uint32_t)UART4_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4, ENABLE);
-				index = NUM_UART4;
+        index = NUM_UART4;
         break;
 
     case (uint32_t)UART5_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, ENABLE);
-				index = NUM_UART5;
+        index = NUM_UART5;
         break;
 #endif
     }
@@ -269,44 +269,30 @@ void Uart::interrupt(IrqType type, FunctionalState enable,uint8_t preemption_pri
     NVIC_InitTypeDef NVIC_InitStructure;
 
     USART_ClearITPendingBit(_USARTx, USART_IT_TC);
-    USART_ClearFlag(USART2,USART_FLAG_TC); 
+    USART_ClearFlag(_USARTx,USART_FLAG_TC); 
     switch((uint32_t)_USARTx)
     {
-    case (uint32_t)USART1_BASE:
-        NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
-        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
-        NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
-        NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-        break;
-
-    case (uint32_t)USART2_BASE:
-        NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
-        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
-        NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
-        NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-        break;
-
-    case (uint32_t)USART3_BASE:
-        NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
-        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
-        NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
-        NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-        break;
+        case (uint32_t)USART1_BASE:
+            NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
+            break;
+        case (uint32_t)USART2_BASE:
+            NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+            break;
+        case (uint32_t)USART3_BASE:
+            NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
+            break;
 #if defined (STM32F10X_HD)
-    case (uint32_t)UART4_BASE:
-        NVIC_InitStructure.NVIC_IRQChannel = UART4_IRQn;
-        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
-        NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
-        NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-        break;
-    case (uint32_t)UART5_BASE:
-        NVIC_InitStructure.NVIC_IRQChannel = UART5_IRQn;
-        NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
-        NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
-        NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-        break;
+        case (uint32_t)UART4_BASE:
+            NVIC_InitStructure.NVIC_IRQChannel = UART4_IRQn;
+            break;
+        case (uint32_t)UART5_BASE:
+            NVIC_InitStructure.NVIC_IRQChannel = UART5_IRQn;
+            break;
 #endif
     }
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = enable;
     NVIC_Init(&NVIC_InitStructure);
     if(type == RxIrq)
         USART_ITConfig(_USARTx, USART_IT_RXNE, enable);
