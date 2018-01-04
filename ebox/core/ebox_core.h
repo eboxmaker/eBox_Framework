@@ -51,6 +51,7 @@
 #include "../core/port/ebox_port_spi.h"
 #include "../core/port/ebox_port_i2c.h"
 
+
 #define EBOX_VERSION "2.1"
 
 
@@ -61,11 +62,29 @@
 #define high_byte(w) ((uint8_t) ((w) >> 8))
 
 
+/** read bit of value */
 #define bit_read(value, bit) (((value) >> (bit)) & 0x01)
+
+/** set bit to 1 of value */
 #define bit_set(value, bit) ((value) |= (1UL << (bit)))
+
+/** set bit to 0 of value */
 #define bit_clear(value, bit) ((value) &= ~(1UL << (bit)))
+
+/** write bit of value*/
 #define bit_write(value, bit, bitvalue) (bitvalue ? bit_set(value, bit) : bit_clear(value, bit))
 
+/** Bits m to n of x */
+#define bits_get(x, m, n) ((((uint32)x) << (31 - (n))) >> ((31 - (n)) + (m)))
+
+/** 1UL shifted left by 'shift' */
+#define bit_shift(shift)                     (1UL << (shift))
+
+/** 'Mask' shifted left by 'shift' */
+#define bit_mask_shift(mask, shift)    ((mask) << (shift))
+
+/** True iff v is a power of two (1, 2, 4, 8, ...) */
+#define is_power_of_tow(v)  ((v) && !((v) & ((v) - 1)))
 
 void        shift_out(Gpio *data_pin, Gpio *clock_pin, uint8_t bit_order, uint8_t val);
 uint8_t     shift_in(Gpio *data_pin, Gpio *clock_pin, uint8_t bit_order);
