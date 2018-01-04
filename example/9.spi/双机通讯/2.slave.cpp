@@ -56,7 +56,7 @@ bool cmd_prepare(uint8_t cmd)
 {
     if(cmd == CMD_7688_READ_FROM_STM32)
     {
-        
+        slave_spi1.set_tx_dma();
     }
     else if(CMD_7688_WRITE_TO_STM32)
     {
@@ -101,13 +101,11 @@ void process(uint8_t ch)
 				else
                 {
 					fsm_status_next = FSM_SEND_RESP;
-                    uart1.printf("下一个255走向SEND RESP\r\n");
                 }
             }
             else
             {
                 slave_spi1.write(0);
-                uart1.printf("错误的命令\r\n");
 
             }
             break;
@@ -118,13 +116,17 @@ void process(uint8_t ch)
 				fsm_status_next = FSM_SET_BLOCK_LEN;
                 uart1.printf("OK:CMD_SET_BLOCK_LEN %d\r\n",ch);
 			} else if (CMD_7688_WRITE_TO_STM32 == cmd) {
-				slave_spi1.disable_rx_irq();
+				slave_spi1.disable_rx_int();
                 slave_spi1.enable_rx_dma();
                 uart1.printf("OK:ENABLE RX DMA\r\n",ch);
 
 				//send_ch(0);
 				fsm_status_next = FSM_7688_WRITE_TO_STM32;
 			} else if (CMD_7688_READ_FROM_STM32 == cmd) {
+                slave_spi1.disable_rx_int();
+                slave_spi1.enable_tx_dma();
+                uart1.printf("OK:ENABLE tX DMA\r\n",ch);
+                
 				fsm_status_next = FSM_7688_READ_FROM_STM32;
 			}
 			break;
@@ -157,8 +159,19 @@ void process(uint8_t ch)
         case FSM_7688_WRITE_TO_STM32:
             slave_spi1.disable_rx_dma();
             slave_spi1.enable_rx_int();
+            uint8_t tbuf[32];
+            for(int i = 0; i < 32; i++)
+                tbuf[i] =slave_spi1.xfet[i];
+            uart1.write(tbuf,32);
+            uart1.println();
+            fsm_status_next = FSM_NULL;
+
             break;
 		case FSM_7688_READ_FROM_STM32:
+            slave_spi1.disable_tx_dma();
+            slave_spi1.enable_rx_int();
+            fsm_status_next = FSM_NULL;
+
             break;
 		case FSM_RECV_END_RESP:
 		case FSM_SEND_END_RESP:
@@ -190,7 +203,8 @@ void tc()
 //    while ((SPI1->SR & SPI_I2S_FLAG_TXE) == RESET);
 //    while((SPI1->SR & SPI_I2S_FLAG_BSY) == SET);
 ////    delay_ms(1);
-////    uart1.printf("DMA %d\r\n",updata);
+    uart1.printf("DMA %d\r\n",updata);
+    slave_spi1.write_buf.write(0);
 //    PA2.reset();
 //    slave_spi1.enable_rx_irq();
 

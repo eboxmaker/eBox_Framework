@@ -84,11 +84,65 @@ int main(void)
         delay_ms(1);
         uart1.printf("CMD_7688_WRITE_TO_STM32 :0X%X\r\n",spi1.read());
         delay_ms(1);
-
-
         spi1.write(buf,32);
         delay_ms(1);
         uart1.printf("write 32 bytes\r\n");
+        delay_ms(1);
+        PA4.set();
+        
+        
+        PA4.reset();
+        spi1.write(CMD_GET_STATUS);
+        delay_ms(1);
+        uart1.printf("CMD status:0X%X\r\n",spi1.transfer(0XFF));
+        delay_ms(1);
+        PA4.set();
+
+        
+        
+        
+        
+        PA4.reset();
+        spi1.write(CMD_7688_READ_FROM_STM32);
+        delay_ms(1);
+        uart1.printf("CMD_7688_READ_FROM_STM32 :0X%X\r\n",spi1.read());
+        delay_ms(1);
+        spi1.read(buf,32);
+        uart1.write(buf,32);
+        delay_ms(1);
+        delay_ms(1);
+        PA4.set();
+        
+        PA4.reset();
+        spi1.write(CMD_7688_READ_FROM_STM32);
+        delay_ms(1);
+        uart1.printf("CMD_7688_READ_FROM_STM32 :0X%X\r\n",spi1.read());
+        delay_ms(1);
+        spi1.read(buf,32);
+        uart1.write(buf,32);
+        delay_ms(1);
+        delay_ms(1);
+        PA4.set();
+        
+        PA4.reset();
+        spi1.write(CMD_7688_READ_FROM_STM32);
+        delay_ms(1);
+        uart1.printf("CMD_7688_READ_FROM_STM32 :0X%X\r\n",spi1.read());
+        delay_ms(1);
+        spi1.read(buf,32);
+        uart1.write(buf,32);
+        delay_ms(1);
+        delay_ms(1);
+        PA4.set();
+        
+        PA4.reset();
+        spi1.write(CMD_7688_READ_FROM_STM32);
+        delay_ms(1);
+        uart1.printf("CMD_7688_READ_FROM_STM32 :0X%X\r\n",spi1.read());
+        delay_ms(1);
+        spi1.read(buf,32);
+        uart1.write(buf,32);
+        delay_ms(1);
         delay_ms(1);
         PA4.set();
         
