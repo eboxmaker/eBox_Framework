@@ -40,7 +40,7 @@
 #include "ebox_iflash.h"
 #include "ebox_dac.h"
 #include "ebox_wdg.h"
-
+#include "ebox_slave_spi.h"
 
 #include "stdio.h"
 
@@ -65,6 +65,7 @@ extern mcuSpi spi1;
 extern mcuSpi spi2;
 extern SoftSpi sspi1;
 extern SoftSpi sspi2;
+extern SlaveSpi slave_spi1;
 
 extern mcuI2c i2c1;
 extern mcuI2c i2c2;
