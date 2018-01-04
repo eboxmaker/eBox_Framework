@@ -120,9 +120,7 @@ void SlaveSpi::config(SpiConfig_t *spi_config)
     }
     SPI_Init(spi, &SPI_InitStructure);
 
-    enable_rx_irq();
-    enable_dma_tc_irq();
-//    SPI_I2S_DMACmd(spi,SPI_I2S_DMAReq_Tx,ENABLE);
+    enable_rx_int();
     nvic(ENABLE,0,0);
     
     NVIC_InitTypeDef NVIC_InitStructure;
@@ -216,17 +214,19 @@ void SlaveSpi::set_tx_dma()
                           (0);        // 通道开启（0：通道不工作，1：通道开启）
 
 }
-
-void SlaveSpi::enable_rx_irq()
+void SlaveSpi::enable_tx_dma()
 {
-    SPI_I2S_ITConfig(spi,SPI_I2S_IT_RXNE,ENABLE);
-    SPI_I2S_ClearITPendingBit(spi, SPI_I2S_IT_RXNE);
-}
+    SPI_I2S_DMACmd(spi,SPI_I2S_DMAReq_Tx,ENABLE);
+    DMA_Cmd(DMA1_Channel3,ENABLE);
 
-void SlaveSpi::disable_rx_irq()
-{
-    SPI_I2S_ITConfig(spi,SPI_I2S_IT_RXNE,DISABLE);
 }
+void SlaveSpi::disable_tx_dma()
+{
+    SPI_I2S_DMACmd(spi,SPI_I2S_DMAReq_Tx,DISABLE);
+    DMA_Cmd(DMA1_Channel3,DISABLE);
+}
+    
+
 
 void SlaveSpi::enable_dma_tc_irq()
 {
@@ -281,33 +281,6 @@ uint8_t SlaveSpi::read()
     return spi->DR;
 }
 
-void SlaveSpi::enable_tx_dma()
-{
-    DMA_Cmd(DMA1_Channel3,DISABLE);
-    DMA_DeInit(DMA1_Channel3);   //将DMA的通道1寄存器重设为缺省值
-    _DMA1_Channelx->CPAR = (uint32_t)&spi->DR; //外设地址
-    _DMA1_Channelx->CMAR = (uint32_t) xfet; //mem地址
-    _DMA1_Channelx->CNDTR = xlen  ; //传输长度
-    _DMA1_Channelx->CCR = (0 << 14) | // 0:非存储器到存储器模式,1:启动存储器到存储器模式。
-                          (2 << 12) | // 通道优先级高0-3:低到高
-                          (0 << 11) | // 存储器数据宽度8bit（0：8bit;1：16bit；2:32bit）
-                          (0 << 10) | // 存储器数据宽度8bit（0：8bit;1：16bit；2:32bit）
-                          (0 <<  9) | // 外设数据宽度8bit（0：8bit;1：16bit；2:32bit）
-                          (0 <<  8) | // 外设数据宽度8bit（0：8bit;1：16bit；2:32bit）
-                          (1 <<  7) | // 存储器地址增量模式（0：不执行存储器地址增量操作，1：执行存储器地址增量操作）
-                          (0 <<  6) | // 外设地址增量模式(不增)（0：不执行外设地址增量操作，1：执行外设地址增量操作）
-                          (0 <<  5) | // 非循环模式（0：不执行循环操作，1：执行循环操作）
-                          (1 <<  4) | // 从存储器读（0：从外设读，1：从存储器读）
-                          (0 <<  3) | // 是否允许传输错误中断（0：禁止TE中断，1：允许TE中断）
-                          (0 <<  2) | // 是否允许半传输中断（0：禁止HT中断，1：允许HT中断）
-                          (1 <<  1) | // 是否允许传输完成中断（0：禁止TC中断，1：允许TC中断）
-                          (1);        // 通道开启（0：通道不工作，1：通道开启）
-    DMA_Cmd(DMA1_Channel3,ENABLE);
-}
-void SlaveSpi::disable_tx_dma()
-{
-    DMA_Cmd(DMA1_Channel3,DISABLE);
-}
 
 void SlaveSpi::wait_tx_over()
 {
