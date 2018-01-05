@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_uart.h"
 #include "nvic.h"
+#include "dma.h"
 
 uint8_t busy[5];
 
@@ -27,6 +28,7 @@ static uint32_t serial_irq_ids[UART_NUM] = {0, 0, 0,0,0};
 
 static uart_irq_handler irq_handler;
 
+Dma Dma1Ch4(DMA1_Channel4);
 
 
 
@@ -298,24 +300,45 @@ void Uart::interrupt(IrqType type, FunctionalState enable)
 */
 uint16_t Uart::dma_send_string(const char *str, uint16_t length)
 {
-    DMA_DeInit(_DMA1_Channelx);   //将DMA的通道1寄存器重设为缺省值
-    _DMA1_Channelx->CPAR = (uint32_t)&_USARTx->DR; //外设地址
-    _DMA1_Channelx->CMAR = (uint32_t) str; //mem地址
-    _DMA1_Channelx->CNDTR = length ; //传输长度
-    _DMA1_Channelx->CCR = (0 << 14) | // 非存储器到存储器模式
-                          (2 << 12) | // 通道优先级高
-                          (0 << 11) | // 存储器数据宽度8bit
-                          (0 << 10) | // 存储器数据宽度8bit
-                          (0 <<  9) | // 外设数据宽度8bit
-                          (0 <<  8) | // 外设数据宽度8bit
-                          (1 <<  7) | // 存储器地址增量模式
-                          (0 <<  6) | // 外设地址增量模式(不增)
-                          (0 <<  5) | // 非循环模式
-                          (1 <<  4) | // 从存储器读
-                          (1 <<  3) | // 是否允许传输错误中断
-                          (0 <<  2) | // 是否允许半传输中断
-                          (0 <<  1) | // 是否允许传输完成中断
-                          (1);        // 通道开启
+//    DMA_DeInit(_DMA1_Channelx);   //将DMA的通道1寄存器重设为缺省值
+//    _DMA1_Channelx->CPAR = (uint32_t)&_USARTx->DR; //外设地址
+//    _DMA1_Channelx->CMAR = (uint32_t) str; //mem地址
+//    _DMA1_Channelx->CNDTR = length ; //传输长度
+//    _DMA1_Channelx->CCR = (0 << 14) | // 非存储器到存储器模式
+//                          (2 << 12) | // 通道优先级高
+//                          (0 << 11) | // 存储器数据宽度8bit
+//                          (0 << 10) | // 存储器数据宽度8bit
+//                          (0 <<  9) | // 外设数据宽度8bit
+//                          (0 <<  8) | // 外设数据宽度8bit
+//                          (1 <<  7) | // 存储器地址增量模式
+//                          (0 <<  6) | // 外设地址增量模式(不增)
+//                          (0 <<  5) | // 非循环模式
+//                          (1 <<  4) | // 从存储器读
+//                          (0 <<  3) | // 是否允许传输错误中断
+//                          (0 <<  2) | // 是否允许半传输中断
+//                          (0 <<  1) | // 是否允许传输完成中断
+//                          (0);        // 通道开启
+    
+    DMA_InitTypeDef DMA_InitStructure;
+
+    Dma1Ch4.deInit();
+    
+    DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&_USARTx->DR;
+    DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t) str;
+    DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;
+    DMA_InitStructure.DMA_BufferSize = length;
+    DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+    DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+    DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+    DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+    DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
+    DMA_InitStructure.DMA_Priority = DMA_Priority_High;
+    DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
+    Dma1Ch4.init(&DMA_InitStructure);
+    Dma1Ch4.interrupt(DMA_IT_TC,DISABLE);
+    Dma1Ch4.nvic(DISABLE,0,0);
+
+    Dma1Ch4.cmd(ENABLE);
     return length;
 }
 
