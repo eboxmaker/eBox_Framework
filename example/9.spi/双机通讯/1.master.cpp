@@ -31,7 +31,8 @@ Copyright 2015 shentq. All Rights Reserved.
 
 
 SpiConfig_t config;
-uint8_t buf[32];
+uint8_t txbuf[32];
+uint8_t rxbuf[32];
 uint8_t len;
 
 void setup()
@@ -43,7 +44,7 @@ void setup()
     config.dev_num = 0;
     config.bit_order = SPI_FirstBit_MSB;
     config.mode = SPI_MODE0;
-    config.prescaler = SPI_BaudRatePrescaler_4;
+    config.prescaler = SPI_BaudRatePrescaler_256;
     
     spi1.begin(&config);
     PA4.mode(OUTPUT_PP);
@@ -51,7 +52,7 @@ void setup()
 
     for(int i =0; i < 32; i++)
     {
-        buf[i] = 0x30+i;
+        txbuf[i] = 0x30+i;
     }
 }
 int main(void)
@@ -60,7 +61,8 @@ int main(void)
 
     while(1)
     {
-        len = 3;//random(10,15);
+        
+        //get status
         PA4.reset();
         spi1.write(CMD_GET_STATUS);
         delay_ms(1);
@@ -68,6 +70,7 @@ int main(void)
         delay_ms(1);
         PA4.set();
 
+        //set len 32
         PA4.reset();
         spi1.write(CMD_SET_BLOCK_LEN);
         delay_ms(1);
@@ -79,18 +82,20 @@ int main(void)
         delay_ms(1);
         PA4.set();
         
+        //write to slave
         PA4.reset();
         spi1.write(CMD_7688_WRITE_TO_STM32);
         delay_ms(1);
         uart1.printf("CMD_7688_WRITE_TO_STM32 :0X%X\r\n",spi1.read());
         delay_ms(1);
-        spi1.write(buf,32);
+        spi1.write(txbuf,32);
         delay_ms(1);
         uart1.printf("write 32 bytes\r\n");
         delay_ms(1);
         PA4.set();
         
         
+        //get status
         PA4.reset();
         spi1.write(CMD_GET_STATUS);
         delay_ms(1);
@@ -100,51 +105,21 @@ int main(void)
 
         
         
-        
-        
+        //read form slave
         PA4.reset();
         spi1.write(CMD_7688_READ_FROM_STM32);
         delay_ms(1);
         uart1.printf("CMD_7688_READ_FROM_STM32 :0X%X\r\n",spi1.read());
         delay_ms(1);
-        spi1.read(buf,32);
-        uart1.write(buf,32);
+        spi1.read(rxbuf,32);
+        uart1.write(rxbuf,32);
         delay_ms(1);
         delay_ms(1);
         PA4.set();
         
-        PA4.reset();
-        spi1.write(CMD_7688_READ_FROM_STM32);
-        delay_ms(1);
-        uart1.printf("CMD_7688_READ_FROM_STM32 :0X%X\r\n",spi1.read());
-        delay_ms(1);
-        spi1.read(buf,32);
-        uart1.write(buf,32);
-        delay_ms(1);
-        delay_ms(1);
-        PA4.set();
+
         
-        PA4.reset();
-        spi1.write(CMD_7688_READ_FROM_STM32);
-        delay_ms(1);
-        uart1.printf("CMD_7688_READ_FROM_STM32 :0X%X\r\n",spi1.read());
-        delay_ms(1);
-        spi1.read(buf,32);
-        uart1.write(buf,32);
-        delay_ms(1);
-        delay_ms(1);
-        PA4.set();
-        
-        PA4.reset();
-        spi1.write(CMD_7688_READ_FROM_STM32);
-        delay_ms(1);
-        uart1.printf("CMD_7688_READ_FROM_STM32 :0X%X\r\n",spi1.read());
-        delay_ms(1);
-        spi1.read(buf,32);
-        uart1.write(buf,32);
-        delay_ms(1);
-        delay_ms(1);
-        PA4.set();
+
         
         
         

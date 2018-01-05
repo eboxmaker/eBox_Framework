@@ -1,47 +1,45 @@
- /**
-  ******************************************************************************
-  * @file    main.cpp
-  * @author  shentq
-  * @version V2.0
-  * @date    2016/08/14
-  * @brief   ebox application example .
-  ******************************************************************************
-  * @attention
-  *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
-  * preliminary and is subject to change at any time without notice. shentq assumes
-  * no responsibility for any errors contained herein.
-  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
-  ******************************************************************************
-  */
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
+
+Copyright 2015 shentq. All Rights Reserved.
+*/
+
+//STM32 RUN IN eBox
+
 
 #include "ebox.h"
-u8 count;
-void tc_evnet()
-{
-    count++;
-    PB8.toggle();
-}
+#include "w5500.h"
+#include "ebox_slave_spi.h"
+#include "spibridge.h"
+
+
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
-    uart1.attach(tc_evnet,TcIrq);
-    uart1.interrupt(TcIrq,ENABLE);
-    PB8.mode(OUTPUT_PP);
-    PB8.reset();
-	no_interrupts();
-}
+    uart1.begin(115200,0);
+    uart1.printf("\r\nuart1 115200 ok!");
+    PA2.mode(OUTPUT_PP);
+//    Dma1Ch3.attach(tc,DmaTcIrq);
+//    Dma1Ch2.attach(test,DmaTcIrq);
+    begin();
+//    
 
+}
 int main(void)
 {
     setup();
+
     while(1)
     {
-        uart1.printf("uart is ok ! count = %d\r\n", count);
-        delay_ms(1000);
+        loop();
+
+//        delay_ms(1000);
     }
+
+
 }
 
 

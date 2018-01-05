@@ -19,8 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_uart.h"
-#include "nvic.h"
-#include "dma.h"
+
 
 uint8_t busy[5];
 
@@ -28,7 +27,6 @@ static uint32_t serial_irq_ids[UART_NUM] = {0, 0, 0,0,0};
 
 static uart_irq_handler irq_handler;
 
-Dma Dma1Ch4(DMA1_Channel4);
 
 
 
@@ -73,28 +71,25 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 {
     uint8_t             index;
     USART_InitTypeDef   USART_InitStructure;
-    
-    use_dma = _use_dma;
-    if(use_dma == 1)
-        RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);	//Ê¹ÄÜDMAÊ±ÖÓ
+        
 
     switch((uint32_t)_USARTx)
     {
     case (uint32_t)USART1_BASE:
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
-        _DMA1_Channelx = DMA1_Channel4;
+        dma_tx = &Dma1Ch4;
         index = NUM_UART1;
         break;
 
     case (uint32_t)USART2_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
-        _DMA1_Channelx = DMA1_Channel7;
+        dma_tx = &Dma1Ch7;
         index = NUM_UART2;
         break;
 
     case (uint32_t)USART3_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
-        _DMA1_Channelx = DMA1_Channel2;
+        dma_tx = &Dma1Ch2;
         index = NUM_UART3;
         break;
 
@@ -156,7 +151,14 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     USART_Init(_USARTx, &USART_InitStructure);
 
     if((_USARTx == USART1 || _USARTx == USART2 || _USARTx == USART3) && (use_dma == 1) )
+    {
         USART_DMACmd(_USARTx, USART_DMAReq_Tx, ENABLE);
+        dma_tx->rcc_enable();
+        dma_tx->nvic(DISABLE,0,0);
+        dma_tx->interrupt(DmaItTc,DISABLE);
+        dma_tx->interrupt(DmaItTe,DISABLE);
+        dma_tx->interrupt(DmaItHt,DISABLE);
+    }
     USART_Cmd(_USARTx, ENABLE);
     
 
@@ -321,7 +323,7 @@ uint16_t Uart::dma_send_string(const char *str, uint16_t length)
     
     DMA_InitTypeDef DMA_InitStructure;
 
-    Dma1Ch4.deInit();
+    dma_tx->deInit();
     
     DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&_USARTx->DR;
     DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t) str;
@@ -334,11 +336,8 @@ uint16_t Uart::dma_send_string(const char *str, uint16_t length)
     DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
     DMA_InitStructure.DMA_Priority = DMA_Priority_High;
     DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
-    Dma1Ch4.init(&DMA_InitStructure);
-    Dma1Ch4.interrupt(DMA_IT_TC,DISABLE);
-    Dma1Ch4.nvic(DISABLE,0,0);
-
-    Dma1Ch4.cmd(ENABLE);
+    dma_tx->init(&DMA_InitStructure);
+    dma_tx->enable();
     return length;
 }
 

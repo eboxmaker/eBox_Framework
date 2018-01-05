@@ -23,7 +23,8 @@
 
 #include "ebox_core.h"
 #include "FunctionPointer.h"
-
+#include "nvic.h"
+#include "dma.h"
 /*
 	1.支持串口1,2,3,4,5；
 	2.支持一个中断事件 rx_it
@@ -113,11 +114,11 @@ public:
 
 private:
     USART_TypeDef       *_USARTx;
-    DMA_Channel_TypeDef *_DMA1_Channelx;
     char                *uart_buf;
     uint8_t             use_dma;
     uint16_t            dma_send_string(const char *str, uint16_t length);
     void                set_busy();
+    Dma                 *dma_tx;
 
 protected:
     FunctionPointer _irq[2];
