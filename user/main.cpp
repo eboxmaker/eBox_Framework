@@ -28,7 +28,7 @@ void setup()
     ebox_init();
     uart1.begin(115200);
     uart1.attach(tc_evnet,TcIrq);
-    uart1.interrupt(TcIrq,DISABLE);
+    uart1.interrupt(TcIrq,ENABLE);
     PB8.mode(OUTPUT_PP);
     PB8.reset();
 	no_interrupts();

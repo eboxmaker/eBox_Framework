@@ -181,3 +181,5 @@ SoftI2c si2c2(&PB10, &PB11);
 
 //can
 Can can1(&PB8, &PB9);
+
+//dma

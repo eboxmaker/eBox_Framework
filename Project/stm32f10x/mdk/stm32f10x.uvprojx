@@ -707,6 +707,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\nvic.cpp</FilePath>
             </File>
+            <File>
+              <FileName>dma.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\dma.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
