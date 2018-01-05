@@ -5,20 +5,23 @@
 #include "ringbuf.h"
 #include "FunctionPointer.h"
 
+#include "dma.h"
+
 //”√ªß≈‰÷√//////////////
 #define SPI_NUM (3)
 
 enum SpiIrqType {
-		SpiRxIrq = 0,
-		SpiTcIrq
+		SpiItRx = 0,
+		SpiItTc,
+        SpiItRc
 };
 
 enum SpiItIndex{
     SPI1_ID  = 0,
     SPI2_ID  = 1,
     SPI3_ID  = 2,
-    SPI4_ID  = 1,
-    SPI5_ID  = 2,
+    SPI4_ID  = 3,
+    SPI5_ID  = 4,
 } ; 
 
 typedef void (*SpiIrqHandler_t)(uint32_t id, SpiIrqType type);
@@ -33,50 +36,40 @@ public:
 
     void    write(uint8_t data);
     uint8_t read();
+    void    enable_rx_int();
+    void    disable_rx_int();
 
     void    set_rx_dma();
     void    enable_rx_dma();
     void    disable_rx_dma();
+    void    enable_dma_rx_int();
+    void    disable_dma_rx_int();
 
 
     void    set_tx_dma();
     void    enable_tx_dma();
     void    disable_tx_dma();
-    void    enable_dma_tc_irq();
-    void    disable_dma_tc_irq();
+    void    enable_dma_tx_int();
+    void    disable_dma_tx_int();
 
-    void    enable_rx_int();
-    void    disable_rx_int();
-
-
-
-
-
-    void    wait_tx_over();
-
-
-    uint8_t transfer(uint8_t data);
     
-    uint8_t read_buf_pool[100];
-    uint8_t write_buf_pool[100];
+    void    int_rx_event();
+    void    dma_rx_over_event();
+    void    dma_tx_over_event();
+    
+    uint8_t read_buf_pool[500];
+    uint8_t write_buf_pool[500];
+
+    uint8_t cmd_buf_pool[500];
+    
     RINGBUF read_buf;
     RINGBUF write_buf;
-//    virtual uint8_t read_config(void);
+    RINGBUF cmd_buf;
 
-//    virtual uint8_t transfer(uint8_t data);
-
-//    virtual int8_t  write(uint8_t data);
-//    virtual int8_t  write(uint8_t *data, uint16_t data_length);
-
-//    virtual uint8_t read();
-//    virtual int8_t  read(uint8_t  *recv_data);
-//    virtual int8_t  read(uint8_t *recv_data, uint16_t data_length);
-//public:
-//    virtual int8_t take_spi_right(SpiConfig_t *spi_config);
-//    virtual int8_t release_spi_right(void);
-    uint8_t dma_buf[256];
+    uint8_t     *xfet;
+    uint16_t     xlen;
     
-        /** Attach a function to call whenever a serial interrupt is generated
+    /** Attach a function to call whenever a serial interrupt is generated
      *
      *  @param fptr A pointer to a void function, or 0 to set as none
      *  @param type Which serial interrupt to attach the member function to (Seriall::RxIrq for receive, TxIrq for transmit buffer empty)
@@ -101,17 +94,13 @@ public:
 		
     static void _irq_handler(uint32_t id, SpiIrqType irq_type);
 
-
-
-    uint8_t     *xfet;
-    uint16_t     xlen;
-
 private:
     SPI_TypeDef *spi;
-    uint8_t     busy;
-    DMA_Channel_TypeDef *_DMA1_Channelx;
+    Dma         *dma_tx;
+    Dma         *dma_rx;
+
 protected:
-    FunctionPointer _irq[2];
+    FunctionPointer _irq[3];
 
 };
 
@@ -123,6 +112,7 @@ void spi_irq_handler(uint8_t index, SpiIrqHandler_t handler, uint32_t id);
 #ifdef __cplusplus
 }
 #endif
+
 #endif
 
 
