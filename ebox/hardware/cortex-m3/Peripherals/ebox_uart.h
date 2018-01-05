@@ -73,7 +73,7 @@ public:
     //initial uart
     void    begin(uint32_t baud_rate,uint8_t _use_dma = 1);
     void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit,uint8_t _use_dma);
-
+    void    nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
     //write method
     virtual size_t  write(uint8_t c);
     virtual size_t  write(const uint8_t *buffer, size_t size);
@@ -92,8 +92,9 @@ public:
      */
     //attach user event
     void attach(void (*fptr)(void), IrqType type);
-    void interrupt(IrqType type, FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
+    void interrupt(IrqType type,FunctionalState enable);
 
+//    void printf(const char *fmt, ...);
 
     /** Attach a member function to call whenever a serial interrupt is generated
      *

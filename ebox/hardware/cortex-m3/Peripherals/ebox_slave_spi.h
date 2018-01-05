@@ -54,8 +54,6 @@ public:
 
     void    wait_tx_over();
 
-    void    enable_rx_irq();
-    void    disable_rx_irq();
 
     uint8_t transfer(uint8_t data);
     
@@ -102,7 +100,9 @@ public:
     }
 		
     static void _irq_handler(uint32_t id, SpiIrqType irq_type);
-    void    nvic(FunctionalState enable,uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
+
+
+
     uint8_t     *xfet;
     uint16_t     xlen;
 
