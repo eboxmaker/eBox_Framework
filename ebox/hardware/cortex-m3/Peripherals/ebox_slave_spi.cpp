@@ -2,7 +2,7 @@
 #include "ebox_slave_spi.h"
 
 #include "ebox.h"
-
+#include "nvic.h"
 
 static uint32_t spi_irq_ids[SPI_NUM] = {0};
 
@@ -120,22 +120,15 @@ void SlaveSpi::config(SpiConfig_t *spi_config)
     }
     SPI_Init(spi, &SPI_InitStructure);
 
+    
+    nvic_irq_set_priority((uint32_t)spi,0,0,0);
+    nvic_irq_enable((uint32_t)spi,0);
+    
+    nvic_irq_set_priority((uint32_t)_DMA1_Channelx,0,0,0);
+    nvic_irq_enable((uint32_t)_DMA1_Channelx,0);
+    
     enable_rx_int();
-    nvic(ENABLE,0,0);
     
-    NVIC_InitTypeDef NVIC_InitStructure;
-    NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel3_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
-    
-    NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel2_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
-
     SPI_Cmd(spi, ENABLE);
 }
 void SlaveSpi::set_rx_dma()
@@ -157,7 +150,7 @@ void SlaveSpi::set_rx_dma()
                           (0 <<  3) | // 是否允许传输错误中断
                           (0 <<  2) | // 是否允许半传输中断
                           (1 <<  1) | // 是否允许传输完成中断
-                          (1);        // 通道开启
+                          (0);        // 通道开启
 
 }
 void SlaveSpi::enable_rx_dma()
@@ -217,13 +210,13 @@ void SlaveSpi::set_tx_dma()
 void SlaveSpi::enable_tx_dma()
 {
     SPI_I2S_DMACmd(spi,SPI_I2S_DMAReq_Tx,ENABLE);
-    DMA_Cmd(DMA1_Channel3,ENABLE);
+    _DMA1_Channelx->CCR |= 0x0001;
 
 }
 void SlaveSpi::disable_tx_dma()
 {
     SPI_I2S_DMACmd(spi,SPI_I2S_DMAReq_Tx,DISABLE);
-    DMA_Cmd(DMA1_Channel3,DISABLE);
+    _DMA1_Channelx->CCR &= 0xfffe;
 }
     
 
@@ -239,35 +232,7 @@ void SlaveSpi::disable_dma_tc_irq()
 }
 
 
-void SlaveSpi::nvic(FunctionalState enable,uint8_t preemption_priority , uint8_t sub_priority)
-{
-    if(preemption_priority > 3)preemption_priority = 3;
-    if(sub_priority > 3)sub_priority = 3;
-    NVIC_InitTypeDef NVIC_InitStructure;
-//    SPI_I2S_ClearITPendingBit(spi, SPI_I2S_IT_RXNE);
-//    while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
-//    ;
 
-    switch((uint32_t)spi)
-    {
-        case (uint32_t)SPI1_BASE:
-            NVIC_InitStructure.NVIC_IRQChannel = SPI1_IRQn;
-            NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
-            NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
-            NVIC_InitStructure.NVIC_IRQChannelCmd = enable;
-            break;
-
-        case (uint32_t)SPI2_BASE:
-            NVIC_InitStructure.NVIC_IRQChannel = SPI2_IRQn;
-            NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
-            NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
-            NVIC_InitStructure.NVIC_IRQChannelCmd = enable;
-            break;
-
-    }
-    NVIC_Init(&NVIC_InitStructure);
-    
-}
 
 void SlaveSpi::write(uint8_t data)
 {
