@@ -174,8 +174,10 @@ bool Ting::begin(Gpio *rst,Gpio *wakeup, Uart *uart, uint32_t baud)
     pDataBuf.begin(data_buf, DATA_BUFFER_SIZE); //初始化环形缓冲区
 
     this->uart->begin(baud);
+    this->uart->nvic(ENABLE,0,0);
     this->uart->attach(this,&Ting::rx_evend,RxIrq);
-
+    this->uart->interrupt(RxIrq,ENABLE);
+    
     hard_reset();
     clear_rx_cdm_buffer();
     return true;
