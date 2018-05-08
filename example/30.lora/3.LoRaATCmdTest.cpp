@@ -36,9 +36,9 @@ tLoRaSettings LoRaSettings =
     1,                // ErrorCoding [1: 4/5, 2: 4/6, 3: 4/7, 4: 4/8]
     true,             // CrcOn [0: OFF, 1: ON]
     false,            // ImplicitHeaderOn [0: OFF, 1: ON]
-    true,                // RxSingleOn [0: Continuous, 1 Single]
+    false,                // RxSingleOn [0: Continuous, 1 Single]
     false,                // FreqHopOn [0: OFF, 1: ON]
-    4,                // HopPeriod Hops every frequency hopping period symbols
+    0,                // HopPeriod Hops every frequency hopping period symbols
     //100,              // TxPacketTimeout
     3000,              // RxPacketTimeout
     8,              // PayloadLength (used for implicit header mode)
@@ -47,17 +47,6 @@ tLoRaSettings LoRaSettings =
 void setup()
 {
     ebox_init();
-    PA2.mode(INPUT_PD);
-    PA3.mode(INPUT_PD);
-    PB2.mode(INPUT);
-    PB3.mode(INPUT);
-    PB4.mode(INPUT);
-    PB5.mode(INPUT);
-    PB6.mode(INPUT);
-    PA4.mode(INPUT);
-    PA5.mode(INPUT);
-    PA6.mode(INPUT);
-    PA7.mode(INPUT);
     uart1.begin(115200);
     ting.begin(&PA1,&PA8,&uart3,115200);
     uart1.printf("start\r\n");
