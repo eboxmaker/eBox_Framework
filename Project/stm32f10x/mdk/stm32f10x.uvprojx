@@ -10,6 +10,7 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pCCUsed>5060183::V5.06 update 2 (build 183)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F103C8</Device>
@@ -124,47 +125,6 @@
             <HexOffset>0</HexOffset>
             <Oh166RecLen>16</Oh166RecLen>
           </OPTHX>
-          <Simulator>
-            <UseSimulator>0</UseSimulator>
-            <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
-            <RunToMain>1</RunToMain>
-            <RestoreBreakpoints>1</RestoreBreakpoints>
-            <RestoreWatchpoints>1</RestoreWatchpoints>
-            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
-            <RestoreFunctions>1</RestoreFunctions>
-            <RestoreToolbox>1</RestoreToolbox>
-            <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
-          </Simulator>
-          <Target>
-            <UseTarget>1</UseTarget>
-            <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
-            <RunToMain>1</RunToMain>
-            <RestoreBreakpoints>1</RestoreBreakpoints>
-            <RestoreWatchpoints>1</RestoreWatchpoints>
-            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
-            <RestoreFunctions>0</RestoreFunctions>
-            <RestoreToolbox>1</RestoreToolbox>
-            <RestoreTracepoints>1</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-          </Target>
-          <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>6</TargetSelection>
-          <SimDlls>
-            <CpuDll></CpuDll>
-            <CpuDllArguments></CpuDllArguments>
-            <PeripheralDll></PeripheralDll>
-            <PeripheralDllArguments></PeripheralDllArguments>
-            <InitializationFile></InitializationFile>
-          </SimDlls>
-          <TargetDlls>
-            <CpuDll></CpuDll>
-            <CpuDllArguments></CpuDllArguments>
-            <PeripheralDll></PeripheralDll>
-            <PeripheralDllArguments></PeripheralDllArguments>
-            <InitializationFile></InitializationFile>
-            <Driver>Segger\JL2CM3.dll</Driver>
-          </TargetDlls>
         </DebugOption>
         <Utilities>
           <Flash1>
@@ -229,6 +189,7 @@
             <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
+            <nSecure>0</nSecure>
             <RoSelD>3</RoSelD>
             <RwSelD>3</RwSelD>
             <CodeSel>0</CodeSel>
@@ -365,11 +326,15 @@
             <useXO>0</useXO>
             <v6Lang>0</v6Lang>
             <v6LangP>0</v6LangP>
+            <vShortEn>1</vShortEn>
+            <vShortWch>1</vShortWch>
+            <v6Lto>0</v6Lto>
+            <v6WtE>0</v6WtE>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define>ARM_MATH_CM3</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\ebox\core\mem;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\component\lwip\lwip-2.0.2\src\include;..\..\..\component\lwip;..\..\..\component\lwip\ebox</IncludePath>
+              <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\ebox\core\mem;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\component\lwip\lwip-2.0.2\src\include;..\..\..\component\lwip;..\..\..\component\lwip\ebox;..\..\..\component\ddc;..\..\..\ebox\core\math</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1051,6 +1016,31 @@
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\main.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ddc</GroupName>
+          <Files>
+            <File>
+              <FileName>ddc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\component\ddc\ddc.c</FilePath>
+            </File>
+            <File>
+              <FileName>ddc_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\component\ddc\ddc_list.c</FilePath>
+            </File>
+            <File>
+              <FileName>ddc_port.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\ddc\ddc_port.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ddc_user.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\ddc\ddc_user.cpp</FilePath>
             </File>
           </Files>
         </Group>
