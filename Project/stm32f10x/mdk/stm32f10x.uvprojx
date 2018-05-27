@@ -750,17 +750,17 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>user</GroupName>
+          <GroupName>edriver</GroupName>
           <Files>
             <File>
-              <FileName>bsp.cpp</FileName>
+              <FileName>ads1118.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\user\bsp.cpp</FilePath>
+              <FilePath>..\..\..\component\edriver\ads1118.cpp</FilePath>
             </File>
             <File>
-              <FileName>main.cpp</FileName>
+              <FileName>w25x16.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\user\main.cpp</FilePath>
+              <FilePath>..\..\..\component\edriver\w25x16.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -846,6 +846,21 @@
               <FileName>porttimer.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\FreeModbus\port\porttimer.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>user</GroupName>
+          <Files>
+            <File>
+              <FileName>bsp.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\bsp.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>main.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\main.cpp</FilePath>
             </File>
           </Files>
         </Group>

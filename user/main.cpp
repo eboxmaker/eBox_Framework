@@ -16,7 +16,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 #include "freemodbus.h"
  #include "ebox_analog.h"
-
+#include "ads1118.h"
 #define LED1_ON   PB8.set()
 #define LED1_OFF  PB8.reset()
 
@@ -88,10 +88,12 @@ void setup()
 	PA4.mode(AIN);
 	PA5.mode(AIN);
 }
-
 int main(void)
 {
 	setup();
+
+    
+
 	while(1)
 	{		 	
         FreemodbusPoll();
