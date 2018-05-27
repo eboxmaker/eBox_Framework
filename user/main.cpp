@@ -1,89 +1,106 @@
-/*----------------------------------------------------------------------------
- * Name:    demo.c
- * Purpose: USB HID Demo
- * Version: V1.20
- *----------------------------------------------------------------------------
- * This file is part of the uVision/ARM development tools.
- * This software may only be used under the terms of a valid, current,
- * end user licence from KEIL for a compatible version of KEIL software
- * development tools. Nothing else gives you the right to use this software.
- *
- * This software is supplied "AS IS" without warranties of any kind.
- *
- * Copyright (c) 2008 Keil - An ARM Company. All rights reserved.
- *----------------------------------------------------------------------------*/
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
+
+Copyright 2015 shentq. All Rights Reserved.
+*/
+
+//STM32 RUN IN eBox
 
 
-#include <stdio.h>
-
+/*
+一个简单的命令帧接收示例
+*/
 #include "ebox.h"
+#include "freemodbus.h"
+ #include "ebox_analog.h"
 
-#include "ddc.h"
-#include "ddc_user.h"
-Timer timer(TIM2);
-extern callback_fun_type EP_evnent[3];
+#define LED1_ON   PB8.set()
+#define LED1_OFF  PB8.reset()
+
+#define LED2_ON   PB9.set()
+#define LED2_OFF  PB9.reset()
+
+#define  BUTTON1_READ()  PA8.read()
+ 
+u8 count;
+Timer timer4(TIM4);
+
+void FreeModbusIoConfig(void)
+{ 
+    modbus.uart=&uart1;
+	modbus.timer=&timer4;
+	modbus.Mode4851=&PB0;
+	modbus.Mode4852=&PB1;
+	
+	modbus.Mode=MB_RTU;
+	modbus.SlaveAdress=0x01;
+	modbus.PortId=0x01;
+	modbus.BaudRate=115200;
+	modbus.Pariby=MB_PAR_NONE;	
+  }
 
 
-
-
-uint8_t test_recv_data[5] = {0x01,0X01,0x05,0X06,0X07};
-
-void timer_event()
+void LED_Poll(void)
 {
-    static unsigned char n;
-    uint8_t buf[100];
-   
-    int len =0;
-    test_recv_data[1] = n++;
-//    PB9.toggle();
-
-    
-    len = ddc_make_frame(buf,test_recv_data,5,DDC_NoAck,0);
-    for(int i = 0; i < len; i++)
-        ddc_get_char(buf[i]);
-    len = ddc_make_frame(buf,test_recv_data,5,DDC_NoAck,1);
-    for(int i = 0; i < len; i++)
-        ddc_get_char(buf[i]);
-
+  uint8_t LED_Status;
+  LED_Status = ucRegCoilsBuf[0];
+  if(LED_Status & 0x01) {LED1_ON;} else {LED1_OFF;}
+  if(LED_Status & 0x02) {LED2_ON;} else {LED2_OFF;}
 }
 
-
-
-
-void test(uint8_t *ptr,uint16_t len)
+void Button_Poll(void)
 {
-    PB8.toggle();
-    uart1.printf("【value = %d】\r\n",ptr[1]);
+  
+  uint8_t Button_Status = 0x00;  
+  BUTTON1_READ()?(Button_Status &=~ 0x01):(Button_Status |= 0x01);
+ 
+  ucRegDiscreteBuf[0] = Button_Status;
+} 
+
+void Adc_Poll(void)
+{ 
+    usRegInputBuf[0]=analog_read(&PA0);
+	usRegInputBuf[1]=analog_read(&PA1);
+
+	usRegInputBuf[4]=analog_read(&PA4);
+	usRegInputBuf[5]=analog_read(&PA5);
+	
 }
-void test1(uint8_t *ptr,uint16_t len)
-{
-    PB9.toggle();
-    uart1.printf("【value = %d】\r\n",ptr[1]);
-}
-int main (void) 
-{
-    ebox_init();
 
+void setup()
+{
+	ebox_init();
+	
+	FreeModbusIoConfig();
+	FreemodbusConfig();
+	
     PB8.mode(OUTPUT_PP);
-    PB9.mode(OUTPUT_PP);
-//    
-	timer.begin(1);
-    timer.attach(timer_event);
-    timer.interrupt(ENABLE);
-    timer.start();
+    PB9.mode(OUTPUT_PP); 
     
-    uart1.begin(115200);
+    PA8.mode(INPUT);                                                                       
+		
+	PA0.mode(AIN);
+	PA1.mode(AIN);
 
-    //初始化通讯协议
-     ddc_init();
-    //绑定使用通道的回调函数
-    //用户不得使用255通道，因为255通道被内部的回复帧占用。
-     ddc_attach_chx(0,test);
-     ddc_attach_chx(1,test1);
+	PA4.mode(AIN);
+	PA5.mode(AIN);
+}
 
-    while (1)                                         /* Loop forever */
-	{
-        ddc_test();
-
+int main(void)
+{
+	setup();
+	while(1)
+	{		 	
+        FreemodbusPoll();
+        LED_Poll();
+        Button_Poll();
+        Adc_Poll();
 	}
 }
+
+
+
+

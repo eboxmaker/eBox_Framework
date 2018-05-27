@@ -47,7 +47,8 @@ static void prvvTIMERExpiredISR( void );
 BOOL
 xMBPortTimersInit( USHORT usTim1Timerout50us )
 {
-	modbus.timer->begin(100); 
+    uint16_t frq = 20000/usTim1Timerout50us;
+	modbus.timer->begin(frq); 
 	modbus.timer->interrupt(ENABLE);
 	modbus.timer->attach(t4it);
 	modbus.timer->start();

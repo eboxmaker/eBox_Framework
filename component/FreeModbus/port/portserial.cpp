@@ -44,32 +44,40 @@ uint8_t RxEnaleBit=1;
 void
 vMBPortSerialEnable( BOOL xRxEnable, BOOL xTxEnable )
 {
-  if(xRxEnable)
-  {
-    //使能接收和接收中断
-    //MAX485操作 低电平为接收模式
-		RxEnaleBit=1;
-		modbus.Mode4851->write(0);
-		modbus.Mode4852->write(0);
-  }
-  else
-  {
-    //MAX485操作 高电平为发送模式
-		RxEnaleBit=0;
-		modbus.Mode4851->write(1);
-		modbus.Mode4852->write(1);
-  }
+    if(xRxEnable)
+    {
+        //使能接收和接收中断
+        //MAX485操作 低电平为接收模式
+        RxEnaleBit=1;
+        modbus.Mode4851->write(0);
+        modbus.Mode4852->write(0);
+        modbus.uart->interrupt(RxIrq,ENABLE);
+    }
+    else
+    {
+        //MAX485操作 高电平为发送模式
+        RxEnaleBit=0;
+        modbus.Mode4851->write(1);
+        modbus.Mode4852->write(1);
+        modbus.uart->interrupt(RxIrq,DISABLE);
+    }
 
-  if(xTxEnable)
-  {
-    //使能发送完成中断
-		TxEnaleBit=1;
-  }
-  else
-  {
-    //禁止发送完成中断
-		TxEnaleBit=0;
-  }
+    if(xTxEnable)
+    {
+        //使能发送完成中断
+        modbus.Mode4851->write(1);
+        modbus.Mode4852->write(1);
+        TxEnaleBit=1;
+        modbus.uart->interrupt(TcIrq,ENABLE);
+    }
+    else
+    {
+        //禁止发送完成中断
+        TxEnaleBit=0;
+        modbus.Mode4851->write(0);
+        modbus.Mode4852->write(0);
+        modbus.uart->interrupt(TcIrq,DISABLE);
+    }
   
 }
 
@@ -90,6 +98,9 @@ xMBPortSerialInit( UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits, eMBParity e
 	modbus.uart->begin(ulBaudRate); 		
 	modbus.uart->attach(USART_RXIRQ,RxIrq);
 	modbus.uart->attach(USART_TXIRQ,TcIrq);
+    //modbus.uart->interrupt(TcIrq,ENABLE);
+    modbus.uart->interrupt(RxIrq,ENABLE);
+
 	//最后配置485发送和接收模式
 	modbus.Mode4851->mode(OUTPUT_PP);
 	modbus.Mode4852->mode(OUTPUT_PP);
@@ -159,16 +170,16 @@ u8 flag_rx = 0;
 void USART_RXIRQ(void)
 {
 	
-  //发生接收中断
-	if(RxEnaleBit)
-	 prvvUARTRxISR();	
-  }
+    //发生接收中断
+    if(RxEnaleBit)
+        prvvUARTRxISR();	
+}
 	
 void USART_TXIRQ(void)
 {
 	  //发生发送中断
-	if(TxEnaleBit)
-   prvvUARTTxReadyISR();
-  }
+    if(TxEnaleBit)
+        prvvUARTTxReadyISR();
+}
  
 
