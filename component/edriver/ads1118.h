@@ -69,11 +69,13 @@ class Ads1118
          AdsConfig_t cfg;
     public:
         Ads1118(Gpio *cs,Spi *spi);
-        void begin(uint8_t dev_num);
-        uint16_t read(uint8_t ch);
-        uint16_t set_cfg(AdsConfig_t *cfg);
-        void read_temperature();
-        void set_gain();
+        void        begin(uint8_t dev_num);
+        bool        self_test();
+        uint16_t    read(uint8_t ch);
+        AdsConfig_t update_cfg(AdsConfig_t *cfg);
+        void        read_temperature();
+        float       read_voltage(uint8_t ch);
+        void        set_gain();
     
     private:
         Gpio    *cs;
