@@ -28,6 +28,8 @@ Copyright 2015 shentq. All Rights Reserved.
 u8 count;
 Timer timer4(TIM4);
 
+Ads1118 adc(&PB12,&spi2);
+
 void FreeModbusIoConfig(void)
 { 
     modbus.uart=&uart1;
@@ -73,20 +75,24 @@ void Adc_Poll(void)
 void setup()
 {
 	ebox_init();
-	
-	FreeModbusIoConfig();
-	FreemodbusConfig();
-	
-    PB8.mode(OUTPUT_PP);
-    PB9.mode(OUTPUT_PP); 
-    
-    PA8.mode(INPUT);                                                                       
-		
-	PA0.mode(AIN);
-	PA1.mode(AIN);
+//	FreeModbusIoConfig();
+//	FreemodbusConfig();
+//	
+//    PB8.mode(OUTPUT_PP);
+//    PB9.mode(OUTPUT_PP); 
+//    
+//    PA8.mode(INPUT);                                                                       
+//		
+//	PA0.mode(AIN);
+//	PA1.mode(AIN);
 
-	PA4.mode(AIN);
-	PA5.mode(AIN);
+//	PA4.mode(AIN);
+//	PA5.mode(AIN);
+    uart1.begin(115200);
+    PA5.mode(OUTPUT_PP);
+	adc.begin(1);
+    uart1.printf("test:%d\r\n",adc.self_test());
+
 }
 int main(void)
 {
@@ -96,10 +102,15 @@ int main(void)
 
 	while(1)
 	{		 	
-        FreemodbusPoll();
-        LED_Poll();
-        Button_Poll();
-        Adc_Poll();
+//        FreemodbusPoll();
+//        LED_Poll();
+//        Button_Poll();
+//        Adc_Poll();
+        PA5.toggle();
+        uart1.printf("A0:%d\r\n",adc.read(AIN0));
+        uart1.printf("A1:%d\r\n",adc.read(AIN1));
+
+      //  delay_ms(500);
 	}
 }
 

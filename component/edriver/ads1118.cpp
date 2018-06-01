@@ -8,23 +8,32 @@ Ads1118::Ads1118(Gpio *cs,Spi *spi)
     {
         miso = &PA6;
     }
+    else if(spi == &spi2)
+    {
+        miso = &PB14;
+    }
+    cfg.value = 0x0;
+
     cfg.bit.ss = 0;
-    cfg.bit.mux = AIN0;
-    cfg.bit.pga = PGA6144;
+    cfg.bit.mux = AIN1;
+    cfg.bit.pga = PGA4096;
     cfg.bit.mode = MODE_CONTINU;
     
-    cfg.bit.dr = DR_128;
+    cfg.bit.dr = DR_860;
     cfg.bit.ts_mode = TS_MODE_ADC;
     cfg.bit.pu_en = PU_EN;
     
     cfg.bit.nop = NOP_A;
-    cfg.bit.reserv = 0;
+    cfg.bit.reserv = 1;
+
+
+
 }
 void Ads1118::begin(uint8_t dev_num)
 {
     AdsConfig_t temp_cfg;
     config.dev_num = dev_num;
-    config.mode = SPI_MODE0;
+    config.mode = SPI_MODE1;
     config.prescaler = SPI_CLOCK_DIV4;
     config.bit_order = MSB_FIRST;
 
@@ -43,13 +52,14 @@ bool Ads1118::self_test()
     AdsConfig_t temp_cfg = cfg;
     if(update_cfg(&temp_cfg).value == temp_cfg.value)
     {
-        return true;
+        return 1;
     }
     else
-        return false;
+        return 0;
 }
 uint16_t Ads1118::read(uint8_t ch)
 {
+    uint32_t last = millis();
     uint16_t value;
     //更新配置
     if(cfg.bit.mux != ch)
@@ -61,8 +71,11 @@ uint16_t Ads1118::read(uint8_t ch)
     //读取相应通道值
     spi->take_spi_right(&config);
     cs->reset();
-    while(miso->read() == 1);
-    //delay_us(1);
+    while(miso->read() == 1)
+    {   
+        if(millis() - last > 10)
+            break;
+    }
     value |= spi->read() << 8;
     value |= spi->read();
     cs->set();
@@ -72,16 +85,21 @@ uint16_t Ads1118::read(uint8_t ch)
 AdsConfig_t Ads1118::update_cfg(AdsConfig_t *cfg)
 {
     
+    uint32_t last = millis();
     AdsConfig_t temp;
     spi->take_spi_right(&config);
     cs->reset();
-    while(miso->read() == 1);
-    //delay_us(1);
+        delay_us(1);
+
+    while(miso->read() == 1)
+    {   
+        if(millis() - last > 10)
+            break;
+    }
     spi->write(cfg->byte[0]);
     spi->write(cfg->byte[1]);
     temp.byte[0] = spi->read();
     temp.byte[1] = spi->read();
-    
     cs->set();
     spi->release_spi_right();
     return temp;
