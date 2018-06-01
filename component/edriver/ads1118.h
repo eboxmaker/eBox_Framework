@@ -61,6 +61,7 @@ typedef union
 #define PU_EN       1
 
 #define NOP_A   1
+#define NOP_D   0
 
 
 class Ads1118
