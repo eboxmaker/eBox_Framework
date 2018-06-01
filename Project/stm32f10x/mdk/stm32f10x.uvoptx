@@ -213,54 +213,6 @@
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>9</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134233450</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\component\edriver\ads1118.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../component/edriver/ads1118.cpp\9</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>13</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134233462</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\component\edriver\ads1118.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../component/edriver/ads1118.cpp\13</Expression>
-        </Bp>
-        <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>7</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134233444</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\component\edriver\ads1118.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../component/edriver/ads1118.cpp\7</Expression>
-        </Bp>
-        <Bp>
-          <Number>5</Number>
-          <Type>0</Type>
           <LineNumber>109</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>

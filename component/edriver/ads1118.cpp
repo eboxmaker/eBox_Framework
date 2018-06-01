@@ -16,7 +16,7 @@ Ads1118::Ads1118(Gpio *cs,Spi *spi)
 
     cfg.bit.ss = 0;
     cfg.bit.mux = AIN1;
-    cfg.bit.pga = PGA4096;
+    cfg.bit.pga = PGA6144;
     cfg.bit.mode = MODE_CONTINU;
     
     cfg.bit.dr = DR_860;
@@ -34,7 +34,7 @@ void Ads1118::begin(uint8_t dev_num)
     AdsConfig_t temp_cfg;
     config.dev_num = dev_num;
     config.mode = SPI_MODE1;
-    config.prescaler = SPI_CLOCK_DIV4;
+    config.prescaler = SPI_CLOCK_DIV2;
     config.bit_order = MSB_FIRST;
 
     spi->begin(&config);

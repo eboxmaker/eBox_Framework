@@ -107,10 +107,11 @@ int main(void)
 //        Button_Poll();
 //        Adc_Poll();
         PA5.toggle();
-        uart1.printf("A0:%d\r\n",adc.read(AIN0));
-        uart1.printf("A1:%d\r\n",adc.read(AIN1));
+        uart1.printf("===========ADC test==============\r\n");
+        uart1.printf("A0-1(hex    ):%d\t%d\r\n",adc.read(AIN0),adc.read(AIN1));
+        uart1.printf("A0-1(voltage):%f\t%f\r\n",adc.read_voltage(AIN0),adc.read_voltage(AIN1));
 
-      //  delay_ms(500);
+        delay_ms(500);
 	}
 }
 
