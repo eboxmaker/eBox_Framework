@@ -17,35 +17,34 @@
   */
 
 #include "ebox.h"
+#include "mcu.h"
 
 unsigned char ch;
 uint8_t len;
-
+uint32_t last;
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
+    uart1.begin(115200,0);
 }
 
 int main(void)
 {
     setup();
-    uint32_t last = millis();
     while(1)
     {
-        if(millis() - last > 1000)
-        {
-            ebox_printf("uart test\r\n");
-            last = millis();
-        }
-//        uart1.printf("hello World !\r\n");
-//        delay_ms(1000);
+//        if(millis() - last > 1000)
+//        {
+//            ebox_printf("uart test\r\n");
+//            last = millis();
+//        }
         
-        
-        len = ebox_fifo_get(uart_fifo_ptr,&ch,1);
-        if(len == 1)
+//        
+//        len = ebox_fifo_get(uart_fifo_ptr,&ch,1);
+//        if(len == 1)
         {
-            uart1.write(ch);
+            uart1.printf("123\r\n");
+            mcu_delay_ms(1000);
         }
 
     }

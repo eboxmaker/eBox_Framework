@@ -17,7 +17,7 @@
     extern int __bss_end;
 #endif
 
-#define STM32_SRAM_SIZE         20
+#define STM32_SRAM_SIZE         50
 #define STM32_SRAM_END          (0x20000000 + STM32_SRAM_SIZE * 1024)
 
 #if defined (STM32_EX_SRAM)
