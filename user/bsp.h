@@ -20,23 +20,9 @@
 #ifndef __BSP_H
 #define __BSP_H
 #include "ebox.h"
-#include "button.h"
-#include "w5500.h"
-#include "led.h"
-#include "mmc_sd.h"
-#include "lcd_1.8.h"
-#include "w25x16.h"
-#include "at24c02.h"
 
 
-extern Led      led1;
-extern Led      led2;
-extern Button   btn;
-extern W5500    w5500;
-extern SD       sd;
-//extern Lcd      lcd;
-extern W25x16   flash;
-extern At24c02  eeprom;
+
 
 
 

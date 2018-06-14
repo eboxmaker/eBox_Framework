@@ -7,9 +7,12 @@ extern "C" {
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "../core/stdFun/fifo.h"
+#include "fifo.h"
 
 extern struct ebox_fifo *uart_fifo_ptr;
+
+void ebox_printf_init(void);
+
 void ebox_printf(const char *fmt, ...);
     
 #ifdef __cplusplus

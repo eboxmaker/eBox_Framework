@@ -57,6 +57,7 @@ class Gpio
     public:
     Gpio(){};
     virtual void mode(PIN_MODE mode) = 0;
+    virtual void mode(PIN_MODE mode,uint8_t af_configration) = 0;
     virtual void set() = 0;
     virtual void reset() = 0;
     virtual void write(uint8_t val) = 0;

@@ -18,7 +18,6 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f10x.h"
 #include "ebox_analog.h"
 #include "mcu.h"
 #define systick_no_interrupt()  SysTick->CTRL &=0xfffffffd
