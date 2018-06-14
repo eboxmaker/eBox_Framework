@@ -1,6 +1,6 @@
 //#include "ebox_common.h"
 #include "mcu.h"
-
+#include "ebox_core.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,32 +11,59 @@ extern "C" {
 cpu_t mcu;
 __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
  static void get_system_clock(cpu_clock_t *clock);
+    __IO uint16_t micro_para;
 
 void mcu_init(void)
 {
-    get_system_clock(&mcu.clock);
-    SysTick_Config(mcu.clock.core/1000);//  每隔 (nhz/168,000,000)s产生一次中断
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-   // ADC1_init();
+        get_system_clock(&mcu.clock);
+        SysTick_Config(mcu.clock.core/1000);//  每隔 (nhz/168,000,000)s产生一次中断
+        #ifdef __CC_ARM
+            ebox_heap_init((void*)STM32_SRAM_BEGIN, (void*)STM32_SRAM_END);
+        #elif __ICCARM__
+            rt_system_heap_init(__segment_end("HEAP"), (void*)STM32_SRAM_END);
+        #else
+            rt_system_heap_init((void*)&__bss_end, (void*)STM32_SRAM_END);
+        #endif
+        micro_para = mcu.clock.core/1000000;//减少micros函数计算量
+        mcu.ability = 0;
+        millis_seconds = 0;
+        //统计cpu计算能力//////////////////
+        do
+        {
+            mcu.ability++;//统计cpu计算能力 
+        }
+        while(millis_seconds < 100);
+        mcu.ability = mcu.ability * 10;
+        ////////////////////////////////
+        NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
+
+
 }
 uint64_t mcu_micros(void)
 {
-    if((SysTick->CTRL & (1 << 16)) && (__get_PRIMASK())) //如果此时屏蔽了所有中断且发生了systick溢出，需要对millis_secend进行补偿
-    {
-        millis_seconds++;
-    }
-    return  millis_seconds * 1000 + (1000 - SysTick->VAL / 168);
+        uint64_t micro;
+        uint32_t temp = __get_PRIMASK();//保存之前中断设置
+        no_interrupts();
+        if(SysTick->CTRL & (1 << 16))//发生了溢出
+        {    
+            if( __get_IPSR() ||  (temp) ) //如果此时屏蔽了所有中断或者被别的中断打断无法执行，systick中断函数，则需要对millis_secend进行补偿
+            millis_seconds++;
+        }
+        micro = (millis_seconds * 1000 + (1000 - (SysTick->VAL)/(micro_para)));
+        __set_PRIMASK(temp);//恢复之前中断设置
+        
+        return  micro;
 }
 uint64_t mcu_millis( void )
 {
-    return mcu_micros() / 1000;
+    return millis_seconds;
 }
 
 void mcu_delay_ms(uint64_t ms)
 {
     uint64_t end ;
-    end = mcu_micros() + ms * 1000;
-    while(mcu_micros() < end);
+    end = millis_seconds + ms ;
+    while(millis_seconds < end);
 }
 void mcu_delay_us(uint64_t us)
 {
@@ -83,7 +110,6 @@ void SysTick_Handler(void)//systick中断
             systick_cb_table[0]();
         }
     }
-
 }
 #ifdef __cplusplus
 }
