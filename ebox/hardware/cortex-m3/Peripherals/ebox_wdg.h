@@ -21,6 +21,7 @@
 #ifndef __WDG_H
 #define __WDG_H
 #include "ebox_core.h"
+#include "mcu.h"
 
 /**
  * 初始化独立看门狗

@@ -19,6 +19,7 @@
 #define __EBOX_ENCODER_H
 
 #include "ebox_core.h"
+#include "mcu.h"
 
 
 class Encoder

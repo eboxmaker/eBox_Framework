@@ -1,6 +1,16 @@
 #include "ebox_core.h"
 
 
+void        (*_ebox_init)(void);
+void        (*ebox_reset)();
+uint64_t    (*micros)();
+uint64_t    (*millis)();
+void        (*delay_ms)(uint64_t ms);
+void        (*delay_us)(uint64_t ms);
+
+
+cpu_t cpu;
+
 
 /** @defgroup commonº¯Êý
   * @{

@@ -3,6 +3,7 @@
 
 
 #include "ebox_core.h"
+#include "mcu.h"
 
 typedef struct
 {

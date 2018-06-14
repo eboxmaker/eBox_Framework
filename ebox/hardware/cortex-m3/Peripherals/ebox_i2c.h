@@ -22,6 +22,8 @@
 #define __I2C_H
 
 #include "ebox_core.h"
+#include "mcu.h"
+
 /*
 	1.支持I2C1和I2C2
 	2.暂时不支持remap，后续很快会完成

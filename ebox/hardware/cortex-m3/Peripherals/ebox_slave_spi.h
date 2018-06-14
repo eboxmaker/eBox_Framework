@@ -2,7 +2,6 @@
 #define __EBOX_SLAVE_SPI_H
 
 #include "ebox_core.h"
-#include "ringbuf.h"
 #include "FunctionPointer.h"
 
 #include "dma.h"

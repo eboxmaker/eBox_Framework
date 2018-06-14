@@ -28,6 +28,7 @@
 #ifndef __IN_CAPTURE_H
 #define __IN_CAPTURE_H
 #include "ebox_core.h"
+#include "mcu.h"
 #include "FunctionPointer.h"
 
 #define TIM_ICPOLARITY_FALLING TIM_ICPolarity_Falling
