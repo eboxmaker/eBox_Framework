@@ -28,8 +28,8 @@
 #ifndef __EBOX_CORE_H
 #define __EBOX_CORE_H
 
+
 #include "mcu_config.h"    
-#include "ebox_printf.h"
 
 #include "../core/ebox_type.h"
 #include "../core/stdFun/new.h"
@@ -43,6 +43,7 @@
 #include "../core/stdFun/random.h"
 #include "../core/stdFun/crc.h"
 #include "../core/stdFun/ebox_mem.h"
+#include "../core/stdFun/ebox_printf.h"
 
 
 #include "math.h"

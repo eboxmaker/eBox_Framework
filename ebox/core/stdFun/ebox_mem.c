@@ -126,7 +126,7 @@ void *ebox_malloc( size_t xWantedSize )
     }
     if(pvReturn == NULL)
     {
-        ebox_printf("bad mem malloc!!!\r\n");
+       // ebox_printf("bad mem malloc!!!\r\n");
     }
     
 	return pvReturn;
@@ -261,13 +261,13 @@ uint16_t ebox_free_block_print(void)
 {
     eboxBlockLink_t *p;
     int i = 0;
-    ebox_printf("----start----\r\n");
+    //ebox_printf("----start----\r\n");
     for(p = (eboxBlockLink_t *)( &(heap[0]) ); p != NULL; p = ( p->nextFreeBlock))
     {
-        ebox_printf("free block %d: ",i++);
-        ebox_printf("0X%X\t|%x\t|\r\n",p,p->blockSize);
+       // ebox_printf("free block %d: ",i++);
+       // ebox_printf("0X%X\t|%x\t|\r\n",p,p->blockSize);
     }
-    ebox_printf("----end-----\r\n");
+   // ebox_printf("----end-----\r\n");
     return 0;
 }
 

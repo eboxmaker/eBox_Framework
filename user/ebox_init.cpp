@@ -10,8 +10,9 @@ void ebox_init()
     micros      = mcu_micros;
     millis      = mcu_millis;
     
-    
     _ebox_init();
+    ebox_printf_init();
     
     cpu = mcu;
 }
+

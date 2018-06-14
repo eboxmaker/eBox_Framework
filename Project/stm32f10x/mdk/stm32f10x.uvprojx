@@ -582,6 +582,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\ebox\core\stdFun\ebox_mem.c</FilePath>
             </File>
+            <File>
+              <FileName>ebox_printf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\stdFun\ebox_printf.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -591,11 +596,6 @@
               <FileName>ebox_core.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\ebox_core.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_printf.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\ebox_printf.cpp</FilePath>
             </File>
           </Files>
         </Group>
