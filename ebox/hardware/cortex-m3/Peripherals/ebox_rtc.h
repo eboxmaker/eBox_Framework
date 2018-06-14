@@ -21,6 +21,7 @@
 #ifndef __RTC_H
 #define __RTC_H
 #include "ebox_core.h"
+#include "mcu.h"
 #include "FunctionPointer.h"
 
 enum Rtc_IrqType {

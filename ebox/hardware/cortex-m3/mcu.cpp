@@ -18,13 +18,14 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "ebox_core.h"
+#include "stm32f10x.h"
 #include "ebox_analog.h"
+#include "mcu.h"
 #define systick_no_interrupt()  SysTick->CTRL &=0xfffffffd
 #define systick_interrupt()     SysTick->CTRL |=0x0002
 extern "C" {
 
-    cpu_t cpu;
+    cpu_t mcu;
 
     extern uint16_t  AD_value[];
 
@@ -32,13 +33,13 @@ extern "C" {
     __IO uint16_t micro_para;
 
 
-    void ebox_init(void)
+    void mcu_init(void)
     {
-        get_system_clock(&cpu.clock);
+        get_system_clock(&mcu.clock);
         get_chip_info();
-        cpu.company[0] = 'S';
-        cpu.company[1] = 'T';
-        cpu.company[2] = '\0';
+        mcu.company[0] = 'S';
+        mcu.company[1] = 'T';
+        mcu.company[2] = '\0';
 
         
         #ifdef __CC_ARM
@@ -49,20 +50,20 @@ extern "C" {
             rt_system_heap_init((void*)&__bss_end, (void*)STM32_SRAM_END);
         #endif
 
-        SysTick_Config(cpu.clock.core/1000);//  每隔 1ms产生一次中断
+        SysTick_Config(mcu.clock.core/1000);//  每隔 1ms产生一次中断
         SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);//systemticks clock；
-        micro_para = cpu.clock.core/1000000;//减少micros函数计算量
+        micro_para = mcu.clock.core/1000000;//减少micros函数计算量
         
         
-        cpu.ability = 0;
+        mcu.ability = 0;
         millis_seconds = 0;
         //统计cpu计算能力//////////////////
         do
         {
-            cpu.ability++;//统计cpu计算能力 
+            mcu.ability++;//统计cpu计算能力 
         }
         while(millis_seconds < 100);
-        cpu.ability = cpu.ability * 10;
+        mcu.ability = mcu.ability * 10;
         ////////////////////////////////
         ADC1_init();
 
@@ -75,12 +76,12 @@ extern "C" {
         random_seed(AD_value[0]);//初始化随机数种子
 
     }
-    void ebox_reset(void)
+    void mcu_reset(void)
     {
         NVIC_SystemReset();
     }
     
-    uint64_t micros(void)
+    uint64_t mcu_micros(void)
     {
         uint64_t micro;
         uint32_t temp = __get_PRIMASK();//保存之前中断设置
@@ -95,21 +96,21 @@ extern "C" {
         
         return  micro;
     }
-    uint64_t millis( void )
+    uint64_t mcu_millis( void )
     {
         return millis_seconds;
     }
 
-    void delay_ms(uint64_t ms)
+    void mcu_delay_ms(uint64_t ms)
     {
         uint64_t end ;
-        end = micros() + ms * 1000 - 3;
-        while(micros() < end);
+        end = mcu_micros() + ms * 1000 - 3;
+        while(mcu_micros() < end);
     }
-    void delay_us(uint64_t us)
+    void mcu_delay_us(uint64_t us)
     {
-        uint64_t end = micros() + us - 3;
-        while(micros() < end);
+        uint64_t end = mcu_micros() + us - 3;
+        while(mcu_micros() < end);
     }
 
 
@@ -155,16 +156,16 @@ extern "C" {
     
     static void get_chip_info()
     {
-        cpu.chip_id[2] = *(__IO uint32_t *)(0X1FFFF7E8); //低字节
-        cpu.chip_id[1] = *(__IO uint32_t *)(0X1FFFF7EC); //
-        cpu.chip_id[0] = *(__IO uint32_t *)(0X1FFFF7F0); //高字节
+        mcu.chip_id[2] = *(__IO uint32_t *)(0X1FFFF7E8); //低字节
+        mcu.chip_id[1] = *(__IO uint32_t *)(0X1FFFF7EC); //
+        mcu.chip_id[0] = *(__IO uint32_t *)(0X1FFFF7F0); //高字节
 
-        cpu.flash_size = *(uint16_t *)(0x1FFFF7E0);   //芯片flash容量
+        mcu.flash_size = *(uint16_t *)(0x1FFFF7E0);   //芯片flash容量
     }
     
     uint32_t get_cpu_calculate_per_sec(void)
     {
-        return cpu.ability;
+        return mcu.ability;
     }
 
 

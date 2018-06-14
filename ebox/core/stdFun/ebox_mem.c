@@ -72,7 +72,7 @@ void *ebox_malloc( size_t xWantedSize )
     
     if(end_block[0] == NULL)
     {
-        ebox_heap_init(STM32_SRAM_BEGIN,(void *)STM32_SRAM_END);
+        //ebox_heap_init(STM32_SRAM_BEGIN,(void *)STM32_SRAM_END);
     }
         
         
@@ -172,7 +172,7 @@ void ebox_free( void *pv )
 	}
 
 }
-size_t ebox_get_free(  )
+size_t ebox_get_free(void)
 {
     return FreeBytesRemaining;
 }
@@ -244,20 +244,22 @@ static void insert_block_into_freeList( eboxBlockLink_t *pxBlockToInsert)
 
     
 }
-size_t ebox_get_sram_start_addr()
+size_t ebox_get_sram_start_addr(void)
 {
-    return (size_t)MEM_ALIGN((uint32_t)STM32_SRAM_BEGIN);
+  //  return (size_t)MEM_ALIGN((uint32_t)STM32_SRAM_BEGIN);
+    return 0;
 }
 
-size_t ebox_get_sram_end_addr()
+size_t ebox_get_sram_end_addr(void)
 {
-    return (size_t)MEM_ALIGN((uint32_t)STM32_SRAM_END);
+//    return (size_t)MEM_ALIGN((uint32_t)STM32_SRAM_END);
+    return 0;
+
 }
 
-uint16_t ebox_free_block_print()
+uint16_t ebox_free_block_print(void)
 {
     eboxBlockLink_t *p;
-    uint32_t temp;
     int i = 0;
     ebox_printf("----start----\r\n");
     for(p = (eboxBlockLink_t *)( &(heap[0]) ); p != NULL; p = ( p->nextFreeBlock))
@@ -266,7 +268,7 @@ uint16_t ebox_free_block_print()
         ebox_printf("0X%X\t|%x\t|\r\n",p,p->blockSize);
     }
     ebox_printf("----end-----\r\n");
-
+    return 0;
 }
 
 

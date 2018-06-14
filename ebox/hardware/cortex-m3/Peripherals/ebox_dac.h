@@ -21,6 +21,8 @@
 #ifndef __DAC_H
 #define __DAC_H
 #include "ebox_core.h"
+#include "mcu.h"
+
 class DACCLASS
 {
 

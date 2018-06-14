@@ -5,7 +5,6 @@ extern "C"{
 #endif // __cplusplus
 
 #include "ebox_type.h"
-#include "mcu_config.h"
 #include "stdio.h"
     
 typedef struct EBOX_BLOCK_LINK
@@ -17,10 +16,10 @@ typedef struct EBOX_BLOCK_LINK
 void    ebox_heap_init(void *begin_addr, void *end_addr);
 void    *ebox_malloc( size_t xWantedSize );
 void    ebox_free( void *ptr );
-size_t  ebox_get_free();
-size_t  ebox_get_sram_start_addr();
-size_t  ebox_get_sram_end_addr();
-uint16_t ebox_free_block_print();
+size_t  ebox_get_free(void);
+size_t  ebox_get_sram_start_addr(void);
+size_t  ebox_get_sram_end_addr(void);
+uint16_t ebox_free_block_print(void);
 
     
 int ebox_memcmp(const void * cs,const void * ct, size_t count);

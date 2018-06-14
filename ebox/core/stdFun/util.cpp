@@ -317,3 +317,14 @@ void quick_sort(float arr[], int low, int high) {
 	quick_sort(arr, low, mid-1);
 	quick_sort(arr, mid+1, high);
 }
+
+
+
+
+
+
+
+
+
+
+

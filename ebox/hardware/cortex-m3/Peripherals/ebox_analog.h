@@ -20,6 +20,7 @@
 #ifndef __ANALOG_H
 #define __ANALOG_H
 #include "ebox_core.h"
+#include "mcu.h"
 
 void        ADC1_init(void);
 

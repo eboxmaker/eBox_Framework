@@ -2,7 +2,7 @@
 #define __MCU_CONFIG_H
 
 
-#include "stm32f10x.h"
+#include "stdint.h"
 
 
 #define MCU_PIN_NUM 48 //48, 64, 100, 144

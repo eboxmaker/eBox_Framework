@@ -22,6 +22,7 @@
 #define __UARTX_H
 
 #include "ebox_core.h"
+#include "mcu.h"
 #include "FunctionPointer.h"
 #include "nvic.h"
 #include "dma.h"

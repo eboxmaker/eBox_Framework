@@ -17,7 +17,7 @@
 */
 
 #include <stdlib.h>
-#include "../core/mem/ebox_mem.h"
+#include "ebox_mem.h"
 
 void *operator new(size_t size) {
   return ebox_malloc(size);

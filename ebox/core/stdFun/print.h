@@ -25,7 +25,6 @@
 
 #include "WString.h"
 #include "Printable.h"
-
 #include "ebox_mem.h"
 
 #define DEC 10

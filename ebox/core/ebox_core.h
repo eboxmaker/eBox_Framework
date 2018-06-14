@@ -31,19 +31,20 @@
 #include "mcu_config.h"    
 #include "ebox_printf.h"
 
-
 #include "../core/ebox_type.h"
-#include "../core/new.h"
-#include "../core/print.h"
-#include "../core/binary.h"
-#include "../core/mem/ebox_mem.h"
-#include "../core/math/random.h"
-#include "../core/math/crc.h"
-#include "../core/math/math_misc.h"
-#include "../core/ringbuf.h"
-#include "../core/list.h"
-#include "../core/util.h"
-#include "../core/big_little.h"
+#include "../core/stdFun/new.h"
+#include "../core/stdFun/print.h"
+#include "../core/stdFun/binary.h"
+#include "../core/stdFun/math_misc.h"
+#include "../core/stdFun/ringbuf.h"
+#include "../core/stdFun/list.h"
+#include "../core/stdFun/util.h"
+#include "../core/stdFun/big_little.h"
+#include "../core/stdFun/random.h"
+#include "../core/stdFun/crc.h"
+#include "../core/stdFun/ebox_mem.h"
+
+
 #include "math.h"
 
 
@@ -54,6 +55,21 @@
 
 #define EBOX_VERSION "2.1"
 
+
+
+extern void        (*_ebox_init)(void);
+extern void        (*ebox_reset)();
+extern uint64_t    (*micros)();
+extern uint64_t    (*millis)();
+extern void        (*delay_ms)(uint64_t ms);
+extern void        (*delay_us)(uint64_t ms);
+
+
+extern void         get_sys_clock(cpu_t *info);
+float               sys_version();
+
+
+extern cpu_t cpu;
 
 /////////////////////////////////////////
 

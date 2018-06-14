@@ -45,6 +45,8 @@
 #include "stdio.h"
 
 
+void ebox_init();
+
 ////////系统debug支持////////////////////////////////////////////////////////////////
 #define EBOX_DEBUG 1
 #if EBOX_DEBUG

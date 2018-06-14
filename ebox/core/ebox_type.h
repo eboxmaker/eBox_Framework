@@ -1,7 +1,7 @@
 #ifndef __EBOX_TYPE_H
 #define __EBOX_TYPE_H
 
-#include "stm32f10x.h"
+#include "stdint.h"
 
 #define true 0x1
 #define false 0x0
@@ -30,6 +30,25 @@
 #define E2LONG      5
 #define EOTHER      128
 
+
+typedef struct
+{
+    uint32_t pll_vco;
+    uint32_t core;
+    uint32_t hclk;
+    uint32_t pclk2;
+    uint32_t pclk1;
+}cpu_clock_t;  
+
+typedef struct
+{
+	uint32_t    ability;//cpu calculate plus per second;
+	cpu_clock_t	clock;
+	uint32_t    chip_id[3];
+    uint16_t    flash_size;
+    char        company[8];
+}cpu_t;
+
 typedef union
 {
     uint8_t byte[2];
@@ -53,6 +72,7 @@ typedef union
     uint8_t byte[4];
     int32_t value;
 }Data32_t; 
+
 
 typedef struct
 {
