@@ -44,8 +44,11 @@
 
 #include "stdio.h"
 
-
-void ebox_init();
+extern "C"{
+    
+void ebox_init(void);
+void ebox_printf_flush(void);
+}
 
 //////////系统debug支持////////////////////////////////////////////////////////////////
 //#define EBOX_DEBUG 1

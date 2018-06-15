@@ -1,6 +1,7 @@
 #ifndef __EBOX_DAC_H
 #define __EBOX_DAC_H
-#include "ebox_common.h"
+#include "ebox_core.h"
+#include "mcu.h"
 
 #define DAC1  0
 #define DAC2  1

@@ -1,7 +1,8 @@
 #include "ebox_mem.h"
+#include "ebox_printf.h"
 
 
-
+static uint32_t ram_addr_begin,ram_addr_end;
 
 
 #define BYTE_ALIGNMENT          (8)                 //×Ö½Ú¶ÔÆë
@@ -61,6 +62,8 @@ void ebox_heap_init(void *begin_addr, void *end_addr)
 
 	BlockAllocatedBit = ( ( size_t ) 1 ) << ( ( sizeof( size_t ) * 8 ) - 1 );
 
+    ram_addr_begin = (uint32_t)begin_addr;
+    ram_addr_end = (uint32_t)end_addr;
 }
 void *ebox_malloc( size_t xWantedSize )
 {
@@ -70,10 +73,10 @@ void *ebox_malloc( size_t xWantedSize )
 
     __disable_irq();
     
-    if(end_block[0] == NULL)
-    {
-        //ebox_heap_init(STM32_SRAM_BEGIN,(void *)STM32_SRAM_END);
-    }
+//    if(end_block[0] == NULL)
+//    {
+//        //ebox_heap_init(STM32_SRAM_BEGIN,(void *)STM32_SRAM_END);
+//    }
         
         
 
@@ -126,7 +129,7 @@ void *ebox_malloc( size_t xWantedSize )
     }
     if(pvReturn == NULL)
     {
-       // ebox_printf("bad mem malloc!!!\r\n");
+        ebox_printf("bad mem malloc!!!\r\n");
     }
     
 	return pvReturn;
@@ -244,16 +247,18 @@ static void insert_block_into_freeList( eboxBlockLink_t *pxBlockToInsert)
 
     
 }
+float ebox_mem_usage()
+{
+    return (100 - ebox_get_free() * 100.0 / (ram_addr_end - ram_addr_begin));
+}
 size_t ebox_get_sram_start_addr(void)
 {
-  //  return (size_t)MEM_ALIGN((uint32_t)STM32_SRAM_BEGIN);
-    return 0;
+    return (size_t)MEM_ALIGN((uint32_t)ram_addr_begin);
 }
 
 size_t ebox_get_sram_end_addr(void)
 {
-//    return (size_t)MEM_ALIGN((uint32_t)STM32_SRAM_END);
-    return 0;
+    return (size_t)MEM_ALIGN((uint32_t)ram_addr_end);
 
 }
 
@@ -261,13 +266,13 @@ uint16_t ebox_free_block_print(void)
 {
     eboxBlockLink_t *p;
     int i = 0;
-    //ebox_printf("----start----\r\n");
+    ebox_printf("----start----\r\n");
     for(p = (eboxBlockLink_t *)( &(heap[0]) ); p != NULL; p = ( p->nextFreeBlock))
     {
-       // ebox_printf("free block %d: ",i++);
-       // ebox_printf("0X%X\t|%x\t|\r\n",p,p->blockSize);
+        ebox_printf("free block %d: ",i++);
+        ebox_printf("0X%X\t|%x\t|\r\n",p,p->blockSize);
     }
-   // ebox_printf("----end-----\r\n");
+    ebox_printf("----end-----\r\n");
     return 0;
 }
 

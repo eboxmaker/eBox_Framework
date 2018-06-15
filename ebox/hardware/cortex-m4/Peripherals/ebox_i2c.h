@@ -15,18 +15,19 @@ This specification is preliminary and is subject to change at any time without n
 #ifndef __EBOX_I2C_H
 #define __EBOX_I2C_H
 
-#include "ebox_common.h"
+#include "ebox_core.h"
+#include "mcu.h"
 
 /*
 	1.支持I2C1和I2C2
 	2.暂时不支持remap，后续很快会完成
 */
 
-class I2c
+class mcuI2c
 {
 
 public:
-    I2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin);
+    mcuI2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin);
     void		begin(uint32_t speed);
     void        config(uint32_t speed);
     uint32_t    read_config();

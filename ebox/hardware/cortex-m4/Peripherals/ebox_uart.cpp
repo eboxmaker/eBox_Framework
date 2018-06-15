@@ -24,7 +24,7 @@ Uart::Uart(USART_TypeDef *USARTx, Gpio *tx, Gpio *rx)
 }
 void Uart::begin(uint32_t baud_rate)
 {
-    begin(baud_rate,1);
+    begin(baud_rate,0);
 }
 void Uart::begin(uint32_t baud_rate,uint8_t use_dma)
 {

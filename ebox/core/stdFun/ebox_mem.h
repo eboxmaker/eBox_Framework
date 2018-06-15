@@ -17,6 +17,7 @@ void    ebox_heap_init(void *begin_addr, void *end_addr);
 void    *ebox_malloc( size_t xWantedSize );
 void    ebox_free( void *ptr );
 size_t  ebox_get_free(void);
+float   ebox_mem_usage(void);
 size_t  ebox_get_sram_start_addr(void);
 size_t  ebox_get_sram_end_addr(void);
 uint16_t ebox_free_block_print(void);

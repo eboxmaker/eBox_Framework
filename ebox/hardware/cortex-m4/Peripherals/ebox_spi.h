@@ -1,6 +1,7 @@
 #ifndef __EBOX_SPI_H
 #define __EBOX_SPI_H
-#include "ebox_common.h"
+#include "ebox_core.h"
+#include "mcu.h"
 //spi相关公共宏和声明//////////////////////////////////
 
 
@@ -26,10 +27,10 @@ typedef struct
 		如果不释放总线会导致别的SPI设备一直处于等待的状态
 */
 //默认配置 空，只依靠结构体SPICONFIG来初始化
-class	Spi
+class	mcuSpi
 {
 public:
-    Spi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
+    mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
 
     void    begin (SPI_CONFIG_TYPE *spi_config);
     void    config(SPI_CONFIG_TYPE *spi_config);

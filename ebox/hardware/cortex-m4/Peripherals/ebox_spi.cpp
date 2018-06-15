@@ -18,7 +18,7 @@ This specification is preliminary and is subject to change at any time without n
 #include "stm32f4xx_spi.h"
 
 
-Spi::Spi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
+mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 {
     busy = 0;
     spi = SPIx;	
@@ -28,7 +28,7 @@ Spi::Spi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 	
 }  
 
-void Spi::begin(SPI_CONFIG_TYPE *spi_config)
+void mcuSpi::begin(SPI_CONFIG_TYPE *spi_config)
 {
 //	  sck->mode(AF_PP_PU,GPIO_AF_SPI3);
 //    miso->mode(AF_PP_PU,GPIO_AF_SPI3);
@@ -61,7 +61,7 @@ void Spi::begin(SPI_CONFIG_TYPE *spi_config)
 
     config(spi_config);
 }
-void Spi::config(SPI_CONFIG_TYPE *spi_config)
+void mcuSpi::config(SPI_CONFIG_TYPE *spi_config)
 {
     SPI_InitTypeDef SPI_InitStructure;
 
@@ -103,13 +103,13 @@ void Spi::config(SPI_CONFIG_TYPE *spi_config)
     SPI_Cmd(spi, ENABLE);
 }
 
-uint8_t Spi::read_config(void)
+uint8_t mcuSpi::read_config(void)
 {
     return current_dev_num;
 }
 
 
-uint8_t Spi::transfer(uint8_t data)
+uint8_t mcuSpi::transfer(uint8_t data)
 {
     while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
         ;
@@ -120,7 +120,7 @@ uint8_t Spi::transfer(uint8_t data)
 }
 
 
-int8_t Spi::write(uint8_t data)
+int8_t mcuSpi::write(uint8_t data)
 {
     __IO uint8_t dummyByte;
     while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
@@ -132,7 +132,7 @@ int8_t Spi::write(uint8_t data)
 
     return 0;
 }
-int8_t Spi::write(uint8_t *data, uint16_t data_length)
+int8_t mcuSpi::write(uint8_t *data, uint16_t data_length)
 {
     __IO uint8_t dummyByte;
     if(data_length == 0)
@@ -148,7 +148,7 @@ int8_t Spi::write(uint8_t *data, uint16_t data_length)
     }
     return 0;
 }
-uint8_t Spi::read()
+uint8_t mcuSpi::read()
 {
     while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
         ;
@@ -158,7 +158,7 @@ uint8_t Spi::read()
     return(spi->DR);
 
 }
-int8_t Spi::read(uint8_t *recv_data)
+int8_t mcuSpi::read(uint8_t *recv_data)
 {
     while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
         ;
@@ -170,7 +170,7 @@ int8_t Spi::read(uint8_t *recv_data)
     return 0;
 }
 
-int8_t Spi::read(uint8_t *recv_data, uint16_t data_length)
+int8_t mcuSpi::read(uint8_t *recv_data, uint16_t data_length)
 {
     if(data_length == 0)
         return -1;
@@ -186,7 +186,7 @@ int8_t Spi::read(uint8_t *recv_data, uint16_t data_length)
     return 0;
 }
 
-int8_t Spi::take_spi_right(SPI_CONFIG_TYPE *spi_config)
+int8_t mcuSpi::take_spi_right(SPI_CONFIG_TYPE *spi_config)
 {
     while((busy == 1) && (spi_config->dev_num != read_config()))
         delay_ms(1);
@@ -199,7 +199,7 @@ int8_t Spi::take_spi_right(SPI_CONFIG_TYPE *spi_config)
     busy = 1;
     return 0;
 }
-int8_t Spi::release_spi_right(void)
+int8_t mcuSpi::release_spi_right(void)
 {
     busy = 0;
     return 0;

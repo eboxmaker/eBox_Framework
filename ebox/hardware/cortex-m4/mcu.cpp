@@ -8,9 +8,9 @@ extern "C" {
 #define systick_no_interrupt()  SysTick->CTRL &=0xfffffffd
 #define systick_interrupt()     SysTick->CTRL |=0x0002
 
-cpu_t mcu;
+Cpu_t mcu;
 __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
- static void get_system_clock(cpu_clock_t *clock);
+ static void get_system_clock(CpuClock_t *clock);
     __IO uint16_t micro_para;
 
 void mcu_init(void)
@@ -88,7 +88,7 @@ void attach_systick_user_event(void (*callback_fun)(void))
 }
 
 
-static void get_system_clock(cpu_clock_t *clock)
+static void get_system_clock(CpuClock_t *clock)
 {
     RCC_ClocksTypeDef RCC_ClocksStatus;
     

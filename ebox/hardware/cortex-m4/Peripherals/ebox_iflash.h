@@ -18,7 +18,8 @@ This specification is preliminary and is subject to change at any time without n
 
 
 
-#include "ebox_common.h"
+#include "ebox_core.h"
+#include "mcu.h"
 
 
 

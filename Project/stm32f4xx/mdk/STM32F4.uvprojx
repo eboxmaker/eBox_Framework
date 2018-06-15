@@ -702,6 +702,51 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_uart.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ebox_adc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_adc.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_dac.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_dac.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_i2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_i2c.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_iflash.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_iflash.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_pwm.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_pwm.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_soft_iic.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_soft_iic.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_soft_spi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_soft_spi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_spi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_spi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_time.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_time.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
