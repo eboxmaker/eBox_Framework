@@ -24,7 +24,7 @@
 #define systick_interrupt()     SysTick->CTRL |=0x0002
 extern "C" {
 
-    cpu_t mcu;
+    Cpu_t mcu;
 
     extern uint16_t  AD_value[];
 
@@ -139,7 +139,7 @@ extern "C" {
         }
 
     }
-	static void get_system_clock(cpu_clock_t *clock)
+	static void get_system_clock(CpuClock_t *clock)
     {
         RCC_ClocksTypeDef RCC_ClocksStatus;
         

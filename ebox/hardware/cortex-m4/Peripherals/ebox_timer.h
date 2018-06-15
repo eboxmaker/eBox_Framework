@@ -20,7 +20,8 @@
 #ifndef __EBOX_GTIMER_H
 #define __EBOX_GTIMER_H
 
-#include "ebox_common.h"
+#include "ebox_core.h"
+#include "mcu.h"
 
 /*
     简介：使定时器产生一个定时中断。

@@ -30,7 +30,7 @@ typedef void (*callback_fun_type)(void);
 #define NVIC_GROUP_CONFIG NVIC_PriorityGroup_2//以后NVIC_PriorityGroupConfig()函数不需要再被调用。更不能再以非NVIC_GROUP_CONFIG值填充调用
 
 
-extern cpu_t mcu;
+extern Cpu_t mcu;
 
 
     void mcu_init(void);

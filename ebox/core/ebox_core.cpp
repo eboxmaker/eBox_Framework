@@ -9,7 +9,7 @@ void        (*delay_ms)(uint64_t ms);
 void        (*delay_us)(uint64_t ms);
 
 
-cpu_t cpu;
+Cpu_t cpu;
 
 
 /** @defgroup commonº¯Êý

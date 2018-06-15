@@ -29,7 +29,6 @@
 #define __EBOX_CORE_H
 
 
-#include "mcu_config.h"    
 
 #include "../core/ebox_type.h"
 #include "../core/stdFun/new.h"
@@ -54,7 +53,7 @@
 #include "../core/port/ebox_port_i2c.h"
 
 
-#define EBOX_VERSION "2.1"
+#define EBOX_VERSION "2.2"
 
 
 
@@ -66,11 +65,11 @@ extern void        (*delay_ms)(uint64_t ms);
 extern void        (*delay_us)(uint64_t ms);
 
 
-extern void         get_sys_clock(cpu_t *info);
+extern void         get_sys_clock(Cpu_t *info);
 float               sys_version();
 
 
-extern cpu_t cpu;
+extern Cpu_t cpu;
 
 /////////////////////////////////////////
 

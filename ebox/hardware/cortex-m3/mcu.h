@@ -34,12 +34,13 @@ extern "C" {
 #endif
 #include "stm32f10x.h"
 #include "ebox_type.h"
+#include "mcu_config.h"
 
 #define interrupts() 		__enable_irq()//允许所有中断
 #define no_interrupts() 	__disable_irq()//禁止所有中断
 	
 
-extern cpu_t mcu;
+extern Cpu_t mcu;
 
 
 
@@ -65,7 +66,7 @@ void set_systick_user_event_per_sec(u16 frq);//设定用户中断事件的相应频率。frq[1
 void attach_systick_user_event(void (*callback_fun)(void));//绑定systick中断调用函数，调用频率由用户决定，频率为1hz-1000hz
 
 
-static void get_system_clock(cpu_clock_t *clock);
+static void get_system_clock(CpuClock_t *clock);
 static void get_chip_info(void);
 
 #ifdef __cplusplus

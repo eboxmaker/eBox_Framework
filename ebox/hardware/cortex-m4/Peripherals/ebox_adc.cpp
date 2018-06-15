@@ -143,53 +143,53 @@ void ADC1_init(void)
 */
 uint16_t analog_read(Gpio *pin)
 {
-    switch((uint32_t)pin->port)
-    {
-    case  (uint32_t)GPIOA_BASE:
-        switch(pin->pin)
-        {
-        case GPIO_Pin_0:
-            return AD_value[0];
-        case GPIO_Pin_1:
-            return AD_value[1];
-        case GPIO_Pin_2:
-            return AD_value[2];
-        case GPIO_Pin_3:
-            return AD_value[3];
-        case GPIO_Pin_4:
-            return AD_value[4];
-        case GPIO_Pin_5:
-            return AD_value[5];
-        case GPIO_Pin_6:
-            return AD_value[6];
-        case GPIO_Pin_7:
-            return AD_value[7];
-        }
-    case (uint32_t)GPIOB_BASE:
-        switch(pin->pin)
-        {
-        case GPIO_Pin_0:
-            return AD_value[8];
-        case GPIO_Pin_1:
-            return AD_value[9];
-        }
-    case (uint32_t)GPIOC_BASE:
-        switch(pin->pin)
-        {
-        case GPIO_Pin_0:
-            return AD_value[10];
-        case GPIO_Pin_1:
-            return AD_value[11];
-        case GPIO_Pin_2:
-            return AD_value[12];
-        case GPIO_Pin_3:
-            return AD_value[13];
-        case GPIO_Pin_4:
-            return AD_value[14];
-        case GPIO_Pin_5:
-            return AD_value[15];
-        }
-    }
+//    switch((uint32_t)pin->port)
+//    {
+//    case  (uint32_t)GPIOA_BASE:
+//        switch(pin->pin)
+//        {
+//        case GPIO_Pin_0:
+//            return AD_value[0];
+//        case GPIO_Pin_1:
+//            return AD_value[1];
+//        case GPIO_Pin_2:
+//            return AD_value[2];
+//        case GPIO_Pin_3:
+//            return AD_value[3];
+//        case GPIO_Pin_4:
+//            return AD_value[4];
+//        case GPIO_Pin_5:
+//            return AD_value[5];
+//        case GPIO_Pin_6:
+//            return AD_value[6];
+//        case GPIO_Pin_7:
+//            return AD_value[7];
+//        }
+//    case (uint32_t)GPIOB_BASE:
+//        switch(pin->pin)
+//        {
+//        case GPIO_Pin_0:
+//            return AD_value[8];
+//        case GPIO_Pin_1:
+//            return AD_value[9];
+//        }
+//    case (uint32_t)GPIOC_BASE:
+//        switch(pin->pin)
+//        {
+//        case GPIO_Pin_0:
+//            return AD_value[10];
+//        case GPIO_Pin_1:
+//            return AD_value[11];
+//        case GPIO_Pin_2:
+//            return AD_value[12];
+//        case GPIO_Pin_3:
+//            return AD_value[13];
+//        case GPIO_Pin_4:
+//            return AD_value[14];
+//        case GPIO_Pin_5:
+//            return AD_value[15];
+//        }
+//    }
 
     return 0;
 

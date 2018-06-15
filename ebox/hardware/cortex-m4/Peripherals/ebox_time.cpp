@@ -21,7 +21,7 @@
 #include "ebox_timer.h"
 
 
-extern callback_fun_type timx_cb_table[7][5];
+ callback_fun_type timx_cb_table[7][5];
 
 //////////////////////////////////////
 

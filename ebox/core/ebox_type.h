@@ -29,7 +29,13 @@
 #define EPARA       4
 #define E2LONG      5
 #define EOTHER      128
-
+typedef enum
+{
+    STM32F103C8T6 = 0,
+    STM32F103RCT6 ,
+    
+    STM32F407IGT6,
+}CpuType;
 
 typedef struct
 {
@@ -38,16 +44,18 @@ typedef struct
     uint32_t hclk;
     uint32_t pclk2;
     uint32_t pclk1;
-}cpu_clock_t;  
+}CpuClock_t;  
 
 typedef struct
 {
+    CpuType     type;
 	uint32_t    ability;//cpu calculate plus per second;
-	cpu_clock_t	clock;
+	CpuClock_t	clock;
 	uint32_t    chip_id[3];
     uint16_t    flash_size;
     char        company[8];
-}cpu_t;
+    
+}Cpu_t;
 
 typedef union
 {
@@ -73,6 +81,17 @@ typedef union
     int32_t value;
 }Data32_t; 
 
+typedef union
+{
+    uint8_t byte[4];
+    float value;
+}DataFloat_t;
+
+typedef union
+{
+    uint8_t byte[4];
+    double value;
+}DataDouble_t;
 
 typedef struct
 {

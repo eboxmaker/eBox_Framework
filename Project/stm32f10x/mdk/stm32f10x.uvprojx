@@ -597,6 +597,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\ebox_core.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ebox_init.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\ebox_init.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -722,11 +727,6 @@
         <Group>
           <GroupName>user</GroupName>
           <Files>
-            <File>
-              <FileName>ebox_init.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\ebox_init.cpp</FilePath>
-            </File>
             <File>
               <FileName>bsp.cpp</FileName>
               <FileType>8</FileType>

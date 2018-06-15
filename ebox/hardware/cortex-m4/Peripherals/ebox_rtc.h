@@ -20,7 +20,8 @@
 
 #ifndef __RTC_H
 #define __RTC_H
-#include "ebox_common.h"
+#include "ebox_core.h"
+#include "mcu.h"
 /*
 	1.提供一个32位的循环计数,每秒加1.
 	2.一个中断源，三个中断事件
