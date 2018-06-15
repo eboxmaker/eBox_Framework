@@ -5,8 +5,9 @@
 #include "stdint.h"
 
 
-#define MCU_PIN_NUM 48 //48, 64, 100, 144
-
+#define MCU_PINS    48 //48, 64, 100, 144
+#define MCU_TYPE    STM32F103C8T6
+#define MCU_COMPANY "ST\0"
 
 #ifdef __CC_ARM
     extern int Image$$RW_IRAM1$$ZI$$Limit;

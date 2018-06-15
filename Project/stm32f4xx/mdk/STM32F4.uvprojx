@@ -677,6 +677,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\ebox_core.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ebox_init.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\ebox_init.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -747,6 +752,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_time.cpp</FilePath>
             </File>
+            <File>
+              <FileName>nvic.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\nvic.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -756,11 +766,6 @@
               <FileName>bsp.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\bsp.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_init.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\ebox_init.cpp</FilePath>
             </File>
             <File>
               <FileName>main.cpp</FileName>

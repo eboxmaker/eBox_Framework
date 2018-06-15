@@ -19,54 +19,35 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_analog.h"
+
+#include "ebox_core.h"
 #include "mcu.h"
 #define systick_no_interrupt()  SysTick->CTRL &=0xfffffffd
 #define systick_interrupt()     SysTick->CTRL |=0x0002
 extern "C" {
 
-    Cpu_t mcu;
 
     extern uint16_t  AD_value[];
 
     __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
     __IO uint16_t micro_para;
 
+    static void update_system_clock(CpuClock_t *clock);
+    static void update_chip_info(void);
 
     void mcu_init(void)
     {
-        get_system_clock(&mcu.clock);
-        get_chip_info();
-        mcu.company[0] = 'S';
-        mcu.company[1] = 'T';
-        mcu.company[2] = '\0';
-
-        
-        #ifdef __CC_ARM
-            ebox_heap_init((void*)STM32_SRAM_BEGIN, (void*)STM32_SRAM_END);
-        #elif __ICCARM__
-            rt_system_heap_init(__segment_end("HEAP"), (void*)STM32_SRAM_END);
-        #else
-            rt_system_heap_init((void*)&__bss_end, (void*)STM32_SRAM_END);
-        #endif
-
-        SysTick_Config(mcu.clock.core/1000);//  每隔 1ms产生一次中断
+        update_system_clock(&cpu.clock);
+        SysTick_Config(cpu.clock.core/1000);//  每隔 1ms产生一次中断
         SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);//systemticks clock；
-        micro_para = mcu.clock.core/1000000;//减少micros函数计算量
+        micro_para = cpu.clock.core/1000000;//减少micros函数计算量
         
+        NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
         
-        mcu.ability = 0;
-        millis_seconds = 0;
-        //统计cpu计算能力//////////////////
-        do
-        {
-            mcu.ability++;//统计cpu计算能力 
-        }
-        while(millis_seconds < 100);
-        mcu.ability = mcu.ability * 10;
-        ////////////////////////////////
+        update_chip_info();
+
         ADC1_init();
 
-        NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
 
         //将pb4默认设置为IO口，禁用jtag
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
@@ -139,7 +120,7 @@ extern "C" {
         }
 
     }
-	static void get_system_clock(CpuClock_t *clock)
+	static void update_system_clock(CpuClock_t *clock)
     {
         RCC_ClocksTypeDef RCC_ClocksStatus;
         
@@ -153,18 +134,33 @@ extern "C" {
     }
 
     
-    static void get_chip_info()
+    static void update_chip_info()
     {
-        mcu.chip_id[2] = *(__IO uint32_t *)(0X1FFFF7E8); //低字节
-        mcu.chip_id[1] = *(__IO uint32_t *)(0X1FFFF7EC); //
-        mcu.chip_id[0] = *(__IO uint32_t *)(0X1FFFF7F0); //高字节
+        cpu.type = MCU_TYPE;
+        cpu.pins = MCU_PINS;
+        memcpy(cpu.company,MCU_COMPANY,sizeof(MCU_COMPANY));
 
-        mcu.flash_size = *(uint16_t *)(0x1FFFF7E0);   //芯片flash容量
+        cpu.chip_id[2] = *(__IO uint32_t *)(0X1FFFF7E8); //低字节
+        cpu.chip_id[1] = *(__IO uint32_t *)(0X1FFFF7EC); //
+        cpu.chip_id[0] = *(__IO uint32_t *)(0X1FFFF7F0); //高字节
+
+        cpu.flash_size = *(uint16_t *)(0x1FFFF7E0);   //芯片flash容量
+        
+        millis_seconds = 0;
+        SysTick->VAL = 0;
+        //统计cpu计算能力//////////////////
+        do
+        {
+            cpu.ability++;//统计cpu计算能力 
+        }
+        while(millis_seconds < 1);
+        cpu.ability = cpu.ability  * 1000 * 2;
+        ////////////////////////////////
     }
     
     uint32_t get_cpu_calculate_per_sec(void)
     {
-        return mcu.ability;
+        return cpu.ability;
     }
 
 

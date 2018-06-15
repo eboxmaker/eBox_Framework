@@ -57,7 +57,6 @@
 
 
 
-extern void        (*_ebox_init)(void);
 extern void        (*ebox_reset)();
 extern uint64_t    (*micros)();
 extern uint64_t    (*millis)();
