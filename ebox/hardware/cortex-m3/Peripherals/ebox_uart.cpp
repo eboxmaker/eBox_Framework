@@ -176,7 +176,26 @@ void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub
     else
         nvic_irq_disable((uint32_t)_USARTx,0);
 }
+///////////////////////////////////////////////////////////////
 
+/**
+ *@name     void Uart::interrupt(FunctionalState enable)
+ *@brief    串口中断控制函数
+ *@param    enable:  ENABLE使能串口的发送完成和接收中断；DISABLE：关闭这两个中断
+ *@retval   None
+*/
+void Uart::interrupt(IrqType type, FunctionalState enable)
+{
+
+    if(type == RxIrq)
+        USART_ITConfig(_USARTx, USART_IT_RXNE, enable);
+    if(type == TcIrq)
+    {
+        USART_ClearITPendingBit(_USARTx, USART_IT_TC);
+        USART_ClearFlag(_USARTx,USART_FLAG_TC); 
+        USART_ITConfig(_USARTx, USART_IT_TC, enable);//禁止关闭发送完成中断
+    }
+}
 /**
  *@name     size_t Uart::write(uint8_t c)
  *@brief    串口方式发送一个字节
@@ -226,37 +245,6 @@ size_t Uart::write(const uint8_t *buffer, size_t size)
 	return size;
 }
 
-//void Uart::printf(const char *fmt, ...)
-//{
-//    int     size1 = 0;
-//    size_t  size2 = 256;
-
-//    wait_busy();
-//    if(uart_buf != NULL)
-//        ebox_free(uart_buf);
-//    set_busy();
-//    va_list va_params;
-//    va_start(va_params, fmt);
-//    
-//    do{
-//        uart_buf = (char *)ebox_malloc(size2);
-//        if(uart_buf == NULL)
-//            return ;
-//        size1 = vsnprintf(uart_buf, size2,fmt, va_params);
-//        if(size1 == -1  || size1 > size2)
-//        {
-//            size2+=128;
-//            size1 = -1;
-//            ebox_free(uart_buf);
-//        }
-//    }while(size1 == -1);
-
-//    //vsprintf(uart_buf, fmt, va_params); 
-//    va_end(va_params);
-//        dma_send_string(uart_buf, size1);
-
-//}
-
 
 /**
  *@name     uint16_t Uart::read()
@@ -270,26 +258,7 @@ uint16_t Uart::read()
 }
 
 
-///////////////////////////////////////////////////////////////
 
-/**
- *@name     void Uart::interrupt(FunctionalState enable)
- *@brief    串口中断控制函数
- *@param    enable:  ENABLE使能串口的发送完成和接收中断；DISABLE：关闭这两个中断
- *@retval   None
-*/
-void Uart::interrupt(IrqType type, FunctionalState enable)
-{
-
-    if(type == RxIrq)
-        USART_ITConfig(_USARTx, USART_IT_RXNE, enable);
-    if(type == TcIrq)
-    {
-        USART_ClearITPendingBit(_USARTx, USART_IT_TC);
-        USART_ClearFlag(_USARTx,USART_FLAG_TC); 
-        USART_ITConfig(_USARTx, USART_IT_TC, enable);//禁止关闭发送完成中断
-    }
-}
 
 
 

@@ -1,38 +1,25 @@
+
 /**
   ******************************************************************************
-  * @file    pwm.cpp
-  * @author  shentq
-  * @version V1.2
-  * @date    2016/08/14
+  * @file   : *.cpp
+  * @author : shentq
+  * @version: V2.2
+  * @date   : 2016/08/14
+
   * @brief   ebox application example .
-  ******************************************************************************
-  * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
-  * preliminary and is subject to change at any time without notice. shentq assumes
-  * no responsibility for any errors contained herein.
-  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
+  * Copyright 2016 shentq. All Rights Reserved.         
   ******************************************************************************
-  */
-
-
-/* Includes ------------------------------------------------------------------*/
-
-
+ */
+ 
+ 
 #include "ebox.h"
-
-
-
+                                            
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
-    PB9.mode(OUTPUT_PP);
-}
-int main(void)
-{
-    setup();
+    uart1.begin(115200,0);
+    
     uart1.printf("core:%d\r\n",cpu.clock.core);
     uart1.printf("core:%d\r\n",cpu.clock.core);
     uart1.printf("hclk:%d\r\n",cpu.clock.hclk);
@@ -41,14 +28,23 @@ int main(void)
     uart1.printf("cpu id:0x%x %x %x\r\n",cpu.chip_id[0],cpu.chip_id[1],cpu.chip_id[2]);
     uart1.printf("size:%dK\r\n",cpu.flash_size);
     uart1.printf("company:%s\r\n",cpu.company);
-    uart1.printf("company:%dK times add per second\r\n",cpu.ability/1000);
+    uart1.printf("ability:%0.2fM times add per second\r\n",cpu.ability/1000000.0);
+}
+
+int main(void)
+{
+    setup();
 
     while(1)
     {
-        PB9.toggle();
-        delay_ms(200);
+
+        delay_ms(1000);
     }
+
 }
+
+
+
 
 
 

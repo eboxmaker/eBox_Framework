@@ -33,9 +33,11 @@ typedef enum
 {
     STM32F103C8T6 = 0,
     STM32F103RCT6 ,
-    
+
     STM32F407IGT6,
 }CpuType;
+
+
 
 typedef struct
 {
@@ -49,10 +51,11 @@ typedef struct
 typedef struct
 {
     CpuType     type;
+    uint8_t     pins;
+    uint16_t    flash_size;
 	uint32_t    ability;//cpu calculate plus per second;
 	CpuClock_t	clock;
 	uint32_t    chip_id[3];
-    uint16_t    flash_size;
     char        company[8];
     
 }Cpu_t;

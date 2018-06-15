@@ -1,7 +1,6 @@
 #include "ebox_core.h"
 
 
-void        (*_ebox_init)(void);
 void        (*ebox_reset)();
 uint64_t    (*micros)();
 uint64_t    (*millis)();

@@ -4,16 +4,23 @@
 
 void ebox_init(void)
 {
-    _ebox_init   = mcu_init;
+    #ifdef __CC_ARM
+        ebox_heap_init((void*)STM32_SRAM_BEGIN, (void*)STM32_SRAM_END);
+    #elif __ICCARM__
+        rt_system_heap_init(__segment_end("HEAP"), (void*)STM32_SRAM_END);
+    #else
+        rt_system_heap_init((void*)&__bss_end, (void*)STM32_SRAM_END);
+    #endif
     delay_ms    = mcu_delay_ms;
     delay_us    = mcu_delay_us;
     micros      = mcu_micros;
     millis      = mcu_millis;
+    mcu_init();
     
-    _ebox_init();
     ebox_printf_init();
     
-    cpu = mcu;
+    
+    
 }
 
 void ebox_printf_flush(void)
