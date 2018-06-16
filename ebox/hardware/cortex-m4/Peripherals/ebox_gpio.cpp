@@ -40,6 +40,12 @@ mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
         case (uint32_t)GPIOG_BASE:
             temp1 = 6;
         break;
+        case (uint32_t)GPIOH_BASE:
+            temp1 = 7;
+        break;
+        case (uint32_t)GPIOI_BASE:
+            temp1 = 8;
+        break;
         default:
             temp1 = 0;
         break;
@@ -92,11 +98,17 @@ void mcuGpio::mode(PIN_MODE mode)
     case (uint32_t)GPIOG_BASE:
         RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE);
         break;
+    case (uint32_t)GPIOH_BASE:
+        RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOH, ENABLE);
+        break;
+    case (uint32_t)GPIOI_BASE:
+        RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOI, ENABLE);
+        break;
     }
 
 
     GPIO_InitStructure.GPIO_Pin = this->pin;
-    GPIO_InitStructure.GPIO_Mode = (GPIOMode_TypeDef)mode;
+    //GPIO_InitStructure.GPIO_Mode = (GPIOMode_TypeDef)mode;
     switch((uint8_t)mode)
     {
         /*analog input mode

@@ -3,9 +3,9 @@
 #include "ebox_core.h"
 #include "mcu.h"
 #include "FunctionPointer.h"
+#include "dma.h"
 
 //”√ªß≈‰÷√//////////////
-#define UART_MAX_SEND_BUF 128
 
 #define UART_NUM (5)
 
@@ -32,8 +32,7 @@ public:
     void    begin(uint32_t baud_rate);
     void    begin(uint32_t baud_rate,uint8_t use_dma);
     void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit);
-    void    attach_rx_interrupt(void (*callback_fun)(void));
-    void    attach_tx_interrupt(void (*callback_fun)(void));
+
 
     //write method
     virtual size_t  write(uint8_t c);
@@ -60,7 +59,7 @@ public:
 protected:
     FunctionPointer _irq[2];
 private:
-    char                *uart_buf;
+    char                *data_ptr;
     Gpio                *tx;
     Gpio                *rx;
     uint8_t             gpio_af_usart;
@@ -69,20 +68,17 @@ private:
     void                (*rcc_usart_clock_cmd)(uint32_t rcc,FunctionalState state);
     uint32_t            usart_rcc;
     uint8_t             usart_irq;
-    void                usart_config(uint32_t baud_rate);
+    void                config(uint32_t baud_rate);
 
     uint8_t             use_dma;
-    void                (*rcc_dma_clock_cmd)(uint32_t rcc,FunctionalState state);
-    uint32_t            dma_rcc;//;
-    uint8_t             dma_irq;//DMA2_Stream7_IRQn;
-    DMA_TypeDef         *dma;
     uint32_t            dma_channel;
-    DMA_Stream_TypeDef  *dma_stream;
-    void                dma_config();
-    uint16_t            dma_send_string(const char *str, uint16_t length);
+    uint16_t            dma_write(const char *buf, uint16_t length);
 
-    char                send_buf[UART_MAX_SEND_BUF];
     void                set_busy();
+    
+    
+    Dma                 *dma_tx;
+
 };
 
 

@@ -638,14 +638,14 @@
               <FilePath>..\..\..\ebox\core\stdFun\new.cpp</FilePath>
             </File>
             <File>
-              <FileName>print.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\print.cpp</FilePath>
-            </File>
-            <File>
               <FileName>random.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\stdFun\random.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>print.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\stdFun\print.cpp</FilePath>
             </File>
             <File>
               <FileName>ringbuf.cpp</FileName>
@@ -756,6 +756,11 @@
               <FileName>nvic.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m4\nvic.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>dma.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\dma.cpp</FilePath>
             </File>
           </Files>
         </Group>

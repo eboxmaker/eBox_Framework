@@ -51,6 +51,13 @@ typedef enum
     
     PG0_ID = 0x60,  PG1_ID,     PG2_ID,     PG3_ID,     PG4_ID,     PG5_ID,     PG6_ID,     PG7_ID,
     PG8_ID,         PG9_ID,     PG10_ID,    PG11_ID,    PG12_ID,    PG13_ID,    PG14_ID,    PG15_ID,
+    
+    PH0_ID = 0x70,  PH1_ID,     PH2_ID,     PH3_ID,     PH4_ID,     PH5_ID,     PH6_ID,     PH7_ID,
+    PH8_ID,         PH9_ID,     PH10_ID,    PH11_ID,    PH12_ID,    PH13_ID,    PH14_ID,    PH15_ID,
+    
+    PI0_ID = 0x80,  PI1_ID,     PI2_ID,     PI3_ID,     PI4_ID,     PI5_ID,     PI6_ID,     PI7_ID,
+    PI8_ID,         PI9_ID,     PI10_ID,    PI11_ID,    PI12_ID,    PI13_ID,    PI14_ID,    PI15_ID,
+    
 }PIN_ID_t;///<引脚的名字
 class Gpio
 {

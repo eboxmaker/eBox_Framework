@@ -166,7 +166,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     interrupt(RxIrq,DISABLE);
     interrupt(TcIrq,DISABLE);
     USART_ClearITPendingBit(_USARTx, USART_IT_TC);
-    USART_ClearFlag(USART2,USART_FLAG_TC); 
+    USART_ClearFlag(_USARTx,USART_FLAG_TC); 
 }
 void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
@@ -222,17 +222,17 @@ size_t Uart::write(const uint8_t *buffer, size_t size)
     if((_USARTx == USART1 | _USARTx == USART2 | _USARTx == USART3 ) && (use_dma == 1))
     {
         wait_busy();
-        if(uart_buf != NULL)
-            ebox_free(uart_buf);
+        if(data_ptr != NULL)
+            ebox_free(data_ptr);
         set_busy();
-        uart_buf = (char *)ebox_malloc(size);
-        if(uart_buf == NULL)
+        data_ptr = (char *)ebox_malloc(size);
+        if(data_ptr == NULL)
         {
             return 0;
         }
         for(int i = 0; i < size; i++)
-            uart_buf[i] = *buffer++;
-        dma_send_string(uart_buf, size);
+            data_ptr[i] = *buffer++;
+        dma_write(data_ptr, size);
     }
     else
     {
@@ -269,7 +269,7 @@ uint16_t Uart::read()
             length：    缓冲区的长度
  *@retval   发送数据的长度
 */
-uint16_t Uart::dma_send_string(const char *str, uint16_t length)
+uint16_t Uart::dma_write(const char *str, uint16_t length)
 {
 //    DMA_DeInit(_DMA1_Channelx);   //将DMA的通道1寄存器重设为缺省值
 //    _DMA1_Channelx->CPAR = (uint32_t)&_USARTx->DR; //外设地址
@@ -310,23 +310,6 @@ uint16_t Uart::dma_send_string(const char *str, uint16_t length)
     return length;
 }
 
-///**
-// *@name     int Uart::put_char(uint16_t ch)
-// *@brief    串口方式发送一个字节
-// *@param    ch：    要发送的字符
-// *@retval   已发送的数据
-//*/
-//int Uart::put_char(uint16_t ch)
-//{
-//    while(USART_GetFlagStatus(_USARTx, USART_FLAG_TXE) == RESET);//单字节等待，等待寄存器空
-//    USART_SendData(_USARTx, ch);
-//    return ch;
-//}
-
-
-
-
-
 
 
 /**
@@ -344,7 +327,6 @@ void Uart::wait_busy()
         while(busy[0] == 1 ){
             if(USART1->SR & 0X40){
                 busy[0] = 0;
-//                irq_handler(serial_irq_ids[NUM_UART1],TcIrq);
                 USART_ClearITPendingBit(USART1, USART_IT_TC);
                 break;
             }
@@ -354,7 +336,6 @@ void Uart::wait_busy()
         while(busy[1] == 1 ){
             if(USART2->SR & 0X40){
                 busy[1] = 0;
-//                irq_handler(serial_irq_ids[NUM_UART2],TcIrq);
                 USART_ClearITPendingBit(USART2, USART_IT_TC);
                 break;
             }
@@ -364,7 +345,6 @@ void Uart::wait_busy()
         while(busy[2] == 1 ){
             if(USART3->SR & 0X40){
                 busy[2] = 0;
-//                irq_handler(serial_irq_ids[NUM_UART3],TcIrq);
                 USART_ClearITPendingBit(USART3, USART_IT_TC);
                 break;
             }
@@ -374,7 +354,6 @@ void Uart::wait_busy()
         while(busy[3] == 1 ){
             if(UART4->SR & 0X40){
                 busy[3] = 0;
-//                irq_handler(serial_irq_ids[NUM_UART4],TcIrq);
                 USART_ClearITPendingBit(UART4, USART_IT_TC);
                 break;
             }
@@ -508,24 +487,6 @@ extern "C" {
         }
     }
 #endif
-
-    //void DMA1_Channel4_IRQHandler(void)
-    //	{
-
-    //		DMA_Cmd(DMA1_Channel4,DISABLE);
-    //		DMA_ClearFlag(DMA1_FLAG_TC4);
-
-    //	}
-    //	void DMA1_Channel7_IRQHandler(void)
-    //	{
-    //		DMA_Cmd(DMA1_Channel7,DISABLE);
-    //		DMA_ClearFlag(DMA1_FLAG_TC7);
-    //	}
-    //	void DMA1_Channel2_IRQHandler(void)
-    //	{
-    //		DMA_Cmd(DMA1_Channel2,DISABLE);
-    //		DMA_ClearFlag(DMA1_FLAG_TC2);
-    //	}
 		
 void serial_irq_handler(uint8_t index, uart_irq_handler handler, uint32_t id)
 {

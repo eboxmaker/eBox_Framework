@@ -2,10 +2,6 @@
 #include "nvic.h"
 
 
-callback_fun_type usart_callback_table[5][2];//支持串口的rx中断
-#define uart_tx_length   100
-uint8_t uart_tx_buf[uart_tx_length];
-
 
 static uint32_t serial_irq_ids[UART_NUM] = {0, 0, 0,0,0};
 
@@ -51,12 +47,8 @@ void Uart::begin(uint32_t baud_rate,uint8_t use_dma)
             usart_irq           = USART1_IRQn;
             /* dma parament
             */
-            rcc_dma_clock_cmd   = RCC_AHB1PeriphClockCmd;        
-            dma_rcc             = RCC_AHB1Periph_DMA2;
-            dma_irq             = DMA2_Stream7_IRQn;
-            dma                 = DMA2;
+            dma_tx              = &Dma2Stream7;
             dma_channel         = DMA_Channel_4;
-            dma_stream          = DMA2_Stream7;
         
             index = NUM_UART1;
 
@@ -74,12 +66,9 @@ void Uart::begin(uint32_t baud_rate,uint8_t use_dma)
             usart_irq           = USART2_IRQn;
             /* dma parament
             */
-            rcc_dma_clock_cmd   = RCC_AHB1PeriphClockCmd;        
-            dma_rcc             = RCC_AHB1Periph_DMA1;
-            dma                 = DMA1;
+            dma_tx              = &Dma1Stream6;
             dma_channel         = DMA_Channel_4;
-            dma_irq             = DMA1_Stream6_IRQn;
-            dma_stream          = DMA1_Stream6;
+
             index               = NUM_UART2;
         break;
         
@@ -95,12 +84,9 @@ void Uart::begin(uint32_t baud_rate,uint8_t use_dma)
             usart_irq           = USART3_IRQn;
             /* dma parament
             */
-            rcc_dma_clock_cmd   = RCC_AHB1PeriphClockCmd;        
-            dma_rcc             = RCC_AHB1Periph_DMA1;
-            dma                 = DMA1;
+            dma_tx              = &Dma1Stream3;
             dma_channel         = DMA_Channel_4;
-            dma_irq             = DMA1_Stream3_IRQn;
-            dma_stream          = DMA1_Stream3;
+
             index               = NUM_UART3;
         break;   
     
@@ -116,12 +102,10 @@ void Uart::begin(uint32_t baud_rate,uint8_t use_dma)
             usart_irq           = UART4_IRQn;
             /* dma parament
             */
-            rcc_dma_clock_cmd   = RCC_AHB1PeriphClockCmd;        
-            dma_rcc             = RCC_AHB1Periph_DMA1;
-            dma                 = DMA1;
+            dma_tx              = &Dma1Stream4;
             dma_channel         = DMA_Channel_4;
-            dma_irq             = DMA1_Stream4_IRQn;
-            dma_stream          = DMA1_Stream4;
+
+
             index               = NUM_UART4;
         break;   
     
@@ -137,26 +121,29 @@ void Uart::begin(uint32_t baud_rate,uint8_t use_dma)
             usart_irq           = UART5_IRQn;
             /* dma parament
             */
-            rcc_dma_clock_cmd   = RCC_AHB1PeriphClockCmd;        
-            dma_rcc             = RCC_AHB1Periph_DMA1;
-            dma                 = DMA1;
+            dma_tx              = &Dma1Stream7;
             dma_channel         = DMA_Channel_4;
-            dma_irq             = DMA1_Stream7_IRQn;
-            dma_stream          = DMA1_Stream7;
+
+
             index               = NUM_UART5;
         break;   
     
     }               
-    usart_config(baud_rate);
+    config(baud_rate);
     if(this->use_dma == 1)
     {
-        dma_config();
+        dma_tx->rcc_enable();
+        dma_tx->nvic(DISABLE,0,0);
+        dma_tx->interrupt(DmaItTc,DISABLE);
+        dma_tx->interrupt(DmaItTe,DISABLE);
+        dma_tx->interrupt(DmaItHt,DISABLE);
+        dma_tx->deInit();
     }
     
     serial_irq_handler(index, Uart::_irq_handler, (uint32_t)this);
 
 }
-void Uart::usart_config(uint32_t baud_rate)
+void Uart::config(uint32_t baud_rate)
 {
   	USART_InitTypeDef USART_InitStructure;
     
@@ -177,61 +164,11 @@ void Uart::usart_config(uint32_t baud_rate)
   	USART_ClearFlag(USARTx, USART_FLAG_TC);  
  
     nvic(ENABLE,0,0);
-    interrupt(RxIrq,ENABLE);
-    interrupt(TcIrq,ENABLE);
+    interrupt(RxIrq,DISABLE);
+    interrupt(TcIrq,DISABLE);
 }
-void Uart::dma_config()
-{
-	NVIC_InitTypeDef NVIC_InitStructure ;
-	DMA_InitTypeDef DMA_InitStructure;
 
-    //串口发DMA配置  
-    //启动DMA时钟
-    rcc_dma_clock_cmd(dma_rcc, ENABLE);//////////////////////
-    //DMA发送中断设置
-    NVIC_InitStructure.NVIC_IRQChannel = dma_irq;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
-    //DMA通道配置
-    DMA_DeInit(dma_stream);/////////////////////////////
-    DMA_InitStructure.DMA_Channel = dma_channel; /////////////////////
-    //外设地址
-    DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)(&USARTx->DR);/////////////////
-    //内存地址
-    DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)this->send_buf;//////////////////////////
-    //dma传输方向
-    DMA_InitStructure.DMA_DIR = DMA_DIR_MemoryToPeripheral;
-    //设置DMA在传输时缓冲区的长度
-    DMA_InitStructure.DMA_BufferSize = uart_tx_length;///////////////////////////////
-    //设置DMA的外设递增模式，一个外设
-    DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
-    //设置DMA的内存递增模式
-    DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
-    //外设数据字长
-    DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
-    //内存数据字长
-    DMA_InitStructure.DMA_MemoryDataSize = DMA_PeripheralDataSize_Byte;
-    //设置DMA的传输模式
-    DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
-    //设置DMA的优先级别
-    DMA_InitStructure.DMA_Priority = DMA_Priority_High;
-    
-    //指定如果FIFO模式或直接模式将用于指定的流 ： 不使能FIFO模式  
-    DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;    
-    //指定了FIFO阈值水平
-    DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;        
-    //指定的Burst转移配置内存传输 
-    DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;       
-    //指定的Burst转移配置外围转移 */  
-    DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single; 
 
-    //配置DMA1的通道         
-    DMA_Init(dma_stream, &DMA_InitStructure);  //////////////////////////////////////////
-    //使能中断
-    DMA_ITConfig(dma_stream,DMA_IT_TC,ENABLE); /////////////////////
-}
 void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
     nvic_irq_set_priority((uint32_t)USARTx,0,0,0);
@@ -277,17 +214,17 @@ size_t Uart::write(const uint8_t *buffer, size_t size)
     if((USARTx == USART1 | USARTx == USART2 | USARTx == USART3 ) && (use_dma == 1))
     {
         wait_busy();
-        if(uart_buf != NULL)
-            ebox_free(uart_buf);
+        if(data_ptr != NULL)
+            ebox_free(data_ptr);
         set_busy();
-        uart_buf = (char *)ebox_malloc(size);
-        if(uart_buf == NULL)
+        data_ptr = (char *)ebox_malloc(size);
+        if(data_ptr == NULL)
         {
             return 0;
         }
         for(int i = 0; i < size; i++)
-            uart_buf[i] = *buffer++;
-        dma_send_string(uart_buf, size);
+            data_ptr[i] = *buffer++;
+        dma_write(data_ptr, size);
     }
     else
     {
@@ -298,6 +235,54 @@ size_t Uart::write(const uint8_t *buffer, size_t size)
         }
     }
 	return size;
+}
+
+/**
+ *@name     uint16_t Uart::dma_write(const char *ptr,uint16_t length)
+ *@brief    串口DMA方式发送字符串，缓冲区数据
+ *@param    ptr：       要发送的字符串，数据缓冲区
+            length：    缓冲区的长度
+ *@retval   发送数据的长度
+*/
+uint16_t Uart::dma_write(const char *ptr, uint16_t length)
+{
+	DMA_InitTypeDef DMA_InitStructure;
+
+    dma_tx->deInit();
+    
+    
+    DMA_InitStructure.DMA_Channel = dma_channel; /////////////////////
+    //外设地址
+    DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)(&USARTx->DR);/////////////////
+    //内存地址
+    DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)ptr;//////////////////////////
+    //dma传输方向
+    DMA_InitStructure.DMA_DIR = DMA_DIR_MemoryToPeripheral;
+    //设置DMA在传输时缓冲区的长度
+    DMA_InitStructure.DMA_BufferSize = length;///////////////////////////////
+    //设置DMA的外设递增模式，一个外设
+    DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+    //设置DMA的内存递增模式
+    DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+    //外设数据字长
+    DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+    //内存数据字长
+    DMA_InitStructure.DMA_MemoryDataSize = DMA_PeripheralDataSize_Byte;
+    //设置DMA的传输模式
+    DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
+    //设置DMA的优先级别
+    DMA_InitStructure.DMA_Priority = DMA_Priority_High;
+    
+    //指定如果FIFO模式或直接模式将用于指定的流 ： 不使能FIFO模式  
+    DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;    
+    //指定了FIFO阈值水平
+    DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;        
+    //指定的Burst转移配置内存传输 
+    DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;       
+    //指定的Burst转移配置外围转移 */  
+    DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single; 
+    dma_tx->init(&DMA_InitStructure);
+    dma_tx->enable();
 }
 /**
  *@name     uint16_t Uart::receive()
@@ -310,75 +295,6 @@ uint16_t Uart::read()
     return (uint16_t)(USARTx->DR & (uint16_t)0x01FF);
 }
 
-/**
- *@name     void Uart::attach_rx_interrupt(void (*callback_fun)(void))
- *@brief    绑定串口接收中断所调用的用户程序
- *@param    callback_fun:  用户函数
- *@retval   None
-*/
-void Uart::attach_rx_interrupt(void (*callback_fun)(void))
-{
-    switch((uint32_t)USARTx)
-    {
-    case (uint32_t)USART1_BASE:
-        usart_callback_table[0][0] = callback_fun;
-        break;
-    case (uint32_t)USART2_BASE:
-        usart_callback_table[1][0] = callback_fun;
-        break;
-    case (uint32_t)USART3_BASE:
-        usart_callback_table[2][0] = callback_fun;
-        break;
-    case (uint32_t)UART4_BASE:
-        usart_callback_table[3][0] = callback_fun;
-        break;
-    case (uint32_t)UART5_BASE:
-        usart_callback_table[4][0] = callback_fun;
-        break;
-    }
-}
-
-/**
- *@name     void Uart::attach_tx_interrupt(void (*callback_fun)(void))
- *@brief    绑定串口发送完成中断所调用的用户程序
- *@param    callback_fun:  用户函数
- *@retval   None
-*/
-void Uart::attach_tx_interrupt(void (*callback_fun)(void))
-{
-    switch((uint32_t)USARTx)
-    {
-    case (uint32_t)USART1_BASE:
-        usart_callback_table[0][1] = callback_fun;
-        break;
-    case (uint32_t)USART2_BASE:
-        usart_callback_table[1][1] = callback_fun;
-        break;
-    case (uint32_t)USART3_BASE:
-        usart_callback_table[2][1] = callback_fun;
-        break;
-    case (uint32_t)UART4_BASE:
-        usart_callback_table[3][1] = callback_fun;
-        break;
-    case (uint32_t)UART5_BASE:
-        usart_callback_table[4][1] = callback_fun;
-        break;
-    }
-}
-/**
- *@name     uint16_t Uart::dma_send_string(const char *str,uint16_t length)
- *@brief    串口DMA方式发送字符串，缓冲区数据
- *@param    str：       要发送的字符串，数据缓冲区
-            length：    缓冲区的长度
- *@retval   发送数据的长度
-*/
-uint16_t Uart::dma_send_string(const char *str, uint16_t length)
-{
-//此函数有待优化，去掉第一个参数
-	DMA_SetCurrDataCounter(dma_stream,length);
- 	DMA_Cmd(dma_stream,ENABLE);
-    return length;
-}
 
 
 /**
@@ -396,7 +312,6 @@ void Uart::wait_busy()
         while(busy[0] == 1 ){
             if(USART1->SR & 0X40){
                 busy[0] = 0;
-//                irq_handler(serial_irq_ids[NUM_UART1],TcIrq);
                 USART_ClearITPendingBit(USART1, USART_IT_TC);
                 break;
             }
@@ -406,7 +321,6 @@ void Uart::wait_busy()
         while(busy[1] == 1 ){
             if(USART2->SR & 0X40){
                 busy[1] = 0;
-//                irq_handler(serial_irq_ids[NUM_UART2],TcIrq);
                 USART_ClearITPendingBit(USART2, USART_IT_TC);
                 break;
             }
@@ -416,7 +330,6 @@ void Uart::wait_busy()
         while(busy[2] == 1 ){
             if(USART3->SR & 0X40){
                 busy[2] = 0;
-//                irq_handler(serial_irq_ids[NUM_UART3],TcIrq);
                 USART_ClearITPendingBit(USART3, USART_IT_TC);
                 break;
             }
@@ -426,7 +339,6 @@ void Uart::wait_busy()
         while(busy[3] == 1 ){
             if(UART4->SR & 0X40){
                 busy[3] = 0;
-//                irq_handler(serial_irq_ids[NUM_UART4],TcIrq);
                 USART_ClearITPendingBit(UART4, USART_IT_TC);
                 break;
             }
@@ -436,7 +348,6 @@ void Uart::wait_busy()
         while(busy[4] == 1 ){
             if(UART5->SR & 0X40){
                 busy[4] = 0;
-//                irq_handler(serial_irq_ids[NUM_UART5],TcIrq);
                 USART_ClearITPendingBit(UART5, USART_IT_TC);
                 break;
             }
@@ -511,7 +422,6 @@ extern "C" {
         if(USART_GetITStatus(USART2, USART_IT_TC) == SET)
         {
             busy[1] = 0;
-            if(usart_callback_table[1][1] != 0)
                 irq_handler(serial_irq_ids[NUM_UART2],TcIrq);
             USART_ClearITPendingBit(USART2, USART_IT_TC);
         }
