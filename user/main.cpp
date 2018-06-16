@@ -26,12 +26,13 @@ void tc_evnet()
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
+    uart1.begin(115200,1);
     uart1.attach(tc_evnet,TcIrq);
     uart1.interrupt(TcIrq,ENABLE);
     PB8.mode(OUTPUT_PP);
     PB8.reset();
 	no_interrupts();
+
 }
 
 int main(void)
@@ -40,6 +41,7 @@ int main(void)
     while(1)
     {
         uart1.printf("uart is ok ! count = %d\r\n", count);
+
         delay_ms(1000);
     }
 }

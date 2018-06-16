@@ -144,6 +144,12 @@ mcuGpio PG13(GPIOG, GPIO_Pin_13);
 mcuGpio PG14(GPIOG, GPIO_Pin_14);
 mcuGpio PG15(GPIOG, GPIO_Pin_15);
 
+mcuGpio PH9(GPIOH, GPIO_Pin_9);
+
+mcuGpio PI5(GPIOI, GPIO_Pin_5);
+mcuGpio PI6(GPIOI, GPIO_Pin_6);
+mcuGpio PI7(GPIOI, GPIO_Pin_7);
+
 //Spi     spi1(SPI1, &PB3, &PB4, &PA7);
 //Spi     spi2(SPI2, &PB13, &PB14, &PB15);
 //Spi     spi3(SPI3, &PB3, &PB4, &PB5);

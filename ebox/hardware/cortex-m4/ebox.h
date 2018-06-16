@@ -206,6 +206,12 @@ extern mcuGpio PG14;
 extern mcuGpio PG15;
 
 
+extern mcuGpio PH9;
+
+extern mcuGpio PI5;
+extern mcuGpio PI6;
+extern mcuGpio PI7;
+
 
 
 
