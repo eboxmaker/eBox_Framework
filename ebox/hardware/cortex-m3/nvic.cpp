@@ -70,9 +70,12 @@ static IRQn_Type dev_to_irqn(uint32_t dev,uint8_t index)
     for(i = 0; i < sizeof(dev_to_IRQn_table)/sizeof(DevToIRQn_t); i++)
     {
         if(dev == dev_to_IRQn_table[i].dev)
+        {
+            return (IRQn_Type)dev_to_IRQn_table[i].irqn[index];
             break;
+        }
     }
-    return (IRQn_Type)dev_to_IRQn_table[i].irqn[index];
+    return IRQn_Type(0);
 }
 
 

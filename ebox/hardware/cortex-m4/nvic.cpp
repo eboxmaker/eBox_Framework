@@ -34,25 +34,26 @@ const DevToIRQn_t dev_to_IRQn_table[] =
     {USART2_BASE,USART2_IRQn},
     {USART3_BASE,USART3_IRQn},
     
-    #ifdef STM32F10X_HD
     
-    {TIM5_BASE,TIM5_IRQn},
-    {TIM6_BASE,TIM6_IRQn},
-    {TIM7_BASE,TIM7_IRQn},
-    {TIM8_BASE,TIM8_BRK_IRQn,TIM8_UP_IRQn,TIM8_TRG_COM_IRQn,TIM8_CC_IRQn},
+//    {TIM5_BASE,TIM5_IRQn},
+//    {TIM6_BASE,TIM6_IRQn},
+//    {TIM7_BASE,TIM7_IRQn},
+//    {TIM8_BASE,TIM8_BRK_IRQn,TIM8_UP_IRQn,TIM8_TRG_COM_IRQn,TIM8_CC_IRQn},
 
+    {DMA2_Stream0_BASE,DMA2_Stream0_IRQn},
     {DMA2_Stream1_BASE,DMA2_Stream1_IRQn},
     {DMA2_Stream2_BASE,DMA2_Stream2_IRQn},
     {DMA2_Stream3_BASE,DMA2_Stream3_IRQn},
     {DMA2_Stream4_BASE,DMA2_Stream4_IRQn},
     {DMA2_Stream5_BASE,DMA2_Stream5_IRQn},
+    {DMA2_Stream6_BASE,DMA2_Stream6_IRQn},
+    {DMA2_Stream7_BASE,DMA2_Stream7_IRQn},
     
     {SPI3_BASE,SPI3_IRQn},
     
     {UART4_BASE,UART4_IRQn},
     {UART5_BASE,UART5_IRQn},
     
-    #endif
     
 };
 #define AIRCR_VECTKEY_MASK    ((uint32_t)0x05FA0000)
@@ -72,22 +73,26 @@ static IRQn_Type dev_to_irqn(uint32_t dev,uint8_t index)
     for(i = 0; i < sizeof(dev_to_IRQn_table)/sizeof(DevToIRQn_t); i++)
     {
         if(dev == dev_to_IRQn_table[i].dev)
+        {
+            return (IRQn_Type)dev_to_IRQn_table[i].irqn[index];
             break;
+        }
     }
-    return (IRQn_Type)dev_to_IRQn_table[i].irqn[index];
+    return IRQn_Type(0);
 }
 
 
 
 
 
-
+//按照设备基地址设置其中断优先级。index针对一个外设有N个中断入口的第几个中断入口
 void nvic_irq_set_priority(uint32_t dev, uint8_t index , uint8_t PreemptionPriority,uint8_t SubPriority) 
 {
     
     uint32_t tmppriority = 0x00, tmppre = 0x00, tmpsub = 0x0F;
 
     IRQn_Type irq_num = dev_to_irqn(dev,index);
+    if(irq_num == 0) return ;
     tmppriority = (0x700 - ((SCB->AIRCR) & (uint32_t)0x700))>> 0x08;
     tmppre = (0x4 - tmppriority);
     tmpsub = tmpsub >> tmppriority;
@@ -98,6 +103,7 @@ void nvic_irq_set_priority(uint32_t dev, uint8_t index , uint8_t PreemptionPrior
         
     NVIC->IP[irq_num] = tmppriority;
 }
+//直接输入中断号设置其中断优先级
 void nvic_irq_set_priority(IRQn_Type irq_num, uint8_t PreemptionPriority,uint8_t SubPriority) 
 {
     

@@ -39,15 +39,15 @@ public:
     virtual uint32_t    read_config();
 
     virtual int8_t	write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t data);
-    virtual int8_t	write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t num_to_write);
+    virtual int8_t	write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t len);
     virtual int8_t	read_byte (uint8_t slave_address, uint8_t reg_address, uint8_t *data);
-    virtual int8_t	read_byte (uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t num_to_read);
+    virtual int8_t	read_byte (uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t len);
     virtual int8_t	wait_dev_busy(uint8_t slave_address);
 public:
     virtual int8_t take_i2c_right(uint32_t speed);
     virtual int8_t release_i2c_right(void);
 
-public:
+private:
     virtual int8_t start();
     virtual int8_t stop();
     virtual int8_t send_ack();
@@ -84,15 +84,15 @@ public:
     virtual uint32_t	read_config();
 
     virtual int8_t		write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t data);
-    virtual int8_t 		write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t num_to_write);
+    virtual int8_t 		write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t len);
     virtual int8_t 		read_byte (uint8_t slave_address, uint8_t reg_address, uint8_t *data);
-    virtual int8_t 		read_byte (uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t num_to_read);
+    virtual int8_t 		read_byte (uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t len);
     virtual int8_t		wait_dev_busy (uint8_t slave_address);
 public:
     virtual int8_t      take_i2c_right(uint32_t speed);
     virtual int8_t      release_i2c_right(void);
 
-public:
+private:
     virtual int8_t 	start();
     virtual int8_t 	stop();
     virtual int8_t 	send_ack();

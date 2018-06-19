@@ -272,11 +272,11 @@ int8_t  SoftSpi::write(uint8_t data)
     transfer(data);
     return 0;
 }
-int8_t  SoftSpi::write(uint8_t *data, uint16_t data_length)
+int8_t  SoftSpi::write(uint8_t *data, uint16_t len)
 {
-    if(data_length == 0)
+    if(len == 0)
         return -1;
-    while(data_length--)
+    while(len--)
     {
         transfer(*data++);
     }
@@ -293,11 +293,11 @@ int8_t  SoftSpi::read(uint8_t *data)
     return 0;
 
 }
-int8_t  SoftSpi::read(uint8_t *rcvdata, uint16_t data_length)
+int8_t  SoftSpi::read(uint8_t *rcvdata, uint16_t len)
 {
-    if(data_length == 0)
+    if(len == 0)
         return -1;
-    while(data_length--)
+    while(len--)
     {
         *rcvdata++ = transfer(0xff);
     }
