@@ -149,12 +149,12 @@ int8_t mcuSpi::write(uint8_t data)
 
     return 0;
 }
-int8_t mcuSpi::write(uint8_t *data, uint16_t data_length)
+int8_t mcuSpi::write(uint8_t *data, uint16_t len)
 {
     __IO uint8_t dummyByte;
-    if(data_length == 0)
+    if(len == 0)
         return -1;
-    while(data_length--)
+    while(len--)
     {
         while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
             ;
@@ -187,11 +187,11 @@ int8_t mcuSpi::read(uint8_t *recv_data)
     return 0;
 }
 
-int8_t mcuSpi::read(uint8_t *recv_data, uint16_t data_length)
+int8_t mcuSpi::read(uint8_t *recv_data, uint16_t len)
 {
-    if(data_length == 0)
+    if(len == 0)
         return -1;
-    while(data_length--)
+    while(len--)
     {
         while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
             ;

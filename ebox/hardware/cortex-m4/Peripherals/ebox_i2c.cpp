@@ -196,14 +196,14 @@ int8_t mcuI2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t da
     return err;
 
 }
-int8_t mcuI2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t num_to_write)
+int8_t mcuI2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t len)
 {
     uint16_t err = 0;
 
     start();
     send_7bits_address(slave_address);
     send_byte(reg_address);
-    while(num_to_write--)
+    while(len--)
     {
         send_byte(*data);
         data++;
@@ -228,7 +228,7 @@ int8_t mcuI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *da
     return 0;
 }
 
-int8_t mcuI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t num_to_read)
+int8_t mcuI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t len)
 {
     uint8_t i = 0;
     start();
@@ -238,16 +238,16 @@ int8_t mcuI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *da
     start();
     send_7bits_address(slave_address + 1);
 
-    while(num_to_read)
+    while(len)
     {
-        if(num_to_read == 1)
+        if(len == 1)
         {
             send_no_ack();
             stop();
         }
         receive_byte(data);
         data++;
-        num_to_read--;
+        len--;
         i++;
     }
     send_ack();

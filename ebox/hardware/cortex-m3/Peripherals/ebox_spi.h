@@ -49,11 +49,11 @@ public:
     virtual uint8_t transfer(uint8_t data);
 
     virtual int8_t  write(uint8_t data);
-    virtual int8_t  write(uint8_t *data, uint16_t data_length);
+    virtual int8_t  write(uint8_t *data, uint16_t len);
 
     virtual uint8_t read();
     virtual int8_t  read(uint8_t  *recv_data);
-    virtual int8_t  read(uint8_t *recv_data, uint16_t data_length);
+    virtual int8_t  read(uint8_t *recv_data, uint16_t len);
 public:
     virtual int8_t take_spi_right(SpiConfig_t *spi_config);
     virtual int8_t release_spi_right(void);
@@ -81,11 +81,11 @@ public:
 
 
     virtual int8_t  write(uint8_t data);
-    virtual int8_t  write(uint8_t *data, uint16_t data_length);
+    virtual int8_t  write(uint8_t *data, uint16_t len);
 
     virtual uint8_t read();
     virtual int8_t  read(uint8_t *data);
-    virtual int8_t  read(uint8_t *rcvdata, uint16_t data_length);
+    virtual int8_t  read(uint8_t *rcvdata, uint16_t len);
 
 public:
     virtual int8_t take_spi_right(SpiConfig_t *spi_config);

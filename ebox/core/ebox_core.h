@@ -64,9 +64,6 @@ extern void        (*delay_ms)(uint64_t ms);
 extern void        (*delay_us)(uint64_t ms);
 
 
-extern void         get_sys_clock(Cpu_t *info);
-float               sys_version();
-
 
 extern Cpu_t cpu;
 

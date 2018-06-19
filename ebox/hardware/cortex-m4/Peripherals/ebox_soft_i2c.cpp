@@ -187,7 +187,7 @@ int8_t SoftI2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t d
     delay_us(10);
     return ret;
 }
-int8_t SoftI2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t num_to_write)
+int8_t SoftI2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t len)
 {
     int8_t ret = 0;
     start();
@@ -198,7 +198,7 @@ int8_t SoftI2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *
     if (send_byte(reg_address) == -1)
         ret = -2;
 
-    while(num_to_write--)
+    while(len--)
     {
         send_byte(*data++);
         if (wait_ack() == -1)
@@ -234,7 +234,7 @@ int8_t 	SoftI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *
 
     return ret;
 }
-int8_t 	SoftI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t num_to_read)
+int8_t 	SoftI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t len)
 {
     int8_t ret = 0;
     int i = 0;
@@ -252,12 +252,12 @@ int8_t 	SoftI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *
     if (send_7bits_address(slave_address + 1) == -1)
         ret = -3;
 
-    while(num_to_read)
+    while(len)
     {
         *data++ = receive_byte();
-        num_to_read--;
+        len--;
         i++;
-        if(num_to_read == 0)
+        if(len == 0)
         {
             send_no_ack();
             stop();

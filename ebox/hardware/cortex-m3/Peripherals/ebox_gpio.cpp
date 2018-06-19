@@ -148,6 +148,7 @@ void mcuGpio::mode(PIN_MODE mode)
         case OUTPUT_OD_PD:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;break;
             
+        case OUTPUT:
         case OUTPUT_PP:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;break;
         
