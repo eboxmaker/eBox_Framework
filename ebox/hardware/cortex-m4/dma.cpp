@@ -1,6 +1,6 @@
 #include "dma.h"
 #include "nvic.h"
-
+#include "rcc.h"
 static uint32_t dma_irq_ids[DMA_NUM] = {0, 0, 0,0,0,0,0};
 
 static DmaIrqHandler_t irq_handler;

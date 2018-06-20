@@ -71,7 +71,6 @@ public:
 private:
     Gpio        *pwm_pin;
     TIM_TypeDef *TIMx;
-    uint32_t    rcc;
     uint8_t     ch;
     uint16_t    period;//保存溢出值，用于计算占空比
     uint16_t    duty;//保存占空比值

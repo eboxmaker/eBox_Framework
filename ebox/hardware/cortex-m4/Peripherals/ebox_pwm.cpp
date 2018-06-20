@@ -19,6 +19,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_pwm.h"
+#include "nvic.h"
+#include "rcc.h"
 
 #define TIMxCH1 0x01
 #define TIMxCH2 0x02
@@ -33,48 +35,36 @@ Pwm::Pwm(Gpio *pwm_pin,TIM_TypeDef *timer,uint8_t ch)
 	switch((uint32_t)timer)
 	{
 		case TIM1_BASE:
-			rcc_timer_clock_cmd = RCC_APB2PeriphClockCmd;
-			rcc = RCC_APB2Periph_TIM1;
 			af_timer_x = GPIO_AF_TIM1;
 			break;
 		case TIM2_BASE:
-			rcc_timer_clock_cmd = RCC_APB1PeriphClockCmd;
-			rcc = RCC_APB1Periph_TIM2;
 			af_timer_x = GPIO_AF_TIM2;
 			break;
 		case TIM3_BASE:
-			rcc_timer_clock_cmd = RCC_APB1PeriphClockCmd;
-			rcc = RCC_APB1Periph_TIM3;
 			af_timer_x = GPIO_AF_TIM3;
 			break;
 		case TIM4_BASE:
-			rcc_timer_clock_cmd = RCC_APB1PeriphClockCmd;
-			rcc = RCC_APB1Periph_TIM4;
+
 			af_timer_x = GPIO_AF_TIM4;
 			break;
 		case TIM5_BASE:
-			rcc_timer_clock_cmd = RCC_APB1PeriphClockCmd;
-			rcc = RCC_APB1Periph_TIM5;
+
 			af_timer_x = GPIO_AF_TIM5;
 			break;
 		case TIM8_BASE:
-			rcc_timer_clock_cmd = RCC_APB1PeriphClockCmd;
-			rcc = RCC_APB2Periph_TIM8;
+
 			af_timer_x = GPIO_AF_TIM8;
 			break;
 		case TIM9_BASE:
-			rcc_timer_clock_cmd = RCC_APB1PeriphClockCmd;
-			rcc = RCC_APB2Periph_TIM9;
+
 			af_timer_x = GPIO_AF_TIM9;
 			break;
 		case TIM10_BASE:
-			rcc_timer_clock_cmd = RCC_APB1PeriphClockCmd;
-			rcc = RCC_APB2Periph_TIM10;
+
 			af_timer_x = GPIO_AF_TIM10;
 			break;
 		case TIM11_BASE:
-			rcc_timer_clock_cmd = RCC_APB1PeriphClockCmd;
-			rcc = RCC_APB2Periph_TIM11;
+
 			af_timer_x = GPIO_AF_TIM11;
 			break;
 		default :
@@ -90,7 +80,7 @@ void Pwm::begin(uint32_t frq, uint16_t duty)
     pwm_pin->mode(AF_PP,af_timer_x);
 
 
-    rcc_timer_clock_cmd(rcc,ENABLE);
+    rcc_clock_cmd((uint32_t)TIMx,ENABLE);
     set_oc_polarity(1);
     set_frq(frq);
     _set_duty(duty);
@@ -222,7 +212,6 @@ void Pwm::base_init(uint32_t _period, uint32_t _prescaler)
 
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 
-    RCC_APB1PeriphClockCmd(rcc, ENABLE);
     TIM_TimeBaseStructure.TIM_Period = this->period - 1; //ARR
     TIM_TimeBaseStructure.TIM_Prescaler = _prescaler - 1;
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; //

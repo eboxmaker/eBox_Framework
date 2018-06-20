@@ -1,6 +1,6 @@
 #include "ebox_uart.h"
 #include "nvic.h"
-
+#include "rcc.h"
 
 
 static uint32_t serial_irq_ids[UART_NUM] = {0, 0, 0,0,0};
@@ -42,9 +42,6 @@ void Uart::begin(uint32_t baud_rate,uint8_t use_dma)
         
             /* Uart parament
             */
-            rcc_usart_clock_cmd = RCC_APB2PeriphClockCmd;
-            usart_rcc           = RCC_APB2Periph_USART1;
-            usart_irq           = USART1_IRQn;
             /* dma parament
             */
             dma_tx              = &Dma2Stream7;
@@ -61,9 +58,6 @@ void Uart::begin(uint32_t baud_rate,uint8_t use_dma)
         
             /* Uart parament
             */
-            rcc_usart_clock_cmd = RCC_APB1PeriphClockCmd;
-            usart_rcc           = RCC_APB1Periph_USART2;
-            usart_irq           = USART2_IRQn;
             /* dma parament
             */
             dma_tx              = &Dma1Stream6;
@@ -79,9 +73,6 @@ void Uart::begin(uint32_t baud_rate,uint8_t use_dma)
         
             /* Uart parament
             */
-            rcc_usart_clock_cmd = RCC_APB1PeriphClockCmd;
-            usart_rcc           = RCC_APB1Periph_USART3;
-            usart_irq           = USART3_IRQn;
             /* dma parament
             */
             dma_tx              = &Dma1Stream3;
@@ -97,14 +88,10 @@ void Uart::begin(uint32_t baud_rate,uint8_t use_dma)
         
             /* Uart parament
             */
-            rcc_usart_clock_cmd = RCC_APB1PeriphClockCmd;
-            usart_rcc           = RCC_APB1Periph_UART4;
-            usart_irq           = UART4_IRQn;
             /* dma parament
             */
             dma_tx              = &Dma1Stream4;
             dma_channel         = DMA_Channel_4;
-
 
             index               = NUM_UART4;
         break;   
@@ -116,9 +103,6 @@ void Uart::begin(uint32_t baud_rate,uint8_t use_dma)
         
             /* Uart parament
             */
-            rcc_usart_clock_cmd = RCC_APB1PeriphClockCmd;
-            usart_rcc           = RCC_APB1Periph_UART5;
-            usart_irq           = UART5_IRQn;
             /* dma parament
             */
             dma_tx              = &Dma1Stream7;
@@ -150,7 +134,7 @@ void Uart::config(uint32_t baud_rate)
     tx->mode(AF_PP,gpio_af_usart);
     rx->mode(AF_PP,gpio_af_usart);
     
-    rcc_usart_clock_cmd(usart_rcc,ENABLE);
+    rcc_clock_cmd((uint32_t)USARTx,ENABLE);
   	USART_InitStructure.USART_BaudRate = baud_rate;//≤®Ãÿ¬ …Ë÷√
   	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
   	USART_InitStructure.USART_StopBits = USART_StopBits_1;

@@ -60,7 +60,6 @@ public:
 private:
     Gpio		*pwm_pin;
     TIM_TypeDef *TIMx;
-    uint32_t    rcc;
     uint8_t     ch;
     uint16_t    period;//保存溢出值，用于计算占空比
     uint16_t    duty;//保存占空比值
@@ -72,7 +71,6 @@ private:
 //-------------------------------------------------------------
 
     uint8_t             af_timer_x;
-    void                (*rcc_timer_clock_cmd)(uint32_t rcc,FunctionalState state);
 
 };
 void analog_write(Gpio *pwm_pin, uint16_t duty);

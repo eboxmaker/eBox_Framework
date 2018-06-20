@@ -1,5 +1,5 @@
-#include "ebox_common.h"
-
+#include "ebox_core.h"
+#include "mcu.h"
 callback_fun_type timx_cb_table[15][5];
 uint16_t t2_overflow_times = 0;
 uint16_t t3_overflow_times = 0;
