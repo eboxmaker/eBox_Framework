@@ -698,14 +698,14 @@
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_gpio.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_object.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\ebox_object.cpp</FilePath>
-            </File>
-            <File>
               <FileName>ebox_uart.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_uart.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_object.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\ebox_object.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_i2c.cpp</FileName>
@@ -761,6 +761,16 @@
               <FileName>dma.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m4\dma.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>rcc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\rcc.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_it.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\ebox_it.cpp</FilePath>
             </File>
           </Files>
         </Group>

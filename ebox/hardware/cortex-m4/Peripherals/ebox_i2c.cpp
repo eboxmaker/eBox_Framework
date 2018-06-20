@@ -29,10 +29,7 @@ void  mcuI2c::begin(uint32_t speed)
     this->speed = speed;
     I2C_InitTypeDef I2C_InitStructure;
 
-    if(I2Cx == I2C1)
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1, ENABLE);
-    else if(I2Cx == I2C2)
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C2, ENABLE);
+
 
 
     sda_pin->mode(AF_OD_PU,GPIO_AF_I2C1);//

@@ -20,7 +20,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_timer.h"
 #include "ebox_timer_it.h"
-
+#include "rcc.h"
+#include "nvic.h"
 
 static tim_irq_handler irq_handler;
 static uint32_t tim_irq_ids[TIM_IRQ_ID_NUM];
@@ -58,10 +59,8 @@ void Timer::begin(uint32_t frq)
         _period = get_timer_source_clock() / _prescaler / frq;
         if((0xffff >= _period))break;
     }
-
-    base_init(_period, _prescaler);
-		
-		switch((uint32_t)_TIMx)
+    
+    switch((uint32_t)_TIMx)
     {
     case (uint32_t)TIM1_BASE:
         index = TIM1_IT_Update;
@@ -85,38 +84,42 @@ void Timer::begin(uint32_t frq)
         index = TIM7_IT_Update;
         break;
     }		
-		tim_irq_init(index,(&Timer::_irq_handler),(uint32_t)this);
+    tim_irq_init(index,(&Timer::_irq_handler),(uint32_t)this);
+    
+    rcc_clock_cmd((uint32_t)_TIMx,ENABLE);
+
+    base_init(_period, _prescaler);
+    nvic(ENABLE,0,0);
+    interrupt(ENABLE);
 }
 void Timer::reset_frq(uint32_t frq)
 {
     begin(frq);
-    interrupt(ENABLE);
     start();
+}
+void Timer::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
+{
+    nvic_irq_set_priority((uint32_t)_TIMx,0,0,0);
+    if(enable != DISABLE)
+        nvic_irq_enable((uint32_t)_TIMx,0);
+    else
+        nvic_irq_disable((uint32_t)_TIMx,0);
 }
 
 void Timer::interrupt(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
 {
-    if(preemption_priority > 3)preemption_priority = 3;
-    if(sub_priority > 3)sub_priority = 3;
-    NVIC_InitTypeDef NVIC_InitStructure;
-    
-    NVIC_InitStructure.NVIC_IRQChannel = nvic_ch;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
     TIM_ClearITPendingBit(_TIMx , TIM_FLAG_Update);//必须加，否则开启中断会立即产生一次中断
     TIM_ITConfig(_TIMx, TIM_IT_Update, enable);
 }
 
 void Timer::start(void)
 {
-    TIM_Cmd(_TIMx, ENABLE); //????
+    TIM_Cmd(_TIMx, ENABLE); 
 }
 
 void Timer::stop(void)
 {
-    TIM_Cmd(_TIMx, DISABLE); //????
+    TIM_Cmd(_TIMx, DISABLE); 
 }
 void Timer::base_init(uint16_t period, uint16_t prescaler)
 {
@@ -124,42 +127,12 @@ void Timer::base_init(uint16_t period, uint16_t prescaler)
 
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
     TIM_DeInit(_TIMx);
-    switch((uint32_t)_TIMx)
-    {
-    case (uint32_t)TIM1:
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
-        //此处和通用定时器不一样 控制定时器溢出多少次产生一次中断
-        TIM_TimeBaseStructure.TIM_RepetitionCounter = 0 ;
-        nvic_ch = TIM1_UP_IRQn;//
-        break;
-    case (uint32_t)TIM2_BASE:
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-        nvic_ch = TIM2_IRQn;//
-        break;
-    case (uint32_t)TIM3_BASE:
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
-        nvic_ch = TIM3_IRQn;//
-        break;
-    case (uint32_t)TIM4_BASE:
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
-        nvic_ch = TIM4_IRQn;//
-        break;
-#if defined (STM32F10X_HD)
-    case (uint32_t)TIM5_BASE:
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE);
-        nvic_ch = TIM5_IRQn;//
-        break;
-    case (uint32_t)TIM6_BASE:
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6, ENABLE);
-        nvic_ch = TIM6_IRQn;//
-        break;
-    case (uint32_t)TIM7_BASE:
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM7, ENABLE);
-        nvic_ch = TIM7_IRQn;//
-        break;
-#endif
-    }
+
+    
     TIM_InternalClockConfig(_TIMx);
+    //此处和通用定时器不一样 控制定时器溢出多少次产生一次中断
+    if(_TIMx == TIM1)
+        TIM_TimeBaseStructure.TIM_RepetitionCounter = 0 ;
 
     TIM_TimeBaseStructure.TIM_Period = period - 1; //ARR寄存器
     TIM_TimeBaseStructure.TIM_Prescaler = prescaler - 1;

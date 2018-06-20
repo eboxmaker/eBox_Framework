@@ -19,7 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_uart.h"
-
+#include "rcc.h"
 
 uint8_t busy[5];
 
@@ -72,35 +72,31 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     uint8_t             index;
     USART_InitTypeDef   USART_InitStructure;
         
-
+    rcc_clock_cmd((uint32_t)_USARTx,ENABLE);
+    
     switch((uint32_t)_USARTx)
     {
     case (uint32_t)USART1_BASE:
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
         dma_tx = &Dma1Ch4;
         index = NUM_UART1;
         break;
 
     case (uint32_t)USART2_BASE:
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
         dma_tx = &Dma1Ch7;
         index = NUM_UART2;
         break;
 
     case (uint32_t)USART3_BASE:
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
         dma_tx = &Dma1Ch2;
         index = NUM_UART3;
         break;
 
 #if defined (STM32F10X_HD)
     case (uint32_t)UART4_BASE:
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4, ENABLE);
         index = NUM_UART4;
         break;
 
     case (uint32_t)UART5_BASE:
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, ENABLE);
         index = NUM_UART5;
         break;
 #endif

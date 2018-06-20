@@ -12,14 +12,20 @@ No part of this software may be used for any commercial activities by any form o
 Disclaimer
 This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
 */
-#ifndef __MCU_CORE_H
-#define __MCU_CORE_H
+#ifndef __MCU_H
+#define __MCU_H
+
+
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 #include "stm32f4xx.h"
 #include "ebox_type.h"
 #include "mcu_config.h"
+
+    
     
 typedef void (*callback_fun_type)(void);
 

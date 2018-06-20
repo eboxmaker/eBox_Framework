@@ -26,4 +26,6 @@
     #define STM32_EX_SRAM_END      0x68080000 /* the end address of external SRAM */
 #endif
 
+
+static const int xx = 0;
 #endif

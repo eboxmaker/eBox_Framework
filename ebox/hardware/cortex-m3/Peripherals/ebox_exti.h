@@ -38,7 +38,8 @@ class Exti
 public:
     Exti(Gpio *exti_pin, uint8_t  trigger);
     void begin();
-    void interrupt(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
+    void nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
+    void interrupt(FunctionalState enable);
 
     static void _irq_handler( uint32_t id);
     void attach(void (*fptr)(void));
@@ -48,14 +49,12 @@ public:
     }
 
 private:
-    Gpio                *exti_pin;
+    Gpio                *pin;
     uint8_t             trigger;
     uint8_t             port_source;
     uint8_t             pin_source;
     uint32_t            exti_line;
-    uint8_t             irq;
 
-    void init_info(Gpio *exti_pin);
 protected:
     FunctionPointer _irq;
 };

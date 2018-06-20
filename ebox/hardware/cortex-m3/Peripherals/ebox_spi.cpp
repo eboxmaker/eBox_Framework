@@ -19,7 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_spi.h"
-
+#include "rcc.h"
 
 mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 {
@@ -33,19 +33,7 @@ mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 
 void mcuSpi::begin(SpiConfig_t *spi_config)
 {
-    if(spi == SPI1)
-    {
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
-    }
-    if(spi == SPI2)
-    {
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
-    }
-    if(spi == SPI3)
-    {
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3, ENABLE);
-    }
-
+    rcc_clock_cmd((uint32_t)spi,ENABLE);
     config(spi_config);
 }
 void mcuSpi::config(SpiConfig_t *spi_config)

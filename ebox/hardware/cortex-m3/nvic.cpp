@@ -5,7 +5,7 @@
   
 const DevToIRQn_t dev_to_IRQn_table[] = 
 {
-    {TIM1_BASE,TIM1_BRK_IRQn,TIM1_UP_IRQn,TIM1_TRG_COM_IRQn,TIM1_CC_IRQn},
+    {TIM1_BASE,TIM1_UP_IRQn,TIM1_BRK_IRQn,TIM1_TRG_COM_IRQn,TIM1_CC_IRQn},
     {TIM2_BASE,TIM2_IRQn},
     {TIM3_BASE,TIM3_IRQn},
     {TIM4_BASE,TIM4_IRQn},
@@ -31,6 +31,23 @@ const DevToIRQn_t dev_to_IRQn_table[] =
     {USART1_BASE,USART1_IRQn},
     {USART2_BASE,USART2_IRQn},
     {USART3_BASE,USART3_IRQn},
+    
+    {EXTI_Line0,EXTI0_IRQn},
+    {EXTI_Line1,EXTI1_IRQn},
+    {EXTI_Line2,EXTI2_IRQn},
+    {EXTI_Line3,EXTI3_IRQn},
+    {EXTI_Line4,EXTI4_IRQn},
+    {EXTI_Line5,EXTI9_5_IRQn},
+    {EXTI_Line6,EXTI9_5_IRQn},
+    {EXTI_Line7,EXTI9_5_IRQn},
+    {EXTI_Line8,EXTI9_5_IRQn},
+    {EXTI_Line9,EXTI9_5_IRQn},
+    {EXTI_Line10,EXTI15_10_IRQn},
+    {EXTI_Line11,EXTI15_10_IRQn},
+    {EXTI_Line12,EXTI15_10_IRQn},
+    {EXTI_Line13,EXTI15_10_IRQn},
+    {EXTI_Line14,EXTI15_10_IRQn},
+    {EXTI_Line15,EXTI15_10_IRQn},
     
     #ifdef STM32F10X_HD
     

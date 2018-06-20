@@ -16,7 +16,7 @@ This specification is preliminary and is subject to change at any time without n
 #include "ebox_spi.h"
 #include "ebox_gpio.h"
 #include "stm32f4xx_spi.h"
-
+#include "rcc.h"
 
 mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 {
@@ -40,7 +40,6 @@ void mcuSpi::begin(SPI_CONFIG_TYPE *spi_config)
         miso->mode(AF_PP_PU,GPIO_AF_SPI1);
         mosi->mode(AF_PP_PU,GPIO_AF_SPI1);
 
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
     }
     if(spi == SPI2)
     {
@@ -48,7 +47,6 @@ void mcuSpi::begin(SPI_CONFIG_TYPE *spi_config)
         miso->mode(AF_PP_PU,GPIO_AF_SPI2);
         mosi->mode(AF_PP_PU,GPIO_AF_SPI2);
 
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
     }
     if(spi == SPI3)
     {
@@ -56,9 +54,9 @@ void mcuSpi::begin(SPI_CONFIG_TYPE *spi_config)
         miso->mode(AF_PP_PU,GPIO_AF_SPI3);
         mosi->mode(AF_PP_PU,GPIO_AF_SPI3);
 
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3, ENABLE);
     }
 
+    
     config(spi_config);
 }
 void mcuSpi::config(SPI_CONFIG_TYPE *spi_config)
@@ -67,7 +65,7 @@ void mcuSpi::config(SPI_CONFIG_TYPE *spi_config)
 
     current_dev_num = spi_config->dev_num;
 
-
+    rcc_clock_cmd((uint32_t)spi,ENABLE);
     SPI_Cmd(spi, DISABLE);
 
     SPI_I2S_DeInit(spi);

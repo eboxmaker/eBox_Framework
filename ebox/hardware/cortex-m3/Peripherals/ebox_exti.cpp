@@ -19,7 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_exti.h"
-
+#include "nvic.h"
 /** @defgroup exti 
   * @brief exti driver modules
   * @{
@@ -69,8 +69,7 @@ Exti::Exti(Gpio *pin, uint8_t trigger)
 {
 
     
-    
-    this->exti_pin = pin;
+    this->pin = pin;
     this->trigger = trigger;
 
 }
@@ -87,13 +86,38 @@ void Exti::begin()
 {
     
 	
-    init_info(exti_pin);
+    port_source = (uint32_t)pin->id>>4;
+    pin_source = pin->id&0x0f;
+    exti_line = 1<<pin_source;
+    
     exti_irq_init(this->pin_source,(&Exti::_irq_handler),(uint32_t)this);
 
-    exti_pin->mode(INPUT);
+    
+    pin->mode(INPUT_PU);
+    nvic(ENABLE,0,0);
+    interrupt(ENABLE);
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+}
 
+void Exti::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
+{
+    nvic_irq_set_priority((uint32_t)exti_line,0,0,0);
+    if(enable != DISABLE)
+        nvic_irq_enable((uint32_t)exti_line,0);
+    else
+        nvic_irq_disable((uint32_t)exti_line,0);
+}
+
+/**
+ * @brief   外部中断引脚的中断允许、禁止控制函数
+ * @param   enable: 允许或者禁止中断
+ *          - ENABLE: 允许该外部中断   
+ *          - DISABLE: 禁止该外部中断   
+ *          
+ * @return  NONE
+ */ 
+void Exti::interrupt(FunctionalState enable)
+{
 
     EXTI_InitTypeDef EXTI_InitStructure;
     switch(trigger)
@@ -111,165 +135,8 @@ void Exti::begin()
     GPIO_EXTILineConfig(port_source, pin_source);
     EXTI_InitStructure.EXTI_Line = exti_line;
     EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    EXTI_InitStructure.EXTI_LineCmd = enable;
     EXTI_Init(&EXTI_InitStructure);
-    interrupt(ENABLE);
-
-}
-
-/**
- * @brief   外部中断引脚的中断允许、禁止控制函数
- * @param   enable: 允许或者禁止中断
- *          - ENABLE: 允许该外部中断   
- *          - DISABLE: 禁止该外部中断   
- *          
- * @return  NONE
- */ 
-void Exti::interrupt(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
-{
-    if(preemption_priority > 3)preemption_priority = 3;
-    if(sub_priority > 3)sub_priority = 3;
-    NVIC_InitTypeDef NVIC_InitStructure;
-
-    /* Configure one bit for preemption priority */
-    //  NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);//使用全局控制值
-
-    NVIC_InitStructure.NVIC_IRQChannel = irq;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = preemption_priority;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = sub_priority;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = enable;
-    NVIC_Init(&NVIC_InitStructure);
-
-}
-
-/**
- * @brief   初始化引脚所对应的中断控制器参数
- * @param   *pin: 外部中断所对应的引脚PA0~PG15
- *          
- * @return  NONE
- */ 
-void Exti::init_info(Gpio *pin)
-{
-    switch((uint32_t)pin->id>>4)
-    {
-    case (uint32_t)0:
-        port_source = GPIO_PortSourceGPIOA;
-        break;
-    case (uint32_t)1:
-        port_source = GPIO_PortSourceGPIOB;
-        break;
-    case (uint32_t)2:
-        port_source = GPIO_PortSourceGPIOC;
-        break;
-    case (uint32_t)3:
-        port_source = GPIO_PortSourceGPIOD;
-        break;
-    case (uint32_t)4:
-        port_source = GPIO_PortSourceGPIOE;
-        break;
-    case (uint32_t)5:
-        port_source = GPIO_PortSourceGPIOF;
-        break;
-    }
-    switch(pin->id&0x0f)
-    {
-    case 0:
-        pin_source = GPIO_PinSource0;
-        exti_line = EXTI_Line0;
-        irq = EXTI0_IRQn;
-        break;
-
-    case 1:
-        pin_source = GPIO_PinSource1;
-        exti_line = EXTI_Line1;
-        irq = EXTI1_IRQn;
-        break;
-
-    case 2:
-        pin_source = GPIO_PinSource2;
-        exti_line = EXTI_Line2;
-        irq = EXTI2_IRQn;
-        break;
-
-    case 3:
-        pin_source = GPIO_PinSource3;
-        exti_line = EXTI_Line3;
-        irq = EXTI3_IRQn;
-        break;
-
-    case 4:
-        pin_source = GPIO_PinSource4;
-        exti_line = EXTI_Line4;
-        irq = EXTI4_IRQn;
-        break;
-
-    case 5:
-        pin_source = GPIO_PinSource5;
-        exti_line = EXTI_Line5;
-        irq = EXTI9_5_IRQn;
-        break;
-
-    case 6:
-        pin_source = GPIO_PinSource6;
-        exti_line = EXTI_Line6;
-        irq = EXTI9_5_IRQn;
-        break;
-
-    case 7:
-        pin_source = GPIO_PinSource7;
-        exti_line = EXTI_Line7;
-        irq = EXTI9_5_IRQn;
-        break;
-
-    case 8:
-        pin_source = GPIO_PinSource8;
-        exti_line = EXTI_Line8;
-        irq = EXTI9_5_IRQn;
-        break;
-
-    case 9:
-        pin_source = GPIO_PinSource9;
-        exti_line = EXTI_Line9;
-        irq = EXTI9_5_IRQn;
-        break;
-
-    case 10:
-        pin_source = GPIO_PinSource10;
-        exti_line = EXTI_Line10;
-        irq = EXTI15_10_IRQn;
-        break;
-
-    case 11:
-        pin_source = GPIO_PinSource11;
-        exti_line = EXTI_Line11;
-        irq = EXTI15_10_IRQn;
-        break;
-
-    case 12:
-        pin_source = GPIO_PinSource12;
-        exti_line = EXTI_Line12;
-        irq = EXTI15_10_IRQn;
-        break;
-
-    case 13:
-        pin_source = GPIO_PinSource13;
-        exti_line = EXTI_Line13;
-        irq = EXTI15_10_IRQn;
-        break;
-
-    case 14:
-        pin_source = GPIO_PinSource14;
-        exti_line = EXTI_Line14;
-        irq = EXTI15_10_IRQn;
-        break;
-
-    case 15:
-        pin_source = GPIO_PinSource15;
-        exti_line = EXTI_Line15;
-        irq = EXTI15_10_IRQn;
-        break;
-
-    }
 
 }
 

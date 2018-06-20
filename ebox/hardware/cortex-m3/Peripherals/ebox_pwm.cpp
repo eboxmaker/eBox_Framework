@@ -19,7 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_pwm.h"
-
+#include "rcc.h"
 
 
 
@@ -55,13 +55,12 @@ void Pwm::base_init(uint16_t period, uint16_t prescaler)
 
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 
-    if(rcc == RCC_APB2Periph_TIM1 ||  rcc == RCC_APB2Periph_TIM8 )
+    if(TIMx == TIM1 ||  TIMx == TIM8 )
     {
-        RCC_APB2PeriphClockCmd(rcc, ENABLE);
         TIM_CtrlPWMOutputs(TIMx,ENABLE); 
     }
-    else    
-    RCC_APB1PeriphClockCmd(rcc, ENABLE);
+        
+    rcc_clock_cmd((uint32_t)TIMx,ENABLE);
     TIM_TimeBaseStructure.TIM_Period = this->period - 1; //ARR
     TIM_TimeBaseStructure.TIM_Prescaler = prescaler - 1;
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; //
@@ -79,90 +78,74 @@ void Pwm::init_info(Gpio *pwm_pin)
     //TIM2
     case PA0_ID:
         TIMx = TIM2;
-        rcc = RCC_APB1Periph_TIM2;
         ch = TIMxCH1;//irq = TIM2_IRQn;
         break;
     case PA1_ID:
         TIMx = TIM2;
-        rcc = RCC_APB1Periph_TIM2;
         ch = TIMxCH2;//irq = TIM2_IRQn;
         break;
     case PA2_ID:
         TIMx = TIM2;
-        rcc = RCC_APB1Periph_TIM2;
         ch = TIMxCH3;//irq = TIM2_IRQn;
         break;
     case PA3_ID:
         TIMx = TIM2;
-        rcc = RCC_APB1Periph_TIM2;
         ch = TIMxCH4;//irq = TIM2_IRQn;
         break;
     
     //TIM3
     case PA6_ID:
         TIMx = TIM3;
-        rcc = RCC_APB1Periph_TIM3;
         ch = TIMxCH1;//irq = TIM3_IRQn;
         break;
     case PA7_ID:
         TIMx = TIM3;
-        rcc = RCC_APB1Periph_TIM3;
         ch = TIMxCH2;//irq = TIM3_IRQn;
         break;
     
     //TIM1
     case PA8_ID:
         TIMx = TIM1;
-        rcc = RCC_APB2Periph_TIM1;
         ch = TIMxCH1;//irq = TIM4_IRQn;
         break;
     case PA9_ID:
         TIMx = TIM1;
-        rcc = RCC_APB2Periph_TIM1;
         ch = TIMxCH2;//irq = TIM4_IRQn;
         break;
     case PA10_ID:
         TIMx = TIM1;
-        rcc = RCC_APB2Periph_TIM1;
         ch = TIMxCH3;//irq = TIM4_IRQn;
         break;
     case PA11_ID:
         TIMx = TIM1;
-        rcc = RCC_APB2Periph_TIM1;
         ch = TIMxCH4;//irq = TIM4_IRQn;
         break;
 
     //TIM4
     case PB6_ID:
         TIMx = TIM4;
-        rcc = RCC_APB1Periph_TIM4;
         ch = TIMxCH1;//irq = TIM4_IRQn;
         break;
     case PB7_ID:
         TIMx = TIM4;
-        rcc = RCC_APB1Periph_TIM4;
         ch = TIMxCH2;//irq = TIM4_IRQn;
         break;
     case PB8_ID:
         TIMx = TIM4;
-        rcc = RCC_APB1Periph_TIM4;
         ch = TIMxCH3;//irq = TIM4_IRQn;
         break;
     case PB9_ID:
         TIMx = TIM4;
-        rcc = RCC_APB1Periph_TIM4;
         ch = TIMxCH4;//irq = TIM4_IRQn;
         break;
     
     //TIM3
     case PB0_ID:
         TIMx = TIM3;
-        rcc = RCC_APB1Periph_TIM3;
         ch = TIMxCH3;//irq = TIM3_IRQn;
         break;
     case PB1_ID:
         TIMx = TIM3;
-        rcc = RCC_APB1Periph_TIM3;
         ch = TIMxCH4;//irq = TIM3_IRQn;
         break;
     }

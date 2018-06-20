@@ -1,4 +1,6 @@
 #include "ebox_gpio.h"
+#include "rcc.h"
+
 /**
  *@name     Gpio(GPIO_TypeDef *port,uint16_t pin)
  *@brief    Gpio¹¹Ôìº¯Êý
@@ -11,45 +13,7 @@ mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
     uint8_t temp1,temp2;
     this->port = port;
     this->pin = pin;
-    switch((uint32_t)(port))
-    {
-        case (uint32_t)GPIOA_BASE:
-            temp1 = 0;
-        break;
-            
-        case (uint32_t)GPIOB_BASE:
-            temp1 = 1;
-        break;
-            
-        case (uint32_t)GPIOC_BASE:
-            temp1 = 2;
-        break;
-            
-        case (uint32_t)GPIOD_BASE:
-            temp1 = 3;
-        break;
-            
-        case (uint32_t)GPIOE_BASE:
-            temp1 = 4;
-        break;
-            
-        case (uint32_t)GPIOF_BASE:
-            temp1 = 5;
-        break;
-            
-        case (uint32_t)GPIOG_BASE:
-            temp1 = 6;
-        break;
-        case (uint32_t)GPIOH_BASE:
-            temp1 = 7;
-        break;
-        case (uint32_t)GPIOI_BASE:
-            temp1 = 8;
-        break;
-        default:
-            temp1 = 0;
-        break;
-    }
+    temp1 = ((uint32_t)port - AHB1PERIPH_BASE)>>10;
     for(int i = 0; i <= 15; i ++)
     {
         if((this->pin >> i) == 0)
@@ -69,44 +33,7 @@ mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
 void mcuGpio::mode(PIN_MODE mode)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
-
-    switch((uint32_t)this->port)
-    {
-    case (uint32_t)GPIOA_BASE:
-        RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-        break;
-
-    case (uint32_t)GPIOB_BASE:
-        RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-        break;
-
-    case (uint32_t)GPIOC_BASE:
-        RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-        break;
-
-    case (uint32_t)GPIOD_BASE:
-        RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
-        break;
-
-    case (uint32_t)GPIOE_BASE:
-        RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
-        break;
-
-    case (uint32_t)GPIOF_BASE:
-        RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);
-        break;
-    case (uint32_t)GPIOG_BASE:
-        RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE);
-        break;
-    case (uint32_t)GPIOH_BASE:
-        RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOH, ENABLE);
-        break;
-    case (uint32_t)GPIOI_BASE:
-        RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOI, ENABLE);
-        break;
-    }
-
-
+    rcc_clock_cmd((uint32_t)port,ENABLE);
     GPIO_InitStructure.GPIO_Pin = this->pin;
     //GPIO_InitStructure.GPIO_Mode = (GPIOMode_TypeDef)mode;
     switch((uint8_t)mode)
