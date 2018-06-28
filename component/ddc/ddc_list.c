@@ -1,8 +1,6 @@
 #include "ddc_list.h"
-#include "ebox_mem.h"
-#include "stdio.h"
-#include "ebox_printf.h"
-// create a new node with a value
+#include "ebox_cfun.h"
+
 DdcNode_t* list_creat_node(uint8_t *p)
 {
     DdcNode_t *newNode;
@@ -43,7 +41,7 @@ void list_delete_by_val(DdcNode_t *head, uint16_t id)
     
     if (head->next == NULL)
     {
-        ebox_printf("empty list!\n");
+        //ebox_printf("empty list!\n");
         return;
     }
 

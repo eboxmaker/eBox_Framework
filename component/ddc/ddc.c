@@ -1,6 +1,4 @@
 #include "ddc.h"
-#include "crc.h"
-#include "ebox_printf.h"
 DdcNode_t list_send;
 DdcNode_t list_wait_ack;
 DdcCallBack_t ddc_callback_ch[255] = {0};
@@ -66,7 +64,9 @@ void ddc_recv_process()
                     ddc_recv_state = DDC_ID;
                     recv_frame.head[1] = 0x00;
                 }
+                #if DDC_DEBUG
                 ebox_printf("head->");
+                #endif
                 break;
             case DDC_ID:
                 recv_frame.id.byte[counter++] = ch;
@@ -81,7 +81,7 @@ void ddc_recv_process()
                 ddc_recv_state = DDC_ACK;
                 break;
             case DDC_ACK:
-                recv_frame.ack = ch;
+                recv_frame.ack = (DdcAck_t)ch;
                 ddc_recv_state = DDC_LEN;
                 break;
             case DDC_LEN:
@@ -98,7 +98,9 @@ void ddc_recv_process()
                     }
                     counter = 0;
                 }
+                #if DDC_DEBUG
                 ebox_printf("len->");
+                #endif
                 break;
             case DDC_PAYLOAD:
                 recv_frame.payload[counter++] = ch;
@@ -107,17 +109,20 @@ void ddc_recv_process()
                     ddc_recv_state = DDC_CRC;
                     counter = 0;
                 }
+                #if DDC_DEBUG
                 ebox_printf("payload->");
+                #endif
                 break;
             case DDC_CRC:
+                #if DDC_DEBUG
                 ebox_printf("crc->");
+                #endif
                 recv_frame.crc.byte[counter++] = ch;
                 if(counter == 2)
                 {
                     ddc_frame_to_buf(buf,&recv_frame);
                     if(crc16(buf,(recv_frame.payload_len.value + 8)) == recv_frame.crc.value)//crc ok
                     {
-                        counter = 0;
                         //方法1：
                         //将该段数据添加到应用数据链表中。被用户查询并执行
                         //方法2：
@@ -128,14 +133,20 @@ void ddc_recv_process()
                     }
                     else
                     {
+                        #if DDC_DEBUG
                         ebox_printf("\r\ncrc = 0x%04x \r\n",recv_frame.crc.value);
                         ebox_printf("\r\ncrc = 0x%04x \r\n",crc16(buf,recv_frame.payload_len.value + 8));
+                        #endif           
+                        ddc_recv_state = DDC_HEAD;
+
                     }
+                    counter = 0;
+
                 }
                 break;
 
             default:
-                 
+                ddc_recv_state = DDC_HEAD;
                 break;
         }
         
@@ -150,12 +161,15 @@ void ddc_analyze_frame(DdcFrame_t *frame)
     switch(frame->ch)
     {
         case 255:
+            #if DDC_DEBUG
             ebox_printf("\r\n接收到回复:id = %d\r\n",id.value);
+            #endif
             //接收到回复帧，删除等待回复链表中的对应节点
             list_delete_by_val(&list_wait_ack,id.value);        
             break;
         default :
-            ddc_callback_ch[frame->ch](recv_frame.payload,recv_frame.payload_len.value );
+            if(ddc_callback_ch[frame->ch] != 0)
+                ddc_callback_ch[frame->ch](recv_frame.payload,recv_frame.payload_len.value );
             break;
     }
     if(frame->ack == 1)
@@ -165,7 +179,9 @@ void ddc_analyze_frame(DdcFrame_t *frame)
         ddc_add_to_list(buf);
 
     }
+    #if DDC_DEBUG                        
     ebox_printf("ch:%d\r\n",frame->ch);
+    #endif
 
 }
 
@@ -205,9 +221,9 @@ uint16_t ddc_buf_to_frame(DdcFrame_t *frame,uint8_t *src)
     frame->id.byte[0]   = src[i++];
     frame->id.byte[1]   = src[i++];
     
-    frame->ch         = src[i++];// ch
+    frame->ch           = src[i++];// ch
     
-    frame->ack          = src[i++];//ack no need
+    frame->ack          = (DdcAck_t)src[i++];//ack no need
     
     frame->payload_len.byte[0] = src[i++];
     frame->payload_len.byte[1] = src[i++];
@@ -223,9 +239,49 @@ uint16_t ddc_get_id()
 {
     return ddc_id++;
 }
+uint8_t* ddc_nonblocking(uint8_t *data,uint16_t data_len,DdcAck_t ack,uint8_t ch )
+{
+    uint16_t i = 0, k = 0; 
+    uint8_t *dst = (uint8_t *)ebox_malloc(data_len + 10);
+    
+    DataU16_t payload_len;
+    DataU16_t frame_id;
+    DataU16_t crc;
+
+    payload_len.value = data_len;
+    frame_id.value = ddc_get_id();
+
+    
+    dst[i++] = 0x55;
+    dst[i++] = 0xAA;
+    
+    dst[i++] = frame_id.byte[0];
+    dst[i++] = frame_id.byte[1];
+
+    dst[i++] = ch;
+    
+    dst[i++] = ack;
+    
+    dst[i++] = payload_len.byte[0];
+    dst[i++] = payload_len.byte[1];
+    
+    
+    for( k = 0; k < data_len; k++ )
+        dst[i++] = *data++;
+    
+    crc.value = crc16(dst,payload_len.value + 8);
+    
+    dst[i++] = crc.byte[0];
+    dst[i++] = crc.byte[1];
+
+    ddc_add_to_list(dst);  
+
+    return dst;
+}
+
 uint16_t ddc_make_frame(uint8_t *dst,uint8_t *data,uint16_t data_len,DdcAck_t ack,uint8_t ch )
 {
-    uint16_t i = 0,k = 0; 
+    uint16_t i = 0, k = 0; 
     
     
     DataU16_t payload_len;
@@ -234,6 +290,7 @@ uint16_t ddc_make_frame(uint8_t *dst,uint8_t *data,uint16_t data_len,DdcAck_t ac
 
     payload_len.value = data_len;
     frame_id.value = ddc_get_id();
+
     
     dst[i++] = 0x55;
     dst[i++] = 0xAA;
@@ -306,8 +363,9 @@ void ddc_add_to_list(uint8_t *buf)
 
     
     list_insert(&list_send,buf);
+    #if DDC_DEBUG
     ebox_printf("<<<<add frame to [send list] ok ;id = %d\tget free = %d\r\n",frame.id.value,ebox_get_free());
-    
+    #endif
     if(frame.ack == 1)
     {
         uint8_t *ack_buf = (uint8_t*)ebox_malloc(PAY2FRAME_LEN(frame.payload_len.value));
@@ -355,8 +413,9 @@ void ddc_send_list(DdcNode_t *p)
 //        print_frame(p->p);
 
         ddc_send_buf(p->p,len+10);
+        #if DDC_DEBUG
         ebox_printf(">>>>send frame ok:id = %d;\t get free:%d\r\n",id,ebox_get_free());
-        
+        #endif
         no_interrupts();//原子操作
         list_delete_by_val(&list_send,id);
         interrupts();
