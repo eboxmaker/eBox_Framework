@@ -1,6 +1,4 @@
 #include "ebox_uart.h"
-#include "nvic.h"
-#include "rcc.h"
 
 
 static uint32_t serial_irq_ids[UART_NUM] = {0, 0, 0,0,0};
@@ -155,11 +153,11 @@ void Uart::config(uint32_t baud_rate)
 
 void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
-    nvic_irq_set_priority((uint32_t)USARTx,0,0,0);
+    nvic_dev_set_priority((uint32_t)USARTx,0,0,0);
     if(enable != DISABLE)
-        nvic_irq_enable((uint32_t)USARTx,0);
+        nvic_dev_enable((uint32_t)USARTx,0);
     else
-        nvic_irq_disable((uint32_t)USARTx,0);
+        nvic_dev_disable((uint32_t)USARTx,0);
 }
 void Uart::interrupt(IrqType type, FunctionalState enable)
 {
@@ -267,6 +265,7 @@ uint16_t Uart::dma_write(const char *ptr, uint16_t length)
     DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single; 
     dma_tx->init(&DMA_InitStructure);
     dma_tx->enable();
+    return length;
 }
 /**
  *@name     uint16_t Uart::receive()

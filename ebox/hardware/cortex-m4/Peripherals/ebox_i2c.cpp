@@ -14,7 +14,6 @@ This specification is preliminary and is subject to change at any time without n
 */
 
 #include "ebox_i2c.h"
-#include "rcc.h"
 
 mcuI2c::mcuI2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin)
 {

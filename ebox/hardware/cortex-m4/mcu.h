@@ -21,12 +21,11 @@ This specification is preliminary and is subject to change at any time without n
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "stm32f4xx.h"
 #include "ebox_type.h"
 #include "mcu_config.h"
+#include "rcc.h"
+#include "nvic.h"
 
-    
-    
 typedef void (*callback_fun_type)(void);
 
     

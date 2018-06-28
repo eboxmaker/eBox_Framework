@@ -3,6 +3,7 @@
 
 
 #include "stdint.h"
+#include "stm32f10x.h"
 
 
 #define MCU_PINS    48 //48, 64, 100, 144

@@ -19,7 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_i2c.h"
-#include "rcc.h"
+
 mcuI2c::mcuI2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin)
 {
     busy = 0;

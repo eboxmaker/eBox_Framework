@@ -1,9 +1,6 @@
 
 #include "ebox_slave_spi.h"
 
-#include "ebox.h"
-#include "nvic.h"
-
 static uint32_t spi_irq_ids[SPI_NUM] = {0};
 
 static SpiIrqHandler_t irq_handler;
@@ -15,7 +12,7 @@ SlaveSpi::SlaveSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
     sck->mode(AF_PP);
     miso->mode(AF_PP);
     mosi->mode(AF_PP);
-    PA4.mode(AF_PP);
+    //PA4.mode(AF_PP);
 }
 
 void SlaveSpi::begin ()
@@ -124,14 +121,14 @@ void SlaveSpi::config(SpiConfig_t *spi_config)
     SPI_Init(spi, &SPI_InitStructure);
 
     
-    nvic_irq_set_priority((uint32_t)spi,0,0,0);
-    nvic_irq_set_priority((uint32_t)dma_tx->get_dma_ch(),0,0,0);
-    nvic_irq_set_priority((uint32_t)dma_rx->get_dma_ch(),0,0,0);
+    nvic_dev_set_priority((uint32_t)spi,0,0,0);
+    nvic_dev_set_priority((uint32_t)dma_tx->get_dma_ch(),0,0,0);
+    nvic_dev_set_priority((uint32_t)dma_rx->get_dma_ch(),0,0,0);
     
     
-    nvic_irq_enable((uint32_t)spi,0);
-    nvic_irq_enable((uint32_t)dma_tx->get_dma_ch(),0);
-    nvic_irq_enable((uint32_t)dma_rx->get_dma_ch(),0);
+    nvic_dev_enable((uint32_t)spi,0);
+    nvic_dev_enable((uint32_t)dma_tx->get_dma_ch(),0);
+    nvic_dev_enable((uint32_t)dma_rx->get_dma_ch(),0);
     enable_rx_int();
     
     SPI_Cmd(spi, ENABLE);

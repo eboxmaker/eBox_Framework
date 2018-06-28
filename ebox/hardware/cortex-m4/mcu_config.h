@@ -3,7 +3,7 @@
 
 
 #include "stdint.h"
-
+#include "stm32f4xx.h"
 
 #define MCU_PINS    48 //48, 64, 100, 144
 #define MCU_TYPE    STM32F103C8T6

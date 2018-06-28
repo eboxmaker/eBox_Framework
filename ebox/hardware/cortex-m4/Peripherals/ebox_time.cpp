@@ -19,8 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_timer.h"
-#include "nvic.h"
-#include "rcc.h"
 
 
 extern callback_fun_type timx_cb_table[15][5];
@@ -57,11 +55,11 @@ void Timer::reset_frq(uint32_t frq)
 }
 void Timer::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
 {
-    nvic_irq_set_priority((uint32_t)TIMx,0,preemption_priority,sub_priority);
+    nvic_dev_set_priority((uint32_t)TIMx,0,preemption_priority,sub_priority);
     if(enable == ENABLE)
-        nvic_irq_enable((uint32_t)TIMx,0);
+        nvic_dev_enable((uint32_t)TIMx,0);
     else
-        nvic_irq_disable((uint32_t)TIMx,0);
+        nvic_dev_disable((uint32_t)TIMx,0);
 }
 void Timer::interrupt(FunctionalState enable)
 {

@@ -20,7 +20,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_rtc.h"
 #define RTC_CFG_FLAG 0XA5A5
-#include "ebox.h"
 Rtc rtc;
 //callback_fun_type rtc_callback_table[3];//
 static uint32_t rtc_irq_id;
@@ -54,28 +53,28 @@ int Rtc::begin(uint8_t clock_source)
 		/* Check if the Power On Reset flag is set */
 		if (RCC_GetFlagStatus(RCC_FLAG_PORRST) != RESET)
 		{
-			uart1.printf("\r\n\n Power On Reset occurred....");
+			ebox_printf("\r\n\n Power On Reset occurred....");
 		}
 		/* Check if the Pin Reset flag is set */
 		else if (RCC_GetFlagStatus(RCC_FLAG_PINRST) != RESET)
 		{
-			uart1.printf("\r\n\n External Reset occurred....");
+			ebox_printf("\r\n\n External Reset occurred....");
 		}
 		
-		uart1.printf("\r\n No need to configure RTC....");
-		uart1.printf("\r\n step 0....");
+		ebox_printf("\r\n No need to configure RTC....");
+		ebox_printf("\r\n step 0....");
 		/* Wait for RTC registers synchronization */
 		RTC_WaitForSynchro();
-		uart1.printf("\r\n step 1....");
+		ebox_printf("\r\n step 1....");
 		
 		/* Enable the RTC Second */
 		RTC_ITConfig(RTC_IT_SEC, ENABLE);
-		uart1.printf("\r\n step 2....");
+		ebox_printf("\r\n step 2....");
 		
 		/* Wait until last write operation on RTC registers has finished */
 		RTC_WaitForLastTask();
         
-		uart1.printf("\r\n step 3....");
+		ebox_printf("\r\n step 3....");
 	}
 	
 		rtc_irq_init(Rtc::_irq_handler, (uint32_t)this);

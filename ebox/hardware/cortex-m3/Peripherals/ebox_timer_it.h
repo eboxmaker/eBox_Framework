@@ -15,7 +15,8 @@ This specification is preliminary and is subject to change at any time without n
 #ifndef __TIMER_IT_H
 #define __TIMER_IT_H
 
-#include "ebox.h"
+#include "ebox_core.h"
+
 
 enum Tim_It_Index{
     TIM1_IT_Update  = 0,

@@ -19,8 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_pwm.h"
-#include "nvic.h"
-#include "rcc.h"
 
 #define TIMxCH1 0x01
 #define TIMxCH2 0x02

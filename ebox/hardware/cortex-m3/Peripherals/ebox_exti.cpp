@@ -19,7 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_exti.h"
-#include "nvic.h"
 /** @defgroup exti 
   * @brief exti driver modules
   * @{
@@ -101,11 +100,11 @@ void Exti::begin()
 
 void Exti::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
-    nvic_irq_set_priority((uint32_t)exti_line,0,0,0);
+    nvic_dev_set_priority((uint32_t)exti_line,0,0,0);
     if(enable != DISABLE)
-        nvic_irq_enable((uint32_t)exti_line,0);
+        nvic_dev_enable((uint32_t)exti_line,0);
     else
-        nvic_irq_disable((uint32_t)exti_line,0);
+        nvic_dev_disable((uint32_t)exti_line,0);
 }
 
 /**
