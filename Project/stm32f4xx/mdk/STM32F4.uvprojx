@@ -334,7 +334,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcuLib\stm32f4xx\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\..\ebox\core;..\..\..\user;..\..\..\ebox\hardware\cortex-m4;..\..\..\ebox\hardware\cortex-m4\Peripherals</IncludePath>
+              <IncludePath>..\..\..\mcuLib\stm32f4xx\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\..\ebox\core;..\..\..\user;..\..\..\ebox\hardware\cortex-m4;..\..\..\ebox\hardware\cortex-m4\Peripherals;..\..\..\component\ddc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -801,6 +801,31 @@
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\main.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ddc</GroupName>
+          <Files>
+            <File>
+              <FileName>ddc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\component\ddc\ddc.c</FilePath>
+            </File>
+            <File>
+              <FileName>ddc_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\component\ddc\ddc_list.c</FilePath>
+            </File>
+            <File>
+              <FileName>ddc_port.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\ddc\ddc_port.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ddc_user.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\ddc\ddc_user.cpp</FilePath>
             </File>
           </Files>
         </Group>

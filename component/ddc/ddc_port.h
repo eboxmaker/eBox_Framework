@@ -6,7 +6,7 @@
 #endif
      
 //#include "stdio.h"
-#include "fifo.h"
+#include "ebox_cfun.h"
      
 #define DDC_MAX_FRAME_LENGTH   128
 #define DDC_MAX_PAYLOAD_LENGTH  (DDC_MAX_FRAME_LENGTH - 10)

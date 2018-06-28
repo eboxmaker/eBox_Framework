@@ -29,8 +29,6 @@ extern "C" {
     
 typedef void (*callback_fun_type)(void);
 
-#define interrupts() 		__enable_irq()//允许所有中断
-#define no_interrupts() 	__disable_irq()//禁止所有中断
     
 
 #define NVIC_GROUP_CONFIG NVIC_PriorityGroup_2//以后NVIC_PriorityGroupConfig()函数不需要再被调用。更不能再以非NVIC_GROUP_CONFIG值填充调用

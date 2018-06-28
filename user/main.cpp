@@ -14,42 +14,42 @@
 
 
 #include "ebox.h"
-//#include "ebox_analog.h"
+#include "ddc.h"
 
-int x;
-char a[] = "12";
+
+void ddc_evnet_ch20(uint8_t *ptr, uint16_t len)
+{
+    PB8.toggle();
+}
+void ddc_input()
+{
+    ddc_get_char(uart1.read());
+}
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    PB1.mode(INPUT_PD);    
-}
+    uart1.attach(ddc_input,RxIrq);
+    uart1.interrupt(RxIrq,ENABLE);
+    
+    ddc_init();
+    ddc_attach_chx(20,ddc_evnet_ch20);
+    
+    PB8.mode(OUTPUT);
 
-uint8_t last;
-uint32_t last1,last2;
+}
+uint8_t buf[8]={'1','1','1','1','1','1','1','1',};
+DataFloat_t d1,d2;
 int main(void)
 {
     setup();
-    last = PB1.read();
-            uart1.printf("VAL=%D\r\n",PB1.read());
+
     while(1)
     {
-        if(last != PB1.read())
-        {
-            uart1.printf("dif=%D\r\n",millis() - last1);
-            last1 = millis();
-            last = PB1.read();
-            uart1.printf("VAL=%D\r\n",PB1.read());
-        }
-       // uart1.printf("-------------NOW=%D\r\n",PB1.read());
-       // delay_ms(1);
+        ddc_nonblocking(buf,8,DDC_NoAck,4);
+        delay_ms(100);
+        ddc_loop();
 
-//    x = analog_read(&PB1);
-//   // uart1.printf("hex = %05d\r\n", x);
-//    x = analog_read_voltage(&PB1);
-//    uart1.printf("val = %04dmv\r\n", x);
-   // uart1.printf("==============\r\n", x);
-        //delay_ms(1000);
     }
 }
 
