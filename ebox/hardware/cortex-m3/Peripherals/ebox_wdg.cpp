@@ -19,7 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_wdg.h"
-#include "math.h"
 void Iwdg::begin(uint16_t ms)
 {
 

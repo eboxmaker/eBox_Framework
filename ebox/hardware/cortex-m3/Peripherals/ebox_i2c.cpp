@@ -19,7 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_i2c.h"
-
+#include "rcc.h"
 mcuI2c::mcuI2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin)
 {
     busy = 0;
@@ -33,12 +33,13 @@ void  mcuI2c::begin(uint32_t speed)
     this->speed = speed;
     I2C_InitTypeDef I2C_InitStructure;
 
-    if(I2Cx == I2C1)
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1, ENABLE);
-    else if(I2Cx == I2C2)
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C2, ENABLE);
+//    if(I2Cx == I2C1)
+//        RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1, ENABLE);
+//    else if(I2Cx == I2C2)
+//        RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C2, ENABLE);
 
-
+    
+    rcc_clock_cmd((uint32_t)I2Cx,ENABLE);
     sda_pin->mode(AF_OD);
     scl_pin->mode(AF_OD);
 

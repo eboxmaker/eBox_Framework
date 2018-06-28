@@ -29,23 +29,9 @@
 #define __EBOX_CORE_H
 
 
+#include "../core/stdFun/ebox_cfun.h"
+#include "../core/stdFun/ebox_cppfun.h"
 
-#include "../core/ebox_type.h"
-#include "../core/stdFun/new.h"
-#include "../core/stdFun/print.h"
-#include "../core/stdFun/binary.h"
-#include "../core/stdFun/math_misc.h"
-#include "../core/stdFun/ringbuf.h"
-#include "../core/stdFun/list.h"
-#include "../core/stdFun/util.h"
-#include "../core/stdFun/big_little.h"
-#include "../core/stdFun/random.h"
-#include "../core/stdFun/crc.h"
-#include "../core/stdFun/ebox_mem.h"
-#include "../core/stdFun/ebox_printf.h"
-
-
-#include "math.h"
 
 
 #include "../core/port/ebox_port_gpio.h"
