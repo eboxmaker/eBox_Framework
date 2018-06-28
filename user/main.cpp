@@ -1,48 +1,55 @@
 /**
   ******************************************************************************
-  * @file    pwm.cpp
-  * @author  shentq
-  * @version V2.0
-  * @date    2016/08/14
+  * @file   : *.cpp
+  * @author : shentq
+  * @version: V1.2
+  * @date   : 2016/08/14
+
   * @brief   ebox application example .
-  ******************************************************************************
-  * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
-  * preliminary and is subject to change at any time without notice. shentq assumes
-  * no responsibility for any errors contained herein.
-  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
+  * Copyright 2016 shentq. All Rights Reserved.         
   ******************************************************************************
-  */
+ */
 
-
-/* Includes ------------------------------------------------------------------*/
 
 
 #include "ebox.h"
-float x;
-uint16_t y;
-Pwm pwm1(&PB8);
+//#include "ebox_analog.h"
+
+int x;
+char a[] = "12";
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    pwm1.begin(1000, 500);
-    pwm1.set_oc_polarity(1);//set output polarity after compare
-    uart1.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
-    uart1.printf("max frq = %f\r\n",pwm1.get_accuracy());
+    PB1.mode(INPUT_PD);    
 }
+
+uint8_t last;
+uint32_t last1,last2;
 int main(void)
 {
     setup();
+    last = PB1.read();
+            uart1.printf("VAL=%D\r\n",PB1.read());
     while(1)
     {
-        x = x + PI * 0.01;
-        if(x >= PI)x = 0;
-        y = 2000 - (sin(x) + 1) * 1000;
-        pwm1.set_duty(y);
-        delay_ms(10);
+        if(last != PB1.read())
+        {
+            uart1.printf("dif=%D\r\n",millis() - last1);
+            last1 = millis();
+            last = PB1.read();
+            uart1.printf("VAL=%D\r\n",PB1.read());
+        }
+       // uart1.printf("-------------NOW=%D\r\n",PB1.read());
+       // delay_ms(1);
+
+//    x = analog_read(&PB1);
+//   // uart1.printf("hex = %05d\r\n", x);
+//    x = analog_read_voltage(&PB1);
+//    uart1.printf("val = %04dmv\r\n", x);
+   // uart1.printf("==============\r\n", x);
+        //delay_ms(1000);
     }
 }
 

@@ -2,9 +2,11 @@
 #define __EBOX_TYPE_H
 
 #include "stdint.h"
+#include "stdbool.h"
+#include "stdio.h"
+#include "ctype.h"
+  
 
-#define true 0x1
-#define false 0x0
 
 #define LSB_FIRST 0
 #define MSB_FIRST 1
@@ -36,6 +38,7 @@ typedef enum
 
     STM32F407IGT6,
 }CpuType;
+
 
 
 

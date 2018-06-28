@@ -600,8 +600,13 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>stdFun</GroupName>
+          <GroupName>eboxFun</GroupName>
           <Files>
+            <File>
+              <FileName>big_little.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\stdFun\big_little.c</FilePath>
+            </File>
             <File>
               <FileName>crc.c</FileName>
               <FileType>1</FileType>
@@ -611,6 +616,11 @@
               <FileName>ebox_mem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\ebox\core\stdFun\ebox_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_printf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\stdFun\ebox_printf.c</FilePath>
             </File>
             <File>
               <FileName>fifo.c</FileName>
@@ -623,9 +633,19 @@
               <FilePath>..\..\..\ebox\core\stdFun\itoa.c</FilePath>
             </File>
             <File>
-              <FileName>big_little.cpp</FileName>
+              <FileName>math_misc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\stdFun\math_misc.c</FilePath>
+            </File>
+            <File>
+              <FileName>util.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\stdFun\util.c</FilePath>
+            </File>
+            <File>
+              <FileName>Dstring.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\big_little.cpp</FilePath>
+              <FilePath>..\..\..\ebox\core\stdFun\Dstring.cpp</FilePath>
             </File>
             <File>
               <FileName>list.cpp</FileName>
@@ -638,14 +658,14 @@
               <FilePath>..\..\..\ebox\core\stdFun\new.cpp</FilePath>
             </File>
             <File>
-              <FileName>random.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\random.cpp</FilePath>
-            </File>
-            <File>
               <FileName>print.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\stdFun\print.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>random.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\stdFun\random.cpp</FilePath>
             </File>
             <File>
               <FileName>ringbuf.cpp</FileName>
@@ -653,19 +673,14 @@
               <FilePath>..\..\..\ebox\core\stdFun\ringbuf.cpp</FilePath>
             </File>
             <File>
-              <FileName>util.cpp</FileName>
+              <FileName>sort.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\util.cpp</FilePath>
+              <FilePath>..\..\..\ebox\core\stdFun\sort.cpp</FilePath>
             </File>
             <File>
               <FileName>WString.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\stdFun\WString.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_printf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\ebox_printf.c</FilePath>
             </File>
           </Files>
         </Group>

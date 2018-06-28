@@ -1,54 +1,10 @@
-/**
-  ******************************************************************************
-  * @file    util.cpp
-  * @author  shentq
-  * @version V2.1
-  * @date    2016/08/14
-  * @brief   
-  ******************************************************************************
-  * @attention
-  *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
-  * preliminary and is subject to change at any time without notice. shentq assumes
-  * no responsibility for any errors contained herein.
-  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
-  ******************************************************************************
-  */
-
-
-/* Includes ------------------------------------------------------------------*/
+#include "Dstring.h"
 #include "util.h"
-
-
-
-
-/**
-@brief	CONVERT STRING INTO INTEGER
-@return	a integer number
-*/
-
-bool isspace(char c)
-{
-    if(c == ' ')
-        return true;
-    else
-        return false;
-}
-bool isdigital(char c)
-{
-    if(c <= '9' && c >= '0')
-        return true;
-    else 
-        return false;
-
-}
 int atoi(
     char *str,	/**< is a pointer to convert */
     uint16_t base	/**< is a base value (must be in the range 2 - 16) */
 )
 {
-    
     int c;              /* current char */  
     int total = 0;         /* current total */  
     int sign;           /* if '-', then negative, otherwise positive */  
@@ -69,8 +25,6 @@ int atoi(
     else
         return total;
 }
-
-
 
 /**
 @brief	CONVERT STRING INTO HEX OR DECIMAL
@@ -94,69 +48,6 @@ int ValidATOI(
 
     *ret = atoi(str, base);
     return 1;
-}
-
-/**
-@brief	replace the specified character in a string with new character
-*/
-void replacetochar(
-    char *str, 		/**< pointer to be replaced */
-    char oldchar, 	/**< old character */
-    char newchar	/**< new character */
-)
-{
-    int x;
-    for (x = 0; str[x]; x++)
-        if (str[x] == oldchar) str[x] = newchar;
-}
-/**
-@brief	CONVERT CHAR INTO HEX
-@return	HEX
-
-This function converts HEX(0-F) to a character
-*/
-char C2D(
-    uint8_t c	/**< is a character('0'-'F') to convert to HEX */
-)
-{
-    if (c >= '0' && c <= '9')
-        return c - '0';
-    if (c >= 'a' && c <= 'f')
-        return 10 + c - 'a';
-    if (c >= 'A' && c <= 'F')
-        return 10 + c - 'A';
-
-    return (char)c;
-}
-
-//void swap(float *a, float *b) 
-//{
-//	float temp = *a;
-//	*a = *b;
-//	*b = temp;
-//}
-//void swap(int *a, int *b) 
-//{
-//	int temp = *a;
-//	*a = *b;
-//	*b = temp;
-//}
-uint16_t swaps(uint16_t i16)//交换高低字节
-{
-    uint16_t ret = 0;
-    ret = (i16 & 0xFF) << 8;
-    ret |= ((i16 >> 8) & 0xFF);
-    return ret;
-}
-
-uint32_t swapl(uint32_t l32)//交换高低字节
-{
-    uint32_t ret = 0;
-    ret = (l32 & 0xFF) << 24;
-    ret |= ((l32 >> 8) & 0xFF) << 16;
-    ret |= ((l32 >> 16) & 0xFF) << 8;
-    ret |= ((l32 >> 24) & 0xFF);
-    return ret;
 }
 
 int find_str(uint8_t *s_str, uint8_t *p_str, uint16_t count, uint16_t &seek)
@@ -271,60 +162,5 @@ float max(float *p,uint16_t len)
     
 return 0;
 }
-
-
-int partion(int arr[], int low, int high) {
-	int i = low-1;
-	int j = low;
-
-	int x = arr[high];
-
-	for (; j<high; j++) {
-		if (arr[j] < x)
-			swap(&arr[++i], &arr[j]);
-
-	}
-	swap(&arr[i+1], &arr[high]);
-
-	return i+1;
-}
-void quick_sort(int arr[], int low, int high) {
-	if (low >= high)
-		return;
-	int mid = partion(arr, low, high);
-	quick_sort(arr, low, mid-1);
-	quick_sort(arr, mid+1, high);
-}
-int partion(float arr[], int low, int high) {
-	int i = low-1;
-	int j = low;
-
-	int x = arr[high];
-
-	for (; j<high; j++) {
-		if (arr[j] < x)
-			swap(&arr[++i], &arr[j]);
-
-	}
-	swap(&arr[i+1], &arr[high]);
-
-	return i+1;
-}
-void quick_sort(float arr[], int low, int high) {
-	if (low >= high)
-		return;
-	int mid = partion(arr, low, high);
-	quick_sort(arr, low, mid-1);
-	quick_sort(arr, mid+1, high);
-}
-
-
-
-
-
-
-
-
-
 
 

@@ -39,6 +39,9 @@ static const DevToRcc_t dev_to_rcc_table[] =
     {SPI3_BASE,RCC_APB1Periph_SPI3},
 //    {SPI4_BASE,RCC_APB2Periph_SPI4},
 //    {SPI5_BASE,RCC_APB2Periph_SPI5},
+    {I2C1_BASE,RCC_APB1Periph_I2C1},
+    {I2C2_BASE,RCC_APB1Periph_I2C2},
+//    {I2C3_BASE,RCC_APB1Periph_I2C3},
     
     {USART1_BASE,RCC_APB2Periph_USART1},
     {USART2_BASE,RCC_APB1Periph_USART2},
