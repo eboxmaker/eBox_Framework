@@ -24,7 +24,6 @@
 #include "ebox_core.h"
 #include "mcu.h"
 #include "FunctionPointer.h"
-#include "nvic.h"
 #include "dma.h"
 /*
 	1.Ö§³Ö´®¿Ú1,2,3,4,5£»

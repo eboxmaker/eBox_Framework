@@ -1,5 +1,4 @@
 #include "nvic.h"
-#include "ebox.h"
 
 
   
@@ -97,9 +96,7 @@ static IRQn_Type dev_to_irqn(uint32_t dev,uint8_t index)
 
 
 
-
-
-void nvic_irq_set_priority(uint32_t dev, uint8_t index , uint8_t PreemptionPriority,uint8_t SubPriority) 
+void nvic_dev_set_priority(uint32_t dev, uint8_t index , uint8_t PreemptionPriority,uint8_t SubPriority) 
 {
     
     uint32_t tmppriority = 0x00, tmppre = 0x00, tmpsub = 0x0F;
@@ -115,6 +112,26 @@ void nvic_irq_set_priority(uint32_t dev, uint8_t index , uint8_t PreemptionPrior
         
     NVIC->IP[irq_num] = tmppriority;
 }
+
+void nvic_dev_enable(uint32_t dev,uint8_t index) 
+{
+    IRQn_Type irq_num = dev_to_irqn(dev,index);
+    NVIC->ISER[irq_num / 32] = bit_shift(irq_num % 32);
+}
+
+void nvic_dev_disable(uint32_t dev,uint8_t index) 
+{
+    IRQn_Type irq_num = dev_to_irqn(dev,index);
+    NVIC->ICER[irq_num / 32] = bit_shift(irq_num % 32);
+}
+
+
+
+
+
+
+
+
 void nvic_irq_set_priority(IRQn_Type irq_num, uint8_t PreemptionPriority,uint8_t SubPriority) 
 {
     
@@ -131,29 +148,11 @@ void nvic_irq_set_priority(IRQn_Type irq_num, uint8_t PreemptionPriority,uint8_t
     NVIC->IP[irq_num] = tmppriority;
 
 }
-
-
-
-
-void nvic_irq_enable(uint32_t dev,uint8_t index) 
-{
-    IRQn_Type irq_num = dev_to_irqn(dev,index);
-    NVIC->ISER[irq_num / 32] = bit_shift(irq_num % 32);
-}
 void nvic_irq_enable(IRQn_Type irq_num) 
 {
     NVIC->ISER[irq_num / 32] = bit_shift(irq_num % 32);
 }
 
-
-
-
-
-void nvic_irq_disable(uint32_t dev,uint8_t index) 
-{
-    IRQn_Type irq_num = dev_to_irqn(dev,index);
-    NVIC->ICER[irq_num / 32] = bit_shift(irq_num % 32);
-}
 void nvic_irq_disable(IRQn_Type irq_num) 
 {
     NVIC->ICER[irq_num / 32] = bit_shift(irq_num % 32);

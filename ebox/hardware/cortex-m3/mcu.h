@@ -32,11 +32,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "stm32f10x.h"
 #include "ebox_type.h"
 #include "mcu_config.h"
-
-
+#include "rcc.h"
+#include "nvic.h"
 
 
 /*!< 2 bits for pre-emption priority

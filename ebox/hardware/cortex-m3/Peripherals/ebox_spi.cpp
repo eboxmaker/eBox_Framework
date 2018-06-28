@@ -19,7 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_spi.h"
-#include "rcc.h"
 
 mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 {

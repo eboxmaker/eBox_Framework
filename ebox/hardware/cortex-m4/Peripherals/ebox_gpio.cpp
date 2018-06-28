@@ -1,5 +1,4 @@
 #include "ebox_gpio.h"
-#include "rcc.h"
 
 /**
  *@name     Gpio(GPIO_TypeDef *port,uint16_t pin)

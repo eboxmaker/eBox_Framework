@@ -16,7 +16,6 @@ This specification is preliminary and is subject to change at any time without n
 #include "ebox_spi.h"
 #include "ebox_gpio.h"
 #include "stm32f4xx_spi.h"
-#include "rcc.h"
 
 mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 {

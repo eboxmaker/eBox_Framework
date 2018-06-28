@@ -1,6 +1,6 @@
 //#include "ebox_common.h"
-#include "mcu.h"
 #include "ebox_core.h"
+#include "mcu.h"
 
 #ifdef __cplusplus
 extern "C" {

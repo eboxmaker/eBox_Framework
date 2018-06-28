@@ -20,8 +20,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_timer.h"
 #include "ebox_timer_it.h"
-#include "rcc.h"
-#include "nvic.h"
 
 static tim_irq_handler irq_handler;
 static uint32_t tim_irq_ids[TIM_IRQ_ID_NUM];
@@ -99,11 +97,11 @@ void Timer::reset_frq(uint32_t frq)
 }
 void Timer::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
 {
-    nvic_irq_set_priority((uint32_t)_TIMx,0,0,0);
+    nvic_dev_set_priority((uint32_t)_TIMx,0,0,0);
     if(enable != DISABLE)
-        nvic_irq_enable((uint32_t)_TIMx,0);
+        nvic_dev_enable((uint32_t)_TIMx,0);
     else
-        nvic_irq_disable((uint32_t)_TIMx,0);
+        nvic_dev_disable((uint32_t)_TIMx,0);
 }
 
 void Timer::interrupt(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)

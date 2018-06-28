@@ -19,7 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_uart.h"
-#include "rcc.h"
 
 uint8_t busy[5];
 
@@ -166,11 +165,11 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 }
 void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
-    nvic_irq_set_priority((uint32_t)_USARTx,0,0,0);
+    nvic_dev_set_priority((uint32_t)_USARTx,0,0,0);
     if(enable != DISABLE)
-        nvic_irq_enable((uint32_t)_USARTx,0);
+        nvic_dev_enable((uint32_t)_USARTx,0);
     else
-        nvic_irq_disable((uint32_t)_USARTx,0);
+        nvic_dev_disable((uint32_t)_USARTx,0);
 }
 ///////////////////////////////////////////////////////////////
 

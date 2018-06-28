@@ -1,6 +1,4 @@
 #include "dma.h"
-#include "nvic.h"
-#include "rcc.h"
 
 static uint32_t dma_irq_ids[DMA_NUM] = {0, 0, 0,0,0,0,0};
 
@@ -63,11 +61,11 @@ void Dma::rcc_disable()
 
 void Dma::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
-    nvic_irq_set_priority((uint32_t)DMAy_Channelx,0,0,0);
+    nvic_dev_set_priority((uint32_t)DMAy_Channelx,0,0,0);
     if(enable != DISABLE)
-        nvic_irq_enable((uint32_t)DMAy_Channelx,0);
+        nvic_dev_enable((uint32_t)DMAy_Channelx,0);
     else
-        nvic_irq_disable((uint32_t)DMAy_Channelx,0);
+        nvic_dev_disable((uint32_t)DMAy_Channelx,0);
 
 }
 void Dma::interrupt(DmaIrqType DMA_IT,FunctionalState enable)
