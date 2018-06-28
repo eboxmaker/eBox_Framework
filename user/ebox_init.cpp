@@ -11,10 +11,13 @@ void ebox_init(void)
     #else
         ebox_heap_init((void*)&__bss_end, (void*)STM32_SRAM_END);
     #endif
+    interrupts  = __enable_irq;
+    no_interrupts = __disable_irq;
     delay_ms    = mcu_delay_ms;
     delay_us    = mcu_delay_us;
     micros      = mcu_micros;
     millis      = mcu_millis;
+
     mcu_init();
     
     ebox_printf_init();

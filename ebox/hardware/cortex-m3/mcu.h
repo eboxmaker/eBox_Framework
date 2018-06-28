@@ -36,10 +36,6 @@ extern "C" {
 #include "ebox_type.h"
 #include "mcu_config.h"
 
-#define interrupts() 		__enable_irq()//允许所有中断
-#define no_interrupts() 	__disable_irq()//禁止所有中断
-	
-
 
 
 

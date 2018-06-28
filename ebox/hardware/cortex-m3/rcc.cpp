@@ -60,13 +60,8 @@ void rcc_clock_cmd(uint32_t dev, FunctionalState state)
     }
     if(dev >= AHBPERIPH_BASE)
         RCC_AHBPeriphClockCmd(rcc,state);
-//    else if(dev >= AHB1PERIPH_BASE)
-//        RCC_AHB1PeriphClockCmd(rcc,state);
     else if(dev >= APB2PERIPH_BASE)
         RCC_APB2PeriphClockCmd(rcc,state);
     else if(dev >= APB1PERIPH_BASE)
         RCC_APB1PeriphClockCmd(rcc,state);
-
-        
-
 }
