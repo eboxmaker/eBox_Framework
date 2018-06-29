@@ -56,7 +56,7 @@ mcuGpio PB14(GPIOB, GPIO_Pin_14);
 mcuGpio PB15(GPIOB, GPIO_Pin_15);
 
 
-#if (MCU_PIN_NUM >= 64)
+#if (MCU_PINS >= 64)
 mcuGpio PC0(GPIOC, GPIO_Pin_0);
 mcuGpio PC1(GPIOC, GPIO_Pin_1);
 mcuGpio PC2(GPIOC, GPIO_Pin_2);
@@ -79,11 +79,11 @@ mcuGpio PC15(GPIOC, GPIO_Pin_15);
 
 
 
-#if (MCU_PIN_NUM >= 64)
+#if (MCU_PINS >= 64)
 mcuGpio PD0(GPIOD, GPIO_Pin_0);
 mcuGpio PD1(GPIOD, GPIO_Pin_1);
 #endif
-#if (MCU_PIN_NUM >= 100)
+#if (MCU_PINS >= 100)
 mcuGpio PD2(GPIOD, GPIO_Pin_2);
 mcuGpio PD3(GPIOD, GPIO_Pin_3);
 mcuGpio PD4(GPIOD, GPIO_Pin_4);
@@ -118,7 +118,7 @@ mcuGpio PE14(GPIOE, GPIO_Pin_14);
 mcuGpio PE15(GPIOE, GPIO_Pin_15);
 #endif
 
-#if (MCU_PIN_NUM >= 144)
+#if (MCU_PINS >= 144)
 mcuGpio PF0(GPIOF, GPIO_Pin_0);
 mcuGpio PF1(GPIOF, GPIO_Pin_1);
 mcuGpio PF2(GPIOF, GPIO_Pin_2);
@@ -159,10 +159,11 @@ Uart uart1(USART1, &PA9, &PA10);
 Uart uart2(USART2, &PA2, &PA3);
 Uart uart3(USART3, &PB10, &PB11);
 
-#if (MCU_PIN_NUM >= 100)
+#if (MCU_PINS >= 100)
 Uart uart4(UART4, &PC10, &PC11);
 Uart uart5(UART5, &PC12, &PD2);
 #endif 
+
 //spi
 mcuSpi  spi1(SPI1, &PA5, &PA6, &PA7);
 mcuSpi  spi2(SPI2, &PB13, &PB14, &PB15);

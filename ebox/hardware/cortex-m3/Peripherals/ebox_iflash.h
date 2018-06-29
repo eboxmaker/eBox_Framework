@@ -21,13 +21,13 @@
 #ifndef   __IFLASH_H__
 #define   __IFLASH_H__
 
+#include "ebox_core.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "stm32f10x.h"
-#include "stm32f10x_flash.h"
-
+#include "mcu.h"
 
 
 
