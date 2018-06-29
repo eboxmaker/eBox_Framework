@@ -58,6 +58,7 @@ mcuGpio PB14(GPIOB, GPIO_Pin_14);
 mcuGpio PB15(GPIOB, GPIO_Pin_15);
 
 
+#if (MCU_PINS >= 64)
 mcuGpio PC0(GPIOC, GPIO_Pin_0);
 mcuGpio PC1(GPIOC, GPIO_Pin_1);
 mcuGpio PC2(GPIOC, GPIO_Pin_2);
@@ -71,13 +72,20 @@ mcuGpio PC9(GPIOC, GPIO_Pin_9);
 mcuGpio PC10(GPIOC, GPIO_Pin_10);
 mcuGpio PC11(GPIOC, GPIO_Pin_11);
 mcuGpio PC12(GPIOC, GPIO_Pin_12);
+#endif
 mcuGpio PC13(GPIOC, GPIO_Pin_13);
 mcuGpio PC14(GPIOC, GPIO_Pin_14);
 mcuGpio PC15(GPIOC, GPIO_Pin_15);
 
 
+
+
+
+#if (MCU_PINS >= 64)
 mcuGpio PD0(GPIOD, GPIO_Pin_0);
 mcuGpio PD1(GPIOD, GPIO_Pin_1);
+#endif
+#if (MCU_PINS >= 100)
 mcuGpio PD2(GPIOD, GPIO_Pin_2);
 mcuGpio PD3(GPIOD, GPIO_Pin_3);
 mcuGpio PD4(GPIOD, GPIO_Pin_4);
@@ -92,6 +100,7 @@ mcuGpio PD12(GPIOD, GPIO_Pin_12);
 mcuGpio PD13(GPIOD, GPIO_Pin_13);
 mcuGpio PD14(GPIOD, GPIO_Pin_14);
 mcuGpio PD15(GPIOD, GPIO_Pin_15);
+
 
 mcuGpio PE0(GPIOE, GPIO_Pin_0);
 mcuGpio PE1(GPIOE, GPIO_Pin_1);
@@ -109,7 +118,9 @@ mcuGpio PE12(GPIOE, GPIO_Pin_12);
 mcuGpio PE13(GPIOE, GPIO_Pin_13);
 mcuGpio PE14(GPIOE, GPIO_Pin_14);
 mcuGpio PE15(GPIOE, GPIO_Pin_15);
+#endif
 
+#if (MCU_PINS >= 144)
 mcuGpio PF0(GPIOF, GPIO_Pin_0);
 mcuGpio PF1(GPIOF, GPIO_Pin_1);
 mcuGpio PF2(GPIOF, GPIO_Pin_2);
@@ -143,13 +154,16 @@ mcuGpio PG12(GPIOG, GPIO_Pin_12);
 mcuGpio PG13(GPIOG, GPIO_Pin_13);
 mcuGpio PG14(GPIOG, GPIO_Pin_14);
 mcuGpio PG15(GPIOG, GPIO_Pin_15);
+#endif
+
+#if (MCU_PINS >= 176)
 
 mcuGpio PH9(GPIOH, GPIO_Pin_9);
 
 mcuGpio PI5(GPIOI, GPIO_Pin_5);
 mcuGpio PI6(GPIOI, GPIO_Pin_6);
 mcuGpio PI7(GPIOI, GPIO_Pin_7);
-
+#endif
 //Spi     spi1(SPI1, &PB3, &PB4, &PA7);
 //Spi     spi2(SPI2, &PB13, &PB14, &PB15);
 //Spi     spi3(SPI3, &PB3, &PB4, &PB5);

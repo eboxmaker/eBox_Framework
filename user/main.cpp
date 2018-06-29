@@ -1,8 +1,9 @@
+
 /**
   ******************************************************************************
   * @file   : *.cpp
   * @author : shentq
-  * @version: V1.2
+  * @version: V2.2
   * @date   : 2016/08/14
 
   * @brief   ebox application example .
@@ -10,48 +11,40 @@
   * Copyright 2016 shentq. All Rights Reserved.         
   ******************************************************************************
  */
-
-
-
+ 
+ 
 #include "ebox.h"
-#include "ddc.h"
-
-
-void ddc_evnet_ch20(uint8_t *ptr, uint16_t len)
-{
-    PB8.toggle();
-}
-void ddc_input()
-{
-    ddc_get_char(uart1.read());
-}
+                                            
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
-    uart1.attach(ddc_input,RxIrq);
-    uart1.interrupt(RxIrq,ENABLE);
+    uart1.begin(115200,0);
     
-    ddc_init();
-    ddc_attach_chx(20,ddc_evnet_ch20);
-    
-    PB8.mode(OUTPUT);
-
+    uart1.printf("core:%d\r\n",cpu.clock.core);
+    uart1.printf("core:%d\r\n",cpu.clock.core);
+    uart1.printf("hclk:%d\r\n",cpu.clock.hclk);
+    uart1.printf("pclk1:%d\r\n",cpu.clock.pclk1);
+    uart1.printf("pclk2:%d\r\n",cpu.clock.pclk2);
+    uart1.printf("cpu id:0x%x %x %x\r\n",cpu.chip_id[0],cpu.chip_id[1],cpu.chip_id[2]);
+    uart1.printf("size:%dK\r\n",cpu.flash_size);
+    uart1.printf("company:%s\r\n",cpu.company);
+    uart1.printf("ability:%0.2fM times add per second\r\n",cpu.ability/1000000.0);
 }
-uint8_t buf[8]={'1','1','1','1','1','1','1','1',};
-DataFloat_t d1,d2;
+
 int main(void)
 {
     setup();
 
     while(1)
     {
-        ddc_nonblocking(buf,8,DDC_NoAck,4);
-        delay_ms(100);
-        ddc_loop();
 
+        delay_ms(1000);
     }
+
 }
+
+
+
 
 
 

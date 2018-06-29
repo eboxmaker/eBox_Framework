@@ -1,6 +1,6 @@
 #include "ebox_mem.h"
 #include "ebox_printf.h"
-
+#include "mcu_config.h"
 
 static uint32_t ram_addr_begin,ram_addr_end;
 
@@ -73,10 +73,10 @@ void *ebox_malloc( size_t xWantedSize )
 
     __disable_irq();
     
-//    if(end_block[0] == NULL)
-//    {
-//        //ebox_heap_init(STM32_SRAM_BEGIN,(void *)STM32_SRAM_END);
-//    }
+    if(end_block[0] == NULL)
+    {
+        ebox_heap_init(MCU_SRAM_BEGIN,(void *)MCU_SRAM_END);
+    }
         
         
 

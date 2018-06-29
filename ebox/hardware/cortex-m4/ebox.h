@@ -50,15 +50,7 @@ void ebox_init(void);
 void ebox_printf_flush(void);
 }
 
-//////////系统debug支持////////////////////////////////////////////////////////////////
-//#define EBOX_DEBUG 1
-//#if EBOX_DEBUG
-//extern Uart uart1;//根据不同的串口名称此处需要做相应的修改
-//#define DBG(...) uart1.printf(__VA_ARGS__)
-//#else
-//#define  DBG(...)
-//#endif
-//////////////////////////////////////////////////////////////////////////////////
+
 ////创建所有引脚对象和宏定义其指针
 extern Uart uart1;
 extern Uart uart2;
@@ -115,6 +107,7 @@ extern mcuGpio PB13;
 extern mcuGpio PB14;
 extern mcuGpio PB15;
 
+#if (MCU_PINS >= 64)
 extern mcuGpio PC0;
 extern mcuGpio PC1;
 extern mcuGpio PC2;
@@ -129,12 +122,17 @@ extern mcuGpio PC9;
 extern mcuGpio PC10;
 extern mcuGpio PC11;
 extern mcuGpio PC12;
+#endif
 extern mcuGpio PC13;
 extern mcuGpio PC14;
 extern mcuGpio PC15;
 
+#if (MCU_PINS >= 64)
 extern mcuGpio PD0;
 extern mcuGpio PD1;
+#endif
+#if (MCU_PINS >= 100)
+
 extern mcuGpio PD2;
 extern mcuGpio PD3;
 extern mcuGpio PD4;
@@ -168,7 +166,9 @@ extern mcuGpio PE12;
 extern mcuGpio PE13;
 extern mcuGpio PE14;
 extern mcuGpio PE15;
+#endif
 
+#if (MCU_PINS >= 144)
 extern mcuGpio PF0;
 extern mcuGpio PF1;
 extern mcuGpio PF2;
@@ -204,14 +204,17 @@ extern mcuGpio PG12;
 extern mcuGpio PG13;
 extern mcuGpio PG14;
 extern mcuGpio PG15;
+#endif
 
+
+#if (MCU_PINS >= 176)
 
 extern mcuGpio PH9;
 
 extern mcuGpio PI5;
 extern mcuGpio PI6;
 extern mcuGpio PI7;
-
+#endif
 
 
 
