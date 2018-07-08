@@ -28,10 +28,10 @@ typedef union
 }AdsConfig_t;
     
 
-#define AIN0 4
-#define AIN1 5
-#define AIN2 6
-#define AIN3 7
+#define ADC_AIN0 4
+#define ADC_AIN1 5
+#define ADC_AIN2 6
+#define ADC_AIN3 7
 
 #define PGA6144 0
 #define PGA4096 1
@@ -72,10 +72,17 @@ class Ads1118
         Ads1118(Gpio *cs,Spi *spi);
         void        begin(uint8_t dev_num);
         bool        self_test();
-        uint16_t    read(uint8_t ch);
         AdsConfig_t update_cfg(AdsConfig_t *cfg);
         void        read_temperature();
-        float       read_voltage(uint8_t ch);
+    
+        uint16_t    read(uint8_t ch);
+        double      read_voltage(uint8_t ch);
+    
+        float      read_average(uint8_t ch);
+        double      read_vol_average(uint8_t ch);
+    
+        double      adc_to_voltage(double hex);
+
         void        set_gain();
     
     private:
@@ -86,6 +93,5 @@ class Ads1118
     
         
 };
-
 
 #endif

@@ -15,7 +15,7 @@ Ads1118::Ads1118(Gpio *cs,Spi *spi)
     cfg.value = 0x0;
 
     cfg.bit.ss = 0;
-    cfg.bit.mux = AIN1;
+    cfg.bit.mux = ADC_AIN0;
     cfg.bit.pga = PGA6144;
     cfg.bit.mode = MODE_CONTINU;
     
@@ -66,18 +66,19 @@ uint16_t Ads1118::read(uint8_t ch)
     {
         cfg.bit.mux = ch;
         update_cfg(&cfg);
+        delay_ms(10);
     }
-    
     //读取相应通道值
     spi->take_spi_right(&config);
     cs->reset();
+    last = millis();
     while(miso->read() == 1)
     {   
         if(millis() - last > 10)
             break;
     }
-    value |= spi->read() << 8;
-    value |= spi->read();
+    value |= spi->transfer(0xff) << 8;
+    value |= spi->transfer(0xff);
     cs->set();
     spi->release_spi_right();
     return value;
@@ -89,7 +90,6 @@ AdsConfig_t Ads1118::update_cfg(AdsConfig_t *cfg)
     AdsConfig_t temp;
     spi->take_spi_right(&config);
     cs->reset();
-        delay_us(1);
 
     while(miso->read() == 1)
     {   
@@ -98,25 +98,59 @@ AdsConfig_t Ads1118::update_cfg(AdsConfig_t *cfg)
     }
     spi->write(cfg->byte[0]);
     spi->write(cfg->byte[1]);
-    temp.byte[0] = spi->read();
-    temp.byte[1] = spi->read();
+    temp.byte[0] = spi->transfer(0xff);
+    temp.byte[1] = spi->transfer(0xff);
     cs->set();
     spi->release_spi_right();
     return temp;
 }
-float Ads1118::read_voltage(uint8_t ch)
+double Ads1118::read_voltage(uint8_t ch)
 {
     uint16_t temp;
-    float gain;
-    float voltage;
+    double gain;
+    double voltage;
     temp = read(ch);
-    float gain_table[8] = {6.144, 4.096, 2.048, 1.024, 0.512, 0.256, 0.256, 0.256};
+    double gain_table[8] = {6144, 4096, 2048, 1024, 512, 256, 256, 256};
     gain = gain_table[cfg.bit.pga];
     //temp -=32768;
-    voltage = (float)temp*gain/(float)32768;
+    voltage = (double)temp*gain/(double)32768;
     return voltage;
 }
 
+float Ads1118::read_average(uint8_t ch)
+{
+    float sum = 0;
+    for(int i = 0; i < 20; i++)
+    {
+        sum += read(ch);
+        sum = sum;
+        //delay_ms(10);
+        //uart3.printf("\r\n\r\n__%f___ \r\n\r\n",sum);
+    }
+    sum = sum/20.0;
+    return sum;
+}
+double Ads1118::read_vol_average(uint8_t ch)
+{
+    double sum = 0;
+    for(int i = 0; i < 10; i++)
+        sum += read_voltage(ch);
+    sum = sum/10.0;
+    return sum;
+
+}
+
+double Ads1118::adc_to_voltage(double hex)
+{
+    double temp = hex;
+    double gain;
+    double voltage;
+    double gain_table[8] = {6144, 4096, 2048, 1024, 512, 256, 256, 256};
+    gain = gain_table[cfg.bit.pga];
+    //temp -=32768;
+    voltage = ((double)gain/(double)32768)*temp;
+    return voltage;
+}
 void Ads1118::read_temperature()
 {
 

@@ -7,9 +7,9 @@ void ebox_init(void)
     #ifdef __CC_ARM
         ebox_heap_init((void*)MCU_SRAM_BEGIN, (void*)MCU_SRAM_END);
     #elif __ICCARM__
-        ebox_heap_init(__segment_end("HEAP"), (void*)STM32_SRAM_END);
+        ebox_heap_init(__segment_end("HEAP"), (void*)MCU_SRAM_END);
     #else
-        ebox_heap_init((void*)&__bss_end, (void*)STM32_SRAM_END);
+        ebox_heap_init((void*)&__bss_end, (void*)MCU_SRAM_END);
     #endif
     interrupts  = __enable_irq;
     no_interrupts = __disable_irq;
