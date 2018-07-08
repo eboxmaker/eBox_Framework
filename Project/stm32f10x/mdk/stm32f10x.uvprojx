@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\component\FreeModbus\port;..\..\..\component\FreeModbus\modbus\ascii;..\..\..\component\FreeModbus\modbus\rtu;..\..\..\component\FreeModbus\modbus\tcp;..\..\..\component\FreeModbus\modbus\include;..\..\..\component\ddc</IncludePath>
+              <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\component\FreeModbus\port;..\..\..\component\FreeModbus\modbus\ascii;..\..\..\component\FreeModbus\modbus\rtu;..\..\..\component\FreeModbus\modbus\tcp;..\..\..\component\FreeModbus\modbus\include;..\..\..\component\ddc;..\..\..\component\stepMotor</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -619,7 +619,7 @@
             <File>
               <FileName>ebox_init.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\user\ebox_init.cpp</FilePath>
+              <FilePath>..\..\..\ebox\core\ebox_init.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -760,6 +760,11 @@
               <FileName>bsp.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\bsp.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>step_motor.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\stepMotor\step_motor.cpp</FilePath>
             </File>
           </Files>
         </Group>

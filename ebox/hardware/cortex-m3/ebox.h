@@ -46,18 +46,9 @@
 
 extern "C"{
 void ebox_init(void);
-void ebox_printf_flush(void);
 }
 
-////////系统debug支持////////////////////////////////////////////////////////////////
-#define EBOX_DEBUG 1
-#if EBOX_DEBUG
-extern Uart uart1;//根据不同的串口名称此处需要做相应的修改
-#define DBG(...) uart1.printf(__VA_ARGS__)
-#else
-#define  DBG(...)
-#endif
-////////////////////////////////////////////////////////////////////////////////
+
 //创建所有引脚对象和宏定义其指针
 extern Uart uart1;
 extern Uart uart2;

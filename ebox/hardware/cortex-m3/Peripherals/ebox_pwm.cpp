@@ -19,8 +19,10 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_pwm.h"
-
-
+#define PWM_DEBUG 0
+#if PWM_DEBUG
+    #include "ebox.h"
+#endif
 
 #define TIMxCH1 0x01
 #define TIMxCH2 0x02
@@ -165,19 +167,21 @@ void Pwm::set_frq(uint32_t frq)
     uint32_t period  = 0;
     uint32_t prescaler = 1;
     
-    
-    
     if(frq >= get_max_frq())//控制频率，保证其有1%精度
         frq = get_max_frq();
+
     
     //千分之一精度分配方案
     for(; prescaler <= 0xffff; prescaler++)
     {
         period = get_timer_source_clock() / prescaler / frq;
-        if((0xffff >= period) && (period >= 1000))
+        if(period <= 65535)
         {
-            accuracy = 1;
-            break;
+            if((0xffff >= period) && (period >= 1000))
+            {
+                accuracy = 1;
+                break;
+            }
         }
     }
     
@@ -187,15 +191,32 @@ void Pwm::set_frq(uint32_t frq)
         for(prescaler = 1; prescaler <= 0xffff; prescaler++)
         {
             period = get_timer_source_clock() / prescaler / frq;
-            if((0xffff >= period) && (period >= 100))
+            if(period <= 65535)
             {
-            accuracy = 2;
-            break;
+                if((0xffff >= period) && (period >= 100))
+                {
+                    accuracy = 2;
+                    break;
+                }         
             }
         }
-    }
-
-
+    } 
+    if(prescaler == 65536)//上述算法分配失败
+    {
+        //百分之二分配方案
+        for(prescaler = 1; prescaler <= 0xffff; prescaler++)
+        {
+            period = get_timer_source_clock() / prescaler / frq;
+            if(period <= 65535)
+            {
+                if((0xffff >= period) && (period >= 50))
+                {
+                    accuracy = 3;
+                    break;
+                }   
+            }            
+        }
+    }     
     base_init(period, prescaler);
     _set_duty(duty);
 
@@ -295,7 +316,7 @@ uint32_t Pwm::get_timer_source_clock()
 }
 uint32_t Pwm::get_max_frq()
 {
-    return get_timer_source_clock()/100;
+    return get_timer_source_clock()/50;
 
 }
 float Pwm::get_accuracy()
@@ -309,6 +330,8 @@ float Pwm::get_accuracy()
             return 0.001;
         case 2:
             return 0.01;
+        case 3:
+            return 0.02;
 
     }
     return 0.001;
