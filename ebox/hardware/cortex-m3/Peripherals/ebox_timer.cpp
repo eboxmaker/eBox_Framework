@@ -21,20 +21,6 @@
 #include "ebox_timer.h"
 #include "ebox_timer_it.h"
 
-static tim_irq_handler irq_handler;
-static uint32_t tim_irq_ids[TIM_IRQ_ID_NUM];
-
-int tim_irq_init(uint8_t index,tim_irq_handler handler,uint32_t id)
-{
- tim_irq_ids[index] = id;
- irq_handler =  handler;
- return 0;
-}
-
-void tim_irq_callback(uint8_t index)
-{
-	irq_handler(tim_irq_ids[index]);
-}
 
 //////////////////////////////////////
 

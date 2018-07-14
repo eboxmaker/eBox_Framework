@@ -5,7 +5,7 @@
 struct ebox_fifo *uart_fifo_ptr;
 void ebox_printf_init(void)
 {
-    uart_fifo_ptr = ebox_fifo_alloc(128);
+    uart_fifo_ptr = ebox_fifo_alloc(256);
 }
 
 void ebox_printf(const char *fmt, ...)
