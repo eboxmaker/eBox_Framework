@@ -41,6 +41,7 @@
 #include "ebox_dac.h"
 #include "ebox_wdg.h"
 #include "ebox_slave_spi.h"
+#include "ebox_step_motor.h"
 
 #include "stdio.h"
 

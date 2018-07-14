@@ -746,6 +746,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\rcc.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ebox_step_motor.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_step_motor.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -760,11 +765,6 @@
               <FileName>bsp.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\bsp.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>step_motor.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\stepMotor\step_motor.cpp</FilePath>
             </File>
           </Files>
         </Group>

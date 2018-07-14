@@ -23,10 +23,38 @@
 #include "mcu.h"
 
 #include "ebox_timer_it.h"
+/*
+定时器中断简介：
+    此文件提供了定时器的中断入口。定义了所有定时器对象this指针入口tim_irq_ids[TIM_IRQ_ID_NUM]。
+用户可以通过Tim_It_Index来查询每一个定时器所有this指针入口的index值。并通过tim_irq_handler类型的
+方法入口绑定类的静态方法入口。实现了寻找对象并定位方法的两个步骤。
+*/
+
+
 __IO uint16_t t1_overflow_times = 0;
 __IO uint16_t t2_overflow_times = 0;
 __IO uint16_t t3_overflow_times = 0;
 __IO uint16_t t4_overflow_times = 0;
+
+
+static tim_irq_handler irq_handler;
+static uint32_t tim_irq_ids[TIM_IRQ_ID_NUM];//保存对象this指针
+
+//index:定时器保存this指针数组列表中的索引值，实现将特定的对象绑定到特定的入口
+//handler：类的静态方法
+//id:对象的this指针
+int tim_irq_init(uint8_t index,tim_irq_handler handler,uint32_t id)
+{
+ tim_irq_ids[index] = id;//将对象this指针保存至列表中
+ irq_handler =  handler;//类的静态方法
+ return 0;
+}
+
+void tim_irq_callback(uint8_t index)
+{
+	irq_handler(tim_irq_ids[index]);//寻找到对象的回调函数入口
+}
+
 
 extern "C" {
 
