@@ -24,6 +24,7 @@
 
 
 #include "ebox_core.h"
+#include "stdio.h"
 
 
 #include "ebox_gpio.h"
@@ -40,10 +41,8 @@
 #include "ebox_iflash.h"
 #include "ebox_dac.h"
 #include "ebox_wdg.h"
-#include "ebox_slave_spi.h"
 #include "ebox_step_motor.h"
-
-#include "stdio.h"
+#include "ebox_3steper.h"
 
 extern "C"{
 void ebox_init(void);
@@ -63,7 +62,6 @@ extern mcuSpi spi1;
 extern mcuSpi spi2;
 extern SoftSpi sspi1;
 extern SoftSpi sspi2;
-extern SlaveSpi slave_spi1;
 
 extern mcuI2c i2c1;
 extern mcuI2c i2c2;

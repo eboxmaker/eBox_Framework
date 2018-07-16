@@ -171,7 +171,7 @@ mcuSpi  spi3(SPI3, &PB3, &PB4, &PB5);
 SoftSpi	sspi1(&PA5, &PA6, &PA7);
 SoftSpi	sspi2(&PB13, &PB14, &PB15);
 
-SlaveSpi slave_spi1(SPI1, &PA5, &PA6, &PA7);
+//SlaveSpi slave_spi1(SPI1, &PA5, &PA6, &PA7);
 
 //i2c
 mcuI2c  i2c1(I2C1, &PB6, &PB7);
