@@ -120,7 +120,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name>p鮆w葰?p鮆w葰?</Name>
+          <Name>h|?p鮆wh|?p鮆wh|?</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -153,37 +153,45 @@
           <Name>-T0</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint/>
+      <Breakpoint>
+        <Bp>
+          <Number>0</Number>
+          <Type>0</Type>
+          <LineNumber>147</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134231760</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\..\user\main.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\ebox\../../../user/main.cpp\147</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>136</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134231720</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\..\user\main.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\ebox\../../../user/main.cpp\136</Expression>
+        </Bp>
+      </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>motor,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>1</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>accel_lim,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>2</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>max_s_lim,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>3</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>new_step_delay,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>4</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>rest,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>5</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>step_delay,0x0A</ItemText>
+          <ItemText>temp_ctr_bit,0x10</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -247,7 +255,7 @@
 
   <Group>
     <GroupName>start_code</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -267,7 +275,7 @@
 
   <Group>
     <GroupName>CMSIS</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -583,7 +591,7 @@
 
   <Group>
     <GroupName>eboxFun</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -783,7 +791,7 @@
 
   <Group>
     <GroupName>ebox_core</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1066,18 +1074,6 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_slave_spi.cpp</PathWithFileName>
-      <FilenameWithoutPath>ebox_slave_spi.cpp</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>6</GroupNumber>
-      <FileNumber>66</FileNumber>
-      <FileType>8</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\ebox\hardware\cortex-m3\nvic.cpp</PathWithFileName>
       <FilenameWithoutPath>nvic.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
@@ -1085,7 +1081,7 @@
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>67</FileNumber>
+      <FileNumber>66</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1097,7 +1093,7 @@
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>68</FileNumber>
+      <FileNumber>67</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1109,13 +1105,25 @@
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>69</FileNumber>
+      <FileNumber>68</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_step_motor.cpp</PathWithFileName>
       <FilenameWithoutPath>ebox_step_motor.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>69</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_3steper.cpp</PathWithFileName>
+      <FilenameWithoutPath>ebox_3steper.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1151,6 +1159,18 @@
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
+    <File>
+      <GroupNumber>7</GroupNumber>
+      <FileNumber>72</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\component\cnc\cnc.cpp</PathWithFileName>
+      <FilenameWithoutPath>cnc.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
   </Group>
 
   <Group>
@@ -1161,7 +1181,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>72</FileNumber>
+      <FileNumber>73</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1173,7 +1193,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>73</FileNumber>
+      <FileNumber>74</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1185,7 +1205,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>74</FileNumber>
+      <FileNumber>75</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1197,7 +1217,7 @@
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>75</FileNumber>
+      <FileNumber>76</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
