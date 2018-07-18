@@ -54,6 +54,7 @@ void ebox_heap_init(void *begin_addr, void *end_addr)
     end_block[0]->nextFreeBlock  = NULL;
     
     //起始位置初始化一个可用block；next指向heap_end
+    first_block = (eboxBlockLink_t *)begin_align;
     first_block->nextFreeBlock = end_block[0];
     first_block->blockSize = mem_size_aligned;
     
@@ -75,7 +76,7 @@ void *ebox_malloc( size_t xWantedSize )
     
     if(end_block[0] == NULL)
     {
-        ebox_heap_init(MCU_SRAM_BEGIN,(void *)MCU_SRAM_END);
+        ebox_heap_init((void *)MCU_SRAM_BEGIN,(void *)MCU_SRAM_END);
     }
         
         

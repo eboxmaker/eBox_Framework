@@ -1,5 +1,6 @@
 #include "ebox_3steper.h"
 #include "ebox_timer_it.h"
+#include "ebox.h"
 
 
 
@@ -35,12 +36,12 @@ void Steper::begin()
     Ypwm->mode(AF_PP);
 //    Zpwm->mode(AF_PP);
     
-    prescale = get_timer_source_clock()/72000;
+    prescale = get_timer_source_clock()*TIME_UNIT;// 
     period = 65535;
     ccr = 0;
     base_init(period,prescale);
     mode_init_oc_pwm();
-    set_ccr(1000);
+    set_ccr(10);
     nvic(ENABLE,0,0);
     attach(this,&Steper::callback);
     interrupt(ENABLE);
@@ -59,7 +60,6 @@ void Steper::timer_stop()
     TIMx->CNT = 0;
 }
 
-#include "ebox.h"
 void Steper::move(signed int step, unsigned int accel, unsigned int decel, unsigned int speed)
 {
 
@@ -173,21 +173,25 @@ void Steper::callback()
     {
         TIMx->ARR = cycleRing.read();
         ctr_bits = bitsRing.read();
-        if(ctr_bits & (1<<X_STEMP_BIT))
+        if(ctr_bits & (1<<X_STEP_BIT))
             TIMx->CCER |= 0x0100;
         else
             TIMx->CCER &= 0xfeff;
 
-        if(ctr_bits & (1<<Y_STEMP_BIT))
+        if(ctr_bits & (1<<Y_STEP_BIT))
             TIMx->CCER |= 0x1000;
         else
             TIMx->CCER &= 0xefff;
+        
 
     }
     else
     {
         ctr_bits = 0;
+        TIMx->CCER &= 0xefff;
+        TIMx->CCER &= 0xfeff;
         TIM_Cmd(TIMx, DISABLE); //
+        uart1.printf("stop\r\n");
     }
     interrupts();
     

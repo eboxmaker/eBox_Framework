@@ -157,10 +157,5 @@ uint16_t get_str(char *source, const char *end, uint16_t count, char *out)
     }
     return length;
 }
-float max(float *p,uint16_t len)
-{
-    
-return 0;
-}
 
 

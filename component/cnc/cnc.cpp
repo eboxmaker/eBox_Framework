@@ -6,12 +6,41 @@ uint32_t i;
 uint16_t acc_untill;
 uint16_t acc_delta=200;
 
-void draw_line( uint16_t x1, uint16_t y1)
+
+// Calculates the distance (not time) it takes to accelerate from initial_rate to target_rate using the 
+// given acceleration:
+//估计加速度距离
+static float estimate_acceleration_distance(float initial_rate, float target_rate, float acceleration) 
+{
+  return( (target_rate*target_rate-initial_rate*initial_rate)/(2*acceleration) );
+}
+
+/*                        + <- some maximum rate we don't care about
+                         /|\
+                        / | \                    
+                       /  |  + <- final_rate     
+                      /   |  |                   
+     initial_rate -> +----+--+                   
+                          ^  ^                   
+                          |  |                   
+      intersection_distance  distance                                                                           */
+// This function gives you the point at which you must start braking (at the rate of -acceleration) if 
+// you started at speed initial_rate and accelerated until this point and want to end at the final_rate after
+// a total travel of distance. This can be used to compute the intersection point between acceleration and
+// deceleration in the cases where the trapezoid has no plateau (i.e. never reaches maximum speed)
+//相交距离
+static float intersection_distance(float initial_rate, float final_rate, float acceleration, float distance) 
+{
+  return( (2*acceleration*distance-initial_rate*initial_rate+final_rate*final_rate)/(4*acceleration) );
+}
+
+
+void draw_line( uint32_t x1, uint32_t y1)
 {
     uint8_t temp_ctr_bit = 0;
-    uint16_t x0 = 0;
-    uint16_t y0 = 0;
-    int dx,             // difference in x's
+    uint32_t x0 = 0;
+    uint32_t y0 = 0;
+    int32_t dx,             // difference in x's
         dy,             // difference in y's
         dx2,            // dx,dy * 2
         dy2,
@@ -25,25 +54,11 @@ void draw_line( uint16_t x1, uint16_t y1)
     dx = x1 - x0; //计算x距离
     dy = y1 - y0; //计算y距离
 
-    if (dx >= 0)
-    {
-        x_inc = 1;
-    }
-    else
-    {
-        x_inc = -1;
-        dx    = -dx;
-    }
+    if (dx >= 0){ x_inc = 1; }
+    else{ x_inc = -1; dx = -dx; }
 
-    if (dy >= 0)
-    {
-        y_inc = 1;
-    }
-    else
-    {
-        y_inc = -1;
-        dy    = -dy;
-    }
+    if (dy >= 0){ y_inc = 1; }
+    else{ y_inc = -1; dy = -dy; }
 
     dx2 = dx << 1;
     dy2 = dy << 1;
@@ -69,12 +84,12 @@ void draw_line( uint16_t x1, uint16_t y1)
 
                 // move to next line
                 y0 += y_inc; //增加y坐标值
-                bit_set(temp_ctr_bit,Y_STEMP_BIT);
+                bit_set(temp_ctr_bit,Y_STEP_BIT);
 
             } // end if error overflowed
             else
             {
-                bit_clear(temp_ctr_bit,Y_STEMP_BIT);
+                bit_clear(temp_ctr_bit,Y_STEP_BIT);
             }
 
             // adjust the error term
@@ -82,7 +97,7 @@ void draw_line( uint16_t x1, uint16_t y1)
 
             // move to the next pixel
             x0 += x_inc; //x坐标值每次画点后都递增1
-            bit_set(temp_ctr_bit,X_STEMP_BIT);
+            bit_set(temp_ctr_bit,X_STEP_BIT);
             while(steper.bitsRing.isfull())
             {
                 //do run time
@@ -93,11 +108,13 @@ void draw_line( uint16_t x1, uint16_t y1)
             else
                 counter += acc_delta;
 
+            uart1.printf("TIMER:BIT:%D\r\n",steper.cycleRing.available());
             uart1.printf("X>Y:%05d:counter:%05d(%02d)\r\n",index,counter,temp_ctr_bit);
         } // end for
     } // end if |slope| <= 1
     else//y轴大于x轴，则每个y轴上只有一个点，x轴若干个点
     {
+        acc_untill = dy/2;
         //以y轴为递增画点
         // initialize error term
         error = dx2 - dy;
@@ -115,12 +132,12 @@ void draw_line( uint16_t x1, uint16_t y1)
 
                 // move to next line
                 x0 += x_inc;
-                bit_set(temp_ctr_bit,X_STEMP_BIT);
+                bit_set(temp_ctr_bit,X_STEP_BIT);
 
             } // end if error overflowed
             else
             {
-                bit_clear(temp_ctr_bit,X_STEMP_BIT);
+                bit_clear(temp_ctr_bit,X_STEP_BIT);
             }
 
             // adjust the error term
@@ -128,7 +145,7 @@ void draw_line( uint16_t x1, uint16_t y1)
 
             // move to the next pixel
             y0 += y_inc;
-            bit_set(temp_ctr_bit,Y_STEMP_BIT);
+            bit_set(temp_ctr_bit,Y_STEP_BIT);
             while(steper.bitsRing.isfull())
             {
                 //do run time
@@ -138,6 +155,7 @@ void draw_line( uint16_t x1, uint16_t y1)
                 counter -= acc_delta;
             else
                 counter += acc_delta;
+            uart1.printf("TIMER:BIT:%D\r\n",steper.cycleRing.available());
             uart1.printf("Y>X:%05d:counter:%05d(%02d)\r\n",index,counter,temp_ctr_bit);
         } // end for
     } // end else |slope| > 1
@@ -156,13 +174,84 @@ void CNC::move(float *new_position)
     draw_line(delta_steps[X_AXIS],delta_steps[Y_AXIS]);
     
 }
-void CNC::move_x_to(float new_x)
+void CNC::move_signal_to(uint8_t Axis,float new_value)
 {
+    uint32_t c0,c;
+    uint8_t ctr_bits = 0;
+    float delta_mm;
+    uint32_t delta_steps,accelerate_until,decelerate_after;
+    uint32_t step_counter = 0;
+    
+    
+    delta_mm = new_value - this->position[Axis];
+    if(delta_mm == 0)return;
+    else if(delta_mm < 0) { bit_clear(ctr_bits,Axis+3);  delta_mm = -delta_mm; }
+    else{ bit_set(ctr_bits,Axis+3); }
+    delta_steps = mm_to_steps(delta_mm);
+    int32_t accelerate_steps = 
+        mm_to_steps(estimate_acceleration_distance(0, MAX_SPEED_MM_MIN, MAX_ACC_MIN));
+    int32_t decelerate_steps = 
+        mm_to_steps(estimate_acceleration_distance(MAX_SPEED_MM_MIN, 0, -MAX_ACC_MIN));    
+    // Calculate the size of Plateau of Nominal Rate. 
+    int32_t plateau_steps = delta_steps-accelerate_steps-decelerate_steps;
+    if (plateau_steps < 0) {  
+        accelerate_steps = ceil(
+        intersection_distance(0,0, MAX_ACC_MIN, delta_steps));
+        accelerate_steps = max(accelerate_steps,0); // Check limits due to numerical round-off
+        accelerate_steps = min(accelerate_steps,delta_steps);
+        plateau_steps = 0;
+    }  
+    accelerate_until = accelerate_steps;
+    decelerate_after = accelerate_steps+plateau_steps;
+    
+    c0 = calculate_c0(MAX_ACC_MIN);
+    
+    uart1.printf("delta_mm:%f;\r\n", delta_mm);
+    uart1.printf("all:%05d\r\n", delta_steps);
+    uart1.printf("+:%05d\r\n", accelerate_until);
+    uart1.printf("=:%05d\r\n", plateau_steps);
+    uart1.printf("-:%05d\r\n", decelerate_after);
+    uart1.printf("c0:%05d\r\n", c0);
 
-}
-void CNC::move_y_to(float new_y)
-{
 
+    steper.timer_start();
+    step_counter++;
+    bit_set(ctr_bits,Axis);
+    steper.write_buffer(c0,ctr_bits);
+        uart1.printf("steps:%3d\t + \t%04d;0X%X\r\n", step_counter,c0,ctr_bits);
+    for(; step_counter < accelerate_until; step_counter++)
+    {
+
+        c = c0*(sqrt(float(step_counter+1)) - sqrt(float(step_counter)));
+        while(steper.bitsRing.isfull())
+        {
+            //do run time
+        }
+        steper.write_buffer(c,ctr_bits);
+    }
+        uart1.printf("steps:%3d\t + \t%04d;0X%X\r\n", step_counter,c,ctr_bits);
+    for(; step_counter < decelerate_after; step_counter++)
+    {
+        while(steper.bitsRing.isfull())
+        {
+            //do run time
+        }
+        steper.write_buffer(c,ctr_bits);
+
+    }
+        uart1.printf("steps:%3d\t = \t%04d;0X%X\r\n", step_counter,c,ctr_bits);
+    for(; step_counter < delta_steps; step_counter++)
+    {
+        c = c0*(sqrt(float(delta_steps - step_counter+1)) - sqrt(float(delta_steps - step_counter)));
+        while(steper.bitsRing.isfull())
+        {
+            //do run time
+        }
+        steper.write_buffer(c,ctr_bits);
+
+
+    }
+        uart1.printf("steps:%3d\t - \t%04d;0X%X\r\n", step_counter,c,ctr_bits);
 }
 
 uint32_t CNC::mm_to_steps(float mm)
@@ -177,8 +266,8 @@ float CNC::step_to_mm(uint32_t steps)
 
 void CNC::set_speed(float speed)
 {
-    if(speed > MAX_SPEED)
-        this->speed = MAX_SPEED;
+    if(speed > MAX_SPEED_MM_MIN)
+        this->speed = MAX_SPEED_MM_MIN;
     else
         this->speed = speed;
 

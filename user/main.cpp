@@ -17,17 +17,29 @@
   */
 
 #include "ebox.h"
+#include "cnc.h"
+CNC cnc;
+float position[3] = {10,20,0};
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
+    uart1.begin(512000);
+    steper.Xpwm = &PB8;
+    steper.Ypwm = &PB9;
+    steper.begin();
+    cnc.print_info();
+    
+    cnc.move(position);
+    cnc.move_signal_to(Y_AXIS,200.23);
+    cnc.move_signal_to(X_AXIS,200.23);
+ 
 }
 int main(void)
 {
     setup();
     while(1)
     {
-        uart1.printf("hello World !\r\n");
+//        uart1.printf("hello World !\r\n");
         delay_ms(1000);
     }
 }
