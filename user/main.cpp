@@ -19,7 +19,8 @@
 #include "ebox.h"
 #include "cnc.h"
 CNC cnc;
-float position[3] = {10,20,0};
+float position[3] = {50,10,0};
+float position2[3] = {10,50,0};
 void setup()
 {
     ebox_init();
@@ -29,9 +30,6 @@ void setup()
     steper.begin();
     cnc.print_info();
     
-    cnc.move(position);
-    cnc.move_signal_to(Y_AXIS,200.23);
-    cnc.move_signal_to(X_AXIS,200.23);
  
 }
 int main(void)
@@ -39,6 +37,10 @@ int main(void)
     setup();
     while(1)
     {
+    cnc.move(position);
+    cnc.move(position2);
+    cnc.move_signal_to(Y_AXIS,50.23);
+    cnc.move_signal_to(X_AXIS,50.23);
 //        uart1.printf("hello World !\r\n");
         delay_ms(1000);
     }

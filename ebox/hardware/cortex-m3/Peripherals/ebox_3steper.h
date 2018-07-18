@@ -31,7 +31,12 @@
 #define Y_DIR_BIT   4
 #define Z_DIR_BIT   5
 
-
+#define X_STEP_BIT_MASK  (1<<0)
+#define Y_STEP_BIT_MASK  (1<<1)
+#define Z_STEPE_BIT_MASK (1<<2)
+#define X_DIR_BIT_MASK   (1<<3)
+#define Y_DIR_BIT_MASK   (1<<4)
+#define Z_DIR_BIT_MASK   (1<<5)
 class Steper
 {
     public:
