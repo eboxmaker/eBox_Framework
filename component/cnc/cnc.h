@@ -9,9 +9,9 @@
 //最大速度由定时器最小分辨率，驱动脉冲宽度(10*TIME_UNIT)，以及MCU填充缓冲区速度，缓冲区大小等因素的综合限制。
 //最重要的一条参考：MCU能不能在定时器中断周期内实时的更新步进电机运行缓冲区。
 //比如定时器计数频率1Mhz。100个计数周期中断一次。MCU则必须满足100us填充一次运行缓冲区。
-#define MAX_SPEED_MM_MIN    6000.0    //mm/min
+#define MAX_SPEED_MM_MIN    1000.0    //mm/min
 //最大加速度由机械结构限制。
-#define MAX_ACC_S           60.0       //(mm/s^2)
+#define MAX_ACC_S           20.0       //(mm/s^2)
 
 
 
@@ -41,8 +41,9 @@ typedef struct
     uint32_t accelerate_until;
     uint32_t decelerate_after;
     uint32_t delta_steps[3];
-    uint32_t delta_mm[3];
-    
+    float    delta_mm[3];
+    uint8_t     ctr_bits;
+    uint32_t max_delta_steps;
     uint32_t c0;
 
 }CncBlock_t;
@@ -69,12 +70,58 @@ class CNC
         {
           return( (target_rate*target_rate-initial_rate*initial_rate)/(2*acceleration) );
         }
+        static float intersection_distance(float initial_rate, float final_rate, float acceleration, float distance) 
+        {
+          return( (2*acceleration*distance-initial_rate*initial_rate+final_rate*final_rate)/(4*acceleration) );
+        }
         uint32_t calculate_c0(uint32_t acc_per_min)
         {
             float acc = acc_per_min / 3600.0;
             uint32_t c0;
             c0 = sqrt(2*MM_PER_STEP/(acc*TIME_UNIT_POWER));
             return c0;
+        }
+        void calculate_block(CncBlock_t *block)
+        {
+            block->delta_mm[X_AXIS] = (block->position[X_AXIS] - position[X_AXIS]);
+            block->delta_mm[Y_AXIS] = block->position[Y_AXIS] - position[Y_AXIS];
+            block->delta_mm[Z_AXIS] = block->position[Z_AXIS] - position[Z_AXIS];
+            
+            if(block->delta_mm[X_AXIS] < 0 ){bit_clear( block->ctr_bits,X_DIR_BIT);block->delta_mm[X_AXIS] = -block->delta_mm[X_AXIS];}
+            else{bit_set( block->ctr_bits,X_DIR_BIT);}
+            if(block->delta_mm[Y_AXIS] < 0 ){bit_clear( block->ctr_bits,Y_DIR_BIT);block->delta_mm[Y_AXIS] = -block->delta_mm[Y_AXIS];}
+            else{bit_set( block->ctr_bits,Y_DIR_BIT);}
+            if(block->delta_mm[Z_AXIS] < 0 ){bit_clear( block->ctr_bits,Z_DIR_BIT);block->delta_mm[Z_AXIS] = -block->delta_mm[Z_AXIS];}
+            else{bit_set( block->ctr_bits,Z_DIR_BIT);}
+            
+            block->delta_steps[X_AXIS] = mm_to_steps(block->delta_mm[X_AXIS]);
+            block->delta_steps[Y_AXIS] = mm_to_steps(block->delta_mm[Y_AXIS]);
+            block->delta_steps[Z_AXIS] = mm_to_steps(block->delta_mm[Z_AXIS]);
+            block->max_delta_steps = max3v(block->delta_steps[X_AXIS],block->delta_steps[Y_AXIS],block->delta_steps[Z_AXIS]);
+            block->c0 = calculate_c0(block->acc);
+            int32_t accelerate_steps = 
+                mm_to_steps(estimate_acceleration_distance(0, MAX_SPEED_MM_MIN, MAX_ACC_MIN));
+            int32_t decelerate_steps = 
+                mm_to_steps(estimate_acceleration_distance(MAX_SPEED_MM_MIN, 0, -MAX_ACC_MIN));    
+            // Calculate the size of Plateau of Nominal Rate. 
+            int32_t plateau_steps = block->max_delta_steps-accelerate_steps-decelerate_steps;
+            if (plateau_steps < 0) {  
+                accelerate_steps = ceil(
+                intersection_distance(0,0, MAX_ACC_MIN, block->max_delta_steps));
+                accelerate_steps = max(accelerate_steps,0); // Check limits due to numerical round-off
+                accelerate_steps = min(accelerate_steps,block->max_delta_steps);
+                plateau_steps = 0;
+            }  
+            block->accelerate_until = accelerate_steps;
+            block->decelerate_after = accelerate_steps+plateau_steps;
+            
+//            uart1.printf("delta_mm:%f;\r\n", block->);
+            uart1.printf("all:%05d\r\n", block->max_delta_steps);
+            uart1.printf("+:%05d\r\n", block->accelerate_until);
+            uart1.printf("=:%05d\r\n", plateau_steps);
+            uart1.printf("-:%05d\r\n", block->decelerate_after);
+            uart1.printf("c0:%05d\r\n", block->c0);
+            
         }
         void block_planner()
         {
