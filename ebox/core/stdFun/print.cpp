@@ -70,7 +70,7 @@ size_t Print::printf(const char *fmt, ...)
         if(p == NULL)
             return 0;
         size1 = vsnprintf(p, size2,fmt, va_params);
-        if(size1 == -1  || size1 > size2)
+        if(size1 == -1  || size1 >= size2)
         {
             size2+=64;
             size1 = -1;

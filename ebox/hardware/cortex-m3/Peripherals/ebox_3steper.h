@@ -6,11 +6,14 @@
 #include "FunctionPointer.h"
 
 //! Number of (full)steps per round on stepper motor in use.
-#define SPR 200 
-
+#define STEPER_SPR      200 
+#define STEPER_DIV      2
 //步进角
-#define RADIAN_PER_STEP (2*PI/SPR)                    // 2*pi/spr
+#define RADIAN_PER_STEP (2.0*PI/(STEPER_SPR*STEPER_DIV))  // 2*pi/spr
+#define ANGLE_PER_STEP (360.0/(STEPER_SPR*STEPER_DIV))  // 2*pi/spr
 
+#define TIME_UNIT (1e-6)            //单位：s；描述了定时器的时钟周期
+#define TIME_UNIT_POWER (TIME_UNIT*TIME_UNIT)            //单位：s；描述了定时器的时钟周期
 
 //typedef struct 
 //{
@@ -21,9 +24,9 @@
 #define Y_AXIS 1
 #define Z_AXIS 2
 
-#define X_STEMP_BIT 0
-#define Y_STEMP_BIT 1
-#define Z_STEMP_BIT 2
+#define X_STEP_BIT  0
+#define Y_STEP_BIT  1
+#define Z_STEPE_BIT 2
 #define X_DIR_BIT   3
 #define Y_DIR_BIT   4
 #define Z_DIR_BIT   5

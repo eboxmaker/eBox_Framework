@@ -90,7 +90,7 @@ STM32F417VG     LQFP 100    168     1024    192
 #define STM32_TYPE    STM32F103C8
 #define STM32_PINS    48 
 #define STM32_FLASH   64
-#define STM32_RAM     20
+#define STM32_RAM     12
 #define STM32_COMPANY "ST\0"
 
 
