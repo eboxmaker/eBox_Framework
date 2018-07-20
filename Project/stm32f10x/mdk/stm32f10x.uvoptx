@@ -156,50 +156,18 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>116</LineNumber>
+          <LineNumber>61</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134234002</Address>
+          <Address>134239892</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\component\cnc\cnc.h</Filename>
+          <Filename>..\..\..\user\main.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../component/cnc/cnc.h\116</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>90</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134233662</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\component\cnc\cnc.h</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../component/cnc/cnc.h\90</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>100</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134233824</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\component\cnc\cnc.h</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../component/cnc/cnc.h\100</Expression>
+          <Expression>\\ebox\../../../user/main.cpp\61</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -231,7 +199,27 @@
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
+          <ItemText>block,0x10</ItemText>
+        </Ww>
+        <Ww>
+          <count>6</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>cnc</ItemText>
+        </Ww>
+        <Ww>
+          <count>7</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>steper</ItemText>
+        </Ww>
+        <Ww>
+          <count>8</count>
+          <WinNumber>1</WinNumber>
           <ItemText>block,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>9</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>max_mm</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -631,7 +619,7 @@
 
   <Group>
     <GroupName>eboxFun</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -831,7 +819,7 @@
 
   <Group>
     <GroupName>ebox_core</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

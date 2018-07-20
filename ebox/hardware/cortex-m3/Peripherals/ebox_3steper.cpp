@@ -8,7 +8,9 @@ void Steper::begin()
 {
     
     uint8_t index;
-
+    
+    cycleRing.begin(64);
+    bitsRing.begin(64);
 //    init_info(pin);
     
 
@@ -56,16 +58,13 @@ void Steper::timer_start()
 }
 void Steper::timer_stop()
 {
+    TIMx->CCER &= 0xefff;
+    TIMx->CCER &= 0xfeff;
     TIM_Cmd(TIMx,ENABLE);
     TIMx->CNT = 0;
 }
 
-void Steper::move(signed int step, unsigned int accel, unsigned int decel, unsigned int speed)
-{
 
-  
-
-}
 
 void Steper::base_init(uint16_t period, uint16_t prescaler)
 {
@@ -98,7 +97,7 @@ void Steper::mode_init_oc_pwm()
     TIM_OCInitTypeDef  TIM_OCInitStructure;
     TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
     TIM_OCInitStructure.TIM_OutputNState = TIM_OutputState_Disable;
-    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Disable;
     TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
     TIM_OCInitStructure.TIM_Pulse = 0;
 
@@ -157,14 +156,16 @@ bool Steper::write_buffer(uint16_t counter,uint8_t ctr)
 {
     if(!cycleRing.isfull())
     {
+        no_interrupts();
         bitsRing.write(ctr);
         cycleRing.write(counter);
+        interrupts();
         return true;
     }
     return false;
 }
 
-
+#include "bsp.h"
 void Steper::callback()
 {
 
@@ -173,17 +174,18 @@ void Steper::callback()
     {
         TIMx->ARR = cycleRing.read();
         ctr_bits = bitsRing.read();
-        if(ctr_bits & (1<<X_STEP_BIT))
+        if(ctr_bits & X_STEP_BIT_MASK)
             TIMx->CCER |= 0x0100;
         else
             TIMx->CCER &= 0xfeff;
 
-        if(ctr_bits & (1<<Y_STEP_BIT))
+        if(ctr_bits & Y_STEP_BIT_MASK)
             TIMx->CCER |= 0x1000;
         else
             TIMx->CCER &= 0xefff;
+        cnc.update_position(ctr_bits);
         
-
+//    uart1.printf("%X\r\n", ctr_bits);
     }
     else
     {

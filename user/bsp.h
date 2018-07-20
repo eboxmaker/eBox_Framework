@@ -20,9 +20,11 @@
 #ifndef __BSP_H
 #define __BSP_H
 #include "ebox.h"
+#include "cnc.h"
 
 
 
+extern CNC cnc;
 
 
 

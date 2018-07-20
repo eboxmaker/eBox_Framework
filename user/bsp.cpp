@@ -29,5 +29,6 @@ SD      sd(&PB12, &spi2);
 //W25x16  flash(&PA15, &spi1);
 At24c02 eeprom(&i2c2);
 */
+CNC cnc;
 
 

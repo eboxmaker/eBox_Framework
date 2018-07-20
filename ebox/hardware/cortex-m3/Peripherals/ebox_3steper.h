@@ -5,16 +5,29 @@
 #include "mcu.h"
 #include "FunctionPointer.h"
 
+///////////////////可设置参数///////////////////////////////////
+
 //! Number of (full)steps per round on stepper motor in use.
-#define STEPER_SPR      200 
-#define STEPER_DIV      2
+#define STEPER_SPR      200             //电机一圈需要走多少步
+#define STEPER_DIV      2               //电机的细分控制
+#define TIME_UNIT       (1e-6)          //单位：s；描述了定时器的时钟周期
+//定时器最小周期，驱动脉冲宽度(10*TIME_UNIT)，以及MCU填充缓冲区速度，缓冲区大小，机械特性等因素的综合限制。
+//最重要的参考：
+//一、MCU能不能在定时器中断周期内实时的更新步进电机运行缓冲区。
+//比如定时器计数频率1Mhz。100个计数周期中断一次。MCU则必须满足100us填充一次运行缓冲区。
+//二、电机在特定负载下的最高速度，硬件驱动的最快相应速度
+#define MIN_PERIOD      (50*TIME_UNIT)  //单位：s。决定了定时器最高的中断周期，进而电机的最高速度
+//////////////////////////////////////////////////////////////
+
 //步进角
 #define RADIAN_PER_STEP (2.0*PI/(STEPER_SPR*STEPER_DIV))  // 2*pi/spr
 #define ANGLE_PER_STEP (360.0/(STEPER_SPR*STEPER_DIV))  // 2*pi/spr
 
-#define TIME_UNIT (1e-6)            //单位：s；描述了定时器的时钟周期
 #define TIME_UNIT_POWER (TIME_UNIT*TIME_UNIT)            //单位：s；描述了定时器的时钟周期
 
+#define MAX_PERIOD      (65535*TIME_UNIT)//单位：s
+#define MAX_RPM         (60/MIN_PERIOD)/(STEPER_SPR*STEPER_DIV)//一分钟走NSteps/StepsPerRound圈
+#define MIN_RPM         (60/MAX_PERIOD)/(STEPER_SPR*STEPER_DIV)//一分钟走NSteps/StepsPerRound圈
 //typedef struct 
 //{
 //    uint32_t 
@@ -44,8 +57,7 @@ class Steper
         {
             TIMx        = Timer;
             status = false;
-            cycleRing.begin(32);
-            bitsRing.begin(32);
+
         };
         void begin();
         
@@ -62,7 +74,10 @@ class Steper
         
         void move(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
         
+        void print_info()
+        {
         
+        }
         
         void callback();
         static void _irq_handler( uint32_t id);
