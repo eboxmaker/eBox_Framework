@@ -17,32 +17,53 @@
   */
 
 #include "ebox.h"
-#include "cnc.h"
-CNC cnc;
-float position[3] = {50,10,0};
-float position2[3] = {10,50,0};
+#include "bsp.h"
+double position1[3] = {0,0,0};
+double position2[3] = {5,1,0};
+double position3[3] = {1,5,0};
+double position4[3] = {1,100,0};
 void setup()
 {
     ebox_init();
     uart1.begin(512000);
-    steper.Xpwm = &PB8;
-    steper.Ypwm = &PB9;
+    steper.Xpwm = &PB8;//电机X
+    steper.Ypwm = &PB9;//电机Y
     steper.begin();
+    cnc.begin();
     cnc.print_info();
-    
- 
+
 }
 int main(void)
 {
     setup();
     while(1)
     {
-    cnc.move(position);
+    cnc.move(position1);
+    while(!cnc.is_motion_over());
+    cnc.print_position();
+        
     cnc.move(position2);
-    cnc.move_signal_to(Y_AXIS,50.23);
-    cnc.move_signal_to(X_AXIS,50.23);
+    while(!cnc.is_motion_over());
+    cnc.print_position();
+        
+    cnc.move(position3);
+    while(!cnc.is_motion_over());
+    cnc.print_position();
+        
+    cnc.move(position4);
+    while(!cnc.is_motion_over());
+    cnc.print_position();
+        
+    cnc.move(position2);
+    while(!cnc.is_motion_over());
+    cnc.print_position();
+    cnc.move_signal_to(X_AXIS,10.23);
+    while(!cnc.is_motion_over());
+    cnc.print_position();
+//    cnc.move_signal_to(X_AXIS,0);
+//        delay_ms(2000);
+//    cnc.print_position();
 //        uart1.printf("hello World !\r\n");
-        delay_ms(1000);
     }
 }
 
