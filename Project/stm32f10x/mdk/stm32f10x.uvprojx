@@ -771,6 +771,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\component\cnc\cnc.cpp</FilePath>
             </File>
+            <File>
+              <FileName>lcd_1.8.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\lcd_1.8.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

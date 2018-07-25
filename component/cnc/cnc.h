@@ -6,22 +6,22 @@
 //步进mm
 #define MM_PER_STEP (double)0.01 //mm
 
-#define MAX_ACC_S   (double)600.0       //(mm/s^2)
+#define MAX_ACC_S   (double)5.00       //(mm/s^2)
 ////////////////////////////////////////////////////////////////
 
 
 //最大速度由定时器最小周期。
 #define MAX_SPEED_MM_MIN    (double)(MAX_RPM*(STEPER_SPR*STEPER_DIV)*MM_PER_STEP)    //mm/min
 //最小速度由定时器最大值不能超过65535限制，65535*TIME_UNIT时长必须走一步。
-#define MIN_SPEED_MM_MIN    (double)(MM_PER_STEP*60.0)/(65535.0*TIME_UNIT)    //mm/min
+#define MIN_SPEED_MM_MIN    (double)(MIN_RPM*(STEPER_SPR*STEPER_DIV)*MM_PER_STEP)    //mm/min
 
 
 #define MIN_SPEED_MM_S      (double)(MIN_SPEED_MM_MIN/60.0)    //mm/min
 #define MAX_SPEED_MM_S      (double)(MAX_SPEED_MM_MIN/60.0)    //mm/min
 
 
-//最小加速度由c0最大值不能超过65535限制。
-#define MIN_ACC_S           (double)(2.0*MM_PER_STEP)/(65535.0*65535.0*TIME_UNIT_POWER)               //(mm/s^2)
+//最小加速度由c0最大值不能超过65535限制。a = 2*s/t^2
+#define MIN_ACC_S           (double)(2.0*MM_PER_STEP)/(65535.0*65535.0*TIME_UNIT_POW)               //(mm/s^2)
 
 #define MIN_ACC_MIN         (double)(MIN_ACC_S*3600.0)  //(mm/min^2)
 #define MAX_ACC_MIN         (double)(MAX_ACC_S*3600.0)  //(mm/min^2)
@@ -61,9 +61,11 @@ class CNC
         void        move(double *new_position);
         void        move_signal_to(uint8_t Axis,double new_x);
         
-        void        draw_circle(double x0, double y0, double r);
         void        draw_line(CncBlock_t *block);
-
+        uint8_t     judge_quadrant(double x, double y);
+        void        dda_circle( double XStart, double YStart,double XEnd, double YEnd, double radius, int blsCW);
+        int         guaxiang(double x, double y);
+        int         _guaxiang(double x, double y);
         
         
         //计算位置运动block参数
@@ -87,14 +89,15 @@ class CNC
         //log
         void print_position();
         void print_info();
+        uint32_t position_step[3];
     
     private:
         double position[3];
-        uint32_t position_step[3];
         double acc;
         double speed;
         double current_speed;
-        uint32_t steps_completed;
+        uint32_t steps_completed_evnets;
+        uint32_t steps_total_events;
 };
 
 
