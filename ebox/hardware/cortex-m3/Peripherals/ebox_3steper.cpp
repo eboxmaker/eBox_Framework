@@ -58,10 +58,12 @@ void Steper::timer_start()
 }
 void Steper::timer_stop()
 {
+    
     TIMx->CCER &= 0xefff;
     TIMx->CCER &= 0xfeff;
     TIM_Cmd(TIMx,ENABLE);
     TIMx->CNT = 0;
+    ctr_bits = 0;
 }
 
 
@@ -184,17 +186,17 @@ void Steper::callback()
         else
             TIMx->CCER &= 0xefff;
         cnc.update_position(ctr_bits);
-        
+        lcd.draw_pixel(cnc.position_step[X_AXIS],cnc.position_step[Y_AXIS],WHITE);
 //    uart1.printf("%X\r\n", ctr_bits);
     }
-    else
-    {
-        ctr_bits = 0;
-        TIMx->CCER &= 0xefff;
-        TIMx->CCER &= 0xfeff;
-        TIM_Cmd(TIMx, DISABLE); //
-        uart1.printf("stop\r\n");
-    }
+//    else
+//    {
+//        ctr_bits = 0;
+//        TIMx->CCER &= 0xefff;
+//        TIMx->CCER &= 0xfeff;
+//        TIM_Cmd(TIMx, DISABLE); //
+//        uart1.printf("stop\r\n");
+//    }
     interrupts();
     
 }

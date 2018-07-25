@@ -1,5 +1,5 @@
 #include "cnc.h"
-
+#include "bsp.h"
 CncBlock_t block;
 
 void CNC::begin()
@@ -33,13 +33,14 @@ void CNC::move(double *new_position)
 {
 
 
-    steps_completed = 0;
+    steps_completed_evnets = 0;
     block.acc = acc;
     block.speed = speed;
     block.position[0] = new_position[0];
     block.position[1] = new_position[1];
     block.position[2] = new_position[2];
     calculate_block(&block);
+    steps_total_events = block.max_delta_steps;
     draw_line(&block);
     
 }
@@ -54,14 +55,14 @@ void CNC::move_signal_to(uint8_t Axis,double new_value)
         if(i == Axis) block.position[i] = new_value;
         else block.position[i] = this->position[i];
     }
-    block.step_planed = 0;
     
 
 
     bit_set(block.ctr_bits,Axis);
-    steps_completed = 0;
+    steps_completed_evnets = 0;
     calculate_block(&block);    
-    
+    steps_total_events = block.max_delta_steps;
+
 
 
     steper.timer_start();
@@ -78,26 +79,120 @@ void CNC::move_signal_to(uint8_t Axis,double new_value)
 //        uart1.printf("steps:0X%X\r\n", block.ctr_bits);
     }
 }
-void  CNC::draw_circle(double x0, double y0, double r)
+
+uint8_t  CNC::judge_quadrant(double x, double y)
 {
-int i,s;
-    double angle[37];
-    for(i = 0; i < 37;i++)
+    unsigned short nDir;
+    if(x>=0)
     {
-        angle[i] = 10.0*i/180*PI;
+        if(y >= 0){nDir = 1; return 1;}
+        else{nDir = 4; return 4;}
     }
-    double x[37],y[37];
-    for(i = 0; i < 37;i++)
+    else
     {
-        x[i] =  x0 + r*cos(angle[i]);
-        y[i] =  y0 + r*cos(angle[i]);
+        if(y >= 0){nDir = 2;return 2;}
+        else{nDir = 3;return 3;}
     }
-    for(s = 0; s < 36; s++)
-    {
-       // draw_line();
-    }
-    
 }
+
+
+
+
+
+void CNC::dda_circle(double XStart, double YStart,
+    double XEnd, double YEnd, double radius, int blsCW)
+{
+double xCur=XStart,yCur=YStart;
+long xRes=0,yRes = 0;
+    int ndir,Q;
+    int judge = 1;
+    int full_circle = 0;
+    int xEnable,yEnable;
+    xEnable = yEnable = 0;
+    Q=radius;
+
+    //insertPoint(xCre,yCur);
+    uart1.printf("%f\t%f\r\n",xCur,yCur);
+    if(XStart == XEnd&YStart==YEnd)
+    {
+        full_circle = 1;
+    }
+    while(judge == 1 || full_circle == 1)//终点检测
+    {
+        xRes += fabs(xCur);
+        yRes += fabs(yCur);
+        if(xRes >= Q & fabs(yCur) <= radius)
+        {
+            xRes = xRes%Q;
+            yEnable = 1;
+        }
+        if(yRes >= Q & fabs(xCur) <= radius)
+        {
+            yRes = yRes%Q;
+            xEnable = 1;
+        }
+        if(blsCW == 0)//逆圆插补
+        {
+        
+            ndir = judge_quadrant(xCur,yCur);
+            if(yEnable == 1)//xres 溢出，y轴进给
+            {
+                switch(ndir)
+                {
+                    case 1:if(fabs(yCur) < radius) yCur += 1;break;
+                    case 2: yCur -= 1; break;
+                    case 3:if(fabs(yCur) < radius) yCur -= 1; break;
+                    case 4: yCur += 1; break;
+                }
+            }
+            if(xEnable == 1)//xres 溢出，y轴进给
+            {
+                switch(ndir)
+                {
+                    case 1: xCur -= 1; break;
+                    case 2:if(fabs(xCur) < radius) xCur -= 1;break;
+                    case 3: xCur += 1; break;
+                    case 4:if(fabs(xCur) < radius) xCur += 1; break;
+                }
+            }
+        }
+        else//顺圆插补
+        {
+            ndir = judge_quadrant(xCur,yCur);
+            if(yEnable == 1)//xres 溢出，y轴进给
+            {
+                switch(ndir)
+                {
+                    case 1: yCur -= 1; break;
+                    case 2:if(fabs(yCur) < radius) yCur += 1;break;
+                    case 3: yCur += 1; break;
+                    case 4:if(fabs(yCur) < radius) yCur -= 1; break;
+                }
+            }
+            if(xEnable == 1)//xres 溢出，y轴进给
+            {
+                switch(ndir)
+                {
+                    case 1:if(fabs(xCur) < radius) xCur += 1;break;
+                    case 2: xCur += 1; break;
+                    case 3:if(fabs(xCur) < radius) xCur -= 1; break;
+                    case 4: xCur -= 1; break;
+                }
+            }
+        }
+        judge = (fabs(xCur - XEnd) >= 1 || fabs(yCur - YEnd) >= 1);
+        if(xEnable || yEnable)//判断运动给进
+        {
+           //insertPoint(xcur,ycur);
+            lcd.draw_pixel(64+xCur,80+yCur,WHITE);
+            uart1.printf("%f\t%f\r\n",xCur,yCur);
+           xEnable = yEnable = 0;
+            full_circle = 0;
+            delay_ms(10);
+        }
+    }
+}
+
 void CNC::draw_line(CncBlock_t *block)
 {
 int32_t counter = 22100;
@@ -246,7 +341,9 @@ void CNC::calculate_block(CncBlock_t *block)
     
     //检查参数
     if(block->speed > MAX_SPEED_MM_MIN) block->speed = MAX_SPEED_MM_MIN;
+    else if(block->speed < MIN_SPEED_MM_MIN) block->speed = MIN_SPEED_MM_MIN;
     if(block->acc > MAX_ACC_MIN) block->acc = MAX_ACC_MIN;
+    else if(block->acc > MIN_ACC_MIN) block->acc = MIN_ACC_MIN;
     
     block->delta_mm[X_AXIS] = (block->position[X_AXIS] - position[X_AXIS]);
     block->delta_mm[Y_AXIS] = block->position[Y_AXIS] - position[Y_AXIS];
@@ -281,7 +378,7 @@ void CNC::calculate_block(CncBlock_t *block)
     block->decelerate_after = accelerate_steps+plateau_steps;
     //计算c0
     double acc = block->acc / 3600.0;
-    block->c0 = sqrt(2*MM_PER_STEP/(acc*TIME_UNIT_POWER));    
+    block->c0 = sqrt(2*MM_PER_STEP/(acc*TIME_UNIT_POW));    
     block->step_planed = 0;
     
     
@@ -336,7 +433,7 @@ double CNC::step_to_mm(uint32_t steps)
 //状态
 bool CNC::is_motion_over()
 {
-    if(is_block_over(&block))
+    if(steps_completed_evnets == steps_total_events)
         return true;
     else
         return false;
@@ -344,7 +441,7 @@ bool CNC::is_motion_over()
 
 bool CNC::is_block_over(CncBlock_t *block)
 {
-    if(steps_completed == block->max_delta_steps)
+    if(steps_completed_evnets == block->max_delta_steps)
         return true;
     else
         return false;
@@ -388,15 +485,113 @@ void CNC::update_position(uint8_t ctr_bists)
             position_step[Y_AXIS] -= 1;
         }
     }
-    steps_completed++;
-    
+    steps_completed_evnets++;
+    if(steps_completed_evnets == steps_total_events)
+    {
+        steper.timer_stop();
+        uart1.printf("motion over\r\n");
+    }
 }
 
+int CNC::guaxiang(double x, double y)
+{
+    unsigned short nDir;
+//    uart1.printf("(%0.1f,%0.1f):",x,y);
+    if(x > 0)
+    {
+        if(y > 0)
+        {
+            if(x > y)       {nDir = 0;}
+            else if(x == y) {nDir = 1;}
+            else if(x < y)  {nDir = 1;}
+        }
+        else if(y == 0)     {nDir = 0;}
+        else if(y <  0)
+        {
+            if(x > -y)       {nDir = 7;}
+            else if(x == -y) {nDir = 7;}
+            else if(x < -y)  {nDir = 6;}
+        }
+
+    }
+    else if(x == 0)
+    {
+        if(y > 0)       {nDir = 2;}
+        else if(y < 0)  {nDir = 6;}
+    }
+    else if(x < 0)
+    {
+        if(y > 0)
+        {
+            if(-x > y)       {nDir = 3;}
+            else if(-x == y) {nDir = 3;}
+            else if(-x < y)  {nDir = 2;;}
+        }
+        else if(y == 0)     {nDir = 4;}
+        else if(y <  0)
+        {
+            if(-x > -y)       {nDir = 4;}
+            else if(-x == -y) {nDir = 5;;}
+            else if(-x < -y)  {nDir = 5;}
+        }
+
+    }
+    
+//    uart1.printf("\r\n");
+    return nDir;
+}
+int CNC::_guaxiang(double x, double y)
+{
+    unsigned short nDir;
+//    uart1.printf("(%0.1f,%0.1f):",x,y);
+    if(x > 0)
+    {
+        if(y > 0)
+        {
+            if(x > y)       {nDir = 0;}
+            else if(x == y) {nDir = 8;}
+            else if(x < y)  {nDir = 1;}
+        }
+        else if(y == 0)     {nDir = 8;}
+        else if(y <  0)
+        {
+            if(x > -y)       {nDir = 7;}
+            else if(x == -y) {nDir = 8;}
+            else if(x < -y)  {nDir = 6;}
+        }
+
+    }
+    else if(x == 0)
+    {
+        if(y > 0)       {nDir = 8;}
+        else if(y < 0)  {nDir = 8;}
+    }
+    else if(x < 0)
+    {
+        if(y > 0)
+        {
+            if(-x > y)       {nDir = 3;}
+            else if(-x == y) {nDir = 8;}
+            else if(-x < y)  {nDir = 2;}
+        }
+        else if(y == 0)     {nDir = 8;}
+        else if(y <  0)
+        {
+            if(-x > -y)       {nDir = 4;}
+            else if(-x == -y) {nDir = 8;;}
+            else if(-x < -y)  {nDir = 5;}
+        }
+
+    }
+    
+//    uart1.printf("\r\n");
+    return nDir;
+}
 
 void CNC::print_position()
 {
     
-    uart1.printf("position:x:%3.3f(%d)\t y:%3.3f(%d)\tcompleted:%d\r\n",position[X_AXIS],position_step[X_AXIS],position[Y_AXIS],position_step[Y_AXIS],steps_completed);
+    uart1.printf("position:x:%3.3f(%d)\t y:%3.3f(%d)\tcompleted:%d\r\n",position[X_AXIS],position_step[X_AXIS],position[Y_AXIS],position_step[Y_AXIS],steps_completed_evnets);
 }
 void CNC::print_info()
 {

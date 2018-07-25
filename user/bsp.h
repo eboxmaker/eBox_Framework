@@ -22,10 +22,12 @@
 #include "ebox.h"
 #include "cnc.h"
 
+#include "lcd_1.8.h"
 
 
 extern CNC cnc;
 
+extern Lcd lcd;
 
 
 //class Father
