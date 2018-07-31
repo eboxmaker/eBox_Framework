@@ -161,7 +161,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\component\cnc\cnc.cpp</Filename>
+          <Filename>E:\My program\MCU\ebox git\ebox f1 git\eBox_STM32F1\component\cnc\cnc.cpp</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\ebox\../../../component/cnc/cnc.cpp\462</Expression>
         </Bp>
@@ -857,7 +857,7 @@
 
   <Group>
     <GroupName>ebox_mcu</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1176,100 +1176,28 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\user\main.cpp</PathWithFileName>
-      <FilenameWithoutPath>main.cpp</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>71</FileNumber>
-      <FileType>8</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\user\bsp.cpp</PathWithFileName>
-      <FilenameWithoutPath>bsp.cpp</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>72</FileNumber>
-      <FileType>8</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\component\cnc\cnc.cpp</PathWithFileName>
-      <FilenameWithoutPath>cnc.cpp</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>7</GroupNumber>
-      <FileNumber>73</FileNumber>
-      <FileType>8</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\component\edriver\lcd_1.8.cpp</PathWithFileName>
-      <FilenameWithoutPath>lcd_1.8.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\user\bsp_ebox.cpp</PathWithFileName>
+      <FilenameWithoutPath>bsp_ebox.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
   </Group>
 
   <Group>
-    <GroupName>ddc</GroupName>
+    <GroupName>example</GroupName>
     <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>74</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\component\ddc\ddc.c</PathWithFileName>
-      <FilenameWithoutPath>ddc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>8</GroupNumber>
-      <FileNumber>75</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\component\ddc\ddc_list.c</PathWithFileName>
-      <FilenameWithoutPath>ddc_list.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>8</GroupNumber>
-      <FileNumber>76</FileNumber>
+      <FileNumber>71</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\component\ddc\ddc_port.cpp</PathWithFileName>
-      <FilenameWithoutPath>ddc_port.cpp</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>8</GroupNumber>
-      <FileNumber>77</FileNumber>
-      <FileType>8</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\component\ddc\ddc_user.cpp</PathWithFileName>
-      <FilenameWithoutPath>ddc_user.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\example\1.digital\1.gpio_write.cpp</PathWithFileName>
+      <FilenameWithoutPath>1.gpio_write.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
