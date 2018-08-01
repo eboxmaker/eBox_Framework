@@ -21,7 +21,14 @@
 #define __BSP_EBOX_H
 #include "ebox.h"
 
+#define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
+
 extern mcuGpio LED1;
+extern mcuGpio LED2;
+extern mcuGpio LED3;
+
+extern mcuGpio BtnPin;
+extern Uart 	 UART;
 
 #endif
 

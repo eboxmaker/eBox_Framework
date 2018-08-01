@@ -28,10 +28,10 @@ class Button
 public:
     Button(Gpio *pin, uint8_t pull_up);
     void begin();
-    uint8_t loop(void);
-    uint8_t release(void);
-    uint8_t click(void);
-    uint8_t pressed_for(uint32_t ms, uint8_t times);
+    uint8_t loop(void);					// 获取按键状态，需要定时调用
+    uint8_t release(void);			// 按键释放返回1
+    uint8_t click(void);				// 按键按下返回1
+    uint8_t pressed_for(uint32_t ms, uint8_t times);	// 按键长按返回1： ms 长按时长，times 长按响应后触发次数
 
 private:
     Gpio    *pin;           //arduino pin number

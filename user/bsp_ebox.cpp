@@ -21,6 +21,11 @@
 #include "bsp_ebox.h"
 
 mcuGpio 		LED1(GPIOB,GPIO_Pin_8);
+mcuGpio 		LED2(GPIOB,GPIO_Pin_9);
+mcuGpio 		LED3(GPIOB,GPIO_Pin_10);
+
+mcuGpio			BtnPin(GPIOA,GPIO_Pin_8);
+Uart 				UART(USART1, &PA9, &PA10);
 
 /*
 Led     led2(&PB9,1);
