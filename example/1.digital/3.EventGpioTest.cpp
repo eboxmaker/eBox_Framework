@@ -14,6 +14,7 @@
  
 #include "ebox.h"
 #include "EventGpio.h"
+#include "EventManager.h"
 
 void neg()
 {
@@ -51,16 +52,16 @@ void long_press1()
 {
     uart1.println("long1");
 }
-EventGpio event_io_1(&PA8,0,0,0,0,click,release,0);
-EventGpio event_io_2(&PB1,0,0,0,neg,click1,release1,long_press1);
+//EventGpio event_io_1(&PA8,0,0,0,0,click,release,0);
+EventGpio event_io_2(&PA8,0,0,0,neg,click1,release1,long_press1);
 EventManager io_manager;
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    event_io_1.begin(1);
+    //event_io_1.begin(1);
     event_io_2.begin(1);
-    io_manager.add(&event_io_1);
+    //io_manager.add(&event_io_1);
     io_manager.add(&event_io_2);
 }
 int main(void)
