@@ -20,6 +20,8 @@
 #ifndef __BSP_EBOX_H
 #define __BSP_EBOX_H
 #include "ebox.h"
+#include "lcd_1.8.h"
+#include "cnc.h"
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
@@ -43,5 +45,9 @@
 
 #define DAC_0	PB8
 
+
+extern CNC cnc;
+
+extern Lcd lcd;
 #endif
 

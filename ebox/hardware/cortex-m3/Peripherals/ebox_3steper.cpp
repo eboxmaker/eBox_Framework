@@ -3,6 +3,7 @@
 #include "ebox.h"
 
 
+#include "bsp_ebox.h"
 
 void Steper::begin()
 {
@@ -167,7 +168,6 @@ bool Steper::write_buffer(uint16_t counter,uint8_t ctr)
     return false;
 }
 
-#include "bsp.h"
 void Steper::callback()
 {
 
@@ -186,7 +186,7 @@ void Steper::callback()
         else
             TIMx->CCER &= 0xefff;
         cnc.update_position(ctr_bits);
-        lcd.draw_pixel(cnc.position_step[X_AXIS],cnc.position_step[Y_AXIS],WHITE);
+        lcd.draw_pixel(64+cnc.position_step[X_AXIS],80+cnc.position_step[Y_AXIS],WHITE);
 //    uart1.printf("%X\r\n", ctr_bits);
     }
 //    else
