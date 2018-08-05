@@ -80,17 +80,17 @@ void CNC::move_signal_to(uint8_t Axis,double new_value)
     }
 }
 
-uint8_t  CNC::judge_quadrant(double x, double y)
+uint8_t  CNC::judge_quadrant(double x_center, double y_center,double x, double y)
 {
     unsigned short nDir;
-    if(x>=0)
+    if(x - x_center >=0)
     {
-        if(y >= 0){nDir = 1; return 1;}
+        if(y -  y_center >= 0){nDir = 1; return 1;}
         else{nDir = 4; return 4;}
     }
     else
     {
-        if(y >= 0){nDir = 2;return 2;}
+        if(y -  y_center >= 0){nDir = 2;return 2;}
         else{nDir = 3;return 3;}
     }
 }
@@ -98,9 +98,18 @@ uint8_t  CNC::judge_quadrant(double x, double y)
 
 
 
+void  CNC::dda_circle( double XEnd, double YEnd, double i,  double j, int blsCW)
+{
+    double radius =sqrt( i*i +j*j);
+    double x_center = position_step[X_AXIS] - i;
+    double y_center = position_step[Y_AXIS] - j;
+    dda_circle(x_center,y_center,position_step[X_AXIS],position_step[Y_AXIS],XEnd,YEnd,radius,blsCW);
+}
 
-void CNC::dda_circle(double XStart, double YStart,
-    double XEnd, double YEnd, double radius, int blsCW)
+void CNC::dda_circle(double x_center,   double y_center,
+                     double XStart,     double YStart,
+                     double XEnd,       double YEnd, 
+                     double radius,     int blsCW)
 {
 double xCur=XStart,yCur=YStart;
 long xRes=0,yRes = 0;
@@ -108,29 +117,31 @@ long xRes=0,yRes = 0;
     int judge = 1;
     int full_circle = 0;
     int xEnable,yEnable;
+    
     xEnable = yEnable = 0;
     Q=radius;
     uint8_t ctr_bits = 0;
     cnc.position_step[X_AXIS] = XStart;
     cnc.position_step[Y_AXIS] = YStart;
     
+    steps_completed_evnets = 0;
+    steps_total_events = 0;
     //insertPoint(xCre,yCur);
     uart1.printf("%f\t%f\r\n",xCur,yCur);
     if(XStart == XEnd&YStart==YEnd)
     {
         full_circle = 1;
     }
-    steper.timer_start();
     while(judge == 1 || full_circle == 1)//ÖÕµã¼ì²â
     {
-        xRes += fabs(xCur);
-        yRes += fabs(yCur);
-        if(xRes >= Q & fabs(yCur) <= radius)
+        xRes += fabs(xCur -x_center);
+        yRes += fabs(yCur -y_center);
+        if(xRes >= Q & fabs(yCur - y_center) <= radius)
         {
             xRes = xRes%Q;
             yEnable = 1;
         }
-        if(yRes >= Q & fabs(xCur) <= radius)
+        if(yRes >= Q & fabs(xCur - x_center) <= radius)
         {
             yRes = yRes%Q;
             xEnable = 1;
@@ -138,14 +149,14 @@ long xRes=0,yRes = 0;
         if(blsCW == 0)//ÄæÔ²²å²¹
         {
         
-            ndir = judge_quadrant(xCur,yCur);
+            ndir = judge_quadrant(x_center,y_center,xCur,yCur);
             if(yEnable == 1)//xres Òç³ö£¬yÖá½ø¸ø
             {
                 switch(ndir)
                 {
-                    case 1:if(fabs(yCur) < radius) yCur += 1;bit_set(ctr_bits,Y_STEP_BIT);bit_set(ctr_bits,Y_DIR_BIT);  break;
+                    case 1:if(fabs(yCur - y_center) < radius) {yCur += 1;bit_set(ctr_bits,Y_STEP_BIT);bit_set(ctr_bits,Y_DIR_BIT); } break;
                     case 2: yCur -= 1; bit_set(ctr_bits,Y_STEP_BIT);bit_clear(ctr_bits,Y_DIR_BIT);break;
-                    case 3:if(fabs(yCur) < radius) yCur -= 1;bit_set(ctr_bits,Y_STEP_BIT);bit_clear(ctr_bits,Y_DIR_BIT); break;
+                    case 3:if(fabs(yCur - y_center) < radius) {yCur -= 1;bit_set(ctr_bits,Y_STEP_BIT);bit_clear(ctr_bits,Y_DIR_BIT);} break;
                     case 4: yCur += 1; bit_set(ctr_bits,Y_STEP_BIT);bit_set(ctr_bits,Y_DIR_BIT);break;
                 }
             }
@@ -154,33 +165,33 @@ long xRes=0,yRes = 0;
                 switch(ndir)
                 {
                     case 1: xCur -= 1; bit_set(ctr_bits,X_STEP_BIT);bit_clear(ctr_bits,X_DIR_BIT);break;
-                    case 2:if(fabs(xCur) < radius) xCur -= 1;bit_set(ctr_bits,X_STEP_BIT);bit_clear(ctr_bits,X_DIR_BIT);break;
+                    case 2:if(fabs(xCur - x_center) < radius) {xCur -= 1;bit_set(ctr_bits,X_STEP_BIT);bit_clear(ctr_bits,X_DIR_BIT);}break;
                     case 3: xCur += 1; bit_set(ctr_bits,X_STEP_BIT);bit_set(ctr_bits,X_DIR_BIT);break;
-                    case 4:if(fabs(xCur) < radius) xCur += 1;bit_set(ctr_bits,X_STEP_BIT);bit_set(ctr_bits,X_DIR_BIT); break;
+                    case 4:if(fabs(xCur - x_center) < radius) {xCur += 1;bit_set(ctr_bits,X_STEP_BIT);bit_set(ctr_bits,X_DIR_BIT);} break;
                 }
             }
         }
         else//Ë³Ô²²å²¹
         {
-            ndir = judge_quadrant(xCur,yCur);
+            ndir = judge_quadrant(x_center,y_center,xCur,yCur);
             if(yEnable == 1)//xres Òç³ö£¬yÖá½ø¸ø
             {
                 switch(ndir)
                 {
-                    case 1: yCur -= 1; break;
-                    case 2:if(fabs(yCur) < radius) yCur += 1;break;
-                    case 3: yCur += 1; break;
-                    case 4:if(fabs(yCur) < radius) yCur -= 1; break;
+                    case 1: yCur -= 1;              bit_set(ctr_bits,Y_STEP_BIT);bit_clear(ctr_bits,Y_DIR_BIT);break;
+                    case 2:if(fabs(yCur - y_center) < radius)  {yCur += 1;bit_set(ctr_bits,Y_STEP_BIT);bit_set(ctr_bits,Y_DIR_BIT); }break;
+                    case 3: yCur += 1;              bit_set(ctr_bits,Y_STEP_BIT);bit_set(ctr_bits,Y_DIR_BIT);break;
+                    case 4:if(fabs(yCur - y_center) < radius)  {yCur -= 1;bit_set(ctr_bits,Y_STEP_BIT);bit_clear(ctr_bits,Y_DIR_BIT);} break;
                 }
             }
             if(xEnable == 1)//xres Òç³ö£¬yÖá½ø¸ø
             {
                 switch(ndir)
                 {
-                    case 1:if(fabs(xCur) < radius) xCur += 1;break;
-                    case 2: xCur += 1; break;
-                    case 3:if(fabs(xCur) < radius) xCur -= 1; break;
-                    case 4: xCur -= 1; break;
+                    case 1:if(fabs(xCur - x_center) < radius) {xCur += 1;bit_set(ctr_bits,X_STEP_BIT);bit_set(ctr_bits,X_DIR_BIT);} break;
+                    case 2: xCur += 1;  bit_set(ctr_bits,X_STEP_BIT);bit_set(ctr_bits,X_DIR_BIT);break;
+                    case 3:if(fabs(xCur - x_center) < radius) {xCur -= 1;bit_set(ctr_bits,X_STEP_BIT);bit_clear(ctr_bits,X_DIR_BIT);} break;
+                    case 4: xCur -= 1; bit_set(ctr_bits,X_STEP_BIT);bit_clear(ctr_bits,X_DIR_BIT);break;
                 }
             }
         }
@@ -193,11 +204,12 @@ long xRes=0,yRes = 0;
             {
                 //do run time
             }
-            steper.write_buffer(65535,ctr_bits);
+            steper.write_buffer(15535,ctr_bits);
+            steper.timer_start();
             ctr_bits = 0;
-            lcd.draw_pixel(64+xCur,80+yCur,YELLOW);
-            uart1.printf("%f\t%f\r\n",xCur,yCur);
-           xEnable = yEnable = 0;
+            lcd.draw_pixel(xCur,yCur,YELLOW);
+//            uart1.printf("%f\t%f\r\n",xCur,yCur);
+            xEnable = yEnable = 0;
             full_circle = 0;
             steps_total_events++;
            // delay_ms(10);
@@ -284,7 +296,7 @@ void CNC::draw_line(CncBlock_t *block)
             block->vn[0] = MM_PER_STEP/(counter*TIME_UNIT);
             block->vn[1] = block->vn[0] * k;
             block->vn[0] = MM_PER_STEP/(counter*TIME_UNIT);
-            uart1.printf("v%04d:[%0.3f][%0.3f][%0.3f]\r\n",block->step_planed, block->vn[0], block->vn[1], block->vn[2]);
+//            uart1.printf("v%04d:[%0.3f][%0.3f][%0.3f]\r\n",block->step_planed, block->vn[0], block->vn[1], block->vn[2]);
 
 
             block->step_planed++;
@@ -337,7 +349,7 @@ void CNC::draw_line(CncBlock_t *block)
             block->vn[0] = MM_PER_STEP/(counter*TIME_UNIT);
             block->vn[1] = block->vn[0] / k;
             block->vn[0] = MM_PER_STEP/(counter*TIME_UNIT);
-            uart1.printf("v%04d:[%0.3f][%0.3f][%0.3f]\r\n",block->step_planed, block->vn[0], block->vn[1], block->vn[2]);
+//            uart1.printf("v%04d:[%0.3f][%0.3f][%0.3f]\r\n",block->step_planed, block->vn[0], block->vn[1], block->vn[2]);
 
             block->step_planed++;        
         } // end for
@@ -509,12 +521,14 @@ void CNC::update_position(uint8_t ctr_bists)
         }
     }
     steps_completed_evnets++;
-    if(steps_completed_evnets == steps_total_events)
+    uart1.printf("%d(%d):(%f,%f)\r\n",steps_completed_evnets,steps_total_events,position[X_AXIS],position[Y_AXIS]);
+    lcd.draw_pixel(cnc.position_step[X_AXIS],cnc.position_step[Y_AXIS],WHITE);
+    if(steps_completed_evnets >= steps_total_events)
     {
-        steper.timer_stop();
         uart1.printf("motion over\r\n");
+        steper.timer_stop();
+        return ;
     }
-    uart1.printf("(%d,%d)\r\n",position_step[X_AXIS],position_step[Y_AXIS]);
 
 }
 

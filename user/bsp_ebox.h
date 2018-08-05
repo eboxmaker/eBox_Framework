@@ -37,13 +37,13 @@
 #define LED3 PB10
 
 #define BtnPin	PA8
-#define	UART		uart1
+#define	UART    uart1
 
-#define	ADC_0	PA0
-#define	ADC_1	PA1
-#define	ADC_2	PA2
+#define	ADC_0   PA0
+#define	ADC_1   PA1
+#define	ADC_2   PA2
 
-#define DAC_0	PB8
+#define DAC_0   PB8
 
 
 extern CNC cnc;
