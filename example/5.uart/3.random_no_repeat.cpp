@@ -48,7 +48,7 @@ u8 random_no_repeat()
 void setup()
 {
     ebox_init();
-    uart1.begin(9600);
+    uart1.begin(115200);
     random_init();
     for(int i = 0; i < N; i++)
     {

@@ -5,6 +5,7 @@
   * @version V1.2
   * @date    2016/08/14
   * @brief   ebox application example .
+	*					 2018-8-5	通过引入bsp，定义硬件端口，方便例程可以在不同平台上运行 
   ******************************************************************************
   * @attention
   *
@@ -17,17 +18,23 @@
   */
 
 #include "ebox.h"
+#include "bsp_ebox.h"
+
+/**
+	*	1	通过串口打印消息
+	*/
+
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
+    UART.begin(115200);
 }
 int main(void)
 {
     setup();
     while(1)
     {
-        uart1.printf("hello World !\r\n");
+        UART.printf("hello World !\r\n");
         delay_ms(1000);
     }
 }

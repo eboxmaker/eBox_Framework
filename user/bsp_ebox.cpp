@@ -20,12 +20,22 @@
 /* Includes ------------------------------------------------------------------*/
 #include "bsp_ebox.h"
 
-mcuGpio 		LED1(GPIOB,GPIO_Pin_8);
-mcuGpio 		LED2(GPIOB,GPIO_Pin_9);
-mcuGpio 		LED3(GPIOB,GPIO_Pin_10);
+// 如果不使用object.cpp, 使用下列方式创建IO对象
+//mcuGpio 		LED1(GPIOB,GPIO_Pin_8);
+//mcuGpio 		LED2(GPIOB,GPIO_Pin_9);
+//mcuGpio 		LED3(GPIOB,GPIO_Pin_10);
 
-mcuGpio			BtnPin(GPIOA,GPIO_Pin_8);
-Uart 				UART(USART1, &PA9, &PA10);
+//mcuGpio			BtnPin(GPIOA,GPIO_Pin_8);
+//Uart 				UART(USART1, &PA9, &PA10);
+
+
+// 使用object.cpp,使用下列方式重命名IO对象，可以减少code区消耗
+//#define LED1 PB8
+//#define LED2 PB9
+//#define LED3 PB10
+
+//#define BtnPin	PA8
+//#define	UART		uart1
 
 /*
 Led     led2(&PB9,1);

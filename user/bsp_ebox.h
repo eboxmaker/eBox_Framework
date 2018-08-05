@@ -23,12 +23,25 @@
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
-extern mcuGpio LED1;
-extern mcuGpio LED2;
-extern mcuGpio LED3;
+//extern mcuGpio LED1;
+//extern mcuGpio LED2;
+//extern mcuGpio LED3;
 
-extern mcuGpio BtnPin;
-extern Uart 	 UART;
+//extern mcuGpio BtnPin;
+//extern Uart 	 UART;
+
+#define LED1 PB8
+#define LED2 PB9
+#define LED3 PB10
+
+#define BtnPin	PA8
+#define	UART		uart1
+
+#define	ADC_0	PA0
+#define	ADC_1	PA1
+#define	ADC_2	PA2
+
+#define DAC_0	PB8
 
 #endif
 
