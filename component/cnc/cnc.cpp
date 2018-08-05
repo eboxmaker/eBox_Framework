@@ -1,5 +1,5 @@
 #include "cnc.h"
-#include "bsp.h"
+#include "bsp_ebox.h"
 CncBlock_t block;
 
 void CNC::begin()
@@ -110,13 +110,17 @@ long xRes=0,yRes = 0;
     int xEnable,yEnable;
     xEnable = yEnable = 0;
     Q=radius;
-
+    uint8_t ctr_bits = 0;
+    cnc.position_step[X_AXIS] = XStart;
+    cnc.position_step[Y_AXIS] = YStart;
+    
     //insertPoint(xCre,yCur);
     uart1.printf("%f\t%f\r\n",xCur,yCur);
     if(XStart == XEnd&YStart==YEnd)
     {
         full_circle = 1;
     }
+    steper.timer_start();
     while(judge == 1 || full_circle == 1)//终点检测
     {
         xRes += fabs(xCur);
@@ -139,20 +143,20 @@ long xRes=0,yRes = 0;
             {
                 switch(ndir)
                 {
-                    case 1:if(fabs(yCur) < radius) yCur += 1;break;
-                    case 2: yCur -= 1; break;
-                    case 3:if(fabs(yCur) < radius) yCur -= 1; break;
-                    case 4: yCur += 1; break;
+                    case 1:if(fabs(yCur) < radius) yCur += 1;bit_set(ctr_bits,Y_STEP_BIT);bit_set(ctr_bits,Y_DIR_BIT);  break;
+                    case 2: yCur -= 1; bit_set(ctr_bits,Y_STEP_BIT);bit_clear(ctr_bits,Y_DIR_BIT);break;
+                    case 3:if(fabs(yCur) < radius) yCur -= 1;bit_set(ctr_bits,Y_STEP_BIT);bit_clear(ctr_bits,Y_DIR_BIT); break;
+                    case 4: yCur += 1; bit_set(ctr_bits,Y_STEP_BIT);bit_set(ctr_bits,Y_DIR_BIT);break;
                 }
             }
             if(xEnable == 1)//xres 溢出，y轴进给
             {
                 switch(ndir)
                 {
-                    case 1: xCur -= 1; break;
-                    case 2:if(fabs(xCur) < radius) xCur -= 1;break;
-                    case 3: xCur += 1; break;
-                    case 4:if(fabs(xCur) < radius) xCur += 1; break;
+                    case 1: xCur -= 1; bit_set(ctr_bits,X_STEP_BIT);bit_clear(ctr_bits,X_DIR_BIT);break;
+                    case 2:if(fabs(xCur) < radius) xCur -= 1;bit_set(ctr_bits,X_STEP_BIT);bit_clear(ctr_bits,X_DIR_BIT);break;
+                    case 3: xCur += 1; bit_set(ctr_bits,X_STEP_BIT);bit_set(ctr_bits,X_DIR_BIT);break;
+                    case 4:if(fabs(xCur) < radius) xCur += 1;bit_set(ctr_bits,X_STEP_BIT);bit_set(ctr_bits,X_DIR_BIT); break;
                 }
             }
         }
@@ -184,18 +188,27 @@ long xRes=0,yRes = 0;
         if(xEnable || yEnable)//判断运动给进
         {
            //insertPoint(xcur,ycur);
-            lcd.draw_pixel(64+xCur,80+yCur,WHITE);
+            
+            while(steper.bitsRing.isfull())
+            {
+                //do run time
+            }
+            steper.write_buffer(65535,ctr_bits);
+            ctr_bits = 0;
+            lcd.draw_pixel(64+xCur,80+yCur,YELLOW);
             uart1.printf("%f\t%f\r\n",xCur,yCur);
            xEnable = yEnable = 0;
             full_circle = 0;
-            delay_ms(10);
+            steps_total_events++;
+           // delay_ms(10);
         }
     }
+    
 }
 
 void CNC::draw_line(CncBlock_t *block)
 {
-int32_t counter = 22100;
+    int32_t counter = 22100;
     uint8_t temp_ctr_bit = 0;
     uint32_t x0 = 0;
     uint32_t y0 = 0;
@@ -208,6 +221,7 @@ int32_t counter = 22100;
         error,          // the discriminant i.e. error i.e. decision variable
         index;          // used for looping
 
+    double k;
 
     temp_ctr_bit = block->ctr_bits;
     counter = block->c0;
@@ -221,7 +235,8 @@ int32_t counter = 22100;
     if(block->ctr_bits & Y_DIR_BIT_MASK){ y_inc = 1; }
     else{ y_inc = -1; }
 
-
+    k = (double)dy/(double)dx;
+    uart1.printf("k=%0.5f",k);
     dx2 = dx << 1;
     dy2 = dy << 1;
     steper.timer_start();
@@ -266,6 +281,10 @@ int32_t counter = 22100;
                 //do run time
             }
             steper.write_buffer(counter,temp_ctr_bit);
+            block->vn[0] = MM_PER_STEP/(counter*TIME_UNIT);
+            block->vn[1] = block->vn[0] * k;
+            block->vn[0] = MM_PER_STEP/(counter*TIME_UNIT);
+            uart1.printf("v%04d:[%0.3f][%0.3f][%0.3f]\r\n",block->step_planed, block->vn[0], block->vn[1], block->vn[2]);
 
 
             block->step_planed++;
@@ -315,6 +334,10 @@ int32_t counter = 22100;
             }
             steper.write_buffer(counter,temp_ctr_bit);
 
+            block->vn[0] = MM_PER_STEP/(counter*TIME_UNIT);
+            block->vn[1] = block->vn[0] / k;
+            block->vn[0] = MM_PER_STEP/(counter*TIME_UNIT);
+            uart1.printf("v%04d:[%0.3f][%0.3f][%0.3f]\r\n",block->step_planed, block->vn[0], block->vn[1], block->vn[2]);
 
             block->step_planed++;        
         } // end for
@@ -491,6 +514,8 @@ void CNC::update_position(uint8_t ctr_bists)
         steper.timer_stop();
         uart1.printf("motion over\r\n");
     }
+    uart1.printf("(%d,%d)\r\n",position_step[X_AXIS],position_step[Y_AXIS]);
+
 }
 
 int CNC::guaxiang(double x, double y)
@@ -616,4 +641,128 @@ void CNC::print_info()
     print_position();
     uart1.printf("===================================================\r\n");
 
+}
+
+double delta_t;
+double a,v,s,t,sc,tc;
+double delta_t2;
+double a2,v2,s2,t2,sc2,tc2;
+#define TIME_UNITx 1e-4
+void test2()
+{
+    if(a != 0)
+        delta_t  = (-v  + sqrt(v*v   + 2*a*0.01 ))/a;
+    else
+        delta_t  = 0.01/v;
+    
+    if(a2 != 0)
+        delta_t2 = (-v2 + sqrt(v2*v2 + 2*a2*0.01))/a2;
+    else
+        delta_t2  = 0.01/v2;
+        
+//    uart1.printf("adelta_t:%0.6f(%0.6f)\n",delta_t,delta_t2);
+}
+void test3()
+{
+    int i = 0,k = 0;
+    double t1mark =0 ,t2mark=0,_t1,_t2;
+    while(1 )
+    {
+        if(tc < 0.15)
+        {
+        
+            a = tc*8000;
+            a2 = tc*8000;
+        }
+        else
+        {
+            a = tc*1000;
+            a2 = tc*8000;
+            v=v2/8;
+            //v2=0;
+
+        }
+        s += v*TIME_UNITx + 0.5*a*TIME_UNITx*TIME_UNITx;
+        v += a*TIME_UNITx;
+        
+        s2 += v2*TIME_UNITx + 0.5*a2*TIME_UNITx*TIME_UNITx;
+        v2 += a2*TIME_UNITx;
+        
+//        if(v > 50)v=50;
+        tc+=TIME_UNITx;
+        if(s > 0.01)
+        {
+            _t1 = tc - t1mark;
+            s-=0.01;i++;
+            uart1.printf("1.%d:tc:%0.6fs\t\t_t1c:%0.6fs\t\tAx:%0.6f\t\tVx:%0.6f\t\tSx:%0.2f\t\n",i,tc,_t1,a,v,s+i*0.01);
+            t1mark = tc;
+        }
+        else if(s < -0.01)
+        {
+            _t1 = tc - t1mark;
+            s= s+0.01;
+            i--;
+            uart1.printf("1.%d:tc:%0.6fs\t\t_t1c:%0.6fs\t\tAx:%0.6f\t\tVx:%0.6f\t\tSx:%0.2f\t\n",i,tc,_t1,a,v,s+i*0.01);
+            t1mark = tc;
+
+        }        
+        
+//        if(v2 > 100)v2=100;
+//        tc2+=TIME_UNITx;
+        if(s2 > 0.01)
+        {
+            _t2 = tc2 - t2mark;
+            s2= s2-0.01;
+            k++;
+            uart1.printf("2.%d:tc:%0.6fs\t\t_t2c:%0.6fs\t\tAy:%0.6f\t\tVy:%0.6f\t\tSy:%0.2f\t\n",k,tc2,_t2,a2,v2,s2+k*0.01);
+            t2mark = tc2;
+        }
+        else if(s2 < -0.01)
+        {
+            _t2 = tc2 - t2mark;
+            s2= s2+0.01;
+            k--;
+            uart1.printf("2.%d:tc:%0.6fs\t\t_t2c:%0.6fs\t\tAy:%0.6f\t\tVy:%0.6f\t\tSy:%0.2f\t\n",k,tc2,_t2,a2,v2,s2+k*0.01);
+            t2mark = tc2;
+
+        }
+        lcd.draw_pixel(64+s+i*0.01,+s2+k*0.01,GREEN);
+//        lcd.draw_pixel(64+v,80+v2,WHITE);
+//        lcd.draw_pixel(64+a,80+a2,BLUE);
+
+    }
+
+}
+
+void test()
+{
+
+    test3();
+    while(1)
+    {
+        test2();
+        tc += delta_t;
+        s += v*delta_t + 0.5*a*delta_t*delta_t;
+        v += a*delta_t;
+        sc = 0.5*a*tc*tc;
+        
+        
+        tc2 += delta_t2;
+        s2 += v2*delta_t2 + 0.5*a2*delta_t2*delta_t2;
+        v2 += a2*delta_t2;
+        sc2 = 0.5*a2*tc2*tc2;
+        a  = (tc*40000);
+        a2 = (tc2*80000);
+//        if(((int(round(s*100)))&(int(round(s*100)) - 1)) == 0)
+        {
+        uart1.printf("tc:%0.6fs\t\ta:%0.3f\t\tv:%0.3f\t\ts:%0.3f(%0.3f)\t\n",tc,a,v,s,sc);
+        }
+//        if(((int(round(s2*100)))&(int(round(s2*100)) - 1)) == 0)
+        {
+        uart1.printf("tc:%0.6fs\t\ta:%0.3f\t\tv:%0.3f\t\ts:%0.3f(%0.3f)\t\n",tc2,a2,v2,s2,sc2);
+        }
+//        delay_ms(10);
+    }
+        
+    
 }

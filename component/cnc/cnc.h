@@ -6,7 +6,7 @@
 //步进mm
 #define MM_PER_STEP (double)0.01 //mm
 
-#define MAX_ACC_S   (double)5.00       //(mm/s^2)
+#define MAX_ACC_S   (double)50.00       //(mm/s^2)
 ////////////////////////////////////////////////////////////////
 
 
@@ -43,6 +43,7 @@ typedef struct
     
     uint32_t    c0;//根据速度参数计算的第一步的计数器溢出值
     uint32_t    step_planed;//已经计算的点数
+    double      vn[3];//根据速度参数计算的第n步的速度值
     uint8_t     ctr_bits;//电机控制字
 
 }CncBlock_t;
