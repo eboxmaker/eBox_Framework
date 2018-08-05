@@ -5,6 +5,7 @@
   * @version V1.2
   * @date    2016/08/14
   * @brief   ebox application example .
+	*					 2018-8-5	通过引入bsp，定义硬件端口，方便例程可以在不同平台上运行
   ******************************************************************************
   * @attention
   *
@@ -18,19 +19,25 @@
 
 
 #include "ebox.h"
+#include "bsp_ebox.h"
+
+/**
+	*	1	此例程演示如何产生随机数
+	*/
+
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
+    UART.begin(115200);
 }
 int main(void)
 {
     setup();
     while(1)
     {
-        uart1.printf("random=%d\r\n", random());
-        uart1.printf("random=%d\r\n", random(100));
-        uart1.printf("random=%d\r\n", random(100, 65535));
+        UART.printf("random=%d\r\n", random());							// 0-RAND_MAX(0x7fffffff)的随机数,定义在stdlib.h中
+        UART.printf("random=%d\r\n", random(100));					// 100以内的随机数
+				UART.printf("random=%d\r\n", random(100, 65535));		// 100-65535之间的随机数
         delay_ms(1000);
     }
 }
