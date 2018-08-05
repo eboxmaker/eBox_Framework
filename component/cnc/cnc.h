@@ -63,8 +63,9 @@ class CNC
         void        move_signal_to(uint8_t Axis,double new_x);
         
         void        draw_line(CncBlock_t *block);
-        uint8_t     judge_quadrant(double x, double y);
-        void        dda_circle( double XStart, double YStart,double XEnd, double YEnd, double radius, int blsCW);
+        uint8_t     judge_quadrant(double x_center, double y_center,double x, double y);
+        void        dda_circle(double x_center, double y_center, double XStart, double YStart,double XEnd, double YEnd, double radius, int blsCW);
+        void        dda_circle( double XEnd, double YEnd, double i,  double j, int blsCW);
         int         guaxiang(double x, double y);
         int         _guaxiang(double x, double y);
         
@@ -91,9 +92,9 @@ class CNC
         void print_position();
         void print_info();
         uint32_t position_step[3];
+        double position[3];
     
     private:
-        double position[3];
         double acc;
         double speed;
         double current_speed;
