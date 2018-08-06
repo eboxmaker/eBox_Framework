@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    main.cpp
   * @author  shentq
-  * @version V1.2
-  * @date    2016/08/14
+  * @version V2.2
+  * @date    2018/08/6
   * @brief   ebox application example .
   ******************************************************************************
   * @attention
@@ -18,69 +18,81 @@
 
 #include "ebox.h"
 #include "bsp_ebox.h"
-double position0[3] = {0,0,0};
-double position1[3] = {0,0.25,0};
-double position2[3] = {0.64,0.8,0};
-double position3[3] = {0.1,0.2,0};
-double position4[3] = {0.9,1.2,0};
 
-Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
+/**
+	*	1	此例程实现了模数转换。
+	* 
+	*/
+
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"Adc example"
+#define EXAMPLE_DATE	"2018-08-06"
+
+
+static void PrintfLogo(void);
+
+Adc adc(ADC1);
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
-    lcd.begin(1);
-    lcd.clear(RED);
-    lcd.column_order(1);
-    lcd.row_order(0);
-    
-    steper.Xpwm = &PB8;//电机X
-    steper.Ypwm = &PB9;//电机Y
-    steper.begin();
-    cnc.begin();
-    cnc.print_info();
-    lcd.draw_line(0,80,128,80,BLACK);
-    lcd.draw_line(64,0,64,160,BLACK);
-    lcd.draw_circle(64+25,80,25,BLACK);
+    UART.begin(115200);
+    PrintfLogo();
 
-
+    adc.add_ch(&PA0);
+    adc.add_ch(&PA1);
+    adc.add_ch(&PA2);
+    adc.add_temp_senser();
+    adc.begin();
 }
 int main(void)
 {
     setup();
     while(1)
     {
-    cnc.move(position1);
-    while(!cnc.is_motion_over());
-    cnc.print_position();
-
-
-    cnc.dda_circle(0,25,-25,-0,0);
-
-    while(!cnc.is_motion_over());
-        
-    cnc.move(position2);
-    while(!cnc.is_motion_over());
-    cnc.print_position();
-        
-    cnc.move(position3);
-    while(!cnc.is_motion_over());
-    cnc.print_position();
-        
-    cnc.move(position4);
-    while(!cnc.is_motion_over());
-    cnc.print_position();
-        
-
-
-//    while(1);
-//    cnc.move_signal_to(X_AXIS,0);
-//        delay_ms(2000);
-//    cnc.print_position();
-//        uart1.printf("hello World !\r\n");
+        UART.printf("========按照IO查询====================\r\n");
+        UART.printf("adc0:0x%x\t(%0.1fmv)\r\n",adc.read(&PA0),adc.read_voltage(&PA0));
+        UART.printf("adc1:0x%x\t(%0.1fmv)\r\n",adc.read(&PA1),adc.read_voltage(&PA1));
+        UART.printf("adc2:0x%x\t(%0.1fmv)\r\n",adc.read(&PA2),adc.read_voltage(&PA2));
+        UART.printf("adc temp:\t(%0.1f℃)\r\n",adc.read_temp_senser());
+        UART.printf("========按照索引顺序====================\r\n");
+        UART.printf("adc0:0x%x\t(%0.1fmv)\r\n",adc.read(0),adc.read_voltage(0));
+        UART.printf("adc1:0x%x\t(%0.1fmv)\r\n",adc.read(1),adc.read_voltage(1));
+        UART.printf("adc2:0x%x\t(%0.1fmv)\r\n",adc.read(2),adc.read_voltage(2));
+        UART.printf("adc temp:\t(%0.1f℃)\r\n",adc.read_temp_senser());
+        delay_ms(1000);
     }
 }
 
+/*
+*********************************************************************************************************
+*	函 数 名: PrintfLogo
+*	功能说明: 打印例程名称和例程发布日期, 接上串口线后，打开PC机的超级终端软件可以观察结果
+*	形    参：无
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+static void PrintfLogo(void)
+{
+	UART.printf("\n\r");
+	UART.printf("*************************************************************\n\r");
+	UART.printf("* \r\n");	/* 打印一行空格 */
+	UART.printf("* 例程名称   : %s\r\n",EXAMPLE_NAME);	/* 打印例程名称 */
+	UART.printf("* 发布日期   : %s\r\n", EXAMPLE_DATE);	/* 打印例程日期 */
+
+	UART.printf("* 硬件平台   : %s \r\n",HARDWARE);
+	UART.printf("* EBOX库版本 : %s (ebox)\r\n", EBOX_VERSION);
+	UART.printf("* \r\n");	/* 打印一行空格 */
+	UART.printf("*                     CPU 信息\r\n");	/* 打印一行空格 */
+	UART.printf("* \r\n");	/* 打印一行空格 */
+	UART.printf("* CPUID      : %08X %08X %08X\n\r"
+			, cpu.chip_id[2], cpu.chip_id[1], cpu.chip_id[0]);
+	UART.printf("* flash size : %d KB \r\n",cpu.flash_size);
+	UART.printf("* core       : %d\r\n",cpu.clock.core);
+    UART.printf("* hclk       : %d\r\n",cpu.clock.hclk);
+    UART.printf("* pclk1      : %d\r\n",cpu.clock.pclk1);
+	UART.printf("* \r\n");	/* 打印一行空格 */
+	UART.printf("*************************************************************\n\r");
+}
 
 
 

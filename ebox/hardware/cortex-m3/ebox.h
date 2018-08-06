@@ -28,8 +28,7 @@
 
 
 #include "ebox_gpio.h"
-#include "ebox_analog.h"
-#include "ebox_can.h"
+#include "ebox_adc.h"
 #include "ebox_exti.h"
 #include "ebox_timer.h"
 #include "ebox_pwm.h"
@@ -42,6 +41,7 @@
 #include "ebox_iflash.h"
 #include "ebox_dac.h"
 #include "ebox_wdg.h"
+#include "ebox_can.h"
 #include "ebox_step_motor.h"
 #include "ebox_3steper.h"
 

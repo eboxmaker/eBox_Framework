@@ -18,7 +18,6 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "ebox_analog.h"
 
 #include "ebox_core.h"
 #include "mcu.h"
@@ -46,14 +45,12 @@ extern "C" {
         
         update_chip_info();
 
-        ADC1_init();
 
 
         //将pb4默认设置为IO口，禁用jtag
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
         GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
         set_systick_user_event_per_sec(1000);
-        random_seed(AD_value[0]);//初始化随机数种子
 
     }
     void mcu_reset(void)

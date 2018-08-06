@@ -632,14 +632,34 @@
               <FilePath>..\..\..\ebox\hardware\cortex-m3\mcu.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_analog.cpp</FileName>
+              <FileName>rcc.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_analog.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\rcc.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_can.cpp</FileName>
+              <FileName>nvic.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_can.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\nvic.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>dma.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\dma.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_gpio.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_gpio.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_adc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_adc.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_exti.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_exti.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_dac.cpp</FileName>
@@ -650,16 +670,6 @@
               <FileName>ebox_encoder.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_encoder.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_gpio.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_gpio.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_exti.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_exti.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_i2c.cpp</FileName>
@@ -712,6 +722,11 @@
               <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_uart.cpp</FilePath>
             </File>
             <File>
+              <FileName>ebox_can.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_can.cpp</FilePath>
+            </File>
+            <File>
               <FileName>ebox_wdg.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_wdg.cpp</FilePath>
@@ -725,21 +740,6 @@
               <FileName>object.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\object.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>nvic.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m3\nvic.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>dma.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m3\dma.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>rcc.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m3\rcc.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_step_motor.cpp</FileName>
