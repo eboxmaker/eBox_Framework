@@ -40,7 +40,8 @@ static uart_irq_handler irq_handler;
 Uart::Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin)
 {
     _USARTx = USARTx;
-    tx_pin->mode(AF_PP);
+    _tx_pin = tx_pin;
+//    tx_pin->mode(AF_PP);
     rx_pin->mode(INPUT);
 }
 /**
@@ -162,6 +163,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     interrupt(TcIrq,DISABLE);
     USART_ClearITPendingBit(_USARTx, USART_IT_TC);
     USART_ClearFlag(_USARTx,USART_FLAG_TC); 
+    _tx_pin->mode(AF_PP);
 }
 void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
