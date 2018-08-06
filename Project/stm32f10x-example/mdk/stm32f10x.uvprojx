@@ -1315,9 +1315,9 @@
               </FileOption>
             </File>
             <File>
-              <FileName>9.printf.cpp</FileName>
+              <FileName>5.command_frame.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\example\5.uart\9.printf.cpp</FilePath>
+              <FilePath>..\..\..\example\5.uart\5.command_frame.cpp</FilePath>
             </File>
           </Files>
         </Group>
