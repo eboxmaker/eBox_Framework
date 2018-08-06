@@ -22,6 +22,7 @@
 
 #include "ebox_core.h"
 #include "mcu.h"
+#include "FunctionPointer.h"
 
 /*
     简介：使定时器产生一个定时中断。
@@ -35,7 +36,7 @@ public:
     Timer(TIM_TypeDef *TIMx);
     void begin(uint32_t frq);
 
-    void attach_interrupt(void(*callback)(void));
+//    void attach_interrupt(void(*callback)(void));
     void nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
     void interrupt(FunctionalState enable);
 
@@ -46,11 +47,18 @@ public:
     uint32_t get_timer_source_clock();
     uint32_t get_max_frq();
 
+    static void _irq_handler( uint32_t id);
+    void attach(void (*fptr)(void));
+    template<typename T>
+    void attach(T* tptr, void (T::*mptr)(void)) {
+        _irq.attach(tptr, mptr);
+    }
 private:
     void base_init(uint32_t _period, uint32_t _prescaler);
     void set_reload(uint16_t auto_reload);
     void clear_count(void);
     TIM_TypeDef *TIMx;
-
+protected:
+    FunctionPointer _irq;
 };
 #endif

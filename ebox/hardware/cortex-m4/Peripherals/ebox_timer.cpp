@@ -19,9 +19,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_timer.h"
+#include "ebox_timer_it.h"
 
-
-extern callback_fun_type timx_cb_table[15][5];
 
 //////////////////////////////////////
 
@@ -35,7 +34,8 @@ void Timer::begin(uint32_t frq)
 {
     uint32_t _period  = 0;
     uint32_t _prescaler = 1;
-    
+    uint8_t index;
+
     if(frq >= get_max_frq())frq = get_max_frq();//控制最大频率
     for(; _prescaler <= 0xffff; _prescaler++)
     {
@@ -43,6 +43,43 @@ void Timer::begin(uint32_t frq)
         if((0xffff >= _period))break;
     }
     
+    
+    switch((uint32_t)TIMx)
+    {
+    case (uint32_t)TIM1_BASE:
+        index = TIM1_IT_Update;
+        break;
+    case (uint32_t)TIM2_BASE:
+        index = TIM2_IT_Update;
+        break;
+    case (uint32_t)TIM3_BASE:
+        index = TIM3_IT_Update;
+        break;
+    case (uint32_t)TIM4_BASE:
+        index = TIM4_IT_Update;
+        break;
+    case (uint32_t)TIM5_BASE:
+        index = TIM5_IT_Update;
+        break;
+    case (uint32_t)TIM6_BASE:
+        index = TIM6_IT_Update;
+        break;
+    case (uint32_t)TIM7_BASE:
+        index = TIM7_IT_Update;
+        break;
+    case (uint32_t)TIM8_BASE:
+        index = TIM8_IT_Update;
+        break;
+    case (uint32_t)TIM9_BASE:
+        index = TIM9_IT_Update;
+        break;
+    case (uint32_t)TIM10_BASE:
+        index = TIM10_IT_Update;
+        break;
+    }	
+    
+    tim_irq_init(index,(&Timer::_irq_handler),(uint32_t)this);
+
     base_init(_period, _prescaler);
     nvic(ENABLE,0,0);
     interrupt(ENABLE);
@@ -77,55 +114,7 @@ void Timer::stop(void)
 {
     TIM_Cmd(TIMx, DISABLE); //
 }
-void Timer::attach_interrupt(void(*callback)(void))
-{
-    switch((uint32_t)TIMx)
-    {
-    case (uint32_t)TIM1_BASE:
-        timx_cb_table[0][0] = callback;
-        break;
-    case (uint32_t)TIM2_BASE:
-        timx_cb_table[1][0] = callback;
-        break;
-    case (uint32_t)TIM3_BASE:
-        timx_cb_table[2][0] = callback;
-        break;
-    case (uint32_t)TIM4_BASE:
-        timx_cb_table[3][0] = callback;
-        break;
-    case (uint32_t)TIM5_BASE:
-        timx_cb_table[4][0] = callback;
-        break;
-    case (uint32_t)TIM6_BASE:
-        timx_cb_table[5][0] = callback;
-        break;
-    case (uint32_t)TIM7_BASE:
-        timx_cb_table[6][0] = callback;
-        break;
-    case (uint32_t)TIM8_BASE:
-        timx_cb_table[7][0] = callback;
-        break;
-    case (uint32_t)TIM9_BASE:
-        timx_cb_table[8][0] = callback;
-        break;
-    case (uint32_t)TIM10_BASE:
-        timx_cb_table[9][0] = callback;
-        break;
-    case (uint32_t)TIM11_BASE:
-        timx_cb_table[10][0] = callback;
-        break;
-    case (uint32_t)TIM12_BASE:
-        timx_cb_table[11][0] = callback;
-        break;
-    case (uint32_t)TIM13_BASE:
-        timx_cb_table[12][0] = callback;
-        break;
-    case (uint32_t)TIM14_BASE:
-        timx_cb_table[13][0] = callback;
-        break;
 
-    }
-}
 
 void Timer::set_reload(uint16_t auto_reload)
 {
@@ -140,7 +129,11 @@ uint32_t Timer::get_timer_source_clock()
     uint32_t temp = 0;
     uint32_t timer_clock = 0x00;
     
-    if ((uint32_t)this->TIMx == TIM1_BASE)
+    if ((uint32_t)this->TIMx == TIM1_BASE ||
+        (uint32_t)this->TIMx == TIM8_BASE ||
+        (uint32_t)this->TIMx == TIM9_BASE ||
+        (uint32_t)this->TIMx == TIM10_BASE ||
+        (uint32_t)this->TIMx == TIM11_BASE )
     {
         timer_clock = cpu.clock.pclk2;
     }
@@ -172,8 +165,8 @@ void Timer::base_init(uint32_t _period, uint32_t _prescaler)
     rcc_clock_cmd((uint32_t)TIMx,ENABLE);
     
     //此处和通用定时器不一样 控制定时器溢出多少次产生一次中断
-    if(TIMx == TIM1)
-        TIM_TimeBaseStructure.TIM_RepetitionCounter = 0 ;
+//    if(TIMx == TIM1 || TIMx == TIM8)
+    TIM_TimeBaseStructure.TIM_RepetitionCounter = 1 ;
     
     TIM_TimeBaseStructure.TIM_Period = _period - 1; //ARR寄存器
     TIM_TimeBaseStructure.TIM_Prescaler = _prescaler - 1;
@@ -183,8 +176,18 @@ void Timer::base_init(uint32_t _period, uint32_t _prescaler)
     TIM_TimeBaseInit(TIMx, &TIM_TimeBaseStructure);
     TIM_ARRPreloadConfig(TIMx, ENABLE);	//控制ARR寄存器是否使用影子寄存器
 
+}
 
+
+void Timer::_irq_handler( uint32_t id){ 
+		Timer *handler = (Timer*)id;
+		handler->_irq.call();
 
 }
 
 
+void Timer::attach(void (*fptr)(void)) {
+    if (fptr) {
+        _irq.attach(fptr);
+		}
+}

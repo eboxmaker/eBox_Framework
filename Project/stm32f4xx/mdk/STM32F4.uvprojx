@@ -722,6 +722,11 @@
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_adc.cpp</FilePath>
             </File>
             <File>
+              <FileName>ebox_timer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_timer.cpp</FilePath>
+            </File>
+            <File>
               <FileName>ebox_uart.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_uart.cpp</FilePath>
@@ -765,11 +770,6 @@
               <FileName>ebox_pwm.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_pwm.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_time.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_time.cpp</FilePath>
             </File>
             <File>
               <FileName>nvic.cpp</FileName>
