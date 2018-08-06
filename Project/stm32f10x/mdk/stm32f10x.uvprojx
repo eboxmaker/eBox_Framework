@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\component\FreeModbus\port;..\..\..\component\FreeModbus\modbus\ascii;..\..\..\component\FreeModbus\modbus\rtu;..\..\..\component\FreeModbus\modbus\tcp;..\..\..\component\FreeModbus\modbus\include;..\..\..\user;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\cnc</IncludePath>
+              <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\component\FreeModbus\port;..\..\..\component\FreeModbus\modbus\ascii;..\..\..\component\FreeModbus\modbus\rtu;..\..\..\component\FreeModbus\modbus\tcp;..\..\..\component\FreeModbus\modbus\include;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\cnc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -784,7 +784,7 @@
             <File>
               <FileName>bsp_ebox.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\user\bsp_ebox.cpp</FilePath>
+              <FilePath>..\..\..\user\board\spark_f1\bsp_ebox.cpp</FilePath>
             </File>
           </Files>
         </Group>

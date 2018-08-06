@@ -91,6 +91,7 @@ void dma_irq_handler(uint8_t index, DmaIrqHandler_t handler, uint32_t id);
 }
 #endif
 
+extern Dma Dma1Stream0;
 extern Dma Dma1Stream1;
 extern Dma Dma1Stream2;
 extern Dma Dma1Stream3;
@@ -99,6 +100,7 @@ extern Dma Dma1Stream5;
 extern Dma Dma1Stream6;
 extern Dma Dma1Stream7;
 
+extern Dma Dma2Stream0;
 extern Dma Dma2Stream1;
 extern Dma Dma2Stream2;
 extern Dma Dma2Stream3;

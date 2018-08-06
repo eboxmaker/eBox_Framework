@@ -38,7 +38,7 @@ void  Adc::add_ch(Gpio *io)
 }
 void  Adc::begin()
 {
-    rcc_clock_cmd((uint32_t)ADC1,ENABLE);
+    rcc_clock_cmd((uint32_t)ADCx,ENABLE);
     RCC_ADCCLKConfig(RCC_PCLK2_Div6);   //72M/6=12,ADC最大时间不能超过14M
     switch((uint32_t)ADCx)
     {
@@ -48,7 +48,7 @@ void  Adc::begin()
     
     ADC_InitTypeDef  ADC_InitStructure;
 
-    ADC_DeInit(ADC1);  //将外设 ADC1 的全部寄存器重设为缺省值
+    ADC_DeInit(ADCx);  //将外设 ADC1 的全部寄存器重设为缺省值
 
     /* ADC1 configuration ------------------------------------------------------*/
     ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;	//ADC工作模式:ADC1和ADC2工作在独立模式
@@ -57,7 +57,7 @@ void  Adc::begin()
     ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;	//外部触发转换关闭
     ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;	//ADC数据右对齐
     ADC_InitStructure.ADC_NbrOfChannel = ch_num;	//顺序进行规则转换的ADC通道的数目
-    ADC_Init(ADC1, &ADC_InitStructure);	//根据ADC_InitStruct中指定的参数初始化外设ADCx的寄存器
+    ADC_Init(ADCx, &ADC_InitStructure);	//根据ADC_InitStruct中指定的参数初始化外设ADCx的寄存器
 
     /* ADC1 regular channel11 configuration */
     //设置指定ADC的规则组通道，设置它们的转化顺序和采样时间
@@ -74,19 +74,19 @@ void  Adc::begin()
 
 
     // 开启ADC的DMA支持（要实现DMA功能，还需独立配置DMA通道等参数）
-    ADC_DMACmd(ADC1, ENABLE);
+    ADC_DMACmd(ADCx, ENABLE);
 
     /* Enable ADC1 */
-    ADC_Cmd(ADC1, ENABLE);	   //使能指定的ADC1
+    ADC_Cmd(ADCx, ENABLE);	   //使能指定的ADC1
     /* Enable ADC1 reset calibaration register */
-    ADC_ResetCalibration(ADC1);	  //复位指定的ADC1的校准寄存器
+    ADC_ResetCalibration(ADCx);	  //复位指定的ADC1的校准寄存器
     /* Check the end of ADC1 reset calibration register */
-    while(ADC_GetResetCalibrationStatus(ADC1));	//获取ADC1复位校准寄存器的状态,设置状态则等待
+    while(ADC_GetResetCalibrationStatus(ADCx));	//获取ADC1复位校准寄存器的状态,设置状态则等待
 
     /* Start ADC1 calibaration */
-    ADC_StartCalibration(ADC1);		//开始指定ADC1的校准状态
+    ADC_StartCalibration(ADCx);		//开始指定ADC1的校准状态
     /* Check the end of ADC1 calibration */
-    while(ADC_GetCalibrationStatus(ADC1));		//获取指定ADC1的校准程序,设置状态则等待
+    while(ADC_GetCalibrationStatus(ADCx));		//获取指定ADC1的校准程序,设置状态则等待
     
 
     dma->rcc_enable();
@@ -101,7 +101,7 @@ void  Adc::begin()
     dma->deInit();
     /* ADC1  DMA1 Channel Config */
     DMA_InitTypeDef DMA_InitStructure;
-    DMA_InitStructure.DMA_PeripheralBaseAddr =  (uint32_t)&ADC1->DR;  //DMA外设ADC基地址
+    DMA_InitStructure.DMA_PeripheralBaseAddr =  (uint32_t)&ADCx->DR;  //DMA外设ADC基地址
     DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)&adc_buf;  //DMA内存基地址
     DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;  //内存作为数据传输的目的地
     DMA_InitStructure.DMA_BufferSize = ch_num;  //DMA通道的DMA缓存的大小
@@ -115,7 +115,7 @@ void  Adc::begin()
     dma->init(&DMA_InitStructure);
     dma->enable();
 
-    ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+    ADC_SoftwareStartConvCmd(ADCx, ENABLE);
 }
 uint16_t Adc::read(Gpio *io)
 {

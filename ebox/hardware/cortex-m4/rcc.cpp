@@ -22,6 +22,10 @@ static const DevToRcc_t dev_to_rcc_table[] =
     {GPIOH_BASE,RCC_AHB1Periph_GPIOH},
     {GPIOI_BASE,RCC_AHB1Periph_GPIOI},
     
+    {ADC1_BASE,RCC_APB2Periph_ADC1},
+    {ADC2_BASE,RCC_APB2Periph_ADC2},
+    {ADC3_BASE,RCC_APB2Periph_ADC3},
+    
     {TIM1_BASE,RCC_APB2Periph_TIM1},
     {TIM2_BASE,RCC_APB1Periph_TIM2},
     {TIM3_BASE,RCC_APB1Periph_TIM3},
