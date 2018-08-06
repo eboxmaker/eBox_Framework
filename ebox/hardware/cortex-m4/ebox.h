@@ -27,6 +27,7 @@
 
 
 #include "ebox_gpio.h"
+#include "ebox_adc.h"
 //#include "ebox_can.h"
 //#include "ebox_exti.h"
 //#include "ebox_timer.h"

@@ -145,48 +145,19 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name>/</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint>
-        <Bp>
-          <Number>0</Number>
-          <Type>0</Type>
-          <LineNumber>75</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134232296</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_time.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\STM32F4\../../../ebox/hardware/cortex-m4/Peripherals/ebox_time.cpp\75</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>73</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_time.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-      </Breakpoint>
+      <Breakpoint/>
       <WatchWindow1>
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
           <ItemText>uart1</ItemText>
+        </Ww>
+        <Ww>
+          <count>1</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>ch_table</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>
@@ -780,7 +751,7 @@
 
   <Group>
     <GroupName>eboxFun</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1012,7 +983,7 @@
 
   <Group>
     <GroupName>ebox_mcu</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1047,6 +1018,18 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_adc.cpp</PathWithFileName>
+      <FilenameWithoutPath>ebox_adc.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>65</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_uart.cpp</PathWithFileName>
       <FilenameWithoutPath>ebox_uart.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
@@ -1054,7 +1037,7 @@
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
-      <FileNumber>65</FileNumber>
+      <FileNumber>66</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1066,7 +1049,7 @@
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
-      <FileNumber>66</FileNumber>
+      <FileNumber>67</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1078,7 +1061,7 @@
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
-      <FileNumber>67</FileNumber>
+      <FileNumber>68</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1090,7 +1073,7 @@
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
-      <FileNumber>68</FileNumber>
+      <FileNumber>69</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1102,25 +1085,13 @@
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
-      <FileNumber>69</FileNumber>
+      <FileNumber>70</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_spi.cpp</PathWithFileName>
       <FilenameWithoutPath>ebox_spi.cpp</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>5</GroupNumber>
-      <FileNumber>70</FileNumber>
-      <FileType>8</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_adc.cpp</PathWithFileName>
-      <FilenameWithoutPath>ebox_adc.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1235,8 +1206,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\user\bsp.cpp</PathWithFileName>
-      <FilenameWithoutPath>bsp.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\user\main.cpp</PathWithFileName>
+      <FilenameWithoutPath>main.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1247,8 +1218,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\user\main.cpp</PathWithFileName>
-      <FilenameWithoutPath>main.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\user\board\spark_f4\bsp_ebox.cpp</PathWithFileName>
+      <FilenameWithoutPath>bsp_ebox.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcuLib\stm32f4xx\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\..\ebox\core;..\..\..\user;..\..\..\ebox\hardware\cortex-m4;..\..\..\ebox\hardware\cortex-m4\Peripherals;..\..\..\component\ddc</IncludePath>
+              <IncludePath>..\..\..\mcuLib\stm32f4xx\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\..\ebox\core;..\..\..\user;..\..\..\ebox\hardware\cortex-m4;..\..\..\ebox\hardware\cortex-m4\Peripherals;..\..\..\component\ddc;..\..\..\user\board\spark_f4</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -717,6 +717,11 @@
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_gpio.cpp</FilePath>
             </File>
             <File>
+              <FileName>ebox_adc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_adc.cpp</FilePath>
+            </File>
+            <File>
               <FileName>ebox_uart.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_uart.cpp</FilePath>
@@ -745,11 +750,6 @@
               <FileName>ebox_spi.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_spi.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_adc.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_adc.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_dac.cpp</FileName>
@@ -797,14 +797,14 @@
           <GroupName>user</GroupName>
           <Files>
             <File>
-              <FileName>bsp.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\bsp.cpp</FilePath>
-            </File>
-            <File>
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\main.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_ebox.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\board\spark_f4\bsp_ebox.cpp</FilePath>
             </File>
           </Files>
         </Group>
