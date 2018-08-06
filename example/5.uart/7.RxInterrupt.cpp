@@ -5,7 +5,7 @@
   * @version V2.0
   * @date    2016/08/14
   * @brief   ebox application example .
-	*					 2018-8-5	通过引入bsp，定义硬件端口，方便例程可以在不同平台上运行
+  *		 2018-8-5	通过引入bsp，定义硬件端口，方便例程可以在不同平台上运行
   ******************************************************************************
   * @attention
   *
@@ -23,8 +23,8 @@
 
 /**
 	*	1	此例程演示串口的接收中断
-	* 2	收到数据后会同时将数据返回，类似于超级终端里的回显效果
-	*	2	如果不能实现效果，请切换发送格式，建议不要使用hex格式
+	*   2	收到数据后会同时将数据返回，类似于超级终端里的回显效果
+	*	3	如果不能实现效果，请切换发送格式，建议不要使用hex格式
 	*/
 
 /* 定义例程名和例程发布日期 */
@@ -87,8 +87,8 @@ static void PrintfLogo(void)
 			, cpu.chip_id[2], cpu.chip_id[1]);
 	UART.printf("* flash size : %d KB \r\n",cpu.flash_size);
 	UART.printf("* core       : %d\r\n",cpu.clock.core);
-  UART.printf("* hclk       : %d\r\n",cpu.clock.hclk);
-  UART.printf("* pclk1      : %d\r\n",cpu.clock.pclk1);
+    UART.printf("* hclk       : %d\r\n",cpu.clock.hclk);
+    UART.printf("* pclk1      : %d\r\n",cpu.clock.pclk1);
 	UART.printf("* \r\n");	/* 打印一行空格 */
 	UART.printf("*************************************************************\n\r");
 }
