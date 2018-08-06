@@ -47,6 +47,7 @@ SD      sd(&PB12, &spi2);
 At24c02 eeprom(&i2c2);
 */
 CNC cnc;
+Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
 
 
 
