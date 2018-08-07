@@ -21,6 +21,20 @@
 
 
 #include "ebox.h"
+#include "bsp_ebox.h"
+/**
+	*	1	此例程演示了PWM操作
+	*	2	PWM输出频率1Khz,占空比可调的矩形波
+	*	3	实际运行时LED渐变
+	*   4	可用资源请参考ebox_pwm.h说明
+	*/
+	
+
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"PWM example"
+#define EXAMPLE_DATE	"2018-08-08"
+
+
 float x;
 uint16_t y;
 Pwm pwm1(&PB8);
@@ -28,6 +42,8 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+
     pwm1.begin(1000, 500);
     pwm1.set_oc_polarity(1);//set output polarity after compare
     uart1.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);

@@ -1,11 +1,10 @@
- /**
+/**
   ******************************************************************************
-  * @file    main.cpp
+  * @file    wdg.h
   * @author  shentq
-  * @version V1.2
+  * @version V2.1
   * @date    2016/08/14
-  * @brief   ebox application example .
-	*					 2018-8-5	通过引入bsp，定义硬件端口，方便例程可以在不同平台上运行 
+  * @brief   
   ******************************************************************************
   * @attention
   *
@@ -17,33 +16,29 @@
   ******************************************************************************
   */
 
-#include "ebox.h"
-#include "bsp_ebox.h"
+/* Define to prevent recursive inclusion -------------------------------------*/
+
+#ifndef __WDG_H
+#define __WDG_H
+#include "ebox_core.h"
+#include "mcu.h"
 
 /**
-	*	1	通过串口打印消息
-	*/
-/* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"hello world example"
-#define EXAMPLE_DATE	"2018-08-06"
-
-void setup()
+ * 初始化独立看门狗
+   基本计算方法
+ * pr:分频数:0~7(只有低 3 位有效!)
+ * 分频因子=4*2^pr.但最大值只能是 256!
+ * rlr:重装载寄存器值:低 11 位有效.
+ * 时间计算(大概):Tout=((4*2^prer)*rlr)/40 (ms).
+   本函数内部已经做了相关计算；
+    输入参数为ms；1000代表1000ms；请在1s内喂一次狗。否则将会复位
+ */
+class Iwdg
 {
-    ebox_init();
-    UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+public:
+    Iwdg() {};
+    void begin(uint16_t ms);
+    void feed();
+};
 
-}
-int main(void)
-{
-    setup();
-    while(1)
-    {
-        UART.printf("hello World !\r\n");
-        delay_ms(1000);
-    }
-}
-
-
-
-
+#endif

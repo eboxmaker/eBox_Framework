@@ -21,7 +21,11 @@
 
 
 #include "ebox.h"
+#include "bsp_ebox.h"
 
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"exti example"
+#define EXAMPLE_DATE	"2018-08-08"
 
 uint32_t xx;
 
@@ -38,6 +42,7 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
     PB8.mode(OUTPUT_PP);
     ex.begin();//初始化外部中断
     ex.attach(exit);//绑定外部中断触发事件

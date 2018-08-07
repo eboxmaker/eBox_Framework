@@ -20,6 +20,11 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "ebox.h"
+#include "bsp_ebox.h"
+
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"exti example"
+#define EXAMPLE_DATE	"2018-08-08"
 
 Exti ex(&PA8, CHANGE);
 class Test 
@@ -35,6 +40,8 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+
     PB8.mode(OUTPUT_PP);
     ex.begin();
     ex.attach(&test,&Test::event);

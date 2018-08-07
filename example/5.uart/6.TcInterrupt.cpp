@@ -17,16 +17,24 @@
   */
 
 #include "ebox.h"
+#include "bsp_ebox.h"
+
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"UART transmit complete example"
+#define EXAMPLE_DATE	"2018-08-08"
+
 u8 count;
 void tc_evnet()
 {
     count++;
-    PB8.toggle();
+    LED1.toggle();
 }
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+
     uart1.attach(tc_evnet,TcIrq);
     uart1.interrupt(TcIrq,ENABLE);
     PB8.mode(OUTPUT_PP);

@@ -40,7 +40,8 @@
 //#include "ebox_rtc.h"
 //#include "ebox_iflash.h"
 //#include "ebox_dac.h"
-//#include "ebox_wdg.h"
+#include "ebox_wdg.h"
+#include "ebox_iflash.h"
 //#include "ebox_slave_spi.h"
 
 #include "stdio.h"

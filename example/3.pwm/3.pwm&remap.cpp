@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    pwm.cpp
   * @author  shentq
-  * @version V1.2
+  * @version V2.2
   * @date    2016/08/14
   * @brief   ebox application example .
   ******************************************************************************
@@ -22,6 +22,11 @@
 
 #include "ebox.h"
 #include "math.h"
+#include "bsp_ebox.h"
+
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"PWM example"
+#define EXAMPLE_DATE	"2018-08-08"
 
 Pwm pwm1(&PA0);
 Pwm pwm2(&PA1);
@@ -30,10 +35,8 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    uart1.printf("core:%d\r\n",cpu.clock.core);
-    uart1.printf("hclk:%d\r\n",cpu.clock.hclk);
-    uart1.printf("pclk1:%d\r\n",cpu.clock.pclk1);
-    uart1.printf("pclk2:%d\r\n",cpu.clock.pclk2);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+
     
     pwm1.begin(1000, 500);
     pwm1.set_oc_polarity(1);
@@ -45,7 +48,7 @@ void setup()
     
     uart1.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
     uart1.printf("max frq = %f\r\n",pwm1.get_accuracy());
-    PB9.mode(OUTPUT_PP);
+    LED2.mode(OUTPUT_PP);
 }
 
 float x;
@@ -57,7 +60,7 @@ int main(void)
 
     while(1)
     {
-        PB9.toggle();
+        LED2.toggle();
         x = x + PI * 0.01;
         if(x >= PI)x = 0;
         y = 2000 - (sin(x) + 1) * 1000;

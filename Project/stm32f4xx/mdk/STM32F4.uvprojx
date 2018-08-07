@@ -604,7 +604,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>eboxFun</GroupName>
+          <GroupName>ebox_fun</GroupName>
           <Files>
             <File>
               <FileName>big_little.c</FileName>
@@ -712,6 +712,21 @@
               <FilePath>..\..\..\ebox\hardware\cortex-m4\mcu.cpp</FilePath>
             </File>
             <File>
+              <FileName>rcc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\rcc.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>nvic.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\nvic.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>dma.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\dma.cpp</FilePath>
+            </File>
+            <File>
               <FileName>ebox_gpio.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_gpio.cpp</FilePath>
@@ -730,6 +745,11 @@
               <FileName>ebox_uart.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_uart.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_wdg.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_wdg.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_object.cpp</FileName>
@@ -770,21 +790,6 @@
               <FileName>ebox_pwm.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_pwm.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>nvic.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\nvic.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>dma.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\dma.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>rcc.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\rcc.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_it.cpp</FileName>

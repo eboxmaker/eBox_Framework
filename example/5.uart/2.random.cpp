@@ -24,11 +24,16 @@
 /**
 	*	1	此例程演示如何产生随机数
 	*/
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"random out example"
+#define EXAMPLE_DATE	"2018-08-06"
 
 void setup()
 {
     ebox_init();
     UART.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+
 }
 int main(void)
 {
@@ -37,7 +42,7 @@ int main(void)
     {
         UART.printf("random=%d\r\n", random());							// 0-RAND_MAX(0x7fffffff)的随机数,定义在stdlib.h中
         UART.printf("random=%d\r\n", random(100));					// 100以内的随机数
-				UART.printf("random=%d\r\n", random(100, 65535));		// 100-65535之间的随机数
+        UART.printf("random=%d\r\n", random(100, 65535));		// 100-65535之间的随机数
         delay_ms(1000);
     }
 }
