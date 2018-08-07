@@ -1,11 +1,10 @@
- /**
+/**
   ******************************************************************************
-  * @file    main.cpp
+  * @file    wdg.cpp
   * @author  shentq
-  * @version V1.2
+  * @version V2.1
   * @date    2016/08/14
-  * @brief   ebox application example .
-	*					 2018-8-5	通过引入bsp，定义硬件端口，方便例程可以在不同平台上运行 
+  * @brief   
   ******************************************************************************
   * @attention
   *
@@ -17,33 +16,34 @@
   ******************************************************************************
   */
 
-#include "ebox.h"
-#include "bsp_ebox.h"
 
-/**
-	*	1	通过串口打印消息
-	*/
-/* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"hello world example"
-#define EXAMPLE_DATE	"2018-08-06"
-
-void setup()
+/* Includes ------------------------------------------------------------------*/
+#include "ebox_wdg.h"
+void Iwdg::begin(uint16_t ms)
 {
-    ebox_init();
-    UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
 
-}
-int main(void)
-{
-    setup();
-    while(1)
+    uint8_t pr;
+    uint16_t rlr;
+
+    for(pr = 1; pr < 6; pr++)
     {
-        UART.printf("hello World !\r\n");
-        delay_ms(1000);
+        rlr = ms * 40 / (4 * pow(2.0, pr));
+        if(rlr <= 0x0fff) break;
     }
+    if(pr == 5 || rlr > 0x0fff)
+    {
+        pr = 5;
+        rlr = 0xfff;
+    }
+    ebox_printf("pr:%d\trlr:%d",pr,rlr);
+    ebox_printf_flush();
+    IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
+    IWDG_SetPrescaler(pr);
+    IWDG_SetReload(rlr);
+    IWDG_ReloadCounter();
+    IWDG_Enable();
 }
-
-
-
-
+void Iwdg::feed()
+{
+    IWDG_ReloadCounter();    /*reload*/
+}

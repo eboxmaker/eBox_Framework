@@ -54,17 +54,21 @@ typedef enum{
 #endif /* USE_STM324x7I_EVAL or USE_STM324x9I_EVAL */
 }FLASH_SECTOR_ADDR_t;
 
-class FLASHCLASS
+class Flash
 {
-public:
+    public:
 
+        uint32_t read_word(uint32_t ReadAddr);
+        uint8_t  read_byte(uint32_t Address);
+        int      read(uint32_t start_addr, uint8_t *buf, int32_t num_to_read) ;
+        void     read(uint32_t ReadAddr,uint32_t *pBuffer,uint32_t NumToRead);
+        void     write(uint32_t WriteAddr,uint32_t *pBuffer,uint32_t NumToWrite);
 
-    int erase_sector(FLASH_SECTOR_ADDR_t start_addr);
-    int read(uint32_t start_addr, uint8_t *buf, int32_t num_to_read) ;
-    int write_sector(FLASH_SECTOR_ADDR_t start_addr, uint8_t *buf, uint32_t num_to_write);
-private:
-    uint16_t write_without_check(uint32_t iAddress, uint8_t *buf, uint16_t iNumByteToWrite);
-    uint16_t addr_to_sector(uint32_t Address);
+    private:
+        int      erase_sector(FLASH_SECTOR_ADDR_t start_addr);
+        uint16_t addr_to_sector(uint32_t Address);
+        uint32_t sector_size(uint16_t sector);
+        uint32_t sector_first_addr(uint16_t sector);
 
 };
 

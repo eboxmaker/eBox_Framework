@@ -1,10 +1,10 @@
-/**
+ /**
   ******************************************************************************
-  * @file    .cpp
+  * @file    main.cpp
   * @author  shentq
-  * @version V1.2
-  * @date    2016/08/14
-  * @brief   
+  * @version V2.2
+  * @date    2018/08/6
+  * @brief   ebox application example .
   ******************************************************************************
   * @attention
   *
@@ -16,63 +16,51 @@
   ******************************************************************************
   */
 
-
-/* Includes ------------------------------------------------------------------*/
-
 #include "ebox.h"
+#include "bsp_ebox.h"
+
+/**
+	*	1	此例程实现了模数转换。
+	* 
+	*/
+
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"Adc example"
+#define EXAMPLE_DATE	"2018-08-06"
 
 
-Timer timer1(TIM2);
-uint32_t last;
-void t2it()
-{
-    PB8.toggle();  
-    uart1.printf("\r\ntime = %dms", millis() - last);
-    last = millis();
-}
-class Test 
-{
-    public:
-    void event() 
-    {
-        uart1.printf("\r\ntime = %dms", millis() - last);
-        last = millis();
-        PB8.toggle();
-    }
-};
-Test test;
 
+Adc adc(ADC1);
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
-    PB8.mode(OUTPUT_PP);
+    UART.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
 
-    timer1.begin(1);
-    //timer1.attach(t2it);
-    timer1.attach(&test,&Test::event);
-    timer1.interrupt(ENABLE);
-    timer1.start();
-    uart1.printf("\r\ntimer clock       = %dMhz", timer1.get_timer_source_clock()/1000000);
-    uart1.printf("\r\nmax interrupt frq = %dKhz", timer1.get_max_frq()/1000);
+    adc.add_ch(&PA0);
+    adc.add_ch(&PA1);
+    adc.add_ch(&PA2);
+    adc.add_temp_senser();
+    adc.begin();
 }
-
-
 int main(void)
 {
     setup();
     while(1)
     {
-
+        UART.printf("========按照IO查询====================\r\n");
+        UART.printf("adc0:0x%x\t(%0.1fmv)\r\n",adc.read(&PA0),adc.read_voltage(&PA0));
+        UART.printf("adc1:0x%x\t(%0.1fmv)\r\n",adc.read(&PA1),adc.read_voltage(&PA1));
+        UART.printf("adc2:0x%x\t(%0.1fmv)\r\n",adc.read(&PA2),adc.read_voltage(&PA2));
+        UART.printf("adc temp:\t(%0.1f℃)\r\n",adc.read_temp_senser());
+        UART.printf("========按照索引顺序====================\r\n");
+        UART.printf("adc0:0x%x\t(%0.1fmv)\r\n",adc.read(0),adc.read_voltage(0));
+        UART.printf("adc1:0x%x\t(%0.1fmv)\r\n",adc.read(1),adc.read_voltage(1));
+        UART.printf("adc2:0x%x\t(%0.1fmv)\r\n",adc.read(2),adc.read_voltage(2));
+        UART.printf("adc temp:\t(%0.1f℃)\r\n",adc.read_temp_senser());
+        delay_ms(1000);
     }
-
-
 }
-
-
-
-
-
 
 
 

@@ -14,6 +14,10 @@ Copyright 2015 shentq. All Rights Reserved.
 一个独立看门狗的示例程序
 */
 #include "ebox.h"
+#include "bsp_ebox.h"
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"independent wdg example"
+#define EXAMPLE_DATE	"2018-08-08"
 
 Iwdg dog;
 
@@ -22,6 +26,8 @@ void setup()
 {
     ebox_init();
     uart1.begin(9600);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+
     uart1.printf("reset !!!\r\n");
     dog.begin(2000);
 }

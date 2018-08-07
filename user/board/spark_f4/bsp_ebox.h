@@ -44,6 +44,7 @@
 
 #define DAC_0   PB8
 
+void print_log(const char *name,const char *date);
 
 #endif
 

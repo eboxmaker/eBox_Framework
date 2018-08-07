@@ -20,20 +20,24 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "ebox.h"
+#include "bsp_ebox.h"
 
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"Timer interrupt example"
+#define EXAMPLE_DATE	"2018-08-08"
 
 Timer timer2(TIM2);
 
 void t2it()
 {
-    PB8.toggle();  
+    LED1.toggle();  
 }
 class Test 
 {
     public:
     void event() 
     {
-        PB8.toggle();
+        LED1.toggle();
     }
 };
 Test test;
@@ -42,15 +46,17 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    PB8.mode(OUTPUT_PP);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    
+    LED1.mode(OUTPUT_PP);
 
     timer2.begin(1);
     //timer2.attach(t2it);
     timer2.attach(&test,&Test::event);
     timer2.interrupt(ENABLE);
     timer2.start();
-    uart1.printf("\r\ntimer clock       = %dMhz", timer2.get_timer_source_clock()/1000000);
-    uart1.printf("\r\nmax interrupt frq = %dKhz", timer2.get_max_frq()/1000);
+    UART.printf("\r\ntimer clock       = %dMhz", timer2.get_timer_source_clock()/1000000);
+    UART.printf("\r\nmax interrupt frq = %dKhz", timer2.get_max_frq()/1000);
 }
 
 
