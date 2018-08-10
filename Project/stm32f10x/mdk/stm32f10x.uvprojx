@@ -606,6 +606,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\stdFun\WString.cpp</FilePath>
             </File>
+            <File>
+              <FileName>IPAddress.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\network\IPAddress.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

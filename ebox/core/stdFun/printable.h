@@ -21,7 +21,6 @@
 #define Printable_h
 
 #include <stdlib.h>
-
 class Print;
 
 /** The Printable class provides a way for new classes to allow themselves to be printed.
@@ -33,7 +32,8 @@ class Print;
 class Printable
 {
   public:
-    virtual size_t printTo(Print& p) const = 0;
+	virtual ~Printable() {}
+	virtual size_t printTo(Print& p) const = 0;
 };
 
 #endif
