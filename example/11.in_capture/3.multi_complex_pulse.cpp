@@ -92,6 +92,91 @@ int main(void)
     while(1)
     {
 
+/**
+  ******************************************************************************
+  * @file    *.cpp
+  * @author  shentq
+  * @version V1.2
+  * @date    2016/08/14
+  * @brief   
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright 2015 shentq. All Rights Reserved.
+  *
+  * Copyright Notice
+  * No part of this software may be used for any commercial activities by any form 
+  * or means, without the prior written consent of shentq.
+  *
+  * @Disclaimer
+  * This specification is preliminary and is subject to change at any time without
+  * notice. shentq assumes no responsibility for any errors contained herein.
+  ******************************************************************************
+  */
+
+
+/* Includes ------------------------------------------------------------------*/
+
+#include "ebox.h"
+#include "bsp_ebox.h"
+
+/**
+	*	1	此例程演示了输入多路捕获高级,简单模式混合使用方法。支持频率周期，支持了占空比的采样
+    *        输入捕获实验-测量周期，频率，占空比
+    *   2   本例程为使用输入捕获模式测量一个PWM信号的周期，频率和占空比
+    *   3   请将PA0和PB6使用跳线链接起来
+	*/
+
+
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"InCapture multi channel complex and simple mode  example"
+#define EXAMPLE_DATE	"2018-08-01"
+
+
+InCapture ic0(&PA0);//创建一个输入捕获的对象
+InCapture ic1(&PA1);//创建一个输入捕获的对象
+InCapture ic2(&PA2);//创建一个输入捕获的对象
+InCapture ic3(&PA3);//创建一个输入捕获的对象
+
+Pwm pwm1(&PB6);//创建一个PWM输出对象
+Pwm pwm2(&PB7);//创建一个PWM输出对象
+Pwm pwm3(&PB8);//创建一个PWM输出对象
+Pwm pwm4(&PB9);//创建一个PWM输出对象
+
+uint32_t frq =0;
+
+uint16_t p;
+void setup()
+{
+    ebox_init();
+    UART.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+
+    ic0.begin(1,SIMPLE);//初始化输入捕获参数，p分频
+    ic1.begin(1,COMPLEX);//初始化输入捕获参数，p分频
+    ic2.begin(1,SIMPLE);//初始化输入捕获参数，p分频
+    ic3.begin(1,COMPLEX);//初始化输入捕获参数，p分频
+    
+    UART.printf("get_detect_min_pulse_us = %d\r\n",ic0.get_detect_min_pulse_us());
+    frq = 1000;
+    
+    
+    pwm1.begin(50, 900);
+    pwm1.set_oc_polarity(1);
+    pwm2.begin(50, 850);
+    pwm2.set_oc_polarity(1);
+    pwm3.begin(50, 603);
+    pwm3.set_oc_polarity(1);
+    pwm4.begin(50, 201);
+    pwm4.set_oc_polarity(1);
+}
+
+int main(void)
+{
+    setup();
+    while(1)
+    {
+
         if(ic0.available())
         {              
             uart1.printf("peroid0    = %0.2fus\r\n",ic0.get_wave_peroid());
@@ -121,6 +206,16 @@ int main(void)
             uart1.printf("low duty3  = %0.2f%%\r\n\r\n", ic3.get_wave_low_duty());
         }
         delay_ms(1000);
+    }
+}
+
+
+
+
+
+
+
+
 
     }
 }

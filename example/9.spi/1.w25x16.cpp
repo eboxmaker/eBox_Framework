@@ -1,33 +1,45 @@
-/**
-  ******************************************************************************
-  * @file   : *.cpp
-  * @author : shentq
-  * @version: V1.2
-  * @date   : 2016/08/14
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
 
-  * @brief   ebox application example .
-  *
-  * Copyright 2016 shentq. All Rights Reserved.         
-  ******************************************************************************
- */
+Copyright 2015 shentq. All Rights Reserved.
+*/
+
+//STM32 RUN IN eBox
 
 
 #include "ebox.h"
+#include "bsp_ebox.h"
+
 #include "w25x16.h"
 
 
 
-W25x16 flash(&PA15, &spi1);
+/**
+	*	1	此例程需要调用eDrive目录下的w25x16驱动
+	*	2	此例程演示了w25x16的读写功能
+	*/
 
+
+
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"w25x16 example"
+#define EXAMPLE_DATE	"2018-08-11"
+
+
+W25x16 flash(&PA15, &spi1);
 
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
+    UART.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
     flash.begin(1);
+
+
 }
-
-
 int16_t tmp[7];
 uint16_t id;
 uint8_t rbuf[100];

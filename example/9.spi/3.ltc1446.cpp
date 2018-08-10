@@ -1,62 +1,63 @@
-/**
-  ******************************************************************************
-  * @file   : *.cpp
-  * @author : shentq
-  * @version: V1.2
-  * @date   : 2016/08/14
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
 
-  * @brief   ebox application example .
-  *
-  * Copyright 2016 shentq. All Rights Reserved.         
-  ******************************************************************************
- */
+Copyright 2015 shentq. All Rights Reserved.
+*/
+
+//STM32 RUN IN eBox
+
 
 #include "ebox.h"
-#include "encoder.h"
+#include "bsp_ebox.h"
+
 #include "ltc1446.h"
 
-#define PinA	PA0
-#define PinB	PA1
-#define ADCA	PC0
-#define ADCB	PC1
 
-Encoder encoder1(&PinA, &PinB);
-//LTCX ltc1(&PB1,&spi1);
+
+/**
+	*	1	此例程需要调用eDrive目录下的LTCX驱动
+	*	2	此例程演示了外部DAC（LTC系列）的基本功能
+	*/
+
+
+
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"LTCX example"
+#define EXAMPLE_DATE	"2018-08-11"
+
+#define ADCA	PA0
+#define ADCB	PA1
 LTCX ltc1(&PA6, &spi1);
-
+Adc adc(ADC1);
 
 void setup()
 {
     ebox_init();
+    UART.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
     ltc1.begin(1);
-    uart1.begin(115200);
-}
+    
 
+    adc.add_ch(&ADCA);
+    adc.add_ch(&ADCB);
+    adc.begin();
+}
 int main(void)
 {
     uint32_t i = 2048, t = 0;
     setup();
-    uart1.printf("init ok \r\n");
-    uart1.printf("测试成功 \r\n");
-    uart1.printf("%d \r\n", i);
+
     while(1)
     {
-        switch(encoder1.read_encoder())
-        {
-        case 1:
-            i++;
-            uart1.printf("%d \r\n", i);
-            break;
-        case 2:
-            i--;
-            uart1.printf("%d \r\n", i);
-            break;
-        }
         if(i != t)
         {
             t = i;
             ltc1.write(4096 - i, i);
-            uart1.printf("通道A电压 = %d; 通道B电压 = %d \r\n", analog_read_voltage(&ADCA), analog_read_voltage(&ADCB));
+            uart1.printf("通道A电压 = %d; 通道B电压 = %d \r\n", adc.read(&ADCA), adc.read(&ADCB));
         }
     }
 }
+

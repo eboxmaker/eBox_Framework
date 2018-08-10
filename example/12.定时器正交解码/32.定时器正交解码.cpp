@@ -23,6 +23,18 @@
 #include "ebox.h"
 #include "math.h"
 #include "ebox_encoder.h"
+#include "bsp_ebox.h"
+
+/**
+	*	1	此例程演示了定时器正交解码功能
+	*/
+
+
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"timer decoding example"
+#define EXAMPLE_DATE	"2018-08-11"
+
+
 Encoder encoder(TIM4,&PB6,&PB7);
 float x;
 uint16_t y;
@@ -30,12 +42,14 @@ Pwm pwm1(&PA0);
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
+    UART.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+
     encoder.begin(3);
     pwm1.begin(1000, 1000);
     pwm1.set_oc_polarity(1);//set output polarity after compare
-    uart1.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
-    uart1.printf("max frq = %f\r\n",pwm1.get_accuracy());
+    UART.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
+    UART.printf("max frq = %f\r\n",pwm1.get_accuracy());
 }
 int main(void)
 {
@@ -49,7 +63,7 @@ int main(void)
         y = 2500 - (sin(x) + 1) * 1000;
         pwm1.set_duty(y);
         speed = encoder.read_speed()/50;
-        uart1.printf("count :%0.2f(%d)\r\n",speed,encoder.read_direction());
+        UART.printf("count :%0.2f(%d)\r\n",speed,encoder.read_direction());
         delay_ms(100);
         
     }

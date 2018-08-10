@@ -1,19 +1,27 @@
-/**
-  ******************************************************************************
-  * @file   : *.cpp
-  * @author : shentq
-  * @version: V1.2
-  * @date   : 2016/08/14
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
 
-  * @brief   ebox application example .
-  *
-  * Copyright 2016 shentq. All Rights Reserved.         
-  ******************************************************************************
- */
+Copyright 2015 shentq. All Rights Reserved.
+*/
 
-
+//STM32 RUN IN eBox
 #include "ebox.h"
+#include "bsp_ebox.h"
+
 #include "mpu6050.h"
+
+/**
+	*	1	此例程需要调用eDrive目录下的mpu6050驱动
+	*	2	此例程演示了mpu6050的基本操作
+	*/
+
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"mpu6050 example"
+#define EXAMPLE_DATE	"2018-08-11"
+
 
 
 Mpu6050 mpu(&i2c1);
@@ -21,13 +29,14 @@ Mpu6050 mpu(&i2c1);
 void setup()
 {
     ebox_init();
-    uart1.begin(9600);
+    UART.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
 
     mpu.begin(400000);
 
 
-}
 
+}
 int16_t tmp[7];
 int16_t x, y, z;
 uint8_t id;

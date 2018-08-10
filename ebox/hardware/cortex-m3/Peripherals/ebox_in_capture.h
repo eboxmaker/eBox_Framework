@@ -55,12 +55,16 @@
     
 
 */
-
+typedef enum 
+{
+    SIMPLE = 0,
+    COMPLEX = 1
+}ICMode_t;
 class InCapture
 {
 public:
     InCapture(Gpio *capture_pin);
-    void        begin(uint16_t prescaler = 1);//使用默认参数，分频系数为1；最大量程为120s
+    void        begin(uint16_t prescaler = 1,ICMode_t mode = SIMPLE);//使用默认参数，分频系数为1；最大量程为120s
     void        set_count(uint16_t count);
     void        set_polarity_falling();
     void        set_polarity_rising();
