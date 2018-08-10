@@ -28,8 +28,6 @@
 #define EXAMPLE_NAME	"Adc example"
 #define EXAMPLE_DATE	"2018-08-06"
 
-
-
 Adc adc(ADC1);
 void setup()
 {
