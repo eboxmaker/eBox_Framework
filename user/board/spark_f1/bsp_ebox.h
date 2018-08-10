@@ -55,10 +55,7 @@ extern void print_log(const char *name,const char *date);
 
 
 extern CNC cnc;
-
 extern Lcd lcd;
-
-void print_log(const char *name,const char *date);
 
 #endif
 
