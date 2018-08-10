@@ -23,7 +23,7 @@
 
 #define TCP_DEBUG 1
 #if TCP_DEBUG
-#define TCP_DBG(...) DBG(__VA_ARGS__)
+#define TCP_DBG(...) uart1.printf(__VA_ARGS__)
 #else
 #define  TCP_DBG(...)
 #endif
@@ -31,7 +31,7 @@
 int TCPClient::begin(SOCKET ps, uint16_t port)
 {
     s = ps;
-    localPort = port;
+    local_port = port;
     return 1;
 }
 //链接远程服务器
@@ -41,20 +41,20 @@ bool TCPClient::connect(uint8_t *IP, uint16_t Port)
     int ret;
     uint8_t i = 20;
     uint8_t state;
-    remoteIP[0] = IP[0];
-    remoteIP[1] = IP[1];
-    remoteIP[2] = IP[2];
-    remoteIP[3] = IP[3];
-    remotePort = Port;
-    TCP_DBG("remote server:%d.%d.%d.%d:%d\r\n", remoteIP[0], remoteIP[1], remoteIP[2], remoteIP[3], remotePort);
+    remote_ip[0] = IP[0];
+    remote_ip[1] = IP[1];
+    remote_ip[2] = IP[2];
+    remote_ip[3] = IP[3];
+    remote_port = Port;
+    TCP_DBG("remote server:%d.%d.%d.%d:%d\r\n", remote_ip[0], remote_ip[1], remote_ip[2], remote_ip[3], remote_port);
     while(--i)
     {
         state = status();
         switch(state)/*获取socket0的状态*/
         {
         case SOCK_INIT:
-            TCP_DBG("sending connect cmd...\r\n", localPort, s);
-            ret = _connect(s, remoteIP , remotePort); /*在TCP模式下向服务器发送连接请求*/
+            TCP_DBG("sending connect cmd...\r\n", local_port, s);
+            ret = _connect(s, remote_ip , remote_port); /*在TCP模式下向服务器发送连接请求*/
             if(ret == 1)
             {
                 TCP_DBG("send connect cmd ok !\r\n");
@@ -68,11 +68,11 @@ bool TCPClient::connect(uint8_t *IP, uint16_t Port)
             TCP_DBG("connecte successe!\r\n\r\n");
             return true;
         case SOCK_CLOSED:
-            TCP_DBG("openning local socket...\r\n", localPort, s);
-            ret = _socket(s, Sn_MR_TCP, localPort, Sn_MR_ND); /*打开socket的一个端口*/
+            TCP_DBG("openning local socket...\r\n", local_port, s);
+            ret = _socket(s, Sn_MR_TCP, local_port, Sn_MR_ND); /*打开socket的一个端口*/
             if(ret == 1)
             {
-                TCP_DBG("open local port:%d,use %d socket is ok!\r\n", localPort, s);
+                TCP_DBG("open local port:%d,use %d socket is ok!\r\n", local_port, s);
             }
             else
             {
@@ -182,7 +182,7 @@ int TCPServer::begin(SOCKET ps, uint16_t port)
 
     s = ps;
     localPort = port;
-    DBG("\r\ncreat TCP server !");
+    TCP_DBG("\r\ncreat TCP server !");
 
     while(--i)
     {
@@ -198,7 +198,7 @@ int TCPServer::begin(SOCKET ps, uint16_t port)
                 return ret;
             }
             else
-                DBG("\r\nerr code:%d", ret);
+                TCP_DBG("\r\nerr code:%d", ret);
             break;
         case SOCK_CLOSED:/*socket关闭*/
             ret = _socket(s, Sn_MR_TCP, localPort, Sn_MR_ND); /*打开socket的一个端口*/

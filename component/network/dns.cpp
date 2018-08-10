@@ -23,12 +23,12 @@
 
 #define DNS_DEBUG 1
 #if DNS_DEBUG
-#define DNS_DBG(...) DBG(__VA_ARGS__)
+#define DNS_DBG(...) uart1.printf(__VA_ARGS__)
 #else
 #define  DNS_DBG(...)
 #endif
 
-int DNS::begin(SOCKET p_s, uint16_t p_port)
+int Dns::begin(SOCKET p_s, uint16_t p_port)
 {
     int ret = 0;
     s = p_s;
@@ -38,15 +38,15 @@ int DNS::begin(SOCKET p_s, uint16_t p_port)
 }
 /*
 ********************************************************************************
-*              MAKE DNS QUERY AND PARSE THE REPLY
+*              MAKE Dns QUERY AND PARSE THE REPLY
 *
-* Description : This function makes DNS query message and parses the reply from DNS server.
+* Description : This function makes Dns query message and parses the reply from Dns server.
 * Arguments   : name - is a pointer to the domain name.
 * Returns     : if succeeds : 1, fails : -1
 * Note        :
 ********************************************************************************
 */
-int DNS::query(char *name)
+int Dns::query(char *name)
 {
     int state;
     static uint32_t dns_wait_time = 0;
@@ -112,7 +112,7 @@ int DNS::query(char *name)
         }
     };
 }
-bool DNS::get_domain_ip(uint8_t *ip)
+bool Dns::get_domain_ip(uint8_t *ip)
 {
     memcpy(ip, domain_ip, 4);
     return true;
@@ -131,7 +131,7 @@ bool DNS::get_domain_ip(uint8_t *ip)
 * Note        :
 ********************************************************************************
 */
-int DNS::parse_name(uint8_t *msg, uint8_t *compressed, /*char * buf,*/ uint16_t len)
+int Dns::parse_name(uint8_t *msg, uint8_t *compressed, /*char * buf,*/ uint16_t len)
 {
     uint16_t slen;		/* Length of current segment */
     uint8_t   *cp;
@@ -201,7 +201,7 @@ int DNS::parse_name(uint8_t *msg, uint8_t *compressed, /*char * buf,*/ uint16_t 
 * Note        :
 ********************************************************************************
 */
-uint8_t *DNS::question(uint8_t *msg, uint8_t *cp)
+uint8_t *Dns::question(uint8_t *msg, uint8_t *cp)
 {
     int16_t len;
     //	int8_t  xdata name[MAX_DNS_BUF_SIZE];
@@ -229,7 +229,7 @@ uint8_t *DNS::question(uint8_t *msg, uint8_t *cp)
 * Note        :
 ********************************************************************************
 */
-uint8_t *DNS::answer(uint8_t *msg, uint8_t *cp)
+uint8_t *Dns::answer(uint8_t *msg, uint8_t *cp)
 {
     int16_t len, type;
     //	int8_t  xdata name[MAX_DNS_BUF_SIZE];
@@ -313,17 +313,17 @@ uint8_t *DNS::answer(uint8_t *msg, uint8_t *cp)
 
 /*
 ********************************************************************************
-*              PARSE THE DNS REPLY
+*              PARSE THE Dns REPLY
 *
-* Description : This function parses the reply message from DNS server.
-* Arguments   : dhdr - is a pointer to the header for DNS message
+* Description : This function parses the reply message from Dns server.
+* Arguments   : dhdr - is a pointer to the header for Dns message
 *               buf  - is a pointer to the reply message.
 *               len  - is the size of reply message.
 * Returns     : None
 * Note        :
 ********************************************************************************
 */
-uint8_t DNS::parseMSG(struct dhdr *pdhdr, uint8_t *pbuf)
+uint8_t Dns::parseMSG(struct dhdr *pdhdr, uint8_t *pbuf)
 {
     uint16_t tmp = 0;
     uint16_t i = 0;
@@ -383,18 +383,18 @@ uint8_t DNS::parseMSG(struct dhdr *pdhdr, uint8_t *pbuf)
 
 /*
 ********************************************************************************
-*              MAKE DNS QUERY MESSAGE
+*              MAKE Dns QUERY MESSAGE
 *
-* Description : This function makes DNS query message.
+* Description : This function makes Dns query message.
 * Arguments   : op   - Recursion desired
 *               name - is a pointer to the domain name.
-*               buf  - is a pointer to the buffer for DNS message.
+*               buf  - is a pointer to the buffer for Dns message.
 *               len  - is the MAX. size of buffer.
-* Returns     : the pointer to the DNS message.
+* Returns     : the pointer to the Dns message.
 * Note        :
 ********************************************************************************
 */
-int DNS::makequery(uint16_t op, uint8_t *name, uint8_t *buf, uint16_t len)
+int Dns::makequery(uint16_t op, uint8_t *name, uint8_t *buf, uint16_t len)
 {
     uint8_t  *cp;
     uint8_t   *cp1;

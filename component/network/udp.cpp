@@ -20,36 +20,36 @@
 /* Includes ------------------------------------------------------------------*/
 #include "udp.h"
 
-uint8_t UDP::begin(SOCKET ps, uint16_t port)
+uint8_t Udp::begin(SOCKET ps, uint16_t port)
 {
     uint8_t ret;
     s = ps;
-    localPort = port;
-    ret = _socket(s, Sn_MR_UDP, localPort, 0); /*初始化socket 0的套接字*/
+    local_port = port;
+    ret = _socket(s, Sn_MR_UDP, local_port, 0); /*初始化socket 0的套接字*/
     return ret;
 
 }
-uint16_t UDP::send(UDPMessage *msg)
+uint16_t Udp::send(UDPMessage *msg)
 {
     return _sendto(s, msg->buf, msg->len, msg->rIP, msg->rPort);
 }
-uint16_t UDP::sendto(uint8_t *rIP, uint16_t rPort, uint8_t *buf, uint16_t len)
+uint16_t Udp::sendto(uint8_t *rIP, uint16_t rPort, uint8_t *buf, uint16_t len)
 {
     len = _sendto(s, buf, len, rIP, rPort);
     return len;
 }
-uint16_t UDP::recv(uint8_t *buf)
+uint16_t Udp::recv(uint8_t *buf)
 {
     uint16_t len = 0;
     if((len = recv_available(s)) > 0)
     {
         uart1.println(len);
-        len = _recvfrom(s, buf, len, remoteIP, &remotePort); /*W5500接收计算机发送来的数据*/
+        len = _recvfrom(s, buf, len, remote_ip, &remote_port); /*W5500接收计算机发送来的数据*/
         recvFlag = 0;
     }
     return len;
 }
-uint8_t UDP::close()
+uint8_t Udp::close()
 {
     _close(s);
     return 0;

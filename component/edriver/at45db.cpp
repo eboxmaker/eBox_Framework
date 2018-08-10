@@ -233,7 +233,7 @@ void At45db::_waitBusy(void)
         {
             return;
         }
-        DBG("\r\nSPI_FLASH timeout!!!\r\n");
+        uart1.printf("\r\nSPI_FLASH timeout!!!\r\n");
     }
    
 

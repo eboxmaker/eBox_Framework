@@ -18,7 +18,7 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "ebox_common.h"
+#include "ebox_core.h"
 #include "socket.h"
 #include "w5500.h"
 static uint16_t local_port;

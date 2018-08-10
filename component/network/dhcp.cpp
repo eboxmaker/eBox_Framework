@@ -27,7 +27,7 @@ DHCP dhcp;
 #define DHCP_DEBUG 1
 
 #if DHCP_DEBUG
-    #define DHCP_DBG(...) DBG(__VA_ARGS__)
+    #define DHCP_DBG(...) uart1.printf(__VA_ARGS__)
 #else
     #define  DHCP_DBG(...)
 #endif
