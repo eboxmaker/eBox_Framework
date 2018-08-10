@@ -19,7 +19,6 @@
 #define __ESP8266_H__
 
 #include "ebox.h"
-#include "ringbuf.h"
 
 
 #define RX_BUFFER_SIZE 1024
@@ -92,7 +91,7 @@ public:
     bool set_opr_to_station(void);
     bool set_opr_to_softAP(void);
     bool set_opr_to_stationSoftAP(void);
-    bool get_APList(char *list);
+    bool get_ap_list(char *list);
     bool join_AP(char *ssid, char *pwd);
     bool leave_AP(void);
     bool query_sta_ip(char *msg);
@@ -123,6 +122,8 @@ public:
     bool stop_TCPServer(void);
     bool start_Server(uint32_t port = 333);
     bool stop_Server(void);
+    
+    bool ping(const char *host, char *msg);
     /////ATÃüÁî//////////////////////////////////////////////////////////////////////////////////////////////
 private:
     //»ù±¾ATÖ¸Áî

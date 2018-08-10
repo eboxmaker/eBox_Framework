@@ -14,17 +14,16 @@ Copyright 2015 shentq. All Rights Reserved.
 
 
 /**
-	*	1	此例程演示ESP8266的初始化和版本信息打印
+	*	1	此例程演示ping使用方法
 	*	2	此例需要在工程中添加ESP8266.cpp,esp8266_upd.cpp,esp8266_tcp.cpp
 	*/
 /* 定义例程名和例程发布日期 */
-
-
-#define EXAMPLE_NAME	"esp8266 basic test example"
+#define EXAMPLE_NAME	"esp8266 ping example"
 #define EXAMPLE_DATE	"2018-08-11"
 
 char recv_buf[1024] = {0};
 
+bool ret;
 
 void setup()
 {
@@ -33,7 +32,11 @@ void setup()
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
 
     wifi.begin(&PA4, &uart2, 115200);
-
+    wifi.get_ap_list((char *)recv_buf);
+    uart1.printf((char *)recv_buf);
+    ret = wifi.join_ap();
+    if(ret)
+		uart1.printf("esp8266 join wifi OK\r\n");
 }
 
 int main(void)
@@ -42,22 +45,10 @@ int main(void)
     setup();
 
 
-    ret = wifi.kick();
-    if(ret)
-        uart1.printf("kick ok\r\n");
-    else
-        uart1.printf("kick failed\r\n");
-
-    ret = wifi.get_version(recv_buf);
-    if(ret)
-        uart1.printf("%s\r\n", recv_buf);
-    else
-        uart1.printf("get version failed\r\n");
     while(1)
     {
-
-
-
+        wifi.ping("www.baidu.com",recv_buf);
+            uart1.printf(recv_buf);
     }
 
 }

@@ -20,12 +20,11 @@
 
 
 #include "ESP8266.h"
-#include <string.h>
-#include <stdlib.h>
 
 
-char ssid[] = "DVmaster";
-char password[] = "dvmaster456";
+
+char ssid[] = "opposhen";
+char password[] = "12345678";
 
 
 #if 1
@@ -185,8 +184,8 @@ bool ESP8266::begin(Gpio *rst, Uart *uart, uint32_t baud)
     this->uart  = uart;
 
     this->uart->begin(baud);
-//    this->uart->attach_rx_interrupt(uart_interrupt_event);
-	  this->uart->attach(uart_interrupt_event,RxIrq);
+    this->uart->attach(uart_interrupt_event,RxIrq);
+    this->uart->interrupt(RxIrq,ENABLE);
     this->rst->mode(OUTPUT_PP);
 
     wifi_mode = NET_MODE;
@@ -394,7 +393,7 @@ bool ESP8266::set_opr_to_stationSoftAP(void)
  * @note This method will occupy a lot of memeory(hundreds of Bytes to a couple of KBytes).
  *  Do not call this method unless you must and ensure that your board has enough memery left.
  */
-bool ESP8266::get_APList(char *list)
+bool ESP8266::get_ap_list(char *list)
 {
     return exc_AT_CWLAP(list);
 }
@@ -728,6 +727,11 @@ bool ESP8266::stop_Server(void)
     return stop_TCPServer();
 }
 
+bool ESP8266::ping(const char *host, char *msg)
+{
+    return exc_AT_PING(host,msg);
+}
+
 /**
  * Send data based on TCP or UDP builded already in single mode.
  *
@@ -967,7 +971,7 @@ bool ESP8266::exc_AT_CWLAP(char *list)
     wait_wifi_mode(CMD_MODE);
     clear_rx_cdm_buffer();
     uart->printf("AT+CWLAP\r\n");
-    if(wait_cmd(TIMEOUT_TIME) == RECEIVED)
+    if(wait_cmd(5000) == RECEIVED)
     {
         if(search_str(rx_cmd_buf, "OK") != -1)
         {
