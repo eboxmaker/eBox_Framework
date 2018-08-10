@@ -1,88 +1,72 @@
-/*
-file   : *.cpp
-author : shentq
-version: V1.0
-date   : 2015/7/5
+/**
+  ******************************************************************************
+  * @file    pwm.cpp
+  * @author  shentq
+  * @version V2.0
+  * @date    2016/08/14
+  * @brief   ebox application example .
+  ******************************************************************************
+  * @attention
+  *
+  * No part of this software may be used for any commercial activities by any form 
+  * or means, without the prior written consent of shentq. This specification is 
+  * preliminary and is subject to change at any time without notice. shentq assumes
+  * no responsibility for any errors contained herein.
+  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
+  ******************************************************************************
+  */
 
-Copyright 2015 shentq. All Rights Reserved.
-*/
 
-//STM32 RUN IN eBox
+/* Includes ------------------------------------------------------------------*/
 
 
 #include "ebox.h"
+#include "math.h"
+#include "ebox_encoder.h"
 #include "bsp_ebox.h"
 
-#include "w5500.h"
-#include "socket.h"
-#include "dhcp.h"
-
-
 /**
-	*	1	此例程需要调用eDrive目录下的w5500驱动和network组件
-	*	2	此例程演示了DNS域名解析
+	*	1	此例程演示了定时器正交解码功能
 	*/
 
 
-
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"w5500 dns example"
+#define EXAMPLE_NAME	"timer decoding example"
 #define EXAMPLE_DATE	"2018-08-11"
 
 
-u8 mac[6] = {0x00, 0x08, 0xdc, 0x11, 0x11, 0x11}; /*定义Mac变量*/
-u8 ip[4] = {192, 168, 1, 119}; /*定义lp变量*/
-u8 sub[4] = {255, 255, 255, 0}; /*定义subnet变量*/
-u8 gw[4] = {192, 168, 1, 1}; /*定义gateway变量*/
-u8 dns[4] = {192, 168, 1, 1}; /*定dns变量*/
-
-u8 buf[100];
-
-W5500 w5500(&PC13, &PC14, &PC15, &spi2);
-
-int ret;
+Encoder encoder(TIM4,&PB6,&PB7);
+float x;
+uint16_t y;
+Pwm pwm1(&PA0);
 void setup()
 {
     ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-    w5500.begin(2, mac, ip, sub, gw, dns);
 
-    attach_eth_to_socket(&w5500);
-
-
-    ret = dhcp.begin(mac);
-    if(ret == 0 )
-        UART.printf("DHCP success\r\n");
-    if(ret == EOK)
-    {
-        w5500.setSHAR(dhcp.net.mac);/*配置Mac地址*/
-        w5500.setSIPR(dhcp.net.ip);/*配置Ip地址*/
-        w5500.setSUBR(dhcp.net.subnet);/*配置子网掩码*/
-        w5500.setGAR(dhcp.net.gw);/*配置默认网关*/
-        w5500.getMAC (buf);
-        UART.printf("\r\nmac : %02x.%02x.%02x.%02x.%02x.%02x\r\n", buf[0], buf[1], buf[2], buf[3], buf[4], buf[5]);
-        w5500.getIP (buf);
-        UART.printf("IP : %d.%d.%d.%d\r\n", buf[0], buf[1], buf[2], buf[3]);
-        w5500.getSubnet(buf);
-        UART.printf("mask : %d.%d.%d.%d\r\n", buf[0], buf[1], buf[2], buf[3]);
-        w5500.getGateway(buf);
-        UART.printf("GW : %d.%d.%d.%d\r\n", buf[0], buf[1], buf[2], buf[3]);
-        UART.printf("Network is ready.\r\n");
-    }
-
-
+    encoder.begin(3);
+    pwm1.begin(1000, 1000);
+    pwm1.set_oc_polarity(1);//set output polarity after compare
+    UART.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
+    UART.printf("max frq = %f\r\n",pwm1.get_accuracy());
 }
 int main(void)
 {
     setup();
-
+    uint16_t temp;
+    float speed;
     while(1)
     {
-
+        x = x + PI * 0.01;
+        if(x >= PI)x = 0;
+        y = 2500 - (sin(x) + 1) * 1000;
+        pwm1.set_duty(y);
+        speed = encoder.read_speed()/50;
+        UART.printf("count :%0.2f(%d)\r\n",speed,encoder.read_direction());
+        delay_ms(100);
+        
     }
-
-
 }
 
 

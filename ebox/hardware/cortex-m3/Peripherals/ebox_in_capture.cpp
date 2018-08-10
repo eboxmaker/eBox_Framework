@@ -36,7 +36,7 @@ InCapture::InCapture(Gpio *capture_pin)
     low_capture = 0;
     _capture = 0;
 }
-void InCapture::begin(uint16_t prescaler )
+void InCapture::begin(uint16_t prescaler ,ICMode_t mode)
 {
 	  uint8_t index;
     capture_pin->mode(INPUT_PU);
@@ -97,6 +97,11 @@ void InCapture::begin(uint16_t prescaler )
 
     }
     tim_irq_init(index,(&InCapture::_irq_handler),(uint32_t)this);
+    if(mode == SIMPLE)
+        attach(this,&InCapture::simple_event);
+    else
+        attach(this,&InCapture::complex_event);
+
 }
 void InCapture::base_init(uint16_t period, uint16_t prescaler)
 {

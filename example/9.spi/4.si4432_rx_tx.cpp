@@ -9,16 +9,27 @@ Copyright 2015 shentq. All Rights Reserved.
 
 //STM32 RUN IN eBox
 #include "ebox.h"
-#include "wstring.h"
-#include "bsp.h"
+#include "bsp_ebox.h"
+
 #include "si4432.h"
+#include "led.h"
+#include "button.h"
+/**
+	*	1	此例程需要调用eDrive目录下的si4432驱动
+	*	2	此例程演示了si4432无线模块收发
+	*/
+
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"si4432 example"
+#define EXAMPLE_DATE	"2018-08-11"
 
 Si4432	rf(&PA12,&PA11,&PB12,&spi2);
 
-Led     led_net(&PC13,1);
-Led     led_rx(&PC14,1);
-Led		led_tx(&PC15,1);
+Led     led_net(&LED1,1);
+Led     led_rx(&LED2,1);
+Led		led_tx(&LED3,1);
 
+Button btn(&BtnPin,1);
 ///////////////////////////////////
 uint8_t     recv_buf[1024] = {0};
 uint16_t    len = 0;
@@ -53,10 +64,10 @@ void RF_TxData(uint8_t protno)
 
 void setup()
 {
-	ebox_init();
-	uart1.begin(115200);
-	uart1.printf("-------------------------------\r\n");
-	//flash.begin(1);
+    ebox_init();
+    UART.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+
 	rf.begin(2);
 	btn.begin();
 	led_net.begin();
@@ -69,10 +80,7 @@ int main(void)
 	int ret;
 	uint16_t tx_cnt = 0;
 
-	uint32_t last_time= 0;
-	uint32_t last_rt_time = 0;
-	uint32_t last_get_time = 0;
-	uint32_t last_login_time = 0;
+
 	setup();
 
 	//si4432模块启动
