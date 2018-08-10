@@ -84,7 +84,7 @@ struct dhdr
 
 #define	MAX_DNS_BUF_SIZE	256		/* maximum size of DNS buffer. */
 
-class DNS
+class Dns
 {
 public:
     uint8_t domain_ip[4];

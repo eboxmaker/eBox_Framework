@@ -1,7 +1,7 @@
 #include "sx1278.h"
 #define LORA_DEBUG 1
 #if LORA_DEBUG
-#define LORA_DBG(...) DBG(__VA_ARGS__)
+#define LORA_DBG(...) uart1.printf(__VA_ARGS__)
 #else
 #define  LORA_DBG(...)
 #endif

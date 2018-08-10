@@ -37,9 +37,9 @@ public:
     uint16_t     recv(uint8_t *buf, uint16_t len);
     uint16_t 	send(uint8_t *buf, uint16_t len);
 
-    uint16_t localPort;
-    uint8_t  remoteIP[4];/*配置服务器的IP地址*/
-    uint16_t remotePort;/*定义计算机的一个端口并初始化*/
+    uint16_t local_port;
+    uint8_t  remote_ip[4];/*配置服务器的IP地址*/
+    uint16_t remote_port;/*定义计算机的一个端口并初始化*/
 
 
 private:

@@ -20,8 +20,6 @@
 
 #ifndef __SOCKET_H
 #define __SOCKET_H
-#include "stm32f10x.h"
-#include "stdbool.h"
 #include "netconfig.h"
 #include "w5500.h"
 

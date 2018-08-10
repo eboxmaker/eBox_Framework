@@ -123,7 +123,6 @@ uint16_t WIFI_TCP::read(uint8_t *buf)
 uint16_t WIFI_TCP::read_until(uint8_t *buf,char ch)
 {
     int len = 0;
-    char c;
     while(1){
         if(available()){
             buf[len] = wifi->read_one();

@@ -15,7 +15,8 @@
 #include "../core/stdFun/itoa.h"
 #include "../core/stdFun/math_misc.h"
 #include "../core/stdFun/util.h"
- 
+#include "../core/stdFun/binary.h"
+
 extern Cpu_t cpu;
      
 extern void        (*interrupts)(void);

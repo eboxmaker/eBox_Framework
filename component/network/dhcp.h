@@ -20,7 +20,7 @@
 #ifndef __DHCP_H
 #define __DHCP_H
 #include "socket.h"
-#include "ebox_common.h"
+#include "ebox_core.h"
 
 #define USE_HEAP 1
 
