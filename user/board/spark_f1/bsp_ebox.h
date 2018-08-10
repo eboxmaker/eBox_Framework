@@ -36,6 +36,12 @@
 #define LED2 PB9
 #define LED3 PB10
 
+#define LED_R   PB7
+#define LED_G   PB8
+#define LED_B   PB9
+
+#define PWMLED  PB8
+
 #define BtnPin	PA8
 #define	UART    uart1
 
@@ -44,6 +50,8 @@
 #define	ADC_2   PA2
 
 #define DAC_0   PB8
+
+extern void print_log(const char *name,const char *date);
 
 
 extern CNC cnc;

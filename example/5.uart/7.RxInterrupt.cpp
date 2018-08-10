@@ -50,7 +50,7 @@ void setup()
     UART.interrupt(RxIrq,ENABLE);
     LED1.mode(OUTPUT_PP);
     LED1.reset();
-		UART.printf("please enter a word to mcu\r\n");
+	UART.printf("please enter a word to mcu\r\n");
 }
 
 int main(void)

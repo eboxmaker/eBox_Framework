@@ -11,23 +11,36 @@
   ******************************************************************************
  */
 
+/**
+	*	1	此例程演示了rgbled显示。依赖colorled，color_convert模块
+	*   2   运行时三个颜色灯轮流显示，跑马灯形式
+    *       b 添加需要的adc通道
+    *       c begin(),启动adc
+    *       d 通过通道号(&PA0)或通道索引(1)读取转换结果
+	*/
 
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"colorled example"
+#define EXAMPLE_DATE	"2018-08-06"
 
 
 #include "ebox.h"
 #include "math.h"
 #include "colorled.h"
+#include "bsp_ebox.h"
 
 COLOR_HSL hsl;
 COLOR_RGB rgb;
 COLOR_HSV hsv;
 
-COLORLED led(&PB7, &PB8, &PB9);
+// 创建rgb led 对象
+ColorLed led(&LED_R, &LED_G, &LED_B);
 
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
+    UART.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
     led.begin();
     hsl.h = 1;
     hsl.s = 1;
@@ -48,12 +61,12 @@ int main(void)
     while(1)
     {
 //方法1：        
-    led.color_rgb(0,0,255);
-    delay_ms(100);
-    led.color_rgb(0,255,0);
-    delay_ms(100);
-    led.color_rgb(255,0,0);
-    delay_ms(100);
+//    led.color_rgb(0,0,255);
+//    delay_ms(100);
+//    led.color_rgb(0,255,0);
+//    delay_ms(100);
+//    led.color_rgb(255,0,0);
+//    delay_ms(100);
         
 //方法2：
 //        hsv.h++;
@@ -62,10 +75,10 @@ int main(void)
 //        delay_ms(10);
 
 //方法3：
-//        hsl.h++;
-//        if(hsl.h > 360)hsl.h = 0;
-//        led.color_hsl(hsl);
-//        delay_ms(10);
+        hsl.h++;
+        if(hsl.h > 360)hsl.h = 0;
+        led.color_hsl(hsl);
+        delay_ms(10);
         
         
 

@@ -37,17 +37,17 @@
 
 float x;
 uint16_t y;
-Pwm pwm1(&PB8);
+Pwm pwm1(&PWMLED);
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
+    UART.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
 
     pwm1.begin(1000, 500);
     pwm1.set_oc_polarity(1);//set output polarity after compare
-    uart1.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
-    uart1.printf("max frq = %f\r\n",pwm1.get_accuracy());
+    UART.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
+    UART.printf("max frq = %f\r\n",pwm1.get_accuracy());
 }
 int main(void)
 {
