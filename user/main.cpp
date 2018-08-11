@@ -1,76 +1,138 @@
-/*
-file   : *.cpp
-author : shentq
-version: V1.0
-date   : 2015/7/5
+/**
+  ******************************************************************************
+  * @file   : *.cpp
+  * @author : shentq
+  * @version: V1.2
+  * @date   : 2016/08/14
 
-Copyright 2015 shentq. All Rights Reserved.
-*/
-
-//STM32 RUN IN eBox
-
-
+  * @brief   ebox application example .
+  *
+  * Copyright 2016 shentq. All Rights Reserved.         
+  ******************************************************************************
+ */
+ 
+ 
 #include "ebox.h"
 #include "bsp_ebox.h"
 
-#include "w5500.h"
-
+#include "lcd_1.8.h"
+#include "gui.h"
 
 /**
-	*	1	此例程需要调用eDrive目录下的w5500模块
-	*	2	此例程演示了w5500的初始化，基本信息打印
+	*	1	此例程演示了GUI
 	*/
-
-
+	
 
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"w5500 io test example"
+#define EXAMPLE_NAME	"GUI example"
 #define EXAMPLE_DATE	"2018-08-11"
 
 
-u8 mac[6] = {0x00, 0x08, 0xdc, 0x11, 0x11, 0x11}; /*定义Mac变量*/
-u8 ip[4] = {192, 168, 1, 119}; /*定义lp变量*/
-u8 sub[4] = {255, 255, 255, 0}; /*定义subnet变量*/
-u8 gw[4] = {192, 168, 1, 1}; /*定义gateway变量*/
-u8 dns[4] = {192, 168, 1, 1}; /*定dns变量*/
 
-u8 buf[100];
-
-W5500 w5500(&PC13, &PC14, &PC15, &spi2);
-
+Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
+GUI gui;
+Button btn(&BtnPin,1);
 
 void setup()
 {
     ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-    w5500.begin(2, mac, ip, sub, gw, dns);
+    lcd.begin(1);
+    btn.begin();
+    
+    gui.begin(&lcd,128,160);
+    gui.fill_screen(BLACK);
+    
 
-    w5500.getMAC (buf);
-    UART.printf("\r\nmac : %02x.%02x.%02x.%02x.%02x.%02x\r\n", buf[0], buf[1], buf[2], buf[3], buf[4], buf[5]);
-    w5500.getIP (buf);
-    UART.printf("IP : %d.%d.%d.%d\r\n", buf[0], buf[1], buf[2], buf[3]);
-    w5500.getSubnet(buf);
-    UART.printf("mask : %d.%d.%d.%d\r\n", buf[0], buf[1], buf[2], buf[3]);
-    w5500.getGateway(buf);
-    UART.printf("GW : %d.%d.%d.%d\r\n", buf[0], buf[1], buf[2], buf[3]);
-    UART.printf("Network is ready.\r\n");
+}
+void test(uint8_t totation)
+{
+    gui.set_rotation(totation);
 
+    gui.fill_screen(BLACK);
+    gui.set_color(WHITE);
+
+    
+    gui.set_font(&GUI_Font16_ASCII);
+    gui.set_text_mode(LCD_DRAWMODE_NORMAL);
+    gui.printf(0,0,"GUI TEST");
+    
+    
+    //
+    gui.set_color(RED);
+    gui.fill_circle(50,60,40);
+    gui.set_color(GREEN);
+    gui.fill_circle(50,60,37);
+    gui.set_color(BLACK);
+    gui.set_text_mode(LCD_DRAWMODE_TRANS);
+    gui.printf(35,33,"PM2.5");
+    gui.printf(35,77,"ug/m");
+    gui.set_font(&GUI_Font8_ASCII);
+    gui.set_font(&GUI_Font32_ASCII);
+
+
+
+
+    gui.set_color(RED);
+    gui.fill_circle(115,33,25);
+    gui.set_color(GREEN);
+    gui.fill_circle(115,33,22);
+    gui.set_color(BLACK);
+    gui.set_font(&GUI_Font16_ASCII);
+    gui.printf(98,15,"CH2O");
+    gui.set_font(&GUI_Font24_ASCII);
+    gui.printf(103,30,"12");
+
+
+
+
+    gui.set_color(RED);
+    gui.fill_circle(115,83,25);
+    gui.set_color(GREEN);
+    gui.fill_circle(115,83,22);
+    gui.set_color(BLACK);
+    gui.set_font(&GUI_Font16_ASCII);
+    gui.printf(102,65,"CO2");
+    gui.set_font(&GUI_Font32_ASCII);
+    gui.printf(35,47,"95");
+    gui.set_font(&GUI_Font24_ASCII);
+    gui.printf(99,80,"893");
+    
+    gui.set_color(GREEN);
+    gui.fill_rect(150,127,160,95);
+    gui.set_color(YELLOW);
+    gui.fill_rect(150,95,160,63);
+    gui.set_color(BLUE);
+    gui.fill_rect(150,63,160,31);
+    gui.set_color(RED);
+    gui.fill_rect(150,31,160,0);
+    
+    gui.set_color(GREEN);
+    gui.fill_triangle(140,120,150,110,140,100);
 
 
 }
 int main(void)
 {
+    int i = 1;
     setup();
+    test(i);
 
     while(1)
     {
-
+        
+        if(btn.click())
+        {
+            if(i==1)
+                i=3;
+            else
+                i = 1;
+            test(i);
+        }
+        btn.loop();
     }
 
-
 }
-
-
 
 

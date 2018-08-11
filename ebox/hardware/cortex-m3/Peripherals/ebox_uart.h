@@ -115,6 +115,7 @@ public:
 private:
     USART_TypeDef       *_USARTx;
     Gpio                *_tx_pin;
+    Gpio                *_rx_pin;
     char                *data_ptr;
     uint8_t             use_dma;
     uint16_t            dma_write(const char *str, uint16_t length);

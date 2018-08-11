@@ -42,8 +42,7 @@ Uart::Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin)
 {
     _USARTx = USARTx;
     _tx_pin = tx_pin;
-//    tx_pin->mode(AF_PP);
-    rx_pin->mode(INPUT);
+    _rx_pin = rx_pin;
 }
 /**
  *@name     void Uart::begin(uint32_t baud_rate,uint8_t _use_dma)
@@ -165,6 +164,8 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     USART_ClearITPendingBit(_USARTx, USART_IT_TC);
     USART_ClearFlag(_USARTx,USART_FLAG_TC); 
     _tx_pin->mode(AF_PP);
+    _rx_pin->mode(INPUT);
+
 }
 void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {

@@ -22,6 +22,7 @@
 #include "ebox.h"
 #include "lcd_1.8.h"
 #include "cnc.h"
+#include "button.h"
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
