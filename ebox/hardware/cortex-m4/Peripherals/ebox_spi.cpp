@@ -29,10 +29,7 @@ mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 
 void mcuSpi::begin(SpiConfig_t *spi_config)
 {
-//	  sck->mode(AF_PP_PU,GPIO_AF_SPI3);
-//    miso->mode(AF_PP_PU,GPIO_AF_SPI3);
-//    mosi->mode(AF_PP_PU,GPIO_AF_SPI3);
-//	
+
     if(spi == SPI1)
     {
         sck->mode(AF_PP_PU,GPIO_AF_SPI1);

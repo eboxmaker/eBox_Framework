@@ -27,12 +27,16 @@
 
 //mcuGpio			BtnPin(GPIOA,GPIO_Pin_8);
 //Uart 				UART(USART1, &PA9, &PA10);
-
-
+mcuSpi spi_w5500(SPI1,&PB3,&PB4,&PA7);
+W5500  w5500(&PA15, &PC14, &PG2, &spi_w5500);
+Button btn(&PH15,1);
+Led     led1(&LED1,0);
+Led     led2(&LED2,0);
+Led     led3(&LED3,0);
 // 使用object.cpp,使用下列方式重命名IO对象，可以减少code区消耗
-//#define LED1 PB8
-//#define LED2 PB9
-//#define LED3 PB10
+//#define LED1 PI5
+//#define LED2 PI6
+//#define LED3 PI7
 
 //#define BtnPin	PA8
 //#define	UART		uart1

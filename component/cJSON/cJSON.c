@@ -31,7 +31,7 @@
 #include <limits.h>
 #include <ctype.h>
 #include "cJSON.h"
-#include "../../core/mem/ebox_mem.h"
+#include "ebox_cfun.h"
 
 /*ebox 动态内存接口*/
 

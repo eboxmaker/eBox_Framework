@@ -791,6 +791,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\component\apps\EventIo.cpp</FilePath>
             </File>
+            <File>
+              <FileName>cJSON.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\component\cJSON\cJSON.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

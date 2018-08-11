@@ -210,7 +210,23 @@ extern mcuGpio PG15;
 
 #if (MCU_PINS >= 176)
 
+extern mcuGpio PH0;
+extern mcuGpio PH1;
+extern mcuGpio PH2;
+extern mcuGpio PH3;
+extern mcuGpio PH4;
+extern mcuGpio PH5;
+extern mcuGpio PH6;
+extern mcuGpio PH7;
+extern mcuGpio PH8;
 extern mcuGpio PH9;
+extern mcuGpio PH10;
+extern mcuGpio PH11;
+extern mcuGpio PH12;
+extern mcuGpio PH13;
+extern mcuGpio PH14;
+extern mcuGpio PH15;
+
 
 extern mcuGpio PI5;
 extern mcuGpio PI6;

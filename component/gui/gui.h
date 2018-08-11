@@ -104,9 +104,9 @@ class GUI
         uint16_t color, back_color;
         uint8_t  draw_mode;
         uint8_t  text_style;
-        uint8_t rotation;
+        uint8_t  rotation;
         GUI_FONT *current_font;
-        Vhmi    *lcd;
+        Vhmi     *lcd;
         uint16_t width, height; //  
         uint16_t _width, _height; // Display w/h as modified by current rotation 
     public:
@@ -133,9 +133,9 @@ class GUI
         void draw_rect(uint16_t x, uint16_t y, uint16_t x1, uint16_t y1);    
         void fill_rect(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
         void fill_screen(uint16_t color) ;
-        void draw_circle(uint16_t x0, uint16_t y0, uint16_t r);
             
         //graphic 
+        void draw_circle(uint16_t x0, uint16_t y0, uint16_t r);
         void fill_circle(uint16_t x0, uint16_t y0, uint16_t r);
         void draw_circle_helper(uint16_t x0, uint16_t y0, uint16_t r, uint8_t cornername);
         void fill_circle_helper(uint16_t x0, uint16_t y0, uint16_t r, uint8_t cornername,uint16_t delta);
