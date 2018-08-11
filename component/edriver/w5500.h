@@ -129,10 +129,10 @@ public:
 
     void attch_interruput_event(void (*callbackFun)(void))
     {
-        Exti ex(int_pin, FALLING);
-        ex.begin();
-        ex.attach(callbackFun);
-        ex.interrupt(ENABLE);
+//        Exti ex(int_pin, FALLING);
+//        ex.begin();
+//        ex.attach(callbackFun);
+//        ex.interrupt(ENABLE);
     }
 private:
     Gpio *cs;

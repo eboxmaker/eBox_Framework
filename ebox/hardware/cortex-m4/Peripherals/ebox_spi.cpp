@@ -27,7 +27,7 @@ mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 	
 }  
 
-void mcuSpi::begin(SPI_CONFIG_TYPE *spi_config)
+void mcuSpi::begin(SpiConfig_t *spi_config)
 {
 //	  sck->mode(AF_PP_PU,GPIO_AF_SPI3);
 //    miso->mode(AF_PP_PU,GPIO_AF_SPI3);
@@ -58,7 +58,7 @@ void mcuSpi::begin(SPI_CONFIG_TYPE *spi_config)
     
     config(spi_config);
 }
-void mcuSpi::config(SPI_CONFIG_TYPE *spi_config)
+void mcuSpi::config(SpiConfig_t *spi_config)
 {
     SPI_InitTypeDef SPI_InitStructure;
 
@@ -94,8 +94,39 @@ void mcuSpi::config(SPI_CONFIG_TYPE *spi_config)
         SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
         SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
     }
-    SPI_InitStructure.SPI_BaudRatePrescaler = spi_config->prescaler;
-    SPI_InitStructure.SPI_FirstBit = spi_config->bit_order;
+    switch(spi_config->prescaler)
+    {
+        case SPI_CLOCK_DIV2:
+            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;break;
+        case SPI_CLOCK_DIV4:
+            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;break;
+        case SPI_CLOCK_DIV8:
+            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8;break;
+        case SPI_CLOCK_DIV16:
+            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;break;
+        case SPI_CLOCK_DIV32:
+            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_32;break;
+        case SPI_CLOCK_DIV64:
+            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;break;
+        case SPI_CLOCK_DIV128:
+            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128;break;
+        case SPI_CLOCK_DIV256:
+            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;break;
+        default :
+            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;break;
+
+    }
+    
+    switch(spi_config->bit_order)
+    {
+        case MSB_FIRST:
+            SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;break;
+        case LSB_FIRST:
+            SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_LSB;break;
+        default :
+            SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;break;
+
+    }
     SPI_Init(spi, &SPI_InitStructure);
     SPI_Cmd(spi, ENABLE);
 }
@@ -183,7 +214,7 @@ int8_t mcuSpi::read(uint8_t *recv_data, uint16_t data_length)
     return 0;
 }
 
-int8_t mcuSpi::take_spi_right(SPI_CONFIG_TYPE *spi_config)
+int8_t mcuSpi::take_spi_right(SpiConfig_t *spi_config)
 {
     while((busy == 1) && (spi_config->dev_num != read_config()))
         delay_ms(1);

@@ -14,8 +14,6 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "bsp_ebox.h"
 
 #include "w5500.h"
-#include "socket.h"
-#include "udp.h"
 
 
 /**
@@ -47,8 +45,6 @@ void setup()
     UART.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
     w5500.begin(2, mac, ip, sub, gw, dns);
-
-    attach_eth_to_socket(&w5500);
 
     w5500.getMAC (buf);
     UART.printf("\r\nmac : %02x.%02x.%02x.%02x.%02x.%02x\r\n", buf[0], buf[1], buf[2], buf[3], buf[4], buf[5]);

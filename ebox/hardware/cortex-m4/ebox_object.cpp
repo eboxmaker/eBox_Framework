@@ -21,6 +21,22 @@ Uart uart1(USART1,&PA9,&PA10);
 Uart uart2(USART2,&PA2,&PA3);
 //Usart uart2(USART2,&PD5,&PD6);
 Uart uart3(USART3,&PB10,&PB11);
+//spi
+mcuSpi  spi1(SPI1, &PA5, &PA6, &PA7);
+mcuSpi  spi2(SPI2, &PB13, &PB14, &PB15);
+mcuSpi  spi3(SPI3, &PB3, &PB4, &PB5);
+SoftSpi	sspi1(&PA5, &PA6, &PA7);
+SoftSpi	sspi2(&PB13, &PB14, &PB15);
+
+//SlaveSpi slave_spi1(SPI1, &PA5, &PA6, &PA7);
+
+//i2c
+mcuI2c  i2c1(I2C1, &PB6, &PB7);
+mcuI2c  i2c2(I2C2, &PB10, &PB11);
+SoftI2c si2c(&PA4, &PA5);
+SoftI2c si2c1(&PB6, &PB7);
+SoftI2c si2c2(&PB10, &PB11);
+
 
 
 mcuGpio PA0(GPIOA, GPIO_Pin_0);
@@ -164,8 +180,4 @@ mcuGpio PI5(GPIOI, GPIO_Pin_5);
 mcuGpio PI6(GPIOI, GPIO_Pin_6);
 mcuGpio PI7(GPIOI, GPIO_Pin_7);
 #endif
-//Spi     spi1(SPI1, &PB3, &PB4, &PA7);
-//Spi     spi2(SPI2, &PB13, &PB14, &PB15);
-//Spi     spi3(SPI3, &PB3, &PB4, &PB5);
-//SoftSpi	sspi1(&PA5, &PA6, &PA7);
 

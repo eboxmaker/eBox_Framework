@@ -677,11 +677,6 @@
               <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_encoder.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_i2c.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_i2c.cpp</FilePath>
-            </File>
-            <File>
               <FileName>ebox_iflash.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_iflash.cpp</FilePath>
@@ -700,6 +695,11 @@
               <FileName>ebox_rtc.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_rtc.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_i2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_i2c.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_softi2c.cpp</FileName>
