@@ -37,6 +37,7 @@
 #include "../core/port/ebox_port_gpio.h"
 #include "../core/port/ebox_port_spi.h"
 #include "../core/port/ebox_port_i2c.h"
+#include "../core/port/ebox_vhmi.h"
 #include "Stream.h"
 
 

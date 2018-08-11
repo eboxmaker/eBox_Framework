@@ -51,7 +51,7 @@ typedef enum
 #define GRAY0   0xEF7D   	//»ÒÉ«0 3165 00110 001011 00101
 #define GRAY1   0x8410      	//»ÒÉ«1      00000 000000 00000
 #define GRAY2   0x4208      	//»ÒÉ«2  1111111111011111
-class Lcd 
+class Lcd : public Vhmi
 {
 public:
     uint8_t MADCTL;
@@ -78,14 +78,15 @@ public:
     void row_order(uint8_t order);
 
     void set_xy(u16 x, u16 y);
-    void draw_pixel(u16 x, u16 y, u16 Data);
+    virtual void draw_pixel(uint16_t x, uint16_t y, uint16_t Data);
         
-    void draw_h_line(int x0, int y0, int x1, uint16_t color);
-    void draw_v_line(int x0, int y0, int y1, uint16_t color);
-    void draw_line(u16 x0, u16 y0, u16 x1, u16 y1, uint16_t color);
-    void fill_rect  (int x0, int y0,  int x1, int y1, uint16_t color);
-    void fill_rect  (int x0, int y0,  int x1, int y1, u16 *bitmap);
-    void draw_circle(u16 x, u16 y, u16 r, uint16_t color);
+    virtual void draw_h_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t color);
+    virtual void draw_v_line(uint16_t x0, uint16_t y0, uint16_t y1, uint16_t color);
+    virtual void draw_line(u16 x0, u16 y0, u16 x1, u16 y1, uint16_t color);
+    virtual void fill_rect  (uint16_t x0, uint16_t y0,  uint16_t x1, uint16_t y1, uint16_t color);
+    virtual void fill_rect  (uint16_t x0, uint16_t y0,  uint16_t x1, uint16_t y1, u16 *bitmap);
+    virtual void fill_screen(uint16_t color);
+    virtual void draw_circle(u16 x, u16 y, u16 r, uint16_t color);
 
     
     

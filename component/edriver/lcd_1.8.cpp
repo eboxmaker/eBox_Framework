@@ -149,7 +149,7 @@ void Lcd::draw_pixel(u16 x, u16 y, u16 Data)
 入口参数：无
 返回值：无
 *************************************************/
-void Lcd::draw_h_line(int x0, int y0, int x1, uint16_t color)
+void Lcd::draw_h_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t color)
 {
     set_region(x0, y0, x1, y0);
     for (; x0 <= x1; x0++)
@@ -164,7 +164,7 @@ void Lcd::draw_h_line(int x0, int y0, int x1, uint16_t color)
 入口参数：无
 返回值：无
 *************************************************/
-void Lcd::draw_v_line(int x0, int y0,  int y1, uint16_t color)
+void Lcd::draw_v_line(uint16_t x0, uint16_t y0,  uint16_t y1, uint16_t color)
 {
     set_region(x0, y0, x0, y1);
 
@@ -173,7 +173,8 @@ void Lcd::draw_v_line(int x0, int y0,  int y1, uint16_t color)
         write_data_16bit(color);
     }
 }
-void Lcd::fill_rect(int x0, int y0,  int x1, int y1, uint16_t color)
+
+void Lcd::fill_rect(uint16_t x0, uint16_t y0,  uint16_t x1, uint16_t y1, uint16_t color)
 {
     uint16_t i = 0;
     uint8_t dx, dy;
@@ -186,7 +187,7 @@ void Lcd::fill_rect(int x0, int y0,  int x1, int y1, uint16_t color)
         write_data_16bit(color);
     }
 }
-void Lcd::fill_rect(int x0, int y0,  int x1, int y1, uint16_t *bitmap)
+void Lcd::fill_rect(uint16_t x0, uint16_t y0,  uint16_t x1, uint16_t y1, uint16_t *bitmap)
 {
     uint16_t i = 0;
     uint8_t dx, dy;
@@ -199,6 +200,16 @@ void Lcd::fill_rect(int x0, int y0,  int x1, int y1, uint16_t *bitmap)
         write_data_16bit(bitmap[i]);
     }
 
+}
+void Lcd::fill_screen(uint16_t color)
+{
+    unsigned int i;
+    set_region(0, 0, X_MAX_PIXEL - 1, Y_MAX_PIXEL - 1);
+    write_index(0x2C);
+    for(i = 0; i < X_MAX_PIXEL * Y_MAX_PIXEL; i++)
+    {
+        write_data_16bit(color);
+    }
 }
 
 //画线函数，使用Bresenham 画线算法
