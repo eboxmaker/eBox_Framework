@@ -6,6 +6,43 @@
 *
 **********************************************************************
 */
+void GUI::draw_circle(uint16_t x0, uint16_t y0, uint16_t r)
+{
+   
+    int16_t f = 1 - r;
+    int16_t ddF_x = 1;
+    int16_t ddF_y = -2 * r;
+    int16_t x = 0;
+    int16_t y = r;
+
+    draw_pixel(x0  , y0+r);
+    draw_pixel(x0  , y0-r);
+    draw_pixel(x0+r, y0  );
+    draw_pixel(x0-r, y0  );
+
+    while (x<y) 
+    {
+        if (f >= 0) 
+        {
+            y--;
+            ddF_y += 2;
+            f += ddF_y;
+        }
+        x++;
+        ddF_x += 2;
+        f += ddF_x;
+
+        draw_pixel(x0 + x, y0 + y);
+        draw_pixel(x0 - x, y0 + y);
+        draw_pixel(x0 + x, y0 - y);
+        draw_pixel(x0 - x, y0 - y);
+        draw_pixel(x0 + y, y0 + x);
+        draw_pixel(x0 - y, y0 + x);
+        draw_pixel(x0 + y, y0 - x);
+        draw_pixel(x0 - y, y0 - x);
+    }
+}
+
 void GUI::draw_circle_helper( uint16_t x0, uint16_t y0,
  uint16_t r, uint8_t cornername) {
   int16_t f     = 1 - r;

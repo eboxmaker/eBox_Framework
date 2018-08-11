@@ -74,7 +74,7 @@ Pwm::Pwm(Gpio *pwm_pin,TIM_TypeDef *timer,uint8_t ch)
 void Pwm::begin(uint32_t frq, uint16_t duty)
 {
     this->duty = duty;
-    //init_info(pwm_pin);
+
     pwm_pin->mode(AF_PP,af_timer_x);
 
 
@@ -207,18 +207,25 @@ void Pwm::base_init(uint32_t _period, uint32_t _prescaler)
 {
     this->period = _period;//¸üÐÂperiod
 
-
+    if( TIMx == TIM1 ||
+        TIMx == TIM8 ||
+        TIMx == TIM9 ||
+        TIMx == TIM10 ||
+        TIMx == TIM11 )
+    {
+        TIM_CtrlPWMOutputs(TIMx,ENABLE); 
+    }
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 
     TIM_TimeBaseStructure.TIM_Period = this->period - 1; //ARR
     TIM_TimeBaseStructure.TIM_Prescaler = _prescaler - 1;
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; //
+    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+    TIM_TimeBaseStructure.TIM_RepetitionCounter = 1 ;
     TIM_TimeBaseInit(TIMx, &TIM_TimeBaseStructure);
 
     TIM_ARRPreloadConfig(TIMx, ENABLE);
-
     TIM_Cmd(TIMx, ENABLE); //
-    TIMx->CR1 |= TIM_CR1_CEN;
 
 }
 
@@ -227,7 +234,11 @@ uint32_t Pwm::get_timer_source_clock()
     uint32_t temp = 0;
     uint32_t timer_clock = 0x00;
     
-    if ((uint32_t)this->TIMx == TIM1_BASE)
+    if ((uint32_t)this->TIMx == TIM1_BASE ||
+        (uint32_t)this->TIMx == TIM8_BASE ||
+        (uint32_t)this->TIMx == TIM9_BASE ||
+        (uint32_t)this->TIMx == TIM10_BASE ||
+        (uint32_t)this->TIMx == TIM11_BASE )
     {
         timer_clock = cpu.clock.pclk2;
     }

@@ -174,7 +174,22 @@ mcuGpio PG15(GPIOG, GPIO_Pin_15);
 
 #if (MCU_PINS >= 176)
 
+mcuGpio PH0(GPIOH, GPIO_Pin_0);
+mcuGpio PH1(GPIOH, GPIO_Pin_1);
+mcuGpio PH2(GPIOH, GPIO_Pin_2);
+mcuGpio PH3(GPIOH, GPIO_Pin_3);
+mcuGpio PH4(GPIOH, GPIO_Pin_4);
+mcuGpio PH5(GPIOH, GPIO_Pin_5);
+mcuGpio PH6(GPIOH, GPIO_Pin_6);
+mcuGpio PH7(GPIOH, GPIO_Pin_7);
+mcuGpio PH8(GPIOH, GPIO_Pin_8);
 mcuGpio PH9(GPIOH, GPIO_Pin_9);
+mcuGpio PH10(GPIOH, GPIO_Pin_10);
+mcuGpio PH11(GPIOH, GPIO_Pin_11);
+mcuGpio PH12(GPIOH, GPIO_Pin_12);
+mcuGpio PH13(GPIOH, GPIO_Pin_13);
+mcuGpio PH14(GPIOH, GPIO_Pin_14);
+mcuGpio PH15(GPIOH, GPIO_Pin_15);
 
 mcuGpio PI5(GPIOI, GPIO_Pin_5);
 mcuGpio PI6(GPIOI, GPIO_Pin_6);

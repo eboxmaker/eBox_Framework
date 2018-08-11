@@ -20,8 +20,18 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "ebox.h"
-#include  "cjson.h"
-#include "heap.h"
+#include "bsp_ebox.h"
+
+#include  "../cjson/cjson.h"
+/**
+	*	1	此例程演示了cJson使用方法
+	*/
+	
+
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"cJSON example"
+#define EXAMPLE_DATE	"2018-08-11"
+
 /* Parse text to JSON, then render back to text, and print! */
 void doit(char *text)
 {
@@ -137,15 +147,11 @@ char *xx;
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
-    uart1.printf("j:%d\r\n",ebox_get_free());
-    uart1.printf("j:%d\r\n",ebox_get_free());
-//    uart1.printf("1：%d\r\n",mem_get_free_size(EN_SRAM_IN));
-//	xx = (char *)mem_malloc(1024,EN_SRAM_IN);
-//    uart1.printf("2：%d\r\n",mem_get_free_size(EN_SRAM_IN));
-//	xx = (char *)mem_malloc(1024,EN_SRAM_IN);
-//    uart1.printf("2：%d\r\n",mem_get_free_size(EN_SRAM_IN));
+    UART.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    uart1.printf("free:%d\r\n",ebox_get_free());
 
+    
     PB8.mode(OUTPUT_PP);
 	struct record fields[2]={
 		{"zip",37.7668,-1.223959e+2,"","SAN FRANCISCO","CA","94107","US"},
@@ -167,21 +173,15 @@ void setup()
 	}
 	
 /*	cJSON_ReplaceItemInObject(cJSON_GetArrayItem(root,1),"City",cJSON_CreateIntArray(ids,4)); */
-    uart1.printf("j:%d\r\n",ebox_get_free());
+    uart1.printf("free:%d\r\n",ebox_get_free());
 //	out = (char *)cjson_malloc(1000);
 	out=cJSON_Print(root);	
     cJSON_Delete(root);	
     uart1.printf("%s\n",out);	
-    uart1.printf("j:%d\r\n",ebox_get_free());
+    uart1.printf("free:%d\r\n",ebox_get_free());
     ebox_free(out);
-    uart1.printf("j:%d\r\n",ebox_get_free());
+    uart1.printf("free:%d\r\n",ebox_get_free());
 	
-	for(;;)
-	{
-        uart1.printf_length("123456789\r\n",11);
-        delay_ms(500);
-    uart1.printf("j:%d\r\n",ebox_get_free());
-	}
 }
 
 
@@ -190,6 +190,8 @@ int main(void)
     setup();
     while(1)
     {
+        delay_ms(500);
+        uart1.printf("free:%d\r\n",ebox_get_free());
 
     }
 

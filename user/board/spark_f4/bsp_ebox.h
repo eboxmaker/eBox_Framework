@@ -20,22 +20,24 @@
 #ifndef __BSP_EBOX_H
 #define __BSP_EBOX_H
 #include "ebox.h"
-
-
+#include "w5500.h"
+#include "button.h"
+#include "led.h"
 #define	HARDWARE	"ebox_spark£¬STM32F407IGT6"
 
-//extern mcuGpio LED1;
-//extern mcuGpio LED2;
-//extern mcuGpio LED3;
 
-//extern mcuGpio BtnPin;
-//extern Uart 	 UART;
+extern mcuSpi spi_w5500;
+extern W5500 w5500;
+extern Button btn;
+extern Led     led1;
+extern Led     led2;
+extern Led     led3;
 
-#define LED1 PB8
-#define LED2 PB9
-#define LED3 PB10
+#define LED1 PI5
+#define LED2 PI6
+#define LED3 PI7
 
-#define BtnPin	PA8
+#define BtnPin	PH15
 #define	UART    uart1
 
 #define	ADC_0   PA0
