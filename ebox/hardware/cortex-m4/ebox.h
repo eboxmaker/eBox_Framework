@@ -28,28 +28,27 @@
 
 #include "ebox_gpio.h"
 #include "ebox_adc.h"
-//#include "ebox_can.h"
+//#include "ebox_dac.h"
 //#include "ebox_exti.h"
 #include "ebox_timer.h"
-//#include "ebox_pwm.h"
+#include "ebox_pwm.h"
+#include "ebox_i2c.h"
+#include "ebox_spi.h"
+#include "ebox_uart.h"
 //#include "ebox_in_capture.h"
 //#include "ebox_encoder.h"
-//#include "ebox_i2c.h"
-//#include "ebox_spi.h"
-#include "ebox_uart.h"
 //#include "ebox_rtc.h"
 //#include "ebox_iflash.h"
-//#include "ebox_dac.h"
 #include "ebox_wdg.h"
 #include "ebox_iflash.h"
 //#include "ebox_slave_spi.h"
+//#include "ebox_can.h"
 
 #include "stdio.h"
 
 extern "C"{
     
 void ebox_init(void);
-void ebox_printf_flush(void);
 }
 
 
@@ -60,17 +59,17 @@ extern Uart uart3;
 //extern Uart uart4;
 //extern Uart uart5;
 
-//extern mcuSpi spi1;
-//extern mcuSpi spi2;
-//extern SoftSpi sspi1;
-//extern SoftSpi sspi2;
-//extern SlaveSpi slave_spi1;
 
-//extern mcuI2c i2c1;
-//extern mcuI2c i2c2;
-//extern SoftI2c si2c;
-//extern SoftI2c si2c1;
-//extern SoftI2c si2c2;
+extern mcuSpi spi1;
+extern mcuSpi spi2;
+extern SoftSpi sspi1;
+extern SoftSpi sspi2;
+
+extern mcuI2c i2c1;
+extern mcuI2c i2c2;
+extern SoftI2c si2c;
+extern SoftI2c si2c1;
+extern SoftI2c si2c2;
 
 //extern Can can1;
 
