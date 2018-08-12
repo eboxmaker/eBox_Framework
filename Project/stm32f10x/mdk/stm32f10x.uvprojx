@@ -766,6 +766,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\Button.cpp</FilePath>
             </File>
+            <File>
+              <FileName>w25x16.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\w25x16.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

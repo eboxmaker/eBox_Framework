@@ -61,6 +61,10 @@ private:
     uint8_t     current_dev_num;
     SPI_TypeDef *spi;
     uint8_t     busy;
+
+    Gpio *sck;
+    Gpio *miso;
+    Gpio *mosi;
 };
 /*
 	注意：1.该类的SPI_CLOCK_DIV是由delay_us延时函数控制。略有不准，比硬件SPI会慢很多

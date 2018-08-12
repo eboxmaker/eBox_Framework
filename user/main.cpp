@@ -5,6 +5,7 @@
   * @version V1.2
   * @date    2016/08/14
   * @brief   ebox application example .
+	*					 2018-8-5	通过引入bsp，定义硬件端口，方便例程可以在不同平台上运行 
   ******************************************************************************
   * @attention
   *
@@ -16,42 +17,33 @@
   ******************************************************************************
   */
 
-
-/* Includes ------------------------------------------------------------------*/
-
-
 #include "ebox.h"
 #include "bsp_ebox.h"
 
+/**
+	*	1	通过串口打印消息
+	*/
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"exti example"
-#define EXAMPLE_DATE	"2018-08-08"
+#define EXAMPLE_NAME	"hello world example"
+#define EXAMPLE_DATE	"2018-08-06"
 
-uint32_t xx;
-
-//创建一个外部中断对象，链接PA8，中断触发模式为下降沿触发
-Exti ex(&BtnPin, FALLING);
-
-void exit()//外部中断事件
-{
-    xx++;
-    uart1.printf("\r\nxx = %d", xx);
-}
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
+    UART.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
 
-    ex.begin();//初始化外部中断
-    ex.attach(exit);//绑定外部中断触发事件
-    ex.interrupt(ENABLE);//使能外部中断
 }
 int main(void)
 {
     setup();
     while(1)
     {
-        ;
+        UART.printf("hello World !\r\n");
+        delay_ms(1000);
     }
 }
+
+
+
+
