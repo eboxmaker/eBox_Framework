@@ -2,6 +2,7 @@
 
 
   
+//设备->中断号查询表
 const DevToIRQn_t dev_to_IRQn_table[] = 
 {
     {TIM1_BASE,TIM1_UP_IRQn,TIM1_BRK_IRQn,TIM1_TRG_COM_IRQn,TIM1_CC_IRQn},
@@ -69,8 +70,13 @@ const DevToIRQn_t dev_to_IRQn_table[] =
     #endif
     
 };
+/**
+ *@name     void nvic_priority_group_config(uint32_t NVIC_PriorityGroup)
+ *@brief    中断优先级分组配置
+ *@param    NVIC_PriorityGroup :  NVIC_PriorityGroup_2是默认分组方案，0-3抢占式优先级，0-3的从优先级
+ *@retval   NONE
+*/
 #define AIRCR_VECTKEY_MASK    ((uint32_t)0x05FA0000)
-
 void nvic_priority_group_config(uint32_t NVIC_PriorityGroup)
 {
   /* Check the parameters */
@@ -80,6 +86,13 @@ void nvic_priority_group_config(uint32_t NVIC_PriorityGroup)
   SCB->AIRCR = AIRCR_VECTKEY_MASK | NVIC_PriorityGroup;
 }
 
+/**
+ *@name     static IRQn_Type dev_to_irqn(uint32_t dev,uint8_t index)
+ *@brief    根据设备地址和其对应的第几个中断索引，查找出对应的中断号
+ *@param    dev  :  设备地址，如(uint32_t)TIM1,(uint32_t)USART1,(uint32_t)SPI1等等
+            index:  设备的第几个中断入口。最大支持4个，即0-3，一般设备只有一个，即可填0
+ *@retval   中断号
+*/
 static IRQn_Type dev_to_irqn(uint32_t dev,uint8_t index)
 {
     int i;
@@ -96,6 +109,16 @@ static IRQn_Type dev_to_irqn(uint32_t dev,uint8_t index)
 
 
 
+//按照设备基地址设置其中断优先级。index针对一个外设有N个中断入口的第几个中断入口
+/**
+ *@name     void nvic_dev_set_priority(uint32_t dev, uint8_t index , uint8_t PreemptionPriority,uint8_t SubPriority) 
+ *@brief    根据设备地址和其对应的第几个中断索引，设置对应的中断号的主从优先级
+ *@param    dev  :  设备地址，如(uint32_t)TIM1,(uint32_t)USART1,(uint32_t)SPI1等等
+            index:  设备的第几个中断入口。最大支持4个，即0-3，一般设备只有一个，即可填0
+            PreemptionPriority:     抢占式优先级0-3
+            SubPriority:            从优先级0-3
+ *@retval   NONE
+*/
 void nvic_dev_set_priority(uint32_t dev, uint8_t index , uint8_t PreemptionPriority,uint8_t SubPriority) 
 {
     
@@ -113,12 +136,26 @@ void nvic_dev_set_priority(uint32_t dev, uint8_t index , uint8_t PreemptionPrior
     NVIC->IP[irq_num] = tmppriority;
 }
 
+/**
+ *@name     void nvic_dev_enable(uint32_t dev,uint8_t index)  
+ *@brief    开启设备地址和索引对应的中断号的中断
+ *@param    dev  :  设备地址，如(uint32_t)TIM1,(uint32_t)USART1,(uint32_t)SPI1等等
+            index:  设备的第几个中断入口。最大支持4个，即0-3，一般设备只有一个，即可填0
+ *@retval   NONE
+*/
 void nvic_dev_enable(uint32_t dev,uint8_t index) 
 {
     IRQn_Type irq_num = dev_to_irqn(dev,index);
     NVIC->ISER[irq_num / 32] = bit_shift(irq_num % 32);
 }
 
+/**
+ *@name     void nvic_dev_enable(uint32_t dev,uint8_t index)  
+ *@brief    关闭设备地址和索引对应的中断号的中断
+ *@param    dev  :  设备地址，如(uint32_t)TIM1,(uint32_t)USART1,(uint32_t)SPI1等等
+            index:  设备的第几个中断入口。最大支持4个，即0-3，一般设备只有一个，即可填0
+ *@retval   NONE
+*/
 void nvic_dev_disable(uint32_t dev,uint8_t index) 
 {
     IRQn_Type irq_num = dev_to_irqn(dev,index);
@@ -132,6 +169,15 @@ void nvic_dev_disable(uint32_t dev,uint8_t index)
 
 
 
+//直接输入中断号设置其中断优先级
+/**
+ *@name     void nvic_irq_set_priority(IRQn_Type irq_num, uint8_t PreemptionPriority,uint8_t SubPriority) 
+ *@brief    设置中断号的主从优先级
+ *@param    irq_num     :  中断号，如TIM2_IRQn,USART1_IRQn
+            PreemptionPriority:     抢占式优先级0-3
+            SubPriority:            从优先级0-3
+ *@retval   NONE
+*/
 void nvic_irq_set_priority(IRQn_Type irq_num, uint8_t PreemptionPriority,uint8_t SubPriority) 
 {
     
@@ -146,13 +192,25 @@ void nvic_irq_set_priority(IRQn_Type irq_num, uint8_t PreemptionPriority,uint8_t
     tmppriority = tmppriority << 0x04;
         
     NVIC->IP[irq_num] = tmppriority;
-
 }
+
+/**
+ *@name     void nvic_dev_enable(uint32_t dev,uint8_t index)  
+ *@brief    开启中断号的中断
+ *@param    irq_num     :  中断号，如TIM2_IRQn,USART1_IRQn
+ *@retval   NONE
+*/
 void nvic_irq_enable(IRQn_Type irq_num) 
 {
     NVIC->ISER[irq_num / 32] = bit_shift(irq_num % 32);
 }
 
+/**
+ *@name     void nvic_dev_enable(uint32_t dev,uint8_t index)  
+ *@brief    关闭中断号的中断
+ *@param    irq_num     :  中断号，如TIM2_IRQn,USART1_IRQn
+ *@retval   NONE
+*/
 void nvic_irq_disable(IRQn_Type irq_num) 
 {
     NVIC->ICER[irq_num / 32] = bit_shift(irq_num % 32);

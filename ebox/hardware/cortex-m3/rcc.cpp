@@ -10,6 +10,8 @@ typedef struct
     uint32_t rcc;
 
 }DevToRcc_t;
+
+//外设->时钟源查询表
 static const DevToRcc_t dev_to_rcc_table[] = 
 {
     {GPIOA_BASE,RCC_APB2Periph_GPIOA},
@@ -52,6 +54,14 @@ static const DevToRcc_t dev_to_rcc_table[] =
     {UART4_BASE,RCC_APB1Periph_UART4},
     {UART5_BASE,RCC_APB1Periph_UART5}
 };
+
+/**
+ *@name     void rcc_clock_cmd(uint32_t dev, FunctionalState state)
+ *@brief    根据设备地址开启或关闭时钟
+ *@param    dev  :  设备地址，如(uint32_t)TIM1,(uint32_t)USART1,(uint32_t)SPI1等等
+            state:  ENABLE(开启时钟) 或者 DISABLE(关闭时钟)
+ *@retval   NONE
+*/
 void rcc_clock_cmd(uint32_t dev, FunctionalState state)
 {
     uint32_t rcc;

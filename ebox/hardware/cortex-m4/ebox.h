@@ -29,7 +29,7 @@
 #include "ebox_gpio.h"
 #include "ebox_adc.h"
 //#include "ebox_dac.h"
-//#include "ebox_exti.h"
+#include "ebox_exti.h"
 #include "ebox_timer.h"
 #include "ebox_pwm.h"
 #include "ebox_i2c.h"

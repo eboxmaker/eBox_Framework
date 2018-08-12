@@ -24,10 +24,6 @@
     #include "ebox.h"
 #endif
 
-#define TIMxCH1 0x01
-#define TIMxCH2 0x02
-#define TIMxCH3 0x03
-#define TIMxCH4 0x04
 
 
 
