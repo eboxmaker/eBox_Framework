@@ -1,8 +1,8 @@
-/**
+ /**
   ******************************************************************************
-  * @file    pwm.cpp
+  * @file    main.cpp
   * @author  shentq
-  * @version V2.0
+  * @version V1.2
   * @date    2016/08/14
   * @brief   ebox application example .
   ******************************************************************************
@@ -22,49 +22,36 @@
 
 #include "ebox.h"
 #include "bsp_ebox.h"
-/**
-	*	1	此例程演示了PWM操作
-	*	2	PWM输出频率1Khz,占空比可调的矩形波
-	*	3	实际运行时LED渐变
-	*   4	可用资源请参考ebox_pwm.h说明
-	*/
-	
 
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"PWM example"
+#define EXAMPLE_NAME	"exti example"
 #define EXAMPLE_DATE	"2018-08-08"
 
+uint32_t xx;
 
-float x;
-uint16_t y;
-Pwm pwm1(&LED2,TIM8,2);//F4系列PWM接口
+//创建一个外部中断对象，链接PA8，中断触发模式为下降沿触发
+Exti ex(&BtnPin, FALLING);
 
+void exit()//外部中断事件
+{
+    xx++;
+    uart1.printf("\r\nxx = %d", xx);
+}
 void setup()
 {
     ebox_init();
-    UART.begin(115200);
+    uart1.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-    led1.begin();
-    led1.off();
-    pwm1.begin(1000, 500);
-    pwm1.set_oc_polarity(1);//set output polarity after compare
-    UART.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
-    UART.printf("max frq = %f\r\n",pwm1.get_accuracy());
-    
+
+    ex.begin();//初始化外部中断
+    ex.attach(exit);//绑定外部中断触发事件
+    ex.interrupt(ENABLE);//使能外部中断
 }
 int main(void)
 {
     setup();
     while(1)
     {
-        x = x + PI * 0.01;
-        if(x >= PI)x = 0;
-        y = 2000 - (sin(x) + 1) * 1000;
-        pwm1.set_duty(y);
-        delay_ms(10);
+        ;
     }
 }
-
-
-
-

@@ -19,9 +19,9 @@ void DACCLASS::begin()
 		case DAC1:	   
     {
 			GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
-      GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;//模拟输入
-      GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;//下拉
-      GPIO_Init(GPIOA, &GPIO_InitStructure);//初始化
+          GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;//模拟输入
+          GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;//下拉
+          GPIO_Init(GPIOA, &GPIO_InitStructure);//初始化
 			
 	    DAC_InitType.DAC_Trigger=DAC_Trigger_None;	//不使用触发功能 TEN1=0
 	    DAC_InitType.DAC_WaveGeneration=DAC_WaveGeneration_None;//不使用波形发生

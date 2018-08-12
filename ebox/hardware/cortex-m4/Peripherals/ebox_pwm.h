@@ -42,7 +42,10 @@
  *      *修复了芯片主频变动导致定时器PWM频率变化的bug，支持任意主频下正常工作
  *      *增加了get_timer_source_clock(),get_max_frq(),get_accuracy()三个函数接口
  */
- 
+#define TIMxCH1 0x01
+#define TIMxCH2 0x02
+#define TIMxCH3 0x03
+#define TIMxCH4 0x04
 class Pwm
 {
 public:

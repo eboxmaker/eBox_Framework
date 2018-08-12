@@ -5,6 +5,13 @@ static uint32_t dma_irq_ids[DMA_NUM] = {0, 0, 0,0,0,0,0};
 static DmaIrqHandler_t irq_handler;
 
 
+
+/**
+ *@name     Dma::Dma(DMA_Stream_TypeDef* DMAy_Streamx)
+ *@brief    Dma构造函数，传递DMAxStreamx参数和中断指针
+ *@param    DMAy_Streamx :  DMA1_Stream0
+ *@retval   NONE
+*/
 Dma::Dma(DMA_Channel_TypeDef* DMAy_Channelx)
 {
     int index;
@@ -14,6 +21,12 @@ Dma::Dma(DMA_Channel_TypeDef* DMAy_Channelx)
     dma_irq_handler(index, Dma::_irq_handler, (uint32_t)this);
 
 }
+/**
+ *@name     void Dma::rcc_enable()
+ *@brief    开启Dma时钟
+ *@param    NONE
+ *@retval   NONE
+*/
 void Dma::rcc_enable()
 {
     switch((uint32_t)DMAy_Channelx)
@@ -36,6 +49,12 @@ void Dma::rcc_enable()
         #endif
     }
 }
+/**
+ *@name     void Dma::rcc_disable()
+ *@brief    关闭Dma时钟
+ *@param    NONE
+ *@retval   NONE
+*/
 void Dma::rcc_disable()
 {
     switch((uint32_t)DMAy_Channelx)
@@ -59,6 +78,15 @@ void Dma::rcc_disable()
     }
 }
 
+
+/**
+ *@name     void Dma::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
+ *@brief    Dma中断的优先级和允许位设置
+ *@param    enable              :  ENABLE or DISABLE
+            preemption_priority :  0-3
+            sub_priority        :  0-3
+ *@retval   NONE
+*/
 void Dma::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
     nvic_dev_set_priority((uint32_t)DMAy_Channelx,0,0,0);
@@ -68,6 +96,14 @@ void Dma::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_
         nvic_dev_disable((uint32_t)DMAy_Channelx,0);
 
 }
+
+
+/**
+ *@name     void Dma::interrupt(DmaIrqType DMA_IT,FunctionalState enable)
+ *@param    DMA_IT  :  中断类型，DmaItTc or DmaItHt
+            enable  : ENABLE or DISABLE
+ *@retval   NONE
+*/
 void Dma::interrupt(DmaIrqType DMA_IT,FunctionalState enable)
 {
     if(DMA_IT == DmaItTc)
@@ -80,31 +116,71 @@ void Dma::interrupt(DmaIrqType DMA_IT,FunctionalState enable)
 }
 
 
+/**
+ *@name     void Dma::deInit()
+ *@brief    Dma传输设置为默认值
+ *@param    NONE
+ *@retval   NONE
+*/
 void Dma::deInit()
 {
     DMA_DeInit(DMAy_Channelx); 
 }
+
+/**
+ *@name     void Dma::init(DMA_InitTypeDef* DMA_InitStruct)
+ *@brief    Dma传输设置为DMA_InitStruct
+ *@param    DMA_InitStruct  :  初始化结构体
+ *@retval   NONE
+*/
 void Dma::init(DMA_InitTypeDef* DMA_InitStruct)
 {
     DMA_Init(DMAy_Channelx,DMA_InitStruct);
 }
 
+
+/**
+ *@name     void Dma::enable()
+ *@brief    Dma开启传输
+ *@param    NONE
+ *@retval   NONE
+*/
 void Dma::enable()
 {
     DMA_Cmd(DMAy_Channelx,ENABLE);
 
 }
+
+/**
+ *@name     void Dma::enable()
+ *@brief    Dma关闭传输
+ *@param    NONE
+ *@retval   NONE
+*/
 void Dma::disable()
 {
     DMA_Cmd(DMAy_Channelx,DISABLE);
 
 }
+
+/**
+ *@name     void Dma::enable()
+ *@brief    获取Dma流信息
+ *@param    NONE
+ *@retval   DMAy_Streamx
+*/
 DMA_Channel_TypeDef* Dma::get_dma_ch()
 {
     return DMAy_Channelx;
 }
 
 
+/**
+ *@name     void Dma::attach(void (*fptr)(void), DmaIrqType type) 
+ *@brief    绑定中断回调函数
+ *@param    NONE
+ *@retval   NONE
+*/
 void Dma::attach(void (*fptr)(void), DmaIrqType type) 
 {
     if (fptr) 

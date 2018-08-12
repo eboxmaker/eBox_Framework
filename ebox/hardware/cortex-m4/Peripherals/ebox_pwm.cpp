@@ -20,10 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_pwm.h"
 
-#define TIMxCH1 0x01
-#define TIMxCH2 0x02
-#define TIMxCH3 0x03
-#define TIMxCH4 0x04
+
 
 Pwm::Pwm(Gpio *pwm_pin,TIM_TypeDef *timer,uint8_t ch)
 {

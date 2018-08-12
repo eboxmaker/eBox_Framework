@@ -34,9 +34,9 @@ mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
 
     for(int i = 0; i <= 15; i ++)
     {
-        if((this->pin >> i) == 0)
+        if(((this->pin >> i) & 0xfffe) == 0)
         {
-            temp2 = i -1;
+            temp2 = i ;
             break;
         }
     }

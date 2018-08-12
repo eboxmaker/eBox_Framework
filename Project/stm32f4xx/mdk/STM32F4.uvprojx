@@ -732,6 +732,11 @@
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_gpio.cpp</FilePath>
             </File>
             <File>
+              <FileName>ebox_exti.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_exti.cpp</FilePath>
+            </File>
+            <File>
               <FileName>ebox_adc.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_adc.cpp</FilePath>

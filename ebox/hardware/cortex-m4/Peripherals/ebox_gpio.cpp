@@ -15,9 +15,9 @@ mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
     temp1 = ((uint32_t)port - AHB1PERIPH_BASE)>>10;
     for(int i = 0; i <= 15; i ++)
     {
-        if((this->pin >> i) == 0)
+        if(((this->pin >> i) & 0xfffe) == 0)
         {
-            temp2 = i -1;
+            temp2 = i ;
             break;
         }
     }
@@ -41,8 +41,7 @@ void mcuGpio::mode(PIN_MODE mode)
         */
         case AIN:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
-            //GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-            //GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
         break;
         
@@ -50,22 +49,16 @@ void mcuGpio::mode(PIN_MODE mode)
         */
         case INPUT:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-            //GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-            //GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
         break;
         
         case INPUT_PD:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-            //GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-            //GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
         break;
             
         case INPUT_PU:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-            //GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-            //GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
         break;
         
@@ -74,21 +67,18 @@ void mcuGpio::mode(PIN_MODE mode)
         case OUTPUT_OD:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
             GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
-            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
         break;
             
         case OUTPUT_OD_PU:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
             GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
-            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
         break;
             
         case OUTPUT_OD_PD:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
             GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
-            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
         break;
             
@@ -96,21 +86,18 @@ void mcuGpio::mode(PIN_MODE mode)
         case OUTPUT_PP:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
             GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
         break;
         
         case OUTPUT_PP_PU:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
             GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
         break;
         
         case OUTPUT_PP_PD:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
             GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
         break;
         
@@ -120,53 +107,46 @@ void mcuGpio::mode(PIN_MODE mode)
         case AF_OD:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
             GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
-            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
         break;
             
         case AF_OD_PU:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
             GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
-            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
         break;
             
         case AF_OD_PD:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
             GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
-            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
         break;
             
         case AF_PP:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
             GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
        break;
         
         case AF_PP_PU:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
             GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
        break;
         
         case AF_PP_PD:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
             GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
        break;
         /* if parament is other mode,set as INPUT mode
         */
        default:
             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-            //GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-            //GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
             GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
             break;
     }
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
     GPIO_Init(this->port, &GPIO_InitStructure);   //³õÊ¼»¯GPIOC¶Ë¿Ú
 }
 void mcuGpio::mode(PIN_MODE mode,uint8_t af_configration)
