@@ -58,7 +58,7 @@ int Flash::write(uint32_t iAddress, uint8_t *buf, uint32_t iNbrToWrite)
     uint16_t secoff;
     uint16_t secremain;
     uint16_t i = 0;
-    static uint8_t tmp[FLASH_PAGE_SIZE];
+    uint8_t *tmp = (uint8_t *)ebox_malloc(FLASH_PAGE_SIZE);
     volatile FLASH_Status FLASHStatus = FLASH_COMPLETE;
 
     FLASH_UnlockBank1();
@@ -105,6 +105,7 @@ int Flash::write(uint32_t iAddress, uint8_t *buf, uint32_t iNbrToWrite)
         }
 
     }
+    ebox_free(tmp);
 
     FLASH_LockBank1();
     return iNbrToWrite;

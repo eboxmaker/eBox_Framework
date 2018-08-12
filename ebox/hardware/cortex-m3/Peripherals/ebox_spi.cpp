@@ -24,14 +24,18 @@ mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 {
     busy = 0;
     spi = SPIx;
-    sck->mode(AF_PP);
-    miso->mode(AF_PP);
-    mosi->mode(AF_PP);
+    this->sck = sck;
+    this->miso = miso;
+    this->mosi = mosi;
 
 };
 
 void mcuSpi::begin(SpiConfig_t *spi_config)
 {
+    sck->mode(AF_PP);
+    miso->mode(AF_PP);
+    mosi->mode(AF_PP);
+
     rcc_clock_cmd((uint32_t)spi,ENABLE);
     config(spi_config);
 }

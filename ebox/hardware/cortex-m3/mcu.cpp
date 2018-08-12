@@ -142,7 +142,6 @@ extern "C" {
         cpu.chip_id[0] = *(__IO uint32_t *)(0X1FFFF7F0); //高字节
 
         cpu.flash_size = *(uint16_t *)(0x1FFFF7E0);   //芯片flash容量
-        
         millis_seconds = 0;
         SysTick->VAL = 0;
         //统计cpu计算能力//////////////////

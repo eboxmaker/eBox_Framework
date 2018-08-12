@@ -76,7 +76,7 @@ void *ebox_malloc( size_t xWantedSize )
     
     if(end_block[0] == NULL)
     {
-        ebox_heap_init((void *)MCU_SRAM_BEGIN,(void *)MCU_SRAM_END);
+        ebox_heap_init((void *)MCU_HEAP_BEGIN,(void *)MCU_HEAP_END);
     }
         
         
@@ -248,9 +248,13 @@ static void insert_block_into_freeList( eboxBlockLink_t *pxBlockToInsert)
 
     
 }
-float ebox_mem_usage()
+float ebox_mem_usage(void)
 {
     return (100 - ebox_get_free() * 100.0 / (ram_addr_end - ram_addr_begin));
+}
+float ebox_mem_used(void)
+{
+    return (MCU_HEAP_SIZE - ebox_get_free());
 }
 size_t ebox_get_sram_start_addr(void)
 {

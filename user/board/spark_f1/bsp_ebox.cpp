@@ -50,21 +50,30 @@ void print_log(const char *name,const char *date)
 	UART.printf("\n\r");
 	UART.printf("*************************************************************\n\r");
 	UART.printf("* \r\n");	/* 打印一行空格 */
-	UART.printf("* 例程名称   : %s\r\n",name);	/* 打印例程名称 */
-	UART.printf("* 发布日期   : %s\r\n", date);	/* 打印例程日期 */
+	UART.printf("* 例程名称      : %s\r\n",name);	/* 打印例程名称 */
+	UART.printf("* 发布日期      : %s\r\n", date);	/* 打印例程日期 */
 
-	UART.printf("* 硬件平台   : %s \r\n",HARDWARE);
-	UART.printf("* EBOX库版本 : %s (ebox)\r\n", EBOX_VERSION);
+	UART.printf("* 硬件平台      : %s \r\n",HARDWARE);
+	UART.printf("* EBOX库版本    : %s (ebox)\r\n", EBOX_VERSION);
 	UART.printf("* \r\n");	/* 打印一行空格 */
 	UART.printf("*                     CPU 信息\r\n");	/* 打印一行空格 */
 	UART.printf("* \r\n");	/* 打印一行空格 */
-	UART.printf("* CPUID      : %08X %08X %08X\n\r"
+	UART.printf("* CPUID         : %08X %08X %08X\n\r"
 			, cpu.chip_id[2], cpu.chip_id[1], cpu.chip_id[0]);
-	UART.printf("* flash size : %d KB \r\n",cpu.flash_size);
-	UART.printf("* core       : %dMhz\r\n",cpu.clock.core/1000000);
-    UART.printf("* hclk       : %dMhz\r\n",cpu.clock.hclk/1000000);
-    UART.printf("* pclk1      : %dMhz\r\n",cpu.clock.pclk1/1000000);
-    UART.printf("* pclk2      : %dMhz\r\n",cpu.clock.pclk2/1000000);
+	UART.printf("* core          : %0.3fMhz\r\n",cpu.clock.core/1000000.0);
+    UART.printf("* hclk          : %0.3fMhz\r\n",cpu.clock.hclk/1000000.0);
+    UART.printf("* pclk1         : %0.3fMhz\r\n",cpu.clock.pclk1/1000000.0);
+    UART.printf("* pclk2         : %0.3fMhz\r\n",cpu.clock.pclk2/1000000.0);
+    
+	UART.printf("* flash size    : %d    \tKB \r\n",cpu.flash_size);
+	UART.printf("* flash used    : %0.3f \tKB\r\n",MCU_FLASH_USED/1024.0);	/* 打印一行空格 */   
+	UART.printf("* flash remaind : %0.3f \tKB\r\n",MCU_FLASH_REMAIND/1024.0);	/* 打印一行空格 */ 
+    
+	UART.printf("* mem size      : %0.3f \tKB \r\n",MCU_SRAM_SIZE/1024.0);
+	UART.printf("* mem used      : %0.3f \tKB\r\n",MCU_SRAM_USED/1024.0);	/* 打印一行空格 */   
+	UART.printf("* mem remaind   : %0.3f \tKB\r\n",MCU_SRAM_REMAIND/1024.0);	/* 打印一行空格 */   
+	UART.printf("* heap used     : %0.3f \tKB\r\n",ebox_mem_used()/1024.0);	/* 打印一行空格 */   
+	UART.printf("* heap free     : %0.3f \tKB\r\n",ebox_get_free()/1024.0);	/* 打印一行空格 */   
 	UART.printf("* \r\n");	/* 打印一行空格 */
 	UART.printf("*************************************************************\n\r");
 }

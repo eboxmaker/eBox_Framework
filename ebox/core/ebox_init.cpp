@@ -5,7 +5,7 @@
 void ebox_init(void)
 {
     #ifdef __CC_ARM
-        ebox_heap_init((void*)MCU_SRAM_BEGIN, (void*)MCU_SRAM_END);
+        ebox_heap_init((void*)MCU_HEAP_BEGIN, (void*)MCU_HEAP_END);
     #elif __ICCARM__
         ebox_heap_init(__segment_end("HEAP"), (void*)MCU_SRAM_END);
     #else

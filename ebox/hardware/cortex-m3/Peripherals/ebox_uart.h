@@ -118,9 +118,9 @@ private:
     Gpio                *_rx_pin;
     char                *data_ptr;
     uint8_t             use_dma;
+    Dma                 *dma_tx;
     uint16_t            dma_write(const char *str, uint16_t length);
     void                set_busy();
-    Dma                 *dma_tx;
 
 protected:
     FunctionPointer _irq[2];

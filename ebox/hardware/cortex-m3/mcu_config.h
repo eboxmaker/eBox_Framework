@@ -26,7 +26,6 @@ STM32F051R6     LQFP 64     48      32      4
 STM32F051R8     LQFP 64     48      64      8
 
 MCU_TYPE        MCU_PINS   CLOCK    FLASH   RAM     
-STM32F103C8T6    48         72      64K     20K     
 STM32F103C4      48         72      16      6
 STM32F103C6      48         72      32      10
 STM32F103C8      48         72      64      20
@@ -90,7 +89,7 @@ STM32F417VG     LQFP 100    168     1024    192
 #define STM32_TYPE    STM32F103C8
 #define STM32_PINS    48 
 #define STM32_FLASH   64
-#define STM32_RAM     12
+#define STM32_RAM     20
 #define STM32_COMPANY "ST\0"
 
 
@@ -116,18 +115,26 @@ STM32F417VG     LQFP 100    168     1024    192
 
 
 //RAM 区域定义
-#define MCU_SRAM_SIZE         STM32_RAM*1024
+#define MCU_SRAM_SIZE   STM32_RAM*1024
+#define MCU_SRAM_BEGIN  0x20000000
+#define MCU_SRAM_END    (MCU_SRAM_BEGIN + MCU_SRAM_SIZE)
 
 
 #ifdef __CC_ARM
     extern int Image$$RW_IRAM1$$ZI$$Limit;
-    #define MCU_SRAM_BEGIN 	(&Image$$RW_IRAM1$$ZI$$Limit)
+    #define MCU_HEAP_BEGIN 	((uint32_t)&Image$$RW_IRAM1$$ZI$$Limit)
 #elif __ICCARM__
     #pragma section="HEAP"
 #else
     extern int __bss_end;
 #endif
-#define MCU_SRAM_END          (0x20000000 + MCU_SRAM_SIZE)
+#define MCU_HEAP_END        MCU_SRAM_END
+#define MCU_HEAP_SIZE       (MCU_HEAP_END - MCU_HEAP_BEGIN)
+
+
+#define MCU_SRAM_USED       (MCU_HEAP_BEGIN - MCU_SRAM_BEGIN)
+#define MCU_SRAM_REMAIND    (MCU_SRAM_END - MCU_HEAP_BEGIN)
+
 
 
 
@@ -141,8 +148,18 @@ STM32F417VG     LQFP 100    168     1024    192
 //FLASH 区域定义
 #define MCU_FLASH_SIZE        STM32_FLASH*1024 
 
-#define MCU_FLASH_BEGIN       0x8000000
-#define MCU_FLASH_END         (0x8000000+MCU_FLASH_SIZE)
+
+#ifdef __CC_ARM
+    extern int SHT$$INIT_ARRAY$$Limit;
+    #define MCU_FLASH_PRG_END 	((uint32_t)&SHT$$INIT_ARRAY$$Limit)
+#endif
+
+#define MCU_FLASH_BEGIN         0x8000000
+#define MCU_FLASH_END           (0x8000000+MCU_FLASH_SIZE)
+
+
+#define MCU_FLASH_USED          (MCU_FLASH_PRG_END - MCU_FLASH_BEGIN)
+#define MCU_FLASH_REMAIND       (MCU_FLASH_END - MCU_FLASH_PRG_END)
 //--------------------------------------------------------
 
 
