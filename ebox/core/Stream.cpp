@@ -24,7 +24,7 @@
 
 #include "Stream.h"
 
-#define PARSE_TIMEOUT 1000  // default number of milli-seconds to wait
+//#define PARSE_TIMEOUT 100  // default number of milli-seconds to wait
 
 // protected method to read stream with timeout
 int Stream::timedRead()
@@ -231,7 +231,8 @@ size_t Stream::readBytesUntil(char terminator, char *buffer, size_t length)
 String Stream::readString()
 {
   String ret;
-  int c = timedRead();
+//  int c = timedRead();
+  int c = read();//优化读取，如果读取为空，则立即返回不用等待
   while (c >= 0)
   {
     ret += (char)c;
@@ -243,7 +244,8 @@ String Stream::readString()
 String Stream::readStringUntil(char terminator)
 {
   String ret;
-  int c = timedRead();
+//  int c = timedRead();
+  int c = read();//优化读取，如果读取为空，则立即返回不用等待
   while (c >= 0 && c != terminator)
   {
     ret += (char)c;
@@ -259,7 +261,7 @@ int Stream::findMulti( struct Stream::MultiTarget *targets, int tCount) {
     if (t->len <= 0)
       return t - targets;
   }
-
+  if(peek() < 0) return -1;//优化读取，如果读取为空，则立即返回不用等待
   while (1) {
     int c = timedRead();
     if (c < 0)

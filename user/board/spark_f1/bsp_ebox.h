@@ -20,18 +20,12 @@
 #ifndef __BSP_EBOX_H
 #define __BSP_EBOX_H
 #include "ebox.h"
+#include "led.h"
 #include "lcd_1.8.h"
 #include "cnc.h"
 #include "button.h"
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
-
-//extern mcuGpio LED1;
-//extern mcuGpio LED2;
-//extern mcuGpio LED3;
-
-//extern mcuGpio BtnPin;
-//extern Uart 	 UART;
 
 #define LED1 PB8
 #define LED2 PB9
@@ -44,6 +38,7 @@
 #define PWMLED  PB8
 
 #define BtnPin	PA8
+
 #define	UART    uart1
 
 #define	ADC_0   PA0
@@ -52,11 +47,19 @@
 
 #define DAC_0   PB8
 
+
+
+extern Button   btnx;
+extern Led      led1;
+extern Led      led2;
+extern Led      led3;
+extern CNC      cnc;
+extern Lcd      lcd;
+
 extern void print_log(const char *name,const char *date);
 
 
-extern CNC cnc;
-extern Lcd lcd;
+
 
 #endif
 

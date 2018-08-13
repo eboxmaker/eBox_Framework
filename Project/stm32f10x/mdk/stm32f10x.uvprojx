@@ -626,6 +626,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\ebox_init.cpp</FilePath>
             </File>
+            <File>
+              <FileName>Stream.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\Stream.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -727,6 +732,11 @@
               <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_uart.cpp</FilePath>
             </File>
             <File>
+              <FileName>ebox_uart_stream.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_uart_stream.cpp</FilePath>
+            </File>
+            <File>
               <FileName>ebox_can.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_can.cpp</FilePath>
@@ -757,9 +767,9 @@
           <GroupName>ebox_driver</GroupName>
           <Files>
             <File>
-              <FileName>lcd_1.8.cpp</FileName>
+              <FileName>LED.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\lcd_1.8.cpp</FilePath>
+              <FilePath>..\..\..\component\edriver\LED.cpp</FilePath>
             </File>
             <File>
               <FileName>Button.cpp</FileName>
@@ -767,9 +777,29 @@
               <FilePath>..\..\..\component\edriver\Button.cpp</FilePath>
             </File>
             <File>
+              <FileName>lcd_1.8.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\lcd_1.8.cpp</FilePath>
+            </File>
+            <File>
               <FileName>w25x16.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\w25x16.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ws2812.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\ws2812.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>WS2812B.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\WS2812B.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>servo.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\servo.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -800,26 +830,6 @@
               <FileName>cJSON.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\component\cJSON\cJSON.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>esp8266</GroupName>
-          <Files>
-            <File>
-              <FileName>ESP8266.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\WiFi\ESP8266.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>esp8266_tcp.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\WiFi\esp8266_tcp.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>esp8266_udp.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\WiFi\esp8266_udp.cpp</FilePath>
             </File>
           </Files>
         </Group>
