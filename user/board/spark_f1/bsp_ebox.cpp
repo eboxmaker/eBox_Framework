@@ -22,6 +22,7 @@
 
 
 Button  btn(&BtnPin,1);
+// ÒÀÀµedriveÄ¿Â¼ÏÂ ledÄ£¿é
 Led     led1(&LED1,0);
 Led     led2(&LED2,0);
 Led     led3(&LED3,0);

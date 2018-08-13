@@ -13,8 +13,8 @@
 
 /**
 	*	1	此例程演示了rgbled显示。依赖colorled，color_convert模块
-	*   2   运行时三个颜色灯轮流显示，跑马灯形式
-    *       b 添加需要的adc通道
+	*   2   方法一演示了RGB模式，表现为跑马灯，蓝，绿，红
+    *   3   方法二，方法三分别演示了HSV和HSL模式，
     *       c begin(),启动adc
     *       d 通过通道号(&PA0)或通道索引(1)读取转换结果
 	*/
@@ -29,9 +29,9 @@
 #include "colorled.h"
 #include "bsp_ebox.h"
 
-COLOR_HSL hsl;
-COLOR_RGB rgb;
-COLOR_HSV hsv;
+COLOR_HSL hsl;  //HSL色彩模式
+COLOR_RGB rgb;  //RGB色彩模式
+COLOR_HSV hsv;  //HSV色彩模式
 
 // 创建rgb led 对象
 ColorLed led(&LED_R, &LED_G, &LED_B);
@@ -78,7 +78,7 @@ int main(void)
         hsl.h++;
         if(hsl.h > 360)hsl.h = 0;
         led.color_hsl(hsl);
-        delay_ms(10);
+        delay_ms(50);
         
         
 

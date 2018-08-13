@@ -1463,6 +1463,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\component\apps\color_convert.cpp</FilePath>
             </File>
+            <File>
+              <FileName>LED.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\LED.cpp</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
