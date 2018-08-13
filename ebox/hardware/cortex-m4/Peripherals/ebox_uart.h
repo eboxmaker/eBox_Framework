@@ -7,7 +7,7 @@
 
 //”√ªß≈‰÷√//////////////
 
-#define UART_NUM (5)
+#define UART_NUM (8)
 
 enum IrqType {
 		RxIrq = 0,
@@ -19,6 +19,9 @@ enum Uart_It_Index{
     NUM_UART3  = 2,
     NUM_UART4  = 3,
     NUM_UART5  = 4,	
+    NUM_UART6  = 5,	
+    NUM_UART7  = 6,	
+    NUM_UART8  = 7,	
 } ; 
 
 typedef void (*uart_irq_handler)(uint32_t id, IrqType type);

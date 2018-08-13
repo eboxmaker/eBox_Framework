@@ -81,7 +81,13 @@ const DevToIRQn_t dev_to_IRQn_table[] =
     
     {UART4_BASE,UART4_IRQn},
     {UART5_BASE,UART5_IRQn},
+    {USART6_BASE,USART6_IRQn}
     
+    
+    #if defined(STM32F427_437xx) || defined(STM32F429_439xx)
+    ,{UART7_BASE,UART7_IRQn}
+    ,{UART8_BASE,UART8_IRQn}
+    #endif
     
 };
 

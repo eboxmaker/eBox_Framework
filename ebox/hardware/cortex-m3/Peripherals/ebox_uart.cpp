@@ -221,7 +221,7 @@ size_t Uart::write(const uint8_t *buffer, size_t size)
 {
     if(size <= 0 ) return 0;
     wait_busy();
-    if((_USARTx == USART1 | _USARTx == USART2 | _USARTx == USART3 ) && (use_dma == 1))
+    if((_USARTx == USART1 || _USARTx == USART2 || _USARTx == USART3 ) && (use_dma == 1))
     {
 //        wait_busy();
         if(data_ptr != NULL)

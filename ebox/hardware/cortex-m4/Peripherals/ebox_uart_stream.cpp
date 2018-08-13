@@ -33,7 +33,7 @@ int UartStream::read()
 }
 int UartStream::availableForWrite(void)
 {
-
+    return 0;
 }
 void UartStream::flush(void)
 {
@@ -42,11 +42,11 @@ void UartStream::flush(void)
 
 size_t UartStream::write(uint8_t c)
 {
-    uart->write(c);
+    return uart->write(c);
 }
 size_t UartStream::write(const uint8_t *buffer, size_t size)
 {
-    uart->write(buffer,size);
+    return uart->write(buffer,size);
 }
 void UartStream::rx_evnet()
 {

@@ -62,6 +62,9 @@ void print_log(const char *name,const char *date)
 	UART.printf("* \r\n");	/* 打印一行空格 */
 	UART.printf("*                     CPU 信息\r\n");	/* 打印一行空格 */
 	UART.printf("* \r\n");	/* 打印一行空格 */
+	UART.printf("* CPU TYPE      : %d\r\n",MCU_TYPE);	/* 打印一行空格 */
+	UART.printf("* CPU PINS      : %d\r\n",STM32_PINS);	/* 打印一行空格 */
+	UART.printf("* CPU COMPANY   : %s\r\n",MCU_COMPANY);	/* 打印一行空格 */
 	UART.printf("* CPUID         : %08X %08X %08X\n\r"
 			, cpu.chip_id[2], cpu.chip_id[1], cpu.chip_id[0]);
 	UART.printf("* core          : %0.3fMhz\r\n",cpu.clock.core/1000000.0);

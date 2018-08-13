@@ -51,7 +51,14 @@ static const DevToRcc_t dev_to_rcc_table[] =
     {USART2_BASE,RCC_APB1Periph_USART2},
     {USART3_BASE,RCC_APB1Periph_USART3},
     {UART4_BASE,RCC_APB1Periph_UART4},
-    {UART5_BASE,RCC_APB1Periph_UART5}
+    {UART5_BASE,RCC_APB1Periph_UART5},
+    {USART6_BASE,RCC_APB2Periph_USART6}
+
+    #if defined(STM32F427_437xx) || defined(STM32F429_439xx)
+    ,{UART7_BASE,RCC_APB1Periph_UART7}
+    ,{UART8_BASE,RCC_APB1Periph_UART8}
+    #endif
+    
 };
 
 

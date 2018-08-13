@@ -26,7 +26,6 @@ STM32F051R6     LQFP 64     48      32      4
 STM32F051R8     LQFP 64     48      64      8
 
 MCU_TYPE        MCU_PINS   CLOCK    FLASH   RAM     
-STM32F103C8T6    48         72      64K     20K     
 STM32F103C4      48         72      16      6
 STM32F103C6      48         72      32      10
 STM32F103C8      48         72      64      20
@@ -86,7 +85,7 @@ STM32F417VE     LQFP 100    168     512     (128+64)
 STM32F417VG     LQFP 100    168     1024    (128+64)
 */
 
-#define STM32_TYPE    STM32F417IG
+#define STM32_TYPE    STM32F417VG
 #define STM32_PINS    176 
 #define STM32_FLASH   1024
 #define STM32_RAM     (128)
@@ -94,28 +93,24 @@ STM32F417VG     LQFP 100    168     1024    (128+64)
 
 
 
-//由于KEIL自身有编译的宏定义会导致此选项无效，所以要更改keil的device选项，选择正确的MCU
-#if !defined (STM32F10X_LD) && !defined (STM32F10X_LD_VL) && !defined (STM32F10X_MD) && !defined (STM32F10X_MD_VL) && !defined (STM32F10X_HD) && !defined (STM32F10X_HD_VL) && !defined (STM32F10X_XL) && !defined (STM32F10X_CL) 
-#if (STM32_FLASH <= 32)
-    #define STM32F10X_LD   
-#elif (STM32_FLASH <= 128)
-    #define STM32F10X_MD   
-#elif (MCU_FLASH <= 1024)
-    #define STM32F10X_HD   
+#if ((STM32_TYPE >= STM32F401CB) && (STM32_TYPE <= STM32F417VG))
+    #define STM32F40_41xxx
 #endif
-#endif
+
 
 
 //------------------抽象层宏定义------------------------
 
 #define MCU_TYPE        STM32_TYPE
 #define MCU_PINS        STM32_PINS
+#define MCU_FLASH       STM32_FLASH  
+#define MCU_RAM         STM32_RAM     
 #define MCU_COMPANY     STM32_COMPANY
 
 
 
 //RAM 区域定义
-#define MCU_SRAM_SIZE   STM32_RAM*1024
+#define MCU_SRAM_SIZE   MCU_RAM*1024
 #define MCU_SRAM_BEGIN  0x20000000
 #define MCU_SRAM_END    (MCU_SRAM_BEGIN + MCU_SRAM_SIZE)
 
@@ -146,7 +141,7 @@ STM32F417VG     LQFP 100    168     1024    (128+64)
 
 
 //FLASH 区域定义
-#define MCU_FLASH_SIZE        STM32_FLASH*1024 
+#define MCU_FLASH_SIZE        MCU_FLASH*1024 
 
 
 #ifdef __CC_ARM
