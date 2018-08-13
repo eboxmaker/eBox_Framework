@@ -12,4 +12,34 @@
 #include "../core/stdFun/Wstring.h"
 
 
+
+//限制某个数的下界
+template<typename T>
+void limit_low(T &num, T limL)
+{
+	if (num < limL)
+	{
+		num = limL;
+	}
+}
+
+//限制某个数的上界
+template<typename T>
+void limit_high(T &num, T limH)
+{
+	if (num > limH)
+	{
+		num = limH;
+	}
+}
+
+
+//限制某个数的上下界
+template<typename T>
+void limit(T &num, T limL, T limH)
+{
+	limit_low(num, limL);
+	limit_high(num, limH);
+}
+
 #endif

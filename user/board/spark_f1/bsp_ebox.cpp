@@ -20,6 +20,12 @@
 /* Includes ------------------------------------------------------------------*/
 #include "bsp_ebox.h"
 
+
+Button  btn(&BtnPin,1);
+Led     led1(&LED1,0);
+Led     led2(&LED2,0);
+Led     led3(&LED3,0);
+
 // 如果不使用object.cpp, 使用下列方式创建IO对象
 //mcuGpio 		LED1(GPIOB,GPIO_Pin_8);
 //mcuGpio 		LED2(GPIOB,GPIO_Pin_9);

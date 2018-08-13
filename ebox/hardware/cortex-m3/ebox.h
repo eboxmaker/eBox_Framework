@@ -37,6 +37,7 @@
 #include "ebox_i2c.h"
 #include "ebox_spi.h"
 #include "ebox_uart.h"
+#include "ebox_uart_stream.h"
 #include "ebox_rtc.h"
 #include "ebox_iflash.h"
 #include "ebox_dac.h"

@@ -179,8 +179,9 @@ void Uart::interrupt(IrqType type, FunctionalState enable)
 */
 size_t Uart::write(uint8_t c)
 {
-    while(USART_GetFlagStatus(USARTx, USART_FLAG_TXE) == RESET);//µ¥×Ö½ÚµÈ´ý£¬µÈ´ý¼Ä´æÆ÷¿Õ
-    USART_SendData(USARTx, c);
+//    while(USART_GetFlagStatus(USARTx, USART_FLAG_TXE) == RESET);//µ¥×Ö½ÚµÈ´ý£¬µÈ´ý¼Ä´æÆ÷¿Õ
+//    USART_SendData(USARTx, c);
+    write(&c,1);
     return 1;
 }
 /**
@@ -192,10 +193,11 @@ size_t Uart::write(uint8_t c)
 */
 size_t Uart::write(const uint8_t *buffer, size_t size)
 {
+    if(size <= 0 ) return 0;
     wait_busy();
     if((USARTx == USART1 | USARTx == USART2 | USARTx == USART3 ) && (use_dma == 1))
     {
-        wait_busy();
+//        wait_busy();
         if(data_ptr != NULL)
             ebox_free(data_ptr);
         set_busy();

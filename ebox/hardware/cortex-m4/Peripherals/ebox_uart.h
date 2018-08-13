@@ -46,7 +46,7 @@ public:
 
 
     void    nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
-    void attach(void (*fptr)(void), IrqType type);
+    void    attach(void (*fptr)(void), IrqType type);
     void    interrupt(IrqType type, FunctionalState enable);
 
     template<typename T>

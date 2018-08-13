@@ -1,49 +1,45 @@
- /**
-  ******************************************************************************
-  * @file    main.cpp
-  * @author  shentq
-  * @version V1.2
-  * @date    2016/08/14
-  * @brief   ebox application example .
-	*					 2018-8-5	通过引入bsp，定义硬件端口，方便例程可以在不同平台上运行 
-  ******************************************************************************
-  * @attention
-  *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
-  * preliminary and is subject to change at any time without notice. shentq assumes
-  * no responsibility for any errors contained herein.
-  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
-  ******************************************************************************
-  */
-
 #include "ebox.h"
 #include "bsp_ebox.h"
 
+
 /**
-	*	1	通过串口打印消息
+	*	1	此例程演示了UartStream操作
+	*	2	UartStream是串口集成了stream的类。支持了stream的所有功能
+	*		包括读取一个String，查找一个关键字，关键词等
+	*   	但是这个类中都是阻塞性的读取，
+    *       如果开始读取，就会等到读取结束后还会延时设定的超时时间。用户需注意使用
 	*/
+	
+
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"hello world example"
-#define EXAMPLE_DATE	"2018-08-06"
+#define EXAMPLE_NAME	"UartStream example"
+#define EXAMPLE_DATE	"2018-08-13"
+
+UartStream uart1s(&uart1);
+
 
 void setup()
 {
-    ebox_init();
-    UART.begin(115200);
+	ebox_init();
+    uart1.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    
 
+    uart1s.begin(115200);
+    uart1s.setTimeout(100);//定义超时时间
 }
 int main(void)
 {
-    setup();
-    while(1)
-    {
-        UART.printf("hello World !\r\n");
-        delay_ms(1000);
-    }
+	setup();
+	while (1)
+	{
+
+        String x = uart1s.readString();//
+        if(x != NULL)
+        {
+            uart1.print(x);
+            uart1.print('\t');
+            uart1.println(ebox_get_free());
+        }
+	}
 }
-
-
-
-
