@@ -3,7 +3,7 @@
 
 
 /**
-	*	1	此例程演示了UartStream操作
+	*	1	此例程演示了UartStream操作，依赖ebox_uart_stream和core目录下stream
 	*	2	UartStream是串口集成了stream的类。支持了stream的所有功能
 	*		包括读取一个String，查找一个关键字，关键词等
 	*   	但是这个类中都是阻塞性的读取，
@@ -15,13 +15,13 @@
 #define EXAMPLE_NAME	"UartStream example"
 #define EXAMPLE_DATE	"2018-08-13"
 
-UartStream uart1s(&uart1);
+UartStream uart1s(&UART);
 
 
 void setup()
 {
 	ebox_init();
-    uart1.begin(115200);
+    UART.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
     
 
@@ -35,11 +35,13 @@ int main(void)
 	{
 
         String x = uart1s.readString();//
+        
         if(x != NULL)
         {
-            uart1.print(x);
-            uart1.print('\t');
-            uart1.println(ebox_get_free());
+            UART.print(x);
+            UART.print('\t');
+            UART.print(ebox_get_free()/1000);
+            UART.println("kb");
         }
 	}
 }
