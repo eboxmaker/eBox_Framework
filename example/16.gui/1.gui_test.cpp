@@ -1,115 +1,58 @@
-/**
-  ******************************************************************************
-  * @file   : *.cpp
-  * @author : shentq
-  * @version: V1.2
-  * @date   : 2016/08/14
-
-  * @brief   ebox application example .
-  *
-  * Copyright 2016 shentq. All Rights Reserved.         
-  ******************************************************************************
- */
- 
- 
 #include "ebox.h"
 #include "bsp_ebox.h"
+#include "ebox_virtual_lcd.h"
 
-#include "lcd_1.8.h"
 #include "gui.h"
-
 /**
-	*	1	此例程演示了GUI
+	*	1	此例程演示了VLcd（虚拟显示器）的操作，依赖ebox_virtual_lcd和font.h
+	*	2	VLcd实现了LCD的大部分功能，字符串打印。字体设置
+    *       lcd是比较大的一个显示器，窗口在lcd上移动实现了窗口显示内容动态
+    *       变化效果
+    *   3   本例程通过串口打印了缓存
 	*/
 	
 
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"GUI example"
-#define EXAMPLE_DATE	"2018-08-11"
+#define EXAMPLE_NAME	"Virtual LCD example"
+#define EXAMPLE_DATE	"2018-08-14"
 
 
-
-Button btn(&BtnPin,1);
-Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
+VLcd lcdx(32,8);
 GUI gui;
-
 void setup()
 {
-    ebox_init();
+	ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-    lcd.begin(1);
-    btn.begin();
-    
-    gui.begin(&lcd,128,160);
-    gui.fill_screen(BLACK);
-    
+    lcdx.begin();
+    gui.begin(&lcdx,32,8);
+    lcdx.disp_char6x8(-3,0,'a');
+    lcdx.disp_char6x8(1*6-3,0,'b');
+    lcdx.disp_char6x8(2*6-3,0,'1');
+    lcdx.disp_char6x8(3*6-3,0,'2');
+    lcdx.disp_char6x8(4*6-3,0,'3');
+    lcdx.print();
+    lcdx.print_color();
 
-}
-void test(uint8_t totation)
-{
-    gui.set_rotation(totation);
-
-    gui.fill_screen(BLACK);
-    gui.set_color(WHITE);
-
-    
-    gui.set_font(&GUI_Font32_ASCII);
-    gui.set_text_mode(LCD_DRAWMODE_NORMAL);
-    gui.printf(0,0,"GUI TEST");
-    
-    gui.set_font(&GUI_Font24_ASCII);
-    gui.set_text_mode(LCD_DRAWMODE_REV);
-    gui.printf(0,32,"GUI TEST");
-    
-    gui.set_font(&GUI_Font16_ASCII);
-    gui.set_text_mode(LCD_DRAWMODE_TRANS);
-    gui.printf(0,56,"GUI TEST");
-    
-    gui.set_font(&GUI_FontHZ16X16);
-    gui.set_text_mode(LCD_DRAWMODE_NORMAL);
-    gui.printf(0,72,"强 TEST");
-    
-    gui.set_font(&GUI_Font8_ASCII);
-    gui.set_text_mode(LCD_DRAWMODE_NORMAL);
-    gui.printf(0,88,"GUI TEST");
-    
-    
-    
-    
-    gui.set_font(&GUI_Font16_ASCII);
-    gui.printf(10,110,"T:13");
-    gui.set_font(&GUI_Font8_ASCII);
-    gui.printf("o");
-    gui.set_font(&GUI_Font16_ASCII);
-    gui.printf(80,110,"H:24%%");
-
-
-    gui.box(50,100,20,10,1);
-    gui.box2(100,100,20,10,2);
-    
-    gui.btn_down(50,70,90,90);
-    gui.btn_up(100,70,120,90);
 
 }
 int main(void)
 {
-    int i = 0;
-    setup();
-    test(i);
-
-    while(1)
-    {
+    int count =32;
+	setup();
+	while (1)
+	{
+    count--;
+//    lcdx.disp_char6x8(-count,0,'a');
+//    lcdx.disp_char6x8(1*6-count,0,'b');
+//    lcdx.disp_char6x8(2*6-count,0,'1');
+//    lcdx.disp_char6x8(3*6-count,0,'2');
+//    lcdx.disp_char6x8(4*6-count,0,'3');
+        lcdx.set_pixel(count,0);
+        lcdx.printf("12:30");
+    lcdx.print();
+    lcdx.clear(0);
+    if(count == 0)count = 32;
+    delay_ms(100);
         
-        if(btn.click())
-        {
-            i++;
-            i %=4;
-            test(i);
-        }
-        btn.loop();
-    }
-
+	}
 }
-
-

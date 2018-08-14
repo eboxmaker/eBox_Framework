@@ -54,6 +54,9 @@
 
 void Lcd::begin(uint8_t dev_num)
 {
+    
+    width = X_MAX_PIXEL;
+    height = Y_MAX_PIXEL;
     cs->mode(OUTPUT_PP);
     led->mode(OUTPUT_PP);
     rs->mode(OUTPUT_PP);
@@ -129,17 +132,19 @@ void Lcd::clear(uint16_t Color)
 入口参数：xy坐标
 返回值：无
 *************************************************/
-void Lcd::set_xy(uint16_t x, uint16_t y)
+void Lcd::set_xy(int16_t x, int16_t y)
 {
     set_region(x, y, x, y);
 }
 
 
 
-void Lcd::draw_pixel(u16 x, u16 y, u16 Data)
+void Lcd::draw_pixel(int16_t x, int16_t y, uint32_t color)
 {
+    if(x < 0 || x > width) return;
+    if(y < 0 || y > height) return;
     set_region(x, y, x + 1, y + 1);
-    write_data_16bit(Data);
+    write_data_16bit(color);
 }
 
 
@@ -149,8 +154,11 @@ void Lcd::draw_pixel(u16 x, u16 y, u16 Data)
 入口参数：无
 返回值：无
 *************************************************/
-void Lcd::draw_h_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t color)
+void Lcd::draw_h_line(int16_t x0, int16_t y0, int16_t x1, uint32_t color)
 {
+    if(x0 < 0 || x0 > width) return;
+    if(y0 < 0 || y0 > height) return;
+
     set_region(x0, y0, x1, y0);
     for (; x0 <= x1; x0++)
     {
@@ -164,17 +172,20 @@ void Lcd::draw_h_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t color)
 入口参数：无
 返回值：无
 *************************************************/
-void Lcd::draw_v_line(uint16_t x0, uint16_t y0,  uint16_t y1, uint16_t color)
+void Lcd::draw_v_line(int16_t x0, int16_t y0,  int16_t y1, uint32_t color)
 {
-    set_region(x0, y0, x0, y1);
 
+    if(x0 < 0 || x0 > width) return;
+    if(y0 < 0 || y0 > height) return;
+
+    set_region(x0, y0, x0, y1);
     for (; y0 <= y1; y0++)
     {
         write_data_16bit(color);
     }
 }
 
-void Lcd::fill_rect(uint16_t x0, uint16_t y0,  uint16_t x1, uint16_t y1, uint16_t color)
+void Lcd::fill_rect(int16_t x0, int16_t y0,  int16_t x1, int16_t y1, uint32_t color)
 {
     uint16_t i = 0;
     uint8_t dx, dy;
@@ -187,7 +198,7 @@ void Lcd::fill_rect(uint16_t x0, uint16_t y0,  uint16_t x1, uint16_t y1, uint16_
         write_data_16bit(color);
     }
 }
-void Lcd::fill_rect(uint16_t x0, uint16_t y0,  uint16_t x1, uint16_t y1, uint16_t *bitmap)
+void Lcd::fill_rect(int16_t x0, int16_t y0,  int16_t x1, int16_t y1, uint16_t *bitmap)
 {
     uint16_t i = 0;
     uint8_t dx, dy;
@@ -201,7 +212,7 @@ void Lcd::fill_rect(uint16_t x0, uint16_t y0,  uint16_t x1, uint16_t y1, uint16_
     }
 
 }
-void Lcd::fill_screen(uint16_t color)
+void Lcd::fill_screen(uint32_t color)
 {
     unsigned int i;
     set_region(0, 0, X_MAX_PIXEL - 1, Y_MAX_PIXEL - 1);
@@ -213,7 +224,7 @@ void Lcd::fill_screen(uint16_t color)
 }
 
 //画线函数，使用Bresenham 画线算法
-void Lcd::draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t color)
+void Lcd::draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint32_t color)
 {
     int dx,             // difference in x's
         dy,             // difference in y's
@@ -309,7 +320,7 @@ void Lcd::draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t
         } // end for
     } // end else |slope| > 1
 }
-void Lcd::draw_circle(uint16_t x, uint16_t y, uint16_t r, uint16_t color)
+void Lcd::draw_circle(int16_t x, int16_t y, int16_t r, uint32_t color)
 {
     unsigned short  a, b;
     int c;
@@ -349,7 +360,7 @@ void Lcd::draw_circle(uint16_t x, uint16_t y, uint16_t r, uint16_t color)
 
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
-void Lcd::h_disp_char8x16(uint16_t x, uint16_t y, uint8_t ch)
+void Lcd::h_disp_char8x16(int16_t x, int16_t y, uint8_t ch)
 {
     if(ch >= 0x20)ch -= 0x20;
     set_region(x, y, x + 8, y + 16);
@@ -364,7 +375,7 @@ void Lcd::h_disp_char8x16(uint16_t x, uint16_t y, uint8_t ch)
         }
     }
 }
-void Lcd::disp_char8x16(uint16_t x, uint16_t y, uint8_t ch)
+void Lcd::disp_char8x16(int16_t x, int16_t y, uint8_t ch)
 {
     unsigned char i, j;
     unsigned short k;
@@ -376,16 +387,16 @@ void Lcd::disp_char8x16(uint16_t x, uint16_t y, uint8_t ch)
         for(j = 0; j < 8; j++)
         {
             if(asc16[k * 16 + i] & (0x80 >> j))
-                draw_point(x + j, y + i, front_color);
+                draw_pixel(x + j, y + i, front_color);
             else
             {
-                if(text_mode == ENABLE_BACK_COLOR)draw_point(x + j, y + i, back_color);
+                if(text_mode == ENABLE_BACK_COLOR)draw_pixel(x + j, y + i, back_color);
             }
         }
     x += 8;
 }
 
-void Lcd::printf(uint16_t x, uint16_t y, const char *fmt, ...)
+void Lcd::printf(int16_t x, int16_t y, const char *fmt, ...)
 {
     char buf[30];
     uint8_t i = 0;
@@ -404,7 +415,7 @@ void Lcd::printf(uint16_t x, uint16_t y, const char *fmt, ...)
         x += 8;
     }
 }
-void Lcd::draw_font_gbk16(uint16_t x, uint16_t y, uint8_t *s)
+void Lcd::draw_font_gbk16(int16_t x, int16_t y, uint8_t *s)
 {
     unsigned char i, j;
     unsigned short k, x0;
@@ -428,10 +439,10 @@ void Lcd::draw_font_gbk16(uint16_t x, uint16_t y, uint8_t *s)
                 for(i = 0; i < 16; i++)
                     for(j = 0; j < 8; j++)
                     {
-                        if(asc16[k * 16 + i] & (0x80 >> j))	draw_point(x + j, y + i, front_color);
+                        if(asc16[k * 16 + i] & (0x80 >> j))	draw_pixel(x + j, y + i, front_color);
                         else
                         {
-                            if(text_mode == ENABLE_BACK_COLOR)draw_point(x + j, y + i, back_color);
+                            if(text_mode == ENABLE_BACK_COLOR)draw_pixel(x + j, y + i, back_color);
                         }
                     }
                 x += 8;
@@ -451,18 +462,18 @@ void Lcd::draw_font_gbk16(uint16_t x, uint16_t y, uint8_t *s)
                     {
                         for(j = 0; j < 8; j++)
                         {
-                            if(hz16[k].Msk[i * 2] & (0x80 >> j))	draw_point(x + j, y + i, front_color);
+                            if(hz16[k].Msk[i * 2] & (0x80 >> j))	draw_pixel(x + j, y + i, front_color);
                             else
                             {
-                                if(text_mode == ENABLE_BACK_COLOR)draw_point(x + j, y + i, back_color);
+                                if(text_mode == ENABLE_BACK_COLOR)draw_pixel(x + j, y + i, back_color);
                             }
                         }
                         for(j = 0; j < 8; j++)
                         {
-                            if(hz16[k].Msk[i * 2 + 1] & (0x80 >> j))	draw_point(x + j + 8, y + i, front_color);
+                            if(hz16[k].Msk[i * 2 + 1] & (0x80 >> j))	draw_pixel(x + j + 8, y + i, front_color);
                             else
                             {
-                                if(text_mode == ENABLE_BACK_COLOR)draw_point(x + j + 8, y + i, back_color);
+                                if(text_mode == ENABLE_BACK_COLOR)draw_pixel(x + j + 8, y + i, back_color);
                             }
                         }
                     }
@@ -545,7 +556,7 @@ void Lcd::write_reg(uint8_t Index, uint8_t Data)
 入口参数：xy起点和终点
 返回值：无
 *************************************************/
-void Lcd::set_region(uint16_t x_start, uint16_t y_start, uint16_t x_end, uint16_t y_end)
+void Lcd::set_region(int16_t x_start, int16_t y_start, int16_t x_end, int16_t y_end)
 {
     write_index(0x2a);
     write_data_8bit(0x00);
@@ -690,14 +701,4 @@ void Lcd::init(void)
     /////////////////////////////////
     write_index(0x29);//Display on
 }
-/*************************************************
-函数名：LCD_DrawPoint
-功能：画一个点
-入口参数：无
-返回值：无
-*************************************************/
-void Lcd::draw_point(uint16_t x, uint16_t y, uint16_t Data)
-{
-    set_region(x, y, x + 1, y + 1);
-    write_data_16bit(Data);
-}
+

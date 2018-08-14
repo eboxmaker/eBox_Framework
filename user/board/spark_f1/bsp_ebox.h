@@ -49,7 +49,7 @@
 
 
 
-extern Button   btnx;
+extern Button   btn;
 extern Led      led1;
 extern Led      led2;
 extern Led      led3;

@@ -17,8 +17,13 @@ void GUI::set_text_style(uint8_t style)
 }
 void GUI::set_text_mode(uint8_t mode)
 {   
-    draw_mode = mode;
+    text_mode = mode;
 }
+void GUI::set_text_auto_reline(uint8_t enable)
+{
+    text_auto_reline = enable;
+}
+
 ////½âÂë//////////////////////////////
 void GUI::char_index_of_font(uint16_t code,const GUI_FONT_PROP **font_list,uint16_t *index)
 {
@@ -55,30 +60,29 @@ void GUI::disp_index(const GUI_FONT_PROP *font_list,uint16_t index)
     if((font_list == NULL) || (index > (font_list->Last - font_list->First + 1)))return;
     pCharInfo = &font_list->paCharInfo[index];
     byte_per_line = pCharInfo->BytesPerLine;
-    #if TEXT_AUTORELINE 
+    if( text_auto_reline )
         if(cursor_x + pCharInfo->XSize > _width)cursor_x = 0,cursor_y+=current_font->YSize;
-    #endif
 	for(row = 0; row < current_font->YSize; row++){   
         for( count = 0; count < byte_per_line; count++){
             tmp = pCharInfo->pData[byte_per_line * row + count];
             for(mask = 0x80, col = 0; col < 8 ; mask >>= 1, col++){	
-                switch(draw_mode)
+                switch(text_mode)
                 {
-                    case LCD_DRAWMODE_NORMAL:
+                    case TEXT_MODE_NORMAL:
                         if(mask & tmp)
                             draw_pixel(cursor_x,cursor_y);
                         else
                             draw_pixel(cursor_x,cursor_y,back_color);
                         break;
-                    case LCD_DRAWMODE_XOR:
+                    case TEXT_MODE_XOR:
                         if(mask & tmp)
                             draw_pixel(cursor_x,cursor_y);
                         break;
-                    case LCD_DRAWMODE_TRANS:
+                    case TEXT_MODE_TRANS:
                         if(mask & tmp)
                             draw_pixel(cursor_x,cursor_y);
                         break;
-                    case LCD_DRAWMODE_REV:
+                    case TEXT_MODE_REV:
                         if(mask & tmp)
                             draw_pixel(cursor_x,cursor_y,back_color);
                         else
@@ -113,7 +117,7 @@ void GUI::disp_char(uint16_t ch)
     char_index_of_font(ch,&font_list,&index);
     disp_index(font_list,index);
 }
-void GUI::disp_char_at(uint16_t ch,uint16_t x,uint16_t y)
+void GUI::disp_char_at(uint16_t ch,int16_t x,int16_t y)
 {
     set_cursor(x,y);
     disp_char(ch);
@@ -138,7 +142,7 @@ void GUI::disp_string(const char *str)
         }
     }
 }
-void GUI::disp_string_at(const char *str,uint16_t x,uint16_t y)
+void GUI::disp_string_at(const char *str,int16_t x,int16_t y)
 {
     set_cursor(x,y);
     disp_string(str);
@@ -167,7 +171,7 @@ void GUI::printf(const char *fmt, ...)
  
 }
     
-void GUI::printf(u16 x, u16 y, const char *fmt, ...)
+void GUI::printf(int16_t x, int16_t y, const char *fmt, ...)
 {
     char buf[30];
     uint8_t i = 0;

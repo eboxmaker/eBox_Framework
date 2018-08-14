@@ -3,8 +3,8 @@
 // Draw a 1-bit image (bitmap) at the specified (x,y) position from the
 // provided bitmap buffer (must be PROGMEM memory) using the specified
 // foreground color (unset bits are transparent).
-void GUI::drawBitmap(uint16_t x, int16_t y,
- const uint8_t *bitmap, int16_t w, int16_t h, uint16_t color) {
+void GUI::drawBitmap(int16_t x, int16_t y,
+ const uint8_t *bitmap, int16_t w, int16_t h, uint32_t color) {
 
   int16_t i, j, byteWidth = (w + 7) / 8;
   uint8_t byte;
@@ -22,7 +22,7 @@ void GUI::drawBitmap(uint16_t x, int16_t y,
 // provided bitmap buffer (must be PROGMEM memory) using the specified
 // foreground (for set bits) and background (for clear bits) colors.
 void GUI::drawBitmap(int16_t x, int16_t y,
- const uint8_t *bitmap, int16_t w, int16_t h, uint16_t color, uint16_t bg) {
+ const uint8_t *bitmap, int16_t w, int16_t h, uint32_t color, uint16_t bg) {
 
   int16_t i, j, byteWidth = (w + 7) / 8;
   uint8_t byte;
@@ -39,7 +39,7 @@ void GUI::drawBitmap(int16_t x, int16_t y,
 
 // drawBitmap() variant for RAM-resident (not PROGMEM) bitmaps.
 void GUI::drawBitmap(int16_t x, int16_t y,
- uint8_t *bitmap, int16_t w, int16_t h, uint16_t color) {
+ uint8_t *bitmap, int16_t w, int16_t h, uint32_t color) {
 
   int16_t i, j, byteWidth = (w + 7) / 8;
   uint8_t byte;
@@ -55,7 +55,7 @@ void GUI::drawBitmap(int16_t x, int16_t y,
 
 // drawBitmap() variant w/background for RAM-resident (not PROGMEM) bitmaps.
 void GUI::drawBitmap(int16_t x, int16_t y,
- uint8_t *bitmap, int16_t w, int16_t h, uint16_t color, uint16_t bg) {
+ uint8_t *bitmap, int16_t w, int16_t h, uint32_t color, uint16_t bg) {
 
   int16_t i, j, byteWidth = (w + 7) / 8;
   uint8_t byte;
@@ -74,7 +74,7 @@ void GUI::drawBitmap(int16_t x, int16_t y,
 //Usage: Export from GIMP to *.xbm, rename *.xbm to *.c and open in editor.
 //C Array can be directly used with this function
 void GUI::drawXBitmap(int16_t x, int16_t y,
- const uint8_t *bitmap, int16_t w, int16_t h, uint16_t color) {
+ const uint8_t *bitmap, int16_t w, int16_t h, uint32_t color) {
 
   int16_t i, j, byteWidth = (w + 7) / 8;
   uint8_t byte;

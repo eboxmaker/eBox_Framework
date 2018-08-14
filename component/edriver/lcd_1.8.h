@@ -66,8 +66,6 @@ public:
         this->rs = rs;
         this->rst = rst;
         this->spi = spi;
-        x = 0;
-        y = 0;
     }
     void begin(uint8_t dev_num);
     void soft_reset();
@@ -77,25 +75,25 @@ public:
     void column_order(uint8_t order);
     void row_order(uint8_t order);
 
-    void set_xy(u16 x, u16 y);
-    virtual void draw_pixel(uint16_t x, uint16_t y, uint16_t Data);
-        
-    virtual void draw_h_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t color);
-    virtual void draw_v_line(uint16_t x0, uint16_t y0, uint16_t y1, uint16_t color);
-    virtual void draw_line(u16 x0, u16 y0, u16 x1, u16 y1, uint16_t color);
-    virtual void fill_rect  (uint16_t x0, uint16_t y0,  uint16_t x1, uint16_t y1, uint16_t color);
-    virtual void fill_rect  (uint16_t x0, uint16_t y0,  uint16_t x1, uint16_t y1, u16 *bitmap);
-    virtual void fill_screen(uint16_t color);
-    virtual void draw_circle(u16 x, u16 y, u16 r, uint16_t color);
+    void set_xy(int16_t x, int16_t y);
+    
+    
+    virtual void draw_pixel(int16_t x, int16_t y, uint32_t color);
+    virtual void draw_h_line(int16_t x0, int16_t y0, int16_t x1, uint32_t color);
+    virtual void draw_v_line(int16_t x0, int16_t y0, int16_t y1, uint32_t color);
+    virtual void draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint32_t color);
+    virtual void fill_rect  (int16_t x0, int16_t y0,  int16_t x1, int16_t y1, uint32_t color);
+    virtual void fill_rect  (int16_t x0, int16_t y0,  int16_t x1, int16_t y1, uint16_t *bitmap);
+    virtual void fill_screen(uint32_t color);
+    virtual void draw_circle(int16_t x, int16_t y, int16_t r, uint32_t color);
 
     
     
-    inline void draw_point(u16 x, u16 y, u16 Data);
-    u16 read_point(u16 x, u16 y);
-    void h_disp_char8x16(u16 x, u16 y, uint8_t ch);
-    void disp_char8x16(u16 x, u16 y, uint8_t ch);
-    void printf(u16 x, u16 y, const char *fmt, ...);
-    void draw_font_gbk16(u16 x, u16 y, uint8_t *s);
+    int16_t read_point(int16_t x, int16_t y);
+    void h_disp_char8x16(int16_t x, int16_t y, uint8_t ch);
+    void disp_char8x16(int16_t x, int16_t y, uint8_t ch);
+    void printf(int16_t x, int16_t y, const char *fmt, ...);
+    void draw_font_gbk16(int16_t x, int16_t y, uint8_t *s);
 
     void draw_bitmap(const unsigned char *p); //œ‘ æ40*40 QQÕº∆¨
     
@@ -107,7 +105,7 @@ private:
     Gpio *rst;
     Spi  *spi;
     SpiConfig_t config;
-    uint16_t x,y;
+    uint16_t width,height;
 
     void reset(void);
     void init(void);
@@ -121,7 +119,7 @@ private:
     void write_reg(uint8_t Index, uint8_t Data);
     uint8_t   read_reg(uint8_t Index);
 
-    void set_region(u16 x_start, u16 y_start, u16 x_end, u16 y_end);
+    void set_region(int16_t x_start, int16_t y_start, int16_t x_end, int16_t y_end);
 
 };
 #endif
