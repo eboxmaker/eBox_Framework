@@ -631,6 +631,16 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\Stream.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ebox_virtual_hmi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\port\ebox_virtual_hmi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_virtual_lcd.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\ebox_virtual_lcd.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -790,6 +800,16 @@
               <FileName>servo.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\servo.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ws2812.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\ws2812.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>WS2812B.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\WS2812B.cpp</FilePath>
             </File>
           </Files>
         </Group>

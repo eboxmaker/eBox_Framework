@@ -6,7 +6,7 @@
 *
 **********************************************************************
 */
-void GUI::draw_circle(uint16_t x0, uint16_t y0, uint16_t r)
+void GUI::draw_circle(int16_t x0, int16_t y0, int16_t r)
 {
    
     int16_t f = 1 - r;
@@ -43,8 +43,8 @@ void GUI::draw_circle(uint16_t x0, uint16_t y0, uint16_t r)
     }
 }
 
-void GUI::draw_circle_helper( uint16_t x0, uint16_t y0,
- uint16_t r, uint8_t cornername) {
+void GUI::draw_circle_helper( int16_t x0, int16_t y0,
+ int16_t r, uint8_t cornername) {
   int16_t f     = 1 - r;
   int16_t ddF_x = 1;
   int16_t ddF_y = -2 * r;
@@ -78,14 +78,14 @@ void GUI::draw_circle_helper( uint16_t x0, uint16_t y0,
     }
   }
 }
-void GUI::fill_circle(uint16_t x0, uint16_t y0, uint16_t r)
+void GUI::fill_circle(int16_t x0, int16_t y0, int16_t r)
 {
     draw_v_line(x0, y0-r, y0 + r+1);
     fill_circle_helper(x0, y0, r, 3, -1);
 }
 // Used to do circles and roundrects
-void GUI::fill_circle_helper(uint16_t x0, uint16_t y0, uint16_t r,
- uint8_t cornername, uint16_t delta) {
+void GUI::fill_circle_helper(int16_t x0, int16_t y0, int16_t r,
+ uint8_t cornername, int16_t delta) {
 
   int16_t f     = 1 - r;
   int16_t ddF_x = 1;
@@ -119,8 +119,8 @@ void GUI::fill_circle_helper(uint16_t x0, uint16_t y0, uint16_t r,
 
 
 // Draw a rounded rectangle
-void GUI::draw_round_rect(uint16_t x, uint16_t y, uint16_t w,
- uint16_t h, uint16_t r) {
+void GUI::draw_round_rect(int16_t x, int16_t y, int16_t w,
+ int16_t h, int16_t r) {
   // smarter version
   draw_h_line(x+r  , y    , x + w-r + 1); // Top
   draw_h_line(x+r  , y+h-1, x + w-r + 1); // Bottom
@@ -134,8 +134,8 @@ void GUI::draw_round_rect(uint16_t x, uint16_t y, uint16_t w,
 }
 
 // Fill a rounded rectangle
-void GUI::fill_round_rect(uint16_t x, uint16_t y, uint16_t w,
- uint16_t h, uint16_t r) {
+void GUI::fill_round_rect(int16_t x, int16_t y, int16_t w,
+ int16_t h, int16_t r) {
   // smarter version
   fill_rect(x+r, y, x + w-r + 1, y + h);
 
@@ -145,16 +145,16 @@ void GUI::fill_round_rect(uint16_t x, uint16_t y, uint16_t w,
 }
 
 // Draw a triangle
-void GUI::draw_triangle(uint16_t x0, uint16_t y0,
- uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
+void GUI::draw_triangle(int16_t x0, int16_t y0,
+ int16_t x1, int16_t y1, int16_t x2, int16_t y2) {
   draw_line(x0, y0, x1, y1);
   draw_line(x1, y1, x2, y2);
   draw_line(x2, y2, x0, y0);
 }
 
 //// Fill a triangle
-void GUI::fill_triangle(uint16_t x0, uint16_t y0,
- uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
+void GUI::fill_triangle(int16_t x0, int16_t y0,
+ int16_t x1, int16_t y1, int16_t x2, int16_t y2) {
 
   int16_t a, b, y, last;
 
@@ -231,7 +231,7 @@ void GUI::fill_triangle(uint16_t x0, uint16_t y0,
 }
 
 
-void GUI::box(uint16_t x, uint16_t y, uint16_t w, uint16_t h,uint16_t bc)
+void GUI::box(int16_t x, int16_t y, int16_t w, int16_t h,int16_t bc)
 {
 	draw_line(x,y,x+w,y,0xEF7D);
 	draw_line(x+w-1,y+1,x+w-1,y+1+h,0x2965);
@@ -239,7 +239,7 @@ void GUI::box(uint16_t x, uint16_t y, uint16_t w, uint16_t h,uint16_t bc)
 	draw_line(x,y,x,y+h,0xEF7D);
     draw_line(x+1,y+1,x+1+w-2,y+1+h-2,bc);
 }
-void GUI::box2(uint16_t x,uint16_t y,uint16_t w,uint16_t h, u8 mode)
+void GUI::box2(int16_t x,int16_t y,int16_t w,int16_t h, u8 mode)
 {
 	if (mode==0)	{
 		draw_line(x,y,x+w,y,0xEF7D);
@@ -263,31 +263,31 @@ void GUI::box2(uint16_t x,uint16_t y,uint16_t w,uint16_t h, u8 mode)
 
 /**************************************************************************************
 功能描述: 在屏幕显示一凸起的按钮框
-输    入: uint16_t x1,y1,x2,y2 按钮框左上角和右下角坐标
+输    入: int16_t x1,y1,x2,y2 按钮框左上角和右下角坐标
 输    出: 无
 **************************************************************************************/
-void GUI::btn_down(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2)
+void GUI::btn_down(int16_t x1,int16_t y1,int16_t x2,int16_t y2)
 {
-	draw_line(x1,  y1,  x2,y1, GRAY2);  //H
-	draw_line(x1+1,y1+1,x2,y1+1, GRAY1);  //H
-	draw_line(x1,  y1,  x1,y2, GRAY2);  //V
-	draw_line(x1+1,y1+1,x1+1,y2, GRAY1);  //V
-	draw_line(x1,  y2,  x2,y2, WHITE);  //H
-	draw_line(x2,  y1,  x2,y2, WHITE);  //V
+	draw_line(x1,  y1,  x2,y1, GUI_GRAY2);  //H
+	draw_line(x1+1,y1+1,x2,y1+1, GUI_GRAY1);  //H
+	draw_line(x1,  y1,  x1,y2, GUI_GRAY2);  //V
+	draw_line(x1+1,y1+1,x1+1,y2, GUI_GRAY1);  //V
+	draw_line(x1,  y2,  x2,y2, GUI_WHITE);  //H
+	draw_line(x2,  y1,  x2,y2, GUI_WHITE);  //V
 }
 
 /**************************************************************************************
 功能描述: 在屏幕显示一凹下的按钮框
-输    入: uint16_t x1,y1,x2,y2 按钮框左上角和右下角坐标
+输    入: int16_t x1,y1,x2,y2 按钮框左上角和右下角坐标
 输    出: 无
 **************************************************************************************/
-void GUI::btn_up(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2)
+void GUI::btn_up(int16_t x1,int16_t y1,int16_t x2,int16_t y2)
 {
-	draw_line(x1,  y1,  x2,y1, WHITE); //H
-	draw_line(x1,  y1,  x1,y2, WHITE); //V
+	draw_line(x1,  y1,  x2,y1, GUI_WHITE); //H
+	draw_line(x1,  y1,  x1,y2, GUI_WHITE); //V
 	
-	draw_line(x1+1,y2-1,x2,y2-1, GRAY1);  //H
-	draw_line(x1,  y2,  x2,y2, GRAY2);  //H
-	draw_line(x2-1,y1+1,x2-1,y2, GRAY1);  //V
-    draw_line(x2  ,y1  ,x2,y2, GRAY2); //V
+	draw_line(x1+1,y2-1,x2,y2-1, GUI_GRAY1);  //H
+	draw_line(x1,  y2,  x2,y2, GUI_GRAY2);  //H
+	draw_line(x2-1,y1+1,x2-1,y2, GUI_GRAY1);  //V
+    draw_line(x2  ,y1  ,x2,y2, GUI_GRAY2); //V
 }

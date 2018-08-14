@@ -1,6 +1,6 @@
 #include "gui.h"
 
-uint16_t  GUI::set_rotation(uint8_t value)
+void  GUI::set_rotation(uint8_t value)
 {
     rotation = value;
     _width = width;
@@ -13,7 +13,7 @@ uint16_t  GUI::set_rotation(uint8_t value)
             break;
     }
 }
-uint16_t GUI::ro_x(uint16_t x,uint16_t y)
+int16_t GUI::ro_x(int16_t x,int16_t y)
 {
     
     switch(rotation)
@@ -21,16 +21,16 @@ uint16_t GUI::ro_x(uint16_t x,uint16_t y)
         case 0:
             return x;
         case 1:
-            return _height - y;
+            return _height - 1 - y;
         case 2:
-            return _width - x;
+            return _width - 1 - x;
         case 3:
             return  y;
 
     }
     return 0;
 }
-uint16_t GUI::ro_y(uint16_t x,uint16_t y)
+int16_t GUI::ro_y(int16_t x,int16_t y)
 {
     switch(rotation)
     {
@@ -39,32 +39,32 @@ uint16_t GUI::ro_y(uint16_t x,uint16_t y)
         case 1:
             return x;
         case 2:
-            return _height - y ;
+            return _height - 1 - y ;
         case 3:
-            return _width - x;
+            return _width - 1 - x;
 
     }
     return 0;
 
 }
-void GUI::draw_pixel(uint16_t x, uint16_t y)
+void GUI::draw_pixel(int16_t x, int16_t y)
 {
-    uint16_t tempx,tempy;
+    int16_t tempx,tempy;
     tempx = ro_x(x,y);
     tempy = ro_y(x,y);
     lcd->draw_pixel(tempx,tempy,this->color);
 }
-void GUI::draw_pixel(uint16_t x, uint16_t y,uint16_t color)
+void GUI::draw_pixel(int16_t x, int16_t y,uint32_t color)
 {
-    uint16_t tempx,tempy;
+    int16_t tempx,tempy;
     tempx = ro_x(x,y);
     tempy = ro_y(x,y);
     lcd->draw_pixel(tempx,tempy,color);
 }
 
-void GUI::draw_h_line(uint16_t x0, uint16_t y0, uint16_t x1)
+void GUI::draw_h_line(int16_t x0, int16_t y0, int16_t x1)
 {
-    uint16_t tempx0,tempy0,tempx1,tempy1;
+    int16_t tempx0,tempy0,tempx1,tempy1;
     tempx0 = ro_x(x0,y0);
     tempy0 = ro_y(x0,y0);
     tempx1 = ro_x(x1,y0);
@@ -82,9 +82,9 @@ void GUI::draw_h_line(uint16_t x0, uint16_t y0, uint16_t x1)
 
     }
 }
-void GUI::draw_v_line(uint16_t x0, uint16_t y0, uint16_t y1)
+void GUI::draw_v_line(int16_t x0, int16_t y0, int16_t y1)
 {
-    uint16_t tempx0,tempy0,tempx1,tempy1;
+    int16_t tempx0,tempy0,tempx1,tempy1;
     tempx0 = ro_x(x0,y0);
     tempy0 = ro_y(x0,y0);
     tempx1 = ro_x(x0,y1);
@@ -103,9 +103,9 @@ void GUI::draw_v_line(uint16_t x0, uint16_t y0, uint16_t y1)
     }
 //    lcd->draw_v_line(x0,y0,y1,this->color);
 }
-void GUI::draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
+void GUI::draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1)
 {
-    uint16_t tempx0,tempy0,tempx1,tempy1;
+    int16_t tempx0,tempy0,tempx1,tempy1;
     tempx0 = ro_x(x0,y0);
     tempy0 = ro_y(x0,y0);
     tempx1 = ro_x(x1,y1);
@@ -113,9 +113,9 @@ void GUI::draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
 
     lcd->draw_line(tempx0,tempy0,tempx1,tempy1,this->color);
 }
-void GUI::draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1,uint16_t color)
+void GUI::draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1,uint32_t color)
 {
-    uint16_t tempx0,tempy0,tempx1,tempy1;
+    int16_t tempx0,tempy0,tempx1,tempy1;
     tempx0 = ro_x(x0,y0);
     tempy0 = ro_y(x0,y0);
     tempx1 = ro_x(x1,y1);
@@ -123,16 +123,16 @@ void GUI::draw_line(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1,uint16_t 
 
     lcd->draw_line(tempx0,tempy0,tempx1,tempy1,color);
 }
-void GUI::draw_rect(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
+void GUI::draw_rect(int16_t x0, int16_t y0, int16_t x1, int16_t y1)
 {
     draw_h_line(x0, y0, x1);
     draw_h_line(x0, y1, x1);
     draw_v_line(x0, y0, y1);
     draw_v_line(x1, y0, y1);
 }    
-void GUI::fill_rect(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
+void GUI::fill_rect(int16_t x0, int16_t y0, int16_t x1, int16_t y1)
 {
-    uint16_t tempx0,tempy0,tempx1,tempy1;
+    int16_t tempx0,tempy0,tempx1,tempy1;
     tempx0 = ro_x(x0,y0);
     tempy0 = ro_y(x0,y0);
     tempx1 = ro_x(x1,y1);
@@ -140,7 +140,7 @@ void GUI::fill_rect(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
 
     lcd->fill_rect(min(tempx0,tempx1),min(tempy0,tempy1),max(tempx0,tempx1),max(tempy0,tempy1),this->color);
 }
-void GUI::fill_screen(uint16_t color) 
+void GUI::fill_screen(uint32_t color) 
 {
     lcd->fill_screen(color);
 }

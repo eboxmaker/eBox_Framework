@@ -17,7 +17,7 @@
 #include "color_convert.h"
 #include "gui.h"
 Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
-GUI gui(&lcd,128,160);
+GUI gui;
 uint8_t buf[]={03,03,00,00,00,01};
 //    
     uint16_t tmp ;
@@ -29,7 +29,7 @@ void setup()
     lcd.begin(1);
     
     
-    gui.begin();
+    gui.begin(&lcd,128,160);
     gui.fill_screen(BLACK);
     
 //    
@@ -48,6 +48,7 @@ void setup()
     
     delay_ms(2000);
     gui.set_rotation(1);
+    
     gui.printf(50,2,"…ÍPM2.5");
     gui.draw_h_line(10,20,50);
     gui.draw_v_line(50,20,30);
