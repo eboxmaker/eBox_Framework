@@ -6,7 +6,6 @@
 #endif
      
 #include "ebox_type.h"
-#include "ebox_mem.h"
 
 struct ebox_fifo
 {

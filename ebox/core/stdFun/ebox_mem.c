@@ -66,9 +66,9 @@ void ebox_heap_init(void *begin_addr, void *end_addr)
     ram_addr_begin = (uint32_t)begin_addr;
     ram_addr_end = (uint32_t)end_addr;
 }
+
 void *ebox_malloc( size_t xWantedSize )
 {
-
     eboxBlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
     void *pvReturn = NULL;
 
@@ -245,40 +245,63 @@ static void insert_block_into_freeList( eboxBlockLink_t *pxBlockToInsert)
 	else
 	{
 	}
-
-    
 }
+
+
+//获取heap使用了多少字节
 float ebox_mem_usage(void)
 {
     return (100 - ebox_get_free() * 100.0 / (ram_addr_end - ram_addr_begin));
 }
+
+
+//获取heap使用率
 float ebox_mem_used(void)
 {
     return (MCU_HEAP_SIZE - ebox_get_free());
 }
+
+
+//获取heap起始地址
 size_t ebox_get_sram_start_addr(void)
 {
     return (size_t)MEM_ALIGN((uint32_t)ram_addr_begin);
 }
 
+//获取heap结束地址
 size_t ebox_get_sram_end_addr(void)
 {
     return (size_t)MEM_ALIGN((uint32_t)ram_addr_end);
 
 }
 
+
+ /**
+ *@brief    打印内存分割情况
+            free block 即是内存可用区域，block数量越多说明内存碎片化越是严重
+            第一个block是链表头部的变量，地址为heap[x];可用内存为0;
+            最后一个变量是*end_block[x],指向的地址为内存尾部减去一个管理单元占用量
+            0X20004FF8 = MCU_HEAP_END - SIZEOF_STRUCT_MEM;
+            中间的是可用内存块，由于多次分配后，一部分被释放，一部分未被释放就
+            会导致出现多个不连续的内存区域，也就是内存碎片化;如果碎片化太严重，
+            可能会导致系统可用内存虽然很大，但是无法分配一个连续的大区域的内存。
+            最理想的状态是可用内存块为1。
+ *@param    NONE
+ *@retval   可用内存块数量
+*/
 uint16_t ebox_free_block_print(void)
 {
     eboxBlockLink_t *p;
     int i = 0;
-    ebox_printf("----start----\r\n");
+    ebox_printf("\r\n------------------start------------------\r\n");
+    ebox_printf(" free blocks\taddres\t\t|size\t|\r\n");
     for(p = (eboxBlockLink_t *)( &(heap[0]) ); p != NULL; p = ( p->nextFreeBlock))
     {
         ebox_printf("free block %d: ",i++);
-        ebox_printf("0X%X\t|%x\t|\r\n",p,p->blockSize);
+        ebox_printf("|0X%X\t|%06d\t|\r\n",p,p->blockSize);
     }
-    ebox_printf("----end-----\r\n");
-    return 0;
+    ebox_printf("-------------------end-------------------\r\n");
+    return i-2;
 }
 
 
@@ -320,3 +343,12 @@ void *ebox_memcpy(void * dst, const void *src, size_t count)
 	
 	return dst;
 }
+
+//void *malloc(size_t size)
+//{
+//    return ebox_malloc(size);
+//}
+//void free(void *ptr)
+//{
+//     ebox_free(ptr);
+//}

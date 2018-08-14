@@ -180,6 +180,9 @@ typedef struct
 	uint8_t week;
 }DateTime_t;
 
+
 #define ALIGN(size, align)                  ((align + size - 1) & (~ (align - 1)))
+#define ALIGN_4BYTE(size)                  ((4 + size - 1) & (~ (4 - 1)))
+#define ALIGN_8BYTE(size)                  ((8 + size - 1) & (~ (8 - 1)))
 
 #endif

@@ -787,16 +787,6 @@
               <FilePath>..\..\..\component\edriver\w25x16.cpp</FilePath>
             </File>
             <File>
-              <FileName>ws2812.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\ws2812.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>WS2812B.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\WS2812B.cpp</FilePath>
-            </File>
-            <File>
               <FileName>servo.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\servo.cpp</FilePath>

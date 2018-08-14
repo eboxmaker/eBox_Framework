@@ -18,8 +18,7 @@
   */
 #ifndef __LIST_H
 #define __LIST_H
-#include "list.h"
-#include "stdio.h"
+#include "ebox_type.h"
 
 typedef struct _node
 {

@@ -26,6 +26,7 @@
 #include <math.h>
 
 #include "Print.h"
+#include "ebox_mem.h"
 
 // Public Methods //////////////////////////////////////////////////////////////
 
