@@ -25,21 +25,28 @@ void ebox_init(void)
     
     
 }
-
-void ebox_printf_flush(void)
-{
-    uint16_t len;
-    uint8_t ch;
-    while(1)
+extern "C"{
+    /**
+     *@brief    定义一个ebox_printf的输出函数，其中的输出设备必须是可用的
+     *@param    NONE
+     *@retval   NONE
+    */
+    void ebox_printf_flush(void)
     {
-        len = ebox_fifo_get(uart_fifo_ptr,&ch,1);
-        if(len == 1)
+        uint16_t len;
+        uint8_t buffer[64];
+        while(1)
         {
-            uart1.write(ch);
-        }
-        else
-        {
-            break;
+            len = ebox_fifo_get(uart_fifo_ptr,buffer,64);
+            if(len >= 1)
+            {
+                uart1.write(buffer,len);
+            }
+            else
+            {
+                break;
+            }
         }
     }
 }
+

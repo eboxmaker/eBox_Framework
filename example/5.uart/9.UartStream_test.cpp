@@ -38,10 +38,10 @@ int main(void)
         
         if(x != NULL)
         {
-            UART.print(x);
-            UART.print('\t');
-            UART.print(ebox_get_free()/1000);
-            UART.println("kb");
+            uart1s.print(x);
+            uart1s.print('\t');
+            uart1s.print(ebox_get_free()/1024.0);
+            uart1s.println("KB");
         }
 	}
 }

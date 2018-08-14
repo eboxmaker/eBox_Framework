@@ -318,3 +318,4 @@ int Stream::findMulti( struct Stream::MultiTarget *targets, int tCount) {
   // unreachable
   return -1;
 }
+

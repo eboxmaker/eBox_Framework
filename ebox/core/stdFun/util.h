@@ -22,9 +22,7 @@
 #ifdef __cplusplus
 extern "C"{
 #endif // __cplusplus
-#include <stdio.h>
-#include <string.h>
-#include <stdarg.h>
+
 #include "ebox_type.h"
 
 bool    isdigital(char c);

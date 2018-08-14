@@ -26,7 +26,6 @@ extern uint64_t    (*micros)();
 extern uint64_t    (*millis)();
 extern void        (*delay_ms)(uint64_t ms);
 extern void        (*delay_us)(uint64_t ms);
-void                ebox_printf_flush(void);
 
 
 #define low_byte(w) ((uint8_t) ((w) & 0xff))

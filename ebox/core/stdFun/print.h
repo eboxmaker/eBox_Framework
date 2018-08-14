@@ -21,11 +21,9 @@
 #define Print_h
 
 #include <inttypes.h>
-#include <stdio.h> // for size_t
-
+#include "ebox_type.h"
 #include "WString.h"
 #include "Printable.h"
-#include "ebox_mem.h"
 
 #define DEC 10
 #define HEX 16
