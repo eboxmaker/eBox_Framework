@@ -18,8 +18,7 @@
  */
 
 #include "IPAddress.h"
-#include "../stdfun/Printable.h"
-#include "../stdfun/Print.h"
+#include "Print.h"
 
 IPAddress::IPAddress()
 {

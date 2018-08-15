@@ -11,9 +11,8 @@
   ******************************************************************************
  */
 #include "ebox.h"
-#include "lcd_1.8.h"
+#include "bsp_ebox.h"
 
-Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
 uint32_t time_last;
 u8 times;
 
@@ -21,7 +20,7 @@ void setup()
 {
     ebox_init();
     PB8.mode(OUTPUT_PP);
-    lcd.begin(1);
+    lcd.begin();
     lcd.clear(BLUE);
     uart1.begin(9600);
 }

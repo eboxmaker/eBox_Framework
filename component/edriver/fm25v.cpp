@@ -20,13 +20,15 @@
 /* Includes ------------------------------------------------------------------*/
 #include "fm25v.h"
 
-void FM25V::begin(uint8_t dev_num)
+void FM25V::begin()
 {
-	spi_dev_FM25V.dev_num = dev_num;
-	spi_dev_FM25V.mode = SPI_MODE0;
-	spi_dev_FM25V.prescaler = SPI_BaudRatePrescaler_4;
-	spi_dev_FM25V.bit_order = MSB_FIRST;
-	
+    if(initialized == 0)
+    {
+        spi_dev_FM25V.dev_num = spi->get_new_dev_num();
+        spi_dev_FM25V.mode = SPI_MODE0;
+        spi_dev_FM25V.prescaler = SPI_BaudRatePrescaler_4;
+        spi_dev_FM25V.bit_order = MSB_FIRST;
+	}
 	spi->begin(&spi_dev_FM25V);
 	cs->mode(OUTPUT_PP);
 	cs->set();    

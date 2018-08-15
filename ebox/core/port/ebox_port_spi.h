@@ -29,24 +29,34 @@ typedef struct
 } SpiConfig_t;
 class Spi
 {
+    private:
+        uint8_t dev_num_acc;
+    protected:
+        uint8_t current_dev_num;
+
     public:
-    Spi(){};
+        Spi():dev_num_acc(0),current_dev_num(0){ };
 
-    virtual void    begin (SpiConfig_t *spi_config)  = 0;
-    virtual void    config(SpiConfig_t *spi_config)  = 0;
-    virtual uint8_t read_config(void)  = 0;
+        virtual void    begin (SpiConfig_t *spi_config)  = 0;
+        virtual void    config(SpiConfig_t *spi_config)  = 0;
+        virtual uint8_t read_config(void)  = 0;
 
-    virtual uint8_t transfer(uint8_t data)  = 0;
+        virtual uint8_t transfer(uint8_t data)  = 0;
 
-    virtual int8_t  write(uint8_t data)  = 0;
-    virtual int8_t  write(uint8_t *data, uint16_t data_length)  = 0;
+        virtual int8_t  write(uint8_t data)  = 0;
+        virtual int8_t  write(uint8_t *data, uint16_t data_length)  = 0;
 
-    virtual uint8_t read()  = 0;
-    virtual int8_t  read(uint8_t  *recv_data)  = 0;
-    virtual int8_t  read(uint8_t *recv_data, uint16_t data_length)  = 0;
+        virtual uint8_t read()  = 0;
+        virtual int8_t  read(uint8_t  *recv_data)  = 0;
+        virtual int8_t  read(uint8_t *recv_data, uint16_t data_length)  = 0;
 
-    virtual int8_t take_spi_right(SpiConfig_t *spi_config)  = 0;
-    virtual int8_t release_spi_right(void)  = 0;
+        virtual int8_t take_spi_right(SpiConfig_t *spi_config)  = 0;
+        virtual int8_t release_spi_right(void)  = 0;
+        uint8_t get_new_dev_num()
+        {
+            dev_num_acc++;
+            return dev_num_acc;
+        }
 };
 
 #endif

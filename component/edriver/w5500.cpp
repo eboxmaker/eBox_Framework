@@ -21,24 +21,28 @@
 #include "w5500.h"
 #include "string.h"
 
-void W5500::begin(uint8_t dev_num,uint8_t *mac)
+void W5500::begin(uint8_t *mac)
 {
     uint8_t ip_0[4]={0,};
-    begin(dev_num,mac,ip_0,ip_0,ip_0,ip_0);
+    begin(mac,ip_0,ip_0,ip_0,ip_0);
 }
 
-void W5500::begin(uint8_t dev_num, uint8_t *mac, uint8_t *ip, uint8_t *subnet, uint8_t *gateway, uint8_t *dns)
+void W5500::begin( uint8_t *mac, uint8_t *ip, uint8_t *subnet, uint8_t *gateway, uint8_t *dns)
 {
     uint8_t txsize[MAX_SOCK_NUM] = {2, 2, 2, 2, 2, 2, 2, 2};
     uint8_t rxsize[MAX_SOCK_NUM] = {2, 2, 2, 2, 2, 2, 2, 2};
 
 
-    spi_dev_w5500.dev_num = dev_num;
-    spi_dev_w5500.mode = SPI_MODE0;
-    spi_dev_w5500.prescaler = SPI_CLOCK_DIV2;
-    spi_dev_w5500.bit_order = MSB_FIRST;
-
-    spi->begin(&spi_dev_w5500);
+    if(initialized == 0)
+    {
+        config.dev_num = spi->get_new_dev_num();
+        config.mode = SPI_MODE0;
+        config.prescaler = SPI_CLOCK_DIV2;
+        config.bit_order = MSB_FIRST;
+        initialized = 1;
+        ebox_printf("config.dev_num:%d\r\n",config.dev_num);
+    }
+    spi->begin(&config);
     cs->mode(OUTPUT_PP);
     cs->set();
     rst_pin->mode(OUTPUT_PP);
@@ -87,7 +91,7 @@ void W5500::reset()
 void W5500::write(uint32_t addrbsb, uint8_t data)
 {
 
-    spi->take_spi_right(&spi_dev_w5500);
+    spi->take_spi_right(&config);
     cs->reset();                              // CS=0, SPI start
     spi->write( (addrbsb & 0x00FF0000) >> 16); // Address byte 1
     spi->write( (addrbsb & 0x0000FF00) >> 8); // Address byte 2
@@ -100,7 +104,7 @@ void W5500::write(uint32_t addrbsb, uint8_t data)
 uint8_t  W5500::read(uint32_t addrbsb)
 {
     uint8_t data = 0;
-    spi->take_spi_right(&spi_dev_w5500);
+    spi->take_spi_right(&config);
     cs->reset();                          // CS=0, SPI start
     spi->write( (addrbsb & 0x00FF0000) >> 16); // Address byte 1
     spi->write( (addrbsb & 0x0000FF00) >> 8); // Address byte 2
@@ -113,7 +117,7 @@ uint8_t  W5500::read(uint32_t addrbsb)
 }
 uint16_t W5500::write(uint32_t addrbsb, uint8_t *buf, uint16_t len)
 {
-    spi->take_spi_right(&spi_dev_w5500);
+    spi->take_spi_right(&config);
     cs->reset();                               // CS=0, SPI start
     spi->write( (addrbsb & 0x00FF0000) >> 16); // Address byte 1
     spi->write( (addrbsb & 0x0000FF00) >> 8); // Address byte 2
@@ -127,7 +131,7 @@ uint16_t W5500::write(uint32_t addrbsb, uint8_t *buf, uint16_t len)
 }
 uint16_t W5500::read(uint32_t addrbsb, uint8_t *buf, uint16_t len)
 {
-    spi->take_spi_right(&spi_dev_w5500);
+    spi->take_spi_right(&config);
     cs->reset();                               // CS=0, SPI start
     spi->write( (addrbsb & 0x00FF0000) >> 16); // Address byte 1
     spi->write( (addrbsb & 0x0000FF00) >> 8); // Address byte 2

@@ -40,6 +40,7 @@
 #define BtnPin	PA8
 
 #define	UART    uart1
+#define	Serial  uart1
 
 #define	ADC_0   PA0
 #define	ADC_1   PA1

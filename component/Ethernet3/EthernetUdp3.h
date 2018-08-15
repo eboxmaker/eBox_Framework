@@ -1,5 +1,7 @@
 /*
- *  Udp.cpp: Library to send/receive UDP packets.
+ *  Udp.cpp: Library to send/receive UDP packets with the Arduino ethernet shield.
+ *  This version only offers minimal wrapping of socket.c/socket.h
+ *  Drop Udp.h/.cpp into the Ethernet library directory at hardware/libraries/Ethernet/ 
  *
  * NOTE: UDP is fast, but has some important limitations (thanks to Warren Gray for mentioning these)
  * 1) UDP does not guarantee the order in which assembled UDP packets are received. This
@@ -30,60 +32,85 @@
  * THE SOFTWARE.
  *
  * bjoern@cs.stanford.edu 12/30/2008
+ *
+ * - 10 Apr. 2015
+ * Added support for Arduino Ethernet Shield 2
+ * by Arduino.org team
+ *
  */
+ 
 
-#ifndef udp_h
-#define udp_h
+#ifndef ethernetudp3_h
+#define ethernetudp3_h
 
-#include <Stream.h>
-#include <IPAddress.h>
+#include "ebox_core.h"
 
-class UDP : public Stream {
+#define UDP_TX_PACKET_MAX_SIZE 64
+
+class EthernetUDP : public UDP {
+private:
+  uint8_t _sock;  // socket ID for Wiz5100
+  uint16_t _port; // local port to listen on
+  IPAddress _remoteIP; // remote IP address for the incoming packet whilst it's being processed
+  uint16_t _remotePort; // remote port for the incoming packet whilst it's being processed
+  uint16_t _offset; // offset into the packet being sent
+  uint16_t _remaining; // remaining bytes of incoming packet yet to be processed
 
 public:
-  virtual uint8_t begin(uint16_t) =0;  // initialize, start listening on specified port. Returns 1 if successful, 0 if there are no sockets available to use
-  virtual uint8_t beginMulticast(IPAddress, uint16_t) { return 0; }  // initialize, start listening on specified multicast IP address and port. Returns 1 if successful, 0 on failure
-  virtual void stop() =0;  // Finish with the UDP socket
+  EthernetUDP();  // Constructor
+  virtual uint8_t begin(uint16_t);	// initialize, start listening on specified port. Returns 1 if successful, 0 if there are no sockets available to use
+  virtual uint8_t beginMulticast(IPAddress, uint16_t);	// initialize, start listening on specified port. Returns 1 if successful, 0 if there are no sockets available to use
+  virtual void stop();  // Finish with the UDP socket
 
   // Sending UDP packets
   
   // Start building up a packet to send to the remote host specific in ip and port
   // Returns 1 if successful, 0 if there was a problem with the supplied IP address or port
-  virtual int beginPacket(IPAddress ip, uint16_t port) =0;
+  virtual int beginPacket(IPAddress ip, uint16_t port);
   // Start building up a packet to send to the remote host specific in host and port
   // Returns 1 if successful, 0 if there was a problem resolving the hostname or port
-  virtual int beginPacket(const char *host, uint16_t port) =0;
+  virtual int beginPacket(const char *host, uint16_t port);
   // Finish off this packet and send it
   // Returns 1 if the packet was sent successfully, 0 if there was an error
-  virtual int endPacket() =0;
+  virtual int endPacket();
   // Write a single byte into the packet
-  virtual size_t write(uint8_t) =0;
+  virtual size_t write(uint8_t);
   // Write size bytes from buffer into the packet
-  virtual size_t write(const uint8_t *buffer, size_t size) =0;
+  virtual size_t write(const uint8_t *buffer, size_t size);
+  
+//  using Print::write;
 
   // Start processing the next available incoming packet
   // Returns the size of the packet in bytes, or 0 if no packets are available
-  virtual int parsePacket() =0;
+  virtual int parsePacket();
   // Number of bytes remaining in the current packet
-  virtual int available() =0;
+  virtual int available();
   // Read a single byte from the current packet
-  virtual int read() =0;
+  virtual int read();
   // Read up to len bytes from the current packet and place them into buffer
   // Returns the number of bytes read, or 0 if none are available
-  virtual int read(unsigned char* buffer, size_t len) =0;
+  virtual int read(uint8_t* buffer, size_t len);
   // Read up to len characters from the current packet and place them into buffer
   // Returns the number of characters read, or 0 if none are available
-  virtual int read(char* buffer, size_t len) =0;
+  virtual int read(char* buffer, size_t len) { return read((uint8_t*)buffer, len); };
   // Return the next byte from the current packet without moving on to the next byte
-  virtual int peek() =0;
-  virtual void flush() =0;	// Finish reading the current packet
+  virtual int peek();
+  virtual void flush();	// Finish reading the current packet
 
   // Return the IP address of the host who sent the current incoming packet
-  virtual IPAddress remoteIP() =0;
+  virtual IPAddress remoteIP() { return _remoteIP; };
+  virtual void remoteIP(uint8_t *ip);
   // Return the port of the host who sent the current incoming packet
-  virtual uint16_t remotePort() =0;
-protected:
-  uint8_t* rawIPAddress(IPAddress& addr) { return addr.raw_address(); };
+  virtual uint16_t remotePort() { return _remotePort; };
+  // Return the MAC address of the host who sent the current incoming packet
+  virtual void remoteMAC(uint8_t *mac);
+
+  virtual uint8_t getSocketMode();
+  virtual void setBroadcastBlock(bool block = false); // set Broadcast blocking
+  virtual bool getBroadcastBlock(); // get Broadcast blocking state
+  virtual void setUnicastBlock(bool block = false); // set Unicast blocking, only  when socketin Multicast mode
+  virtual bool getUnicastBlock();  // get Unicast blocking state  
+  
 };
 
 #endif

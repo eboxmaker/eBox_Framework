@@ -67,8 +67,8 @@ public:
         this->rst = rst;
         this->spi = spi;
     }
-    void begin(uint8_t dev_num);
-    void soft_reset();
+    void begin(void);
+    void soft_reset(void);
     void clear(u16 Color);
     void on();
     void off();
@@ -106,6 +106,7 @@ private:
     Spi  *spi;
     SpiConfig_t config;
     uint16_t width,height;
+    uint8_t initialized;
 
     void reset(void);
     void init(void);

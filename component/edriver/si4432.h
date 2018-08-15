@@ -39,7 +39,7 @@ class Si4432
 {
 public:
 	Si4432(Gpio *irq, Gpio *ce, Gpio *cs, Spi *spi);
-	void begin(uint8_t dev_num);
+	void begin();
 	void start(void);
 	void set_config(void);
 	uint8_t read(uint8_t *rxbuf);
@@ -53,12 +53,13 @@ public:
 	uint8_t SpiReadRegister (uint8_t reg);	//SPI¶ÁÎÞÏßÄ£¿é¼Ä´æÆ÷
 
 private:
-	uint8_t             spi_flash_buf[256];
+	uint8_t         spi_flash_buf[256];
 	SpiConfig_t     spi_dev_si4432;
-	Gpio				*irq;
-	Gpio				*ce;
-	Gpio				*cs;
-	Spi					*spi;
+	Gpio            *irq;
+	Gpio            *ce;
+	Gpio            *cs;
+	Spi             *spi;
+    uint8_t         initialized;
 
 	
 	void reset(void);

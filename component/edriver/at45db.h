@@ -112,7 +112,7 @@ class At45db
 			this->cs  = cs;
 			this->spi = spi;
 		}
-		void begin(uint8_t dev_num); 
+		void begin(); 
 		void read_id(uint16_t *id); 
 		void read(uint8_t *buf,uint16_t page_addr,uint16_t byte_addr,unsigned long num_to_read);
         void DataToPage_ViaBuffer_WithErase_SecWay(unsigned char BufferNumber,
@@ -127,10 +127,12 @@ class At45db
                                                    unsigned int ByteNum);
         
 	private:
-		uint8_t                  spi_flash_buf[1024];
-		SpiConfig_t     spi_dev_AT45DB;
-		Gpio                *cs;
-		Spi                 *spi;
+		uint8_t     spi_flash_buf[1024];
+		SpiConfig_t spi_dev_AT45DB;
+		Gpio        *cs;
+		Spi         *spi;
+        uint8_t     initialized;
+    
 
 		uint8_t   readSR(void);  
 		void _waitBusy(void);

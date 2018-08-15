@@ -53,9 +53,10 @@ public:
         this->rst_pin = rst;
         this->int_pin = int_pin;
         this->spi     = spi;
+        initialized   = 0;
     }
-    void begin(uint8_t dev_num,uint8_t *mac);
-    void begin(uint8_t dev_num, uint8_t *mac, uint8_t *ip, uint8_t *subnet, uint8_t *gateway, uint8_t *dns);
+    void begin(uint8_t *mac);
+    void begin(uint8_t *mac, uint8_t *ip, uint8_t *subnet, uint8_t *gateway, uint8_t *dns);
     void reset();
 
     void send_data_processing(SOCKET s, uint8_t *data, uint16_t len);
@@ -138,9 +139,9 @@ private:
     Gpio *cs;
     Gpio *rst_pin;
     Gpio *int_pin;
-    SpiConfig_t spi_dev_w5500;
+    SpiConfig_t config;
     Spi *spi;
-
+    uint8_t initialized;
 
 };
 #define SOCKET0 0

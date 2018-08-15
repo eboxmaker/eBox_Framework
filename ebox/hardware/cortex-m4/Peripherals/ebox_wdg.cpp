@@ -36,7 +36,6 @@ void Iwdg::begin(uint16_t ms)
         rlr = 0xfff;
     }
     ebox_printf("pr:%d\trlr:%d",pr,rlr);
-    ebox_printf_flush();
     IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
     IWDG_SetPrescaler(pr);
     IWDG_SetReload(rlr);

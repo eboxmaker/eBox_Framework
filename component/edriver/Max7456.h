@@ -103,7 +103,7 @@ public:
         this->cs  = cs;
         this->spi = spi;
     }
-    void begin(uint8_t dev_num);
+    void begin();
     void init(void);
     void clear(void);
     void plug(void);
@@ -125,6 +125,7 @@ private:
     SpiConfig_t spi_dev_max7456;
     Gpio *cs;
     Spi *spi;
+    uint8_t initialized;
 };
 
 #endif

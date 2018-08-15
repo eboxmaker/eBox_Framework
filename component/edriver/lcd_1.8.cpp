@@ -52,7 +52,7 @@
 
 //Lcd lcd(&PB13,&PB15,&PA13,&PA15,&PA14,&PA12);
 
-void Lcd::begin(uint8_t dev_num)
+void Lcd::begin()
 {
     
     width = X_MAX_PIXEL;
@@ -63,10 +63,13 @@ void Lcd::begin(uint8_t dev_num)
     rst->mode(OUTPUT_PP);
     led->set();
 
-    config.mode = SPI_MODE2;
-    config.bit_order = MSB_FIRST;
-    config.dev_num = dev_num;
-    config.prescaler = SPI_CLOCK_DIV2;
+    if(initialized == 0)
+    {
+        config.mode = SPI_MODE2;
+        config.bit_order = MSB_FIRST;
+        config.dev_num = spi->get_new_dev_num();
+        config.prescaler = SPI_CLOCK_DIV2;
+    }
     spi->begin(&config);
 
     init();

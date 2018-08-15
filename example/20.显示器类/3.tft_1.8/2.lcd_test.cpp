@@ -13,7 +13,7 @@
  
  
 #include "ebox.h"
-#include "lcd_1.8.h"
+#include "bsp_ebox.h"
 #include "color_convert.h"
 
 //±æ≥Ã–Ú  ”√eBox
@@ -29,7 +29,6 @@
 COLOR_HSV hsv;
 COLOR_RGB rgb;
 
-Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
 
 u8 index = 0x20;
 u8 r;
@@ -39,7 +38,7 @@ void setup()
 {
     ebox_init();
     PB8.mode(OUTPUT_PP);
-    lcd.begin(1);
+    lcd.begin();
     lcd.clear(RED);
     uart1.begin(9600);
 

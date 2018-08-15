@@ -21,12 +21,16 @@
 #include "LTC1446.h"
 
 
-void LTCX::begin(uint8_t dev_num)
+void LTCX::begin()
 {
-    spi_dev_LTC1446.dev_num = dev_num;
-    spi_dev_LTC1446.mode = SPI_MODE0;
-    spi_dev_LTC1446.prescaler = SPI_CLOCK_DIV256;
-    spi_dev_LTC1446.bit_order = MSB_FIRST;
+
+    if(initialized == 0)
+    {      
+        spi_dev_LTC1446.dev_num = spi->get_new_dev_num();;
+        spi_dev_LTC1446.mode = SPI_MODE0;
+        spi_dev_LTC1446.prescaler = SPI_CLOCK_DIV256;
+        spi_dev_LTC1446.bit_order = MSB_FIRST; 
+    }
 
     spi->begin(&spi_dev_LTC1446);
     cs->mode(OUTPUT_PP);

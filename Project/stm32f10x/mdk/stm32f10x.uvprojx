@@ -607,9 +607,14 @@
               <FilePath>..\..\..\ebox\core\stdFun\WString.cpp</FilePath>
             </File>
             <File>
+              <FileName>Stream.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\stdFun\Stream.cpp</FilePath>
+            </File>
+            <File>
               <FileName>IPAddress.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\network\IPAddress.cpp</FilePath>
+              <FilePath>..\..\..\ebox\core\stdFun\IPAddress.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -627,19 +632,9 @@
               <FilePath>..\..\..\ebox\core\ebox_init.cpp</FilePath>
             </File>
             <File>
-              <FileName>Stream.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\Stream.cpp</FilePath>
-            </File>
-            <File>
               <FileName>ebox_virtual_hmi.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\port\ebox_virtual_hmi.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_virtual_lcd.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\ebox_virtual_lcd.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -810,6 +805,46 @@
               <FileName>WS2812B.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\WS2812B.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_virtual_lcd.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\ebox_virtual_lcd.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Max7456.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\Max7456.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>LTC1446.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\LTC1446.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>si4432.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\si4432.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>at45db.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\at45db.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>fm25v.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\fm25v.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>MPU6050.CPP</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\MPU6050.CPP</FilePath>
+            </File>
+            <File>
+              <FileName>at24c02.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\at24c02.cpp</FilePath>
             </File>
           </Files>
         </Group>

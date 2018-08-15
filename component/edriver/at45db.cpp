@@ -21,13 +21,17 @@
 
 #include "At45db.h"
 
-void At45db::begin(uint8_t dev_num)
+void At45db::begin()
 {
-	spi_dev_AT45DB.dev_num = dev_num;
-	spi_dev_AT45DB.mode = SPI_MODE0;
-	spi_dev_AT45DB.prescaler = SPI_BaudRatePrescaler_4;
-	spi_dev_AT45DB.bit_order = MSB_FIRST;
-	
+
+    if(initialized == 0)
+    {
+        spi_dev_AT45DB.dev_num = spi->get_new_dev_num();
+        spi_dev_AT45DB.mode = SPI_MODE0;
+        spi_dev_AT45DB.prescaler = SPI_BaudRatePrescaler_4;
+        spi_dev_AT45DB.bit_order = MSB_FIRST;
+	}
+
 	spi->begin(&spi_dev_AT45DB);
 	cs->mode(OUTPUT_PP);
 	cs->set();    
