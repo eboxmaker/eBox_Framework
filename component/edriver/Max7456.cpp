@@ -23,12 +23,16 @@
 
 //------------------ begin ---------------------------------------------------
 
-void OSD::begin(uint8_t dev_num)
+void OSD::begin()
 {
-    spi_dev_max7456.dev_num = dev_num;
-    spi_dev_max7456.mode = SPI_MODE0;
-    spi_dev_max7456.prescaler = SPI_CLOCK_DIV128;
-    spi_dev_max7456.bit_order = MSB_FIRST;
+
+    if(initialized == 0)
+    {
+        spi_dev_max7456.dev_num = spi->get_new_dev_num();
+        spi_dev_max7456.mode = SPI_MODE0;
+        spi_dev_max7456.prescaler = SPI_CLOCK_DIV128;
+        spi_dev_max7456.bit_order = MSB_FIRST;    
+    }
 
     spi->begin(&spi_dev_max7456);
     cs->mode(OUTPUT_PP);

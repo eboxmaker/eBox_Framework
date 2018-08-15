@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcuLib\stm32f4xx\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\..\ebox\core;..\..\..\user;..\..\..\ebox\hardware\cortex-m4;..\..\..\ebox\hardware\cortex-m4\Peripherals;..\..\..\component\ddc;..\..\..\user\board\spark_f4;..\..\..\component\edriver;..\..\..\component\apps</IncludePath>
+              <IncludePath>..\..\..\mcuLib\stm32f4xx\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\..\ebox\core;..\..\..\user;..\..\..\ebox\hardware\cortex-m4;..\..\..\ebox\hardware\cortex-m4\Peripherals;..\..\..\component\ddc;..\..\..\user\board\spark_f4;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\component\gui</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -706,6 +706,16 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\Stream.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ebox_virtual_hmi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\port\ebox_virtual_hmi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_virtual_lcd.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\ebox_virtual_lcd.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -870,6 +880,61 @@
               <FileName>bsp_ebox.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\board\spark_f4\bsp_ebox.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>gui</GroupName>
+          <Files>
+            <File>
+              <FileName>Font8_ASCII.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\Font8_ASCII.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Font16_ASCII.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\Font16_ASCII.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Font16_HZ.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\Font16_HZ.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Font24_ASCII.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\Font24_ASCII.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Font32_ASCII.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\Font32_ASCII.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_bitmap.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_bitmap.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_graphic.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_graphic.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_port.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_port.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_text.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_text.cpp</FilePath>
             </File>
           </Files>
         </Group>

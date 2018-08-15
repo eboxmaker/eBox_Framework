@@ -58,7 +58,6 @@ public:
     virtual int8_t take_spi_right(SpiConfig_t *spi_config);
     virtual int8_t release_spi_right(void);
 private:
-    uint8_t     current_dev_num;
     SPI_TypeDef *spi;
     uint8_t     busy;
 
@@ -104,7 +103,6 @@ private:
     uint8_t bit_order;
     uint8_t spi_delay;
 
-    uint8_t current_dev_num;
     uint8_t busy;
 
     uint8_t transfer0(uint8_t data);

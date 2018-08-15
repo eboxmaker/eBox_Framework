@@ -31,12 +31,13 @@ public:
         cs  = p_cs_pin;
         spi = p_SPI;
     }
-    void begin(uint8_t dev_num);
+    void begin();
     void write(uint16_t _DACA, uint16_t _DACB);
 
 private:
     SpiConfig_t spi_dev_LTC1446;
-    Gpio *cs;
-    Spi *spi;
+    Gpio        *cs;
+    Spi         *spi;
+    uint8_t     initialized;
 };
 #endif

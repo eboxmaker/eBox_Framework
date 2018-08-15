@@ -4,12 +4,17 @@
 
 #include "../core/stdFun/new.h"
 #include "../core/stdFun/print.h"
+#include "../core/stdFun/stream.h"
 #include "../core/stdFun/ringbuf.h"
 #include "../core/stdFun/list.h"
 #include "../core/stdFun/random.h"
 #include "../core/stdFun/sort.h"
 #include "../core/stdFun/Dstring.h"
 #include "../core/stdFun/Wstring.h"
+#include "../core/stdFun/IPAddress.h"
+#include "../core/stdFun/Udp.h"
+#include "../core/stdFun/client.h"
+#include "../core/stdFun/server.h"
 
 
 

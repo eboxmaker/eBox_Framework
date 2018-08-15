@@ -36,7 +36,7 @@ void setup()
     ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-    flash.begin(1);
+    flash.begin();
 
 
 }

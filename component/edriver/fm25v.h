@@ -57,17 +57,18 @@ class FM25V
 			this->cs  = cs;
 			this->spi = spi;
 		}
-		void begin(uint8_t dev_num);//
+		void begin();//
 		void read_id(uint16_t *id); //
 		void read(uint8_t *buf,u32 read_addr,u16 num_to_read);// 
 		void fast_read(uint8_t *buf,u32 read_addr,u16 num_to_read);//
 		void write(uint8_t *buf,u32 write_addr,u16 num_to_write);
 
 	private:
-		uint8_t                  spi_flash_buf[1024];
-		SpiConfig_t     spi_dev_FM25V;
-		Gpio                *cs;
-		Spi                 *spi;
+		uint8_t     spi_flash_buf[1024];
+		SpiConfig_t spi_dev_FM25V;
+		Gpio        *cs;
+		Spi         *spi;
+        uint8_t     initialized;
 
 		uint8_t   readSR(void);  //
 		void _waitBusy(void);//

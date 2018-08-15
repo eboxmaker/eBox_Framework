@@ -21,8 +21,8 @@ float   ebox_mem_used(void);
 size_t  ebox_get_sram_start_addr(void);
 size_t  ebox_get_sram_end_addr(void);
 uint16_t ebox_free_block_print(void);
-//void    *malloc(size_t size);
-//void    free(void *ptr);
+void    *malloc(size_t size);
+void    free(void *ptr);
 
     
 int ebox_memcmp(const void * cs,const void * ct, size_t count);

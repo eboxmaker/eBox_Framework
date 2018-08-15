@@ -344,11 +344,11 @@ void *ebox_memcpy(void * dst, const void *src, size_t count)
 	return dst;
 }
 
-//void *malloc(size_t size)
-//{
-//    return ebox_malloc(size);
-//}
-//void free(void *ptr)
-//{
-//     ebox_free(ptr);
-//}
+void *malloc(size_t size)
+{
+    return ebox_malloc(size);
+}
+void free(void *ptr)
+{
+     ebox_free(ptr);
+}

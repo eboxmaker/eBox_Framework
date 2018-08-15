@@ -23,7 +23,10 @@
 #define Stream_h
 
 #include <inttypes.h>
-#include "ebox_cppfun.h"
+#include "ebox_base.h"
+#include "print.h"
+#include "WString.h"
+
 
 // compatability macros for testing
 /*

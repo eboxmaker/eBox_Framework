@@ -38,12 +38,18 @@ Si4432::Si4432(Gpio *irq, Gpio *ce, Gpio *cs, Spi *spi)
 ** 入口参数：无
 ** 出口参数：无
 ****************************************************************************/
-void Si4432::begin(uint8_t dev_num)
+void Si4432::begin()
 {
-    spi_dev_si4432.dev_num = dev_num;
-    spi_dev_si4432.mode = SPI_MODE0;
-    spi_dev_si4432.prescaler = SPI_CLOCK_DIV4;
-    spi_dev_si4432.bit_order = MSB_FIRST;
+    if(initialized == 0)
+    {      
+        spi_dev_si4432.dev_num = spi->get_new_dev_num();;
+        spi_dev_si4432.mode = SPI_MODE0;
+        spi_dev_si4432.prescaler = SPI_CLOCK_DIV4;
+        spi_dev_si4432.bit_order = MSB_FIRST; 
+    }
+
+
+    
     spi->begin(&spi_dev_si4432);
     cs->mode(OUTPUT_PP);
     cs->set();
