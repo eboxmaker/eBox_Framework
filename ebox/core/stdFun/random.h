@@ -29,8 +29,17 @@
 #ifndef __RANDOM_H
 #define __RANDOM_H
 
+#include "ebox_type.h"
+
 void            random_seed(unsigned int seed);
 unsigned int    random();
 unsigned int    random(unsigned int max);
 unsigned int    random(unsigned int min, unsigned int max);
+
+uint16_t makeWord(unsigned int w);
+uint16_t makeWord(unsigned char h, unsigned char l);
+
+#define word(...) makeWord(__VA_ARGS__)
+
+
 #endif

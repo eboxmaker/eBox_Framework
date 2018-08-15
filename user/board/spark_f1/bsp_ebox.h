@@ -24,6 +24,7 @@
 #include "lcd_1.8.h"
 #include "cnc.h"
 #include "button.h"
+#include "../Ethernet3/utility/w5500.h"
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
@@ -56,6 +57,7 @@ extern Led      led2;
 extern Led      led3;
 extern CNC      cnc;
 extern Lcd      lcd;
+extern W5500Class w5500;
 
 extern void print_log(const char *name,const char *date);
 

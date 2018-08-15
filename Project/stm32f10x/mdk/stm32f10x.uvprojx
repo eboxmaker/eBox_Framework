@@ -948,6 +948,51 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>eth3</GroupName>
+          <Files>
+            <File>
+              <FileName>Dhcp.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\Dhcp.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Dns.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\Dns.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Ethernet3.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\Ethernet3.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EthernetClient.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\EthernetClient.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EthernetServer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\EthernetServer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EthernetUdp3.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\EthernetUdp3.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>socket.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\utility\socket.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>w5500.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\utility\w5500.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>

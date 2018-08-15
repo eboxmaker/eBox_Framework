@@ -28,7 +28,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #define EXAMPLE_NAME	"w5500 io test example"
 #define EXAMPLE_DATE	"2018-08-11"
 
-W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
+//W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
 
 //u8 mac[6] = {0x00, 0x08, 0xdc, 0x11, 0x11, 0x11}; /*定义Mac变量*/
 //u8 ip[4] = {192, 168, 1, 119}; /*定义lp变量*/
