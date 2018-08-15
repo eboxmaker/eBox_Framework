@@ -1,5 +1,6 @@
 
 #include "ebox_printf.h"
+#include "ebox_mem.h"
 
 extern void ebox_printf_flush(void);
 

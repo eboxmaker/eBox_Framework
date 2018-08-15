@@ -2,7 +2,6 @@
 #define _ebox_base_h
 #include "ebox_type.h"
 
-
 extern Cpu_t cpu;
      
 extern void        (*interrupts)(void);
@@ -15,9 +14,9 @@ extern void        (*delay_us)(uint64_t ms);
 
 
 
+
 #define low_byte(w) ((uint8_t) ((w) & 0xff))
 #define high_byte(w) ((uint8_t) ((w) >> 8))
-
 
 /** read bit of value */
 #define bit_read(value, bit) (((value) >> (bit)) & 0x01)
@@ -42,6 +41,18 @@ extern void        (*delay_us)(uint64_t ms);
 
 /** True iff v is a power of two (1, 2, 4, 8, ...) */
 #define is_power_of_tow(v)  ((v) && !((v) & ((v) - 1)))
+
+
+
+#define lowByte(w) ((uint8_t)           ((w) & 0xff))
+#define highByte(w) ((uint8_t)          ((w) >> 8))
+#define bitRead(value, bit)             (((value) >> (bit)) & 0x01)
+#define bitSet(value, bit)              ((value) |= (1UL << (bit)))
+#define bitClear(value, bit)            ((value) &= ~(1UL << (bit)))
+#define bitWrite(value, bit, bitvalue)  (bitvalue ? bitSet(value, bit) : bitClear(value, bit))
+#define bitsGet(x, m, n)                ((((uint32)x) << (31 - (n))) >> ((31 - (n)) + (m)))
+#define bitShift(shift)                 (1UL << (shift))
+#define bitMaskShift(mask, shift)       ((mask) << (shift))
 
 #endif
 

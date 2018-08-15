@@ -27,8 +27,6 @@ void GUI::set_text_auto_reline(uint8_t enable)
 ////½âÂë//////////////////////////////
 void GUI::char_index_of_font(uint16_t code,const GUI_FONT_PROP **font_list,uint16_t *index)
 {
-    uint16_t tmp;
-    uint16_t count;
     const GUI_FONT_PROP *pList;
     pList = current_font->list;
     
