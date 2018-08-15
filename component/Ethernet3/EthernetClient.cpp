@@ -29,11 +29,9 @@ int EthernetClient::connect(const char* host, uint16_t port) {
   dns.begin(Ethernet.dnsServerIP());
   ret = dns.getHostByName(host, remote_addr);
   if (ret == 1) {
-    ebox_printf("dns success\r\n");
 
     return connect(remote_addr, port);
   } else {
-     ebox_printf("dns failed\r\n");
     return ret;
   }
 }
@@ -45,7 +43,6 @@ int EthernetClient::connect(IPAddress ip, uint16_t port) {
     uint8_t s = w5500.readSnSR(i);
     if (s == SnSR::CLOSED || s == SnSR::FIN_WAIT || s == SnSR::CLOSE_WAIT) {
       _sock = i;
-        ebox_printf("socket:%d(state:%d)\r\n",i,s);
       break;
     }
   }
@@ -59,7 +56,6 @@ int EthernetClient::connect(IPAddress ip, uint16_t port) {
   uart1.println(ip.toString());
   if (!::connect(_sock, rawIPAddress(ip), port)) {
     _sock = MAX_SOCK_NUM;
-    ebox_printf("[eth]failed\r\n");
     return 0;
   }
 
@@ -67,11 +63,9 @@ int EthernetClient::connect(IPAddress ip, uint16_t port) {
     delay_ms(1);
     if (status() == SnSR::CLOSED) {
       _sock = MAX_SOCK_NUM;
-      ebox_printf("send connect cmd failed !\r\n");
       return 0;
     }
   }
-      ebox_printf("[eth]connecte successe!\r\n");
 
 
   return 1;

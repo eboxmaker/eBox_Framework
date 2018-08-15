@@ -72,3 +72,6 @@ unsigned int random(unsigned int min, unsigned int max)
     return (min + rand() % (max - min));
 }
 
+uint16_t makeWord(unsigned int w) { return w; }
+uint16_t makeWord(unsigned char h, unsigned char l) { return (h << 8) | l; }
+

@@ -28,8 +28,10 @@
 //mcuGpio			BtnPin(GPIOA,GPIO_Pin_8);
 //Uart 				UART(USART1, &PA9, &PA10);
 mcuSpi spi_w5500(SPI1,&PB3,&PB4,&PA7);
-W5500  w5500(&PA15, &PC14, &PG2, &spi_w5500);
-Button btn(&PH15,1);
+//W5500  w5500(&PA15, &PC14, &PG2, &spi_w5500);
+W5500Class  w5500(&PA15, &PC14, &PG2, &spi_w5500);
+
+Button  btn(&PH15,1);
 Led     led1(&LED1,0);
 Led     led2(&LED2,0);
 Led     led3(&LED3,0);

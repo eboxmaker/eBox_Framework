@@ -29,7 +29,7 @@ uint8_t socket(SOCKET s, uint8_t protocol, uint16_t port, uint8_t flag)
     }
 
     w5500.execCmdSn(s, Sock_OPEN);
-    ebox_printf("[socket]%d opened\r\n",s);
+
     return 1;
   }
 

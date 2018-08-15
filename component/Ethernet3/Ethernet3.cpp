@@ -170,16 +170,16 @@ void EthernetClass::begin(uint8_t *mac, IPAddress local_ip, IPAddress subnet, IP
   _dnsServerAddress = dns_server;
     
     w5500.getMACAddress(buf);
-    ebox_printf("mac : %x.%x.%x.%x.%x.%x\r\n", buf[0], buf[1], buf[2], buf[3], buf[4], buf[5]);
+//    ebox_printf("mac : %x.%x.%x.%x.%x.%x\r\n", buf[0], buf[1], buf[2], buf[3], buf[4], buf[5]);
     
     w5500.getIPAddress(buf);
-    ebox_printf("IP : %d.%d.%d.%d\r\n", buf[0], buf[1], buf[2], buf[3]);
+//    ebox_printf("IP : %d.%d.%d.%d\r\n", buf[0], buf[1], buf[2], buf[3]);
     
     w5500.getGatewayIp(buf);
-    ebox_printf("GW : %d.%d.%d.%d\r\n", buf[0], buf[1], buf[2], buf[3]);
+//    ebox_printf("GW : %d.%d.%d.%d\r\n", buf[0], buf[1], buf[2], buf[3]);
 
     w5500.getSubnetMask(buf);
-    ebox_printf("sub : %d.%d.%d.%d\r\n", buf[0], buf[1], buf[2], buf[3]);
+//    ebox_printf("sub : %d.%d.%d.%d\r\n", buf[0], buf[1], buf[2], buf[3]);
 }
 
 #endif

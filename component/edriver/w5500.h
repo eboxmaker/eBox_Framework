@@ -25,7 +25,7 @@
 #include "ebox.h"
 
 
-typedef int8_t 			SOCKET;
+typedef uint8_t 			SOCKET;
 
 
 
