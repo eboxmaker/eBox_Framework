@@ -42,7 +42,7 @@ extern "C"
 
 void  *cjson_malloc(size_t xWantedSize);
 void  cjson_free(void *pv);
-size_t  cjson_get_free();
+size_t  cjson_get_free(void);
 
 /* The cJSON structure: */
 typedef struct cJSON {

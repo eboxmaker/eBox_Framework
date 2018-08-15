@@ -891,6 +891,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\user\board\spark_f1\bsp_ebox.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ATEM.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\ATEM\ATEM.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

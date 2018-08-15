@@ -32,6 +32,15 @@
 #define EPARA       4
 #define E2LONG      5
 #define EOTHER      128
+
+
+typedef unsigned int word;
+
+#define bit(b) (1UL << (b))
+
+typedef bool boolean;
+typedef uint8_t byte;
+
 typedef enum
 {
 STM32F050C4 = 0,
