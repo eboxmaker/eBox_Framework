@@ -47,9 +47,18 @@
  */
 
 
+#define USE_UART1 1
+#define USE_UART2 1
+#define USE_UART3 1
+#define USE_UART4 1
+#define USE_UART5 1
+#define UART_NUM (USE_UART1 + USE_UART2 + USE_UART3 + USE_UART4 + USE_UART5)
+
+#define USE_UART_DMA 1
+
 
 //”√ªß≈‰÷√//////////////
-#define UART_NUM (5)
+//#define UART_NUM (5)
 
 enum IrqType {
 		RxIrq = 0,
@@ -72,8 +81,9 @@ public:
     Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin);
 
     //initial uart
-    void    begin(uint32_t baud_rate,uint8_t _use_dma = 1);
-    void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit,uint8_t _use_dma);
+    void    begin(uint32_t baud_rate,uint8_t use_dma = 1);
+    void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit,uint8_t use_dma = 1);
+
     void    nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
     //write method
     virtual size_t  write(uint8_t c);
@@ -116,10 +126,12 @@ private:
     USART_TypeDef       *_USARTx;
     Gpio                *_tx_pin;
     Gpio                *_rx_pin;
+    #if USE_UART_DMA
     char                *data_ptr;
-    uint8_t             use_dma;
+    uint8_t             _use_dma;
     Dma                 *dma_tx;
     uint16_t            dma_write(const char *str, uint16_t length);
+    #endif
     void                set_busy();
 
 protected:

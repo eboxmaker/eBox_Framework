@@ -4,7 +4,7 @@
 void UartStream::begin(uint32_t baud_rate,uint8_t _use_dma /*= 1*/)
 {
     _rx_buffer = (char *)ebox_malloc(uart_rx_buffer_size);
-    uart->begin(baud_rate,_use_dma);
+    uart->begin(baud_rate);
     uart->attach(this,&UartStream::rx_evnet,RxIrq);
     uart->interrupt(RxIrq,ENABLE);
 }

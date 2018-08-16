@@ -54,5 +54,8 @@ extern void        (*delay_us)(uint64_t ms);
 #define bitShift(shift)                 (1UL << (shift))
 #define bitMaskShift(mask, shift)       ((mask) << (shift))
 
+#define isDigital(c)		((c>='0') && (c<='9'))//判断是否为数字 
+#define IsDigital(c)		((c>='0') && (c<='9'))//判断是否为数字 
+
 #endif
 
