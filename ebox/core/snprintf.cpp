@@ -167,6 +167,7 @@
 #define HAVE_STDARG_H 1
 #define HAVE_STDLIB_H 1
 #define HAVE_FLOAT_H 1
+#include "snprintf.h"
 //////////////////////
 
 #if HAVE_CONFIG_H

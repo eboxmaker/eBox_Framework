@@ -25,8 +25,9 @@
 #include <string.h>
 #include <math.h>
 
-#include "Print.h"
+#include "snprintf.h"
 #include "ebox_mem.h"
+#include "Print.h"
 
 // Public Methods //////////////////////////////////////////////////////////////
 
@@ -56,34 +57,37 @@ size_t Print::write(const uint8_t *buffer, size_t size)
 //}
 #include "stdio.h"
 #include <stdarg.h>
-
+#include "Myprintf.h"
 size_t Print::printf(const char *fmt, ...)
 {
-    int     size1 = 0;
-    size_t  size2 = 64;
-    char *p;
+//    int     size1 = 0;
+//    size_t  size2 = 64;
+//    char *p;
 
-    va_list va_params;
-    va_start(va_params, fmt);
-    
-    do{
-        p = (char *)ebox_malloc(size2);
-        if(p == NULL)
-            return 0;
-        size1 = vsnprintf(p, size2,fmt, va_params);
-        if(size1 == -1  || size1 >= size2)
-        {
-            size2+=64;
-            size1 = -1;
-            ebox_free(p);
-        }
-    }while(size1 == -1);
+//    va_list va_params;
+//    va_start(va_params, fmt);
+//    
+//    do{
+//        p = (char *)ebox_malloc(size2);
+//        if(p == NULL)
+//            return 0;
+////        size1 =  vsnprintf(p, size2,fmt, va_params);
+////        size1 =  rpl_vsnprintf(p, size2,fmt, va_params);
+////        size1 =  MyVsnprintf(p, size2,fmt, va_params);
 
-    //vsprintf(uart_buf, fmt, va_params); 
-    va_end(va_params);
-    write(p, size1);
-    ebox_free(p);
-    return size1;
+//        if(size1 == -1  || size1 >= size2)
+//        {
+//            size2+=64;
+//            size1 = -1;
+//            ebox_free(p);
+//        }
+//    }while(size1 == -1);
+
+//    //vsprintf(uart_buf, fmt, va_params); 
+//    va_end(va_params);
+//    write(p, size1);
+//    ebox_free(p);
+//    return size1;
 }
 
 size_t Print::print(const String &s)

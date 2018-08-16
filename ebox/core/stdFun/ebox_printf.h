@@ -1,5 +1,11 @@
 #ifndef __EBOX_PRINTF_H
 #define __EBOX_PRINTF_H
+#include "stdarg.h"
+
+
+
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
