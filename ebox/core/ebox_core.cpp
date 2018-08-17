@@ -1,18 +1,19 @@
 #include "ebox_core.h"
 
- extern "C" {
+extern "C" {
 
-void        (*interrupts)(void);
-int         (*no_interrupts)(void);
-void        (*ebox_reset)();
-uint64_t    (*micros)();
-uint64_t    (*millis)();
-void        (*delay_ms)(uint64_t ms);
-void        (*delay_us)(uint64_t ms);
+    void        (*interrupts)(void);
+    int         (*no_interrupts)(void);
+    void        (*ebox_reset)();
+    uint64_t    (*micros)();
+    uint64_t    (*millis)();
+    void        (*delay_ms)(uint64_t ms);
+    void        (*delay_us)(uint64_t ms);
 
- 
-Cpu_t cpu;
+    Cpu_t cpu;
 }
+uint16_t makeWord(unsigned int w) { return w; }
+uint16_t makeWord(unsigned char h, unsigned char l) { return (h << 8) | l; }
 
 /** @defgroup common函数
   * @{
@@ -66,4 +67,55 @@ void shift_out(Gpio *data_pin, Gpio *clock_pin, uint8_t bit_order, uint8_t val)
     }
 }
 
+/**
+ * @brief   
+ * 
+ * @param   
+ *          
+ *          
+ *          
+ * @retval  NONE
+ */
+void random_seed(unsigned int seed)
+{
+    srand(seed);
+}
 
+/**
+ * @brief   产生一个0~65535的随机数
+ * @param   NONE
+ * @retval  0~65535随机数结果
+ */
+unsigned int random()
+{
+    return rand();
+}
+/**
+ * @brief   产生一个小于某个值得随机数
+ * @param   max:随机数的最大值，此值比产生的最大值大1.
+ * @retval  随机数结果
+ */
+unsigned int random(unsigned int max)
+{
+    return (rand() % max);
+}
+
+/**
+ * @name    
+ * @brief   
+ * 
+ * @param   
+ *          
+ *          
+ *          
+ * @retval  NONE
+ */
+unsigned int random(unsigned int min, unsigned int max)
+{
+    return (min + rand() % (max - min));
+}
+
+long map(long x, long in_min, long in_max, long out_min, long out_max)
+{
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}

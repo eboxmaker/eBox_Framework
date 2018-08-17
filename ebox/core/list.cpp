@@ -16,8 +16,8 @@
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
   ******************************************************************************
   */
-#include "list.h"
 #include "ebox_mem.h"
+#include "list.h"
 /**
  *@brief    List单向链表
             本数据链表采用尾插法创建链表，数据起始位置为0。结束位置为size() - 1；

@@ -15,10 +15,11 @@ Function List: printf	格式输出到终端显示
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include "stdlib.h"
+#include  "stdarg.h"
     
 //int MyVsprintf(char *buf,const char *format,va_list args);
-int MyVsnprintf(char *buf,size_t size,const char *format,va_list args);
-//int MyVsprintf(char *buf,const char * format,...);//格式输出到buf
 //extern char * MyPrintf(const char *format,...);//格式输出到终端
 extern int Str2Digital(const char **str);
 extern int Int2Str(int num , char *str);
@@ -31,6 +32,11 @@ unsigned long long mypow10(int y);
 int get_float_integer_len(float value);
 
 //extern void vsn_test(const char *fmt, ...);
+    
+int _ebox_vsnprintf(char *buf,size_t size,const char *format,va_list args);
+int _ebox_snprintf(char *str, size_t size,const char *format,...);
+int _ebox_vsprintf(char *ret, const char *format, va_list ap);
+int _ebox_sprintf(char *str,const char *format,...);
 
 #ifdef __cplusplus
 }

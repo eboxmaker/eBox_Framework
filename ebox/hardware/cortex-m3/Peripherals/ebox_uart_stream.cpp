@@ -1,5 +1,5 @@
+#include "ebox_mem.h"
 #include "ebox_uart_stream.h"
-
 
 void UartStream::begin(uint32_t baud_rate,uint8_t _use_dma /*= 1*/)
 {

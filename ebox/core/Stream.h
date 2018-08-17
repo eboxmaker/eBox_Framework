@@ -23,7 +23,7 @@
 #define Stream_h
 
 #include <inttypes.h>
-#include "ebox_base.h"
+#include "ebox_core.h"
 #include "print.h"
 #include "WString.h"
 

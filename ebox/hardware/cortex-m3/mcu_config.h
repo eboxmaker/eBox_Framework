@@ -4,7 +4,6 @@
 
 #include "stdint.h"
 #include "stm32f10x.h"
-#include "ebox_type.h"
 /*
 MCU_TYPE        MCU_PINS   CLOCK    FLASH   RAM     
 STM32F050C4     LQFP 48     48      16      4

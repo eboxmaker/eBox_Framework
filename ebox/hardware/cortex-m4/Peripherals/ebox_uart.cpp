@@ -1,5 +1,5 @@
+#include "ebox_mem.h"
 #include "ebox_uart.h"
-
 
 static uint32_t serial_irq_ids[UART_NUM] = {0, 0, 0,0,0};
 

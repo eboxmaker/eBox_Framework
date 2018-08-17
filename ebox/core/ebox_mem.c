@@ -1,6 +1,11 @@
-#include "ebox_mem.h"
-#include "ebox_printf.h"
+
+#include "ebox_core.h"
 #include "mcu_config.h"
+#if DEBUG
+    #include "ebox_printf.h"
+#endif
+
+#include "ebox_mem.h"
 
 static uint32_t ram_addr_begin,ram_addr_end;
 
@@ -130,7 +135,9 @@ void *ebox_malloc( size_t xWantedSize )
     }
     if(pvReturn == NULL)
     {
-        ebox_printf("bad mem malloc!!!\r\n");
+        #if DEBUG
+                ebox_printf("bad mem malloc!!!\r\n");
+        #endif
     }
     
 	return pvReturn;
@@ -291,6 +298,7 @@ size_t ebox_get_sram_end_addr(void)
 */
 uint16_t ebox_free_block_print(void)
 {
+    #if USE_PRINTF
     eboxBlockLink_t *p;
     int i = 0;
     ebox_printf("\r\n------------------start------------------\r\n");
@@ -302,6 +310,7 @@ uint16_t ebox_free_block_print(void)
     }
     ebox_printf("-------------------end-------------------\r\n");
     return i-2;
+    #endif
 }
 
 

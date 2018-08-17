@@ -19,15 +19,15 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "bsp_ebox.h"
+#include "ebox_mem.h"
 
-
-Button  btn(&BtnPin,1);
-// 依赖edrive目录下 led模块
-Led     led1(&LED1,0);
-Led     led2(&LED2,0);
-Led     led3(&LED3,0);
-Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
-W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
+//Button  btn(&BtnPin,1);
+//// 依赖edrive目录下 led模块
+//Led     led1(&LED1,0);
+//Led     led2(&LED2,0);
+//Led     led3(&LED3,0);
+//Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
+//W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
 
 // 如果不使用object.cpp, 使用下列方式创建IO对象
 //mcuGpio 		LED1(GPIOB,GPIO_Pin_8);
@@ -44,7 +44,7 @@ W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
 //#define   LED3  PB10
 
 //#define   BtnPin	PA8
-//#define   UART	uart1
+#define   UART	uart1
 
 /*
 *********************************************************************************************************
@@ -70,7 +70,7 @@ void print_log(const char *name,const char *date)
 	UART.printf("* CPU TYPE      : %d\r\n",MCU_TYPE);	/* 打印一行空格 */
 	UART.printf("* CPU PINS      : %d\r\n",STM32_PINS);	/* 打印一行空格 */
 	UART.printf("* CPU COMPANY   : %s\r\n",MCU_COMPANY);	/* 打印一行空格 */
-	UART.printf("* CPUID         : %08X %08X %08X\n\r"
+	UART.printf("* CPUID         : %08x %08x %08x\n\r"
 			, cpu.chip_id[2], cpu.chip_id[1], cpu.chip_id[0]);
 	UART.printf("* core          : %0.3fMhz\r\n",cpu.clock.core/1000000.0);
     UART.printf("* hclk          : %0.3fMhz\r\n",cpu.clock.hclk/1000000.0);

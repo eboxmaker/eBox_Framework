@@ -20,35 +20,35 @@
 #ifndef __BSP_EBOX_H
 #define __BSP_EBOX_H
 #include "ebox.h"
-//#include "w5500.h"
-#include "../Ethernet3/utility/w5500.h"
-#include "button.h"
-#include "led.h"
+////#include "w5500.h"
+//#include "../Ethernet3/utility/w5500.h"
+//#include "button.h"
+//#include "led.h"
 #define	HARDWARE	"ebox_spark£¬STM32F407IGT6"
 
 
-extern mcuSpi spi_w5500;
-//extern W5500 w5500;
-//extern W5500Class  w5500;
+//extern mcuSpi spi_w5500;
+////extern W5500 w5500;
+////extern W5500Class  w5500;
 
-extern Button btn;
-extern Led     led1;
-extern Led     led2;
-extern Led     led3;
+//extern Button btn;
+//extern Led     led1;
+//extern Led     led2;
+//extern Led     led3;
 
-#define LED1 PI5
-#define LED2 PI6
-#define LED3 PI7
+//#define LED1 PI5
+//#define LED2 PI6
+//#define LED3 PI7
 
-#define BtnPin	PH15
+//#define BtnPin	PH15
 #define	UART    uart1
 #define	Serial    uart1
 
-#define	ADC_0   PA0
-#define	ADC_1   PA1
-#define	ADC_2   PA2
+//#define	ADC_0   PA0
+//#define	ADC_1   PA1
+//#define	ADC_2   PA2
 
-#define DAC_0   PB8
+//#define DAC_0   PB8
 
 void print_log(const char *name,const char *date);
 

@@ -4,6 +4,7 @@
 #include "mcu.h"
 #include "FunctionPointer.h"
 #include "dma.h"
+#include "print.h"
 
 //”√ªß≈‰÷√//////////////
 

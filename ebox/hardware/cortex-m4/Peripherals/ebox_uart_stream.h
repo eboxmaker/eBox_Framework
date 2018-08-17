@@ -1,6 +1,7 @@
 #ifndef __EBOX_UART_STREAM_H
 #define __EBOX_UART_STREAM_H
 #include "ebox_uart.h"
+#include "stream.h"
 
 #define RX_BUFFER_SIZE_UNIT 32
 class UartStream :public Stream

@@ -19,8 +19,16 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+//#include <stdlib.h>
+//#include <string.h>
+//#include <ctype.h>
+#include <stdio.h>
+
+#include "itoa.h"
+#include "ebox_core.h"
+
+
 #include "WString.h"
-#include "stdio.h"
 
 #define strlen_P strlen
 #define strcpy_P strcpy
@@ -30,8 +38,12 @@
 /*********************************************/
 char *dtostrf (double val, signed char width, unsigned char prec, char *sout) {
   char fmt[20];
-  sprintf(fmt, "%%%d.%df", width, prec);
-  sprintf(sout, fmt, val);
+//  vsnprintf(fmt, "%%%d.%df", width, prec);
+//  sprintf(sout, fmt, val);
+#if USE_PRINTF 
+  ebox_sprintf(fmt, "%%%d.%df", width, prec);
+  ebox_sprintf(sout, fmt, val);
+#endif
   return sout;
 }
 

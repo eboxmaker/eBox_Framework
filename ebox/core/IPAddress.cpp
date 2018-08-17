@@ -16,6 +16,8 @@
  License along with this library; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+ #include <stdio.h>
+#include "ebox_core.h"
 
 #include "IPAddress.h"
 #include "Print.h"
@@ -70,11 +72,13 @@ size_t IPAddress::printTo(Print& p) const
     n += p.print(_address.bytes[3], DEC);
     return n;
 }
-
 String IPAddress::toString() const
 {
     char szRet[16];
-    sprintf(szRet,"%u.%u.%u.%u", _address.bytes[0], _address.bytes[1], _address.bytes[2], _address.bytes[3]);
+//    sprintf(szRet,"%u.%u.%u.%u", _address.bytes[0], _address.bytes[1], _address.bytes[2], _address.bytes[3]);
+    #if USE_PRINTF
+    ebox_snprintf(szRet,16,"%u.%u.%u.%u", _address.bytes[0], _address.bytes[1], _address.bytes[2], _address.bytes[3]);
+    #endif
     return String(szRet);
 }
 

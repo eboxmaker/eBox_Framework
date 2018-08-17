@@ -419,98 +419,53 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>ebox_fun</GroupName>
+          <GroupName>ebox_core</GroupName>
           <Files>
             <File>
               <FileName>big_little.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\big_little.c</FilePath>
+              <FilePath>..\..\..\ebox\core\big_little.c</FilePath>
             </File>
             <File>
               <FileName>crc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\crc.c</FilePath>
+              <FilePath>..\..\..\ebox\core\crc.c</FilePath>
             </File>
             <File>
               <FileName>ebox_mem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\ebox_mem.c</FilePath>
+              <FilePath>..\..\..\ebox\core\ebox_mem.c</FilePath>
             </File>
             <File>
               <FileName>ebox_printf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\ebox_printf.c</FilePath>
+              <FilePath>..\..\..\ebox\core\ebox_printf.c</FilePath>
             </File>
             <File>
               <FileName>fifo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\fifo.c</FilePath>
+              <FilePath>..\..\..\ebox\core\fifo.c</FilePath>
             </File>
             <File>
               <FileName>itoa.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\itoa.c</FilePath>
+              <FilePath>..\..\..\ebox\core\itoa.c</FilePath>
             </File>
             <File>
               <FileName>math_misc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\math_misc.c</FilePath>
+              <FilePath>..\..\..\ebox\core\math_misc.c</FilePath>
+            </File>
+            <File>
+              <FileName>myprintf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\myprintf.c</FilePath>
             </File>
             <File>
               <FileName>Dstring.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\Dstring.cpp</FilePath>
+              <FilePath>..\..\..\ebox\core\Dstring.cpp</FilePath>
             </File>
-            <File>
-              <FileName>list.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\list.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>new.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\new.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>print.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\print.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>random.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\random.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ringbuf.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\ringbuf.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>sort.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\sort.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Stream.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\Stream.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>WString.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\WString.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>IPAddress.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\IPAddress.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ebox_core</GroupName>
-          <Files>
             <File>
               <FileName>ebox_core.cpp</FileName>
               <FileType>8</FileType>
@@ -522,14 +477,54 @@
               <FilePath>..\..\..\ebox\core\ebox_init.cpp</FilePath>
             </File>
             <File>
+              <FileName>IPAddress.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\IPAddress.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>list.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\list.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>new.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\new.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>print.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\print.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>random.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\random.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ringbuf.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\ringbuf.cpp</FilePath>
+            </File>
+            <File>
               <FileName>snprintf.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\snprintf.cpp</FilePath>
             </File>
             <File>
-              <FileName>myprintf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\myprintf.c</FilePath>
+              <FileName>sort.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\sort.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Stream.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\Stream.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>WString.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\WString.cpp</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,3 +1,4 @@
+#include "ebox_mem.h"
 #include "ebox_uart_stream.h"
 
 

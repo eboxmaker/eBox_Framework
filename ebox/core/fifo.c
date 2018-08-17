@@ -1,7 +1,7 @@
-#include "fifo.h"
-#include "math_misc.h"
+#include "ebox_core.h"
 #include "ebox_mem.h"
 
+#include "fifo.h"
  
 // #define min(a,b) ((a) < (b) ? (a):(b))
  

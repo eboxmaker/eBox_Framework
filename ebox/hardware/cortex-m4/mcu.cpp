@@ -1,5 +1,9 @@
-//#include "ebox_common.h"
+
+
+
+
 #include "ebox_core.h"
+#include "ebox_mem.h"
 #include "mcu.h"
 
 #ifdef __cplusplus
