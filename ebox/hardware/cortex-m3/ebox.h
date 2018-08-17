@@ -24,7 +24,6 @@
 
 
 #include "ebox_core.h"
-#include "stdio.h"
 
 
 #include "ebox_gpio.h"
@@ -44,7 +43,7 @@
 #include "ebox_wdg.h"
 #include "ebox_can.h"
 #include "ebox_step_motor.h"
-#include "ebox_3steper.h"
+//#include "ebox_3steper.h"
 
 extern "C"{
 void ebox_init(void);
@@ -71,7 +70,7 @@ extern SoftI2c si2c;
 extern SoftI2c si2c1;
 extern SoftI2c si2c2;
 
-extern Can can1;
+//extern Can can1;
 
 extern mcuGpio PA0;
 extern mcuGpio PA1;

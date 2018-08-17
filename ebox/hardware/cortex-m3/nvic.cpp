@@ -1,6 +1,5 @@
+#include "ebox_core.h"
 #include "nvic.h"
-
-
   
 //设备->中断号查询表
 const DevToIRQn_t dev_to_IRQn_table[] = 

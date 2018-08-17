@@ -279,7 +279,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
+#if USE_DMA
 Dma Dma1Ch1(DMA1_Channel1);
 Dma Dma1Ch2(DMA1_Channel2);
 Dma Dma1Ch3(DMA1_Channel3);
@@ -287,4 +287,4 @@ Dma Dma1Ch4(DMA1_Channel4);
 Dma Dma1Ch5(DMA1_Channel5);
 Dma Dma1Ch6(DMA1_Channel6);
 Dma Dma1Ch7(DMA1_Channel7);
-
+#endif

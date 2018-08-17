@@ -1,10 +1,11 @@
 #ifndef __EBOX_TYPE_H
 #define __EBOX_TYPE_H
 
+#include "stdlib.h"
 #include "stdint.h"
 #include "stdbool.h"
-#include "stdio.h"
 #include "ctype.h"
+#include "string.h"
   
 
 

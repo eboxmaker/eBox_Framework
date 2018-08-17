@@ -21,7 +21,7 @@
 #ifndef __UARTX_H
 #define __UARTX_H
 
-#include "ebox_core.h"
+#include "print.h"
 #include "mcu.h"
 #include "FunctionPointer.h"
 #include "dma.h"
@@ -48,13 +48,13 @@
 
 
 #define USE_UART1 1
-#define USE_UART2 1
-#define USE_UART3 1
-#define USE_UART4 1
-#define USE_UART5 1
+#define USE_UART2 0
+#define USE_UART3 0
+#define USE_UART4 0
+#define USE_UART5 0
 #define UART_NUM (USE_UART1 + USE_UART2 + USE_UART3 + USE_UART4 + USE_UART5)
 
-#define USE_UART_DMA 1
+#define USE_UART_DMA (0&&USE_DMA)
 
 
 //”√ªß≈‰÷√//////////////

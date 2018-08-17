@@ -45,6 +45,8 @@ mcuI2c  i2c2(I2C2, &PB10, &PB11);
 SoftI2c si2c(&PA4, &PA5);
 SoftI2c si2c1(&PB6, &PB7);
 SoftI2c si2c2(&PB10, &PB11);
+//can
+////Can can1(&PB8, &PB9);
 
 
 mcuGpio PA0(GPIOA, GPIO_Pin_0);
@@ -181,7 +183,3 @@ mcuGpio PG15(GPIOG, GPIO_Pin_15);
 #endif
 
 
-//can
-Can can1(&PB8, &PB9);
-
-//dma

@@ -1,7 +1,6 @@
 #ifndef __NVIC_H
 #define __NVIC_H
 
-#include "ebox_core.h"
 
 
 

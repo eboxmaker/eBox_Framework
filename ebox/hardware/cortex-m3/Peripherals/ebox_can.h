@@ -23,7 +23,6 @@
 
 #include "ebox_core.h"
 #include "mcu.h"
-
 #include "FunctionPointer.h"
 
  /**

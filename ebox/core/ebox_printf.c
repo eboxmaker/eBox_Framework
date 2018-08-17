@@ -1,12 +1,14 @@
 
-#include "ebox_printf.h"
+#include "ebox_core.h"
 #include "ebox_mem.h"
-#include "myprintf.h"
-#include "snprintf.h"
 
-extern void ebox_printf_flush(void);
+#include "ebox_printf.h"
+
+#if USE_PRINTF
 
 struct ebox_fifo *uart_fifo_ptr;
+
+extern void ebox_printf_flush(void);
 void ebox_printf_init(void)
 {
     uart_fifo_ptr = ebox_fifo_alloc(64);
@@ -25,9 +27,8 @@ void ebox_printf(const char *fmt, ...)
         buf = (char *)ebox_malloc(size2);
         if(buf == NULL)
             return ;
-        size1 =  vsnprintf(buf, size2,fmt, va_params);
-//        size1 =  rpl_vsnprintf(buf, size2,fmt, va_params);
-//        size1 =  MyVsnprintf(buf, size2,fmt, va_params);
+
+        size1 =  ebox_vsnprintf(buf, size2,fmt, va_params);
         if(size1 == -1  || size1 >= size2)
         {
             size2+=32;
@@ -56,4 +57,5 @@ void ebox_printf(const char *fmt, ...)
     ebox_free(buf);
     
 }
+#endif
 

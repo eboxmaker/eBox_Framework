@@ -20,6 +20,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_uart.h"
+#include "ebox_mem.h"
 
 uint8_t busy[UART_NUM];
 
@@ -214,8 +215,8 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     nvic(ENABLE,0,0);
     interrupt(RxIrq,DISABLE);
     interrupt(TcIrq,DISABLE);
-    USART_ClearITPendingBit(_USARTx, USART_IT_TC);
-    USART_ClearFlag(_USARTx,USART_FLAG_TC); 
+
+    
     _tx_pin->mode(AF_PP);
     _rx_pin->mode(INPUT);
 
@@ -243,8 +244,6 @@ void Uart::interrupt(IrqType type, FunctionalState enable)
         USART_ITConfig(_USARTx, USART_IT_RXNE, enable);
     if(type == TcIrq)
     {
-        USART_ClearITPendingBit(_USARTx, USART_IT_TC);
-        USART_ClearFlag(_USARTx,USART_FLAG_TC); 
         USART_ITConfig(_USARTx, USART_IT_TC, enable);//禁止关闭发送完成中断
     }
 }
@@ -277,7 +276,6 @@ size_t Uart::write(const uint8_t *buffer, size_t size)
     #if USE_UART_DMA
     if((_USARTx == USART1 || _USARTx == USART2 || _USARTx == USART3 ) && (_use_dma == 1))
     {
-//        wait_busy();
         if(data_ptr != NULL)
             ebox_free(data_ptr);
         set_busy();
@@ -384,6 +382,7 @@ void Uart::wait_busy()
     #if USE_UART1
         case (uint32_t)USART1_BASE:
             while(busy[0] == 1 ){
+                while((USART1->SR & 0X80) == 0);
                 if(USART1->SR & 0X40){
                     busy[0] = 0;
                     USART_ClearITPendingBit(USART1, USART_IT_TC);
@@ -396,6 +395,7 @@ void Uart::wait_busy()
     #if USE_UART2
         case (uint32_t)USART2_BASE:
             while(busy[1] == 1 ){
+                while((USART2->SR & 0X80) == 0);
                 if(USART2->SR & 0X40){
                     busy[1] = 0;
                     USART_ClearITPendingBit(USART2, USART_IT_TC);

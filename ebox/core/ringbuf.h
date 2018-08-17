@@ -52,7 +52,6 @@ private:
 
 };
 
-#include "ebox_cfun.h"
 template <class T>
 class RingBuf
 {

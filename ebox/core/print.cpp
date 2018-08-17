@@ -20,15 +20,13 @@
  Modified 03 August 2015 by Chuck Todd
  */
 
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include <math.h>
+
+#include "ebox_core.h"
 #include "ebox_mem.h"
 
-#include "snprintf.h"
-#include "stdio.h"
-#include "Myprintf.h"
+
 #include "Print.h"
 
 // Public Methods //////////////////////////////////////////////////////////////
@@ -58,6 +56,7 @@ size_t Print::write(const uint8_t *buffer, size_t size)
 //  return n;
 //}
 
+#if USE_PRINTF
 size_t Print::printf(const char *fmt, ...)
 {
     int     size1 = 0;
@@ -71,9 +70,8 @@ size_t Print::printf(const char *fmt, ...)
         p = (char *)ebox_malloc(size2);
         if(p == NULL)
             return 0;
-        size1 =  vsnprintf(p, size2,fmt, va_params);
-//        size1 =  rpl_vsnprintf(p, size2,fmt, va_params);
-//        size1 =  MyVsnprintf(p, size2,fmt, va_params);
+
+        size1 =  ebox_vsnprintf(p, size2,fmt, va_params);
 
         if(size1 == -1  || size1 >= size2)
         {
@@ -89,7 +87,7 @@ size_t Print::printf(const char *fmt, ...)
     ebox_free(p);
     return size1;
 }
-
+#endif
 size_t Print::print(const String &s)
 {
   return write(s.c_str(), s.length());

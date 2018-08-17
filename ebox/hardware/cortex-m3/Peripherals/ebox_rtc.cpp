@@ -53,28 +53,28 @@ int Rtc::begin(uint8_t clock_source)
 		/* Check if the Power On Reset flag is set */
 		if (RCC_GetFlagStatus(RCC_FLAG_PORRST) != RESET)
 		{
-			ebox_printf("\r\n\n Power On Reset occurred....");
+//			ebox_printf("\r\n\n Power On Reset occurred....");
 		}
 		/* Check if the Pin Reset flag is set */
 		else if (RCC_GetFlagStatus(RCC_FLAG_PINRST) != RESET)
 		{
-			ebox_printf("\r\n\n External Reset occurred....");
+//			ebox_printf("\r\n\n External Reset occurred....");
 		}
 		
-		ebox_printf("\r\n No need to configure RTC....");
-		ebox_printf("\r\n step 0....");
+//		ebox_printf("\r\n No need to configure RTC....");
+//		ebox_printf("\r\n step 0....");
 		/* Wait for RTC registers synchronization */
 		RTC_WaitForSynchro();
-		ebox_printf("\r\n step 1....");
+//		ebox_printf("\r\n step 1....");
 		
 		/* Enable the RTC Second */
 		RTC_ITConfig(RTC_IT_SEC, ENABLE);
-		ebox_printf("\r\n step 2....");
+//		ebox_printf("\r\n step 2....");
 		
 		/* Wait until last write operation on RTC registers has finished */
 		RTC_WaitForLastTask();
         
-		ebox_printf("\r\n step 3....");
+//		ebox_printf("\r\n step 3....");
 	}
 	
 		rtc_irq_init(Rtc::_irq_handler, (uint32_t)this);

@@ -18,7 +18,9 @@
 
 
 /* Includes ------------------------------------------------------------------*/
+#include "math.h"
 #include "ebox_wdg.h"
+
 void Iwdg::begin(uint16_t ms)
 {
 
@@ -35,7 +37,7 @@ void Iwdg::begin(uint16_t ms)
         pr = 5;
         rlr = 0xfff;
     }
-    ebox_printf("pr:%d\trlr:%d",pr,rlr);
+////    ebox_printf("pr:%d\trlr:%d",pr,rlr);
     IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
     IWDG_SetPrescaler(pr);
     IWDG_SetReload(rlr);

@@ -20,44 +20,44 @@
 #ifndef __BSP_EBOX_H
 #define __BSP_EBOX_H
 #include "ebox.h"
-#include "led.h"
-#include "lcd_1.8.h"
-#include "cnc.h"
-#include "button.h"
-#include "../Ethernet3/utility/w5500.h"
+//#include "led.h"
+//#include "lcd_1.8.h"
+//#include "cnc.h"
+//#include "button.h"
+//#include "../Ethernet3/utility/w5500.h"
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
 #define LED1 PB8
-#define LED2 PB9
-#define LED3 PB10
+//#define LED2 PB9
+//#define LED3 PB10
 
-#define LED_R   PB7
-#define LED_G   PB8
-#define LED_B   PB9
+//#define LED_R   PB7
+//#define LED_G   PB8
+//#define LED_B   PB9
 
-#define PWMLED  PB8
+//#define PWMLED  PB8
 
-#define BtnPin	PA8
+//#define BtnPin	PA8
 
 #define	UART    uart1
-#define	Serial  uart1
+//#define	Serial  uart1
 
-#define	ADC_0   PA0
-#define	ADC_1   PA1
-#define	ADC_2   PA2
+//#define	ADC_0   PA0
+//#define	ADC_1   PA1
+//#define	ADC_2   PA2
 
-#define DAC_0   PB8
+//#define DAC_0   PB8
 
 
 
-extern Button   btn;
-extern Led      led1;
-extern Led      led2;
-extern Led      led3;
-extern CNC      cnc;
-extern Lcd      lcd;
-extern W5500Class w5500;
+//extern Button   btn;
+//extern Led      led1;
+//extern Led      led2;
+//extern Led      led3;
+//extern CNC      cnc;
+//extern Lcd      lcd;
+//extern W5500Class w5500;
 
 extern void print_log(const char *name,const char *date);
 

@@ -1,6 +1,6 @@
 #ifndef __EBOX_PORT_GPIO_H
 #define __EBOX_PORT_GPIO_H
-#include "../core/ebox_type.h"
+#include "ebox_type.h"
 
 typedef enum
 {

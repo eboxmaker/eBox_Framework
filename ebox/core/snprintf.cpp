@@ -1493,7 +1493,7 @@ mymemcpy(void *dst, void *src, size_t len)
 #endif	/* NEED_MYMEMCPY */
 
 int
-rpl_vasprintf(char **ret, const char *format, va_list ap)
+rpl_vsprintf(char *ret, const char *format, va_list ap)
 {
 	size_t size;
 	int len;
@@ -1502,9 +1502,9 @@ rpl_vasprintf(char **ret, const char *format, va_list ap)
 	VA_COPY(aq, ap);
 	len = vsnprintf(NULL, 0, format, aq);
 	VA_END_COPY(aq);
-	if (len < 0 || (*ret = (char *)malloc(size = len + 1)) == NULL)
+	if (len < 0 || (ret = (char *)malloc(size = len + 1)) == NULL)
 		return -1;
-	return vsnprintf(*ret, size, format, ap);
+	return vsnprintf(ret, size, format, ap);
 }
 #endif	/* !HAVE_VASPRINTF */
 
@@ -1538,7 +1538,7 @@ rpl_snprintf(va_alist) va_dcl
 #if !HAVE_ASPRINTF
 #if HAVE_STDARG_H
 int
-rpl_asprintf(char **ret, const char *format, ...)
+rpl_sprintf(char *ret, const char *format, ...)
 #else
 int
 rpl_asprintf(va_alist) va_dcl
@@ -1554,7 +1554,7 @@ rpl_asprintf(va_alist) va_dcl
 	VA_START(ap, format);
 	VA_SHIFT(ap, ret, char **);
 	VA_SHIFT(ap, format, const char *);
-	len = vasprintf(ret, format, ap);
+	len = vsprintf(ret, format, ap);
 	va_end(ap);
 	return len;
 }

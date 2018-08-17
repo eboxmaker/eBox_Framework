@@ -1,9 +1,7 @@
 
-
-#include <stdio.h>
 #include <stdarg.h>
 #include "stdlib.h"
-#include "ebox_cfun.h"
+#include "ebox_mem.h"
 
 #include "myprintf.h"
 
@@ -73,7 +71,9 @@ int format_str(char *dst,char *src, int len,int width, int flag)
     if(width == -1 || width <= len) 
     {   
         width =len;
-        ebox_memcpy(dst,src,len);
+        ebox_memcpy(dst,src,width);
+        dst+=len;
+        *dst = '\0';
         return len;
     }
     else
@@ -129,6 +129,13 @@ int Int2Str(int num,char *str)//ÕûÊý×ª»»³É×Ö·û´®
 		*str++='-';
         len++;
 	}
+    if(num == 0)
+    {
+        *str++='0';
+        len++;
+        *str = '\0';
+        return 	len;
+    }
 	while(num)
 	{
 			*str= *(num%10 +digits);
@@ -251,7 +258,7 @@ void AddStrBuf(char *buf, char *str, size_t *len, size_t size,int width)//×Ö·û´®
         OUTCHAR(buf,*len,size,*str++);
 }
 
-int MyVsnprintf(char *buf,size_t size,const char *format,va_list args)
+int _ebox_vsnprintf(char *buf,size_t size,const char *format,va_list args)
 {
 	
 	int width;//×Ö·û¿í¶È
@@ -389,24 +396,51 @@ int MyVsnprintf(char *buf,size_t size,const char *format,va_list args)
 	return (int)len;
 }
 
-//int MyPrintf(const char *format,...)
-//{
-//	va_list args;
-//	char PrintBuf[100];
-//	int n ;
-//	char *p;
+int _ebox_snprintf(char *str, size_t size,const char *format,...)
+{
+	va_list args;
+	int n ;
 
-//	p = PrintBuf;
+	va_start(args,format);
+	n = _ebox_vsnprintf(str,size,format,args);	
+	va_end(args);
+	return n;
+}
+int _ebox_vsprintf(char *ret, const char *format, va_list ap)
+{
+	size_t size;
+	int len;
+	va_list aq;
+
+	memcpy(&aq, &ap,sizeof(ap));
+    
+	len = _ebox_vsnprintf(NULL, 0, format, aq);
+
+	if (len < 0 || (ret = (char *)malloc(size = len + 1)) == NULL)
+		return -1;
+	return _ebox_vsnprintf(ret, size, format, ap);
+}
+
+
+int _ebox_sprintf(char *str,const char *format,...)
+{
+//	va_list args;
+//	int n ;
+//    
+//    memcpy(args,);
 //	va_start(args,format);
-//	n =MyVsprintf(PrintBuf,format,args);	
-//	while(*p)
-//	{
-//		putchar(*p);
-//		p++;
-//	}
+//	n =MyVsnprintf(str,size,format,args);	
 //	va_end(args);
 //	return n;
-//}
+    
+    va_list ap;
+	int len;
+
+	va_start(ap, format);
+	len = _ebox_vsprintf(str, format, ap);
+	va_end(ap);
+	return len;
+}
 //void vsn_test(const char *fmt, ...)
 //{
 //    char buf[100];

@@ -20,7 +20,6 @@
 #ifndef Print_h
 #define Print_h
 
-#include <inttypes.h>
 #include "ebox_type.h"
 #include "WString.h"
 #include "Printable.h"
@@ -56,7 +55,6 @@ class Print
     }
     
     
-     size_t printf(const char *fmt, ...);
     
 //    size_t print(const __FlashStringHelper *);
     size_t print(const String &);
@@ -82,6 +80,9 @@ class Print
     size_t println(double, int = 2);
     size_t println(const Printable&);
     size_t println(void);
+    #if USE_PRINTF
+    size_t printf(const char *fmt, ...);
+    #endif
 };
 
 #endif

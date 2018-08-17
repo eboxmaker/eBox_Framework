@@ -32,7 +32,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "ebox_type.h"
 #include "mcu_config.h"
 #include "rcc.h"
 #include "nvic.h"

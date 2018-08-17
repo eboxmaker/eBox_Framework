@@ -1,6 +1,8 @@
 #include "ebox.h"
 #include "mcu.h"
-
+#include "ebox_printf.h"
+#include "ebox_core.h"
+#include "ebox_mem.h"
 
 void ebox_init(void)
 {
@@ -15,11 +17,13 @@ void ebox_init(void)
 
     mcu_init();
     
+    #if USE_PRINTF 
     ebox_printf_init();
-    
+    #endif
     
     
 }
+#if USE_PRINTF
 extern "C"{
     /**
      *@brief    定义一个ebox_printf的输出函数，其中的输出设备必须是可用的
@@ -44,4 +48,4 @@ extern "C"{
         }
     }
 }
-
+#endif
