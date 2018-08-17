@@ -41,6 +41,8 @@ public:
     mcuGpio operator = (int value);
 
 public:
+    void af_config(uint8_t af_configration);
+
     GPIO_TypeDef *port; /**< 引脚的端口 */
     uint16_t pin; /**< 引脚的序号 */
 };

@@ -15,7 +15,6 @@
 #include "../core/stdFun/fifo.h"
 #include "../core/stdFun/itoa.h"
 #include "../core/stdFun/math_misc.h"
-#include "../core/stdFun/util.h"
 #include "../core/stdFun/binary.h"
 
 

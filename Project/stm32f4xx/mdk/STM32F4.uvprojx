@@ -642,11 +642,6 @@
               <FilePath>..\..\..\ebox\core\stdFun\math_misc.c</FilePath>
             </File>
             <File>
-              <FileName>util.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\util.c</FilePath>
-            </File>
-            <File>
               <FileName>Dstring.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\stdFun\Dstring.cpp</FilePath>
@@ -715,6 +710,11 @@
               <FileName>ebox_virtual_hmi.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\port\ebox_virtual_hmi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>myprintf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\myprintf.c</FilePath>
             </File>
           </Files>
         </Group>

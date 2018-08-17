@@ -85,17 +85,16 @@ mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
    this->id = (PIN_ID_t)(temp1*16 + temp2);
 
 }
-void mcuGpio::mode(PIN_MODE mode)
-{
-	mcuGpio::mode(mode,40);
-}
 ///**
 // *@brief    GPIO模式设置
 // *@param    mode:   PIN_MODE枚举变量类型
 // *@retval   None
 //*/
-void mcuGpio::mode(PIN_MODE mode,uint8_t af_configration)
+void mcuGpio::mode(PIN_MODE mode)
 {
+    LL_GPIO_InitTypeDef GPIO_InitStructure;
+    GPIO_InitStructure.Pin = this->pin;
+    
 	switch ((uint32_t)port)
 	{
 	case (uint32_t)GPIOA_BASE:
@@ -125,186 +124,136 @@ void mcuGpio::mode(PIN_MODE mode,uint8_t af_configration)
 		/*analog input mode
 		*/
 	case AIN:
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_ANALOG);
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_NO);		
+        GPIO_InitStructure.Mode = LL_GPIO_MODE_ANALOG;
+        GPIO_InitStructure.Pull = LL_GPIO_PULL_NO;
+	
 		break;
 
 		/* digital input mode
 		*/
 	case INPUT:
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_INPUT);
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_NO);
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_INPUT;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_NO;
 		break;
 
-	case INPUT_PD:
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_INPUT);
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_DOWN);
-		break;
+    
+    
+            case INPUT_PD:
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_INPUT;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_DOWN;
+        break;
+            
+        case INPUT_PU:
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_INPUT;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_UP;
+        break;
+        
+        /*digital output mode
+        */
+        case OUTPUT_OD:
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_OUTPUT;
+            GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_NO;
+        break;
+            
+        case OUTPUT_OD_PU:
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_OUTPUT;
+            GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_UP;
+        break;
+            
+        case OUTPUT_OD_PD:
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_OUTPUT;
+            GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_DOWN;
+        break;
+            
+        case OUTPUT:
+        case OUTPUT_PP:
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_OUTPUT;
+            GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_NO;
+        break;
+        
+        case OUTPUT_PP_PU:
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_OUTPUT;
+            GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_UP;
+        break;
+        
+        case OUTPUT_PP_PD:
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_OUTPUT;
+            GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_DOWN;
+        break;
+        
+        
+        /*af mode
+        */
+        case AF_OD:
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_ALTERNATE;
+            GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_NO;
+        break;
+            
+        case AF_OD_PU:
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_ALTERNATE;
+            GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_UP;
+        break;
+            
+        case AF_OD_PD:
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_ALTERNATE;
+            GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_DOWN;
+        break;
+            
+        case AF_PP:
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_ALTERNATE;
+            GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_NO;
+       break;
+        
+        case AF_PP_PU:
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_ALTERNATE;
+            GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_UP;
+       break;
+        
+        case AF_PP_PD:
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_ALTERNATE;
+            GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_DOWN;
+       break;
+        /* if parament is other mode,set as INPUT mode
+        */
+       default:
+            GPIO_InitStructure.Mode = LL_GPIO_MODE_INPUT;
+            GPIO_InitStructure.Pull = LL_GPIO_PULL_NO;
+            break;
+    }
 
-	case INPUT_PU:
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_INPUT);
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_UP);
-		break;
-
-		/*digital output mode
-		*/
-	case OUTPUT_OD:
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_OUTPUT);
-		LL_GPIO_SetPinOutputType(port,pin,LL_GPIO_OUTPUT_OPENDRAIN);
-		LL_GPIO_SetPinSpeed(port,pin,LL_GPIO_SPEED_FREQ_HIGH);		
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_NO);
-		break;
-
-	case OUTPUT_OD_PU:
-		// GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_OD;
-		// GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;
-		// GPIO_InitStructure.Pull = GPIO_PULLUP;
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_OUTPUT);
-		LL_GPIO_SetPinOutputType(port,pin,LL_GPIO_OUTPUT_OPENDRAIN);
-		LL_GPIO_SetPinSpeed(port,pin,LL_GPIO_SPEED_FREQ_HIGH);		
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_UP);;
-		break;
-
-	case OUTPUT_OD_PD:
-		// GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_OD;
-		// GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;
-		// GPIO_InitStructure.Pull = GPIO_PULLDOWN;
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_OUTPUT);
-		LL_GPIO_SetPinOutputType(port,pin,LL_GPIO_OUTPUT_OPENDRAIN);
-		LL_GPIO_SetPinSpeed(port,pin,LL_GPIO_SPEED_FREQ_HIGH);		
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_DOWN);
-		break;
-
-	case OUTPUT_PP:
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_OUTPUT);
-		LL_GPIO_SetPinOutputType(port,pin,LL_GPIO_OUTPUT_PUSHPULL);
-		LL_GPIO_SetPinSpeed(port,pin,LL_GPIO_SPEED_FREQ_HIGH);		
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_NO);
-		break;
-
-	case OUTPUT_PP_PU:
-		// GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
-		// GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;
-		// GPIO_InitStructure.Pull = GPIO_PULLUP;
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_OUTPUT);
-		LL_GPIO_SetPinOutputType(port,pin,LL_GPIO_OUTPUT_PUSHPULL);
-		LL_GPIO_SetPinSpeed(port,pin,LL_GPIO_SPEED_FREQ_HIGH);		
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_UP);
-		break;
-
-	case OUTPUT_PP_PD:
-		// GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
-		// GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;
-		// GPIO_InitStructure.Pull = GPIO_PULLDOWN;
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_OUTPUT);
-		LL_GPIO_SetPinOutputType(port,pin,LL_GPIO_OUTPUT_PUSHPULL);
-		LL_GPIO_SetPinSpeed(port,pin,LL_GPIO_SPEED_FREQ_HIGH);		
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_DOWN);
-		
-
-		break;
-
-		/*af mode
-		*/
-	case AF_OD:
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_ALTERNATE);
-		LL_GPIO_SetPinOutputType(port,pin,LL_GPIO_OUTPUT_OPENDRAIN);
-		LL_GPIO_SetPinSpeed(port,pin,LL_GPIO_SPEED_FREQ_HIGH);		
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_NO);
-		if (pin< LL_GPIO_PIN_8)
-		{
-			LL_GPIO_SetAFPin_0_7(port,pin,af_configration);
-		}else{
-			LL_GPIO_SetAFPin_8_15(port,pin,af_configration);
-		}
-		break;
-
-	case AF_OD_PU:
-		// GPIO_InitStructure.Mode = GPIO_MODE_AF_OD;
-		// GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;
-		// GPIO_InitStructure.Pull = GPIO_PULLUP;
-		// GPIO_InitStructure.Alternate = af_configration;
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_ALTERNATE);
-		LL_GPIO_SetPinOutputType(port,pin,LL_GPIO_OUTPUT_OPENDRAIN);
-		LL_GPIO_SetPinSpeed(port,pin,LL_GPIO_SPEED_FREQ_HIGH);		
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_UP);
-		if (pin< LL_GPIO_PIN_8)
-		{
-			LL_GPIO_SetAFPin_0_7(port,pin,af_configration);
-		}else{
-			LL_GPIO_SetAFPin_8_15(port,pin,af_configration);
-		}
-		break;
-
-	case AF_OD_PD:
-		// GPIO_InitStructure.Mode = GPIO_MODE_AF_OD;
-		// GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;
-		// GPIO_InitStructure.Pull = GPIO_PULLDOWN;
-		// GPIO_InitStructure.Alternate = af_configration;
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_ALTERNATE);
-		LL_GPIO_SetPinOutputType(port,pin,LL_GPIO_OUTPUT_OPENDRAIN);
-		LL_GPIO_SetPinSpeed(port,pin,LL_GPIO_SPEED_FREQ_HIGH);		
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_DOWN);
-		if (pin< LL_GPIO_PIN_8)
-		{
-			LL_GPIO_SetAFPin_0_7(port,pin,af_configration);
-		}else{
-			LL_GPIO_SetAFPin_8_15(port,pin,af_configration);
-		}
-		break;
-
-	case AF_PP:
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_ALTERNATE);
-		LL_GPIO_SetPinOutputType(port,pin,LL_GPIO_OUTPUT_PUSHPULL);
-		LL_GPIO_SetPinSpeed(port,pin,LL_GPIO_SPEED_FREQ_HIGH);		
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_NO);
-		if (pin< LL_GPIO_PIN_8)
-		{
-			LL_GPIO_SetAFPin_0_7(port,pin,af_configration);
-		}else{
-			LL_GPIO_SetAFPin_8_15(port,pin,af_configration);
-		}
-
-		break;
-
-	case AF_PP_PU:
-
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_ALTERNATE);
-		LL_GPIO_SetPinOutputType(port,pin,LL_GPIO_OUTPUT_PUSHPULL);
-		LL_GPIO_SetPinSpeed(port,pin,LL_GPIO_SPEED_FREQ_HIGH);		
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_UP);
-		if (pin< LL_GPIO_PIN_8)
-		{
-			LL_GPIO_SetAFPin_0_7(port,pin,af_configration);
-		}else{
-			LL_GPIO_SetAFPin_8_15(port,pin,af_configration);
-		}
-		break;
-
-	case AF_PP_PD:
-		// GPIO_InitStructure.Mode = GPIO_MODE_AF_PP;
-		// GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;
-		// GPIO_InitStructure.Pull = GPIO_PULLDOWN;
-		// GPIO_InitStructure.Alternate = af_configration;
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_ALTERNATE);
-		LL_GPIO_SetPinOutputType(port,pin,LL_GPIO_OUTPUT_PUSHPULL);
-		LL_GPIO_SetPinSpeed(port,pin,LL_GPIO_SPEED_FREQ_HIGH);		
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_DOWN);
-		if (pin< LL_GPIO_PIN_8)
-		{
-			LL_GPIO_SetAFPin_0_7(port,pin,af_configration);
-		}else{
-			LL_GPIO_SetAFPin_8_15(port,pin,af_configration);
-		}
-		break;
-		/* if parament is other mode,set as INPUT mode
-		*/
-	default:
-		LL_GPIO_SetPinMode(port,pin,LL_GPIO_MODE_INPUT);
-		LL_GPIO_SetPinPull(port,pin,LL_GPIO_PULL_NO);	
-		break;
-	}
+    LL_GPIO_Init(port, &GPIO_InitStructure);
 }
+
+
+void mcuGpio::mode(PIN_MODE mode,uint8_t af_configration)
+{
+	mcuGpio::mode(mode);
+    af_config(af_configration);
+}
+
+
+
+void mcuGpio::af_config(uint8_t af_configration)
+{  
+    if (pin< LL_GPIO_PIN_8)
+        LL_GPIO_SetAFPin_0_7(port,pin,af_configration);
+    else
+        LL_GPIO_SetAFPin_8_15(port,pin,af_configration);
+}
+
+
 /**
  *@brief    GPIO输出高电平
  *@param    NONE

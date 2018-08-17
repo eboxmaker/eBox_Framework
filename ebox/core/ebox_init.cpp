@@ -4,13 +4,8 @@
 
 void ebox_init(void)
 {
-    #ifdef __CC_ARM
-        ebox_heap_init((void*)MCU_HEAP_BEGIN, (void*)MCU_HEAP_END);
-    #elif __ICCARM__
-        ebox_heap_init(__segment_end("HEAP"), (void*)MCU_SRAM_END);
-    #else
-        ebox_heap_init((void*)&__bss_end, (void*)MCU_SRAM_END);
-    #endif
+    
+    ebox_heap_init((void*)MCU_HEAP_BEGIN, (void*)MCU_HEAP_END);
     interrupts  = __enable_irq;
     no_interrupts = __disable_irq;
     delay_ms    = mcu_delay_ms;

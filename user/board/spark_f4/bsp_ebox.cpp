@@ -78,9 +78,9 @@ void print_log(const char *name,const char *date)
 	UART.printf("* flash used    : %0.3f \tKB\r\n",MCU_FLASH_USED/1024.0);	/* 打印一行空格 */   
 	UART.printf("* flash remaind : %0.3f \tKB\r\n",MCU_FLASH_REMAIND/1024.0);	/* 打印一行空格 */ 
     
-	UART.printf("* mem size      : %0.3f \tKB \r\n",MCU_SRAM_SIZE/1024.0);
-	UART.printf("* mem used      : %0.3f \tKB\r\n",MCU_SRAM_USED/1024.0);	/* 打印一行空格 */   
-	UART.printf("* mem remaind   : %0.3f \tKB\r\n",MCU_SRAM_REMAIND/1024.0);	/* 打印一行空格 */   
+	UART.printf("* mem size      : %0.3f \tKB \r\n",MCU_SRAM1_SIZE/1024.0);
+	UART.printf("* mem used      : %0.3f \tKB\r\n",MCU_SRAM1_USED/1024.0);	/* 打印一行空格 */   
+	UART.printf("* mem remaind   : %0.3f \tKB\r\n",MCU_SRAM1_REMAIND/1024.0);	/* 打印一行空格 */   
 	UART.printf("* heap used     : %0.3f \tKB\r\n",ebox_mem_used()/1024.0);	/* 打印一行空格 */   
 	UART.printf("* heap free     : %0.3f \tKB\r\n",ebox_get_free()/1024.0);	/* 打印一行空格 */   
 	UART.printf("* \r\n");	/* 打印一行空格 */

@@ -1,5 +1,18 @@
 #include "Dstring.h"
-#include "util.h"
+
+char C2D(
+    uint8_t c	/**< is a character('0'-'F') to convert to HEX */
+)
+{
+    if (c >= '0' && c <= '9')
+        return c - '0';
+    if (c >= 'a' && c <= 'f')
+        return 10 + c - 'a';
+    if (c >= 'A' && c <= 'F')
+        return 10 + c - 'A';
+
+    return (char)c;
+}
 int atoi(
     char *str,	/**< is a pointer to convert */
     uint16_t base	/**< is a base value (must be in the range 2 - 16) */
