@@ -90,21 +90,10 @@ STM32F417VG     LQFP 100    168     1024    192
 #define STM32_TYPE    STM32F103C8
 #define STM32_PINS    48 
 #define STM32_FLASH   64
-#define STM32_RAM     20
+#define STM32_RAM     16
 #define STM32_COMPANY "ST\0"
 
 
-
-//由于KEIL自身有编译的宏定义会导致此选项无效，所以要更改keil的device选项，选择正确的MCU
-#if !defined (STM32F10X_LD) && !defined (STM32F10X_LD_VL) && !defined (STM32F10X_MD) && !defined (STM32F10X_MD_VL) && !defined (STM32F10X_HD) && !defined (STM32F10X_HD_VL) && !defined (STM32F10X_XL) && !defined (STM32F10X_CL) 
-    #if (STM32_FLASH <= 32)
-        #define STM32F10X_LD   
-    #elif (STM32_FLASH <= 128)
-        #define STM32F10X_MD   
-    #elif (MCU_FLASH <= 1024)
-        #define STM32F10X_HD   
-    #endif
-#endif
 
 
 //------------------抽象层宏定义------------------------

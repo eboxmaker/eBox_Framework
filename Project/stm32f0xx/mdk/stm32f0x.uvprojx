@@ -551,6 +551,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m0\object.cpp</FilePath>
             </File>
+            <File>
+              <FileName>rcc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m0\rcc.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
