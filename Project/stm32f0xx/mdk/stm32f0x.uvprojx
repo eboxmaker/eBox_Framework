@@ -335,7 +335,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32F072xB USE_FULL_LL_DRIVER</Define>
+              <Define>STM32F072xB,USE_FULL_LL_DRIVER</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f0xx\Libraries\STM32F0xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Device\ST\STM32F0xx\Include;..\..\..\ebox\core;..\..\..\ebox\hardware\cortex-m0;..\..\..\ebox\hardware\cortex-m0\Peripherals;..\..\..\user;..\..\..\user\board\f0</IncludePath>
             </VariousControls>
@@ -457,19 +457,9 @@
               <FilePath>..\..\..\ebox\core\stdFun\math_misc.c</FilePath>
             </File>
             <File>
-              <FileName>util.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\util.c</FilePath>
-            </File>
-            <File>
               <FileName>Dstring.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\stdFun\Dstring.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>IPAddress.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\stdFun\IPAddress.cpp</FilePath>
             </File>
             <File>
               <FileName>list.cpp</FileName>
@@ -511,6 +501,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\stdFun\WString.cpp</FilePath>
             </File>
+            <File>
+              <FileName>IPAddress.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\stdFun\IPAddress.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -530,6 +525,11 @@
               <FileName>snprintf.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\snprintf.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>myprintf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\myprintf.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -560,6 +560,11 @@
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\main.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_ebox.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\board\f0\bsp_ebox.cpp</FilePath>
             </File>
           </Files>
         </Group>

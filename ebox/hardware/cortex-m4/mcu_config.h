@@ -88,7 +88,9 @@ STM32F417VG     LQFP 100    168     1024    (128+64)
 #define STM32_TYPE    STM32F417VG
 #define STM32_PINS    176 
 #define STM32_FLASH   1024
-#define STM32_RAM     (128)
+#define STM32_RAM1    128
+#define STM32_RAM2    0
+#define STM32_RAM3    0
 #define STM32_COMPANY "ST\0"
 
 
@@ -104,40 +106,55 @@ STM32F417VG     LQFP 100    168     1024    (128+64)
 #define MCU_TYPE        STM32_TYPE
 #define MCU_PINS        STM32_PINS
 #define MCU_FLASH       STM32_FLASH  
-#define MCU_RAM         STM32_RAM     
+#define MCU_RAM1        STM32_RAM1    
+#define MCU_RAM2        STM32_RAM2    
+#define MCU_RAM3        STM32_RAM3    
 #define MCU_COMPANY     STM32_COMPANY
 
 
 
 //RAM 区域定义
-#define MCU_SRAM_SIZE   MCU_RAM*1024
-#define MCU_SRAM_BEGIN  0x20000000
-#define MCU_SRAM_END    (MCU_SRAM_BEGIN + MCU_SRAM_SIZE)
+#define MCU_SRAM1_SIZE   MCU_RAM1*1024
+#define MCU_SRAM1_BEGIN  0x20000000
+#define MCU_SRAM1_END    (MCU_SRAM1_BEGIN + MCU_SRAM1_SIZE)
+
+#if STM32_RAM2 != 0 
+#define MCU_SRAM2_SIZE   MCU_RAM2*1024
+#define MCU_SRAM2_BEGIN  0x10000000
+#define MCU_SRAM2_END    (MCU_SRAM2_BEGIN + MCU_SRAM2_SIZE)
+#endif
 
 
+
+#if STM32_RAM3 != 0 
+#define Bank1_SRAM3_ADDR  ((uint32_t)0x64000000)  
+
+#define MCU_SRAM3_SIZE   MCU_RAM3*1024
+#define MCU_SRAM3_BEGIN  Bank1_SRAM3_ADDR
+#define MCU_SRAM3_END    (MCU_SRAM3_BEGIN + MCU_SRAM3_SIZE)
+#endif
+
+
+//HEAP定义管理区域，用于动态内存管理
 #ifdef __CC_ARM
     extern int Image$$RW_IRAM1$$ZI$$Limit;
     #define MCU_HEAP_BEGIN 	((uint32_t)&Image$$RW_IRAM1$$ZI$$Limit)
 #elif __ICCARM__
     #pragma section="HEAP"
+    #define MCU_HEAP_BEGIN 	(__segment_end("HEAP"))
 #else
     extern int __bss_end;
+    #define MCU_HEAP_BEGIN 	&__bss_end
 #endif
-#define MCU_HEAP_END        MCU_SRAM_END
+#define MCU_HEAP_END        MCU_SRAM1_END
 #define MCU_HEAP_SIZE       (MCU_HEAP_END - MCU_HEAP_BEGIN)
 
 
-#define MCU_SRAM_USED       (MCU_HEAP_BEGIN - MCU_SRAM_BEGIN)
-#define MCU_SRAM_REMAIND    (MCU_SRAM_END - MCU_HEAP_BEGIN)
+#define MCU_SRAM1_USED       (MCU_HEAP_BEGIN - MCU_SRAM1_BEGIN)
+#define MCU_SRAM1_REMAIND    (MCU_SRAM1_END - MCU_HEAP_BEGIN)
 
 
 
-
-
-#if defined (STM32_EX_SRAM)
-    #define MCU_EX_SRAM_BEGIN    0x68000000 /* the begining address of external SRAM */
-    #define MCU_EX_SRAM_END      0x68080000 /* the end address of external SRAM */
-#endif
 
 
 //FLASH 区域定义

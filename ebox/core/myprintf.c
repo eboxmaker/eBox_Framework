@@ -8,7 +8,6 @@
 #include "myprintf.h"
 
 
-//#include <malloc.h>
 
 int g_zero_flag=0;//标号 标志对齐方式,为0时表示右对齐方式
 
