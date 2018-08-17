@@ -41,38 +41,27 @@ mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
 //        }
 //    }
 //    this->id = (PIN_ID_t)(temp1*16 + temp2);
-        uint8_t temp1,temp2;
+    uint8_t temp1,temp2;
     this->port = port;
     this->pin = pin;
    switch((uint32_t)(port))
    {
        case (uint32_t)GPIOA_BASE:
-           temp1 = 0;
-       break;
-           
+           temp1 = 0;break;
        case (uint32_t)GPIOB_BASE:
-           temp1 = 1;
-       break;
-           
+           temp1 = 1;break;
        case (uint32_t)GPIOC_BASE:
-           temp1 = 2;
-       break;
-           
+           temp1 = 2;break;
        case (uint32_t)GPIOD_BASE:
-           temp1 = 3;
-       break;
+           temp1 = 3;break;
 #if !(defined(STM32F030x6)||defined(STM32F031x6))            
        case (uint32_t)GPIOE_BASE:
-           temp1 = 4;
-       break;
+           temp1 = 4;break;
 #endif           
        case (uint32_t)GPIOF_BASE:
-           temp1 = 5;
-       break;
-           
+           temp1 = 5;break;
        default:
-           temp1 = 0;
-       break;
+           temp1 = 0;break;
    }
    for(int i = 0; i <= 15; i ++)
    {
