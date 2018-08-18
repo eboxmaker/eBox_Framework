@@ -1,9 +1,6 @@
 #ifndef __NVIC_H
 #define __NVIC_H
 
-
-#include "ebox_core.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif

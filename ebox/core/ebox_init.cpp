@@ -39,7 +39,7 @@ extern "C"{
             len = ebox_fifo_get(uart_fifo_ptr,buffer,64);
             if(len >= 1)
             {
-//                uart1.write(buffer,len);
+                uart1.write(buffer,len);
             }
             else
             {

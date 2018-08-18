@@ -39,7 +39,7 @@ int main(void)
     setup();
     while(1)
     {
-        UART.printf("hello World !\r\n");
+//        UART.printf("hello World !\r\n");
         delay_ms(1000);
     }
 }

@@ -3,7 +3,6 @@
 
 
 #include "ebox_core.h"
-#include "ebox_mem.h"
 #include "mcu.h"
 
 #ifdef __cplusplus
@@ -110,8 +109,7 @@ extern "C" {
     {
         cpu.type = MCU_TYPE;
         cpu.pins = MCU_PINS;
-        ebox_memcpy(cpu.company,"st\0",sizeof("st\0"));
-
+        memcpy(cpu.company,"st\0",sizeof("st\0"));
         cpu.chip_id[2] = *(__IO uint32_t *)(0x1FFF7A10 + 0x00); //µÍ×Ö½Ú
         cpu.chip_id[1] = *(__IO uint32_t *)(0x1FFF7A10 + 0x04); //
         cpu.chip_id[0] = *(__IO uint32_t *)(0x1FFF7A10 + 0x08); //¸ß×Ö½Ú
