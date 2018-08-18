@@ -416,6 +416,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\mcuLib\stm32f0xx\Libraries\STM32F0xx_HAL_Driver\Src\stm32f0xx_ll_gpio.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f0xx_ll_exti.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcuLib\stm32f0xx\Libraries\STM32F0xx_HAL_Driver\Src\stm32f0xx_ll_exti.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f0xx_ll_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcuLib\stm32f0xx\Libraries\STM32F0xx_HAL_Driver\Src\stm32f0xx_ll_usart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -537,19 +547,29 @@
               <FilePath>..\..\..\ebox\hardware\cortex-m0\mcu.cpp</FilePath>
             </File>
             <File>
+              <FileName>rcc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m0\rcc.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>nvic.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m0\nvic.cpp</FilePath>
+            </File>
+            <File>
               <FileName>ebox_gpio.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_gpio.cpp</FilePath>
             </File>
             <File>
+              <FileName>ebox_uart.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_uart.cpp</FilePath>
+            </File>
+            <File>
               <FileName>object.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m0\object.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>rcc.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m0\rcc.cpp</FilePath>
             </File>
           </Files>
         </Group>

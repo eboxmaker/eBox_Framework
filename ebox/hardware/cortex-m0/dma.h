@@ -1,6 +1,6 @@
 #ifndef __DMA_H
 #define __DMA_H
-
+#if USE_DMA
 #include "ebox_core.h"
 #include "mcu.h"
 #include "FunctionPointer.h"
@@ -98,6 +98,6 @@ extern Dma Dma1Ch4;
 extern Dma Dma1Ch5;
 extern Dma Dma1Ch6;
 extern Dma Dma1Ch7;
-
+#endif
 #endif
 

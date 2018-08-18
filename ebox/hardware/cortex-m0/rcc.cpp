@@ -1,12 +1,11 @@
 
+#include "ebox_core.h"
 #include "mcu_config.h"
 #include "stm32f0xx_ll_bus.h"
 
 #include "rcc.h"
-//#define APB1PERIPH_BASE       PERIPH_BASE
-//#define APB2PERIPH_BASE       (PERIPH_BASE + 0x00010000)
-//#define AHB1PERIPH_BASE       (PERIPH_BASE + 0x00020000)
-//#define AHB2PERIPH_BASE       (PERIPH_BASE + 0x10000000)
+
+
 typedef struct 
 {
     uint32_t dev;
@@ -30,33 +29,37 @@ static const DevToRcc_t dev_to_rcc_table[] =
 //    {ADC1_BASE,RCC_APB2Periph_ADC1},
 //    {ADC2_BASE,RCC_APB2Periph_ADC2},
 //    
-//    {TIM1_BASE,RCC_APB2Periph_TIM1},
-//    {TIM2_BASE,RCC_APB1Periph_TIM2},
-//    {TIM3_BASE,RCC_APB1Periph_TIM3},
-//    {TIM4_BASE,RCC_APB1Periph_TIM4},
+    {TIM1_BASE,LL_APB1_GRP2_PERIPH_TIM1},
+    {TIM2_BASE,LL_APB1_GRP1_PERIPH_TIM2},
+    {TIM3_BASE,LL_APB1_GRP1_PERIPH_TIM3},
+//    {TIM4_BASE,LL_APB1_GRP1_PERIPH_TIM4},
 //    {TIM5_BASE,RCC_APB1Periph_TIM5},
-//    {TIM6_BASE,RCC_APB1Periph_TIM6},
-//    {TIM7_BASE,RCC_APB1Periph_TIM7},
+    {TIM6_BASE,LL_APB1_GRP1_PERIPH_TIM6},
+    {TIM7_BASE,LL_APB1_GRP1_PERIPH_TIM7},
 //    {TIM8_BASE,RCC_APB2Periph_TIM8},
 //    {TIM9_BASE,RCC_APB2Periph_TIM9},
 //    {TIM10_BASE,RCC_APB2Periph_TIM10},
 //    {TIM11_BASE,RCC_APB2Periph_TIM11},
 //    
-//    {SPI1_BASE,RCC_APB2Periph_SPI1},
-//    {SPI2_BASE,RCC_APB1Periph_SPI2},
+    {SPI1_BASE,LL_APB1_GRP2_PERIPH_SPI1},
+    {SPI2_BASE,LL_APB1_GRP1_PERIPH_SPI2},
 //    {SPI3_BASE,RCC_APB1Periph_SPI3},
 //    {SPI4_BASE,RCC_APB2Periph_SPI4},
 //    {SPI5_BASE,RCC_APB2Periph_SPI5},
-//    {I2C1_BASE,RCC_APB1Periph_I2C1},
-//    {I2C2_BASE,RCC_APB1Periph_I2C2},
+    {I2C1_BASE,LL_APB1_GRP1_PERIPH_I2C1},
+    {I2C2_BASE,LL_APB1_GRP1_PERIPH_I2C2},
 //    {I2C3_BASE,RCC_APB1Periph_I2C3},
     
-//    {USART1_BASE,RCC_APB2Periph_USART1},
-//    {USART2_BASE,RCC_APB1Periph_USART2},
-//    {USART3_BASE,RCC_APB1Periph_USART3},
-//    {UART4_BASE,RCC_APB1Periph_UART4},
-//    {UART5_BASE,RCC_APB1Periph_UART5}
+    {USART1_BASE,LL_APB1_GRP2_PERIPH_USART1},
+    {USART2_BASE,LL_APB1_GRP1_PERIPH_USART2},
+    {USART3_BASE,LL_APB1_GRP1_PERIPH_USART3},
+    {USART4_BASE,LL_APB1_GRP1_PERIPH_USART4},
+//    {USART5_BASE,LL_APB1_GRP1_PERIPH_USART5}
+    
+    {DMA1_BASE,LL_AHB1_GRP1_PERIPH_DMA1},
+
 };
+
 
 /**
  *@name     void rcc_clock_cmd(uint32_t dev, FunctionalState state)
@@ -67,18 +70,32 @@ static const DevToRcc_t dev_to_rcc_table[] =
 */
 void rcc_clock_cmd(uint32_t dev, FunctionalState state)
 {
+    uint32_t temp;
     uint32_t rcc;
     for(int i = 0; i < sizeof(dev_to_rcc_table)/sizeof(DevToRcc_t); i++)
     {
         if(dev_to_rcc_table[i].dev == dev)
          rcc  = dev_to_rcc_table[i].rcc;
-    
     }
-    if(dev >= AHB2PERIPH_BASE)
-        state?LL_AHB1_GRP1_EnableClock(rcc):LL_AHB1_GRP1_DisableClock(rcc);
-//    else if(dev >= AHBPERIPH_BASE)
-//        LL_AHB1_GRP1_EnableClock(rcc);
-//    else if(dev >= APBPERIPH_BASE)
-//        LL_AHB1_GRP1_EnableClock(rcc);
+    
+    if(dev >=APBPERIPH_BASE)
+    {
+        temp = READ_REG(RCC->AHBENR);
+        state ? (temp |= rcc) : (temp &=  ~rcc);
+        WRITE_REG(RCC->AHBENR,temp);
+        return;
+    }
+    else if(dev >= APBPERIPH_BASE + 0x00010000)
+    {
+        temp = READ_REG(RCC->APB2ENR);
+        state ? (temp |= rcc) : (temp &=  ~rcc);
+        WRITE_REG(RCC->APB2ENR,temp);
+    }
+    else if(dev >= APBPERIPH_BASE)
+    {
+        temp = READ_REG(RCC->APB1ENR);
+        state ? (temp |= rcc) : (temp &=  ~rcc);
+        WRITE_REG(RCC->APB1ENR,temp);
+    }
     
 }

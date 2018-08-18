@@ -1,7 +1,7 @@
 #ifndef ethernetserver_h
 #define ethernetserver_h
 
-#include "../core/stdfun/Server.h"
+#include "Server.h"
 
 class EthernetClient;
 

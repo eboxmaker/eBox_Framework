@@ -22,7 +22,7 @@
 #include "ebox.h"
 
 
-//#define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
+#define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
 //#define LED1 PB8
 //#define LED2 PB9
@@ -36,7 +36,7 @@
 
 //#define BtnPin	PA8
 
-//#define	UART    uart1
+#define	UART    uart1
 //#define	Serial  uart1
 
 //#define	ADC_0   PA0
@@ -44,6 +44,7 @@
 //#define	ADC_2   PA2
 
 //#define DAC_0   PB8
+void print_log(const char *name,const char *date);
 
 
 

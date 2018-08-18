@@ -82,32 +82,11 @@ mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
 void mcuGpio::mode(PIN_MODE mode)
 {
     LL_GPIO_InitTypeDef GPIO_InitStructure;
-    GPIO_InitStructure.Pin = this->pin;
+    GPIO_InitStructure.Pin = pin;
     
-	switch ((uint32_t)port)
-	{
-	case (uint32_t)GPIOA_BASE:
-		LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOA);
-		break;
-	case (uint32_t)GPIOB_BASE:
-		LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOB);
-		break;
-	case (uint32_t)GPIOC_BASE:
-		LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOC);
-		break;
-	case (uint32_t)GPIOD_BASE:
-		LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOD);
-		break;
-#if !(defined(STM32F030x6)||defined(STM32F031x6))
-	case (uint32_t)GPIOE_BASE:
-		LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOE);
-		break;
-#endif
-	case (uint32_t)GPIOF_BASE:
-		LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOF);
-		break;
-	}
-
+    rcc_clock_cmd((uint32_t)port,ENABLE);
+    
+    
 	switch ((uint8_t)mode)
 	{
 		/*analog input mode

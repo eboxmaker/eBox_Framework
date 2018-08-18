@@ -1,6 +1,8 @@
 #ifndef ethernetclient_h
 #define ethernetclient_h
 #include "ebox_core.h"
+#include "client.h"
+#include "IPAddress.h"
 
 class EthernetClient : public Client {
 

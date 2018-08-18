@@ -52,7 +52,7 @@ unsigned int    random(unsigned int min, unsigned int max);
 #endif 
 
  
-#define USE_PRINTF 1
+#define USE_PRINTF 3
 
 #if  USE_PRINTF == 1
     #include "Myprintf.h"
