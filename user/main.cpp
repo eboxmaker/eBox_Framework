@@ -30,9 +30,8 @@
 void setup()
 {
     ebox_init();
-    PB8.mode(OUTPUT);
-//    UART.begin(115200);
-//    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    UART.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
 
 }
 int main(void)
@@ -40,8 +39,7 @@ int main(void)
     setup();
     while(1)
     {
-        PB8.toggle();
-//        UART.printf("hello World !\r\n");
+        UART.printf("hello World !\r\n");
         delay_ms(1000);
     }
 }

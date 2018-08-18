@@ -150,7 +150,7 @@ extern "C" {
 		
         clock->core = RCC_Clock.SYSCLK_Frequency;
         clock->hclk = RCC_Clock.HCLK_Frequency;
-        //clock->pclk2 = clock->core;
+        clock->pclk2 = 0;
         clock->pclk1 = RCC_Clock.PCLK1_Frequency;          
     }
 

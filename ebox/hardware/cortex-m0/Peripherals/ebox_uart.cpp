@@ -70,8 +70,9 @@ void    Uart::begin(uint32_t baud_rate,uint8_t use_dma)
 void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit,uint8_t use_dma)
 {
     uint8_t             index;
-    USART_InitTypeDef   USART_InitStructure;
-        
+	uint32_t _DataWidth;
+	uint32_t _Parity;
+	uint32_t _StopBits = 0;        
     rcc_clock_cmd((uint32_t)_USARTx,ENABLE);
 
     
@@ -156,47 +157,51 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     serial_irq_handler(index, Uart::_irq_handler, (uint32_t)this);
     
     
-    USART_InitStructure.USART_BaudRate = baud_rate;
     switch(data_bit)
     {
     case 8:
-        USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+        _DataWidth = LL_USART_DATAWIDTH_8B;
         break;
     case 9:
-        USART_InitStructure.USART_WordLength = USART_WordLength_9b;
+        _DataWidth = LL_USART_DATAWIDTH_9B;
         break;
     default :
-        USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+        _DataWidth = LL_USART_DATAWIDTH_8B;
         break;
     }
     switch(parity)
     {
     case 0:
-        USART_InitStructure.USART_Parity = USART_Parity_No;
+        _Parity = LL_USART_PARITY_NONE;
         break;
     case 1:
-        USART_InitStructure.USART_Parity = USART_Parity_Even;
+        _Parity = LL_USART_PARITY_EVEN;
         break;
     case 2:
-        USART_InitStructure.USART_Parity = USART_Parity_Odd;
+        _Parity = LL_USART_PARITY_ODD;
         break;
     default :
-        USART_InitStructure.USART_Parity = USART_Parity_No;
+        _Parity = LL_USART_PARITY_NONE;
         break;
     }
-    if(stop_bit == 0.5)
-        USART_InitStructure.USART_StopBits = USART_StopBits_0_5;
-    else if(stop_bit == 1)
-        USART_InitStructure.USART_StopBits = USART_StopBits_1;
-    else if(stop_bit == 1.5)
-        USART_InitStructure.USART_StopBits = USART_StopBits_1_5;
-    else if(stop_bit == 2)
-        USART_InitStructure.USART_StopBits = USART_StopBits_2;
-		
-    USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-    USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-    USART_Init(_USARTx, &USART_InitStructure);
 
+    if(stop_bit == 0.5)
+		_StopBits = LL_USART_STOPBITS_0_5;
+    else if(stop_bit == 1)
+		_StopBits = LL_USART_STOPBITS_1;
+    else if(stop_bit == 1.5)
+		_StopBits = LL_USART_STOPBITS_2;
+    else if(stop_bit == 2)
+		_StopBits = LL_USART_STOPBITS_1_5;
+		
+	LL_USART_SetTransferDirection(_USARTx, LL_USART_DIRECTION_TX_RX);
+	LL_USART_ConfigCharacter(_USARTx, _DataWidth, _Parity, _StopBits);
+	LL_USART_SetBaudRate(_USARTx, SystemCoreClock, LL_USART_OVERSAMPLING_16, baud_rate);
+	LL_USART_Enable(_USARTx);
+	/* Polling USART initialisation */
+	while ((!(LL_USART_IsActiveFlag_TEACK(_USARTx))) || (!(LL_USART_IsActiveFlag_REACK(_USARTx))))
+	{
+	}
 #if USE_UART_DMA
     if((_USARTx == USART1 || _USARTx == USART2 || _USARTx == USART3) && (_use_dma == 1) )
     {
@@ -208,14 +213,13 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
         dma_tx->interrupt(DmaItHt,DISABLE);
     }
 #endif
-    USART_Cmd(_USARTx, ENABLE);
+//    USART_Cmd(_USARTx, ENABLE);
     
 
     nvic(ENABLE,0,0);
     interrupt(RxIrq,DISABLE);
     interrupt(TcIrq,DISABLE);
-    USART_ClearITPendingBit(_USARTx, USART_IT_TC);
-    USART_ClearFlag(_USARTx,USART_FLAG_TC); 
+
     _tx_pin->mode(AF_PP);
     _rx_pin->mode(INPUT);
 
@@ -240,12 +244,10 @@ void Uart::interrupt(IrqType type, FunctionalState enable)
 {
 
     if(type == RxIrq)
-        USART_ITConfig(_USARTx, USART_IT_RXNE, enable);
+        LL_USART_EnableIT_RXNE(_USARTx);
     if(type == TcIrq)
     {
-        USART_ClearITPendingBit(_USARTx, USART_IT_TC);
-        USART_ClearFlag(_USARTx,USART_FLAG_TC); 
-        USART_ITConfig(_USARTx, USART_IT_TC, enable);//禁止关闭发送完成中断
+        LL_USART_EnableIT_TC(_USARTx);
     }
 }
 /**
@@ -295,8 +297,8 @@ size_t Uart::write(const uint8_t *buffer, size_t size)
     {
         while(size--)
         {
-            while(USART_GetFlagStatus(_USARTx, USART_FLAG_TXE) == RESET);//单字节等待，等待寄存器空
-            USART_SendData(_USARTx, *buffer++);
+            while (LL_USART_IsActiveFlag_TXE(_USARTx)== RESET);
+            LL_USART_TransmitData8(_USARTx,*buffer++);
         }
     }
 	return size;
@@ -311,7 +313,7 @@ size_t Uart::write(const uint8_t *buffer, size_t size)
 */
 uint16_t Uart::read()
 {
-    return (uint16_t)(_USARTx->DR & (uint16_t)0x01FF);
+    return (uint16_t)(_USARTx->RDR & (uint16_t)0x01FF);
 }
 
 
@@ -384,9 +386,9 @@ void Uart::wait_busy()
     #if USE_UART1
         case (uint32_t)USART1_BASE:
             while(busy[0] == 1 ){
-                if(USART1->SR & 0X40){
+                if(USART1->ISR & bitShift(6)){
                     busy[0] = 0;
-                    USART_ClearITPendingBit(USART1, USART_IT_TC);
+                    LL_USART_ClearFlag_TC(USART1);
                     break;
                 }
             }
@@ -504,16 +506,16 @@ extern "C" {
     #if USE_UART1
     void USART1_IRQHandler(void)
     {
-        if(USART_GetITStatus(USART1, USART_IT_RXNE) == SET)
+        if(LL_USART_IsActiveFlag_RXNE(USART1) == SET)
         {
             irq_handler(serial_irq_ids[NUM_UART1],RxIrq);
-            USART_ClearITPendingBit(USART1, USART_IT_RXNE);
+            CLEAR_BIT(USART1->ISR,B10000);//强制清除
         }
-        if(USART_GetITStatus(USART1, USART_IT_TC) == SET)
+        if(LL_USART_IsActiveFlag_TC(USART1) == SET)
         {
             busy[0] = 0;   
             irq_handler(serial_irq_ids[NUM_UART1],TcIrq);
-            USART_ClearITPendingBit(USART1, USART_IT_TC);
+            LL_USART_ClearFlag_TC(USART1);
         }        
     }
     #endif

@@ -19,10 +19,10 @@
 
 #ifndef client_h
 #define client_h
-//#include "Print.h"
-//#include "../Stream.h"
-//#include "IPAddress.h"
 #include "ebox_core.h"
+#include "IPAddress.h"
+//#include "Print.h"
+#include "Stream.h"
 
 class Client: public Stream
 {

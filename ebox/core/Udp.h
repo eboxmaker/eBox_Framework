@@ -35,9 +35,9 @@
 #ifndef udp_h
 #define udp_h
 
-//#include "IPAddress.h"
-//#include "../Stream.h"
 #include "ebox_core.h"
+#include "IPAddress.h"
+#include "Stream.h"
 
 class UDP : public Stream {
 

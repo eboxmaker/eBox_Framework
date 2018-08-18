@@ -6,6 +6,25 @@
 #include "stm32f0xx.h"
 #include "ebox_type.h"
 
+
+
+#include "stm32f0xx_ll_bus.h"
+#include "stm32f0xx_ll_rcc.h"
+#include "stm32f0xx_ll_system.h"
+#include "stm32f0xx_ll_utils.h"
+#include "stm32f0xx_ll_gpio.h"
+#include "stm32f0xx_ll_exti.h"
+#include "stm32f0xx_ll_dma.h"
+#include "stm32f0xx_ll_usart.h"
+#include "stm32f0xx_ll_pwr.h"
+#include "stm32f0xx_ll_tim.h"
+#include "stm32f0xx_ll_adc.h"
+#include "stm32f0xx_ll_iwdg.h"
+#include "stm32f0xx_ll_cortex.h"
+#include "stm32f0xx_ll_spi.h"
+#include "stm32f0xx_ll_i2c.h"
+#include "stm32f0xx_ll_RTC.h"    
+
 /*
 MCU_TYPE        MCU_PINS   CLOCK    FLASH   RAM     
 STM32F050C4     LQFP 48     48      16      4
@@ -25,6 +44,9 @@ STM32F051K8     LQFP 32     48      64      8
 STM32F051R4     LQFP 64     48      16      4
 STM32F051R6     LQFP 64     48      32      4
 STM32F051R8     LQFP 64     48      64      8
+
+MCU_TYPE        MCU_PINS   CLOCK    FLASH   RAM     
+STM32F072RB     LQFP 64     48      128     16
 
 MCU_TYPE        MCU_PINS   CLOCK    FLASH   RAM     
 STM32F103C4      48         72      16      6
@@ -87,11 +109,20 @@ STM32F417VG     LQFP 100    168     1024    192
 */
 
 //用户配置区域
-#define STM32_TYPE    STM32F103C8
+#define STM32_TYPE    STM32F072RB
 #define STM32_PINS    48 
-#define STM32_FLASH   64
-#define STM32_RAM     16
+#define STM32_FLASH   128
+#define STM32_RAM1    16
 #define STM32_COMPANY "ST\0"
+
+
+
+
+
+//外设配置
+
+#define USE_DMA 0
+
 
 
 
@@ -105,9 +136,9 @@ STM32F417VG     LQFP 100    168     1024    192
 
 
 //RAM 区域定义
-#define MCU_SRAM_SIZE   STM32_RAM*1024
-#define MCU_SRAM_BEGIN  0x20000000
-#define MCU_SRAM_END    (MCU_SRAM_BEGIN + MCU_SRAM_SIZE)
+#define MCU_SRAM1_SIZE   STM32_RAM1*1024
+#define MCU_SRAM1_BEGIN  0x20000000
+#define MCU_SRAM1_END    (MCU_SRAM1_BEGIN + MCU_SRAM1_SIZE)
 
 
 #ifdef __CC_ARM
@@ -118,21 +149,17 @@ STM32F417VG     LQFP 100    168     1024    192
 #else
     extern int __bss_end;
 #endif
-#define MCU_HEAP_END        MCU_SRAM_END
+#define MCU_HEAP_END        MCU_SRAM1_END
 #define MCU_HEAP_SIZE       (MCU_HEAP_END - MCU_HEAP_BEGIN)
 
 
-#define MCU_SRAM_USED       (MCU_HEAP_BEGIN - MCU_SRAM_BEGIN)
-#define MCU_SRAM_REMAIND    (MCU_SRAM_END - MCU_HEAP_BEGIN)
+#define MCU_SRAM1_USED       (MCU_HEAP_BEGIN - MCU_SRAM1_BEGIN)
+#define MCU_SRAM1_REMAIND    (MCU_SRAM1_END - MCU_HEAP_BEGIN)
 
 
 
 
 
-#if defined (STM32_EX_SRAM)
-    #define MCU_EX_SRAM_BEGIN    0x68000000 /* the begining address of external SRAM */
-    #define MCU_EX_SRAM_END      0x68080000 /* the end address of external SRAM */
-#endif
 
 
 //FLASH 区域定义
