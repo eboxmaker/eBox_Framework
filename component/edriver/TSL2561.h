@@ -32,7 +32,8 @@
 #ifndef _TSL2561_H_
 #define _TSL2561_H_
 
-#include <ebox.h>
+#include <ebox_core.h>
+#include "ebox_i2c.h"
 
 #define TSL2561_VISIBLE 2                   // channel 0 - channel 1
 #define TSL2561_INFRARED 1                  // channel 1

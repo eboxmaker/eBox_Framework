@@ -172,7 +172,7 @@ void Oled4Spi::display_off(void)
 *   返回结果：
 *   备    注：在指定位置显示一个字符,包括部分字符
 ***********************************************************/
-void Oled4Spi::show_char(uint8_t x, uint8_t y, uint8_t chr,u8 Char_Size)
+void Oled4Spi::show_char(uint8_t x, uint8_t y, uint8_t chr,uint8_t Char_Size)
 {
     unsigned char c = 0, i = 0;
     c = chr - ' '; //得到偏移后的值
@@ -205,7 +205,7 @@ void Oled4Spi::show_char(uint8_t x, uint8_t y, uint8_t chr,u8 Char_Size)
 *   返回结果：
 *   备    注：在指定位置显示一个字符串
 ***********************************************************/
-void Oled4Spi::show_string(uint8_t x, uint8_t y, char *chr,u8 Char_Size)
+void Oled4Spi::show_string(uint8_t x, uint8_t y, char *chr,uint8_t Char_Size)
 {
     unsigned char j = 0;
     while (chr[j] != '\0')

@@ -26,7 +26,7 @@ void FM25V::begin()
     {
         spi_dev_FM25V.dev_num = spi->get_new_dev_num();
         spi_dev_FM25V.mode = SPI_MODE0;
-        spi_dev_FM25V.prescaler = SPI_BaudRatePrescaler_4;
+        spi_dev_FM25V.prescaler = SPI_CLOCK_DIV4;
         spi_dev_FM25V.bit_order = MSB_FIRST;
 	}
 	spi->begin(&spi_dev_FM25V);

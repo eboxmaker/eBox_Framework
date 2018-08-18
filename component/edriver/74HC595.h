@@ -20,7 +20,7 @@
 #ifndef  __74HC595_H
 #define  __74HC595_H
 
-#include "ebox.h"
+#include "ebox_core.h"
 
 class _74hc595
 {

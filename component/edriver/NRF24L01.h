@@ -1,6 +1,6 @@
 #ifndef __NRF24L01_H
 #define __NRF24L01_H
-#include "ebox.h"
+#include "ebox_core.h"
 
 class NRF24L01
 {

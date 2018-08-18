@@ -95,10 +95,15 @@ STM32F417VG     LQFP 100    168     1024    (128+64)
 
 
 
+
 #if ((STM32_TYPE >= STM32F401CB) && (STM32_TYPE <= STM32F417VG))
     #define STM32F40_41xxx
 #endif
 
+
+//外设配置层
+
+#define USE_DMA 1
 
 
 //------------------抽象层宏定义------------------------

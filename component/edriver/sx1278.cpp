@@ -1,5 +1,5 @@
 #include "sx1278.h"
-#define LORA_DEBUG 1
+#define LORA_DEBUG 0
 #if LORA_DEBUG
 #define LORA_DBG(...) uart1.printf(__VA_ARGS__)
 #else
@@ -114,7 +114,7 @@ void Lora::evnet_tc()
 }
 
 void Lora::enttry_rx() {
-    u8 addr;
+    uint8_t addr;
     setMode(SX1278_STANDBY);
     setRegValue(SX1278_REG_PA_DAC, SX1278_PA_BOOST_OFF);
     setRegValue(SX1278_REG_HOP_PERIOD, SX1278_HOP_PERIOD_MAX);

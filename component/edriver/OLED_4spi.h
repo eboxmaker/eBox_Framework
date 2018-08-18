@@ -60,7 +60,7 @@
  *                   头 文 件 配 置 区                     *
  ***********************************************************/
 
-#include "ebox.h"
+#include "ebox_core.h"
 
 /*--------------------------------------------------------*
  *                    系 统 宏 定 义                      *
@@ -104,8 +104,8 @@ public:
 
     void draw_point(uint8_t x,uint8_t y);
 
-    void show_char(uint8_t x, uint8_t y, uint8_t chr,u8 Char_Size);
-    void show_string(uint8_t x, uint8_t y, char *p,u8 Char_Size);
+    void show_char(uint8_t x, uint8_t y, uint8_t chr,uint8_t Char_Size);
+    void show_string(uint8_t x, uint8_t y, char *p,uint8_t Char_Size);
     void show_num(uint8_t x, uint8_t y, uint32_t num, uint8_t len, uint8_t size);
     void show_chinese(uint8_t x, uint8_t y, uint8_t no);
 

@@ -19,7 +19,7 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __CLOCK_H
 #define __CLOCK_H
-#include "ebox.h"
+#include "ebox_core.h"
 /******************************************************
 可以用于GPS,BD模块驱动时间
 也可以用于RTC秒中断驱动时间
@@ -73,7 +73,7 @@ class Calendar
 	
 		
 	//获取某天是星期几
-		void	get_week(u16 year,uint8_t month,uint8_t date,uint8_t &_week);//获取某天是星期几
+		void	get_week(uint16_t year,uint8_t month,uint8_t date,uint8_t &_week);//获取某天是星期几
 	
     
 	public:
@@ -93,15 +93,15 @@ class Calendar
         
 	private:
 	  ///////以下是日历计算的私有函数///////////////////////
-		uint8_t 		is_leap_year(u16 _year);//是否是闰年
+		uint8_t 		is_leap_year(uint16_t _year);//是否是闰年
 		void	mon_1_3_5_7_8_10_12_add_one_day();//天的进位
 		void	mon_4_6_9_11_add_one_day();//天的进位
 		void	mon_2_add_one_day();//天的进位
 		///////倒计时计算相关的函数////////////////////////
 		uint8_t         _alarm_enable;
-		void	        swap(u16 *a,u16 *b);//交换两个u16型变量的数据
-		u16		        day_in_year(DateTime_t &_dt);//日期是那年的第几天
-		u16		        days_between_2_date(DateTime_t &dt_current,DateTime_t &dt_target);//两个日期之间的天数差
+		void	        swap(uint16_t *a,uint16_t *b);//交换两个uint16_t型变量的数据
+		uint16_t		        day_in_year(DateTime_t &_dt);//日期是那年的第几天
+		uint16_t		        days_between_2_date(DateTime_t &dt_current,DateTime_t &dt_target);//两个日期之间的天数差
 		uint32_t		sec_in_day(DateTime_t &_dt);//时间是当天的第几秒
 		uint32_t		seconds_between_2_time(DateTime_t &dt1,DateTime_t &dt2);//两个时间之间的秒数差
 		void	        sec_to_time(uint32_t sec_source,uint8_t &hour,uint8_t &min,uint8_t &sec);//秒转换成hms格式的时间

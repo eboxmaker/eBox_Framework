@@ -22,7 +22,7 @@
 
 #ifndef __W5500_H
 #define __W5500_H
-#include "ebox.h"
+#include "ebox_core.h"
 
 
 typedef uint8_t 			SOCKET;

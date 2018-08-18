@@ -21,7 +21,7 @@
 
 #ifndef TM1637_h
 #define TM1637_h
-#include <ebox.h>
+#include <ebox_core.h>
 //************definitions for TM1637*********************
 #define ADDR_AUTO  0x40
 #define ADDR_FIXED 0x44

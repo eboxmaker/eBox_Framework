@@ -1,5 +1,5 @@
 #include "ads1118.h"
-
+#include "ebox.h"
 Ads1118::Ads1118(Gpio *cs,Spi *spi)
 {
     this->cs = cs;

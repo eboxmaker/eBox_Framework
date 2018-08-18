@@ -1,8 +1,10 @@
 #ifndef __OLED_IIC_H
 #define __OLED_IIC_H
 
-#include "ebox.h"
+#include "ebox_core.h"
+#include "ebox_i2c.h"
 #include "font.h"
+
 #define OLED_CMD  0	//Ð´ÃüÁî
 #define OLED_DATA 1	//Ð´Êý¾Ý
 #define SlaveAddr  0x78
@@ -33,10 +35,10 @@ class OledI2c
         void display_on(void);
         void display_off(void);
         
-        void show_char(u8 x,u8 y,u8 chr,u8 Char_Size);
-        void show_string(u8 x,u8 y,char  *chr,u8 Char_Size);
-        void show_num(u8 x,u8 y,u32 num,u8 len,u8 size2);
-        void show_chinese(u8 x,u8 y,u8 no);
+        void show_char(uint8_t x,uint8_t y,uint8_t chr,uint8_t Char_Size);
+        void show_string(uint8_t x,uint8_t y,char  *chr,uint8_t Char_Size);
+        void show_num(uint8_t x,uint8_t y,u32 num,uint8_t len,uint8_t size2);
+        void show_chinese(uint8_t x,uint8_t y,uint8_t no);
 
         
         void fill_picture(unsigned char fill_Data);

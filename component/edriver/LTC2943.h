@@ -84,7 +84,8 @@ http://www.linear.com/product/LTC2943-1#demoboards
 #ifndef LTC2943_H
 #define LTC2943_H
 
-#include "ebox.h"
+#include "ebox_core.h"
+#include "ebox_i2c.h"
 
 
 /*!

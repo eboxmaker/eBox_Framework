@@ -14,7 +14,9 @@
 #ifndef __MCP23017_H
 #define __MCP23017_H
 
-#include "ebox.h"
+#include "ebox_core.h"
+#include "ebox_i2c.h"
+
 
 class MCP23017 {
 public:

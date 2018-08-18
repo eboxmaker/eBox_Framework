@@ -6,7 +6,7 @@ uint8_t rx_addr_1[RX_ADR_WIDTH] = {0x34, 0x43, 0x10, 0x10, 0x01}; //∑¢ÀÕµÿ÷∑
 
 void exti_callback()
 {
-    uart1.printf("exti event");
+
 }
 NRF24L01::NRF24L01(Gpio *irq, Gpio *ce, Gpio *cs, Spi *spi)
 {

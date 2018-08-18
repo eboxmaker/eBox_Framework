@@ -21,7 +21,7 @@
 #ifndef __SPI2_RAM_H
 #define __SPI2_RAM_H
 
-#include "ebox.h"
+#include "ebox_core.h"
 
 
 /*+++++++++++++++++++++++++++++++++FM25V02++++++++++++++++++++++++++++++++++*/
@@ -59,9 +59,9 @@ class FM25V
 		}
 		void begin();//
 		void read_id(uint16_t *id); //
-		void read(uint8_t *buf,u32 read_addr,u16 num_to_read);// 
-		void fast_read(uint8_t *buf,u32 read_addr,u16 num_to_read);//
-		void write(uint8_t *buf,u32 write_addr,u16 num_to_write);
+		void read(uint8_t *buf,uint32_t read_addr,uint16_t num_to_read);// 
+		void fast_read(uint8_t *buf,uint32_t read_addr,uint16_t num_to_read);//
+		void write(uint8_t *buf,uint32_t write_addr,uint16_t num_to_write);
 
 	private:
 		uint8_t     spi_flash_buf[1024];

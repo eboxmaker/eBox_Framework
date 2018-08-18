@@ -19,7 +19,7 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __RGB_LED_H
 #define __RGB_LED_H
-#include "ebox.h"
+#include "ebox_core.h"
 
 typedef enum
 {
@@ -83,5 +83,5 @@ void HSV_to_RGB(const COLOR_HSV &hsv, COLOR_RGB &rgb);
 
 void RGB_to_GRB(COLOR_RGB &rgb, COLOR_GRB &grb);
 void RGB_BUF_to_GRB(COLOR_BUF &c_buf);
-void rgb_to_565(COLOR_RGB &rgb, u16 &color);
+void rgb_to_565(COLOR_RGB &rgb, uint16_t &color);
 #endif

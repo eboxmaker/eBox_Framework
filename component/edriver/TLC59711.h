@@ -18,7 +18,7 @@
 #ifndef _ADAFRUIT_TLC59711_H
 #define _ADAFRUIT_TLC59711_H
 
-#include <ebox.h>
+#include <ebox_core.h>
 
 
 class Adafruit_TLC59711 {

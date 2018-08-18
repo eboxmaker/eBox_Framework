@@ -28,7 +28,7 @@ void At45db::begin()
     {
         spi_dev_AT45DB.dev_num = spi->get_new_dev_num();
         spi_dev_AT45DB.mode = SPI_MODE0;
-        spi_dev_AT45DB.prescaler = SPI_BaudRatePrescaler_4;
+        spi_dev_AT45DB.prescaler = SPI_CLOCK_DIV4;
         spi_dev_AT45DB.bit_order = MSB_FIRST;
 	}
 
@@ -237,7 +237,6 @@ void At45db::_waitBusy(void)
         {
             return;
         }
-        uart1.printf("\r\nSPI_FLASH timeout!!!\r\n");
     }
    
 

@@ -54,7 +54,7 @@
 #define USE_UART5 0
 #define UART_NUM (USE_UART1 + USE_UART2 + USE_UART3 + USE_UART4 + USE_UART5)
 
-#define USE_UART_DMA (0&&USE_DMA)
+#define USE_UART_DMA (1&&USE_DMA)
 
 
 //”√ªß≈‰÷√//////////////
@@ -127,7 +127,7 @@ private:
     Gpio                *_tx_pin;
     Gpio                *_rx_pin;
     #if USE_UART_DMA
-    char                *data_ptr;
+    char                *tx_buf_ptr;
     uint8_t             _use_dma;
     Dma                 *dma_tx;
     uint16_t            dma_write(const char *str, uint16_t length);

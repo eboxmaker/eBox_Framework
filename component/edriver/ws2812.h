@@ -1,6 +1,6 @@
 #ifndef __WS2812_H
 #define __WS2812_H
-#include "ebox.h"
+#include "ebox_core.h"
 #include "color_convert.h"
 
 #define TIM_PERIOD		29					// Number of CPU cycles that will constitute 1 period
@@ -27,10 +27,10 @@ public:
         pin = p_pin;
     }
     void	begin();
-    void	set_color(u8 g, u8 r, u8 b);
-    void	set_color(u32 color);
+    void	set_color(uint8_t g, uint8_t r, uint8_t b);
+    void	set_color(uint32_t color);
     void reset();
-    void write(u32 color);
+    void write(uint32_t color);
     void send_bit_high();
     void send_bit_low();
     void RCC_Config(void);

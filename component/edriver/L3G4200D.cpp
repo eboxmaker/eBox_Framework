@@ -37,7 +37,7 @@ void L3G4200D::begin(uint32_t speed)
 }
 void L3G4200D::test()
 {
-    uart1.printf("id = %d\r\n", read_reg(L3G4200D_WHO_AM_I));
+//    uart1.printf("id = %d\r\n", read_reg(L3G4200D_WHO_AM_I));
 }
 
 // Writes a gyro register

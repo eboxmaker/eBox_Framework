@@ -23,7 +23,7 @@
 #ifndef __ADS7816_H
 #define __ADS7816_H
 
-#include "ebox.h"
+#include "ebox_core.h"
 
 #define v_ref 2500
 class Ads7816

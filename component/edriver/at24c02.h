@@ -20,7 +20,7 @@
 
 #ifndef __AT24C02_H
 #define __AT24C02_H
-#include "ebox.h"
+#include "ebox_core.h"
 
 #define AT24C02
 #define SLAVE_ADDR 0xA0

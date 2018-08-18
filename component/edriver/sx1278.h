@@ -1,6 +1,6 @@
 #ifndef __SX1278_H
 #define __SX1278_H
-#include "ebox.h"
+#include "ebox_core.h"
 //SX1278 register map
 #define SX1278_REG_FIFO                               0x00
 #define SX1278_REG_OP_MODE                            0x01

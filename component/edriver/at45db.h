@@ -22,7 +22,7 @@
 #ifndef __AT45DB_H
 #define __AT45DB_H
 
-#include "ebox.h"
+#include "ebox_core.h"
 
 
 /*+++++++++++++++++++++++++++++++++AT45DB321D++++++++++++++++++++++++++++++++++*/
