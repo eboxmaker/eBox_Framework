@@ -6,239 +6,9 @@
 #include "myprintf.h"
 
 
-
 int g_zero_flag=0;//标号 标志对齐方式,为0时表示右对齐方式
 
-#define IsDigital(c)		((c>='0') && (c<='9'))//判断是否为数字 
-
-const char *digits = "0123456789abcdefghijklmnopqrstuvwxyz";
-char *strbuf;
-void ReverseStr(char *str);
-int mystrlen(char *str)//求字符串长度
-{
-	int i=0;
-	while(*(str++))
-		i++;
-	return i;
-} 
-
-
-int Str2Digital(const char **str)//将字符串转换成整数
-{
-	int i=0;
-	while(IsDigital(**str))
-		i = i*10+*((*str)++) - '0';
-	return i;
-}
-int float2str(double num,char *str,int precision)//浮点数转换成字符串
-{
-    unsigned long int_part;
-    double remainder;
-    int n;
-    double rounding = 0.5;
-    unsigned int toPrint;
-    int i;
-
-    if (num < 0.0)
-    {
-        num = -num;
-    }
-  
-    rounding = 0.5;
-    for (i=0; i<precision; ++i)
-        rounding /= 10.0;
-
-    num += rounding;
-
-    int_part = (unsigned long)num;
-    remainder = num - (double)int_part;
-    
-    n = Int2Str(int_part,str);
-    str[n++] = '.';
-    while (precision-- > 0)
-    {
-        remainder *= 10.0;
-        toPrint = (unsigned int)(remainder);
-        str[n++] = toPrint+0x30;
-        remainder -= toPrint; 
-    } 
-    str[n] = '\0';
-    return n;
-}
-int format_str(char *dst,char *src, int len,int width, int flag)
-{
-    int space_len = 0;
-    if(width == -1 || width <= len) 
-    {   
-        width =len;
-        ebox_memcpy(dst,src,width);
-        dst+=len;
-        *dst = '\0';
-        return len;
-    }
-    else
-    { 
-        space_len = width - len;
-        if(!flag)
-        {
-            while(space_len--)
-            {
-                if(g_zero_flag)
-                    *dst++ = '0';
-                else
-                    *dst++ = ' ';
-            }
-            ebox_memcpy(dst,src,len);
-            dst+=len;
-
-        }
-        else
-        {
-            ebox_memcpy(dst,src,len);
-            dst+=len;
-            while(space_len--)
-            {
-                if(g_zero_flag)
-                    *dst++ = '0';
-                else
-                    *dst++ = ' ';
-            }
-        }
-    }
-    *dst = '\0';
-    return width;
-}
-int float2str_format(double num,char *str,int precision,int width, int flag)
-{
-    int n = 0;
-    int len = 0;
-    char buf[64];
-    
-    len = float2str(num,buf,precision);
-    n = format_str(str,buf,len,width,flag);
-    
-    return n;
-}
-int Int2Str(int num,char *str)//整数转换成字符串
-{
-	int k=0;
-    int len = 0;
-	if(num <0)
-	{	
-		num = -num;
-		*str++='-';
-        len++;
-	}
-    if(num == 0)
-    {
-        *str++='0';
-        len++;
-        *str = '\0';
-        return 	len;
-    }
-	while(num)
-	{
-			*str= *(num%10 +digits);
-			num=num/10;
-			str++;
-			k++;
-            len++;
-	}
-	*str = '\0';
-	ReverseStr(str-k);
-return 	len;
-}
-
-int int2str_format(int num,char *dst,int width, int flag)//整数转换成字符串
-{
-    int len = 0;
-    char buf[64];
-    
-    int space_len = 0;
-    len = Int2Str(num,buf);
-
-
-    if(width == -1 || width <= len) 
-    {   
-        width =len;
-        ebox_memcpy(dst,buf,len);
-        dst+=len;
-    }
-    else
-    { 
-        space_len = width - len;
-        if(!flag)
-        {
-            while(space_len--)
-            {
-                if(g_zero_flag)
-                    *dst++ = '0';
-                else
-                    *dst++ = ' ';
-            }
-            ebox_memcpy(dst,buf,len);
-            dst+=len;
-
-        }
-        else
-        {
-            ebox_memcpy(dst,buf,len);
-            dst+=len;
-            while(space_len--)
-            {
-                    *dst++ = ' ';
-            }
-        }
-    }
-    *dst = '\0';
-    return width;    
-
-}
-
-void ReverseStr(char *str)//字符串倒置
-{
-	char tmp;
-	int i,len;
-	
-	len = mystrlen(str);
-	for(i=0;i<len/2;i++)
-	{
-		tmp =*(str+i);
-		*(str+i) = *(str+len-1-i);
-		*(str+len-1-i) = tmp;		
-	}
-}
-void Convert(int num,int n , char *str)//十进制转换成任意进制
-{
-	while(num)
-	{
-			*str= *(num%n +digits);
-			num=num/n;
-			str++;
-	}
-	*str = '\0';
-}
-
-char * AddBuf(char *buf,char *str,int precision,int width,int flag)//字符串添加到buf里
-{
-	int len = 0;
-	int i;
-	len =mystrlen(str);
-//	printf("len:%dstr:%s",len,str);
-	
-	if( precision < 0)
-		precision = len;
-	else if(len > precision)
-		len =precision;
-	if(!flag)
-		while(--width >0 && width-len > 0)
-			*buf++ = ' ';
-	for(i=0;i<len;i++)
-		*buf++ = *str++;
-	while(--width>0 && width-len>0)
-		*buf++ = ' ';
-	return buf;
-}
+#define isDigital(c)		((c>='0') && (c<='9'))//判断是否为数字 
 
 
 #define OUTCHAR(str, len, size, ch)                                          \
@@ -247,15 +17,25 @@ do {                                                                         \
 		str[len] = ch;                                               \
 	(len)++;                                                             \
 } while (/* CONSTCOND */ 0)
-void AddStrBuf(char *buf, char *str, size_t *len, size_t size,int width)//字符串添加到buf里
-{
-	int _len = 0;
 
-	_len =mystrlen(str);
+static bool isHex(char c);
+static int format_num_str(char *dst,char *src, int len,int width, int flag);
 
-    while(_len--)
-        OUTCHAR(buf,*len,size,*str++);
-}
+//浮点数处理
+static int float2str(double value,char *str,int precision);//浮点数转换成字符串
+static int float2str_format(double value,char *str,int precision,int width, int flag);
+
+//整数处理
+static int int2str(int value,char *str);//整数转换成字符串
+static int int2str_format(int value,char *dst,int width, int flag);//整数转换成字符串
+static int convert2str_format(int value,int base, int caps,char *dst,int width, int flag);
+
+static int  str2digital(const char **str);//将字符串转换成整数
+static void reverseStr(char *str);
+static int convert(int value,char *buf, int base, int caps);//十进制转换成任意进制
+
+static void addStrToBuf(char *buf, char *str, size_t *len, size_t size,int width);//字符串添加到buf里
+
 
 int _ebox_vsnprintf(char *buf,size_t size,const char *format,va_list args)
 {
@@ -289,13 +69,13 @@ int _ebox_vsnprintf(char *buf,size_t size,const char *format,va_list args)
 				}
 				//检查字符宽度
 				width = -1;
-				if(IsDigital(*format))
+				if(isDigital(*format))
                 {
                     if(*format == '0')
                         g_zero_flag = 1;
                     else
                         g_zero_flag = 0;
-					width = Str2Digital(&format);
+					width = str2digital(&format);
                 }
 				else if(*format == '*')
 				{
@@ -312,8 +92,8 @@ int _ebox_vsnprintf(char *buf,size_t size,const char *format,va_list args)
 				if(*format == '.')
 				{
 					format++;
-					if(IsDigital(*format))
-						precision = Str2Digital(&format);
+					if(isDigital(*format))
+						precision = str2digital(&format);
 					else if(*format == '*')
 					{
 						precision = va_arg(args,int);
@@ -354,31 +134,29 @@ int _ebox_vsnprintf(char *buf,size_t size,const char *format,va_list args)
 						case 's':
                             str = p;
                             str = va_arg(args,char *);
-							AddStrBuf(buf,str,&len,size,width);
+							addStrToBuf(buf,str,&len,size,width);
 							break;
 						case 'o':
                             str = p;
-							Convert(va_arg(args,int), 8, str);
-							ReverseStr(str);
-							AddStrBuf(buf,str,&len,size,width);
+							convert(va_arg(args,int),str,16,1);
+							addStrToBuf(buf,str,&len,size,width);
 							break;
 						case 'd':
 						case 'D':
                             str = p;
                             width = int2str_format(va_arg(args,int),str,width,flag);
-							AddStrBuf(buf,str,&len,size,width);
+							addStrToBuf(buf,str,&len,size,width);
 							break;
 						case 'x':
 						case 'X':
                             str = p;
-							Convert(va_arg(args,int),16,str);
-							ReverseStr(str);
-							AddStrBuf(buf,str,&len,size,width);
+							convert2str_format(va_arg(args,int),16,1,str,width,flag);
+							addStrToBuf(buf,str,&len,size,width);
 							break;
 						case 'f':
                             str = p;
 							width = float2str_format(va_arg(args,double),str,precision,width,flag);
-							AddStrBuf(buf,str,&len,size,width);
+							addStrToBuf(buf,str,&len,size,width);
 							break;
 						default:
 							break;
@@ -425,14 +203,7 @@ int _ebox_vsprintf(char *ret, const char *format, va_list ap)
 
 int _ebox_sprintf(char *str,const char *format,...)
 {
-//	va_list args;
-//	int n ;
-//    
-//    memcpy(args,);
-//	va_start(args,format);
-//	n =MyVsnprintf(str,size,format,args);	
-//	va_end(args);
-//	return n;
+
     
     va_list ap;
 	int len;
@@ -442,18 +213,224 @@ int _ebox_sprintf(char *str,const char *format,...)
 	va_end(ap);
 	return len;
 }
-//void vsn_test(const char *fmt, ...)
-//{
-//    char buf[100];
-//    size_t  size1 = 0;
-//    size_t  size2 = 32;
-//    va_list va_params;
 
-//    va_start(va_params, fmt);
 
-//    size1 = MyVsnprintf(buf,size2,fmt, va_params);
+int float2str(double value,char *str,int precision)//浮点数转换成字符串
+{
+    unsigned long int_part = 0;
+    double remainder = 0;
+    int n = 0;
+    double rounding = 0.5;
+    unsigned int toPrint = 0;
+    int i = 0;
 
-//    va_end(va_params);
+//    char str[30];
+    if (value < 0.0)
+    {
+        value = -value;
+        str[n++] = '-';
+    }
+  
+    rounding = 0.5;
+    for (i=0; i<precision; ++i)
+        rounding /= 10.0;
 
-//    
-//}
+    value += rounding;
+
+    int_part = (unsigned long)value;
+    remainder = value - (double)int_part;
+    
+    n += int2str(int_part,&str[n]);
+    str[n++] = '.';
+    while (precision-- > 0)
+    {
+        remainder *= 10.0;
+        toPrint = (unsigned int)(remainder);
+        str[n++] = toPrint+0x30;
+        remainder -= toPrint; 
+    } 
+    str[n] = '\0';
+    return n;
+}
+int format_num_str(char *dst,char *src, int len,int width, int flag)
+{
+    int space_len = 0;
+    if(width == -1 || width <= len) 
+    {   
+        width =len;
+        ebox_memcpy(dst,src,width);
+        dst+=len;
+        *dst = '\0';
+        return len;
+    }
+    else
+    { 
+        space_len = width - len;
+        
+        if(!flag)
+        {
+            while(space_len--)
+            {
+                if(g_zero_flag)
+                {
+                    if(*src == '-')
+                    {
+                        *dst++ = '-';
+                        src++;
+                    }
+                    else
+                        *dst++ = '0';
+                }
+                else
+                    *dst++ = ' ';
+            }
+            ebox_memcpy(dst,src,len);
+            dst+=len;
+
+        }
+        else
+        {
+            ebox_memcpy(dst,src,len);
+            dst+=len;
+            while(len--)
+            {
+                if(isDigital(*src) != 1 && *src != '.' && *src != '-')
+                {
+                    src++;
+                    g_zero_flag = 0;
+                }
+            }
+                
+            while(space_len--)
+            {
+                if(g_zero_flag)
+                    *dst++ = '0';
+                else
+                    *dst++ = ' ';
+            }
+        }
+    }
+    *dst = '\0';
+    return width;
+}
+static int float2str_format(double value,char *str,int precision,int width, int flag)
+{
+    int n = 0;
+    int len = 0;
+    char buf[64];
+    
+    len = float2str(value,buf,precision);
+    n = format_num_str(str,buf,len,width,flag);
+    
+    return n;
+}
+static int int2str(int value,char *str)//整数转换成字符串
+{
+	const char *digits =  "0123456789ABCDEF" ;
+	int k=0;
+    int len = 0;
+	if(value <0)
+	{	
+		value = -value;
+		*str++='-';
+        len++;
+	}
+    if(value == 0)
+    {
+        *str++='0';
+        len++;
+        *str = '\0';
+        return 	len;
+    }
+	while(value)
+	{
+			*str= *(value%10 +digits);
+			value=value/10;
+			str++;
+			k++;
+            len++;
+	}
+	*str = '\0';
+	reverseStr(str-k);
+return 	len;
+}
+static int int2str_format(int value,char *dst,int width, int flag)//整数转换成字符串
+{
+    int n;
+    int len = 0;
+    char buf[64];
+    
+    int space_len = 0;
+    len = int2str(value,buf);
+    n = format_num_str(dst,buf,len,width,flag);
+
+    return width;    
+
+}
+static int convert2str_format(int value,int base, int caps,char *dst,int width, int flag)
+{
+    
+    int n = 0;
+    int len = 0;
+    char buf[64];
+    
+    len = convert(value,buf,base,caps);
+    reverseStr(buf);
+    n = format_num_str(dst,buf,len,width,flag);
+    
+    return n;
+}
+
+static int str2digital(const char **str)//将字符串转换成整数
+{
+	int i=0;
+	while(isDigital(**str))
+		i = i*10+*((*str)++) - '0';
+	return i;
+}
+
+static void reverseStr(char *str)//字符串倒置
+{
+	char tmp;
+	int i,len;
+	
+	len = strlen(str);
+	for(i=0;i<len/2;i++)
+	{
+		tmp =*(str+i);
+		*(str+i) = *(str+len-1-i);
+		*(str+len-1-i) = tmp;		
+	}
+}
+static int convert(int value,char *buf, int base, int caps)//十进制转换成任意进制
+{
+	const char *digits = caps ? "0123456789ABCDEF" : "0123456789abcdef";
+	size_t pos = 0;
+    
+    	/* We return an unterminated buffer with the digits in reverse order. */
+	do {
+		buf[pos++] = digits[value % base];
+		value /= base;
+	} while (value != 0 );
+
+    buf[pos] = '\0';
+	return (int)pos;
+    
+}
+static void addStrToBuf(char *buf, char *str, size_t *len, size_t size,int width)//字符串添加到buf里
+{
+	int _len = 0;
+
+	_len = strlen(str);
+
+    while(_len--)
+        OUTCHAR(buf,*len,size,*str++);
+}
+static bool isHex(char c)
+{
+	if((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F' ))
+        return true;
+    else
+        return false;
+
+}
