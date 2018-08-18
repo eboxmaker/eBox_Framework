@@ -21,7 +21,7 @@
 #ifndef _Max7456_h
 #define _Max7456_h
 
-#include "ebox.h"
+#include "ebox_core.h"
 
 /******* FROM DATASHEET *******/
 

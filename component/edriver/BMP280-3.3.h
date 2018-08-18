@@ -2,7 +2,7 @@
 #define __BMP280_33_H
 
 
-#include <ebox.h>
+#include <ebox_core.h>
 
 
 

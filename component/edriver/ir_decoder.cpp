@@ -1,4 +1,6 @@
 #include "ir_decoder.h"
+#include "ebox_in_capture.h"
+#include "ebox.h"
 /*
  * ir_decoder.cpp
  *

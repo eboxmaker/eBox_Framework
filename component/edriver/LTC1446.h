@@ -21,7 +21,7 @@
 #ifndef __LTC1446_H
 #define __LTC1446_H
 
-#include "ebox.h"
+#include "ebox_core.h"
 
 class LTCX
 {

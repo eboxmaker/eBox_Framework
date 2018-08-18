@@ -36,7 +36,7 @@
 #ifndef dht11_h
 #define dht11_h
 
-#include "ebox.h"
+#include "ebox_core.h"
 
 /*
  * Dht11

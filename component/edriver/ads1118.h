@@ -1,6 +1,6 @@
 #ifndef __ADS1118_H
 #define __ADS1118_H
-#include "ebox.h"
+#include "ebox_core.h"
 
 
 #define CONFIG_DEFAULT = 0x008B;

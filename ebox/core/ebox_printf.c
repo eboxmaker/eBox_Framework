@@ -17,7 +17,7 @@ void ebox_printf_init(void)
 void ebox_printf(const char *fmt, ...)
 {
     char *buf;
-    size_t  size1 = 0;
+    int  len = 0;
     size_t  size2 = 32;
     va_list va_params;
 
@@ -28,21 +28,20 @@ void ebox_printf(const char *fmt, ...)
         if(buf == NULL)
             return ;
 
-        size1 =  ebox_vsnprintf(buf, size2,fmt, va_params);
-        if(size1 == -1  || size1 >= size2)
+        len =  ebox_vsnprintf(buf, size2,fmt, va_params);
+        if(len == -1  || len >= size2)
         {
             size2+=32;
-            size1 = -1;
             ebox_free(buf);
         }
-    }while(size1 == -1);
+    }while(len == -1 || len >= size2);
     va_end(va_params);
     while(1)
     {
-        size2 = ebox_fifo_put(uart_fifo_ptr,(unsigned char *)buf,size1);
-        if(size2 < size1)
+        size2 = ebox_fifo_put(uart_fifo_ptr,(unsigned char *)buf,len);
+        if(size2 < len)
         {
-            size1 -= size2; 
+            len -= size2; 
             buf+=size2;
             ebox_printf_flush();
         }

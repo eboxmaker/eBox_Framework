@@ -405,7 +405,7 @@ void Lcd::printf(int16_t x, int16_t y, const char *fmt, ...)
     uint8_t i = 0;
     va_list va_params;
     va_start(va_params, fmt);
-    vsprintf(buf, fmt, va_params);
+    ebox_vsprintf(buf, fmt, va_params);
     va_end(va_params);
     while(buf[i] != '\0')
     {

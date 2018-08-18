@@ -19,7 +19,7 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __W25X16_H
 #define __W25X16_H
-#include "ebox.h"
+#include "ebox_core.h"
 
 
 ////////////////////////////////////////////////////////////////////////////

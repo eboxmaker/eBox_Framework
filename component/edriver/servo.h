@@ -1,7 +1,7 @@
 #ifndef __SERVO_H
 #define __SERVO_H
-#include "ebox.h"
-
+#include "ebox_core.h"
+#include "ebox_pwm.h"
 
 //舵机驱动
 //支持端口：    

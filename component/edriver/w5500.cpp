@@ -40,7 +40,6 @@ void W5500::begin( uint8_t *mac, uint8_t *ip, uint8_t *subnet, uint8_t *gateway,
         config.prescaler = SPI_CLOCK_DIV2;
         config.bit_order = MSB_FIRST;
         initialized = 1;
-        ebox_printf("config.dev_num:%d\r\n",config.dev_num);
     }
     spi->begin(&config);
     cs->mode(OUTPUT_PP);

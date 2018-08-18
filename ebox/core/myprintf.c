@@ -250,8 +250,7 @@ do {                                                                         \
 void AddStrBuf(char *buf, char *str, size_t *len, size_t size,int width)//字符串添加到buf里
 {
 	int _len = 0;
-	int integer_len;
-    int space_len;
+
 	_len =mystrlen(str);
 
     while(_len--)
@@ -269,8 +268,7 @@ int _ebox_vsnprintf(char *buf,size_t size,const char *format,va_list args)
 	char *p;
 	char *str;
     
-//	int i;
-	//char *pbuf=buf;
+
 	str = p =(char *)ebox_malloc(64);	
 	while(*format)
 	{
@@ -336,6 +334,7 @@ int _ebox_vsnprintf(char *buf,size_t size,const char *format,va_list args)
 				switch(*format)
 				{
 						case 'c':
+						case 'C':
 							if(!flag)//右对齐方式	
                             {                                
 								while(--width>0)
@@ -364,11 +363,13 @@ int _ebox_vsnprintf(char *buf,size_t size,const char *format,va_list args)
 							AddStrBuf(buf,str,&len,size,width);
 							break;
 						case 'd':
+						case 'D':
                             str = p;
                             width = int2str_format(va_arg(args,int),str,width,flag);
 							AddStrBuf(buf,str,&len,size,width);
 							break;
 						case 'x':
+						case 'X':
                             str = p;
 							Convert(va_arg(args,int),16,str);
 							ReverseStr(str);

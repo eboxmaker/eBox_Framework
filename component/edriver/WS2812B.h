@@ -1,7 +1,7 @@
 
 #ifndef __WS2812B_H
 #define	__WS2812B_H
-#include "ebox.h"
+#include "ebox_core.h"
 #include "stm32f10x.h"
 //#include "delay.h"
 #define TIMxCH1 0x01

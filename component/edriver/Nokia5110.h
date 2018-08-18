@@ -18,14 +18,8 @@
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 
-#include "ebox.h"
+#include "ebox_core.h"
 
-#define SCLK 		PB13
-#define SDIN 		PB12
-#define LCD_DC 		PB11
-#define LCD_CE 		PB10
-#define LCD_RST 	PB9
-#define LCD_LED 	PB8
 
 class NOKIA5110
 {
@@ -50,5 +44,12 @@ public:
                               unsigned char line, unsigned char row);
     void draw_bmp_pixel(unsigned char X, unsigned char Y, unsigned char *map,
                         unsigned char Pix_x, unsigned char Pix_y);
+private:
+    Gpio *clk;
+    Gpio *din;
+    Gpio *dc;
+    Gpio *ce;
+    Gpio *rst;
+    Gpio *led;
 
 };

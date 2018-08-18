@@ -20,7 +20,8 @@
 #ifndef __LSM303DLHC_H
 #define __LSM303DLHC_H
 
-#include "ebox.h"
+#include "ebox_core.h"
+#include "ebox_i2c.h"
 
 #define LSM303_ACC_ADDR				0x32
 #define LSM303_MAG_ADDR				0x3C

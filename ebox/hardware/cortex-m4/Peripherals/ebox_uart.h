@@ -63,7 +63,7 @@ public:
 protected:
     FunctionPointer _irq[2];
 private:
-    char                *data_ptr;
+    char                *tx_buf_ptr;
     Gpio                *tx;
     Gpio                *rx;
     uint8_t             gpio_af_usart;

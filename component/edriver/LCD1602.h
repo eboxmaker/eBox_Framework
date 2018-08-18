@@ -21,7 +21,7 @@
 #ifndef __LCD1602_1_H
 #define __LCD1602_1_H
 
-#include "ebox.h"
+#include "ebox_core.h"
 class Lcd1602
 {
 

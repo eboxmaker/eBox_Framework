@@ -22,10 +22,9 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 
 #include "ebox_type.h"
+#include "binary.h"
 
 
-#include "Myprintf.h"
-#include "snprintf.h"
 
 #define EBOX_VERSION "2.2"
 
@@ -52,45 +51,39 @@ unsigned int    random(unsigned int min, unsigned int max);
  }
 #endif 
 
-#ifdef __cplusplus
-    #include "WCharacter.h"
-    #include "WString.h"
-    #include "port/ebox_port_gpio.h"
-    #include "port/ebox_port_spi.h"
-    #include "port/ebox_port_i2c.h"
-#endif  
-#define USE_DMA 1
  
-#define USE_PRINTF 3
+#define USE_PRINTF 1
 
 #if  USE_PRINTF == 1
-  #define ebox_vsnprintf(...)    _ebox_vsnprintf(__VA_ARGS__)
-  #define ebox_snprintf(...)     _ebox_snprintf(__VA_ARGS__)
- 
-  #define ebox_vsprintf(...)     _ebox_vsprintf(__VA_ARGS__)
-  #define ebox_sprintf(...)      _ebox_sprintf(__VA_ARGS__)
+    #include "Myprintf.h"
+    #define ebox_vsnprintf(...)    _ebox_vsnprintf(__VA_ARGS__)
+    #define ebox_snprintf(...)     _ebox_snprintf(__VA_ARGS__)
+
+    #define ebox_vsprintf(...)     _ebox_vsprintf(__VA_ARGS__)
+    #define ebox_sprintf(...)      _ebox_sprintf(__VA_ARGS__)
 #elif USE_PRINTF == 2
-  #define ebox_vsnprintf(...)    rpl_vsnprintf(__VA_ARGS__)
-  #define ebox_snprintf(...)     rpl_snprintf(__VA_ARGS__)
-  #define ebox_vsprintf(...)     rpl_vsprintf(__VA_ARGS__)
-  #define ebox_sprintf(...)      rpl_sprintf(__VA_ARGS__)
+    #include "snprintf.h"
+    #define ebox_vsnprintf(...)    rpl_vsnprintf(__VA_ARGS__)
+    #define ebox_snprintf(...)     rpl_snprintf(__VA_ARGS__)
+    #define ebox_vsprintf(...)     rpl_vsprintf(__VA_ARGS__)
+    #define ebox_sprintf(...)      rpl_sprintf(__VA_ARGS__)
 #elif  USE_PRINTF == 3
-  #define ebox_vsnprintf(...)    vsnprintf(__VA_ARGS__)
-  #define ebox_snprintf(...)     snprintf(__VA_ARGS__)
-  #define ebox_vsprintf(...)     vsprintf(__VA_ARGS__)
-  #define ebox_sprintf(...)      sprintf(__VA_ARGS__)
+    #include <stdio.h>
+    #include <stdarg.h>
+    #define ebox_vsnprintf(...)    vsnprintf(__VA_ARGS__)
+    #define ebox_snprintf(...)     snprintf(__VA_ARGS__)
+    #define ebox_vsprintf(...)     vsprintf(__VA_ARGS__)
+    #define ebox_sprintf(...)      sprintf(__VA_ARGS__)
                                 
  #endif
 
-#ifdef abs
-#undef abs
-#endif
+
 
 #define min3v(v1, v2, v3)   ((v1)>(v2)? ((v2)>(v3)?(v3):(v2)):((v1)>(v3)?(v3):(v2)))
 #define max3v(v1, v2, v3)   ((v1)<(v2)? ((v2)<(v3)?(v3):(v2)):((v1)<(v3)?(v3):(v1)))
 #define min(v1, v2 )        ((v1)<(v2)? (v1):(v2))
 #define max(v1, v2 )        ((v1)>(v2)? (v1):(v2))
-#define abs(x)              ((x)>0?(x):-(x))
+//#define abs(x)              ((x)>0?(x):-(x))
 #define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
 #define round(x)            ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
 #define radians(deg)        ((deg)*DEG_TO_RAD)
@@ -141,6 +134,15 @@ unsigned int    random(unsigned int min, unsigned int max);
 #define isDigital(c)		((c>='0') && (c<='9'))//判断是否为数字 
 
 #ifdef __cplusplus
+
+#include "WCharacter.h"
+#include "WString.h"
+#include "port/ebox_port_gpio.h"
+#include "port/ebox_port_spi.h"
+#include "port/ebox_port_i2c.h"
+#include "port/ebox_virtual_hmi.h"
+
+
 uint16_t makeWord(unsigned int w);
 uint16_t makeWord(unsigned char h, unsigned char l);
 #define word(...) makeWord(__VA_ARGS__)
@@ -152,6 +154,37 @@ unsigned int    random();
 unsigned int    random(unsigned int max);
 unsigned int    random(unsigned int min, unsigned int max);
 long            map(long, long, long, long, long);
+
+
+//限制某个数的下界
+template<typename T>
+void limitLow(T &num, T limL)
+{
+	if (num < limL)
+	{
+		num = limL;
+	}
+}
+
+//限制某个数的上界
+template<typename T>
+void limitHigh(T &num, T limH)
+{
+	if (num > limH)
+	{
+		num = limH;
+	}
+}
+
+
+//限制某个数的上下界
+template<typename T>
+void limit(T &num, T limL, T limH)
+{
+	limitLow(num, limL);
+	limitHigh(num, limH);
+}
+
 #endif
 #endif
 

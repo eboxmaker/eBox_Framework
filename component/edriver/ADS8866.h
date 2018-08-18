@@ -1,7 +1,7 @@
 #ifndef __ADS8866_H
 #define __ADS8866_H
 
-#include "ebox.h"
+#include "ebox_core.h"
 class Ads8866
 {
     public:

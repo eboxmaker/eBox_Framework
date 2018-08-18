@@ -22,7 +22,7 @@
 #ifndef  __GP2Y1051_H
 #define  __GP2Y1051_H
 
-#include "ebox.h"
+#include "ebox_core.h"
 #include "ebox_uart.h"
 
 

@@ -21,7 +21,7 @@
 #ifndef __Button_h
 #define __Button_h
 
-#include "ebox.h"
+#include "ebox_core.h"
 
 class Button
 {

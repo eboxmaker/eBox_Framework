@@ -1,4 +1,5 @@
 #include "OLED_i2c.h"
+#include "math.h"
 bool OledI2c::begin(uint32_t speed)
 {
     this->speed = speed;

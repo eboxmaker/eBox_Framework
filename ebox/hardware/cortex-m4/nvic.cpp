@@ -122,7 +122,6 @@ static IRQn_Type dev_to_irqn(uint32_t dev,uint8_t index)
         if(dev == dev_to_IRQn_table[i].dev)
         {
             return (IRQn_Type)dev_to_IRQn_table[i].irqn[index];
-            break;
         }
     }
     return IRQn_Type(0);

@@ -2,6 +2,8 @@
 #define __ebox_virtual_lcd_h
 
 #include "ebox_core.h"
+#include "print.h"
+
 #include "font.h"
 
 class VLcd :public Vhmi ,public Print
@@ -31,11 +33,8 @@ class VLcd :public Vhmi ,public Print
         }Lcd_t;
 
     public:
-        VLcd(){};
-        ~VLcd(){
-            ebox_free(lcd.pixel);
-        };
-        
+        VLcd();
+        ~VLcd();
         void    begin(uint16_t lcd_w,uint16_t lcd_h);
         void    set_xy(int16_t x,int16_t y);
         void    clear(uint32_t color);
@@ -45,6 +44,7 @@ class VLcd :public Vhmi ,public Print
         
         //重载Print的接口。脱离gui也可做简单的字符串打印功能
         virtual size_t write(uint8_t ch);
+        using Print::write;
 
         //重载Vhmi的接口
         virtual void    draw_pixel(int16_t x,int16_t y,uint32_t color);

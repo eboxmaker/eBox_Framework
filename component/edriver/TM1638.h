@@ -20,7 +20,7 @@
 #ifndef  __TM1638_H
 #define  __TM1638_H
 
-#include "ebox.h"
+#include "ebox_core.h"
 
 //uint8_t static DisBuffer[8]={0,0,0,0,0,0,0,0};    //  /*显示缓存区*/	//各个数码管显示的值
 static uint8_t const tab[] =

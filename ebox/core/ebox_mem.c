@@ -298,6 +298,8 @@ size_t ebox_get_sram_end_addr(void)
 */
 uint16_t ebox_free_block_print(void)
 {
+
+    #if DEBUG    
     #if USE_PRINTF
     eboxBlockLink_t *p;
     int i = 0;
@@ -311,6 +313,8 @@ uint16_t ebox_free_block_print(void)
     ebox_printf("-------------------end-------------------\r\n");
     return i-2;
     #endif
+    #endif
+    return 0;
 }
 
 

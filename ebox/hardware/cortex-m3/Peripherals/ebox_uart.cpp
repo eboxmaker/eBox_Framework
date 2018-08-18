@@ -276,17 +276,17 @@ size_t Uart::write(const uint8_t *buffer, size_t size)
     #if USE_UART_DMA
     if((_USARTx == USART1 || _USARTx == USART2 || _USARTx == USART3 ) && (_use_dma == 1))
     {
-        if(data_ptr != NULL)
-            ebox_free(data_ptr);
+        if(tx_buf_ptr != NULL)
+            ebox_free(tx_buf_ptr);
         set_busy();
-        data_ptr = (char *)ebox_malloc(size);
-        if(data_ptr == NULL)
+        tx_buf_ptr = (char *)ebox_malloc(size);
+        if(tx_buf_ptr == NULL)
         {
             return 0;
         }
         for(int i = 0; i < size; i++)
-            data_ptr[i] = *buffer++;
-        dma_write(data_ptr, size);
+            tx_buf_ptr[i] = *buffer++;
+        dma_write(tx_buf_ptr, size);
     }
     else
     #endif

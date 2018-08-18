@@ -23,7 +23,7 @@
 #ifndef __EVENTIO_H
 #define __EVENTIO_H
 
-#include "ebox.h"
+#include "ebox_core.h"
 
 class EventIo
 {

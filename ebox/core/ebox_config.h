@@ -1,10 +1,12 @@
+#ifndef _ebox_core_h
+#define _ebox_core_h
 /**
   ******************************************************************************
-  * @file    parallel_gpio.h
+  * @file    core.h
   * @author  shentq
-  * @version V1.2
+  * @version V2.1
   * @date    2016/08/14
-  * @brief   
+  * @brief   此文件为ebox核心文件,提供了诸多非常重要的接口,可以被标准的c文件调用。
   ******************************************************************************
   * @attention
   *
@@ -16,21 +18,18 @@
   ******************************************************************************
   */
 
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 
-#ifndef  __PARALLEL_GPIO_H
-#define  __PARALLEL_GPIO_H
 
-#include "ebox_core.h"
 
-class ParallelGpio
-{
-public:
-    Gpio *bit[8];
-public:
-    void    mode(PIN_MODE mode);
-    void    write(uint8_t data);
-    uint8_t read();
-};
+
+#define USE_DMA 1
+
+
+#define USE_PRINTF 1
+
+
 
 #endif
+

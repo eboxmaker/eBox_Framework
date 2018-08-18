@@ -1,4 +1,5 @@
 /* Includes ------------------------------------------------------------------*/
+#include "crc.h"
 #include "ds18b20.h"
 /* Extern variables ----------------------------------------------------------*/
 /* Public variables ----------------------------------------------------------*/
@@ -63,7 +64,7 @@ void Ds18b20::write(uint8_t data)
 
 uint8_t Ds18b20::read()
 {
-    u8 data=0;
+    uint8_t data=0;
     no_interrupts();
     for(int i=0;i<8;i++)								
     { 
@@ -81,8 +82,8 @@ uint8_t Ds18b20::read()
 }
 float Ds18b20::get_temp()
 {
-    u8 flag;
-    u8 temp_l,temp_h;
+    uint8_t flag;
+    uint8_t temp_l,temp_h;
     float temperature;
     uint8_t buf[9];
     

@@ -17,7 +17,8 @@
 #ifndef PCA9685_H
 #define PCA9685_H
 
-#include "ebox.h"
+#include "ebox_core.h"
+#include "ebox_i2c.h"
 
 /**
   Version 1.0.0

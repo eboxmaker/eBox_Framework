@@ -54,8 +54,6 @@ void GP2Y1051::get_data(int8_t *buf)
         break;
         }
 
-        uart1.printf("\r\voutH = %d", tmpbuf[0]);
-        uart1.printf("\r\voutL = %d", tmpbuf[0]);
     }
 
 }

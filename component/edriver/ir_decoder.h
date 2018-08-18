@@ -22,7 +22,7 @@
  */
 
 
-#include "ebox.h"
+#include "ebox_core.h"
 
 //标准协议时间
 #define STARTBIT_uS (13500L)

@@ -1,6 +1,7 @@
 #ifndef __CSB_H
 #define __CSB_H
-#include "ebox.h"
+#include "ebox_core.h"
+#include "ebox_in_capture.h"
 
 class ULTRA:public InCapture
 {

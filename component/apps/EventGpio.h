@@ -1,6 +1,6 @@
 #ifndef __IOEVENT_H
 #define __IOEVENT_H
-#include "ebox.h"
+#include "ebox_core.h"
 #include "eventio.h"
 #define IO_EDGE_FILTER_COUNTS 5
 
@@ -32,12 +32,12 @@ class EventGpio : public EventIo
 
     private:
         Gpio *io;
-        u8 state;
+        uint8_t state;
         uint32_t last_time;
-        u16 long_pressed;
-        u8 click_pushed;
-        u8 click_released;
-        u8 first_state;
+        uint16_t long_pressed;
+        uint8_t click_pushed;
+        uint8_t click_released;
+        uint8_t first_state;
         uint8_t changed;
 } ;
 

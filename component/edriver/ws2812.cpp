@@ -2,7 +2,7 @@
 #include <stdlib.h>							// For rand() 		function
 #include <math.h>							// For floor() 		function
 #include "font.h"
-
+#include "mcu.h"
 /* Buffer that holds one complete DMA transmission.
  *
  * The buffer size can be calculated as followas:

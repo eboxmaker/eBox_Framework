@@ -19,7 +19,9 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __L3G4200D_H
 #define __L3G4200D_H
-#include "ebox.h"
+#include "ebox_core.h"
+#include "ebox_i2c.h"
+
 // register addresses
 #define GYR_ADDRESS 0xD2
 #define L3G4200D_WHO_AM_I      0x0F

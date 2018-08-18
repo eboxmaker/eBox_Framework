@@ -20,7 +20,7 @@
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 
-#include "ebox.h"
+#include "ebox_core.h"
 #include "font.h"
 
 #define X_MAX_PIXEL	        128
@@ -55,8 +55,8 @@ class Lcd : public Vhmi
 {
 public:
     uint8_t MADCTL;
-    u16 front_color;
-    u16 back_color;
+    int16_t front_color;
+    int16_t back_color;
     TEXT_MODE_TYPE text_mode;
 public:
     Lcd(Gpio *cs, Gpio *led, Gpio *rs, Gpio *rst, Spi *spi)
@@ -69,7 +69,7 @@ public:
     }
     void begin(void);
     void soft_reset(void);
-    void clear(u16 Color);
+    void clear(uint16_t Color);
     void on();
     void off();
     void column_order(uint8_t order);
@@ -113,9 +113,9 @@ private:
     void spi_write_data(uint8_t Data);
     void write_index(uint8_t Index);
     void write_data_8bit(uint8_t Data);
-    void write_data_16bit(u16 Data);
+    void write_data_16bit(uint16_t Data);
     uint8_t read_8bit();
-    u16 read_16bit();
+    int16_t read_16bit();
 
     void write_reg(uint8_t Index, uint8_t Data);
     uint8_t   read_reg(uint8_t Index);

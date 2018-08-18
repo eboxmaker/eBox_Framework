@@ -5,7 +5,7 @@ file   : mmc_sd.h
 #ifndef __MMC_SD_H
 #define __MMC_SD_H
 
-#include "ebox.h"
+#include "ebox_core.h"
 
 class SD
 {
@@ -31,7 +31,7 @@ private:
     uint8_t     _wait(void);
     uint8_t     _send_command(uint8_t cmd, uint32_t arg, uint8_t crc);
     uint8_t     _send_command_no_deassert(uint8_t cmd, uint32_t arg, uint8_t crc);
-    int         _receive_data(uint8_t *data, u16 len, uint8_t release);
+    int         _receive_data(uint8_t *data, uint16_t len, uint8_t release);
 
 public:
     uint8_t  SD_Type; //SD¿¨µÄÀàĞÍ

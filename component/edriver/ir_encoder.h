@@ -21,7 +21,8 @@
  */
 
 
-#include "ebox.h"
+#include "ebox_core.h"
+#include "ebox_pwm.h"
 
 class IR_ENCODER
 {

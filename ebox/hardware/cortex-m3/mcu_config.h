@@ -88,7 +88,7 @@ STM32F417VG     LQFP 100    168     1024    192
 #define STM32_TYPE    STM32F103C8
 #define STM32_PINS    48 
 #define STM32_FLASH   64
-#define STM32_RAM     20
+#define STM32_RAM1    20
 #define STM32_COMPANY "ST\0"
 
 
@@ -105,6 +105,22 @@ STM32F417VG     LQFP 100    168     1024    192
 #endif
 
 
+
+//外设配置层
+
+#define USE_DMA 1
+
+
+
+
+
+
+
+
+
+
+
+
 //------------------抽象层宏定义------------------------
 
 #define MCU_TYPE        STM32_TYPE
@@ -114,9 +130,9 @@ STM32F417VG     LQFP 100    168     1024    192
 
 
 //RAM 区域定义
-#define MCU_SRAM_SIZE   STM32_RAM*1024
-#define MCU_SRAM_BEGIN  0x20000000
-#define MCU_SRAM_END    (MCU_SRAM_BEGIN + MCU_SRAM_SIZE)
+#define MCU_SRAM1_SIZE   STM32_RAM1*1024
+#define MCU_SRAM1_BEGIN  0x20000000
+#define MCU_SRAM1_END    (MCU_SRAM1_BEGIN + MCU_SRAM1_SIZE)
 
 
 #ifdef __CC_ARM
@@ -127,21 +143,16 @@ STM32F417VG     LQFP 100    168     1024    192
 #else
     extern int __bss_end;
 #endif
-#define MCU_HEAP_END        MCU_SRAM_END
+#define MCU_HEAP_END        MCU_SRAM1_END
 #define MCU_HEAP_SIZE       (MCU_HEAP_END - MCU_HEAP_BEGIN)
 
 
-#define MCU_SRAM_USED       (MCU_HEAP_BEGIN - MCU_SRAM_BEGIN)
-#define MCU_SRAM_REMAIND    (MCU_SRAM_END - MCU_HEAP_BEGIN)
+#define MCU_SRAM1_USED       (MCU_HEAP_BEGIN - MCU_SRAM1_BEGIN)
+#define MCU_SRAM1_REMAIND    (MCU_SRAM1_END - MCU_HEAP_BEGIN)
 
 
 
 
-
-#if defined (STM32_EX_SRAM)
-    #define MCU_EX_SRAM_BEGIN    0x68000000 /* the begining address of external SRAM */
-    #define MCU_EX_SRAM_END      0x68080000 /* the end address of external SRAM */
-#endif
 
 
 //FLASH 区域定义

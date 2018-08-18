@@ -19,9 +19,10 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __COLORLED_H
 #define __COLORLED_H
-#include "ebox.h"
-#include "color_convert.h"
+#include "ebox_core.h"
+#include "ebox_pwm.h"
 
+#include "color_convert.h"
 
 class ColorLed
 {

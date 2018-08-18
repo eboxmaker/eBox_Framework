@@ -1,5 +1,11 @@
 #include "ebox_virtual_lcd.h"
+#include "ebox_mem.h"
+VLcd::VLcd(){
+};
 
+VLcd::~VLcd(){
+    ebox_free(lcd.pixel);
+};
 void VLcd::begin(uint16_t lcd_w,uint16_t lcd_h)
 {
     lcd.width = lcd_w;
@@ -35,6 +41,7 @@ size_t VLcd::write(uint8_t ch)
 {
     disp_char6x8(current_x,current_y,ch);
     current_x+=6;
+    return 1;
 }
 
 void VLcd::fill_screen(uint32_t color)

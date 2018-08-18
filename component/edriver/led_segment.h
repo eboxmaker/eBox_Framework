@@ -19,7 +19,7 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __LED_H
 #define __LED_H
-#include "ebox.h"
+#include "ebox_core.h"
 #include "74hc595.h"
 
 class LedSegment: public _74hc595

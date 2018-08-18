@@ -27,17 +27,17 @@ LCD_init: 5110LCD初始化
 -----------------------------------------------------------------------*/
 void NOKIA5110::begin()
 {
-    SCLK.mode(OUTPUT_PP);
-    SDIN.mode(OUTPUT_PP);
-    LCD_DC.mode(OUTPUT_PP);
-    LCD_CE.mode(OUTPUT_PP);
-    LCD_RST.mode(OUTPUT_PP);
-    LCD_LED.mode(OUTPUT_PP);
+    clk->mode(OUTPUT_PP);
+    din->mode(OUTPUT_PP);
+    dc->mode(OUTPUT_PP);
+    ce->mode(OUTPUT_PP);
+    rst->mode(OUTPUT_PP);
+    led->mode(OUTPUT_PP);
 
-    LCD_RST.reset();
-    LCD_RST.set();
-    LCD_CE.reset();
-    LCD_CE.set();
+    rst->reset();
+    rst->set();
+    ce->reset();
+    ce->set();
 
     write_cmd(0x21);	// 使用扩展命令设置LCD模式
     write_cmd(0xba);	// 设置偏置电压
@@ -47,7 +47,7 @@ void NOKIA5110::begin()
     clear();	        // 清屏
     write_cmd(0x0c);	// 设定显示模式，正常显示
 
-    LCD_CE.reset();
+    ce->reset();
     back_led(1);
 
 }
@@ -87,7 +87,7 @@ back_led        : 设置LCD背光
 -----------------------------------------------------------------------*/
 void NOKIA5110::back_led(uint8_t val)
 {
-    LCD_LED.write(val);
+    led->write(val);
 }
 
 /*-----------------------------------------------------------------------
@@ -136,7 +136,7 @@ void NOKIA5110::printf(uint8_t row, uint8_t col, const char *fmt, ...)
     uint8_t i = 0;
     va_list va_params;
     va_start(va_params, fmt);
-    vsprintf(buf, fmt, va_params);
+    ebox_vsprintf(buf, fmt, va_params);
     va_end(va_params);
     set_xy(row, col);
     while(buf[i] != '\0')
@@ -219,10 +219,10 @@ LCD_write_byte    : 写数据到LCD
 -----------------------------------------------------------------------*/
 void NOKIA5110::write_data(unsigned char dat)
 {
-    LCD_CE.reset(); // 使能LCD
-    LCD_DC.set();// 传送数据
-    shift_out(&SDIN, &SCLK, MSB_FIRST, dat);
-    LCD_CE.set();
+    ce->reset(); // 使能LCD
+    dc->set();// 传送数据
+    shift_out(din, clk, MSB_FIRST, dat);
+    ce->set();
 
 }
 
@@ -232,10 +232,10 @@ write_cmd 			: 写命令到LCD
 -----------------------------------------------------------------------*/
 void NOKIA5110::write_cmd(unsigned char cmd)
 {
-    LCD_CE.reset(); // 使能LCD
-    LCD_DC.reset();// 传送命令
-    shift_out(&SDIN, &SCLK, MSB_FIRST, cmd);
-    LCD_CE.set();
+    ce->reset(); // 使能LCD
+    dc->reset();// 传送命令
+    shift_out(din, clk, MSB_FIRST, cmd);
+    ce->set();
 }
 
 

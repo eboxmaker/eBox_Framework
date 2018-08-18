@@ -167,7 +167,7 @@ String Calendar::get_time_to_string()
 {
     String str;
     char buf[20];
-    sprintf(buf,"%02d%02d%02d",dt.hour,dt.min,dt.sec);
+    ebox_sprintf(buf,"%02d%02d%02d",dt.hour,dt.min,dt.sec);
     str = buf;
     return str;
 }
@@ -175,7 +175,7 @@ String Calendar::get_date_to_string()
 {
     String str;
     char buf[20];
-    sprintf(buf,"20%02d%02d%02d",dt.year,dt.month,dt.date);
+    ebox_sprintf(buf,"20%02d%02d%02d",dt.year,dt.month,dt.date);
     str = buf;
     return str;
 }
@@ -183,7 +183,7 @@ String Calendar::get_date_time_to_string()
 {
     String str;
     char buf[20];
-    sprintf(buf,"20%02d%02d%02d%02d%02d%02d",dt.year,dt.month,dt.date,dt.hour,dt.min,dt.sec);
+    ebox_sprintf(buf,"20%02d%02d%02d%02d%02d%02d",dt.year,dt.month,dt.date,dt.hour,dt.min,dt.sec);
     str = buf;
     return str;
 
@@ -321,7 +321,7 @@ String Calendar::get_cutdown_dddhhmmss_to_string()
         }		        
     }
 	sec_to_time(diff_sec,h,m,s);
-    sprintf(buf,"%03d%02d%02d%02d",diff_days,h,m,s);
+    ebox_sprintf(buf,"%03d%02d%02d%02d",diff_days,h,m,s);
     str = buf;
     return str;
 }
@@ -402,7 +402,7 @@ String Calendar::get_cutdown_hhmmss_to_string()
         }		        
     }
 	sec_to_time(diff_sec,h,m,s);
-    sprintf(buf,"%02d%02d%02d",h,m,s);
+    ebox_sprintf(buf,"%02d%02d%02d",h,m,s);
     str = buf;
     return str;
 }
