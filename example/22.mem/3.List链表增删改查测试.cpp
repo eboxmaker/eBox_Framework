@@ -13,8 +13,16 @@
  
  
 #include "ebox.h"
-#include "bsp.h"
+#include "bsp_ebox.h"
 #include "list.h"
+
+/**
+	*	1	List单向链表增删改查测试
+	*/
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"List  example"
+#define EXAMPLE_DATE	"2018-08-19"
+
 
 int table[10]={1,2};
 List l;
@@ -27,12 +35,12 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
 }
 int main(void)
 {
     setup();
     uart1.printf("test1\n",node);
-    uart1.printf("test2\n",node);
     for(int i = 0; i < 10; i++)
         table[i] = i;
     for(int i = 0; i < 10; i++)
