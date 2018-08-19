@@ -1,16 +1,19 @@
 
 #include "ebox_core.h"
 #include "mcu_config.h"
-#if DEBUG
+#include "ebox_mem.h"
+
+#define DEBUG 1
+
+#if DEBUG 
     #include "ebox_printf.h"
 #endif
 
-#include "ebox_mem.h"
 
-static uint32_t ram_addr_begin,ram_addr_end;
+static uint32_t heap_addr_begin,heap_addr_end;
 
 
-#define BYTE_ALIGNMENT          (8)                 //字节对齐
+#define BYTE_ALIGNMENT          (4)                 //字节对齐
 
 #define MEM_ALIGN(size)         ((BYTE_ALIGNMENT + size - 1) & (~ (BYTE_ALIGNMENT - 1)))
 #define MEM_ALIGN_DOWN(size)    ((size) & ~((BYTE_ALIGNMENT) - 1))
@@ -37,12 +40,12 @@ void ebox_heap_init(void *begin_addr, void *end_addr)
 {
     eboxBlockLink_t *first_block;
     uint32_t begin_align = MEM_ALIGN((uint32_t)begin_addr);
-    uint32_t end_align = MEM_ALIGN_DOWN((uint32_t)end_addr - 8);
+    uint32_t end_align = MEM_ALIGN_DOWN((uint32_t)end_addr - SIZEOF_STRUCT_MEM);//预留最后一个结构体的空间。将会被初始化正链表的最后一个节点
 
     if ((end_align > (2 * SIZEOF_STRUCT_MEM)) &&
         ((end_align - 2 * SIZEOF_STRUCT_MEM) >= begin_align))
     {
-        mem_size_aligned = end_align - begin_align - 2 * SIZEOF_STRUCT_MEM;
+        mem_size_aligned = end_align - begin_align - 2 * SIZEOF_STRUCT_MEM;//去掉起始和结束的两个结构体区域，剩余就是最大内存
     }
     else
     {
@@ -51,26 +54,29 @@ void ebox_heap_init(void *begin_addr, void *end_addr)
     
     //heap[0]的next指针指向，内存起始位置
     heap[0].nextFreeBlock  = (eboxBlockLink_t *)begin_align;
-    heap[0].blockSize = 0;
+    heap[0].blockSize = 0;//heap为链表入口。没有可用内存
     
     //heap_end指向内存终止位置SIZEOF_STRUCT_MEM个字节之前
     end_block[0] = (eboxBlockLink_t *)end_align;
-    end_block[0]->blockSize = 0;
-    end_block[0]->nextFreeBlock  = NULL;
+    end_block[0]->blockSize = 0;//最后一个节点。后面没有内存。
+    end_block[0]->nextFreeBlock  = NULL;//最后一个节点。后面没有内存。
     
     //起始位置初始化一个可用block；next指向heap_end
     first_block = (eboxBlockLink_t *)begin_align;
     first_block->nextFreeBlock = end_block[0];
     first_block->blockSize = mem_size_aligned;
     
-    MinimumEverFreeBytesRemaining = first_block->blockSize;
-	FreeBytesRemaining = first_block->blockSize;
+    MinimumEverFreeBytesRemaining = first_block->blockSize;//更新历史最小分配内存。用来评估内存分配的碎片化程度，即使该被分配的内存被释放，此最小值也会保持不变
+	FreeBytesRemaining = first_block->blockSize;//更新可用内存
 
-	BlockAllocatedBit = ( ( size_t ) 1 ) << ( ( sizeof( size_t ) * 8 ) - 1 );
+	BlockAllocatedBit = ( ( size_t ) 1 ) << ( ( sizeof( size_t ) * 8 ) - 1 );//计算CPU位数，并将最高位设置为1.保存于BlockAllocatedBit
 
-    ram_addr_begin = (uint32_t)begin_addr;
-    ram_addr_end = (uint32_t)end_addr;
+    heap_addr_begin = (uint32_t)begin_addr;
+    heap_addr_end = (uint32_t)end_addr;
+    
+    //初始化完成后的结构为heap->first_block->end_block;
 }
+
 
 void *ebox_malloc( size_t xWantedSize )
 {
@@ -79,14 +85,14 @@ void *ebox_malloc( size_t xWantedSize )
 
     __disable_irq();
     
-    if(end_block[0] == NULL)
+    if(end_block[0] == NULL)//如果在调用之前没有初始化内存，则初始化
     {
         ebox_heap_init((void *)MCU_HEAP_BEGIN,(void *)MCU_HEAP_END);
     }
         
         
 
-    if( ( xWantedSize & BlockAllocatedBit ) == 0 )
+    if( ( xWantedSize & BlockAllocatedBit ) == 0 )//检查内存单元是否为超过系统管理大小
     {
         
         if( xWantedSize > 0 )
@@ -94,41 +100,41 @@ void *ebox_malloc( size_t xWantedSize )
             xWantedSize += SIZEOF_STRUCT_MEM;                 //实际大小=请求大小+1个BlockLink_t的大小
             xWantedSize = MEM_ALIGN(xWantedSize);
         }
-        if( ( xWantedSize > 0 ) && ( xWantedSize <= FreeBytesRemaining ) )
+        if( ( xWantedSize > 0 ) && ( xWantedSize <= FreeBytesRemaining ) )//检查申请大小是否小于当前空闲总和
         {
             pxPreviousBlock = &heap[0];
             pxBlock = heap[0].nextFreeBlock;
-            while( ( pxBlock->blockSize < xWantedSize ) && ( pxBlock->nextFreeBlock != NULL ) )
+            while( ( pxBlock->blockSize < xWantedSize ) && ( pxBlock->nextFreeBlock != NULL ) )//寻找第一个大于申请空间的空闲区域
             {
                 pxPreviousBlock = pxBlock;
                 pxBlock = pxBlock->nextFreeBlock;
             }
-            if( (size_t)(&pxBlock) != mem_size_aligned )
+            if( (size_t)(pxBlock) != heap_addr_end )//如果所指向的内存区域不超过内存结尾，则有效
             {
-                pvReturn = ( void * ) ( ( ( uint8_t * ) pxPreviousBlock->nextFreeBlock ) + SIZEOF_STRUCT_MEM );
-                pxPreviousBlock->nextFreeBlock = pxBlock->nextFreeBlock;
+                pvReturn = ( void * ) ( ( ( uint8_t * ) pxPreviousBlock->nextFreeBlock ) + SIZEOF_STRUCT_MEM );//返回地址需要增加一个结构体空间
+                pxPreviousBlock->nextFreeBlock = pxBlock->nextFreeBlock;//将其前一个空闲块的下一块指向其下一块空闲区域，跳过了当前被申请走的区块
 
             }
-            if( ( pxBlock->blockSize - xWantedSize ) > _MINIMUM_BLOCK_SIZE )
+            if( ( pxBlock->blockSize - xWantedSize ) > _MINIMUM_BLOCK_SIZE )//如果当前区块还有剩余内存，则需要在剩余空间上创建新的空闲区块
             {
-                pxNewBlockLink = ( void * ) ( ( ( uint8_t * ) pxBlock ) + xWantedSize );
+                pxNewBlockLink = ( void * ) ( ( ( uint8_t * ) pxBlock ) + xWantedSize );//设置新空闲区的结构体存储的地址
                 /* Calculate the sizes of two blocks split from the
                 single block. */
-                pxNewBlockLink->blockSize = pxBlock->blockSize - xWantedSize;
-                pxBlock->blockSize = xWantedSize;
-                insert_block_into_freeList(  pxNewBlockLink  );
+                pxNewBlockLink->blockSize = pxBlock->blockSize - xWantedSize;//设置空闲区的大小
+                pxBlock->blockSize = xWantedSize;//设置当前已申请内存的大小。
+                insert_block_into_freeList(  pxNewBlockLink  );//将新的区块插入到空闲链表中
 
             }
-            FreeBytesRemaining -= pxBlock->blockSize;
-            if( FreeBytesRemaining < MinimumEverFreeBytesRemaining )
+            FreeBytesRemaining -= pxBlock->blockSize;//从空闲内存中减去相应的大小
+            if( FreeBytesRemaining < MinimumEverFreeBytesRemaining )//更新历史最小分配内存。用来评估内存分配的碎片化程度，即使该被分配的内存被释放，此最小值也会保持不变
             {
                 MinimumEverFreeBytesRemaining = FreeBytesRemaining;
             }
 
             /* The block is being returned - it is allocated and owned
             by the application and has no "next" block. */
-            pxBlock->blockSize |= BlockAllocatedBit;
-            pxBlock->nextFreeBlock = NULL;
+            pxBlock->blockSize |= BlockAllocatedBit;//设置最高位为1，使内存单元标记为有效的
+            pxBlock->nextFreeBlock = NULL;//将已分配区块的指向设置为0
 
         }
     __enable_irq();
@@ -142,6 +148,8 @@ void *ebox_malloc( size_t xWantedSize )
     
 	return pvReturn;
 }
+
+
 void ebox_free( void *pv )
 {
     uint8_t *puc = ( uint8_t * ) pv;
@@ -159,7 +167,7 @@ void ebox_free( void *pv )
 
 		/* Check the block is actually allocated. */
 
-		if( ( pxLink->blockSize & BlockAllocatedBit ) != 0 )
+		if( ( pxLink->blockSize & BlockAllocatedBit ) != 0 )//如果最高位为1，说明是有效的内存单元
 		{
 			if( pxLink->nextFreeBlock == NULL )
 			{
@@ -183,9 +191,50 @@ void ebox_free( void *pv )
 	}
 
 }
+
+void *ebox_realloc(void *ptr, size_t size)
+{
+    if(ptr == NULL)
+    {
+        return ebox_malloc(size);//distribution new mem
+    }
+    else
+    {
+        void *temp = ptr;//save ptr to temp
+        ptr = ebox_malloc(size);//distribution new mem
+        ebox_memcpy(ptr,temp,ebox_get_sizeof_ptr(temp));
+        ebox_free(temp);//free temp
+    }
+    return ptr;
+}
+
+size_t ebox_get_sizeof_ptr(void *ptr)
+{
+    eboxBlockLink_t *temp = (eboxBlockLink_t *)((uint32_t)ptr - SIZEOF_STRUCT_MEM);//get ptr`s mem maneger block
+    if((temp->blockSize & BlockAllocatedBit) != 0) //如果最高位为1，说明是有效的内存单元
+        return ((temp->blockSize & (~BlockAllocatedBit)) - 8);
+    else
+        return 0;
+}
+
 size_t ebox_get_free(void)
 {
     return FreeBytesRemaining;
+}
+
+void *malloc(size_t size)
+{
+    return ebox_malloc(size);
+}
+
+void free(void *ptr)
+{
+     ebox_free(ptr);
+}
+
+void *realloc(void *ptr, size_t size)
+{
+    return ebox_realloc(ptr,size);
 }
 
 
@@ -258,7 +307,7 @@ static void insert_block_into_freeList( eboxBlockLink_t *pxBlockToInsert)
 //获取heap使用了多少字节
 float ebox_mem_usage(void)
 {
-    return (100 - ebox_get_free() * 100.0 / (ram_addr_end - ram_addr_begin));
+    return (100 - ebox_get_free() * 100.0 / (heap_addr_end - heap_addr_begin));
 }
 
 
@@ -270,15 +319,15 @@ float ebox_mem_used(void)
 
 
 //获取heap起始地址
-size_t ebox_get_sram_start_addr(void)
+size_t ebox_get_heap_start_addr(void)
 {
-    return (size_t)MEM_ALIGN((uint32_t)ram_addr_begin);
+    return (size_t)MEM_ALIGN((uint32_t)heap_addr_begin);
 }
 
 //获取heap结束地址
-size_t ebox_get_sram_end_addr(void)
+size_t ebox_get_heap_end_addr(void)
 {
-    return (size_t)MEM_ALIGN((uint32_t)ram_addr_end);
+    return (size_t)MEM_ALIGN((uint32_t)heap_addr_end);
 
 }
 
@@ -357,11 +406,4 @@ void *ebox_memcpy(void * dst, const void *src, size_t count)
 	return dst;
 }
 
-void *malloc(size_t size)
-{
-    return ebox_malloc(size);
-}
-void free(void *ptr)
-{
-     ebox_free(ptr);
-}
+
