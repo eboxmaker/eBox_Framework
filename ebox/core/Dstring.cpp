@@ -1,5 +1,5 @@
 #include "Dstring.h"
-
+#include "ebox_core.h"
 char C2D(
     uint8_t c	/**< is a character('0'-'F') to convert to HEX */
 )

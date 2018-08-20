@@ -37,7 +37,8 @@ void ebox_printf(const char *fmt, ...)
             ebox_free(buf);
         }
     }while(len == -1);
-    
+    va_end(va_params);
+
     while(1)
     {
         size2 = ebox_fifo_put(uart_fifo_ptr,(unsigned char *)buf,len);

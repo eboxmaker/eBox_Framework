@@ -15,6 +15,19 @@ extern "C" {
 uint16_t makeWord(unsigned int w) { return w; }
 uint16_t makeWord(unsigned char h, unsigned char l) { return (h << 8) | l; }
 
+char char2digital(
+    char c	/**< is a character('0'-'F') to convert to HEX */
+)
+{
+    if (c >= '0' && c <= '9')
+        return c - '0';
+    if (c >= 'a' && c <= 'f')
+        return 10 + c - 'a';
+    if (c >= 'A' && c <= 'F')
+        return 10 + c - 'A';
+
+    return (char)c;
+}
 /** @defgroup commonº¯Êı
   * @{
   */
