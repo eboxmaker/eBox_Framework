@@ -20,6 +20,11 @@ class UartStream :public Stream
             uart_rx_buffer_size = 2*RX_BUFFER_SIZE_UNIT;
         }
         void begin(uint32_t baud_rate,uint8_t _use_dma = 1);
+        void end()
+        {  // clear any received data
+          _rx_buffer_head = _rx_buffer_tail;
+        };
+
         virtual int available();
         virtual int read();
         virtual int peek();

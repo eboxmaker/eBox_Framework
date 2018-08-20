@@ -83,6 +83,8 @@ class Print
     #if USE_PRINTF
     size_t printf(const char *fmt, ...);
     #endif
+    virtual void flush() { /* Empty implementation for backward compatibility */ }
+
 };
 
 #endif
