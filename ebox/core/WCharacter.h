@@ -21,7 +21,7 @@
 #define Character_h
 
 #include <ctype.h>
-#include <ebox_type.h>
+#include "ebox_type.h"
 
 #ifdef __cplusplus
 extern "C" {

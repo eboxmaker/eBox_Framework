@@ -1,6 +1,6 @@
 
 #include <stdarg.h>
-#include "stdlib.h"
+#include <stdlib.h>
 #include "ebox_mem.h"
 
 #include "myprintf.h"
@@ -18,7 +18,7 @@ do {                                                                         \
 	(len)++;                                                             \
 } while (/* CONSTCOND */ 0)
 
-static bool isHex(char c);
+//static bool isHex(char c);
 static int format_num_str(char *dst,char *src, int len,int width, int flag);
 
 //浮点数处理
@@ -360,11 +360,10 @@ static int int2str_format(int value,char *dst,int width, int flag)//整数转换成字
     int len = 0;
     char buf[64];
     
-    int space_len = 0;
     len = int2str(value,buf);
     n = format_num_str(dst,buf,len,width,flag);
 
-    return width;    
+    return n;    
 
 }
 static int convert2str_format(int value,int base, int caps,char *dst,int width, int flag)
@@ -426,11 +425,10 @@ static void addStrToBuf(char *buf, char *str, size_t *len, size_t size,int width
     while(_len--)
         OUTCHAR(buf,*len,size,*str++);
 }
-static bool isHex(char c)
-{
-	if((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F' ))
-        return true;
-    else
-        return false;
-
-}
+//static bool isHex(char c)
+//{
+//	if((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F' ))
+//        return true;
+//    else
+//        return false;
+//}

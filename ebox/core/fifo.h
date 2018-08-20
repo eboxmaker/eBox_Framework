@@ -1,11 +1,11 @@
 #ifndef __RINGBUFX_H
 #define __RINGBUFX_H
+#include "ebox_type.h"
 
 #ifdef __cplusplus
  extern "C" {
 #endif
      
-#include "ebox_type.h"
 
 struct ebox_fifo
 {

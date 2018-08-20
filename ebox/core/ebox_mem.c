@@ -3,9 +3,7 @@
 #include "mcu_config.h"
 #include "ebox_mem.h"
 
-#define DEBUG 1
-
-#if DEBUG 
+#if EBOX_DEBUG 
     #include "ebox_printf.h"
 #endif
 
@@ -141,7 +139,7 @@ void *ebox_malloc( size_t xWantedSize )
     }
     if(pvReturn == NULL)
     {
-        #if DEBUG
+        #if EBOX_DEBUG
                 ebox_printf("bad mem malloc!!!\r\n");
         #endif
     }
@@ -222,20 +220,20 @@ size_t ebox_get_free(void)
     return FreeBytesRemaining;
 }
 
-void *malloc(size_t size)
-{
-    return ebox_malloc(size);
-}
+//void *malloc(size_t size)
+//{
+//    return ebox_malloc(size);
+//}
 
-void free(void *ptr)
-{
-     ebox_free(ptr);
-}
+//void free(void *ptr)
+//{
+//     ebox_free(ptr);
+//}
 
-void *realloc(void *ptr, size_t size)
-{
-    return ebox_realloc(ptr,size);
-}
+//void *realloc(void *ptr, size_t size)
+//{
+//    return ebox_realloc(ptr,size);
+//}
 
 
 static void insert_block_into_freeList( eboxBlockLink_t *pxBlockToInsert)
@@ -348,16 +346,16 @@ size_t ebox_get_heap_end_addr(void)
 uint16_t ebox_free_block_print(void)
 {
 
-    #if DEBUG    
+    #if EBOX_DEBUG    
     #if USE_PRINTF
     eboxBlockLink_t *p;
     int i = 0;
     ebox_printf("\r\n------------------start------------------\r\n");
-    ebox_printf(" free blocks\taddres\t\t|size\t|\r\n");
+    ebox_printf(" free block\taddres\t|size\t|\r\n");
     for(p = (eboxBlockLink_t *)( &(heap[0]) ); p != NULL; p = ( p->nextFreeBlock))
     {
         ebox_printf("free block %d: ",i++);
-        ebox_printf("|0X%X\t|%06d\t|\r\n",p,p->blockSize);
+        ebox_printf("|@0X%X\t|%06d\t|\r\n",p,p->blockSize);
     }
     ebox_printf("-------------------end-------------------\r\n");
     return i-2;

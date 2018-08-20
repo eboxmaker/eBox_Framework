@@ -1,5 +1,5 @@
+#include "ebox_core.h"
 #include "sort.h"
-#include "Dstring.h"
 
 int partion(int arr[], int low, int high) {
 	int i = low-1;

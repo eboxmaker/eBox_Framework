@@ -1,7 +1,10 @@
 #ifndef __EBOX_PRINTF_H
 #define __EBOX_PRINTF_H
 
+#include <stdio.h>
+#include <stdarg.h>
 #include "ebox_core.h"
+#include "fifo.h"
 
 
 #if USE_PRINTF
@@ -10,10 +13,7 @@
 extern "C" {
 #endif
 
-#include <stdio.h>
-#include <stdarg.h>
 
-#include "fifo.h"
 
     
 extern struct ebox_fifo *uart_fifo_ptr;

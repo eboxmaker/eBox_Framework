@@ -1,5 +1,5 @@
-#ifndef _ebox_core_h
-#define _ebox_core_h
+#ifndef _ebox_config_h
+#define _ebox_config_h
 /**
   ******************************************************************************
   * @file    core.h
@@ -21,10 +21,6 @@
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 
-
-
-
-#define USE_DMA 1
 
 
 #define USE_PRINTF 1

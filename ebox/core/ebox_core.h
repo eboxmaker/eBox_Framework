@@ -25,7 +25,6 @@
 #include "binary.h"
 
 
-
 #define EBOX_VERSION "2.2"
 
 
@@ -45,13 +44,10 @@ extern uint64_t    (*millis)();
 extern void        (*delay_ms)(uint64_t ms);
 extern void        (*delay_us)(uint64_t ms);
     
-unsigned int    random(unsigned int min, unsigned int max);
 
-#if __cplusplus
- }
-#endif 
 
- 
+#define EBOX_DEBUG 1
+
 #define USE_PRINTF 1
 
 #if  USE_PRINTF == 1
@@ -116,7 +112,7 @@ unsigned int    random(unsigned int min, unsigned int max);
 #define bit_mask_shift(mask, shift)    ((mask) << (shift))
 
 /** True iff v is a power of two (1, 2, 4, 8, ...) */
-#define is_power_of_tow(v)  ((v) && !((v) & ((v) - 1)))
+#define is_pow_tow(v)  ((v) && !((v) & ((v) - 1)))
 
 
 
@@ -130,9 +126,18 @@ unsigned int    random(unsigned int min, unsigned int max);
 #define bitsGet(x, m, n)                ((((uint32)x) << (31 - (n))) >> ((31 - (n)) + (m)))
 #define bitShift(shift)                 (1UL << (shift))
 #define bitMaskShift(mask, shift)       ((mask) << (shift))
+#define isPow2(v)                       ((v) && !((v) & ((v) - 1)))
 
-#define isDigital(c)		((c>='0') && (c<='9'))//ÅÐ¶ÏÊÇ·ñÎªÊý×Ö 
 
+
+unsigned int    random(unsigned int min, unsigned int max);
+char            char2digital(char c);
+
+#if __cplusplus
+ } // extern "C"
+#endif 
+
+ 
 #ifdef __cplusplus
 
 #include "WCharacter.h"
@@ -146,7 +151,9 @@ unsigned int    random(unsigned int min, unsigned int max);
 uint16_t makeWord(unsigned int w);
 uint16_t makeWord(unsigned char h, unsigned char l);
 #define word(...) makeWord(__VA_ARGS__)
- void            shift_out(Gpio *data_pin, Gpio *clock_pin, uint8_t bit_order, uint8_t val);
+
+
+void            shift_out(Gpio *data_pin, Gpio *clock_pin, uint8_t bit_order, uint8_t val);
 uint8_t         shift_in(Gpio *data_pin, Gpio *clock_pin, uint8_t bit_order);
 
 void            random_seed(unsigned int seed);
@@ -185,6 +192,15 @@ void limit(T &num, T limL, T limH)
 	limitHigh(num, limH);
 }
 
+
+template <class T>
+void swap(T *a,T *b)
+{
+    T temp;
+    temp = *a;
+    *a= *b;
+    *b = temp;
+}
 #endif
 #endif
 

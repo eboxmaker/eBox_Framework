@@ -1,12 +1,12 @@
 #ifndef __EBOX_TYPE_H
 #define __EBOX_TYPE_H
 
-#include "stdlib.h"
-#include "stdint.h"
-#include "stdbool.h"
-#include "ctype.h"
-#include "string.h"
-  
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <math.h>
+#include <stdint.h>
+
 #include "ebox_cpu_type.h"
 
 

@@ -12,12 +12,13 @@ Function List: printf	格式输出到终端显示
 #ifndef _MY_PRINTF_H
 #define _MY_PRINTF_H
 
+#include <stdlib.h>
+#include  <stdarg.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "stdlib.h"
-#include  "stdarg.h"
     
     
 int _ebox_vsnprintf(char *buf,size_t size,const char *format,va_list args);

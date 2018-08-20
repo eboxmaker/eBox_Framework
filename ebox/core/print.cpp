@@ -21,7 +21,6 @@
  */
 
 #include <stdio.h>
-#include <math.h>
 
 #include "ebox_core.h"
 #include "ebox_mem.h"
