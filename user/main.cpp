@@ -61,22 +61,6 @@ void digitalWriteCallback(byte port, int value)
   }
 }
 
-void analogWriteCallback(byte pin, int value)
-{
-//  switch (pin) {
-//    case 9: servo9.write(value); break;
-//    case 10: servo10.write(value); break;
-//    case 3:
-//    case 5:
-//    case 6:
-//    case 11: // PWM pins
-//      analogWrite(pin, value);
-//      break;
-//  }
-    analogWrite(pin, value);
-
-}
-
 void setup()
 {
     ebox_init();
@@ -86,23 +70,26 @@ void setup()
     
   Firmata.setFirmwareVersion(FIRMATA_FIRMWARE_MAJOR_VERSION, FIRMATA_FIRMWARE_MINOR_VERSION);
   Firmata.attach(DIGITAL_MESSAGE, digitalWriteCallback);
-  Firmata.attach(SET_PIN_MODE, setPinModeCallback);
+//  Firmata.attach(SET_PIN_MODE, setPinModeCallback);
   Firmata.begin(57600);
+
 }
 int main(void)
 {
     setup();
+	uint16_t value = 0;
     while(1)
     {
         byte i;
 
         for (i = 0; i < TOTAL_PORTS; i++) {
-        outputPort(i, readPort(i, 0xff));
+            outputPort(i, readPort(i, 0xff));
         }
 
         while (Firmata.available()) {
         Firmata.processInput();
         }
+
     }
 
 }

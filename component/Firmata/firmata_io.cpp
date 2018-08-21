@@ -2,54 +2,98 @@
 
 UartStream Serial(&uart1);
 
-Pwm pwm1(&PB8);
+
+#define PWM_NUM  4
+
+Pwm pwm[PWM_NUM] = {
+Pwm(&PB6),
+Pwm(&PB7),
+Pwm(&PB8),
+Pwm(&PB9),
+};
+
+
 Adc adc1(ADC1);
+
 
 void firmata_io_init()
 {
-    pwm1.begin(1000,100);
+    for(int i = 0; i < PWM_NUM; i++)
+    {
+        pwm[i].begin(1000,100);
+        pwm[i].disable_pin();
+    }
+    
+    adc1.add_ch(&PA0);
     adc1.add_ch(&PA1);
     adc1.add_ch(&PA2);
-    adc1.add_temp_senser();
+    adc1.add_ch(&PA3);
+    adc1.add_ch(&PA4);
+    adc1.add_ch(&PA5);
+    adc1.add_ch(&PA6);
+    adc1.add_ch(&PA7);
     adc1.begin();
+    PA8.mode(INPUT);
   
+}
+Gpio *objectGpioTable[32] = 
+{
+&PA0,&PA1,&PA2,&PA3,&PA4,&PA5,&PA6,&PA7,&PA8,&PA9,&PA10,&PA11,&PA12,&PA13,&PA14,&PA15,
+&PB0,&PB1,&PB2,&PB3,&PB4,&PB5,&PB6,&PB7,&PB8,&PB9,&PB10,&PB11,&PB12,&PB13,&PB14,&PB15,
+};
+
+Gpio *digitalPinToObjectGpio(uint8_t pin)
+{
+	if(pin > 31) return 0;
+		return objectGpioTable[pin];
 }
 
 void pinMode(uint8_t pin, uint8_t mode)
 {
-    
+	Gpio *io;
+	io = digitalPinToObjectGpio(pin);
+	io->mode((PIN_MODE)mode);
+}
+void digitalWrite(uint8_t pin, uint8_t val)
+{
+	Gpio *io;
+	io = digitalPinToObjectGpio(pin);
+	io->mode((PIN_MODE)OUTPUT);
+	io->write(val);
 
 }
-void digitalWrite(uint8_t, uint8_t)
-{
 
-}
-int digitalRead(uint8_t)
+int digitalRead(uint8_t pin)
 {
+	Gpio *io;
+	io = digitalPinToObjectGpio(pin);
+	io->mode((PIN_MODE)INPUT);
+	return io->read();
+}
 
-}
-float analogRead(uint8_t pin)
+int analogRead(uint8_t pin)
 {
-    int temp;
-    switch(pin)
-    {
-        case 1: temp = adc1.read(&PA1);break;
-        case 2: temp = adc1.read(&PA2);break;
-        case 3: temp = adc1.read_temp_senser();break;
-        default:temp = adc1.read_temp_senser();break;
-    }
-    return temp;
+	Gpio *io;
+	io = digitalPinToObjectGpio(pin);
+	io->mode((PIN_MODE)AIN);
+	delay(1);
+	return adc1.read(io);
 }
 void analogReference(uint8_t mode)
 {
 
+	
 }
 void analogWrite(uint8_t pin, int value)
 {
-    switch(pin)
+	Gpio *io;
+	io = digitalPinToObjectGpio(pin);
+	io->mode((PIN_MODE)AF_PP);
+	
+    for(int i = 0; i < PWM_NUM; i++)
     {
-        case 1: pwm1.set_duty(value);break;
-        default:
-            pwm1.set_duty(value);break;
+        if(pwm[i].pin->id == io->id)
+            pwm[i].set_duty(value);
     }
+
 }

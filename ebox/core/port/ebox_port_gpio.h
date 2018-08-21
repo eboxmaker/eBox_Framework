@@ -6,25 +6,25 @@ typedef enum
 {
     OUTPUT      = 0x00, 
     
-    OUTPUT_PP   = 0x10,    
+    OUTPUT_PP   ,    
     OUTPUT_PP_PU    ,    
     OUTPUT_PP_PD    ,
     
-    OUTPUT_OD   = 0x20,
+    OUTPUT_OD   ,
     OUTPUT_OD_PU    ,
     OUTPUT_OD_PD    ,
     
-    AIN         = 0x30,
+    AIN          ,
     
-    INPUT       = 0x40,
+    INPUT       ,
     INPUT_PD        ,
     INPUT_PU        ,
     
-    AF_OD       = 0x50,
+    AF_OD        ,
     AF_OD_PU        ,   
     AF_OD_PD        ,
     
-    AF_PP       = 0x60,      
+    AF_PP        ,      
     AF_PP_PU        ,
     AF_PP_PD        ,
 }PIN_MODE;
