@@ -33,7 +33,7 @@ int UartStream::read()
 }
 int UartStream::availableForWrite(void)
 {
-    uart->wait_busy();//如果忙。就是0。所以等待
+//    uart->wait_busy();//如果忙。就是0。所以等待
     return 255;
 }
 void UartStream::flush(void)

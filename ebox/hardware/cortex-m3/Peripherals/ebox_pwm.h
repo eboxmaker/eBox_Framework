@@ -62,8 +62,11 @@
 class Pwm
 {
 public:
+    Gpio        *pin;
+public:
     Pwm(Gpio *pwm_pin);
     void begin(uint32_t frq, uint16_t duty);
+    void end(void);
     void set_frq(uint32_t frq);
     void set_duty(uint16_t duty);//保证以最快的速度分配完成
     void set_oc_polarity(uint8_t flag);//设置输出极性1：比较匹配后输出低电平（默认设置），0：比较匹配后输出高电平
@@ -71,9 +74,10 @@ public:
     uint32_t get_timer_source_clock();
     uint32_t get_max_frq();
     float    get_accuracy();
-
+		
+    void enable_pin(void);
+    void disable_pin(void);
 private:
-    Gpio        *pwm_pin;
     TIM_TypeDef *TIMx;
     uint8_t     ch;
     uint16_t    period;//保存溢出值，用于计算占空比

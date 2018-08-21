@@ -31,15 +31,15 @@ Pwm::Pwm(Gpio *pwm_pin)
 {
     //	if(isPwmPin(PWMpin))
     //	{
-    this->pwm_pin = pwm_pin;
+    this->pin = pwm_pin;
     //	}
 }
 void Pwm::begin(uint32_t frq, uint16_t duty)
 {
     this->duty = duty;
 
-    init_info(pwm_pin);
-    pwm_pin->mode(AF_PP);
+    init_info(pin);
+    pin->mode(AF_PP);
 
     set_oc_polarity(1);
     set_frq(frq);
@@ -334,23 +334,23 @@ float Pwm::get_accuracy()
 
 
 }
-
-
+void Pwm::enable_pin()
+{
+    pin->mode(AF_PP);
+}
+void Pwm::disable_pin()
+{
+    pin->mode(INPUT);
+}
+void Pwm::end()
+{
+    
+}
 //duty:0-1000∂‘”¶0%-100.0%
 void analog_write(Gpio *pwm_pin, uint16_t duty)
 {
-    //	if(isPwmPin(PWMpin))
-    //	{
     Pwm p(pwm_pin);
     p.begin(1000, duty);
-    //p.SetFrq(1000,1);
-    //			p._set_duty(duty);
-
-    //	}
-    //	else
-    //	{
-    //	;
-    //	}
 }
 
 //////////////////////////////////////////////////////////////

@@ -202,26 +202,26 @@ writePort(port, value, bitmask):  Write an 8 bit port.
 
 // Arduino Mega
 #elif defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
-#define TOTAL_ANALOG_PINS       16
-#define TOTAL_PINS              70 // 54 digital + 16 analog
-#define VERSION_BLINK_PIN       PB8_ID
+#define TOTAL_ANALOG_PINS       8
+#define TOTAL_PINS              8 // 54 digital + 16 analog
+#define VERSION_BLINK_PIN       PB9_ID
 #define PIN_SERIAL1_RX          PA10_ID
 #define PIN_SERIAL1_TX          PA9_ID
 //#define PIN_SERIAL2_RX          17
 //#define PIN_SERIAL2_TX          16
 //#define PIN_SERIAL3_RX          15
 //#define PIN_SERIAL3_TX          14
-#define IS_PIN_DIGITAL(p)       ((p) >= PA0_ID && (p) < PB15_ID)
-#define IS_PIN_ANALOG(p)        ((p) >= PA0_ID && (p) < PA7_ID)
-#define IS_PIN_PWM(p)           (p == PB8_ID)
-#define IS_PIN_SERVO(p)         (p == PB8_ID)
-#define IS_PIN_I2C(p)           ((p) == 20 || (p) == 21)
-#define IS_PIN_SPI(p)           ((p) == SS || (p) == MOSI || (p) == MISO || (p) == SCK)
-#define IS_PIN_SERIAL(p)        (1)
+#define IS_PIN_DIGITAL(p)       ((p) >= PA0_ID && (p) <= PA7_ID)
+#define IS_PIN_ANALOG(p)        ((p) >= PA0_ID && (p) <= PA7_ID)
+#define IS_PIN_PWM(p)           (p >= PB6_ID && p <= PB9_ID)
+//#define IS_PIN_SERVO(p)         (p == PB8_ID)
+//#define IS_PIN_I2C(p)           ((p) == 20 || (p) == 21)
+//#define IS_PIN_SPI(p)           ((p) == SS || (p) == MOSI || (p) == MISO || (p) == SCK)
+//#define IS_PIN_SERIAL(p)        (1)
 #define PIN_TO_DIGITAL(p)       (p)
-#define PIN_TO_ANALOG(p)        ((p) - 0)
+#define PIN_TO_ANALOG(p)        ((p))
 #define PIN_TO_PWM(p)           PIN_TO_DIGITAL(p)
-#define PIN_TO_SERVO(p)         ((p) - 2)
+//#define PIN_TO_SERVO(p)         ((p) - 2)
 
 
 // Arduino DUE
