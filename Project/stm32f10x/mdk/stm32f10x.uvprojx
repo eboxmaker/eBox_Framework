@@ -774,32 +774,12 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>firmata</GroupName>
+          <GroupName>edriver</GroupName>
           <Files>
             <File>
-              <FileName>Firmata.cpp</FileName>
+              <FileName>MPU6050.CPP</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\component\Firmata\Firmata.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>firmata_io.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\Firmata\firmata_io.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FirmataMarshaller.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\Firmata\FirmataMarshaller.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FirmataParser.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\Firmata\FirmataParser.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>SerialFirmata.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\Firmata\utility\SerialFirmata.cpp</FilePath>
+              <FilePath>..\..\..\component\edriver\MPU6050.CPP</FilePath>
             </File>
           </Files>
         </Group>
