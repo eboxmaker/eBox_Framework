@@ -20,8 +20,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "mpu6050.h"
 
-int Gscale = GFS_250DPS;
-int Ascale = AFS_4G;
+int Gscale = GFS_2000DPS;
+int Ascale = AFS_8G;
 
 void MPU6050::begin(uint32_t speed)
 {
@@ -115,7 +115,6 @@ float MPU6050::getAres() {
       break;
   }
 }
-
 
 void MPU6050::readAccelData(int16_t * destination)
 {
