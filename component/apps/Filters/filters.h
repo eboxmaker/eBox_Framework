@@ -2,8 +2,9 @@
 
 #define __FILTERS_H__
 
-#include "ebox.h"
-
+#include "ebox_type.h"
+#include "ebox_mem.h"
+#include "sort.h"
 class LpfRc
 {
     public:
