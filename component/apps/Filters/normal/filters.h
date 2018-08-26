@@ -9,8 +9,10 @@ class LpfRc
     public:
         LpfRc(float bandWidthInHz,uint16_t sampleFreq)
         {
+            
             alpha = 0.01;
             last_output = 0;
+            alpha = bandWidthInHz * TWO_PI/sampleFreq;
             
         }
         float in(float input_val)
