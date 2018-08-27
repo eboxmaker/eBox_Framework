@@ -1,26 +1,27 @@
 
 #include<math.h>
+#include "imu.h"
 //---------------------------------------------------------------------------------------------------
 // 变量定义
 
-#define f 1
-#define Kp 10.0f                        // 比例增益支配率收敛到加速度计/磁强计
-#define Ki 0.005f                // 积分增益支配率的陀螺仪偏见的衔接
-#define halfT 0.005f                // 采样周期的一半
+//#define f 1
+#define Kp 10.0f            // 比例增益支配率收敛到加速度计/磁强计
+#define Ki 0.005f           // 积分增益支配率的陀螺仪偏见的衔接
+#define halfT 0.005f        // 采样周期的一半
 
 float q0 = 1, q1 = 0, q2 = 0, q3 = 0;          // 四元数的元素，代表估计方向
 float exInt = 0, eyInt = 0, ezInt = 0;        // 按比例缩小积分误差
 
 
-//互补滤波
-//时间常数   t=a/(1-a)*dt    a=t/(t+dt)         t 截至频率  dt计算间隔时间
-#define        kfa   0.98
-#define        kfan  1.0-kfa
-//ang= kfa*ang+kfgn*acc;
+////互补滤波
+////时间常数   t=a/(1-a)*dt    a=t/(t+dt)         t 截至频率  dt计算间隔时间
+//#define        kfa   0.98
+//#define        kfan  1.0-kfa
+////ang= kfa*ang+kfgn*acc;
 
-#define        kfg   0.80
-#define        kfgn  1.0-kfg
-float Yaw,Pitch,Rool;  //偏航角，俯仰角，翻滚角
+//#define        kfg   0.80
+//#define        kfgn  1.0-kfg
+//float Yaw,Pitch,Rool;  //偏航角，俯仰角，翻滚角
 
 //ang= kfa*g+kfgn*acc;
 
@@ -31,8 +32,7 @@ float Yaw,Pitch,Rool;  //偏航角，俯仰角，翻滚角
 //加数度为3轴采样数据，做归一化
 //输出为4元数
 
-void IMUupdate(float gxi, float gyi, float gzi, float axi, float ayi, float azi) {
-        float gx=0,gy=0,gz=0,ax=0,ay=0,az=0;          //全局变量  
+void IMUupdate(float gx, float gy, float gz, float ax, float ay, float az, float *roll, float *pitch, float *yaw) {
         float norm;
         float vx, vy, vz;
         float ex, ey, ez;  
@@ -48,21 +48,7 @@ void IMUupdate(float gxi, float gyi, float gzi, float axi, float ayi, float azi)
                 float q2q3 = q2*q3;
                 float q3q3 = q3*q3;
 
-//        ax=ax*kfa+kfan*axi;
-//        ay=ay*kfa+kfan*ayi;
-//        az=az*kfa+kfan*azi;
 
-//        gx=gx*kfg+kfgn*gxi;
-//        gy=gy*kfg+kfgn*gyi;
-//        gz=gz*kfg+kfgn*gzi;
-
-        ax=axi;
-        ay=ayi;
-        az=azi;
-
-        gx=gxi;
-        gy=gyi;
-        gz=gzi;
         // 测量正常化
         norm = sqrt(ax*ax + ay*ay + az*az);       
         ax = ax / norm;
@@ -101,8 +87,8 @@ void IMUupdate(float gxi, float gyi, float gzi, float axi, float ayi, float azi)
         q1 = q1 / norm;
         q2 = q2 / norm;
         q3 = q3 / norm;
-        Pitch   = asin(-2 * q1 * q3 + 2 * q0* q2)* 57.3; // pitch
-        Rool    = atan2(2 * q2 * q3 + 2 * q0 * q1, -2 * q1 * q1 - 2 * q2* q2 + 1)* 57.3; // rollv
-        Yaw     = atan2(2.0f * (q1 * q2 + q0 * q3), q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3)*57.3;
+        *pitch   = asin(-2 * q1 * q3 + 2 * q0* q2)* 57.3; // pitch
+        *roll    = atan2(2 * q2 * q3 + 2 * q0 * q1, -2 * q1 * q1 - 2 * q2* q2 + 1)* 57.3; // rollv
+        *yaw     = atan2(2.0f * (q1 * q2 + q0 * q3), q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3)*57.3;
 
 }

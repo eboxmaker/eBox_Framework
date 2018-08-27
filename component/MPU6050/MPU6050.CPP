@@ -73,7 +73,6 @@ int8_t  MPU6050::get_data(uint8_t reg_address, int16_t *buf, uint8_t num_to_read
     return readnum / 2;
 }
 
-
 float MPU6050::getGres() {
   switch (Gscale)
   {
@@ -94,7 +93,6 @@ float MPU6050::getGres() {
       break;
   }
 }
-
 float MPU6050::getAres() {
   switch (Ascale)
   {
@@ -115,24 +113,144 @@ float MPU6050::getAres() {
       break;
   }
 }
-
-void MPU6050::readAccelData(int16_t * destination)
+void MPU6050::setScale(uint8_t scale)
 {
-  uint8_t rawData[6];  // x/y/z accel register data stored here
-  readBytes(MPU6050_ADDRESS, ACCEL_XOUT_H, 6, &rawData[0]);  // Read the six raw data registers into data array
-  destination[0] = (int16_t)((rawData[0] << 8) | rawData[1]) ;  // Turn the MSB and LSB into a signed 16-bit value
-  destination[1] = (int16_t)((rawData[2] << 8) | rawData[3]) ;
-  destination[2] = (int16_t)((rawData[4] << 8) | rawData[5]) ;
+    uint8_t value;
+
+    switch (scale)
+    {
+	case GFS_250DPS:
+	    dpsPerDigit = 250.0 / 32768.0;
+	    break;
+	case GFS_500DPS:
+	    dpsPerDigit = 500.0 / 32768.0;
+	    break;
+	case GFS_1000DPS:
+	    dpsPerDigit = 1000.0 / 32768.0;
+	    break;
+	case GFS_2000DPS:
+	    dpsPerDigit = 2000.0 / 32768.0;
+	    break;
+	default:
+	    break;
+    }
+
+    value = readRegister8(GYRO_CONFIG);
+    value &= B11100111;
+    value |= (scale << 3);
+    writeRegister8(GYRO_CONFIG, value);
+
 }
-
-void MPU6050::readGyroData(int16_t * destination)
+uint8_t MPU6050::getScale(void)
 {
+    uint8_t value;
+    value = readRegister8(GYRO_CONFIG);
+    value &= B00011000;
+    value >>= 3;
+    return value;
+}
+void MPU6050::setRange(uint8_t range)
+{
+    uint8_t value;
+    switch (range)
+    {
+    // Possible gyro scales (and their register bit settings) are:
+    // 250 DPS (00), 500 DPS (01), 1000 DPS (10), and 2000 DPS  (11).
+    // Here's a bit of an algorith to calculate DPS/(ADC tick) based on that 2-bit value:
+    case AFS_2G:
+        rangePerDigit = 2.0 / 32768.0;
+        break;
+    case AFS_4G:
+        rangePerDigit = 4.0 / 32768.0;
+        break;
+    case AFS_8G:
+        rangePerDigit = 8.0 / 32768.0;
+        break;
+    case AFS_16G:
+        rangePerDigit = 16.0 / 32768.0;
+        break;
+    }
+    value = readRegister8(ACCEL_CONFIG);
+    value &= B11100111;
+    value |= (range << 3);
+    writeRegister8(ACCEL_CONFIG, value);
+}
+uint8_t MPU6050::getRange(void)
+{
+    uint8_t value;
+    value = readRegister8(ACCEL_CONFIG);
+    value &= B00011000;
+    value >>= 3;
+    return value;
+}
+Vector MPU6050::readRawGyro(void)
+{
+    Vector rg;
   uint8_t rawData[6];  // x/y/z gyro register data stored here
   readBytes(MPU6050_ADDRESS, GYRO_XOUT_H, 6, &rawData[0]);  // Read the six raw data registers sequentially into data array
-  destination[0] = (int16_t)((rawData[0] << 8) | rawData[1]) ;  // Turn the MSB and LSB into a signed 16-bit value
-  destination[1] = (int16_t)((rawData[2] << 8) | rawData[3]) ;
-  destination[2] = (int16_t)((rawData[4] << 8) | rawData[5]) ;
+  rg.XAxis = (int16_t)((rawData[0] << 8) | rawData[1]) ;  // Turn the MSB and LSB into a signed 16-bit value
+  rg.YAxis = (int16_t)((rawData[2] << 8) | rawData[3]) ;
+  rg.ZAxis = (int16_t)((rawData[4] << 8) | rawData[5]) ;
+    return rg;
 }
+Vector MPU6050::readNormalizeGyro(void)
+{
+    Vector rg,ng;
+    rg = readRawGyro();
+
+    ng.XAxis = rg.XAxis * dpsPerDigit ;
+    ng.YAxis = rg.YAxis * dpsPerDigit ;
+    ng.ZAxis = rg.ZAxis * dpsPerDigit ;
+
+    return ng;
+
+}
+Vector MPU6050::readAngleGyro(void)//½Ç¶ÈÃ¿Ãë
+{
+    Vector rg,ng;
+    rg = readRawGyro();
+
+    ng.XAxis = rg.XAxis * dpsPerDigit * PI / 180.0;
+    ng.YAxis = rg.YAxis * dpsPerDigit * PI / 180.0;
+    ng.ZAxis = rg.ZAxis * dpsPerDigit * PI / 180.0;
+
+    return ng;
+
+}
+
+Vector MPU6050::readRawAccel(void)
+{
+    Vector ra;
+    uint8_t rawData[6];  // x/y/z accel register data stored here
+    readBytes(MPU6050_ADDRESS, ACCEL_XOUT_H, 6, &rawData[0]);  // Read the six raw data registers into data array
+    ra.XAxis = (int16_t)((rawData[0] << 8) | rawData[1]) ;  // Turn the MSB and LSB into a signed 16-bit value
+    ra.YAxis = (int16_t)((rawData[2] << 8) | rawData[3]) ;
+    ra.ZAxis = (int16_t)((rawData[4] << 8) | rawData[5]) ;
+   return ra;
+}
+Vector MPU6050::readNormalizeAccel(void)
+{
+    Vector ra,na;
+    ra = readRawAccel();
+
+    na.XAxis = ra.XAxis * rangePerDigit * 9.80665f;
+    na.YAxis = ra.YAxis * rangePerDigit * 9.80665f;
+    na.ZAxis = ra.ZAxis * rangePerDigit * 9.80665f;
+
+    return na;
+}
+Vector MPU6050::readScaledAccel(void)
+{
+    Vector ra,na;
+    ra = readRawAccel();
+
+    na.XAxis = ra.XAxis * rangePerDigit;
+    na.YAxis = ra.YAxis * rangePerDigit;
+    na.ZAxis = ra.ZAxis * rangePerDigit;
+
+    return na;
+}
+
 
 int16_t MPU6050::readTempData()
 {
@@ -220,13 +338,13 @@ void MPU6050::initMPU6050()
   writeByte(MPU6050_ADDRESS, GYRO_CONFIG, c & ~0xE0); // Clear self-test bits [7:5]
   writeByte(MPU6050_ADDRESS, GYRO_CONFIG, c & ~0x18); // Clear AFS bits [4:3]
   writeByte(MPU6050_ADDRESS, GYRO_CONFIG, c | Gscale << 3); // Set full scale range for the gyro
-
+  setScale(Gscale);
   // Set accelerometer configuration
   c =  readByte(MPU6050_ADDRESS, ACCEL_CONFIG);
   writeByte(MPU6050_ADDRESS, ACCEL_CONFIG, c & ~0xE0); // Clear self-test bits [7:5]
   writeByte(MPU6050_ADDRESS, ACCEL_CONFIG, c & ~0x18); // Clear AFS bits [4:3]
   writeByte(MPU6050_ADDRESS, ACCEL_CONFIG, c | Ascale << 3); // Set full scale range for the accelerometer
-
+    setRange(Ascale);
   // Configure Interrupts and Bypass Enable
   // Set interrupt pin active high, push-pull, and clear on read of INT_STATUS, enable I2C_BYPASS_EN so additional chips
   // can join the I2C bus and all can be controlled by the Arduino as master
@@ -236,7 +354,7 @@ void MPU6050::initMPU6050()
 
 // Function which accumulates gyro and accelerometer data after device initialization. It calculates the average
 // of the at-rest readings and then loads the resulting offsets into accelerometer and gyro bias registers.
-void MPU6050::calibrateMPU6050(float * dest1, float * dest2)
+void MPU6050::calibrateMPU6050()
 {
   uint8_t data[12]; // data array to hold accelerometer and gyro x, y, z, data
   uint16_t ii, packet_count, fifo_count;
@@ -329,9 +447,9 @@ void MPU6050::calibrateMPU6050(float * dest1, float * dest2)
   writeByte(MPU6050_ADDRESS, ZG_OFFS_USRH, data[4]);
   writeByte(MPU6050_ADDRESS, ZG_OFFS_USRL, data[5]);
 
-  dest1[0] = (float) gyro_bias[0] / (float) gyrosensitivity; // construct gyro bias in deg/s for later manual subtraction
-  dest1[1] = (float) gyro_bias[1] / (float) gyrosensitivity;
-  dest1[2] = (float) gyro_bias[2] / (float) gyrosensitivity;
+  gyroCount[0] = (float) gyro_bias[0] / (float) gyrosensitivity; // construct gyro bias in deg/s for later manual subtraction
+  gyroCount[1] = (float) gyro_bias[1] / (float) gyrosensitivity;
+  gyroCount[2] = (float) gyro_bias[2] / (float) gyrosensitivity;
 
   // Construct the accelerometer biases for push to the hardware accelerometer bias registers. These registers contain
   // factory trim values which must be added to the calculated accelerometer biases; on boot up these registers will hold
@@ -378,14 +496,14 @@ void MPU6050::calibrateMPU6050(float * dest1, float * dest2)
   writeByte(MPU6050_ADDRESS, ZA_OFFSET_L_TC, data[5]);
 
   // Output scaled accelerometer biases for manual subtraction in the main program
-  dest2[0] = (float)accel_bias[0] / (float)accelsensitivity;
-  dest2[1] = (float)accel_bias[1] / (float)accelsensitivity;
-  dest2[2] = (float)accel_bias[2] / (float)accelsensitivity;
+  accelCount[0] = (float)accel_bias[0] / (float)accelsensitivity;
+  accelCount[1] = (float)accel_bias[1] / (float)accelsensitivity;
+  accelCount[2] = (float)accel_bias[2] / (float)accelsensitivity;
 }
 
 
 // Accelerometer and gyroscope self test; check calibration wrt factory settings
-void MPU6050::MPU6050SelfTest(float * destination) // Should return percent deviation from factory trim values, +/- 14 or less deviation is a pass
+bool MPU6050::MPU6050SelfTest() // Should return percent deviation from factory trim values, +/- 14 or less deviation is a pass
 {
   uint8_t rawData[4];
   uint8_t selfTest[6];
@@ -424,8 +542,15 @@ void MPU6050::MPU6050SelfTest(float * destination) // Should return percent devi
   // Report results as a ratio of (STR - FT)/FT; the change from Factory Trim of the Self-Test Response
   // To get to percent, must multiply by 100 and subtract result from 100
   for (int i = 0; i < 6; i++) {
-    destination[i] = 100.0 + 100.0 * ((float)selfTest[i] - factoryTrim[i]) / factoryTrim[i]; // Report percent differences
+    SelfTest[i] = 100.0 + 100.0 * ((float)selfTest[i] - factoryTrim[i]) / factoryTrim[i]; // Report percent differences
   }
+    if (SelfTest[0] < 1.0f && SelfTest[1] < 1.0f && SelfTest[2] < 1.0f && SelfTest[3] < 1.0f && SelfTest[4] < 1.0f && SelfTest[5] < 1.0f)
+    {
+        return true;
+    }
+    else
+        return false;
+
 
 }
 
@@ -473,4 +598,37 @@ void MPU6050::readBytes(uint8_t address, uint8_t subAddress, uint8_t count, uint
     i2c->read_byte(MPU6050_ADDRESS, subAddress, dest, count);
     i2c->release_i2c_right();
 
+}
+
+uint8_t MPU6050::readRegister8(uint8_t reg)
+{
+    uint8_t value;
+    i2c->take_i2c_right(speed);
+    i2c->read_byte(MPU6050_ADDRESS, reg, &value, 1);
+    i2c->release_i2c_right();
+}
+void MPU6050::writeRegister8(uint8_t reg, uint8_t value)
+{
+    i2c->take_i2c_right(speed);
+    i2c->write_byte(MPU6050_ADDRESS, reg, value);
+    i2c->release_i2c_right();
+}
+
+int16_t MPU6050::readRegister16(uint8_t reg)
+{
+    Data16_t data;
+    i2c->take_i2c_right(speed);
+    i2c->read_byte(MPU6050_ADDRESS, reg, data.byte, 2);
+    i2c->release_i2c_right();
+
+    return data.value;
+
+}
+void MPU6050::writeRegister16(uint8_t reg, int16_t value)
+{
+    Data16_t data;
+    data.value = value;
+    i2c->take_i2c_right(speed);
+    i2c->write_byte(MPU6050_ADDRESS, reg, data.byte,2);
+    i2c->release_i2c_right();
 }

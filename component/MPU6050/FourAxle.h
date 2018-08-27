@@ -44,6 +44,5 @@ class FourAxle
         Stream *frameStream;
         uint8_t sendBuffer[32];
 };
-extern FourAxle test;
 #endif
 
