@@ -73,8 +73,8 @@ void Timer::begin(uint32_t frq)
     rcc_clock_cmd((uint32_t)_TIMx,ENABLE);
 
     base_init(_period, _prescaler);
-    nvic(ENABLE,0,0);
-    interrupt(ENABLE);
+    nvic(DISABLE,0,0);
+    interrupt(DISABLE);
 }
 void Timer::reset_frq(uint32_t frq)
 {
@@ -121,7 +121,7 @@ void Timer::base_init(uint16_t period, uint16_t prescaler)
     TIM_TimeBaseStructure.TIM_Period = period - 1; //ARR¼Ä´æÆ÷
     TIM_TimeBaseStructure.TIM_Prescaler = prescaler - 1;
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; //µ¥±ßÐ±ÆÂ
-    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV4;
+    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 
     TIM_TimeBaseInit(_TIMx, &TIM_TimeBaseStructure);
     TIM_ARRPreloadConfig(_TIMx, ENABLE);	//¿ØÖÆARR¼Ä´æÆ÷ÊÇ·ñÊ¹ÓÃÓ°×Ó¼Ä´æÆ÷
@@ -158,7 +158,7 @@ uint32_t Timer::get_timer_source_clock()
 }
 uint32_t Timer::get_max_frq()
 {
-    return get_timer_source_clock()/400;
+    return get_timer_source_clock();
 
 }
 

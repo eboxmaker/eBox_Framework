@@ -33,9 +33,9 @@ void VLcd::draw_pixel(int16_t x,int16_t y,uint32_t color)
     if(y<0 || y >= lcd.width)return;
     
     uint32_t index = position_to_index(x,y);
-    lcd.pixel[index].color.g = (color&0xff0000)>>16;
-    lcd.pixel[index].color.r = (color&0xff00)>>8;
-    lcd.pixel[index].color.b = (color&0xff);
+    lcd.pixel[index].color.b = (color&0xff0000)>>16;
+    lcd.pixel[index].color.g = (color&0xff00)>>8;
+    lcd.pixel[index].color.r = (color&0xff);
 }
 size_t VLcd::write(uint8_t ch)
 {

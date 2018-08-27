@@ -189,15 +189,20 @@ int _ebox_vsprintf(char *ret, const char *format, va_list ap)
 {
 	size_t size;
 	int len;
+    
 	va_list aq;
+    char *temp;
 
 	memcpy(&aq, &ap,sizeof(ap));
     
 	len = _ebox_vsnprintf(NULL, 0, format, aq);
 
-	if (len < 0 || (ret = (char *)malloc(size = len + 1)) == NULL)
+	if (len < 0 || (temp = (char *)ebox_malloc(size = len + 1)) == NULL)
 		return -1;
-	return _ebox_vsnprintf(ret, size, format, ap);
+	len = _ebox_vsnprintf(temp, size, format, ap);
+    ebox_memcpy(ret,temp,len);
+    ebox_free(temp);
+    return len;
 }
 
 
