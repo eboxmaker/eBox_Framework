@@ -2,7 +2,6 @@
 
 
 #include "FourAxle.h"
-FourAxle test;
 
 void FourAxle::begin(uint16_t baud)
 {

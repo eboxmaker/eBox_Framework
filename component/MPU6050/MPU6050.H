@@ -157,9 +157,20 @@ enum Gscale {
 #define WHO_AM_I_MPU6050 0x75 // Should return 0x68
 #define MPU6050_ADDRESS	0xD0	//IIC写入时的地址字节数据
 
+struct Vector
+{
+    float XAxis;
+    float YAxis;
+    float ZAxis;
+};
 
 class MPU6050
 {
+public:
+    int16_t accelCount[3];  // Stores the 16-bit signed accelerometer sensor output
+    int16_t gyroCount[3];   // Stores the 16-bit signed gyro sensor output
+    float SelfTest[6];
+
 public:
     MPU6050(I2c *i2c)
     {
@@ -171,21 +182,43 @@ public:
     void        get_id(uint8_t *id);
     float getGres();
     float getAres();
-    void readAccelData(int16_t * destination);
-    void readGyroData(int16_t * destination);
+
     int16_t readTempData();
+    
+    void setScale(uint8_t range);
+    uint8_t getScale(void);
+    void setRange(uint8_t range);
+    uint8_t getRange(void);
+    
+	Vector readRawGyro(void);//原始AD值
+	Vector readNormalizeGyro(void);//弧度每秒
+	Vector readAngleGyro(void);//角度每秒
+
+	Vector readRawAccel(void);//原始AD值
+	Vector readNormalizeAccel(void);//加速度,单位m/s^2
+	Vector readScaledAccel(void);//重力加速度比值，单位g;
+    
+    
+    
     void LowPowerAccelOnlyMPU6050();
     void initMPU6050();
-    void calibrateMPU6050(float * dest1, float * dest2);
-    void MPU6050SelfTest(float * destination);
+    void calibrateMPU6050();
+    bool MPU6050SelfTest();
     void writeByte(uint8_t address, uint8_t subAddress, uint8_t data);
     uint8_t readByte(uint8_t address, uint8_t subAddress);
     void readBytes(uint8_t address, uint8_t subAddress, uint8_t count, uint8_t * dest);
     
 private:
-
     I2c         *i2c;
     uint32_t    speed;
+
+	float   dpsPerDigit, rangePerDigit;
+
+	uint8_t readRegister8(uint8_t reg);
+	void writeRegister8(uint8_t reg, uint8_t value);
+
+	int16_t readRegister16(uint8_t reg);
+	void writeRegister16(uint8_t reg, int16_t value);
 };
 
 #endif
