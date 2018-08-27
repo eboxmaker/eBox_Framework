@@ -1500,11 +1500,11 @@ rpl_vsprintf(char *ret, const char *format, va_list ap)
 	va_list aq;
 
 	VA_COPY(aq, ap);
-	len = vsnprintf(NULL, 0, format, aq);
+	len = rpl_vsnprintf(NULL, 0, format, aq);
 	VA_END_COPY(aq);
 	if (len < 0 || (ret = (char *)malloc(size = len + 1)) == NULL)
 		return -1;
-	return vsnprintf(ret, size, format, ap);
+	return rpl_vsnprintf(ret, size, format, ap);
 }
 #endif	/* !HAVE_VASPRINTF */
 
@@ -1529,7 +1529,7 @@ rpl_snprintf(va_alist) va_dcl
 	VA_SHIFT(ap, str, char *);
 	VA_SHIFT(ap, size, size_t);
 	VA_SHIFT(ap, format, const char *);
-	len = vsnprintf(str, size, format, ap);
+	len = rpl_vsnprintf(str, size, format, ap);
 	va_end(ap);
 	return len;
 }

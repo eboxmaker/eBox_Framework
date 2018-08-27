@@ -162,6 +162,55 @@ void Dma::disable()
     DMA_Cmd(DMAy_Channelx,DISABLE);
 
 }
+void Dma::set_current_len(uint16_t len)
+{
+
+    DMA_SetCurrDataCounter(DMAy_Channelx, len);
+}
+bool Dma::get_flag_status()
+{
+    switch((uint32_t)DMAy_Channelx)
+    {
+        case (uint32_t)DMA1_Channel1:
+            return DMA_GetFlagStatus(DMA1_FLAG_TC1);
+        case (uint32_t)DMA1_Channel2:
+            return DMA_GetFlagStatus(DMA1_FLAG_TC2);
+        case (uint32_t)DMA1_Channel3:
+            return DMA_GetFlagStatus(DMA1_FLAG_TC3);
+        case (uint32_t)DMA1_Channel4:
+            return DMA_GetFlagStatus(DMA1_FLAG_TC4);
+        case (uint32_t)DMA1_Channel5:
+            return DMA_GetFlagStatus(DMA1_FLAG_TC5);
+        case (uint32_t)DMA1_Channel6:
+            return DMA_GetFlagStatus(DMA1_FLAG_TC6);
+        case (uint32_t)DMA1_Channel7:
+            return DMA_GetFlagStatus(DMA1_FLAG_TC7);
+        default:
+            break;
+    }
+}
+void Dma::clear_flag()
+{
+    switch((uint32_t)DMAy_Channelx)
+    {
+        case (uint32_t)DMA1_Channel1:
+             DMA_ClearFlag(DMA1_FLAG_TC1);break;
+        case (uint32_t)DMA1_Channel2:
+             DMA_ClearFlag(DMA1_FLAG_TC2);break;
+        case (uint32_t)DMA1_Channel3:
+             DMA_ClearFlag(DMA1_FLAG_TC3);break;
+        case (uint32_t)DMA1_Channel4:
+             DMA_ClearFlag(DMA1_FLAG_TC4);break;
+        case (uint32_t)DMA1_Channel5:
+             DMA_ClearFlag(DMA1_FLAG_TC5);break;
+        case (uint32_t)DMA1_Channel6:
+             DMA_ClearFlag(DMA1_FLAG_TC6);break;
+        case (uint32_t)DMA1_Channel7:
+             DMA_ClearFlag(DMA1_FLAG_TC7);break;
+        default:
+            break;
+    }
+}
 
 /**
  *@name     void Dma::enable()

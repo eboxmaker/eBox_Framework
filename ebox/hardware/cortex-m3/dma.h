@@ -40,7 +40,10 @@ class Dma
         void init(DMA_InitTypeDef* DMA_InitStruct);
         void enable();
         void disable();
-    
+        void set_current_len(uint16_t len);
+        bool get_flag_status();
+        void clear_flag();
+
         DMA_Channel_TypeDef* get_dma_ch();
 
     

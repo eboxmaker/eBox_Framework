@@ -49,20 +49,20 @@ void Pwm::base_init(uint16_t period, uint16_t prescaler)
 {
     this->period = period;//¸üÐÂperiod
 
+    rcc_clock_cmd((uint32_t)TIMx,ENABLE);
 
-    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 
     if(TIMx == TIM1 ||  TIMx == TIM8 )
     {
         TIM_CtrlPWMOutputs(TIMx,ENABLE); 
     }
         
-    rcc_clock_cmd((uint32_t)TIMx,ENABLE);
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
     TIM_TimeBaseStructure.TIM_Period = this->period - 1; //ARR
     TIM_TimeBaseStructure.TIM_Prescaler = prescaler - 1;
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; //
-    TIM_TimeBaseInit(TIMx, &TIM_TimeBaseStructure);
     TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+    TIM_TimeBaseInit(TIMx, &TIM_TimeBaseStructure);
 
     TIM_ARRPreloadConfig(TIMx, ENABLE);
     TIM_Cmd(TIMx, ENABLE); //

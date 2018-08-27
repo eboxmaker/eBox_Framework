@@ -1,12 +1,11 @@
 #ifndef __WS2812_H
 #define __WS2812_H
 #include "ebox_core.h"
-#include "color_convert.h"
-
-#define TIM_PERIOD		29					// Number of CPU cycles that will constitute 1 period
-#define PWM_HIGH_WIDTH		17				// Duty cycle of pwm signal for a logical 1 to be read by the ws2812 chip. 
+#include "dma.h"
+#define TIM_PERIOD		72					// pwmÆµÂÊ£º1Mhz
+#define PWM_HIGH_WIDTH		48				// 6.6us
 //Duty cycle = PWM_HIGH_WIDTH/TIM_PERIOD*100
-#define PWM_LOW_WIDTH		9					// Duty cycle of pwm signal for a logical 0 to be read by the ws2812 chip.
+#define PWM_LOW_WIDTH		24					// 3.3us
 //Duty cycle = PWM_LOW_WIDTH/TIM_PERIOD*100
 //9/29*100
 #define COLUMBS			8
@@ -14,33 +13,39 @@
 
 #define LED_COUNT		COLUMBS*ROWS
 
-#define LED_BUFFER_SIZE		24*LED_COUNT+42				// Buffer size needs to be the number of LEDs times 24 bits plus 42 trailing bit to signify the end of the data being transmitted.
+// Buffer size needs to be the number of LEDs times 24 bits plus 42 trailing bit to signify the end of the data being transmitted.
+#define LED_BUFFER_SIZE		24*LED_COUNT+42 
 
-
-extern uint8_t led_Colors[LED_COUNT];						//Array of integers that will function as indexes for the rgb array
-
-class WS2812
+class WS2812 
 {
 public:
     WS2812(Gpio *p_pin)
     {
         pin = p_pin;
+
     }
-    void	begin();
-    void	set_color(uint8_t g, uint8_t r, uint8_t b);
-    void	set_color(uint32_t color);
+    void begin();
     void reset();
-    void write(uint32_t color);
-    void send_bit_high();
-    void send_bit_low();
-    void RCC_Config(void);
-    void TIM_Config(void);
-    void DMA_Config(void);
-    void send_data(uint8_t *led_Colors, uint16_t len);
+    void display(uint8_t *ptr,uint16_t height,uint16_t width);
+    
     void rainbow_Loop();
     void rainbow_Loop1();
+    
+
+
 private:
     Gpio *pin;
+    TIM_TypeDef *TIMx;
+    Dma *dma;
+    uint32_t dam_cc;
+    uint32_t dma_target;
+    uint8_t ch;
+
+    void TIM_Config(void);
+    void DMA_Config(void);
+    void send_data(uint16_t len);
+
+    void init_info(Gpio *pwm_pin);
 
 };
 #endif
