@@ -12,7 +12,7 @@
  * This leaves us with a maximum string length of
  * (2^16 bytes per DMA stream - 42 bytes)/24 bytes per LED = 2728 LEDs.
  */
-uint8_t rgb1[LED_COUNT][3];						//Array that will store color data
+//uint8_t rgb1[LED_COUNT][3];						//Array that will store color data
 
 uint8_t ledBuff[LED_BUFFER_SIZE];					//Array of data to be sent to leds.
 
@@ -93,244 +93,244 @@ void WS2812::display(uint8_t *ptr,uint16_t height,uint16_t width)
     dma->clear_flag();
 }
 
-static uint8_t rain_table[] =
-{
-    '-', '-', '-', 'x', 'x', '-', '-', '-',
-    '-', '-', 'x', 'x', 'x', 'x', '-', '-',
-    '-', 'x', 'x', 'x', 'x', 'x', 'x', '-',
-    'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x',
-    '-', 'x', 'x', 'x', 'x', 'x', 'x', '-',
-    '-', 'x', 'x', 'x', 'x', 'x', 'x', '-',
-    '-', 'x', 'x', 'x', 'x', 'x', 'x', '-',
-    '-', 'x', 'x', 'x', 'x', 'x', 'x', '-',
+//static uint8_t rain_table[] =
+//{
+//    '-', '-', '-', 'x', 'x', '-', '-', '-',
+//    '-', '-', 'x', 'x', 'x', 'x', '-', '-',
+//    '-', 'x', 'x', 'x', 'x', 'x', 'x', '-',
+//    'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x',
+//    '-', 'x', 'x', 'x', 'x', 'x', 'x', '-',
+//    '-', 'x', 'x', 'x', 'x', 'x', 'x', '-',
+//    '-', 'x', 'x', 'x', 'x', 'x', 'x', '-',
+//    '-', 'x', 'x', 'x', 'x', 'x', 'x', '-',
 
-};
+//};
 //显示图形
-void WS2812::rainbow_Loop()
-{
-    COLOR_HSV hsv;
-    //COLOR_HSL hsl;
-    COLOR_RGB rgb;
+//void WS2812::rainbow_Loop()
+//{
+//    COLOR_HSV hsv;
+//    //COLOR_HSL hsl;
+//    COLOR_RGB rgb;
 
-    //	u8 intStageNum = 0;
-    //	float   r = 255, g = 0, b = 0;
-    uint16_t i, k;
-    //    hsl.s = 1;
-    //    hsl.l = 0.5;
+//    //	u8 intStageNum = 0;
+//    //	float   r = 255, g = 0, b = 0;
+//    uint16_t i, k;
+//    //    hsl.s = 1;
+//    //    hsl.l = 0.5;
 
-    hsv.s = 1;
-    hsv.v = 0.1;
-    for(i = 0; i < 360; i++)
-    {
-        for(int j = 0; j < 64 ; j ++)
-        {
-            if(rain_table[ j] == 'x')
-            {
-                //HSV模式
-                hsv.h = (i + j) % 360;
-                hsv.s = 1;
-                hsv.v = 0.1;
-                HSV_to_RGB(hsv, rgb);
-                //HSL模式
-                //                hsl.h = (i+j)%360;
-                //                hsl.s = 1;
-                //                hsl.l = 0.5;
-                //                HSL_to_RGB(hsl,rgb);
+//    hsv.s = 1;
+//    hsv.v = 0.1;
+//    for(i = 0; i < 360; i++)
+//    {
+//        for(int j = 0; j < 64 ; j ++)
+//        {
+//            if(rain_table[ j] == 'x')
+//            {
+//                //HSV模式
+//                hsv.h = (i + j) % 360;
+//                hsv.s = 1;
+//                hsv.v = 0.1;
+//                HSV_to_RGB(hsv, rgb);
+//                //HSL模式
+//                //                hsl.h = (i+j)%360;
+//                //                hsl.s = 1;
+//                //                hsl.l = 0.5;
+//                //                HSL_to_RGB(hsl,rgb);
 
-                rgb1[j][0] = rgb.r;// (uint8_t)floor(r/20+j);
-                rgb1[j][1] = rgb.g;//(uint8_t)floor(g/20+j);
-                rgb1[j][2] = rgb.b;//(uint8_t)floor(b/20+j);
+//                rgb1[j][0] = rgb.r;// (uint8_t)floor(r/20+j);
+//                rgb1[j][1] = rgb.g;//(uint8_t)floor(g/20+j);
+//                rgb1[j][2] = rgb.b;//(uint8_t)floor(b/20+j);
 
-            }
-            else
-            {
-                //HSV模式
-                hsv.h = (i + j) % 360;
-                hsv.s = 1;
-                hsv.v = 0;
-                HSV_to_RGB(hsv, rgb);
-
-
-                //                hsl.h = (i+j)%360;
-                //                hsl.s = 1;
-                //                hsl.l = 0.5;
-                //                HSL_to_RGB(hsl,rgb);
+//            }
+//            else
+//            {
+//                //HSV模式
+//                hsv.h = (i + j) % 360;
+//                hsv.s = 1;
+//                hsv.v = 0;
+//                HSV_to_RGB(hsv, rgb);
 
 
-                rgb1[j][0] = rgb.r;// (uint8_t)floor(r/20+j);
-                rgb1[j][1] = rgb.g;//(uint8_t)floor(g/20+j);
-                rgb1[j][2] = rgb.b;//(uint8_t)floor(b/20+j);
+//                //                hsl.h = (i+j)%360;
+//                //                hsl.s = 1;
+//                //                hsl.l = 0.5;
+//                //                HSL_to_RGB(hsl,rgb);
 
-            }
-        }
-        send_data( LED_COUNT);
-        delay_ms(2);
-    }
-}
+
+//                rgb1[j][0] = rgb.r;// (uint8_t)floor(r/20+j);
+//                rgb1[j][1] = rgb.g;//(uint8_t)floor(g/20+j);
+//                rgb1[j][2] = rgb.b;//(uint8_t)floor(b/20+j);
+
+//            }
+//        }
+//        send_data( LED_COUNT);
+//        delay_ms(2);
+//    }
+//}
 
 //遍历字符串
-void WS2812::rainbow_Loop1()
-{
-    COLOR_HSV hsv;
-    //COLOR_HSL hsl;
-    COLOR_RGB rgb;
-    //	float   r = 255, g = 0, b = 0;
-    uint16_t i, k;
-    //		hsl.s = 1;
-    //		hsl.l = 0.5;
+//void WS2812::rainbow_Loop1()
+//{
+//    COLOR_HSV hsv;
+//    //COLOR_HSL hsl;
+//    COLOR_RGB rgb;
+//    //	float   r = 255, g = 0, b = 0;
+//    uint16_t i, k;
+//    //		hsl.s = 1;
+//    //		hsl.l = 0.5;
 
-    hsv.s = 1;
-    hsv.v = 0.1;
-    for(int t = 0; t < 92; t++)
-        for(i = 0; i < 64; i++)
-        {
-            for(int j = 0; j < 8 ; j ++)
-                for(k = 0; k < 8; k ++)
-                {
-                    if(j > 1)
-                    {
-                        if(font6x8[t][8 - j] & (1 << k))
-                        {
-                            hsv.h = (i * 4) % 360;
-                            hsv.s = 1;
-                            hsv.v = 0.1;
-
-
-                            //								hsl.h = (i + j)%360;
-                            //								hsl.s = 1;
-                            //								hsl.l = 0.5;
-
-                            HSV_to_RGB(hsv, rgb);
-                            //HSL_to_RGB(hsl,rgb);
-                            rgb1[j * 8 + k][0] = rgb.r; // (uint8_t)floor(r/20+j);
-                            rgb1[j * 8 + k][1] = rgb.g; //(uint8_t)floor(g/20+j);
-                            rgb1[j * 8 + k][2] = rgb.b; //(uint8_t)floor(b/20+j);
-                        }
-                        else
-                        {
-                            hsv.h = (i * 4) % 360;
-                            hsv.s = 1;
-                            hsv.v = 0;
+//    hsv.s = 1;
+//    hsv.v = 0.1;
+//    for(int t = 0; t < 92; t++)
+//        for(i = 0; i < 64; i++)
+//        {
+//            for(int j = 0; j < 8 ; j ++)
+//                for(k = 0; k < 8; k ++)
+//                {
+//                    if(j > 1)
+//                    {
+//                        if(font6x8[t][8 - j] & (1 << k))
+//                        {
+//                            hsv.h = (i * 4) % 360;
+//                            hsv.s = 1;
+//                            hsv.v = 0.1;
 
 
-                            //								hsl.h = (i + j)%360;
-                            //								hsl.s = 1;
-                            //								hsl.l = 0.5;
+//                            //								hsl.h = (i + j)%360;
+//                            //								hsl.s = 1;
+//                            //								hsl.l = 0.5;
 
-                            HSV_to_RGB(hsv, rgb);
-                            //HSL_to_RGB(hsl,rgb);
-
-                            rgb1[j * 8 + k][0] = rgb.r; // (uint8_t)floor(r/20+j);
-                            rgb1[j * 8 + k][1] = rgb.g; //(uint8_t)floor(g/20+j);
-                            rgb1[j * 8 + k][2] = rgb.b; //(uint8_t)floor(b/20+j);
-
-                        }
-                    }
-                    else
-                    {
-                        hsv.h = 240;
-                        hsv.s = 1;
-                        hsv.v = 0;
+//                            HSV_to_RGB(hsv, rgb);
+//                            //HSL_to_RGB(hsl,rgb);
+//                            rgb1[j * 8 + k][0] = rgb.r; // (uint8_t)floor(r/20+j);
+//                            rgb1[j * 8 + k][1] = rgb.g; //(uint8_t)floor(g/20+j);
+//                            rgb1[j * 8 + k][2] = rgb.b; //(uint8_t)floor(b/20+j);
+//                        }
+//                        else
+//                        {
+//                            hsv.h = (i * 4) % 360;
+//                            hsv.s = 1;
+//                            hsv.v = 0;
 
 
-                        //								hsl.h = (i + j)%360;
-                        //								hsl.s = 1;
-                        //								hsl.l = 0.5;
+//                            //								hsl.h = (i + j)%360;
+//                            //								hsl.s = 1;
+//                            //								hsl.l = 0.5;
 
-                        HSV_to_RGB(hsv, rgb);
-                        //	HSL_to_RGB(hsl,rgb);
+//                            HSV_to_RGB(hsv, rgb);
+//                            //HSL_to_RGB(hsl,rgb);
 
-                        rgb1[j * 8 + k][0] = rgb.g; // (uint8_t)floor(r/20+j);
-                        rgb1[j * 8 + k][1] = rgb.r; //(uint8_t)floor(g/20+j);
-                        rgb1[j * 8 + k][2] = rgb.b; //(uint8_t)floor(b/20+j);
+//                            rgb1[j * 8 + k][0] = rgb.r; // (uint8_t)floor(r/20+j);
+//                            rgb1[j * 8 + k][1] = rgb.g; //(uint8_t)floor(g/20+j);
+//                            rgb1[j * 8 + k][2] = rgb.b; //(uint8_t)floor(b/20+j);
 
-                    }
-                    int l, h, l_offset, h_offset;
-                    if(i > 8)
-                        l_offset = i * 8 / 64;
-                    h_offset = 0;
-
-                    if(l_offset > 0)
-                    {
-                        l = j + l_offset;
-                        l %= 8 ;
-                    }
-                    else
-                    {
-                        if(j + l_offset >= 0)
-                            l = j + l_offset;
-                        else
-                            l = 8 + j + l_offset;
-                    }
-
-                    if(h_offset > 0)
-                    {
-                        h = k + h_offset;
-                        h %= 8 ;
-                    }
-                    else
-                    {
-                        if(k + h_offset >= 0)
-                            h = k + h_offset;
-                        else
-                            h =  k + h_offset + 8;
-                    }
+//                        }
+//                    }
+//                    else
+//                    {
+//                        hsv.h = 240;
+//                        hsv.s = 1;
+//                        hsv.v = 0;
 
 
-                }
+//                        //								hsl.h = (i + j)%360;
+//                        //								hsl.s = 1;
+//                        //								hsl.l = 0.5;
 
-            // Send data to LEDs
-            send_data(LED_COUNT);
-            delay_ms(5);
-        }
-}
+//                        HSV_to_RGB(hsv, rgb);
+//                        //	HSL_to_RGB(hsl,rgb);
+
+//                        rgb1[j * 8 + k][0] = rgb.g; // (uint8_t)floor(r/20+j);
+//                        rgb1[j * 8 + k][1] = rgb.r; //(uint8_t)floor(g/20+j);
+//                        rgb1[j * 8 + k][2] = rgb.b; //(uint8_t)floor(b/20+j);
+
+//                    }
+//                    int l, h, l_offset, h_offset;
+//                    if(i > 8)
+//                        l_offset = i * 8 / 64;
+//                    h_offset = 0;
+
+//                    if(l_offset > 0)
+//                    {
+//                        l = j + l_offset;
+//                        l %= 8 ;
+//                    }
+//                    else
+//                    {
+//                        if(j + l_offset >= 0)
+//                            l = j + l_offset;
+//                        else
+//                            l = 8 + j + l_offset;
+//                    }
+
+//                    if(h_offset > 0)
+//                    {
+//                        h = k + h_offset;
+//                        h %= 8 ;
+//                    }
+//                    else
+//                    {
+//                        if(k + h_offset >= 0)
+//                            h = k + h_offset;
+//                        else
+//                            h =  k + h_offset + 8;
+//                    }
+
+
+//                }
+
+//            // Send data to LEDs
+//            send_data(LED_COUNT);
+//            delay_ms(5);
+//        }
+//}
 
 
 
 
-void WS2812::send_data(uint16_t len)
-{
-    uint8_t i, j = 0;
-    uint16_t buffersize = (24 * len) + 42, memaddr = 0;
+//void WS2812::send_data(uint16_t len)
+//{
+//    uint8_t i, j = 0;
+//    uint16_t buffersize = (24 * len) + 42, memaddr = 0;
 
 
-    uint8_t temp, led = 0;
+//    uint8_t temp, led = 0;
 
-    for(int ln =0; ln < len;ln++)
-    {
-        for (i = 0; i < 3; i++)  						// Set RGB LED color R -> i=0, G -> i=1, B -> i=2
-        {
-            temp = rgb1[ln][i];
-            for (j = 0; j < 8; j++)  					// Set 8 bits of color
-            {
-                if ((temp) & 0x80)  					// Data sent MSB first, j = 0 is MSB j = 7 is LSB
-                {
-                    ledBuff[memaddr++] = PWM_HIGH_WIDTH; 		// Compare value for logical 1
-                }
-                else
-                {
-                    ledBuff[memaddr++] = PWM_LOW_WIDTH;		// Compare value for logical 0
-                }
-                temp = temp << 1;
-            }
-        }
-    }
+//    for(int ln =0; ln < len;ln++)
+//    {
+//        for (i = 0; i < 3; i++)  						// Set RGB LED color R -> i=0, G -> i=1, B -> i=2
+//        {
+//            temp = rgb1[ln][i];
+//            for (j = 0; j < 8; j++)  					// Set 8 bits of color
+//            {
+//                if ((temp) & 0x80)  					// Data sent MSB first, j = 0 is MSB j = 7 is LSB
+//                {
+//                    ledBuff[memaddr++] = PWM_HIGH_WIDTH; 		// Compare value for logical 1
+//                }
+//                else
+//                {
+//                    ledBuff[memaddr++] = PWM_LOW_WIDTH;		// Compare value for logical 0
+//                }
+//                temp = temp << 1;
+//            }
+//        }
+//    }
 
-    // Add needed delay at end of byte cycle, pulsewidth = 0
-    while(memaddr < buffersize)
-    {
-        ledBuff[memaddr++] = 0;
-    }
+//    // Add needed delay at end of byte cycle, pulsewidth = 0
+//    while(memaddr < buffersize)
+//    {
+//        ledBuff[memaddr++] = 0;
+//    }
 
-    dma->set_current_len(LED_BUFFER_SIZE);
-    dma->enable();
-    TIM_Cmd(TIMx, ENABLE); 						// enable Timer 2
-    while(!dma->get_flag_status()); 			// wait until transfer complete
-    TIM_Cmd(TIMx, DISABLE); 					// disable Timer 2
-    dma->disable(); 				// disable DMA channel 1
-    dma->clear_flag();
+//    dma->set_current_len(LED_BUFFER_SIZE);
+//    dma->enable();
+//    TIM_Cmd(TIMx, ENABLE); 						// enable Timer 2
+//    while(!dma->get_flag_status()); 			// wait until transfer complete
+//    TIM_Cmd(TIMx, DISABLE); 					// disable Timer 2
+//    dma->disable(); 				// disable DMA channel 1
+//    dma->clear_flag();
 
-}
+//}
 
 void WS2812::TIM_Config(void)
 {

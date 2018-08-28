@@ -335,7 +335,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define></Define>
+              <Define>ARM_MATH_CM3</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\component\FreeModbus\port;..\..\..\component\FreeModbus\modbus\ascii;..\..\..\component\FreeModbus\modbus\rtu;..\..\..\component\FreeModbus\modbus\tcp;..\..\..\component\FreeModbus\modbus\include;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\cnc;..\..\..\component\network;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal</IncludePath>
             </VariousControls>
@@ -766,97 +766,10 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\user\board\spark_f1\bsp_ebox.cpp</FilePath>
             </File>
-            <File>
-              <FileName>ws2812.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\ws2812.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>color_convert.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\apps\color_convert.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_virtual_lcd.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\ebox_virtual_lcd.cpp</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>mpu</GroupName>
-          <Files>
-            <File>
-              <FileName>FourAxle.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\MPU6050\FourAxle.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>IMU.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\MPU6050\IMU.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>MPU6050.CPP</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\MPU6050\MPU6050.CPP</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>gui</GroupName>
-          <Files>
-            <File>
-              <FileName>Font8_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\Font8_ASCII.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font16_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\Font16_ASCII.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font16_HZ.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\Font16_HZ.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font24_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\Font24_ASCII.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font32_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\Font32_ASCII.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_bitmap.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_bitmap.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_graphic.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_graphic.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_port.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_port.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_text.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_text.cpp</FilePath>
-            </File>
-          </Files>
+          <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
     </Target>
@@ -864,7 +777,14 @@
 
   <RTE>
     <apis/>
-    <components/>
+    <components>
+      <component Cclass="CMSIS" Cgroup="DSP" Cvendor="ARM" Cversion="1.5.2" condition="CMSIS DSP">
+        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.3.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
+    </components>
     <files/>
   </RTE>
 
