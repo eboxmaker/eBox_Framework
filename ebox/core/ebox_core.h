@@ -47,8 +47,12 @@ extern void        (*delay_us)(uint64_t ms);
 
 
 #define EBOX_DEBUG 1
-
-#define USE_PRINTF 1
+#define USE_PRINTF 3
+    
+    
+    
+    
+    
 
 #if  USE_PRINTF == 1
     #include "Myprintf.h"
