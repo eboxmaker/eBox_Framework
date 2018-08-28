@@ -8,8 +8,8 @@
 #define PWM_LOW_WIDTH		24					// 3.3us
 //Duty cycle = PWM_LOW_WIDTH/TIM_PERIOD*100
 //9/29*100
-#define COLUMBS			8
-#define	ROWS			8
+#define COLUMBS			32
+#define	ROWS			16
 
 #define LED_COUNT		COLUMBS*ROWS
 

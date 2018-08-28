@@ -124,8 +124,12 @@ void print_log(const char *name,const char *date)
     UART.println("KB");
     
 	UART.print("* heap used     : ");	    /* 打印heap使用率 */   
-	UART.print(ebox_mem_used()/1024.0);	
+	UART.print(ebox_mem_usage());	
 	UART.println("%");	
+    
+	UART.print("* heap used     : ");	    /* 打印heap使用率 */   
+	UART.print(ebox_mem_used()/1024.0);	
+	UART.println("KB");	
     
 	UART.print("* heap free     : ");	    /* 打印heap使用了多少KB */   
 	UART.print(ebox_get_free()/1024.0);
