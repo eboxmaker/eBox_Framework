@@ -20,7 +20,7 @@ void EventGpio::process()
         }    
         else
         {
-            if(( millis() - last_time ) > IO_EDGE_FILTER_COUNTS)
+//            if(( millis() - last_time ) > IO_EDGE_FILTER_COUNTS)
             {   
                 if(state == 1)
                 {

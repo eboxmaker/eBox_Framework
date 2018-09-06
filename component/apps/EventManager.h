@@ -6,7 +6,7 @@
 
 #include "EventIo.h"
 #include "EventGpio.h"
-
+#include "list.h"
 class EventManager
 {
     public:

@@ -2,7 +2,7 @@
 #define __IOEVENT_H
 #include "ebox_core.h"
 #include "eventio.h"
-#define IO_EDGE_FILTER_COUNTS 5
+#define IO_EDGE_FILTER_COUNTS 0
 
 class EventGpio : public EventIo
 {
