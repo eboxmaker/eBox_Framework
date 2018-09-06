@@ -1076,6 +1076,16 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\user\board\spark_f4\bsp_ebox.cpp</FilePath>
             </File>
+            <File>
+              <FileName>FSMCIO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\user\board\spark_f4\FSMCIO.c</FilePath>
+            </File>
+            <File>
+              <FileName>ft232h_cpu_fifo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\component\FT232H\ft232h_cpu_fifo.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

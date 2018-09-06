@@ -119,6 +119,10 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>DLGUARM</Key>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>JL2CM3</Key>
           <Name>-U-O78 -O78 -S2 -ZTIFSpeedSel5000 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(1BA01477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO11 -FD20000000 -FC1000 -FN1 -FF0STM32F10x_128.FLM -FS08000000 -FL020000 -FP0($$Device:STM32F103C8$Flash\STM32F10x_128.FLM)</Name>
         </SetRegEntry>
@@ -152,9 +156,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>116</LineNumber>
+          <LineNumber>21</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134234434</Address>
+          <Address>134229236</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -163,7 +167,55 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\..\..\user\main.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../user/main.cpp\116</Expression>
+          <Expression>\\ebox\../../../user/main.cpp\21</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>49</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134236962</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\..\user\main.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\ebox\../../../user/main.cpp\49</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>50</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134236998</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\..\user\main.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\ebox\../../../user/main.cpp\50</Expression>
+        </Bp>
+        <Bp>
+          <Number>3</Number>
+          <Type>0</Type>
+          <LineNumber>53</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\..\..\user\main.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -1154,6 +1206,50 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\user\board\spark_f1\bsp_ebox.cpp</PathWithFileName>
       <FilenameWithoutPath>bsp_ebox.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>72</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\user\ads1271.cpp</PathWithFileName>
+      <FilenameWithoutPath>ads1271.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>app</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>73</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\component\apps\EventGpio.cpp</PathWithFileName>
+      <FilenameWithoutPath>EventGpio.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>74</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\component\apps\EventIo.cpp</PathWithFileName>
+      <FilenameWithoutPath>EventIo.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
