@@ -73,7 +73,8 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 	uint32_t _DataWidth;
 	uint32_t _Parity;
 	uint32_t _StopBits = 0;        
-    rcc_clock_cmd((uint32_t)_USARTx,ENABLE);
+    //rcc_clock_cmd((uint32_t)_USARTx,ENABLE);
+    LL_APB1_GRP2_EnableClock(LL_APB1_GRP2_PERIPH_USART1);
 
     
 #if USE_UART_DMA
@@ -156,7 +157,6 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 
     serial_irq_handler(index, Uart::_irq_handler, (uint32_t)this);
     
-    
     switch(data_bit)
     {
     case 8:
@@ -220,8 +220,8 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     interrupt(RxIrq,DISABLE);
     interrupt(TcIrq,DISABLE);
 
-    _tx_pin->mode(AF_PP);
-    _rx_pin->mode(INPUT);
+    _tx_pin->mode(AF_PP_PU,LL_GPIO_AF_1);
+    _rx_pin->mode(AF_PP_PU,LL_GPIO_AF_1);
 
 }
 void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )

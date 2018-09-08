@@ -21,6 +21,7 @@
 #define Print_h
 
 #include "ebox_type.h"
+#include "ebox_core.h"
 #include "WString.h"
 #include "Printable.h"
 

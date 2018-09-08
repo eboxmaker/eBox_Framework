@@ -22,7 +22,7 @@
 
 ////´®¿Ú
 Uart uart1(USART1, &PA9, &PA10);
-//Uart uart2(USART2, &PA2, &PA3);
+Uart uart2(USART2, &PA2, &PA3);
 //Uart uart3(USART3, &PB10, &PB11);
 
 //#if (MCU_PINS >= 100)
