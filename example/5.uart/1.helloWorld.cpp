@@ -30,7 +30,9 @@
 void setup()
 {
     ebox_init();
+    LED1.mode(OUTPUT_PP);    
     UART.begin(115200);
+    LED1.set();
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
 
 }
@@ -41,6 +43,9 @@ int main(void)
     {
         UART.printf("hello World !\r\n");
         delay_ms(1000);
+        LED1.set();
+        delay_ms(1000);
+        LED1.reset();
     }
 }
 
