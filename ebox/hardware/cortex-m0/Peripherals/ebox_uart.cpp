@@ -216,7 +216,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 //    USART_Cmd(_USARTx, ENABLE);
     
 
-    nvic(ENABLE,0,0);
+//    nvic(ENABLE,0,0);
     interrupt(RxIrq,DISABLE);
     interrupt(TcIrq,DISABLE);
 
