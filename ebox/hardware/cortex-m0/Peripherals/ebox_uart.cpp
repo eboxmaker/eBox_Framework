@@ -73,9 +73,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 	uint32_t _DataWidth;
 	uint32_t _Parity;
 	uint32_t _StopBits = 0;        
-    //rcc_clock_cmd((uint32_t)_USARTx,ENABLE);
-    LL_APB1_GRP2_EnableClock(LL_APB1_GRP2_PERIPH_USART1);
-
+    rcc_clock_cmd((uint32_t)_USARTx,ENABLE);
     
 #if USE_UART_DMA
     _use_dma = use_dma;
@@ -193,7 +191,10 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 		_StopBits = LL_USART_STOPBITS_2;
     else if(stop_bit == 2)
 		_StopBits = LL_USART_STOPBITS_1_5;
-		
+
+    nvic(ENABLE,0,0);
+    _rx_pin->mode(AF_PP_PU,LL_GPIO_AF_1);
+    
 	LL_USART_SetTransferDirection(_USARTx, LL_USART_DIRECTION_TX_RX);
 	LL_USART_ConfigCharacter(_USARTx, _DataWidth, _Parity, _StopBits);
 	LL_USART_SetBaudRate(_USARTx, SystemCoreClock, LL_USART_OVERSAMPLING_16, baud_rate);
@@ -202,6 +203,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 	while ((!(LL_USART_IsActiveFlag_TEACK(_USARTx))) || (!(LL_USART_IsActiveFlag_REACK(_USARTx))))
 	{
 	}
+    _tx_pin->mode(AF_PP_PU,LL_GPIO_AF_1);
 #if USE_UART_DMA
     if((_USARTx == USART1 || _USARTx == USART2 || _USARTx == USART3) && (_use_dma == 1) )
     {
@@ -213,16 +215,9 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
         dma_tx->interrupt(DmaItHt,DISABLE);
     }
 #endif
-//    USART_Cmd(_USARTx, ENABLE);
-    
-
-//    nvic(ENABLE,0,0);
+   
     interrupt(RxIrq,DISABLE);
     interrupt(TcIrq,DISABLE);
-
-    _tx_pin->mode(AF_PP_PU,LL_GPIO_AF_1);
-    _rx_pin->mode(AF_PP_PU,LL_GPIO_AF_1);
-
 }
 void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
@@ -398,9 +393,9 @@ void Uart::wait_busy()
     #if USE_UART2
         case (uint32_t)USART2_BASE:
             while(busy[1] == 1 ){
-                if(USART2->SR & 0X40){
+                if(USART2->ISR & 0X40){
                     busy[1] = 0;
-                    USART_ClearITPendingBit(USART2, USART_IT_TC);
+                    LL_USART_ClearFlag_TC(USART2);
                     break;
                 }
             }
@@ -524,16 +519,21 @@ extern "C" {
     #if USE_UART2
     void USART2_IRQHandler(void)
     {
-        if(USART_GetITStatus(USART2, USART_IT_RXNE) == SET)
+        if(LL_USART_IsActiveFlag_RXNE(USART2) == SET)
         {
             irq_handler(serial_irq_ids[NUM_UART2],RxIrq);
-            USART_ClearITPendingBit(USART2, USART_IT_RXNE);
+            // 如果回调函数中没有读取数据，则将当前数据抛弃，准备下一次接收
+			if (LL_USART_IsActiveFlag_RXNE(USART2) == SET )
+			{
+				LL_USART_RequestRxDataFlush(USART2);
+			}
         }
-        if(USART_GetITStatus(USART2, USART_IT_TC) == SET)
+        if(LL_USART_IsActiveFlag_TC(USART2) == SET)
         {
             busy[1] = 0;
             irq_handler(serial_irq_ids[NUM_UART2],TcIrq);
-            USART_ClearITPendingBit(USART2, USART_IT_TC);
+            // 清除发送结束中断标志
+			LL_USART_ClearFlag_TC(USART2);
         }
     }
     #endif

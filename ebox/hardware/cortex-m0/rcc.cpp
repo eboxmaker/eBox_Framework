@@ -78,7 +78,7 @@ void rcc_clock_cmd(uint32_t dev, FunctionalState state)
          rcc  = dev_to_rcc_table[i].rcc;
     }
     
-    if(dev >=APBPERIPH_BASE)
+    if(dev >=AHBPERIPH_BASE)
     {
         temp = READ_REG(RCC->AHBENR);
         state ? (temp |= rcc) : (temp &=  ~rcc);

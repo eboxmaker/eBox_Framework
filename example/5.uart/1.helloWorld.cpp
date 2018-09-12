@@ -39,7 +39,7 @@ int main(void)
     setup();
     while(1)
     {
-        UART.printf("hello World !\r\n");
+        UART.printf("hello World %d %d !\r\n",0x40,bitShift(6));
         delay_ms(1000);
         LED1.set();
         delay_ms(1000);
