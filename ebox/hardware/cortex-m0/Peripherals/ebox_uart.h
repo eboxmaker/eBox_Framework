@@ -47,9 +47,9 @@
  *  *增加初始化的一种接口，支持更复杂的初始化要求
  */
 
-
+// 定义使用的串口，注意如果使用串口3，则串口1,2,3必须定义为1，依次类推
 #define USE_UART1 1
-#define USE_UART2 0
+#define USE_UART2 1
 #define USE_UART3 0
 #define USE_UART4 0
 #define USE_UART5 0
