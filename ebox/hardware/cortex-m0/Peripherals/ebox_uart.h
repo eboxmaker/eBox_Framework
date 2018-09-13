@@ -55,7 +55,7 @@
 #define USE_UART5 0
 #define UART_NUM (USE_UART1 + USE_UART2 + USE_UART3 + USE_UART4 + USE_UART5)
 
-#define USE_UART_DMA 0
+#define USE_UART_DMA 1
 
 
 //”√ªß≈‰÷√//////////////
