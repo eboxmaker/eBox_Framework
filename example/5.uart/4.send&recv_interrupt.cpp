@@ -30,7 +30,7 @@
 #define EXAMPLE_NAME	"send&recv_interrupt example"
 #define EXAMPLE_DATE	"2018-08-06"
 
-u8 count;
+uint8_t count;
 // 接受中断回调
 void rx_event()
 {

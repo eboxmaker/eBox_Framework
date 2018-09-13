@@ -12,13 +12,13 @@ static DmaIrqHandler_t irq_handler;
  *@param    DMAy_Streamx :  DMA1_Stream0
  *@retval   NONE
 */
-Dma::Dma(DMA_Channel_TypeDef* DMAy_Channelx)
+Dma::Dma(uint32_t DMAy_Channelx)
 {
-    int index;
+//    int index;
     this->DMAy_Channelx = DMAy_Channelx;
-    if(((uint32_t)DMAy_Channelx - DMA1_Channel1_BASE) <= 0x80 )
-        index = ((uint32_t)DMAy_Channelx - DMA1_Channel1_BASE) / 20;
-    dma_irq_handler(index, Dma::_irq_handler, (uint32_t)this);
+//    if(((uint32_t)DMAy_Channelx - DMA1_Channel1_BASE) <= 0x80 )
+//        index = ((uint32_t)DMAy_Channelx - DMA1_Channel1_BASE) / 20;
+    dma_irq_handler(DMAy_Channelx, Dma::_irq_handler, (uint32_t)this);
 
 }
 /**
@@ -29,25 +29,26 @@ Dma::Dma(DMA_Channel_TypeDef* DMAy_Channelx)
 */
 void Dma::rcc_enable()
 {
-    switch((uint32_t)DMAy_Channelx)
-    {
-        case DMA1_Channel1_BASE:
-        case DMA1_Channel2_BASE:
-        case DMA1_Channel3_BASE:
-        case DMA1_Channel4_BASE:
-        case DMA1_Channel5_BASE:
-        case DMA1_Channel6_BASE:
-        case DMA1_Channel7_BASE:
-            RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);	//使能DMA时钟
-        break;
-        #ifdef STM32F10X_HD
-        case DMA2_Channel1_BASE:
-        case DMA2_Channel2_BASE:
-        case DMA2_Channel3_BASE:
-        case DMA2_Channel4_BASE:
-            RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2, ENABLE);	//使能DMA时钟
-        #endif
-    }
+    LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1);
+//    switch((uint32_t)DMAy_Channelx)
+//    {
+//        case DMA1_Channel1_BASE:
+//        case DMA1_Channel2_BASE:
+//        case DMA1_Channel3_BASE:
+//        case DMA1_Channel4_BASE:
+//        case DMA1_Channel5_BASE:
+//        case DMA1_Channel6_BASE:
+//        case DMA1_Channel7_BASE:
+//            RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);	//使能DMA时钟
+//        break;
+//        #ifdef STM32F10X_HD
+//        case DMA2_Channel1_BASE:
+//        case DMA2_Channel2_BASE:
+//        case DMA2_Channel3_BASE:
+//        case DMA2_Channel4_BASE:
+//            RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2, ENABLE);	//使能DMA时钟
+//        #endif
+//    }
 }
 /**
  *@name     void Dma::rcc_disable()
@@ -57,25 +58,27 @@ void Dma::rcc_enable()
 */
 void Dma::rcc_disable()
 {
-    switch((uint32_t)DMAy_Channelx)
-    {
-        case DMA1_Channel1_BASE:
-        case DMA1_Channel2_BASE:
-        case DMA1_Channel3_BASE:
-        case DMA1_Channel4_BASE:
-        case DMA1_Channel5_BASE:
-        case DMA1_Channel6_BASE:
-        case DMA1_Channel7_BASE:
-            RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, DISABLE);	//使能DMA时钟
-        break;
-        #ifdef STM32F10X_HD
-        case DMA2_Channel1_BASE:
-        case DMA2_Channel2_BASE:
-        case DMA2_Channel3_BASE:
-        case DMA2_Channel4_BASE:
-            RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2, DISABLE);	//使能DMA时钟
-        #endif
-    }
+      LL_AHB1_GRP1_DisableClock(LL_AHB1_GRP1_PERIPH_DMA1);
+    
+//    switch((uint32_t)DMAy_Channelx)
+//    {
+//        case DMA1_Channel1_BASE:
+//        case DMA1_Channel2_BASE:
+//        case DMA1_Channel3_BASE:
+//        case DMA1_Channel4_BASE:
+//        case DMA1_Channel5_BASE:
+//        case DMA1_Channel6_BASE:
+//        case DMA1_Channel7_BASE:
+//            RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, DISABLE);	//使能DMA时钟
+//        break;
+//        #ifdef STM32F10X_HD
+//        case DMA2_Channel1_BASE:
+//        case DMA2_Channel2_BASE:
+//        case DMA2_Channel3_BASE:
+//        case DMA2_Channel4_BASE:
+//            RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2, DISABLE);	//使能DMA时钟
+//        #endif
+//    }
 }
 
 
@@ -107,11 +110,14 @@ void Dma::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_
 void Dma::interrupt(DmaIrqType DMA_IT,FunctionalState enable)
 {
     if(DMA_IT == DmaItTc)
-        DMA_ITConfig(DMAy_Channelx,DMA_IT_TC,enable);
+        LL_DMA_EnableIT_TC(DMA1, DMAy_Channelx);
+        //DMA_ITConfig(DMAy_Channelx,DMA_IT_TC,enable);
     else if(DMA_IT == DmaItTe)
-        DMA_ITConfig(DMAy_Channelx,DMA_IT_TE,enable);
+        LL_DMA_EnableIT_TE(DMA1, DMAy_Channelx);
+        //DMA_ITConfig(DMAy_Channelx,DMA_IT_TE,enable);
     else if(DMA_IT == DmaItHt)
-        DMA_ITConfig(DMAy_Channelx,DMA_IT_HT,enable);
+//        DMA_ITConfig(DMAy_Channelx,DMA_IT_HT,enable);
+        LL_DMA_EnableIT_HT(DMA1, DMAy_Channelx);
 
 }
 
@@ -124,7 +130,8 @@ void Dma::interrupt(DmaIrqType DMA_IT,FunctionalState enable)
 */
 void Dma::deInit()
 {
-    DMA_DeInit(DMAy_Channelx); 
+//    DMA_DeInit(DMAy_Channelx); 
+    LL_DMA_DeInit(DMA1,DMAy_Channelx);
 }
 
 /**
@@ -133,9 +140,10 @@ void Dma::deInit()
  *@param    DMA_InitStruct  :  初始化结构体
  *@retval   NONE
 */
-void Dma::init(DMA_InitTypeDef* DMA_InitStruct)
+void Dma::init(LL_DMA_InitTypeDef* DMA_InitStruct)
 {
-    DMA_Init(DMAy_Channelx,DMA_InitStruct);
+    //DMA_Init(DMAy_Channelx,DMA_InitStruct);
+    LL_DMA_Init(DMA1,DMAy_Channelx,DMA_InitStruct);
 }
 
 
@@ -147,7 +155,8 @@ void Dma::init(DMA_InitTypeDef* DMA_InitStruct)
 */
 void Dma::enable()
 {
-    DMA_Cmd(DMAy_Channelx,ENABLE);
+ //   DMA_Cmd(DMAy_Channelx,ENABLE);
+    LL_DMA_EnableChannel(DMA1,DMAy_Channelx);
 
 }
 
@@ -159,8 +168,8 @@ void Dma::enable()
 */
 void Dma::disable()
 {
-    DMA_Cmd(DMAy_Channelx,DISABLE);
-
+//    DMA_Cmd(DMAy_Channelx,DISABLE);
+    LL_DMA_DisableChannel(DMA1,DMAy_Channelx);
 }
 
 /**
@@ -169,7 +178,7 @@ void Dma::disable()
  *@param    NONE
  *@retval   DMAy_Streamx
 */
-DMA_Channel_TypeDef* Dma::get_dma_ch()
+uint32_t Dma::get_dma_ch()
 {
     return DMAy_Channelx;
 }
@@ -210,64 +219,69 @@ extern "C" {
     
     void DMA1_Channel1_IRQHandler(void)
     {
-        if(DMA_GetITStatus(DMA1_IT_TC1) == SET)
+        if(LL_DMA_IsActiveFlag_TC1(DMA1) == SET)
         {
             irq_handler(dma_irq_ids[DMA1_CH1],DmaItTc);
-            DMA_ClearITPendingBit(DMA1_IT_TC1);
+            //DMA_ClearITPendingBit(DMA1_IT_TC1);
+            LL_DMA_ClearFlag_GI1(DMA1);
             return ;
         }
     }
     void DMA1_Channel2_IRQHandler(void)
     {
-        if(DMA_GetITStatus(DMA1_IT_TC2) == SET)
+        if(LL_DMA_IsActiveFlag_TC2(DMA1) == SET)
         {
             irq_handler(dma_irq_ids[DMA1_CH2],DmaItTc);
-            DMA_ClearITPendingBit(DMA1_IT_TC2);
-            
+            //DMA_ClearITPendingBit(DMA1_IT_TC2);
+            LL_DMA_ClearFlag_GI2(DMA1);
         }
     }
     void DMA1_Channel3_IRQHandler(void)
     {
-        if(DMA_GetITStatus(DMA1_IT_TC3) == SET)
+        if(LL_DMA_IsActiveFlag_TC3(DMA1) == SET)
         {
             irq_handler(dma_irq_ids[DMA1_CH3],DmaItTc);
-            DMA_ClearITPendingBit(DMA1_IT_TC3);
+            LL_DMA_ClearFlag_GI3(DMA1);
             return ;
         }
     }
-    void DMA1_Channel4_IRQHandler(void)
-    {
-        if(DMA_GetITStatus(DMA1_IT_TC4) == SET)
-        {
-            irq_handler(dma_irq_ids[DMA1_CH4],DmaItTc);
-            DMA_ClearITPendingBit(DMA1_IT_TC4);
-            
-        }
-    }
+//    void DMA1_Channel4_IRQHandler(void)
+//    {
+//        if(LL_DMA_IsActiveFlag_TC4(DMA1) == SET)
+//        {
+//            irq_handler(dma_irq_ids[DMA1_CH4],DmaItTc);
+//            LL_DMA_ClearFlag_GI4(DMA1);            
+//        }
+//    }
     void DMA1_Channel5_IRQHandler(void)
     {
-        if(DMA_GetITStatus(DMA1_IT_TC5) == SET)
+        if(LL_DMA_IsActiveFlag_TC5(DMA1) == SET)
         {
             irq_handler(dma_irq_ids[DMA1_CH5],DmaItTc);
-            DMA_ClearITPendingBit(DMA1_IT_TC5);
+            LL_DMA_ClearFlag_GI5(DMA1);
             return ;
         }
     }
     void DMA1_Channel6_IRQHandler(void)
     {
-        if(DMA_GetITStatus(DMA1_IT_TC6) == SET)
+        if(LL_DMA_IsActiveFlag_TC6(DMA1) == SET)
         {
             irq_handler(dma_irq_ids[DMA1_CH6],DmaItTc);
-            DMA_ClearITPendingBit(DMA1_IT_TC6);
+            LL_DMA_ClearFlag_GI6(DMA1);
             
         }
     }
-    void DMA1_Channel7_IRQHandler(void)
+    void DMA1_Channel4_5_6_7_IRQnHandler(void)
     {
-        if(DMA_GetITStatus(DMA1_IT_TC7) == SET)
+      if(LL_DMA_IsActiveFlag_TC4(DMA1) == SET)
+        {
+            irq_handler(dma_irq_ids[DMA1_CH4],DmaItTc);
+            LL_DMA_ClearFlag_GI4(DMA1);            
+        }
+        if(LL_DMA_IsActiveFlag_TC7(DMA1) == SET)
         {
             irq_handler(dma_irq_ids[DMA1_CH7],DmaItTc);
-            DMA_ClearITPendingBit(DMA1_IT_TC7);
+            LL_DMA_ClearFlag_GI7(DMA1);
             return ;
         }
     }
@@ -280,11 +294,11 @@ extern "C" {
 }
 #endif
 
-Dma Dma1Ch1(DMA1_Channel1);
-Dma Dma1Ch2(DMA1_Channel2);
-Dma Dma1Ch3(DMA1_Channel3);
-Dma Dma1Ch4(DMA1_Channel4);
-Dma Dma1Ch5(DMA1_Channel5);
-Dma Dma1Ch6(DMA1_Channel6);
-Dma Dma1Ch7(DMA1_Channel7);
+Dma Dma1Ch1(LL_DMA_CHANNEL_1);
+Dma Dma1Ch2(LL_DMA_CHANNEL_2);
+Dma Dma1Ch3(LL_DMA_CHANNEL_3);
+Dma Dma1Ch4(LL_DMA_CHANNEL_4);
+Dma Dma1Ch5(LL_DMA_CHANNEL_5);
+Dma Dma1Ch6(LL_DMA_CHANNEL_6);
+Dma Dma1Ch7(LL_DMA_CHANNEL_7);
 

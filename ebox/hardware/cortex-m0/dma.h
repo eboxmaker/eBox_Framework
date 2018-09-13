@@ -1,9 +1,11 @@
 #ifndef __DMA_H
 #define __DMA_H
-#if USE_DMA
+
 #include "ebox_core.h"
 #include "mcu.h"
 #include "FunctionPointer.h"
+
+#if USE_DMA
 
 //”√ªß≈‰÷√//////////////
 #define DMA_NUM (7)
@@ -27,7 +29,7 @@ typedef void (*DmaIrqHandler_t)(uint32_t id, DmaIrqType type);
 class Dma
 {
     public:
-        Dma(DMA_Channel_TypeDef* DMAy_Channelx);
+        Dma(uint32_t DMAy_Channelx);
         
         void rcc_enable();
         void rcc_disable();
@@ -37,11 +39,11 @@ class Dma
 
         void deInit();
         
-        void init(DMA_InitTypeDef* DMA_InitStruct);
+        void init(LL_DMA_InitTypeDef * DMA_InitStruct);
         void enable();
         void disable();
     
-        DMA_Channel_TypeDef* get_dma_ch();
+        uint32_t get_dma_ch();
 
     
     
@@ -76,7 +78,7 @@ class Dma
     
     
     private:
-        DMA_Channel_TypeDef* DMAy_Channelx;
+        uint32_t DMAy_Channelx;
     protected:
         FunctionPointer _irq[3];
 

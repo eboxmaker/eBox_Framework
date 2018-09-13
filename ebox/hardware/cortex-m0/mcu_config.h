@@ -116,12 +116,8 @@ STM32F417VG     LQFP 100    168     1024    192
 #define STM32_COMPANY "ST\0"
 
 
-
-
-
 //Õ‚…Ë≈‰÷√
-
-#define USE_DMA 0
+#define USE_DMA 1
 
 
 

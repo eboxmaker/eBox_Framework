@@ -21,6 +21,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_uart.h"
 
+#if USE_UART_DMA
+#include "ebox_mem.h"
+#endif
+
 uint8_t busy[UART_NUM];
 
 static uint32_t serial_irq_ids[UART_NUM] = {0};
@@ -82,14 +86,14 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
         
     #if USE_UART1
     case (uint32_t)USART1_BASE:
-        dma_tx = &Dma1Ch4;
+        dma_tx = &Dma1Ch2;
         index = NUM_UART1;
         break;
     #endif
 
     #if USE_UART2 
     case (uint32_t)USART2_BASE:
-        dma_tx = &Dma1Ch7;
+        dma_tx = &Dma1Ch4;
         index = NUM_UART2;
         break;
     #endif
@@ -191,9 +195,10 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 		_StopBits = LL_USART_STOPBITS_2;
     else if(stop_bit == 2)
 		_StopBits = LL_USART_STOPBITS_1_5;
+    
 
-    nvic(ENABLE,0,0);
     _rx_pin->mode(AF_PP_PU,LL_GPIO_AF_1);
+    _tx_pin->mode(AF_PP_PU,LL_GPIO_AF_1);
     
 	LL_USART_SetTransferDirection(_USARTx, LL_USART_DIRECTION_TX_RX);
 	LL_USART_ConfigCharacter(_USARTx, _DataWidth, _Parity, _StopBits);
@@ -203,11 +208,11 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 	while ((!(LL_USART_IsActiveFlag_TEACK(_USARTx))) || (!(LL_USART_IsActiveFlag_REACK(_USARTx))))
 	{
 	}
-    _tx_pin->mode(AF_PP_PU,LL_GPIO_AF_1);
+    nvic(ENABLE,0,0);
 #if USE_UART_DMA
     if((_USARTx == USART1 || _USARTx == USART2 || _USARTx == USART3) && (_use_dma == 1) )
     {
-        USART_DMACmd(_USARTx, USART_DMAReq_Tx, ENABLE);
+        LL_USART_EnableDMAReq_TX(_USARTx);
         dma_tx->rcc_enable();
         dma_tx->nvic(DISABLE,0,0);
         dma_tx->interrupt(DmaItTc,DISABLE);
@@ -215,7 +220,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
         dma_tx->interrupt(DmaItHt,DISABLE);
     }
 #endif
-   
+    
     interrupt(RxIrq,DISABLE);
     interrupt(TcIrq,DISABLE);
 }
@@ -272,6 +277,7 @@ size_t Uart::write(const uint8_t *buffer, size_t size)
     if(size <= 0 ) return 0;
     wait_busy();
     #if USE_UART_DMA
+
     if((_USARTx == USART1 || _USARTx == USART2 || _USARTx == USART3 ) && (_use_dma == 1))
     {
 //        wait_busy();
@@ -311,11 +317,6 @@ uint16_t Uart::read()
     return (uint16_t)(_USARTx->RDR & (uint16_t)0x01FF);
 }
 
-
-
-
-
-
 /**
  *@name     uint16_t Uart::dma_send_string(const char *str,uint16_t length)
  *@brief    串口DMA方式发送字符串，缓冲区数据
@@ -325,41 +326,22 @@ uint16_t Uart::read()
 */
 #if USE_UART_DMA
 uint16_t Uart::dma_write(const char *str, uint16_t length)
-{
-//    DMA_DeInit(_DMA1_Channelx);   //将DMA的通道1寄存器重设为缺省值
-//    _DMA1_Channelx->CPAR = (uint32_t)&_USARTx->DR; //外设地址
-//    _DMA1_Channelx->CMAR = (uint32_t) str; //mem地址
-//    _DMA1_Channelx->CNDTR = length ; //传输长度
-//    _DMA1_Channelx->CCR = (0 << 14) | // 非存储器到存储器模式
-//                          (2 << 12) | // 通道优先级高
-//                          (0 << 11) | // 存储器数据宽度8bit
-//                          (0 << 10) | // 存储器数据宽度8bit
-//                          (0 <<  9) | // 外设数据宽度8bit
-//                          (0 <<  8) | // 外设数据宽度8bit
-//                          (1 <<  7) | // 存储器地址增量模式
-//                          (0 <<  6) | // 外设地址增量模式(不增)
-//                          (0 <<  5) | // 非循环模式
-//                          (1 <<  4) | // 从存储器读
-//                          (0 <<  3) | // 是否允许传输错误中断
-//                          (0 <<  2) | // 是否允许半传输中断
-//                          (0 <<  1) | // 是否允许传输完成中断
-//                          (0);        // 通道开启
+{  
+    LL_DMA_InitTypeDef DMA_InitStructure;
     
-    DMA_InitTypeDef DMA_InitStructure;
-
     dma_tx->deInit();
-    
-    DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&_USARTx->DR;
-    DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t) str;
-    DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;
-    DMA_InitStructure.DMA_BufferSize = length;
-    DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
-    DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
-    DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
-    DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
-    DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
-    DMA_InitStructure.DMA_Priority = DMA_Priority_High;
-    DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
+ 
+    DMA_InitStructure.PeriphOrM2MSrcAddress  = (uint32_t)&_USARTx->TDR;             //外设地址
+    DMA_InitStructure.MemoryOrM2MDstAddress  = (uint32_t) str;                      //mem地址
+    DMA_InitStructure.Direction              = LL_DMA_DIRECTION_MEMORY_TO_PERIPH;   //传输方向，内存到外设
+    DMA_InitStructure.Mode                   = LL_DMA_MODE_NORMAL;                  //传输模式
+    DMA_InitStructure.PeriphOrM2MSrcIncMode  = LL_DMA_PERIPH_NOINCREMENT;           //外设地址增量模式(不增)
+    DMA_InitStructure.MemoryOrM2MDstIncMode  = LL_DMA_MEMORY_INCREMENT;             //存储器地址增量模式
+    DMA_InitStructure.PeriphOrM2MSrcDataSize = LL_DMA_PDATAALIGN_BYTE;              //外设数据宽度8bit
+    DMA_InitStructure.MemoryOrM2MDstDataSize = LL_DMA_MDATAALIGN_BYTE;              //存储器数据宽度8bit
+    DMA_InitStructure.NbData                 = length;                              //传输长度
+    DMA_InitStructure.Priority               = LL_DMA_PRIORITY_HIGH;                //通道优先级高
+
     dma_tx->init(&DMA_InitStructure);
     dma_tx->enable();
     return length;

@@ -25,13 +25,13 @@ const DevToIRQn_t dev_to_IRQn_table[] =
     {I2C1_BASE,I2C1_IRQn},
     {I2C2_BASE,I2C2_IRQn},
     
-    {DMA1_Channel1_BASE,DMA1_Channel1_IRQn},
-    {DMA1_Channel2_BASE,DMA1_Channel2_3_IRQn},
-    {DMA1_Channel3_BASE,DMA1_Channel2_3_IRQn},
-    {DMA1_Channel4_BASE,DMA1_Channel4_5_6_7_IRQn},
-    {DMA1_Channel5_BASE,DMA1_Channel4_5_6_7_IRQn},
-    {DMA1_Channel6_BASE,DMA1_Channel4_5_6_7_IRQn},
-    {DMA1_Channel7_BASE,DMA1_Channel4_5_6_7_IRQn},
+    {LL_DMA_CHANNEL_1,DMA1_Channel1_IRQn},
+    {LL_DMA_CHANNEL_2,DMA1_Channel2_3_IRQn},
+    {LL_DMA_CHANNEL_3,DMA1_Channel2_3_IRQn},
+    {LL_DMA_CHANNEL_4,DMA1_Channel4_5_6_7_IRQn},
+    {LL_DMA_CHANNEL_5,DMA1_Channel4_5_6_7_IRQn},
+    {LL_DMA_CHANNEL_6,DMA1_Channel4_5_6_7_IRQn},
+    {LL_DMA_CHANNEL_7,DMA1_Channel4_5_6_7_IRQn},
     
    
     {USART1_BASE,USART1_IRQn},
