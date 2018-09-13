@@ -195,11 +195,10 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 		_StopBits = LL_USART_STOPBITS_2;
     else if(stop_bit == 2)
 		_StopBits = LL_USART_STOPBITS_1_5;
-    
 
+    nvic(ENABLE,0,0);
     _rx_pin->mode(AF_PP_PU,LL_GPIO_AF_1);
-    _tx_pin->mode(AF_PP_PU,LL_GPIO_AF_1);
-    
+    _tx_pin->mode(AF_PP_PU,LL_GPIO_AF_1);    
 	LL_USART_SetTransferDirection(_USARTx, LL_USART_DIRECTION_TX_RX);
 	LL_USART_ConfigCharacter(_USARTx, _DataWidth, _Parity, _StopBits);
 	LL_USART_SetBaudRate(_USARTx, SystemCoreClock, LL_USART_OVERSAMPLING_16, baud_rate);
@@ -208,7 +207,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 	while ((!(LL_USART_IsActiveFlag_TEACK(_USARTx))) || (!(LL_USART_IsActiveFlag_REACK(_USARTx))))
 	{
 	}
-    nvic(ENABLE,0,0);
+
 #if USE_UART_DMA
     if((_USARTx == USART1 || _USARTx == USART2 || _USARTx == USART3) && (_use_dma == 1) )
     {
