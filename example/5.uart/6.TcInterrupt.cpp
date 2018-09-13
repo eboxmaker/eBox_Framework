@@ -23,7 +23,7 @@
 #define EXAMPLE_NAME	"UART transmit complete example"
 #define EXAMPLE_DATE	"2018-08-08"
 
-u8 count;
+uint8_t count;
 void tc_evnet()
 {
     count++;
