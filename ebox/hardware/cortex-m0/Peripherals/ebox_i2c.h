@@ -34,15 +34,17 @@ class mcuI2c :public I2c
 
 public:
     mcuI2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin);
-    virtual void		begin(uint32_t speed);
+    virtual void		begin(uint32_t _speed);
     virtual void        config(uint32_t speed);
     virtual uint32_t    read_config();
 
+    int8_t	write_byte(uint8_t slave_address, uint8_t data);
     virtual int8_t	write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t data);
     virtual int8_t	write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t len);
     virtual int8_t	read_byte (uint8_t slave_address, uint8_t reg_address, uint8_t *data);
     virtual int8_t	read_byte (uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t len);
     virtual int8_t	wait_dev_busy(uint8_t slave_address);
+    int8_t	wait_dev_busy1(uint8_t slave_address,uint16_t timeout_us = 300);
 public:
     virtual int8_t take_i2c_right(uint32_t speed);
     virtual int8_t release_i2c_right(void);
