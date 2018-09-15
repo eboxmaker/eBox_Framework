@@ -34,10 +34,10 @@
 
 //#define PWMLED  PB8
 
-//#define BtnPin	PA8
+#define BtnPin	PC13
 
 //#define	UART    uart1
-#define	UART    uart2
+#define	UART    uart1
 
 //#define	ADC_0   PA0
 //#define	ADC_1   PA1

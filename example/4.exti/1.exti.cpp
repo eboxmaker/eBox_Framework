@@ -30,23 +30,25 @@
 uint32_t xx;
 
 //创建一个外部中断对象，链接PA8，中断触发模式为下降沿触发
-Exti ex(&PA8, FALLING);
+Exti ex(&BtnPin, FALLING);
 
 void exit()//外部中断事件
 {
     xx++;
     uart1.printf("\r\nxx = %d", xx);
-    PB8.toggle();
+    LED1.toggle();
 }
+
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-    PB8.mode(OUTPUT_PP);
+    LED1.mode(OUTPUT_PP);
     ex.begin();//初始化外部中断
     ex.attach(exit);//绑定外部中断触发事件
     ex.interrupt(ENABLE);//使能外部中断
+
 }
 int main(void)
 {

@@ -29,7 +29,7 @@
 
 #include "ebox_gpio.h"
 //#include "ebox_adc.h"
-//#include "ebox_exti.h"
+#include "ebox_exti.h"
 //#include "ebox_timer.h"
 //#include "ebox_pwm.h"
 //#include "ebox_in_capture.h"
@@ -37,7 +37,7 @@
 //#include "ebox_i2c.h"
 //#include "ebox_spi.h"
 #include "ebox_uart.h"
-//#include "ebox_uart_stream.h"
+#include "ebox_uart_stream.h"
 //#include "ebox_rtc.h"
 //#include "ebox_iflash.h"
 //#include "ebox_dac.h"
@@ -124,9 +124,9 @@ extern mcuGpio PB15;
 //extern mcuGpio PC11;
 //extern mcuGpio PC12;
 //#endif
-//extern mcuGpio PC13;
-//extern mcuGpio PC14;
-//extern mcuGpio PC15;
+extern mcuGpio PC13;
+extern mcuGpio PC14;
+extern mcuGpio PC15;
 
 //#if (MCU_PINS >= 64)
 //extern mcuGpio PD0;
