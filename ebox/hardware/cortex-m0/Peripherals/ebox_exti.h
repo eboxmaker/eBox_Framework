@@ -51,8 +51,8 @@ public:
 private:
     Gpio                *pin;
     uint8_t             trigger;
-    uint8_t             port_source;
-    uint8_t             pin_source;
+//    uint8_t             port_source;
+//    uint8_t             pin_source;
     uint32_t            exti_line;
 
 protected:

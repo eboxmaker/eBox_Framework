@@ -26,14 +26,13 @@ void setup()
     
 
     uart1s.begin(115200);
-    uart1s.setTimeout(100);//定义超时时间
+    uart1s.setTimeout(1000);//定义超时时间
 }
 int main(void)
 {
 	setup();
 	while (1)
 	{
-
         String x = uart1s.readString();//
         
         if(x != NULL)
