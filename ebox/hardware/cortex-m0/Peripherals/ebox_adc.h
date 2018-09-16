@@ -28,7 +28,7 @@ class Adc
         ADC_TypeDef     *ADCx;
         Dma             *dma;
         uint8_t         ch_num;//添加通道的数量自增变量
-        uint8_t         ch_table[2][16];//[0]:保存IO索引，[1]：保存IO对应adc通道索引
+        uint32_t         ch_table[2][16];//[0]:保存IO索引，[1]：保存IO对应adc通道索引
         uint16_t        adc_buf[18];//DMA不断的按照添加顺序将adc各个通道值。传输至此数组
 
 };
