@@ -41,9 +41,9 @@ void setup()
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
 
     adc.add_ch(&PA0);
-    adc.add_ch(&PA1);
-    adc.add_ch(&PA2);
-    adc.add_temp_senser();
+//    adc.add_ch(&PA1);
+//    adc.add_ch(&PA2);
+//    adc.add_temp_senser();
     adc.begin();
 }
 int main(void)
@@ -53,14 +53,14 @@ int main(void)
     {
         UART.printf("========按照IO查询====================\r\n");
         UART.printf("adc0:0x%x\t(%0.1fmv)\r\n",adc.read(&PA0),adc.read_voltage(&PA0));
-        UART.printf("adc1:0x%x\t(%0.1fmv)\r\n",adc.read(&PA1),adc.read_voltage(&PA1));
-        UART.printf("adc2:0x%x\t(%0.1fmv)\r\n",adc.read(&PA2),adc.read_voltage(&PA2));
-        UART.printf("adc temp:\t(%0.1f℃)\r\n",adc.read_temp_senser());
-        UART.printf("========按照索引顺序====================\r\n");
-        UART.printf("adc0:0x%x\t(%0.1fmv)\r\n",adc.read(0),adc.read_voltage(0));
-        UART.printf("adc1:0x%x\t(%0.1fmv)\r\n",adc.read(1),adc.read_voltage(1));
-        UART.printf("adc2:0x%x\t(%0.1fmv)\r\n",adc.read(2),adc.read_voltage(2));
-        UART.printf("adc temp:\t(%0.1f℃)\r\n",adc.read_temp_senser());
+//        UART.printf("adc1:0x%x\t(%0.1fmv)\r\n",adc.read(&PA1),adc.read_voltage(&PA1));
+//        UART.printf("adc2:0x%x\t(%0.1fmv)\r\n",adc.read(&PA2),adc.read_voltage(&PA2));
+//        UART.printf("adc temp:\t(%0.1f℃)\r\n",adc.read_temp_senser());
+//        UART.printf("========按照索引顺序====================\r\n");
+//        UART.printf("adc0:0x%x\t(%0.1fmv)\r\n",adc.read(0),adc.read_voltage(0));
+//        UART.printf("adc1:0x%x\t(%0.1fmv)\r\n",adc.read(1),adc.read_voltage(1));
+//        UART.printf("adc2:0x%x\t(%0.1fmv)\r\n",adc.read(2),adc.read_voltage(2));
+//        UART.printf("adc temp:\t(%0.1f℃)\r\n",adc.read_temp_senser());
         delay_ms(1000);
     }
 }

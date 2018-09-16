@@ -45,7 +45,7 @@ void  mcuI2c::begin(uint32_t _speed)
 {
   switch (cpu.clock.pclk1/1000000){
   case 16:
-    switch (speed){
+    switch (_speed){
     case 10:
       this->speed = C16M10K;	// 10k 	@16M
       break;
@@ -84,7 +84,7 @@ void  mcuI2c::begin(uint32_t _speed)
       this->speed = C8M400K;			// 400k @8M
     }
   }
-  this->speed = speed;
+  this->speed = _speed;
 //    I2C_InitTypeDef I2C_InitStructure;
 
 
