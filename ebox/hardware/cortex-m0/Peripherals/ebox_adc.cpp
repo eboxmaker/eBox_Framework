@@ -1,4 +1,7 @@
 #include "ebox_adc.h"
+#include "ebox_uart.h"
+
+extern Uart uart1;
 
 void Adc::add_temp_senser()
 {
@@ -63,24 +66,12 @@ void  Adc::begin()
     
     ADC_REG_InitStruct.TriggerSource    = LL_ADC_REG_TRIG_SOFTWARE;         // 触发源，软件触发
     ADC_REG_InitStruct.SequencerDiscont = LL_ADC_REG_SEQ_DISCONT_DISABLE;   //
-    ADC_REG_InitStruct.ContinuousMode   = LL_ADC_REG_CONV_SINGLE;
+    ADC_REG_InitStruct.ContinuousMode   = LL_ADC_REG_CONV_CONTINUOUS;       // 连续采样
     ADC_REG_InitStruct.DMATransfer      = LL_ADC_REG_DMA_TRANSFER_NONE;
     ADC_REG_InitStruct.Overrun          = LL_ADC_REG_OVR_DATA_OVERWRITTEN;
     
     LL_ADC_REG_Init(ADCx,&ADC_REG_InitStruct);
     
-//    ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;	//ADC工作模式:ADC1和ADC2工作在独立模式
-//    ADC_InitStructure.ADC_ScanConvMode = ENABLE;	//模数转换工作在扫描模式
-//    ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;	//模数转换工作在连续转换模式
-//    ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;	//外部触发转换关闭
-//    //ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;	//ADC数据右对齐
-//    ADC_InitStructure.ADC_NbrOfChannel = ch_num;	//顺序进行规则转换的ADC通道的数目
-//   // ADC_Init(ADCx, &ADC_InitStructure);	//根据ADC_InitStruct中指定的参数初始化外设ADCx的寄存器
-
-    /* ADC1 regular channel11 configuration */
-    //设置指定ADC的规则组通道，设置它们的转化顺序和采样时间
-    //ADC1,ADC通道x,规则采样顺序值为y,采样时间为239.5周期
-
     LL_ADC_SetSamplingTimeCommonChannels(ADC1, LL_ADC_SAMPLINGTIME_41CYCLES_5);
     for(int i = 0; i < ch_num; i++)
     {
@@ -89,12 +80,24 @@ void  Adc::begin()
         if(ch_table[1][i] == LL_ADC_CHANNEL_TEMPSENSOR)
         {
             //ADC_TempSensorVrefintCmd(ENABLE); //开启内部温度传感器
-            LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1),ch_table[1][i]);
+            LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1),LL_ADC_PATH_INTERNAL_TEMPSENSOR);
+            LL_ADC_REG_SetSequencerChAdd(ADCx,LL_ADC_CHANNEL_TEMPSENSOR);
         }
     }
     
-
-//    // 开启ADC的DMA支持（要实现DMA功能，还需独立配置DMA通道等参数）
+    if (LL_ADC_IsEnabled(ADC1) == 0)
+	{
+		/* Run ADC self calibration */
+		LL_ADC_StartCalibration(ADC1);
+		while (LL_ADC_IsCalibrationOnGoing(ADC1) != 0){}
+		/* Enable ADC */
+		LL_ADC_Enable(ADC1);
+		while (LL_ADC_IsActiveFlag_ADRDY(ADC1) == 0){}
+	}
+    enableDMA();
+}
+void Adc::enableDMA(){
+    //    // 开启ADC的DMA支持（要实现DMA功能，还需独立配置DMA通道等参数）
 //    ADC_DMACmd(ADCx, ENABLE);
 
 //    /* Enable ADC1 */
@@ -110,8 +113,8 @@ void  Adc::begin()
 //    while(ADC_GetCalibrationStatus(ADCx));		//获取指定ADC1的校准程序,设置状态则等待
 //    
 
-//    dma->rcc_enable();
-//    dma->nvic(DISABLE,0,0);
+    dma->rcc_enable();
+    dma->nvic(ENABLE,0,0);
 //    dma->interrupt(DmaItTc,DISABLE);
 //    dma->interrupt(DmaItTe,DISABLE);
 //    dma->interrupt(DmaItHt,DISABLE);
@@ -137,38 +140,67 @@ void  Adc::begin()
 //    dma->enable();
 
 //    ADC_SoftwareStartConvCmd(ADCx, ENABLE);
+
+	/* Enable the peripheral clock of DMA */
+//	LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1);
+	
+//	if (_deep == 0){
+//		r_buffer = (uint16_t*)malloc(_channelNum);
+//		/* Set DMA transfer size */
+//		LL_DMA_SetDataLength(DMA1,
+//		                     LL_DMA_CHANNEL_1,
+//		                     _channelNum);
+//		LL_ADC_REG_SetDMATransfer(ADC1, LL_ADC_REG_DMA_TRANSFER_UNLIMITED);
+//	}else{
+//		r_buffer = (uint16_t*)malloc(_channelNum*_deep);
+		LL_DMA_SetDataLength(DMA1,
+		                     LL_DMA_CHANNEL_1,
+		                     ch_num);
+		LL_ADC_REG_SetDMATransfer(ADC1, LL_ADC_REG_DMA_TRANSFER_UNLIMITED);
+//	}
+
+	/* Configure the DMA transfer */
+	/*  - DMA transfer in circular mode to match with ADC configuration:        */
+	/*    DMA unlimited requests.                                               */
+	/*  - DMA transfer from ADC without address increment.                      */
+	/*  - DMA transfer to memory with address increment.                        */
+	/*  - DMA transfer from ADC by half-word to match with ADC configuration:   */
+	/*    ADC resolution 12 bits.                                               */
+	/*  - DMA transfer to memory by half-word to match with ADC conversion data */
+	/*    buffer variable type: half-word.                                      */
+	LL_DMA_ConfigTransfer(DMA1,
+	                      LL_DMA_CHANNEL_1,
+	                      LL_DMA_DIRECTION_PERIPH_TO_MEMORY |
+	                      LL_DMA_MODE_CIRCULAR              |
+	                      LL_DMA_PERIPH_NOINCREMENT         |
+	                      LL_DMA_MEMORY_INCREMENT           |
+	                      LL_DMA_PDATAALIGN_HALFWORD        |
+	                      LL_DMA_MDATAALIGN_HALFWORD        |
+	                      LL_DMA_PRIORITY_HIGH               );
+
+	/* Set DMA transfer addresses of source and destination */
+	LL_DMA_ConfigAddresses(DMA1,
+	                       LL_DMA_CHANNEL_1,
+	                       LL_ADC_DMA_GetRegAddr(ADC1, LL_ADC_DMA_REG_REGULAR_DATA),
+	                       (uint32_t)adc_buf,
+	                       LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
+
+	/* Enable the DMA transfer */
+	LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
+    
+    	// 启动ADC,并等待结束
+	LL_ADC_REG_StartConversion(ADC1);
+	while (!LL_DMA_IsActiveFlag_TC1(DMA1));
 }
+
 uint16_t Adc::read(Gpio *io)
 {
-//    for(int i = 0; i < ch_num; i++)
-//    {
-//        if(io->id == ch_table[0][i])
-//            return adc_buf[i];
-//    }
-//    return 0;
-    	if (LL_ADC_IsEnabled(ADC1) == 0)
-	{
-		/* Run ADC self calibration */
-		LL_ADC_StartCalibration(ADC1);
-
-		while (LL_ADC_IsCalibrationOnGoing(ADC1) != 0)
-		{
-
-		}
-
-		/* Enable ADC */
-		LL_ADC_Enable(ADC1);
-
-		while (LL_ADC_IsActiveFlag_ADRDY(ADC1) == 0)
-		{
-
-		}
-	}
-	LL_ADC_REG_SetSequencerChannels(ADC1, LL_ADC_CHANNEL_0);
-	LL_ADC_REG_StartConversion(ADC1);
-	
-	while (!LL_ADC_IsActiveFlag_EOC(ADC1));
-	return LL_ADC_REG_ReadConversionData12(ADC1);
+    for(int i = 0; i < ch_num; i++)
+    {
+        if(io->id == ch_table[0][i])
+            return adc_buf[i];
+    }
+    return 0;
 }
 uint16_t Adc::read(int index)
 {
@@ -194,7 +226,13 @@ float Adc::read_temp_senser()
     uint16_t adc_value = 0;
     for(int i = 0; i < ch_num; i++)
     {
-        if(0XFF == ch_table[0][i])
+//        if(0XFF == ch_table[0][i])
+//        {
+//            adc_value = adc_buf[i];
+//            break;
+//        }
+        
+        if(LL_ADC_CHANNEL_TEMPSENSOR == ch_table[1][i])
         {
             adc_value = adc_buf[i];
             break;
@@ -202,6 +240,7 @@ float Adc::read_temp_senser()
     }
 
     temperate=(float)adc_value*(3.3/4096);       //电压值 
-    temperate=(1.43-temperate)/0.0043+25;   //转换为温度值  
+    temperate=(1.43-temperate)/0.0043+25;   //转换为温度值 
+    temperate = __LL_ADC_CALC_TEMPERATURE(3300,adc_value,LL_ADC_RESOLUTION_12B);
     return temperate;
 }

@@ -25,6 +25,8 @@ class Adc
         float read_temp_senser();
         
     private:
+        void  enableDMA(void);
+        
         ADC_TypeDef     *ADCx;
         Dma             *dma;
         uint8_t         ch_num;//添加通道的数量自增变量
