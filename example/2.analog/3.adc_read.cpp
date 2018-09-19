@@ -58,9 +58,9 @@ int main(void)
         UART.printf("adc2:0x%x\t(%0.1fmv)\r\n",adc.read(&PA2),adc.read_voltage(&PA2));
         UART.printf("adc temp:\t(%0.1f¡æ)\r\n",adc.read_temp_senser());
         UART.printf("========°´ÕÕË÷ÒýË³Ðò====================\r\n");
-//        UART.printf("adc0:0x%x\t(%0.1fmv)\r\n",adc.read(0),adc.read_voltage(0));
-//        UART.printf("adc1:0x%x\t(%0.1fmv)\r\n",adc.read(1),adc.read_voltage(1));
-//        UART.printf("adc2:0x%x\t(%0.1fmv)\r\n",adc.read(2),adc.read_voltage(2));
+        UART.printf("adc0:0x%x\t(%0.1fmv)\r\n",adc.read(0),adc.read_voltage(0));
+        UART.printf("adc1:0x%x\t(%0.1fmv)\r\n",adc.read(1),adc.read_voltage(1));
+        UART.printf("adc2:0x%x\t(%0.1fmv)\r\n",adc.read(2),adc.read_voltage(2));
         UART.printf("adc temp:\t(%0.1f¡æ)\r\n",adc.read_temp_senser());
         delay_ms(2000);
     }
