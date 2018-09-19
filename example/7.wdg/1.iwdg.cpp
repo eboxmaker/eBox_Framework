@@ -25,11 +25,11 @@ Iwdg dog;
 void setup()
 {
     ebox_init();
-    uart1.begin(9600);
+    UART.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
 
-    uart1.printf("reset !!!\r\n");
-    dog.begin(2000);
+    UART.printf("reset !!!\r\n");
+    dog.begin(26208);
 }
 
 int main(void)
@@ -40,8 +40,8 @@ int main(void)
     while(1)
     {
         dog.feed();//在常见的应用中喂狗应该在定时器中断中定时喂狗
-        uart1.printf("running!\r\n");
-        delay_ms(1000);
+        UART.printf("running!\r\n");
+        delay_ms(25000);
         //        delay_ms(1900);
         //        delay_ms(2000);
         //        delay_ms(3000);
