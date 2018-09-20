@@ -5,3 +5,5 @@
 5  I2C需要优化，其中begin,config 都要优化
 6  ADC 初始化ok，需要完善DMA转换
 7  STM32F0 adc只能按照固定顺序读取
+8  iflash部分，f0,f1,f4有差异，需要优化，保持接口一致
+9  timer接口需优化
