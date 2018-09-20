@@ -57,7 +57,7 @@ void setup()
     LED1.mode(OUTPUT_PP);
 
     timer1.begin(1);
-    //timer1.attach(t2it);
+//    timer1.attach(t2it);
     timer1.attach(&test,&Test::event);
     timer1.interrupt(ENABLE);
     timer1.start();
