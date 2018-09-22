@@ -39,6 +39,58 @@
  */
 extern uint32_t GetClock(void); 
 
+#define TIMxCH1 0x01
+#define TIMxCH2 0x02
+#define TIMxCH3 0x03
+#define TIMxCH4 0x04
+
+// 函数指针,指向LL_TIM_OC_SetCompareCH4(TIM_TypeDef *TIMx, uint32_t CompareValue) 函数
+typedef void (*pfun)(TIM_TypeDef *,uint32_t);
+
+typedef struct{
+	PIN_ID_t	_pin_id;		//pin_id
+	PIN_MODE	_pin_date;	    //pin 参数， mode，outputtyper,updown
+	uint8_t		_pin_af;		//af功能
+	uint32_t	_periph_OR_ch;	//外设名或通道号
+}AF_FUN_S;
+
+static const AF_FUN_S TIM_MAP[] ={
+	// TIM3,CH1,CH2,CH4
+	PA6_ID,AF_PP,LL_GPIO_AF_1,TIM3_BASE+TIMxCH1,
+	PA7_ID,AF_PP,LL_GPIO_AF_1,TIM3_BASE+TIMxCH2,
+	PB1_ID,AF_PP,LL_GPIO_AF_1,TIM3_BASE+TIMxCH4,
+	// TIM16,CH1
+	PA6_ID,AF_PP,LL_GPIO_AF_5,TIM16_BASE+TIMxCH1,
+	// TIM17,CH1
+	PA7_ID,AF_PP,LL_GPIO_AF_5,TIM17_BASE+TIMxCH1,
+	// TIM14,CH1
+	PA4_ID,AF_PP,LL_GPIO_AF_4,TIM14_BASE+TIMxCH1,
+	// TIM1,CH2,CH3
+	PA8_ID,AF_PP,LL_GPIO_AF_2,TIM1_BASE+TIMxCH1,
+	PA9_ID,AF_PP,LL_GPIO_AF_2,TIM1_BASE+TIMxCH2,
+	PA10_ID,AF_PP,LL_GPIO_AF_2,TIM1_BASE+TIMxCH3,
+	(PIN_ID_t)0xff
+};
+
+/**
+ *@brief    根据Pin_id获取对应外设索引
+ *@param    val：1：输出高电平；0：输出低电平
+ *@retval   NONE
+*/
+__STATIC_INLINE uint8_t getIndex(PIN_ID_t pin_id,uint32_t periph,const AF_FUN_S *emap)
+{
+	uint8_t i = 0;
+	while (!((0xffffff00 & (emap+i)->_periph_OR_ch) == periph) || !((emap+i)->_pin_id == pin_id))
+	{
+		if ((emap+i)->_pin_id == 0xff){
+			return (uint8_t)0xff;
+		}
+		i++;
+	}
+	return i;
+}
+
+
 class T_base{
 public:
 	T_base(TIM_TypeDef *TIMx);

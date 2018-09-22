@@ -48,7 +48,8 @@ enum Tim_It_Index{
     TIM5_IT_CC4     = 26,
 } ;
 
-#define TIM_IRQ_ID_NUM 27
+#define TIM_IT_CC_OFFSET    6
+#define TIM_IRQ_ID_NUM      27
 
 #ifdef __cplusplus
 extern "C" {

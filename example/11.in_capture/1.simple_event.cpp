@@ -39,8 +39,10 @@
 #define EXAMPLE_DATE	"2018-08-01"
 
 
-InCapture ic0(&PA0);//创建一个输入捕获的对象
-Pwm pwm1(&PB6);//创建一个PWM输出对象
+//InCapture ic0(&PA0);//创建一个输入捕获的对象
+////Pwm pwm1(&PB6);//创建一个PWM输出对象
+InCapture ic0(TIM1CH2);
+Pwm pwm1(TIM3CH1);
 
 uint32_t frq =0;
 
@@ -52,10 +54,9 @@ void setup()
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
 
     ic0.begin(1,SIMPLE);//初始化输入捕获参数，p分频
-    UART.printf("get_detect_min_pulse_us = %d\r\n",ic0.get_detect_min_pulse_us());
+//    UART.printf("get_detect_min_pulse_us = %d\r\n",ic0.get_detect_min_pulse_us());
     frq = 1000;
     pwm1.begin(frq, 30);
-
 }
 
 int main(void)

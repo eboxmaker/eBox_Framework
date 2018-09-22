@@ -67,7 +67,7 @@ extern "C" {
     }
   }
 
-  void TIM1_UP_IRQHandler(void)
+  void TIM1_CC_IRQHandler(void)
   {
 
     /* Check whether CC1 interrupt is pending */
