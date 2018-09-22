@@ -40,7 +40,7 @@ extern Uart uart1;
  *@param    NONE
  *@retval   当前TIM频率
 */
-__INLINE uint32_t GetClock(void){
+uint32_t GetClock(void){
 	// 计算TIM时钟频率
 	return LL_RCC_GetAPB1Prescaler() == 0 ? cpu.clock.pclk1 : (cpu.clock.pclk1*2);
 }

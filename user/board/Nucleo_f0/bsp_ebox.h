@@ -32,7 +32,8 @@
 //#define LED_G   PB8
 //#define LED_B   PB9
 
-//#define PWMLED  PB8
+#define PWMLED  PA5
+#define TIM3CH1		TIM3,&PA6
 
 #define BtnPin	PC13
 

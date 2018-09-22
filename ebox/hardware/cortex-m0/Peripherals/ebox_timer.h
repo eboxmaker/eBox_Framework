@@ -37,6 +37,8 @@
  *      *增加了get_timer_clock(),get_max_frq()两个函数接口
  *      *修复了芯片主频变动导致定时器中断频率变化的bug，支持任意主频下正常工作
  */
+extern uint32_t GetClock(void); 
+
 class T_base{
 public:
 	T_base(TIM_TypeDef *TIMx);
