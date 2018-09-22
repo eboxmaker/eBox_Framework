@@ -23,6 +23,8 @@
 
 #include "ebox_core.h"
 #include "mcu.h"
+#include "ebox_timer.h"
+#include "ebox_gpio.h"
 
 /*
 	1.支持TIM1,2,3,4下的CH1-4通道。共计16个通道
@@ -59,34 +61,139 @@
 #define TIMxCH3 0x03
 #define TIMxCH4 0x04
 
-class Pwm
-{
-public:
-    Pwm(Gpio *pwm_pin);
-    void begin(uint32_t frq, uint16_t duty);
-    void set_frq(uint32_t frq);
-    void set_duty(uint16_t duty);//保证以最快的速度分配完成
-    void set_oc_polarity(uint8_t flag);//设置输出极性1：比较匹配后输出低电平（默认设置），0：比较匹配后输出高电平
+// 函数指针,指向LL_TIM_OC_SetCompareCH4(TIM_TypeDef *TIMx, uint32_t CompareValue) 函数
+typedef void (*pfun)(TIM_TypeDef *,uint32_t);
 
-    uint32_t get_timer_source_clock();
-    uint32_t get_max_frq();
-    float    get_accuracy();
+typedef struct{
+	PIN_ID_t	_pin_id;		//pin_id
+	PIN_MODE	_pin_date;	    //pin 参数， mode，outputtyper,updown
+	uint8_t		_pin_af;		//af功能
+	uint32_t	_periph_OR_ch;	//外设名或通道号
+}AF_FUN_S;
 
-private:
-    Gpio        *pwm_pin;
-    TIM_TypeDef *TIMx;
-    uint8_t     ch;
-    uint16_t    period;//保存溢出值，用于计算占空比
-    uint16_t    duty;//保存占空比值
-    uint16_t    oc_polarity;
-    uint8_t     accuracy;
-
-    void init_info(Gpio *pwm_pin);
-    void base_init(uint16_t Period, uint16_t Prescaler);
-    void _set_duty(uint16_t duty);
-//-------------------------------------------------------------
-
+static const AF_FUN_S TIM_MAP[] ={
+	// TIM3,CH1,CH2,CH4
+	PA6_ID,AF_PP,LL_GPIO_AF_1,TIM3_BASE+TIMxCH1,
+	PA7_ID,AF_PP,LL_GPIO_AF_1,TIM3_BASE+TIMxCH2,
+	PB1_ID,AF_PP,LL_GPIO_AF_1,TIM3_BASE+TIMxCH4,
+	// TIM16,CH1
+	PA6_ID,AF_PP,LL_GPIO_AF_5,TIM16_BASE+TIMxCH1,
+	// TIM17,CH1
+	PA7_ID,AF_PP,LL_GPIO_AF_5,TIM17_BASE+TIMxCH1,
+	// TIM14,CH1
+	PA4_ID,AF_PP,LL_GPIO_AF_4,TIM14_BASE+TIMxCH1,
+	// TIM1,CH2,CH3
+	PA8_ID,AF_PP,LL_GPIO_AF_2,TIM1_BASE+TIMxCH1,
+	PA9_ID,AF_PP,LL_GPIO_AF_2,TIM1_BASE+TIMxCH2,
+	PA10_ID,AF_PP,LL_GPIO_AF_2,TIM1_BASE+TIMxCH3,
+	(PIN_ID_t)0xff
 };
+
+/**
+ *@brief    根据Pin_id获取对应外设索引
+ *@param    val：1：输出高电平；0：输出低电平
+ *@retval   NONE
+*/
+__STATIC_INLINE uint8_t getIndex(PIN_ID_t pin_id,uint32_t periph,const AF_FUN_S *emap)
+{
+	uint8_t i = 0;
+	while (!((0xffffff00 & (emap+i)->_periph_OR_ch) == periph) || !((emap+i)->_pin_id == pin_id))
+	{
+		if ((emap+i)->_pin_id == 0xff){
+			return (uint8_t)0xff;
+		}
+		i++;
+	}
+	return i;
+}
+
+class Pwm:T_base{
+public:
+	Pwm(TIM_TypeDef *TIMx,mcuGpio *pin):T_base(TIMx){
+		uint8_t _index;
+		uint32_t t = (uint32_t)TIMx;
+		//E_PinBase *_pin;
+		//_pin = new E_PinBase(id);
+		_index = getIndex(pin->id,t,TIM_MAP);
+		//_pin->mode(TIM_MAP[_index]._pin_date,TIM_MAP[_index]._pin_af);
+        pin->mode(TIM_MAP[_index]._pin_date,TIM_MAP[_index]._pin_af);
+		_timx = TIMx;
+		
+		t = (TIM_MAP[_index]._periph_OR_ch) - (uint32_t)_timx;
+		switch (t)
+		{
+		case TIMxCH1:
+			_channel = LL_TIM_CHANNEL_CH1;
+			_OCsetCompare = &LL_TIM_OC_SetCompareCH1;
+			break;
+		case TIMxCH2:
+			_channel = LL_TIM_CHANNEL_CH2;
+			_OCsetCompare = &LL_TIM_OC_SetCompareCH2;
+			break;
+		case TIMxCH3:
+			_channel = LL_TIM_CHANNEL_CH3;
+			_OCsetCompare = &LL_TIM_OC_SetCompareCH3;
+			break;
+		case TIMxCH4:
+			_channel = LL_TIM_CHANNEL_CH4;
+			_OCsetCompare = &LL_TIM_OC_SetCompareCH4;
+			break;
+		}
+	}
+	void begin(uint32_t frq,uint16_t duty);
+
+	void SetPorlicy(uint8_t porlicy);
+	void SetFrequency(uint32_t frq);
+	void SetDutyCycle(uint16_t duty);
+
+	uint32_t GetMaxFrequency(void);
+    
+    // 端口匹配
+    void set_frq(uint32_t frq){SetFrequency(frq);};
+    void set_duty(uint16_t duty){SetDutyCycle(duty);};//保证以最快的速度分配完成
+    void set_oc_polarity(uint8_t flag){SetPorlicy(flag);};//设置输出极性1：比较匹配后输出低电平（默认设置），0：比较匹配后输出高电平
+
+    uint32_t get_timer_source_clock(){return GetMaxFrequency();};
+    uint32_t get_max_frq(){return GetMaxFrequency()/100;};
+    float    get_accuracy();
+private:
+	uint32_t _channel;
+	uint16_t _duty;		// 占空比
+	uint8_t	 _accuracy; // 精度
+
+	pfun  _OCsetCompare;
+
+	void _setMode(void);
+};
+
+//class Pwm
+//{
+//public:
+//    Pwm(Gpio *pwm_pin);
+//    void begin(uint32_t frq, uint16_t duty);
+//    void set_frq(uint32_t frq);
+//    void set_duty(uint16_t duty);//保证以最快的速度分配完成
+//    void set_oc_polarity(uint8_t flag);//设置输出极性1：比较匹配后输出低电平（默认设置），0：比较匹配后输出高电平
+
+//    uint32_t get_timer_source_clock();
+//    uint32_t get_max_frq();
+//    float    get_accuracy();
+
+//private:
+//    Gpio        *pwm_pin;
+//    TIM_TypeDef *TIMx;
+//    uint8_t     ch;
+//    uint16_t    period;//保存溢出值，用于计算占空比
+//    uint16_t    duty;//保存占空比值
+//    uint16_t    oc_polarity;
+//    uint8_t     accuracy;
+
+//    void init_info(Gpio *pwm_pin);
+//    void base_init(uint16_t Period, uint16_t Prescaler);
+//    void _set_duty(uint16_t duty);
+////-------------------------------------------------------------
+
+//};
 void analog_write(Gpio *pwm_pin, uint16_t duty);
 
 #endif
