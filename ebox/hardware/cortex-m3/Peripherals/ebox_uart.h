@@ -21,7 +21,7 @@
 #ifndef __UARTX_H
 #define __UARTX_H
 
-#include "print.h"
+#include "stream.h"
 #include "mcu.h"
 #include "FunctionPointer.h"
 #include "dma.h"
@@ -46,24 +46,52 @@
  *  *增加初始化的一种接口，支持更复杂的初始化要求
  */
 
-
-#define USE_UART1 1
-#define USE_UART2 0
-#define USE_UART3 0
-#define USE_UART4 0
-#define USE_UART5 0
-#define UART_NUM (USE_UART1 + USE_UART2 + USE_UART3 + USE_UART4 + USE_UART5)
-
-#define USE_UART_DMA (1&&USE_DMA)
+/**
+ * Modification History:
+ * -shentq                  -version 2.1(2018/9/23)
+ *  新架构的串口特性
+ *  1、接收方式：DMA+环形缓冲区，在关闭所有中断的情况下依然可以正常使用
+ *  2、发送方式：中断+环形缓冲区，用户写入实际是向缓冲区中写入数据，然后开启
+ *      TX中断，单片机将自动将缓冲区内容传输出去直到完成，并关闭TX中断。
+ *      A、关闭全局中断：调用flush函数依然可以正确的将缓冲区传输完成，并关闭TX中断。
+ *         如果不调用flush，数据则会卡在缓冲区中。但是并未丢失，当用户发送足够多
+ *         的数据使缓冲区满之后，用户再发送新的数据，缓冲区旧的数据将会被以此发送
+ *         出去，但是缓冲区一直会有N个数据卡在里面，直到摆脱A的前提条件或者调用flush
+ *         则会发送完成所有数据
+ *      B、在其他中断服务函数：当次服务函数优先级高于或者等于串口优先级情况下和A一样，
+ *         当次服务函数；优先级低于串口时对串口无影响
+ *      C、本身的TX中断被关闭：如果用户在数据没有发送完的情况下主动关闭了TX中断，则会
+ *         导致环形缓冲区卡在里面，用户可以通过再次调用写入函数重新开始传输，或者调用
+ *         flush来完成。
+ *   3、缓冲区的内存采用动态分配方式。      
+ *   4、读取：用户需要在某个循环中通过available判断缓冲区有多少个字节需要读取，然后一次
+ *            性读取（循环n次read函数 ）所有数据或者一个一个的读去（一次判断available
+ *            调用一次read函数 ），
+ *            风险：当用户读取数据的速度比接收的数据慢的情况发生，可能会发生数据丢失，新的
+ *            数据则会覆盖老的数据
+ *   5、写入：用户可调用Print提供的所有API接口进行写入，写入之前可以通过availableForWrite判断
+ *            缓冲区还有多少字节可以写入，如果不够则可调用flush冲刷一次，如果不调用系统依然能够
+ *            完整的写入所有数据
+ *   6、RxIrq中断：RxIrq中断在DMA+环形缓冲区的接收方式下，无法使用，在中断+环形缓冲区的接收方式下可以
+ *                 正常使用。
+ *   6、TxIrq中断：每发送一个字节中断一次，用户可以正常使用，但建议不要在回调函数中填写过于占用时间
+ *                 的函数。当用户调用flush后，由于发送是手动强制执行的，则会丢失此部分中断，如果用户   
+ *                 写入的数据量大于availableForWrite时，也会丢失部分中断。其他情况正常使用，所以建议
+ *                 用户再需要使用TxIrq中断的情况下，不要调用flush，不要写入大于availableForWrite的数
+ *                 据量，则可完全保证中断不会丢失。
+ */
 
 
 //用户配置//////////////
-//#define UART_NUM (5)
+#define UART_NUM (5)
+#define TX_BUFFER_SIZE 100
+#define RX_BUFFER_SIZE 100
 
 enum IrqType {
 		RxIrq = 0,
-		TcIrq
+        TxIrq = 1
 };
+
 
 enum Uart_It_Index{
     NUM_UART1  = 0,
@@ -75,27 +103,32 @@ enum Uart_It_Index{
 
 typedef void (*uart_irq_handler)(uint32_t id, IrqType type);
 
-class Uart:public Print
+class Uart:public Stream
 {
 public:
     Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin);
 
     //initial uart
-    void    begin(uint32_t baud_rate,uint8_t use_dma = 1);
-    void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit,uint8_t use_dma = 1);
-
+    void    begin(uint32_t baud_rate);
+    void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit);
     void    nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
-    //write method
+
+
+    virtual int     available();
+    virtual int     peek(void);
+    virtual int     read();
+    virtual int     availableForWrite();
+    virtual void    flush();
     virtual size_t  write(uint8_t c);
-    virtual size_t  write(const uint8_t *buffer, size_t size);
-    using   Print::write;
+    inline  size_t  write(unsigned long n) { return write((uint8_t)n); }
+    inline  size_t  write(long n) { return write((uint8_t)n); }
+    inline  size_t  write(unsigned int n) { return write((uint8_t)n); }
+    inline  size_t  write(int n) { return write((uint8_t)n); }
+//    virtual size_t  write(const uint8_t *buffer, size_t size);
+    using       Print::write;
 
-    //read method
-    uint16_t    read();
 
-    //user addation method
-//    void    printf(const char *fmt, ...); 
-    void    wait_busy();
+
     /** Attach a function to call whenever a serial interrupt is generated
      *
      *  @param fptr A pointer to a void function, or 0 to set as none
@@ -122,17 +155,21 @@ public:
 		
 		static void _irq_handler(uint32_t id, IrqType irq_type);
 
+uint16_t _rx_buffer_size;
+uint16_t _rx_buffer_head;
+uint16_t _rx_buffer_tail;
+uint16_t *_rx_ptr;
+    
 private:
     USART_TypeDef       *_USARTx;
     Gpio                *_tx_pin;
     Gpio                *_rx_pin;
-    #if USE_UART_DMA
-    char                *tx_buf_ptr;
-    uint8_t             _use_dma;
-    Dma                 *dma_tx;
-    uint16_t            dma_write(const char *str, uint16_t length);
-    #endif
-    void                set_busy();
+    char                *data_ptr;
+
+    Dma                 *dma_rx;
+    uint8_t             uart_index;
+    uint8_t             preemption_priority;
+    uint8_t             sub_priority;
 
 protected:
     FunctionPointer _irq[2];
@@ -142,6 +179,7 @@ protected:
 #ifdef __cplusplus
 extern "C" {
 #endif
+    void tx_bufferx_one(USART_TypeDef* uart,uint8_t uart_num);
 
 void serial_irq_handler(uint8_t index, uart_irq_handler handler, uint32_t id);
 #ifdef __cplusplus
