@@ -23,7 +23,7 @@
 
 #if USE_PRINTF
 // 是否打印调试信息, 1打印,0不打印
-#define debug 1
+#define debug 0
 #endif
 
 #if debug
@@ -32,7 +32,7 @@ extern Uart uart1;
 #define DBG(...) uart1.printf(__VA_ARGS__)
 #define  TIMER_DEBUG(...) DBG("[TIMER]  "),DBG(__VA_ARGS__)
 #else
-#define  IFLASH_DEBUG(...)
+#define  TIMER_DEBUG(...)
 #endif
 
 /**

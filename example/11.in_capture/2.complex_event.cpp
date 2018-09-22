@@ -39,8 +39,11 @@
 #define EXAMPLE_DATE	"2018-08-01"
 
 
-InCapture ic0(&PA0);//创建一个输入捕获的对象
-Pwm pwm1(&PB6);//创建一个PWM输出对象
+//InCapture ic0(&PA0);//创建一个输入捕获的对象
+//Pwm pwm1(&PB6);//创建一个PWM输出对象
+
+InCapture ic0(TIM1CH2);
+Pwm pwm1(TIM3CH1);
 
 uint32_t frq =0;
 
@@ -71,8 +74,8 @@ int main(void)
             UART.printf("high_duty = %0.2f%%\r\n", ic0.get_wave_high_duty());
             UART.printf("low duty  = %0.2f%%\r\n\r\n", ic0.get_wave_low_duty());
         }
-        delay_ms(1000);
-
+        pwm1.set_frq(frq+=100);
+        delay_ms(1000);        
     }
 }
 

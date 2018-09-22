@@ -202,6 +202,8 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 	LL_USART_SetTransferDirection(_USARTx, LL_USART_DIRECTION_TX_RX);
 	LL_USART_ConfigCharacter(_USARTx, _DataWidth, _Parity, _StopBits);
 	LL_USART_SetBaudRate(_USARTx, SystemCoreClock, LL_USART_OVERSAMPLING_16, baud_rate);
+      //	½ûÖ¹Òç³ö¼ì²â
+	LL_USART_DisableOverrunDetect(_USARTx);
 	LL_USART_Enable(_USARTx);
 	/* Polling USART initialisation */
 	while ((!(LL_USART_IsActiveFlag_TEACK(_USARTx))) || (!(LL_USART_IsActiveFlag_REACK(_USARTx))))
