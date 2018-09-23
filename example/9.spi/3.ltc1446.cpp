@@ -38,7 +38,7 @@ void setup()
     ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-    ltc1.begin(1);
+    ltc1.begin();
     
 
     adc.add_ch(&ADCA);
@@ -54,9 +54,10 @@ int main(void)
     {
         if(i != t)
         {
-            t = i;
+            i--;
             ltc1.write(4096 - i, i);
-            uart1.printf("通道A电压 = %d; 通道B电压 = %d \r\n", adc.read(&ADCA), adc.read(&ADCB));
+            UART.printf("通道A电压 = %d; 通道B电压 = %d \r\n", adc.read(&ADCA), adc.read(&ADCB));
+            delay_ms(1000);
         }
     }
 }
