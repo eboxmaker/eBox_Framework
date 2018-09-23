@@ -73,6 +73,7 @@ void Dma::rcc_disable()
         case DMA2_Channel2_BASE:
         case DMA2_Channel3_BASE:
         case DMA2_Channel4_BASE:
+        case DMA2_Channel5_BASE:
             RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2, DISABLE);	//Ê¹ÄÜDMAÊ±ÖÓ
         #endif
     }

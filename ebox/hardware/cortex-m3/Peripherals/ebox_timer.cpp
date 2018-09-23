@@ -83,14 +83,14 @@ void Timer::reset_frq(uint32_t frq)
 }
 void Timer::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
 {
-    nvic_dev_set_priority((uint32_t)_TIMx,0,0,0);
+    nvic_dev_set_priority((uint32_t)_TIMx,0,preemption_priority,sub_priority);
     if(enable != DISABLE)
         nvic_dev_enable((uint32_t)_TIMx,0);
     else
         nvic_dev_disable((uint32_t)_TIMx,0);
 }
 
-void Timer::interrupt(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
+void Timer::interrupt(FunctionalState enable)
 {
     TIM_ClearITPendingBit(_TIMx , TIM_FLAG_Update);//必须加，否则开启中断会立即产生一次中断
     TIM_ITConfig(_TIMx, TIM_IT_Update, enable);
