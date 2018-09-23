@@ -30,7 +30,8 @@ Copyright 2015 shentq. All Rights Reserved.
 
 #define ADCA	PA0
 #define ADCB	PA1
-LTCX ltc1(&PA6, &spi1);
+//LTCX ltc1(&PA6, &spi1);
+LTCX ltc1(&PA6, &sspi1);
 Adc adc(ADC1);
 
 void setup()

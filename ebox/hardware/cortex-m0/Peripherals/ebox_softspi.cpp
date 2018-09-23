@@ -58,28 +58,28 @@ void SoftSpi::config(SpiConfig_t *spi_config)
     bit_order = spi_config->bit_order;
     switch(spi_config->prescaler)
     {
-    case SPI_BaudRatePrescaler_2:
+    case SPI_CLOCK_DIV2:
         spi_delay = 0;
         break;
-    case SPI_BaudRatePrescaler_4:
+    case SPI_CLOCK_DIV4:
         spi_delay = 1;
         break;
-    case SPI_BaudRatePrescaler_8:
+    case SPI_CLOCK_DIV8:
         spi_delay = 2;
         break;
-    case SPI_BaudRatePrescaler_16:
+    case SPI_CLOCK_DIV16:
         spi_delay = 4;
         break;
-    case SPI_BaudRatePrescaler_32:
+    case SPI_CLOCK_DIV32:
         spi_delay = 8;
         break;
-    case SPI_BaudRatePrescaler_64:
+    case SPI_CLOCK_DIV64:
         spi_delay = 16;
         break;
-    case SPI_BaudRatePrescaler_128:
+    case SPI_CLOCK_DIV128:
         spi_delay = 32;
         break;
-    case SPI_BaudRatePrescaler_256:
+    case SPI_CLOCK_DIV256:
         spi_delay = 64;
         break;
     default:
