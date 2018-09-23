@@ -44,7 +44,7 @@ public:
     Timer(TIM_TypeDef *TIMx);
     void begin(uint32_t frq);
     void nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
-    void interrupt(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
+    void interrupt(FunctionalState enable);
     void start(void);
     void stop(void);
     void reset_frq(uint32_t frq);

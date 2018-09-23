@@ -25,32 +25,16 @@
 #include "mcu.h"
 #include "FunctionPointer.h"
 #include "dma.h"
-/*
-	1.支持串口1,2,3,4,5；
-	2.支持一个中断事件 rx_it
-	3.发送模式采用DMA自动发送模式，大大节省cpu占用。
-	4.支持强大的printf
-	5.暂时不支持引脚的remap
-    6.支持动态申请内存和释放内存。
-    注意：
-        串口4，5没有使用DMA；即使初始化时使用DMA，也不会产生任何影响
-        串口发送，不能在no_interrupt下连续执行两次。
-*/
-/**
- * Modification History:
- * -shentq                  -version 2.0(2016/10/19)
- *  *串口使用动态内存
- * -shentq                  -version 2.0(2016/10/20)
- *  *修复一个动态内存申请错误
- *  *修改使用DMA配置方式，删除宏定义配置方式，改用初始化参数配置
- *  *增加初始化的一种接口，支持更复杂的初始化要求
- */
 
 /**
  * Modification History:
  * -shentq                  -version 2.1(2018/9/23)
  *  新架构的串口特性
- *  1、接收方式：DMA+环形缓冲区，在关闭所有中断的情况下依然可以正常使用
+ *  1、接收方式：
+ *     A、DMA+环形缓冲区(默认模式)，在关闭所有中断的情况下依然可以正常使用，但是此种模式每一个串口
+ *        将独占一个DMA通道，用户需要注意任何时候不要使用串口使用的DMA通道，除非你使用完成之后完整
+ *        的恢复DMA的所有设置和CNTR值。
+ *     B、中断+环形缓冲区，用户不能关闭全局中断和接收中断否则将无法接收数据
  *  2、发送方式：中断+环形缓冲区，用户写入实际是向缓冲区中写入数据，然后开启
  *      TX中断，单片机将自动将缓冲区内容传输出去直到完成，并关闭TX中断。
  *      A、关闭全局中断：调用flush函数依然可以正确的将缓冲区传输完成，并关闭TX中断。
@@ -83,15 +67,40 @@
 
 
 //用户配置//////////////
-#define UART_NUM (5)
-#define TX_BUFFER_SIZE 100
-#define RX_BUFFER_SIZE 100
+
+#define USE_UART1 1
+#define USE_UART2 1
+#define USE_UART3 1
+#define USE_UART4 0
+#define USE_UART5 0
+#define UART_NUM (USE_UART1 + USE_UART2 + USE_UART3 + USE_UART4 + USE_UART5)
+
+
+
+#define TX_BUFFER_SIZE_UART1 100
+#define RX_BUFFER_SIZE_UART1 100
+
+#define TX_BUFFER_SIZE_UART2 100
+#define RX_BUFFER_SIZE_UART2 100
+
+#define TX_BUFFER_SIZE_UART3 100
+#define RX_BUFFER_SIZE_UART3 100
+
+#define TX_BUFFER_SIZE_UART4 100
+#define RX_BUFFER_SIZE_UART4 100
+
+#define TX_BUFFER_SIZE_UART5 100
+#define RX_BUFFER_SIZE_UART5 100
 
 enum IrqType {
-		RxIrq = 0,
-        TxIrq = 1
+    RxIrq = 0,
+    TxIrq = 1
 };
 
+typedef enum  {
+    RxDMA = 0,
+    RxIt = 1,
+}RxMode_t;
 
 enum Uart_It_Index{
     NUM_UART1  = 0,
@@ -109,9 +118,9 @@ public:
     Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin);
 
     //initial uart
-    void    begin(uint32_t baud_rate);
-    void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit);
-    void    nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
+    void    begin(uint32_t baud_rate,RxMode_t mode = RxDMA);
+    void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit,RxMode_t mode = RxDMA);
+    void    nvic(FunctionalState enable, uint8_t preemption_priority = 3, uint8_t sub_priority = 3);
 
 
     virtual int     available();
@@ -155,17 +164,14 @@ public:
 		
 		static void _irq_handler(uint32_t id, IrqType irq_type);
 
-uint16_t _rx_buffer_size;
-uint16_t _rx_buffer_head;
-uint16_t _rx_buffer_tail;
-uint16_t *_rx_ptr;
+
     
 private:
     USART_TypeDef       *_USARTx;
     Gpio                *_tx_pin;
     Gpio                *_rx_pin;
-    char                *data_ptr;
 
+    RxMode_t            mode;
     Dma                 *dma_rx;
     uint8_t             uart_index;
     uint8_t             preemption_priority;

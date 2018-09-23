@@ -209,7 +209,7 @@ void nvic_irq_get_priority(uint8_t irq_num, uint8_t *PreemptionPriority,uint8_t 
 //    NVIC->IP[irq_num] = tmppriority;
     
     *PreemptionPriority = (NVIC->IP[irq_num] >> 4) >> tmppre;
-    *SubPriority = ((uint8_t)((NVIC->IP[irq_num] >> 4) << (7 - tmppre))) >>(7 - tmppre);
+    *SubPriority = ((uint8_t)((NVIC->IP[irq_num] >> 4) << (8 - tmppre))) >>(8 - tmppre);
 }
 /**
  *@name     void nvic_dev_enable(uint32_t dev,uint8_t index)  

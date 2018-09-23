@@ -29,7 +29,7 @@
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
 #define LED1 PB8
-//#define LED2 PB9
+#define LED2 PB9
 //#define LED3 PB10
 
 //#define LED_R   PB7
