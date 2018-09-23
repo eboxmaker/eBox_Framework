@@ -119,10 +119,6 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
-          <Key>DLGUARM</Key>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
           <Key>JL2CM3</Key>
           <Name>-U-O78 -O78 -S2 -ZTIFSpeedSel5000 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(1BA01477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO11 -FD20000000 -FC1000 -FN1 -FF0STM32F10x_128.FLM -FS08000000 -FL020000 -FP0($$Device:STM32F103C8$Flash\STM32F10x_128.FLM)</Name>
         </SetRegEntry>
@@ -156,18 +152,34 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>430</LineNumber>
+          <LineNumber>29</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134228670</Address>
+          <Address>134229604</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_uart.cpp</Filename>
+          <Filename>C:\Users\Administrator\Documents\eBox_Framework - 鍓湰\user\main.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../ebox/hardware/cortex-m3/Peripherals/ebox_uart.cpp\430</Expression>
+          <Expression>\\ebox\../../../user/main.cpp\29</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>21</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134229570</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>C:\Users\Administrator\Documents\eBox_Framework - 鍓湰\user\main.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\ebox\../../../user/main.cpp\21</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -210,6 +222,11 @@
           <count>7</count>
           <WinNumber>1</WinNumber>
           <ItemText>((NVIC_Type *) ((0xE000E000UL) + 0x0100UL) )</ItemText>
+        </Ww>
+        <Ww>
+          <count>8</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>offset,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -1200,6 +1217,38 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\component\apps\EventIo.cpp</PathWithFileName>
       <FilenameWithoutPath>EventIo.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>modbus</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>7</GroupNumber>
+      <FileNumber>74</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\component\modbus\libraries\Modbus\Modbus.cpp</PathWithFileName>
+      <FilenameWithoutPath>Modbus.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>7</GroupNumber>
+      <FileNumber>75</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\component\modbus\libraries\ModbusSerial\ModbusSerial.cpp</PathWithFileName>
+      <FilenameWithoutPath>ModbusSerial.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

@@ -17,7 +17,6 @@
 
 #include "Firmata.h"
 //#include "HardwareSerial.h"
-#include "ebox_uart_stream.h"
 #include "firmata_io.h"
 
 #include <string.h>

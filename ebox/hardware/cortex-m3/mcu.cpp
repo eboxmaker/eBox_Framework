@@ -84,13 +84,34 @@ extern "C" {
         end = mcu_micros() + ms * 1000 - 3;
         while(mcu_micros() < end);
     }
-    void mcu_delay_us(uint64_t us)
+//    void mcu_delay_us(uint64_t us)
+//    {
+//        uint64_t end = mcu_micros() + us - 3;
+//        while(mcu_micros() < end);
+//    }
+
+ /**
+   *@brief    us延时,使用systick计数器。48Mhz时钟时可以满足us(1.3)精度。8Mhz时最小6-7us,24Mhz时最小2.2us,16Mhz时最小3.5us
+   *@param    uint16_t us  要延时的时长，最小1us
+   *@retval   none
+  */
+  void  mcu_delay_us(uint64_t us)
+  {
+    uint32_t ticks;
+    uint32_t told,tnow,tcnt=0;
+
+    ticks = (us-1) *micro_para;             /* 计数周期 */
+    tcnt = 0;
+    told = SysTick->VAL;               /* 保存当前计数值 */
+
+    while (1)
     {
-        uint64_t end = mcu_micros() + us - 3;
-        while(mcu_micros() < end);
+      tnow = SysTick->VAL;
+      tcnt += (tnow < told)? (told-tnow):(SysTick->LOAD - tnow + told);
+      if (tcnt >= ticks)break;
+      told = tnow;
     }
-
-
+  }
     callback_fun_type systick_cb_table[1] = {0};
     __IO uint16_t systick_user_event_per_sec;//真实的值
     __IO uint16_t _systick_user_event_per_sec;//用于被millis_second取余数

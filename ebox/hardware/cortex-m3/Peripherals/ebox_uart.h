@@ -120,6 +120,7 @@ public:
     //initial uart
     void    begin(uint32_t baud_rate,RxMode_t mode = RxDMA);
     void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit,RxMode_t mode = RxDMA);
+    void    end();
     void    nvic(FunctionalState enable, uint8_t preemption_priority = 3, uint8_t sub_priority = 3);
 
 

@@ -1,6 +1,5 @@
 #include "firmata_io.h"
 
-UartStream Serial(&uart1);
 
 
 #define PWM_NUM  4

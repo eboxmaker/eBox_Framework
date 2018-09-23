@@ -2,9 +2,8 @@
 #define __FIRMATA_IO_H
 #include  "ebox.h"
 
-extern UartStream Serial;
 extern Adc adc1;
-
+#define Serial  uart1
 #define Serial1 Serial 
 
 #define delay(x) delay_ms(x)

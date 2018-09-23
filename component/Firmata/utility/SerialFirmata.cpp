@@ -74,7 +74,7 @@ boolean SerialFirmata::handleSysex(byte command, byte argc, byte *argv)
                 // because all Arduino pins are set to OUTPUT by default in StandardFirmata.
                 pinMode(pins.rx, INPUT);
               }
-              ((UartStream*)serialPort)->begin(baud);
+              ((Uart*)serialPort)->begin(baud);
             }
           } else {
 #if defined(SoftwareSerial_h)
@@ -172,7 +172,7 @@ boolean SerialFirmata::handleSysex(byte command, byte argc, byte *argv)
         serialPort = getPortFromId(portId);
         if (serialPort != NULL) {
           if (portId < 8) {
-            ((UartStream*)serialPort)->end();
+            ((Uart*)serialPort)->end();
           } else {
 #if defined(SoftwareSerial_h)
             ((SoftwareSerial*)serialPort)->end();
