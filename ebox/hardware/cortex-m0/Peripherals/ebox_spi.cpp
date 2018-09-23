@@ -65,6 +65,29 @@ void mcuSpi::config(SpiConfig_t *spi_config)
     default:
         break;
     }
+    
+    switch(spi_config->prescaler)
+    {
+        case SPI_CLOCK_DIV2:
+            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV2;break;
+        case SPI_CLOCK_DIV4:
+            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV2;break;
+        case SPI_CLOCK_DIV8:
+            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV4;break;
+        case SPI_CLOCK_DIV16:
+            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV8;break;
+        case SPI_CLOCK_DIV32:
+            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV16;break;
+        case SPI_CLOCK_DIV64:
+            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV32;break;
+        case SPI_CLOCK_DIV128:
+            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV64;break;
+        case SPI_CLOCK_DIV256:
+            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV128;break;
+        default :
+            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV256;break;
+
+    }
 
     /* Configure SPI1 communication */
     LL_SPI_SetBaudRatePrescaler(_spi, spi_config->prescaler);
