@@ -35,7 +35,7 @@
 #include "ebox_in_capture.h"
 //#include "ebox_encoder.h"
 #include "ebox_i2c.h"
-//#include "ebox_spi.h"
+#include "ebox_spi.h"
 #include "ebox_uart.h"
 #include "ebox_uart_stream.h"
 //#include "ebox_rtc.h"
@@ -60,9 +60,9 @@ extern Uart uart2;
 //extern Uart uart5;
 //#endif
 
-//extern mcuSpi spi1;
+extern mcuSpi spi1;
 //extern mcuSpi spi2;
-//extern SoftSpi sspi1;
+extern SoftSpi sspi1;
 //extern SoftSpi sspi2;
 
 extern mcuI2c i2c1;
