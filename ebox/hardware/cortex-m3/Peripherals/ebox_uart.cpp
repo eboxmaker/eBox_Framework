@@ -210,6 +210,12 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     _rx_pin->mode(INPUT);
 
 }
+void Uart::end()
+{
+    USART_DeInit(_USARTx);
+  // clear any received data
+  _rx_buffer_head[uart_index] = _rx_buffer_tail[uart_index];
+}
 void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
     this->preemption_priority = preemption_priority;

@@ -1,77 +1,48 @@
-#include "ebox.h"
+/*
+  Modbus-Arduino Example - Lamp (Modbus Serial)
+  Copyright by André Sarmento Barbosa
+  http://github.com/andresarmento/modbus-arduino
+*/
+ 
+#include <Modbus.h>
+#include <ModbusSerial.h>
 #include "bsp_ebox.h"
+// Modbus Registers Offsets (0-9999)
+const int LAMP1_HOLD = 0; 
+const int LAMP2_HOLD = 1; 
 
+Pwm pwmled1(&LED1);
+Pwm pwmled2(&LED2);
 
-/**
-	*	1	此例程演示了Uart的基本读写和绑定操作
-	*	2	Uart是串口集成了stream的类。支持了stream的所有功能
-	*		包括读取一个String，查找一个关键字，关键词等
-	*   	但是这个类中都是阻塞性的读取，
-    *       如果开始读取，就会等到读取结束后还会延时设定的超时时间。用户需注意使用
-	*/
-	
+ModbusSerial mb;
 
-/* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"Uart1,2,3 RxIt mode loop back example"
-#define EXAMPLE_DATE	"2018-9-23"
-
-
-size_t len;
-
-void rx()
-{
-     LED1.toggle();
-}
-void rx2()
-{
-     LED2.toggle();
-}
-
-void setup()
-{
-	ebox_init();
+void setup() {
+    ebox_init();
+    mb.config(&uart1, 115200,&PA5);
+    // Set the Slave ID (1-247)
+    mb.setSlaveId(10);  
     
-    LED1.mode(OUTPUT_PP);
-    LED2.mode(OUTPUT_PP);
+
+    pwmled1.begin(1000,500);
+    pwmled2.begin(1000,500);
     
-    uart1.begin(115200,RxIt);
-    uart1.attach(rx,RxIrq);
-
-    uart2.begin(115200,RxIt);
-    uart2.attach(rx2,RxIrq);
-
-    uart3.begin(115200,RxIt);
-    uart3.attach(rx2,RxIrq);
-
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-
+    // Add LAMP1_COIL register - Use addCoil() for digital outputs
+    mb.addHreg(LAMP1_HOLD);
+    mb.addHreg(LAMP2_HOLD);
 
 }
-int main(void)
+int main()
 {
-	setup();
-
-	while (1)
-	{
-
-//        len = uart1.available();
-//        for(int i = 0; i < len; i++ )
-//        {
-//            uart1.write(uart1.read());
-//        }
-//        len = uart2.available();
-//        for(int i = 0; i < len; i++ )
-//        {
-//            uart2.write(uart2.read());
-//        }      
-//        len = uart3.available();
-//        for(int i = 0; i < len; i++ )
-//        {
-//            uart3.write(uart3.read());
-//        }
-
-        String str = uart1.readString();
+    setup();
+    while(1)
+    {
         
-        uart1.print(str);
-	}
+       // Call once inside loop() - all magic here
+       mb.task();
+       // Attach ledPin to LAMP1_COIL register     
+        pwmled1.set_duty(mb.Hreg(LAMP1_HOLD));
+        pwmled2.set_duty(mb.Hreg(LAMP2_HOLD));
+
+    }
+
 }

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="modbus-arduino" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin/Release/modbus-arduino" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="README.md" />
+		<Unit filename="README_pt_BR.md" />
+		<Unit filename="TODO.txt" />
+		<Unit filename="libraries/ModbusIP/ModbusIP.cpp" />
+		<Unit filename="libraries/ModbusIP/ModbusIP.h" />
+		<Unit filename="libraries/ModbusIP/examples/Lamp/Lamp.ino" />
+		<Unit filename="libraries/ModbusIP/examples/Servo/Servo.ino" />
+		<Unit filename="libraries/ModbusIP/examples/Switch/Switch.ino" />
+		<Unit filename="libraries/ModbusIP/examples/TempSensor/TempSensor.ino" />
+		<Unit filename="libraries/ModbusIP/keywords.txt" />
+		<Unit filename="libraries/ModbusIP_ENC28J60/ModbusIP_ENC28J60.cpp" />
+		<Unit filename="libraries/ModbusIP_ENC28J60/ModbusIP_ENC28J60.h" />
+		<Unit filename="libraries/ModbusIP_ENC28J60/examples/Lamp/Lamp.ino" />
+		<Unit filename="libraries/ModbusIP_ENC28J60/examples/Servo/Servo.ino" />
+		<Unit filename="libraries/ModbusIP_ENC28J60/examples/Switch/Switch.ino" />
+		<Unit filename="libraries/ModbusIP_ENC28J60/examples/TempSensor/TempSensor.ino" />
+		<Unit filename="libraries/ModbusIP_ENC28J60/keywords.txt" />
+		<Unit filename="libraries/ModbusIP_ESP8266AT/ModbusIP_ESP8266AT.cpp" />
+		<Unit filename="libraries/ModbusIP_ESP8266AT/ModbusIP_ESP8266AT.h" />
+		<Unit filename="libraries/ModbusIP_ESP8266AT/examples/Lamp/Lamp.ino" />
+		<Unit filename="libraries/ModbusIP_ESP8266AT/examples/Servo/Servo.ino" />
+		<Unit filename="libraries/ModbusIP_ESP8266AT/examples/Switch/Switch.ino" />
+		<Unit filename="libraries/ModbusIP_ESP8266AT/examples/TempSensor/TempSensor.ino" />
+		<Unit filename="libraries/ModbusSerial/ModbusSerial.cpp" />
+		<Unit filename="libraries/ModbusSerial/ModbusSerial.h" />
+		<Unit filename="libraries/ModbusSerial/examples/Lamp/Lamp.ino" />
+		<Unit filename="libraries/ModbusSerial/examples/Servo/Servo.ino" />
+		<Unit filename="libraries/ModbusSerial/examples/Switch/Switch.ino" />
+		<Unit filename="libraries/ModbusSerial/examples/TempSensor/TempSensor.ino" />
+		<Unit filename="libraries/ModbusSerial/keywords.txt" />
+		<Unit filename="libraries/Modbus/Modbus.cpp" />
+		<Unit filename="libraries/Modbus/Modbus.h" />
+		<Unit filename="libraries/Modbus/keywords.txt" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
