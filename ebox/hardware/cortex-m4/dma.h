@@ -75,7 +75,7 @@ class Dma
     
     
     
-    private:
+//    private:
         DMA_Stream_TypeDef* DMAy_Streamx;
     protected:
         FunctionPointer _irq[3];

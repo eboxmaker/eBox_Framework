@@ -8,11 +8,9 @@
 #include <ModbusSerial.h>
 #include "bsp_ebox.h"
 // Modbus Registers Offsets (0-9999)
-const int LAMP1_HOLD = 0; 
-const int LAMP2_HOLD = 1; 
-
-Pwm pwmled1(&LED1);
-Pwm pwmled2(&LED2);
+const int LAMP1_COIL = 0; 
+const int LAMP2_COIL = 1; 
+const int LAMP3_COIL = 2; 
 
 ModbusSerial mb;
 
@@ -22,14 +20,12 @@ void setup() {
     // Set the Slave ID (1-247)
     mb.setSlaveId(10);  
     
-
-    pwmled1.begin(1000,500);
-    pwmled2.begin(1000,500);
-    
+    LED1.mode(OUTPUT_PP);
+    LED2.mode(OUTPUT_PP);
     // Add LAMP1_COIL register - Use addCoil() for digital outputs
-    mb.addHreg(LAMP1_HOLD);
-    mb.addHreg(LAMP2_HOLD);
-
+    mb.addCoil(LAMP1_COIL);
+    mb.addCoil(LAMP2_COIL);
+    mb.addCoil(LAMP3_COIL);
 }
 int main()
 {
@@ -40,9 +36,8 @@ int main()
        // Call once inside loop() - all magic here
        mb.task();
        // Attach ledPin to LAMP1_COIL register     
-        pwmled1.set_duty(mb.Hreg(LAMP1_HOLD));
-        pwmled2.set_duty(mb.Hreg(LAMP2_HOLD));
-
+       LED1.write( mb.Coil(LAMP1_COIL));
+       LED2.write( mb.Coil(LAMP2_COIL));
     }
 
 }

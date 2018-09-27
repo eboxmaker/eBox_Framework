@@ -217,6 +217,25 @@ void nvic_irq_set_priority(IRQn_Type irq_num, uint8_t PreemptionPriority,uint8_t
     NVIC->IP[irq_num] = tmppriority;
 
 }
+void nvic_irq_get_priority(uint8_t irq_num, uint8_t *PreemptionPriority,uint8_t *SubPriority) 
+{
+    
+    irq_num  = (irq_num -  16);
+    uint32_t tmppriority = 0x00, tmppre = 0x00, tmpsub = 0x0F;
+
+    tmppriority = (0x700 - ((SCB->AIRCR) & (uint32_t)0x700))>> 0x08;
+    tmppre = (0x4 - tmppriority);
+    tmpsub = tmpsub >> tmppriority;
+
+//    tmppriority = (uint32_t)PreemptionPriority<< tmppre;
+//    tmppriority |=  SubPriority & tmpsub;
+//    tmppriority = tmppriority << 0x04;
+//        
+//    NVIC->IP[irq_num] = tmppriority;
+    
+    *PreemptionPriority = (NVIC->IP[irq_num] >> 4) >> tmppre;
+    *SubPriority = ((uint8_t)((NVIC->IP[irq_num] >> 4) << (8 - tmppre))) >>(8 - tmppre);
+}
 
 /**
  *@name     void nvic_dev_enable(uint32_t dev,uint8_t index)  
