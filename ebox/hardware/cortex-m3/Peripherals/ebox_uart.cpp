@@ -86,49 +86,49 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     #if USE_UART1
     case (uint32_t)USART1_BASE:
         dma_rx = &Dma1Ch5;
-        uart_index = NUM_UART1;
-        _tx_buffer_size[uart_index] = TX_BUFFER_SIZE_UART1;
-        _rx_buffer_size[uart_index] = RX_BUFFER_SIZE_UART1;
+        index = NUM_UART1;
+        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART1;
+        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART1;
         break;
     #endif
 
     #if USE_UART2 
     case (uint32_t)USART2_BASE:
         dma_rx = &Dma1Ch6;
-        uart_index = NUM_UART2;
-        _tx_buffer_size[uart_index] = TX_BUFFER_SIZE_UART2;
-        _rx_buffer_size[uart_index] = RX_BUFFER_SIZE_UART2;
+        index = NUM_UART2;
+        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART2;
+        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART2;
         break;
     #endif
 
     #if USE_UART3 
     case (uint32_t)USART3_BASE:
         dma_rx = &Dma1Ch3;
-        uart_index = NUM_UART3;
-        _tx_buffer_size[uart_index] = TX_BUFFER_SIZE_UART3;
-        _rx_buffer_size[uart_index] = RX_BUFFER_SIZE_UART3;
+        index = NUM_UART3;
+        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART3;
+        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART3;
         break;
     #endif
 
 #if defined (STM32F10X_HD)
     case (uint32_t)UART4_BASE:
         dma_rx = &Dma2Ch3;
-        uart_index = NUM_UART4;
-        _tx_buffer_size[uart_index] = TX_BUFFER_SIZE_UART4;
-        _rx_buffer_size[uart_index] = RX_BUFFER_SIZE_UART4;
+        index = NUM_UART4;
+        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART4;
+        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART4;
         break;
 
     case (uint32_t)UART5_BASE:
-        uart_index = NUM_UART5;
-        _tx_buffer_size[uart_index] = TX_BUFFER_SIZE_UART5;
-        _rx_buffer_size[uart_index] = RX_BUFFER_SIZE_UART5;
+        index = NUM_UART5;
+        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART5;
+        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART5;
         break;
 #endif
     }
-    _tx_ptr[uart_index] = (char *)ebox_malloc(_tx_buffer_size[uart_index]);
-    _rx_ptr[uart_index] = (uint16_t *)ebox_malloc(_rx_buffer_size[uart_index]);
+    _tx_ptr[index] = (char *)ebox_malloc(_tx_buffer_size[index]);
+    _rx_ptr[index] = (uint16_t *)ebox_malloc(_rx_buffer_size[index]);
 
-    serial_irq_handler(uart_index, Uart::_irq_handler, (uint32_t)this);
+    serial_irq_handler(index, Uart::_irq_handler, (uint32_t)this);
     
     
     USART_InitStructure.USART_BaudRate = baud_rate;
@@ -187,9 +187,9 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
         dma_rx->deInit();
         
         DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&_USARTx->DR;
-        DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t) _rx_ptr[uart_index];
+        DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t) _rx_ptr[index];
         DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
-        DMA_InitStructure.DMA_BufferSize = _rx_buffer_size[uart_index];
+        DMA_InitStructure.DMA_BufferSize = _rx_buffer_size[index];
         DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
         DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
         DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
@@ -214,7 +214,7 @@ void Uart::end()
 {
     USART_DeInit(_USARTx);
   // clear any received data
-  _rx_buffer_head[uart_index] = _rx_buffer_tail[uart_index];
+  _rx_buffer_head[index] = _rx_buffer_tail[index];
 }
 void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
@@ -244,10 +244,10 @@ void Uart::interrupt(IrqType type, FunctionalState enable)
 }
 int Uart::peek(void)
 {
-  if ((_rx_buffer_size[uart_index] - dma_rx->DMAy_Channelx->CNDTR) == _rx_buffer_tail[uart_index]) {
+  if ((_rx_buffer_size[index] - dma_rx->DMAy_Channelx->CNDTR) == _rx_buffer_tail[index]) {
     return -1;
   } else {
-    return _rx_ptr[uart_index][_rx_buffer_tail[uart_index]];
+    return _rx_ptr[index][_rx_buffer_tail[index]];
   }
 }
 /**
@@ -259,30 +259,30 @@ int Uart::peek(void)
 int Uart::available()
 {
     if(mode == RxDMA)
-        return ((unsigned int)(_rx_buffer_size[uart_index] + (_rx_buffer_size[uart_index] - dma_rx->DMAy_Channelx->CNDTR) - _rx_buffer_tail[uart_index])) % _rx_buffer_size[uart_index];
+        return ((unsigned int)(_rx_buffer_size[index] + (_rx_buffer_size[index] - dma_rx->DMAy_Channelx->CNDTR) - _rx_buffer_tail[index])) % _rx_buffer_size[index];
     else
-        return ((unsigned int)(_rx_buffer_size[uart_index] + _rx_buffer_head[uart_index] - _rx_buffer_tail[uart_index])) % _rx_buffer_size[uart_index];
+        return ((unsigned int)(_rx_buffer_size[index] + _rx_buffer_head[index] - _rx_buffer_tail[index])) % _rx_buffer_size[index];
 }
 
 int Uart::read()
 {
     if(mode == RxDMA)
     {
-        if (_rx_buffer_tail[uart_index] == (_rx_buffer_size[uart_index] - dma_rx->DMAy_Channelx->CNDTR)) 
+        if (_rx_buffer_tail[index] == (_rx_buffer_size[index] - dma_rx->DMAy_Channelx->CNDTR)) 
         {
             return -1;
         } 
     }
     else
     {
-        if (_rx_buffer_tail[uart_index] == _rx_buffer_head[uart_index]) 
+        if (_rx_buffer_tail[index] == _rx_buffer_head[index]) 
         {
             return -1;
         } 
     }
     {
-        int c = _rx_ptr[uart_index][_rx_buffer_tail[uart_index]];
-        _rx_buffer_tail[uart_index] = (_rx_buffer_tail[uart_index] + 1) % _rx_buffer_size[uart_index];
+        int c = _rx_ptr[index][_rx_buffer_tail[index]];
+        _rx_buffer_tail[index] = (_rx_buffer_tail[index] + 1) % _rx_buffer_size[index];
         return c;
     }
 }
@@ -291,11 +291,11 @@ int Uart::read()
 int Uart::availableForWrite()
 {
 
-  uint16_t head = _tx_buffer_head[uart_index];
-  uint16_t tail = _tx_buffer_tail[uart_index];
+  uint16_t head = _tx_buffer_head[index];
+  uint16_t tail = _tx_buffer_tail[index];
 
   if (head >= tail) 
-      return _tx_buffer_size[uart_index] - 1 - head + tail;
+      return _tx_buffer_size[index] - 1 - head + tail;
   
   return tail - head - 1;
 }
@@ -304,7 +304,7 @@ int Uart::availableForWrite()
 void Uart::flush()
 {
     uint8_t major,minor;
-    while(_tx_buffer_head[uart_index] != _tx_buffer_tail[uart_index] )
+    while(_tx_buffer_head[index] != _tx_buffer_tail[index] )
     {
         //如果全局中断被关闭,发送使能中断被关闭、在其他中断函数中,则手动发送
 //        if(__get_PRIMASK() || ((_USARTx->CR1 & USART_FLAG_TXE) == 0))
@@ -315,7 +315,7 @@ void Uart::flush()
             {
 //                interrupt(TxIrq,DISABLE);//期间必须关闭串口中断
                 while(USART_GetFlagStatus(_USARTx, USART_FLAG_TXE) == RESET);//单字节等待，等待寄存器空
-                tx_bufferx_one(_USARTx,uart_index);
+                tx_bufferx_one(_USARTx,index);
             }
         }
         //或者等待串口中断发送完成所有数据的传输
@@ -332,18 +332,18 @@ void Uart::flush()
 size_t Uart::write(uint8_t c)
 {
 
-    uint16_t i = (_tx_buffer_head[uart_index] + 1) % _tx_buffer_size[uart_index];//计算头的位置
+    uint16_t i = (_tx_buffer_head[index] + 1) % _tx_buffer_size[index];//计算头的位置
 
-    while (i == _tx_buffer_tail[uart_index]) //如果环形缓冲区满了就调用一次发送
+    while (i == _tx_buffer_tail[index]) //如果环形缓冲区满了就调用一次发送
     {
         interrupt(TxIrq,DISABLE);//期间必须关闭串口中断
         while(USART_GetFlagStatus(_USARTx, USART_FLAG_TXE) == RESET);//单字节等待，等待寄存器空
-        tx_bufferx_one(_USARTx,uart_index);
+        tx_bufferx_one(_USARTx,index);
         interrupt(TxIrq,ENABLE);//开启发送
     }
 
-    _tx_ptr[uart_index][_tx_buffer_head[uart_index]] = c;
-    _tx_buffer_head[uart_index] = i;
+    _tx_ptr[index][_tx_buffer_head[index]] = c;
+    _tx_buffer_head[index] = i;
 
     interrupt(TxIrq,ENABLE);//开启发送
   
@@ -385,29 +385,29 @@ void Uart::_irq_handler(uint32_t id, IrqType irq_type) {
 
 
 extern "C" {
-    void tx_bufferx_one(USART_TypeDef* uart,uint8_t uart_index)
+    void tx_bufferx_one(USART_TypeDef* uart,uint8_t index)
     {
-        if (_tx_buffer_head[uart_index] == _tx_buffer_tail[uart_index])//如果空则直接返回
+        if (_tx_buffer_head[index] == _tx_buffer_tail[index])//如果空则直接返回
             return;
-        unsigned char c = _tx_ptr[uart_index][_tx_buffer_tail[uart_index]];
-        _tx_buffer_tail[uart_index] = (_tx_buffer_tail[uart_index] + 1) % _tx_buffer_size[uart_index];
+        unsigned char c = _tx_ptr[index][_tx_buffer_tail[index]];
+        _tx_buffer_tail[index] = (_tx_buffer_tail[index] + 1) % _tx_buffer_size[index];
         uart->DR = (c & (uint16_t)0x01FF);
-        if (_tx_buffer_head[uart_index] == _tx_buffer_tail[uart_index])//如果发送完所有数据
+        if (_tx_buffer_head[index] == _tx_buffer_tail[index])//如果发送完所有数据
         {
             // Buffer empty, so disable interrupts
             USART_ITConfig(uart, USART_IT_TXE, DISABLE);
         }
     }
-    void rx_buffer_one(USART_TypeDef* uart,uint8_t uart_index)
+    void rx_buffer_one(USART_TypeDef* uart,uint8_t index)
     {
-        uint16_t i = (_rx_buffer_head[uart_index] + 1) % _rx_buffer_size[uart_index];//计算头的位置
-        if(i == _rx_buffer_tail[uart_index]) //如果环形缓冲区满了就修改一次tail，将会舍弃最老的一个数据
+        uint16_t i = (_rx_buffer_head[index] + 1) % _rx_buffer_size[index];//计算头的位置
+        if(i == _rx_buffer_tail[index]) //如果环形缓冲区满了就修改一次tail，将会舍弃最老的一个数据
         {
-            _rx_buffer_tail[uart_index] = (_rx_buffer_tail[uart_index] + 1) % _rx_buffer_size[uart_index];
+            _rx_buffer_tail[index] = (_rx_buffer_tail[index] + 1) % _rx_buffer_size[index];
 
         }
-        _rx_ptr[uart_index][_rx_buffer_head[uart_index]] = uart->DR;
-        _rx_buffer_head[uart_index] = i;
+        _rx_ptr[index][_rx_buffer_head[index]] = uart->DR;
+        _rx_buffer_head[index] = i;
 
     }
 
@@ -493,10 +493,10 @@ extern "C" {
     }
 #endif
 		
-void serial_irq_handler(uint8_t uart_index, uart_irq_handler handler, uint32_t id)
+void serial_irq_handler(uint8_t index, uart_irq_handler handler, uint32_t id)
 {
     irq_handler = handler;
-    serial_irq_ids[uart_index] = id;
+    serial_irq_ids[index] = id;
 }
 }
 

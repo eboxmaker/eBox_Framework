@@ -174,7 +174,7 @@ private:
 
     RxMode_t            mode;
     Dma                 *dma_rx;
-    uint8_t             uart_index;
+    uint8_t             index;
     uint8_t             preemption_priority;
     uint8_t             sub_priority;
 

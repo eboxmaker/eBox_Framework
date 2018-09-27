@@ -14,16 +14,16 @@
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
-          <Device>STM32F407IGTx</Device>
+          <Device>STM32F407VETx</Device>
           <Vendor>STMicroelectronics</Vendor>
           <PackID>Keil.STM32F4xx_DFP.2.9.0</PackID>
           <PackURL>http://www.keil.com/pack</PackURL>
-          <Cpu>IRAM(0x20000000,0x20000) IRAM2(0x10000000,0x10000) IROM(0x08000000,0x100000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
+          <Cpu>IRAM(0x20000000,0x20000) IRAM2(0x10000000,0x10000) IROM(0x08000000,0x80000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F4xx_1024 -FS08000000 -FL0100000 -FP0($$Device:STM32F407IGTx$CMSIS\Flash\STM32F4xx_1024.FLM))</FlashDriverDll>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F4xx_512 -FS08000000 -FL080000 -FP0($$Device:STM32F407VETx$CMSIS\Flash\STM32F4xx_512.FLM))</FlashDriverDll>
           <DeviceId>0</DeviceId>
-          <RegisterFile>$$Device:STM32F407IGTx$Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h</RegisterFile>
+          <RegisterFile>$$Device:STM32F407VETx$Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -33,7 +33,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:STM32F407IGTx$CMSIS\SVD\STM32F40x.svd</SFDFile>
+          <SFDFile>$$Device:STM32F407VETx$CMSIS\SVD\STM32F40x.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -138,7 +138,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -249,7 +249,7 @@
               <IROM>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x100000</Size>
+                <Size>0x80000</Size>
               </IROM>
               <XRAM>
                 <Type>0</Type>
@@ -274,7 +274,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x100000</Size>
+                <Size>0x80000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>ARM_MATH_CM4</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcuLib\stm32f4xx\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\..\ebox\core;..\..\..\user;..\..\..\ebox\hardware\cortex-m4;..\..\..\ebox\hardware\cortex-m4\Peripherals;..\..\..\component\ddc;..\..\..\user\board\spark_f4;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\component\gui</IncludePath>
+              <IncludePath>..\..\..\mcuLib\stm32f4xx\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\..\ebox\core;..\..\..\user;..\..\..\ebox\hardware\cortex-m4;..\..\..\ebox\hardware\cortex-m4\Peripherals;..\..\..\component\ddc;..\..\..\user\board\spark_f4;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\component\gui;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -762,11 +762,6 @@
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_uart.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_uart_stream.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_uart_stream.cpp</FilePath>
-            </File>
-            <File>
               <FileName>ebox_i2c.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_i2c.cpp</FilePath>
@@ -814,231 +809,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>edriver</GroupName>
-          <Files>
-            <File>
-              <FileName>74HC595.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\74HC595.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ads1118.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\ads1118.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ADS7816.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\ADS7816.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ADS8866.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\ADS8866.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>at24c02.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\at24c02.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>at45db.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\at45db.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>BMP280-3.3.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\BMP280-3.3.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Button.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\Button.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>dht11.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\dht11.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ds18b20.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\ds18b20.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>DS3231.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\DS3231.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_virtual_lcd.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\ebox_virtual_lcd.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>enc28j60.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\enc28j60.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>encoder.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\encoder.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>fm25v.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\fm25v.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>GP2Y1051.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\GP2Y1051.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>INA219.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\INA219.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ir_encoder.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\ir_encoder.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>key_dm.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\key_dm.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>L3G4200D.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\L3G4200D.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>lcd_1.8.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\lcd_1.8.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>LCD1602.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\LCD1602.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>LED.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\LED.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>led_segment.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\led_segment.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>lsm303dhlc.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\lsm303dhlc.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>LTC1446.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\LTC1446.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>LTC2943.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\LTC2943.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Max7456.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\Max7456.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>MCP23017.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\MCP23017.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>mmc_sd.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\mmc_sd.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Nokia5110.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\Nokia5110.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>NRF24L01.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\NRF24L01.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>OLED_4spi.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\OLED_4spi.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>OLED_i2c.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\OLED_i2c.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>parallel_gpio.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\parallel_gpio.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>PCA9685.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\PCA9685.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>si4432.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\si4432.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>sx1278.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\sx1278.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>TLC59711.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\TLC59711.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>TM1637.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\TM1637.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>TM1638.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\TM1638.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>TSL2561.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\TSL2561.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>w25x16.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\w25x16.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>w5500.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\w5500.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>apps</GroupName>
           <Files>
             <File>
@@ -1081,10 +851,20 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\user\board\spark_f4\FSMCIO.c</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>modbus</GroupName>
+          <Files>
             <File>
-              <FileName>ft232h_cpu_fifo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\component\FT232H\ft232h_cpu_fifo.c</FilePath>
+              <FileName>Modbus.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\modbus\libraries\Modbus\Modbus.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ModbusSerial.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\modbus\libraries\ModbusSerial\ModbusSerial.cpp</FilePath>
             </File>
           </Files>
         </Group>
