@@ -51,13 +51,14 @@ typedef void (*callback_fun_type)(void);
 extern __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
 
 void mcu_init(void); //ebox系统初始化
+extern void SystemClock_Config(void);       	//外部实现该函数，可以修改时钟源以及时钟频率。默认工作在48Mhz
 void mcu_reset(void);
 uint32_t get_cpu_calculate_per_sec(void);//获取cpu在不跑操作系统的情况下的计算能力。用于统计cpu绝对使用率
 
 uint64_t mcu_micros(void);//获取系统当前运行了多长时间。单位：us
 uint64_t mcu_millis(void);//获取系统当前运行了多长时间。单位：ms
-void mcu_delay_ms(uint64_t ms);//延时n毫秒。可在任意情况下使用，包括禁止所有中断的情况。精度正负1us。
-void mcu_delay_us(uint64_t us);//延时n微秒。可在任意情况下使用，包括禁止所有中断的情况。精度正负1us。
+void mcu_delay_ms(uint32_t ms);//延时n毫秒。可在任意情况下使用，包括禁止所有中断的情况。精度正负1us。
+void mcu_delay_us(uint32_t us);//延时n微秒。可在任意情况下使用，包括禁止所有中断的情况。精度正负1us。
 void set_systick_user_event_per_sec(uint16_t frq);//设定用户中断事件的相应频率。frq[1,1000],frq最好是2的倍数
 void attach_systick_user_event(void (*callback_fun)(void));//绑定systick中断调用函数，调用频率由用户决定，频率为1hz-1000hz
 

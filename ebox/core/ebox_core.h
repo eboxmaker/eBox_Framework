@@ -41,8 +41,8 @@ extern int         (*no_interrupts)(void);
 extern void        (*ebox_reset)();
 extern uint64_t    (*micros)();
 extern uint64_t    (*millis)();
-extern void        (*delay_ms)(uint64_t ms);
-extern void        (*delay_us)(uint64_t ms);
+extern void        (*delay_ms)(uint32_t ms);
+extern void        (*delay_us)(uint32_t us);
     
 
 
