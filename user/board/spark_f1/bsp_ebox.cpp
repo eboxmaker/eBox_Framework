@@ -98,6 +98,10 @@ void print_log(const char *name,const char *date)
 	UART.print(cpu.clock.pclk2/1000000.0);
     UART.println("Mhz");
 
+    UART.print("* ability/s     : ");
+	UART.print(cpu.ability/1000000.0);
+    UART.println("Mhz");
+
     
 	UART.print("* flash size    : ");       /* ¥Ú”°flash¥Û–° */
 	UART.print(cpu.flash_size);	

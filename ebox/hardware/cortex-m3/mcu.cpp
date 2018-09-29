@@ -4,7 +4,8 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/08/14
-  * @brief   
+  * @brief
+  		2019/9/28  移除无用代码,delay函数参数uint64_t改为uint32_t		LQM
   ******************************************************************************
   * @attention
   *
@@ -24,24 +25,29 @@
 #define systick_no_interrupt()  SysTick->CTRL &=0xfffffffd
 #define systick_interrupt()     SysTick->CTRL |=0x0002
 extern "C" {
-
-
-    extern uint16_t  AD_value[];
-
     __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
     __IO uint16_t micro_para;
 
     static void update_system_clock(CpuClock_t *clock);
     static void update_chip_info(void);
+  /**
+  *@brief    配置clock,默认使用HSI，72M
+  *@param    mcu
+  *@retval   none
+  */
+  __weak void SystemClock_Config()
+  {
 
+  }
     void mcu_init(void)
     {
+    SystemClock_Config();
         update_system_clock(&cpu.clock);
         SysTick_Config(cpu.clock.core/1000);//  每隔 1ms产生一次中断
         SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);//systemticks clock；
         micro_para = cpu.clock.core/1000000;//减少micros函数计算量
         
-        NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
+//        NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
         
         update_chip_info();
 
@@ -78,7 +84,7 @@ extern "C" {
         return millis_seconds;
     }
 
-    void mcu_delay_ms(uint64_t ms)
+    void mcu_delay_ms(uint32_t ms)
     {
         uint64_t end ;
         end = mcu_micros() + ms * 1000 - 3;
@@ -92,10 +98,10 @@ extern "C" {
 
  /**
    *@brief    us延时,使用systick计数器。48Mhz时钟时可以满足us(1.3)精度。8Mhz时最小6-7us,24Mhz时最小2.2us,16Mhz时最小3.5us
-   *@param    uint16_t us  要延时的时长，最小1us
+   *@param    uint32_t us  要延时的时长，最小1us
    *@retval   none
   */
-  void  mcu_delay_us(uint64_t us)
+  void  mcu_delay_us(uint32_t us)
   {
     uint32_t ticks;
     uint32_t told,tnow,tcnt=0;
@@ -138,6 +144,11 @@ extern "C" {
         }
 
     }
+  /**
+   *@brief    获取系统时钟
+   *@param    *clock：  时钟指针，返回系统时钟
+   *@retval   none
+  */
 	static void update_system_clock(CpuClock_t *clock)
     {
         RCC_ClocksTypeDef RCC_ClocksStatus;
@@ -151,7 +162,11 @@ extern "C" {
         clock->pclk1 = RCC_ClocksStatus.PCLK1_Frequency;       
     }
 
-    
+  /**
+   *@brief    获取系统信息，CPU_ID,flashsize
+   *@param    none
+   *@retval   none
+  */
     static void update_chip_info()
     {
         cpu.type = MCU_TYPE;

@@ -30,7 +30,7 @@
 
 #define LED1 PB8
 #define LED2 PB9
-//#define LED3 PB10
+#define LED3 PB10
 
 //#define LED_R   PB7
 //#define LED_G   PB8
@@ -38,7 +38,7 @@
 
 //#define PWMLED  PB8
 
-//#define BtnPin	PA8
+#define BtnPin	PA8
 
 #define	UART    uart1
 #define	Serial  uart1
