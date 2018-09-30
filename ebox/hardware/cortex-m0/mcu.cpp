@@ -6,6 +6,7 @@
   * @date    2016/08/14
   * @brief
   		2019/9/28  移除无用代码,delay函数参数uint64_t改为uint32_t		LQM
+                   修改systemtick中断回调函数，完善注释
   ******************************************************************************
   * @attention
   *
@@ -22,13 +23,13 @@
 
 #include "ebox_core.h"
 #include "mcu.h"
+
 #define systick_no_interrupt()  SysTick->CTRL &=0xfffffffd
 #define systick_interrupt()     SysTick->CTRL |=0x0002
-extern "C" {
 
+extern "C" {
   __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
   __IO uint16_t micro_para;
-
 
   static void update_system_clock(CpuClock_t *clock);
   static void update_chip_info(void);
@@ -53,6 +54,11 @@ extern "C" {
     LL_PLL_ConfigSystemClock_HSI(&sUTILS_PLLInitStruct, &sUTILS_ClkInitStruct);
   }
 
+  /**
+    *@brief    初始化，设置时钟，systemtick，systemtick callback，禁用jtag
+    *@param    mcu
+    *@retval   none
+    */
   void mcu_init(void)
   {
     SystemClock_Config();
@@ -63,17 +69,21 @@ extern "C" {
     LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);//systemticks clock；
     micro_para = cpu.clock.core/1000000;//减少micros函数计算量
 
+
+    attachSystickCallBack(nullFun);
     update_chip_info();
-
-    set_systick_user_event_per_sec(1000);
-
-
   }
+
   void mcu_reset(void)
   {
     NVIC_SystemReset();
   }
 
+  /**
+    *@brief    获取us
+    *@param    mcu
+    *@retval   none
+    */
   uint64_t mcu_micros(void)
   {
     uint64_t micro;
@@ -89,21 +99,31 @@ extern "C" {
 
     return  micro;
   }
+
+  /**
+    *@brief    获取ms
+    *@param    mcu
+    *@retval   none
+    */
   uint64_t mcu_millis( void )
   {
     return millis_seconds;
   }
-
+  
+  /**
+    *@brief    ms延时
+    *@param    uint32_t ms  要延时的时长，最小1ms
+    *@retval   none
+   */
   void mcu_delay_ms(uint32_t ms)
   {
     uint64_t end ;
     end = mcu_micros() + ms * 1000 - 3;
     while (mcu_micros() < end);
   }
-
-
   /**
-    *@brief    us延时,使用systick计数器。48Mhz时钟时可以满足us(1.3)精度。8Mhz时最小6-7us,24Mhz时最小2.2us,16Mhz时最小3.5us
+    *@brief    us延时,使用systick计数器。48Mhz及以上时钟时可以满足us(1.3)精度。
+    *          8Mhz时最小6-7us,24Mhz时最小2.2us,16Mhz时最小3.5us
     *@param    uint32_t us  要延时的时长，最小1us
     *@retval   none
    */
@@ -124,32 +144,40 @@ extern "C" {
       told = tnow;
     }
   }
-  callback_fun_type systick_cb_table[1] = {0};
-  __IO uint16_t systick_user_event_per_sec;//真实的值
-  __IO uint16_t _systick_user_event_per_sec;//用于被millis_second取余数
 
-  void set_systick_user_event_per_sec(uint16_t frq)
-  {
-    _systick_user_event_per_sec = 1000 / frq;
-    systick_user_event_per_sec = frq;
-  }
+  // systick 中断回调函数指针，
+  fun_noPara_t  callBackFun;
+  static uint16_t _multiple = 1;
 
-  void attach_systick_user_event(void (*callback_fun)(void))
-  {
-    systick_cb_table[0] = callback_fun;
-  }
-  void SysTick_Handler(void)//systick中断
-  {
-    millis_seconds++;
-    if ((millis_seconds % _systick_user_event_per_sec) == 0)
+  /**
+  *@brief    注册中断回调函数，可以指定调用周期 = 中断周期 * multiple
+  *@param    SystickCallBack_T fun 回调函数（无参）, uint8_t multiple 倍数。用来设定调用周期
+  *@retval   E_OK  注册成功， E_NG 注册失败
+  */
+  uint16_t attachSystickCallBack(fun_noPara_t fun,uint16_t multiple){
+
+    if (callBackFun == NULL || callBackFun == nullFun)
     {
-      if (systick_cb_table[0] != 0)
-      {
-        systick_cb_table[0]();
-      }
+      callBackFun = fun;
+      _multiple = multiple == 0 ? 1 : multiple;
+      return EOK;
+    }else{
+      return ENG;
     }
-
   }
+  /**
+   *@brief    systick中断处理函数
+   *@param    none
+   *@retval   none
+  */
+  void SysTick_Handler(void)
+  {
+    if (millis_seconds++ % _multiple == 0)
+    {
+      callBackFun();
+    }
+  }
+
   /**
    *@brief    获取系统时钟
    *@param    *clock：  时钟指针，返回系统时钟
@@ -198,11 +226,6 @@ extern "C" {
     while (millis_seconds < 1);
     cpu.ability = cpu.ability  * 1000 * 2;
     ////////////////////////////////
-
   }
 
-  uint32_t get_cpu_calculate_per_sec()
-  {
-    return cpu.ability;
-  }
 }
