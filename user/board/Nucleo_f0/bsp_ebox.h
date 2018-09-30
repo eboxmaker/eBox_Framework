@@ -23,6 +23,7 @@
 
 
 #define	HARDWARE	"stm32nucleo£¬STM32F072RB"
+#define F0
 
 #define LED1 PA5
 #define LED2 PA5
