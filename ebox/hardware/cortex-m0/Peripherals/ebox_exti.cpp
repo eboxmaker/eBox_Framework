@@ -27,14 +27,16 @@
   * @{
   */
 
-static exti_irq_handler irq_handler;
-static uint32_t exti_irq_ids[16];
+// uint32_t pObj 类对象 ,uint8_t line 外部中断线
+typedef void (*exti_irq_handler)(uint32_t pObj,uint8_t line);
 
-int exti_irq_init(uint8_t index,exti_irq_handler handler,uint32_t id)
+static exti_irq_handler  exti_handler;   // 声明函数指针变量，指向类的静态成员
+static uint32_t  exti_irq_ids[16];    	 // 保存对象地址，供静态成员识别对象，并访问对象的普通成员
+
+void exti_irq_init(uint8_t index,exti_irq_handler handler,uint32_t id)
 {
-  exti_irq_ids[index] = id;
-  irq_handler =  handler;
-  return 0;
+  exti_irq_ids[index] = id;      // 保存对象地址
+  exti_handler =  handler;        // 指向回调函数
 }
 
 const uint32_t EXTISorce_MAP[]={
@@ -59,10 +61,33 @@ const uint32_t EXTISorce_MAP[]={
  *           - CHANGE: 上升沿和下降沿均触发中断
  * @return   NONE
  */
-Exti::Exti(Gpio *pin, uint8_t trigger)
+Exti::Exti(Gpio *pin)
 {
-  this->pin = pin;
-  this->trigger = trigger;
+  _pin = pin;
+  _line = GETEXTILINE(_pin->id);
+  exti_irq_init(GETEXTILINE(_pin->id),(&Exti::_irq_handler),(uint32_t)this);
+}
+
+void Exti::begin(PIN_MODE mode,ExtiType type){
+  _pin->mode(mode);
+
+  switch (type)
+  {
+  case IT:
+    LL_EXTI_EnableIT_0_31(1<<_line);
+    LL_EXTI_DisableEvent_0_31(1<<_line);
+    break;
+  case EVENT:
+    LL_EXTI_EnableEvent_0_31(1<<_line);
+    LL_EXTI_DisableIT_0_31(1<<_line);
+    break;
+  case IT_EVENT:
+    LL_EXTI_EnableIT_0_31(1<<_line);
+    LL_EXTI_EnableEvent_0_31(1<<_line);
+    break;
+  default:
+    break;
+  }
 }
 
 /**
@@ -73,62 +98,135 @@ Exti::Exti(Gpio *pin, uint8_t trigger)
  * @note    初始化会默认开启中断，如果用户想禁用中断，
  *          可以调用interrupt(DISABLE)关闭中断。
  */
-void Exti::begin()
-{
-  uint8_t pinN = GETEXTILINE(pin->id);
-  exti_line = 1 << pinN;
-  exti_irq_init(pinN,(&Exti::_irq_handler),(uint32_t)this);
+//void Exti::begin()
+//{
+//  uint8_t pinN = GETEXTILINE(pin->id);
+//  exti_line = 1 << pinN;
+//  exti_irq_init(pinN,(&Exti::_irq_handler),(uint32_t)this);
 
-  pin->mode(INPUT);
-  nvic(ENABLE,0,0);
+////  pin->mode(INPUT);
+//  nvic(ENABLE,0,0);
+//}
+
+//void Exti::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
+//{
+//  nvic_dev_set_priority((uint32_t)exti_line,0,0,0);
+//  if (enable != DISABLE)
+//    nvic_dev_enable((uint32_t)exti_line,0);
+//  else
+//    nvic_dev_disable((uint32_t)exti_line,0);
+//}
+
+///**
+// * @brief   外部中断引脚的中断允许、禁止控制函数
+// * @param   enable: 允许或者禁止中断
+// *          - ENABLE: 允许该外部中断
+// *          - DISABLE: 禁止该外部中断
+// *
+// * @return  NONE
+// */
+//void Exti::interrupt(FunctionalState enable)
+//{
+//  LL_EXTI_InitTypeDef EXTI_initS;
+//  // connect exti line
+//  LL_APB1_GRP2_EnableClock(LL_APB1_GRP2_PERIPH_SYSCFG);
+//  LL_SYSCFG_SetEXTISource(GETEXTIPORT(pin->id), EXTISorce_MAP[GETEXTILINE(pin->id)]);
+
+//  switch (trigger)
+//  {
+//  case RISING:
+//    EXTI_initS.Trigger = LL_EXTI_TRIGGER_RISING;               //上升沿沿中断
+//    break;
+//  case FALLING:
+//    EXTI_initS.Trigger = LL_EXTI_TRIGGER_FALLING ;             //下降沿都中断
+//    break;
+//  case CHANGE:
+//    EXTI_initS.Trigger = LL_EXTI_TRIGGER_RISING_FALLING ;      //上升，下降沿都中断
+//    break;
+//  }
+//  EXTI_initS.Line_0_31 = exti_line;
+//  EXTI_initS.Mode = LL_EXTI_MODE_IT;
+//  EXTI_initS.LineCommand = enable;
+//  LL_EXTI_Init(&EXTI_initS);
+//}
+
+//void Exti::_init(ExtiType type){
+
+//}
+/**
+ *@brief    使能中断
+ *@param    NONE
+ *@retval   NONE
+*/
+void Exti::enable(TrigType type,uint32_t priority){
+  switch (type)
+  {
+  case FALL:
+    LL_EXTI_EnableFallingTrig_0_31(1<<_line);
+    LL_EXTI_DisableRisingTrig_0_31(1<<_line);
+    break;
+  case RISE:
+    LL_EXTI_EnableRisingTrig_0_31(1<<_line);
+    LL_EXTI_DisableFallingTrig_0_31(1<<_line);
+    break;
+  case FALL_RISING:
+    LL_EXTI_EnableFallingTrig_0_31(1<<_line);
+    LL_EXTI_EnableRisingTrig_0_31(1<<_line);
+    break;
+  default:
+    break;
+  }
+
+  LL_APB1_GRP2_EnableClock(LL_APB1_GRP2_PERIPH_SYSCFG);
+  LL_SYSCFG_SetEXTISource(GETEXTIPORT(_pin->id), EXTISorce_MAP[_line]);
+
+  switch (_line)
+  {
+  case 0:
+  case 1:
+    NVIC_EnableIRQ(EXTI0_1_IRQn);
+    NVIC_SetPriority(EXTI0_1_IRQn,priority);
+    break;
+  case 2:
+  case 3:
+    NVIC_EnableIRQ(EXTI2_3_IRQn);
+    NVIC_SetPriority(EXTI2_3_IRQn,priority);
+    break;
+  default:
+    NVIC_EnableIRQ(EXTI4_15_IRQn);
+    NVIC_SetPriority(EXTI4_15_IRQn,priority);
+    break;
+  }
 }
 
-void Exti::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
-{
-  nvic_dev_set_priority((uint32_t)exti_line,0,0,0);
-  if (enable != DISABLE)
-    nvic_dev_enable((uint32_t)exti_line,0);
-  else
-    nvic_dev_disable((uint32_t)exti_line,0);
+void Exti::disable(TrigType type){
+  switch (type)
+  {
+  case FALL:
+    LL_EXTI_DisableFallingTrig_0_31(1<<_line);
+    break;
+  case RISE:
+    LL_EXTI_DisableRisingTrig_0_31(1<<_line);
+    break;
+  case FALL_RISING:
+    LL_EXTI_DisableRisingTrig_0_31(1<<_line);
+    LL_EXTI_DisableFallingTrig_0_31(1<<_line);
+    break;
+  default:
+    break;
+  }
 }
 
 /**
- * @brief   外部中断引脚的中断允许、禁止控制函数
- * @param   enable: 允许或者禁止中断
- *          - ENABLE: 允许该外部中断
- *          - DISABLE: 禁止该外部中断
- *
- * @return  NONE
- */
-void Exti::interrupt(FunctionalState enable)
+ *@brief    EXTI 静态成员函数，在中断中调用，解析执行相关回调函数
+ *@param    uint32_t id 对象地址，用来识别对象；IrqType irq_type 中断类型
+ *@retval   NONE
+*/
+void Exti::_irq_handler(uint32_t pObj,uint8_t line)
 {
-  LL_EXTI_InitTypeDef EXTI_initS;
-  // connect exti line
-  LL_APB1_GRP2_EnableClock(LL_APB1_GRP2_PERIPH_SYSCFG);
-  LL_SYSCFG_SetEXTISource(GETEXTIPORT(pin->id), EXTISorce_MAP[GETEXTILINE(pin->id)]);
+  Exti *handler = (Exti*)pObj;  // 指向回调函数地址
+  handler->_pirq[handler->_pin->read()].call();
 
-  switch (trigger)
-  {
-  case RISING:
-    EXTI_initS.Trigger = LL_EXTI_TRIGGER_RISING;               //上升沿沿中断
-    break;
-  case FALLING:
-    EXTI_initS.Trigger = LL_EXTI_TRIGGER_FALLING ;             //下降沿都中断
-    break;
-  case CHANGE:
-    EXTI_initS.Trigger = LL_EXTI_TRIGGER_RISING_FALLING ;      //上升，下降沿都中断
-    break;
-  }
-  EXTI_initS.Line_0_31 = exti_line;
-  EXTI_initS.Mode = LL_EXTI_MODE_IT;
-  EXTI_initS.LineCommand = enable;
-  LL_EXTI_Init(&EXTI_initS);
-}
-
-void Exti::_irq_handler( uint32_t id)
-{
-  Exti *handler = (Exti*)id;
-  handler->_irq.call();
 }
 /**
  * @brief   绑定中断的回调函数，产生中断后程序将执行callback_fun()
@@ -136,11 +234,13 @@ void Exti::_irq_handler( uint32_t id)
  *
  * @return  NONE
  */
-void Exti::attach(void (*fptr)(void))
+void Exti::attach(void (*fptr)(void),TrigType type)
 {
-  if (fptr)
-  {
-    _irq.attach(fptr);
+  if (type == FALL_RISING){
+    _pirq[FALL].attach(fptr);
+    _pirq[RISE].attach(fptr);
+  }else{
+    _pirq[type].attach(fptr);
   }
 }
 
@@ -152,7 +252,7 @@ extern "C" {
     {
       if (LL_EXTI_IsActiveFlag_0_31(1<<i) != RESET)
       {
-        irq_handler(exti_irq_ids[i]);
+        exti_handler(exti_irq_ids[i],i);
         LL_EXTI_ClearFlag_0_31(1<<i);
       }
     }
@@ -162,11 +262,11 @@ extern "C" {
     if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_0) != RESET)
     {
       LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_0);
-      irq_handler(exti_irq_ids[0]);
+      exti_handler(exti_irq_ids[0],0);
     }else if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_1) != RESET)
     {
       LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_1);
-      irq_handler(exti_irq_ids[1]);
+      exti_handler(exti_irq_ids[1],1);
     }
   }
 
@@ -174,11 +274,11 @@ extern "C" {
     if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_2) != RESET)
     {
       LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_2);
-      irq_handler(exti_irq_ids[2]);
+      exti_handler(exti_irq_ids[2],2);
     }else if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_3) != RESET)
     {
       LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_3);
-      irq_handler(exti_irq_ids[3]);
+      exti_handler(exti_irq_ids[3],3);
     }
   }
 }
