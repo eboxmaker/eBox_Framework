@@ -33,6 +33,7 @@
 #define ETIMEOUT    3
 #define EPARA       4
 #define E2LONG      5
+#define ENG         6
 #define EOTHER      128
 
 
@@ -115,7 +116,7 @@ typedef struct
 }DateTime_t;
 
 
-#define ALIGN(size, align)                  ((align + size - 1) & (~ (align - 1)))
+#define ALIGN(size, align)                 ((align + size - 1) & (~ (align - 1)))
 #define ALIGN_4BYTE(size)                  ((4 + size - 1) & (~ (4 - 1)))
 #define ALIGN_8BYTE(size)                  ((8 + size - 1) & (~ (8 - 1)))
 

@@ -7,8 +7,8 @@ extern "C" {
     void        (*ebox_reset)();
     uint64_t    (*micros)();
     uint64_t    (*millis)();
-    void        (*delay_ms)(uint64_t ms);
-    void        (*delay_us)(uint64_t ms);
+    void        (*delay_ms)(uint32_t ms);
+    void        (*delay_us)(uint32_t us);
 
     Cpu_t cpu;
 }
