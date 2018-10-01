@@ -59,6 +59,7 @@ typedef enum
     PI8_ID,         PI9_ID,     PI10_ID,    PI11_ID,    PI12_ID,    PI13_ID,    PI14_ID,    PI15_ID,
     
 }PIN_ID_t;///<引脚的名字
+
 class Gpio
 {
     public:
@@ -67,16 +68,13 @@ class Gpio
     virtual void mode(PIN_MODE mode,uint8_t af_configration) = 0;
     virtual void set() = 0;
     virtual void reset() = 0;
-    virtual void write(uint8_t val) = 0;
-    virtual void toggle() = 0;
+
+	virtual void write(uint8_t val) = 0;
     virtual void read(uint8_t *val) = 0;
     virtual uint8_t read(void) = 0;
+	virtual void toggle() = 0;
         
     PIN_ID_t id;
-
-
-
-
 };
 
 #endif
