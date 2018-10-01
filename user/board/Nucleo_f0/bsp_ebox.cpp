@@ -76,6 +76,7 @@ void print_log(const char *name,const char *date)
     UART.printf("* hclk          : %0.3fMhz\r\n",cpu.clock.hclk/1000000.0);
     UART.printf("* pclk1         : %0.3fMhz\r\n",cpu.clock.pclk1/1000000.0);
     UART.printf("* pclk2         : %0.3fMhz\r\n",cpu.clock.pclk2/1000000.0);
+    UART.printf("* ability/s     : %0.3fMhz\r\n",cpu.ability/1000000.0);
     
 	UART.printf("* flash size    : %d    \tKB \r\n",cpu.flash_size);
 	UART.printf("* flash used    : %0.3f \tKB\r\n",MCU_FLASH_USED/1024.0);	/* 打印一行空格 */   
