@@ -1,4 +1,6 @@
+#include "stm32f10x.h"
 #include "rcc.h"
+
 
 //#define APB1PERIPH_BASE       PERIPH_BASE
 //#define APB2PERIPH_BASE       (PERIPH_BASE + 0x00010000)
