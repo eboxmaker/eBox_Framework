@@ -53,8 +53,8 @@ public:
   Exti(Gpio *exti_pin);
   void begin(PIN_MODE mode= INPUT,ExtiType type = IT);
 
-  void enable(TrigType type,uint32_t priority = 0);
-  void disable(TrigType type);
+  void enable(TrigType trig,uint32_t priority = 0);
+  void disable(TrigType trig);
 
   /**
   *@brief    exti 绑定中断
@@ -65,8 +65,8 @@ public:
   /**
    *@brief    exti 绑定成员回调函数
    *@param    TrigType type 中断触发类型,FALLING,RISING,FALL_RISING;
-  		   T* tptr 对象指针
-  		   void (T::*mptr)(void) 对象成员
+  	          T* tptr 对象指针
+  		        void (T::*mptr)(void) 对象成员
    *@retval   NONE
   */
   template<typename T>
@@ -82,11 +82,11 @@ public:
 private:
   // 静态成员不依赖类的创建，即使不创建类，它也存在，且可以在外部通过类名访问: IRQ::irq_handler(0)
   // 所有实例共享静态成员，静态成员不能访问普通成员，需要通过对象名间接访问
-  static void _irq_handler(uint32_t pObj,uint8_t line);
+  static void _irq_handler(uint32_t pObj);
   // 回调函数指针数组，分别绑定下降沿回调和上升沿回调函数
   FunctionPointer _pirq[2];
   Gpio	*_pin;
-  uint8_t	_line;	//外部中断0-15
+  uint16_t	_extiLine;	//外部中断0-15
 
   void _init(ExtiType type = IT);
 };
