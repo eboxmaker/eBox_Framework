@@ -1559,6 +1559,7 @@
                     <File RelativePath="..\..\..\user\board\Nucleo_f0\bsp_ebox.h" FileType="4" ro="0" bss="0" rw="0" />
                 </Filter>
             </Filter>
+            <File RelativePath="..\..\..\user\ebox_config.h" FileType="4" ro="0" bss="0" rw="0" />
         </Filter>
     </Files>
 </TKStudioProject>
