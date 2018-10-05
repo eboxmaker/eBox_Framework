@@ -32,12 +32,14 @@
 #if EBOX_DEBUG
   // 定义输出设备.该设备需要支持printf
   #include "ebox_uart.h"
-  extern Uart uart1;
-  #define OUT   uart1
+  extern Uart uart2;
+  #define OUT   uart2
   #define DBG(...) OUT.printf(__VA_ARGS__)
 #else
   #define DBG(...)
 #endif
+
+#define USE_TIMEOUT 1
 
 #endif
 
