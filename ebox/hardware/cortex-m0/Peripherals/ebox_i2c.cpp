@@ -33,10 +33,6 @@
 #define  I2C_DEBUG(...)
 #endif
 
-#define GetEndTime(timeOut)					(millis_seconds + timeOut)
-// 超时,返回1 否则返回0   这里采用millis()获取millis_seconds,可以防止因为关闭中断导致程序死在延时函数里
-#define IsTimeOut(endTime,delay)		((uint32_t)(endTime - millis())>delay)
-
 /**
  *@name     I2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin)
  *@brief      I2C构造函数
@@ -54,11 +50,10 @@ mcuI2c::mcuI2c(I2C_TypeDef *I2Cx,Gpio *scl_pin, Gpio *sda_pin)
 }
 
 /**
- *@name     begin(uint16_t speed)
- *@brief    根据i2c时钟和设置速率speed计算timing。默认400k @8M
- *@param    speed:  速率 10,100,400 分别代表10k，100k，400k
- *@retval   None
-*/
+  *@brief    根据i2c时钟和设置速率speed计算timing。默认400k @8M
+  *@param    speed:  速率 10,100,400 分别代表10k，100k，400k
+  *@retval   None
+  */
 void  mcuI2c::begin(uint16_t speed)
 {
   switch (cpu.clock.pclk1/1000000){

@@ -198,6 +198,7 @@ uint8_t mcuI2c::read(uint8_t slaveAddr,uint8_t regAddr,uint16_t tOut)
   _start(tOut);
   _send7bitsAddress(slaveAddr,WRITE,tOut);
   _sendByte(regAddr,tOut);
+  _start(tOut);
   _send7bitsAddress(slaveAddr,READ,tOut);
   _sendNack();
   _stop();
@@ -248,6 +249,7 @@ uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_
   err += _start(tOut);
   err += _send7bitsAddress(slaveAddr,WRITE,tOut);
   err += _sendByte(regAddr,tOut);
+  err += _start(tOut);
   err +=_send7bitsAddress(slaveAddr,READ,tOut);
   while (nRead--)
   {
@@ -287,6 +289,7 @@ uint8_t mcuI2c:: waitAck(uint8_t slaveAddr,uint16_t tOut)
     if (IsTimeOut(end,tOut))
     {
       I2C_ClearFlag(_i2cx, I2C_FLAG_AF|I2C_FLAG_ADDR|I2C_FLAG_SB);
+      I2C_SendData(_i2cx, slaveAddr);
       I2C_GenerateSTOP(_i2cx, ENABLE);
 //            I2C_DEBUG("I2C state sr2 = %d, sr1 = %d \r\n",_i2cx->SR2,_i2cx->SR1);
       return 1;

@@ -1040,6 +1040,7 @@
                         <File RelativePath="..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_uart_stream_old.h" FileType="4" ro="0" bss="0" rw="0" />
                         <File RelativePath="..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_wdg.cpp" FileType="3" Output="ebox_wdg.o" ro="0" bss="0" rw="0" />
                         <File RelativePath="..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_wdg.h" FileType="4" ro="0" bss="0" rw="0" />
+                        <File RelativePath="..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_i2c old.cpp" FileType="3" Output="ebox_i2c old.o" ro="0" bss="0" rw="0" />
                     </Filter>
                 </Filter>
             </Filter>
