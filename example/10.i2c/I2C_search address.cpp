@@ -42,16 +42,16 @@ int main(void)
 	
 	I2C.write(0x4e,0x00);
 	delay_ms(1000);
-    I2C.write(0x4e,0x08);
-    delay_ms(1000);
-	I2C.write(0x4e,0x00);
 	UART.printf("I2C address scanner, Scaning.......\r\n");
 	while (1)
 	{	
+        I2C.write(0x4e,0x00);
+        delay_ms(2000);
+        UART.printf("I2C read %d \r\n",I2C.read(0x4e));
+        I2C.write(0x4e,0x08);
+        delay_ms(2000);
+        UART.printf("I2C read %d \r\n",I2C.read(0x4e));
 
-    I2C.write(0x4e,0x08);
-    delay_ms(1);
-	UART.printf("I2C address scanner, Scaning   %d read %d \r\n",i++,I2C.read(0x4e));
         
 		// 7Œªµÿ÷∑,0-127
 		for (;add<=0x50;add++)

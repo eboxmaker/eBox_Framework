@@ -78,7 +78,7 @@ extern void        (*delay_us)(uint32_t us);
  #endif
 
 
-
+// 取最大值，最小值
 #define min3v(v1, v2, v3)   ((v1)>(v2)? ((v2)>(v3)?(v3):(v2)):((v1)>(v3)?(v3):(v2)))
 #define max3v(v1, v2, v3)   ((v1)<(v2)? ((v2)<(v3)?(v3):(v2)):((v1)<(v3)?(v3):(v1)))
 #define min(v1, v2 )        ((v1)<(v2)? (v1):(v2))
