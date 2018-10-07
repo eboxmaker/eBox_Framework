@@ -3,9 +3,6 @@
 #include "mcu_config.h"
 #include "ebox_mem.h"
 
-#if EBOX_DEBUG 
-    #include "ebox_printf.h"
-#endif
 
 
 static uint32_t heap_addr_begin,heap_addr_end;
