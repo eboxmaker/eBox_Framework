@@ -46,11 +46,13 @@ uint16_t *_rx_ptr[UART_NUM];
  *          rx_pin:  外设所对应的rx引脚
  *@retval   None
 */
-Uart::Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin)
+Uart::Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin, uint16_t tx_buffer_size, uint16_t rx_buffer_size)
 {
     _USARTx = USARTx;
     _tx_pin = tx_pin;
     _rx_pin = rx_pin;
+    this->rx_buffer_size = rx_buffer_size;
+    this->tx_buffer_size = tx_buffer_size;
 }
 /**
  *@name     void Uart::begin(uint32_t baud_rate,uint8_t _use_dma)
@@ -86,51 +88,43 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     #if USE_UART1
     case (uint32_t)USART1_BASE:
         gpio_af_usart   = GPIO_AF_USART1;
-        index      = NUM_UART1;
+        index           = NUM_UART1;
         dma_rx          = &Dma2Stream2;//Dma2Stream5
         dma_channel     = DMA_Channel_4;
-        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART1;
-        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART1;
         break;
     #endif
 
     #if USE_UART2 
     case (uint32_t)USART2_BASE:
         gpio_af_usart   = GPIO_AF_USART2;
-        index      = NUM_UART2;
+        index           = NUM_UART2;
         dma_rx          = &Dma1Stream5;
         dma_channel     = DMA_Channel_4;
-        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART2;
-        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART2;
         break;
     #endif
 
     #if USE_UART3 
     case (uint32_t)USART3_BASE:
         gpio_af_usart   = GPIO_AF_USART3;
-        index      = NUM_UART3;
+        index           = NUM_UART3;
         dma_rx          = &Dma1Stream1;
         dma_channel     = DMA_Channel_4;
-        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART3;
-        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART3;
         break;
     #endif
 
     #if USE_UART4 
     case (uint32_t)UART4_BASE:
         gpio_af_usart   = GPIO_AF_UART4;
-        index      = NUM_UART4;
+        index           = NUM_UART4;
         dma_rx          = &Dma1Stream2;
         dma_channel     = DMA_Channel_4;
-        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART4;
-        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART4;
         break;
     #endif
 
     #if USE_UART5 
     case (uint32_t)UART5_BASE:
         gpio_af_usart   = GPIO_AF_UART5;
-        index      = NUM_UART5;
+        index           = NUM_UART5;
         dma_rx          = &Dma1Stream0;
         dma_channel     = DMA_Channel_4;
         _tx_buffer_size[index] = TX_BUFFER_SIZE_UART5;
@@ -141,11 +135,9 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     #if USE_UART6 
     case (uint32_t)USART6_BASE:
         gpio_af_usart   = GPIO_AF_USART6;
-        index      = NUM_UART6;
+        index           = NUM_UART6;
         dma_rx          = &Dma2Stream1;//Dma2Stream2
         dma_channel     = DMA_Channel_5;
-        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART5;
-        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART5;
     break;  
     
     #endif
@@ -153,26 +145,25 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     #if USE_UART7 
     case (uint32_t)UART7_BASE:
         gpio_af_usart   = GPIO_AF_UART7;
-        index      = NUM_UART7;
+        index           = NUM_UART7;
         dma_rx          = &Dma1Stream3;
         dma_channel     = DMA_Channel_5;
-        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART5;
-        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART5;
         break;  
     #endif
     
     #if USE_UART8 
     case (uint32_t)UART8_BASE:
         gpio_af_usart   = GPIO_AF_UART8;
-        index      = NUM_UART8;
+        index           = NUM_UART8;
         dma_rx          = &Dma1Stream6;
         dma_channel     = DMA_Channel_5;
-        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART5;
-        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART5;
         break; 
     #endif
 //    #endif
     }
+    _tx_buffer_size[index] = tx_buffer_size;
+    _rx_buffer_size[index] = rx_buffer_size;
+
     _tx_ptr[index] = (char *)ebox_malloc(_tx_buffer_size[index]);
     _rx_ptr[index] = (uint16_t *)ebox_malloc(_rx_buffer_size[index]);
 

@@ -69,8 +69,8 @@ void ebox_heap_init(void *begin_addr, void *end_addr)
 
 	BlockAllocatedBit = ( ( size_t ) 1 ) << ( ( sizeof( size_t ) * 8 ) - 1 );//计算CPU位数，并将最高位设置为1.保存于BlockAllocatedBit
 
-    heap_addr_begin = (uint32_t)begin_addr;
-    heap_addr_end = (uint32_t)end_addr;
+    heap_addr_begin = (uint32_t)begin_align;
+    heap_addr_end = (uint32_t)end_align;
     
     //初始化完成后的结构为heap->first_block->end_block;
 }
@@ -137,12 +137,11 @@ void *ebox_malloc( size_t xWantedSize )
 
         }
     __set_PRIMASK(temp);
+    
     }
     if(pvReturn == NULL)
     {
-        #if EBOX_DEBUG
-                ebox_printf("bad mem malloc!!!\r\n");
-        #endif
+
     }
     
 	return pvReturn;
@@ -200,9 +199,16 @@ void *ebox_realloc(void *ptr, size_t size)
     else
     {
         void *temp = ptr;//save ptr to temp
+        if(size < ebox_get_sizeof_ptr(ptr))
+            return ptr;
         ptr = ebox_malloc(size);//distribution new mem
-        ebox_memcpy(ptr,temp,ebox_get_sizeof_ptr(temp));
-        ebox_free(temp);//free temp
+        if(ptr != NULL)
+        {
+            ebox_memcpy(ptr,temp,ebox_get_sizeof_ptr(temp));
+            ebox_free(temp);//free temp
+        }
+        else
+            return NULL;
     }
     return ptr;
 }
@@ -221,20 +227,20 @@ size_t ebox_get_free(void)
     return FreeBytesRemaining;
 }
 
-//void *malloc(size_t size)
-//{
-//    return ebox_malloc(size);
-//}
+void *malloc(size_t size)
+{
+    return ebox_malloc(size);
+}
 
-//void free(void *ptr)
-//{
-//     ebox_free(ptr);
-//}
+void free(void *ptr)
+{
+     ebox_free(ptr);
+}
 
-//void *realloc(void *ptr, size_t size)
-//{
-//    return ebox_realloc(ptr,size);
-//}
+void *realloc(void *ptr, size_t size)
+{
+    return ebox_realloc(ptr,size);
+}
 
 
 static void insert_block_into_freeList( eboxBlockLink_t *pxBlockToInsert)
@@ -246,7 +252,7 @@ static void insert_block_into_freeList( eboxBlockLink_t *pxBlockToInsert)
 	than the block being inserted. */
 	for( pxIterator = &(heap[0]); pxIterator->nextFreeBlock < pxBlockToInsert; pxIterator = pxIterator->nextFreeBlock )
 	{
-		/* Nothing to do here, just iterate to the right position. */
+        /* Nothing to do here, just iterate to the right position. */
 	}
   
     /* Do the block being inserted, and the block it is being inserted after

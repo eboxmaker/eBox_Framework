@@ -64,7 +64,7 @@ class Stream : public Print
     virtual int peek() = 0;
 
 //    Stream() {_timeout=1000;}
-    Stream() {_timeout=100;}//设置为100ms
+    Stream() {_timeout=1000;}//设置为100ms
 
 // parsing methods
 

@@ -244,8 +244,8 @@ String Stream::readString()
 String Stream::readStringUntil(char terminator)
 {
   String ret;
-//  int c = timedRead();
-  int c = read();//优化读取，如果读取为空，则立即返回不用等待
+  int c = timedRead();
+//  int c = read();//优化读取，如果读取为空，则立即返回不用等待
   while (c >= 0 && c != terminator)
   {
     ret += (char)c;

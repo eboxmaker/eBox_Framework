@@ -21,6 +21,7 @@
 
 #include "ebox_core.h"
 #include "mcu.h"
+#include "ebox_printf.h"
 
 #include "ebox_timer_it.h"
 /*
@@ -268,8 +269,11 @@ extern "C" {
     void HardFault_Handler(void)
     {
         /* Go to infinite loop when Hard Fault exception occurs */
+//        hard_fault_isr();
         while (1)
         {
+           // ebox_printf("123\r\n");
+            
         }
     }
 

@@ -30,7 +30,7 @@ static uart_irq_handler irq_handler;
 uint16_t _tx_buffer_size[UART_NUM];
 uint16_t _tx_buffer_head[UART_NUM];
 uint16_t _tx_buffer_tail[UART_NUM];
-char     *_tx_ptr[UART_NUM];
+uint16_t *_tx_ptr[UART_NUM];
 
 uint16_t _rx_buffer_size[UART_NUM];
 uint16_t _rx_buffer_head[UART_NUM];
@@ -46,11 +46,16 @@ uint16_t *_rx_ptr[UART_NUM];
  *          rx_pin:  外设所对应的rx引脚
  *@retval   None
 */
-Uart::Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin)
+Uart::Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin, uint16_t tx_buffer_size, uint16_t rx_buffer_size)
 {
+    
     _USARTx = USARTx;
     _tx_pin = tx_pin;
     _rx_pin = rx_pin;
+    this->rx_buffer_size = rx_buffer_size;
+    this->tx_buffer_size = tx_buffer_size;
+    
+
 }
 /**
  *@name     void Uart::begin(uint32_t baud_rate,uint8_t _use_dma)
@@ -81,14 +86,14 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
         
     rcc_clock_cmd((uint32_t)_USARTx,ENABLE);
     this->mode = mode;
+    
+        
     switch((uint32_t)_USARTx)
     {
     #if USE_UART1
     case (uint32_t)USART1_BASE:
         dma_rx = &Dma1Ch5;
         index = NUM_UART1;
-        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART1;
-        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART1;
         break;
     #endif
 
@@ -96,8 +101,6 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     case (uint32_t)USART2_BASE:
         dma_rx = &Dma1Ch6;
         index = NUM_UART2;
-        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART2;
-        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART2;
         break;
     #endif
 
@@ -105,8 +108,6 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     case (uint32_t)USART3_BASE:
         dma_rx = &Dma1Ch3;
         index = NUM_UART3;
-        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART3;
-        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART3;
         break;
     #endif
 
@@ -125,9 +126,14 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
         break;
 #endif
     }
-    _tx_ptr[index] = (char *)ebox_malloc(_tx_buffer_size[index]);
-    _rx_ptr[index] = (uint16_t *)ebox_malloc(_rx_buffer_size[index]);
 
+    _tx_buffer_size[index] = tx_buffer_size;
+    _rx_buffer_size[index] = rx_buffer_size;
+    
+    _tx_ptr[index] = (uint16_t *)ebox_malloc(_tx_buffer_size[index]);
+    _rx_ptr[index] = (uint16_t *)ebox_malloc(_rx_buffer_size[index]);
+    
+    
     serial_irq_handler(index, Uart::_irq_handler, (uint32_t)this);
     
     
@@ -202,12 +208,12 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     }
     
     USART_Cmd(_USARTx, ENABLE);
+    _tx_pin->mode(AF_PP);
+    _rx_pin->mode(INPUT);
     
     nvic(ENABLE,0,0);
     interrupt(RxIrq,ENABLE);
     interrupt(TxIrq,DISABLE);
-    _tx_pin->mode(AF_PP);
-    _rx_pin->mode(INPUT);
 
 }
 void Uart::end()

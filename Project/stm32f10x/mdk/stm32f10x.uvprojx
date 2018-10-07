@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>__CC_ARM,ARM_MATH_CM3</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\cnc;..\..\..\component\network;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\DSP_Lib;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial</IncludePath>
+              <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\cnc;..\..\..\component\network;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\DSP_Lib;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -542,11 +542,6 @@
               <FilePath>..\..\..\ebox\core\ebox_mem.c</FilePath>
             </File>
             <File>
-              <FileName>ebox_printf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\ebox_printf.c</FilePath>
-            </File>
-            <File>
               <FileName>fifo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\ebox\core\fifo.c</FilePath>
@@ -630,11 +625,6 @@
               <FileName>ebox_gpio.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_gpio.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>object.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m3\object.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_uart.cpp</FileName>
@@ -736,25 +726,10 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\ebox_it.cpp</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>user</GroupName>
-          <Files>
             <File>
-              <FileName>main.cpp</FileName>
+              <FileName>object.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\user\main.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_ebox.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\board\spark_f1\bsp_ebox.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ads1271.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\ads1271.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\object.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -774,17 +749,27 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>modbus</GroupName>
+          <GroupName>esp8266</GroupName>
           <Files>
             <File>
-              <FileName>Modbus.cpp</FileName>
+              <FileName>ESP8266.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\component\modbus\libraries\Modbus\Modbus.cpp</FilePath>
+              <FilePath>..\..\..\component\WeeESP8266\ESP8266.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>user</GroupName>
+          <Files>
+            <File>
+              <FileName>main.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\main.cpp</FilePath>
             </File>
             <File>
-              <FileName>ModbusSerial.cpp</FileName>
+              <FileName>bsp_ebox.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\component\modbus\libraries\ModbusSerial\ModbusSerial.cpp</FilePath>
+              <FilePath>..\..\..\user\board\spark_f1\bsp_ebox.cpp</FilePath>
             </File>
           </Files>
         </Group>
