@@ -24,8 +24,9 @@ public:
 	virtual void    config(uint32_t speed) = 0;
 	virtual uint32_t    readConfig() = 0;
 	// µ¥×Ö½Ú¶ÁÐ´
-	virtual uint8_t	write(uint8_t slaveAddr, uint8_t data,uint16_t tOut) = 0;
-	virtual uint8_t read(uint8_t slaveAddr,uint16_t tOut) = 0;	
+	virtual uint8_t	write(uint8_t slaveAddr, uint8_t data) = 0;
+    virtual uint8_t write(uint8_t slaveAddr,uint8_t regAddr,uint8_t data,uint16_t tOut)=0;
+	virtual uint8_t read(uint8_t slaveAddr) = 0;	
 	virtual uint8_t read(uint8_t slaveAddr,uint8_t regAddr,uint16_t tOut) = 0;
 	// ¶ÁÐ´n×Ö½Ú
 	virtual uint8_t writeBuf(uint8_t slaveAddr,uint8_t *data,uint16_t num_to_write,uint16_t tOut) = 0;

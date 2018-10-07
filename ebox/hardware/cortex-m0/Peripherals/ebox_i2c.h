@@ -52,17 +52,18 @@ public:
   virtual void    config(uint32_t speed);
   virtual uint32_t    readConfig();
   // 单字节读写
-  virtual uint8_t	write(uint8_t slaveAddr, uint8_t data,uint16_t tOut= 300);
-  virtual uint8_t read(uint8_t slaveAddr,uint16_t tOut= 300);
-  virtual uint8_t read(uint8_t slaveAddr,uint8_t regAddr,uint16_t tOut= 300);
+	virtual uint8_t	write(uint8_t slaveAddr, uint8_t data);
+    virtual uint8_t write(uint8_t slaveAddr,uint8_t regAddr, uint8_t data,uint16_t tOut= 300);
+	virtual uint8_t read(uint8_t slaveAddr);	
+	virtual uint8_t read(uint8_t slaveAddr,uint8_t regAddr,uint16_t tOut= 300);
   // 读写n字节
   virtual uint8_t writeBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nWrite,uint16_t tOut = 300);
   virtual uint8_t	writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut = 300);
 
   virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t tOut = 300);
   virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut = 300);
-  // 等待设备响应
-  virtual uint8_t checkBusy(uint8_t slaveAddr,uint16_t tOut = 2000);
+	// 等待设备响应
+	virtual uint8_t checkBusy(uint8_t slaveAddr,uint16_t tOut = 200);
 
   // 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
   virtual uint8_t takeRight(uint32_t timing,uint16_t tOut = 300);
@@ -104,9 +105,10 @@ public:
   virtual void    config(uint32_t speed);
   virtual uint32_t    readConfig();
   // 单字节读写
-  virtual uint8_t	write(uint8_t slaveAddr, uint8_t data,uint16_t tOut= 300);
-  virtual uint8_t read(uint8_t slaveAddr,uint16_t tOut= 300);
-  virtual uint8_t read(uint8_t slaveAddr,uint8_t regAddr,uint16_t tOut= 300);
+  virtual uint8_t   write(uint8_t slaveAddr,uint8_t data);
+  virtual uint8_t   write(uint8_t slaveAddr,uint8_t regAddr, uint8_t data,uint16_t tOut= 300);
+  virtual uint8_t   read(uint8_t slaveAddr);
+  virtual uint8_t   read(uint8_t slaveAddr,uint8_t regAddr,uint16_t tOut= 300);
   // 读写n字节
   virtual uint8_t writeBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nWrite,uint16_t tOut = 300);
   virtual uint8_t	writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut = 300);
@@ -114,7 +116,7 @@ public:
   virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t tOut = 300);
   virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut = 300);
   // 等待设备响应
-  virtual uint8_t checkBusy(uint8_t slaveAddr,uint16_t tOut = 2000);
+  virtual uint8_t   checkBusy(uint8_t slaveAddr,uint16_t tOut = 200);
 
   // 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
   virtual uint8_t takeRight(uint32_t timing,uint16_t tOut = 300);
@@ -138,7 +140,6 @@ private:
   Gpio            *_sda;
   Gpio            *_scl;
   uint32_t   	 	_timing;	// i2c时序
-  uint16_t	delay_times;
   uint8_t 	_busy;
 };
 
