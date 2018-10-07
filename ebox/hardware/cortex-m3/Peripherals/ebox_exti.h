@@ -33,40 +33,68 @@
         - CHANGE: 上升沿和下降沿均触发中断
  */
 
+// 触发类型
+enum TrigType {
+  FALL = 0,	// 下降沿触发
+  RISE,			// 上升沿触发
+  FALL_RISING		// 上升沿下降沿
+};
+
+enum ExtiType{
+  IT = 0,			// 中断
+  EVENT,			// 事件
+  IT_EVENT		// 中断&事件
+};
+
+
 class Exti
 {
 public:
-    Exti(Gpio *exti_pin, uint8_t  trigger);
-    void begin();
-    void nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
-    void interrupt(FunctionalState enable);
+  Exti(Gpio *exti_pin);
+  void begin(PIN_MODE mode= INPUT,ExtiType type = IT);
 
-    static void _irq_handler( uint32_t id);
-    void attach(void (*fptr)(void));
-    template<typename T>
-    void attach(T* tptr, void (T::*mptr)(void)) {
-        _irq.attach(tptr, mptr);
+  void enable(TrigType trig,uint32_t priority = 0);
+  void disable(TrigType trig);
+
+  /**
+  *@brief    exti 绑定中断
+  *@param    TrigType type 中断触发类型,FALLING,RISING,FALL_RISING; void (*fptr)(void) 回调函数指针
+  *@retval   NONE
+  */
+  void attach(void (*fptr)(void),TrigType type);
+  /**
+   *@brief    exti 绑定成员回调函数
+   *@param    TrigType type 中断触发类型,FALLING,RISING,FALL_RISING;
+  	          T* tptr 对象指针
+  		        void (T::*mptr)(void) 对象成员
+   *@retval   NONE
+  */
+  template<typename T>
+  void attach(T* tptr, void (T::*mptr)(void),TrigType type) {
+    if (type == FALL_RISING){
+      _pirq[FALL].attach(tptr, mptr);
+      _pirq[RISE].attach(tptr, mptr);
+    }else{
+      _pirq[type].attach(tptr, mptr);
     }
+  }
 
 private:
-    Gpio                *pin;
-    uint8_t             trigger;
-    uint8_t             port_source;
-    uint8_t             pin_source;
-    uint32_t            exti_line;
+  // 静态成员不依赖类的创建，即使不创建类，它也存在，且可以在外部通过类名访问: IRQ::irq_handler(0)
+  // 所有实例共享静态成员，静态成员不能访问普通成员，需要通过对象名间接访问
+  static void _irq_handler(uint32_t pObj);
+  // 回调函数指针数组，分别绑定下降沿回调和上升沿回调函数
+  FunctionPointer _pirq[2];
+  Gpio	*_pin;
+  uint16_t	_extiLine;	//外部中断0-15
 
-protected:
-    FunctionPointer _irq;
+  void _init(ExtiType type = IT);
 };
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
-typedef void (*exti_irq_handler)(uint32_t id);
-
-int exti_irq_init(uint8_t index,exti_irq_handler handler,uint32_t id);
-	
 #ifdef __cplusplus
 }
 #endif

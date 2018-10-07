@@ -23,39 +23,44 @@
 #define EXAMPLE_NAME	"I2C serach address example"
 #define EXAMPLE_DATE	"2018-08-08"
 
-//#define IC1  I2C1,PB_8,PB_9
-#define IC1  I2C1,I2C1_SCL,I2C1_SDA
-//#define	IC21314	I2C2,PB_13,PB_14
-//E_I2C i2c(IC1);
+//mcuI2c i2c1(I2C1, &PB8, &PB9);
 
 void setup()
 {
 	ebox_init();
 	UART.begin(115200);
 	print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-	I2C.begin(100);
+	I2C.begin(40000);
 }
 
 int main(void)
 {
-	uint8_t add = 1;
+	uint8_t add = 0x45;
+    uint16_t i = 0;
 	setup();
 	
 	
-	I2C.write_byte(0x4e,0x00);
-	delay_ms(6000);
-
+	I2C.write(0x4e,0x00);
+	delay_ms(1000);
 	UART.printf("I2C address scanner, Scaning.......\r\n");
 	while (1)
-	{
+	{	
+        I2C.write(0x4e,0x00);
+        delay_ms(2000);
+        UART.printf("I2C read %d \r\n",I2C.read(0x4e));
+        I2C.write(0x4e,0x08);
+        delay_ms(2000);
+        UART.printf("I2C read %d \r\n",I2C.read(0x4e));
+
+        
 		// 7位地址,0-127
-		for (;add<=127;add++)
+		for (;add<=0x50;add++)
 		{
 			UART.printf("test address is 0x%2x  ",add);
-			if (I2C.wait_dev_busy(add)==0)
+			if (I2C.waitAck(add)==0)
 			{
 				UART.printf("success! \r\n");
-				I2C.write_byte(add,0x08);
+				I2C.write(add,0x08);
 				delay_ms(600);
 				//break;				
 			} else{
@@ -67,8 +72,8 @@ int main(void)
 			UART.printf("请检查接线,并确认设备ok! \r\n");
 		}
 		delay_ms(6000);
-		I2C.write_byte(0x4f,0x00);
-		add = 0;
+		I2C.write(0x4e,0x00);
+		add = 0x45;
 	}
 
 }
