@@ -132,10 +132,10 @@ uint32_t mcuI2c::readConfig()
   *          uint16_t tOut: 超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t mcuI2c::write(uint8_t slaveAddr, uint8_t data,uint16_t tOut)
+uint8_t mcuI2c::write(uint8_t slaveAddr, uint8_t data)
 {
 #if	(USE_TIMEOUT != 0)
-  uint32_t end = GetEndTime(tOut);
+  uint32_t end = GetEndTime(200);
 #endif
   LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,1,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_WRITE);
 
@@ -146,7 +146,40 @@ uint8_t mcuI2c::write(uint8_t slaveAddr, uint8_t data,uint16_t tOut)
       LL_I2C_TransmitData8(_i2cx,data);
     }
 #if	(USE_TIMEOUT != 0)
-    if (IsTimeOut(end,tOut)) return EWAIT;
+    if (IsTimeOut(end,200)) return EWAIT;
+#endif
+  }
+  LL_I2C_ClearFlag_STOP(_i2cx);
+
+  return EOK;
+}
+
+/**
+  *@brief    指定位置写入一个字节. start->data->stop
+  *@param    uint8_t slaveAddr:  从机地址
+  *          uint8_t data:  要写入的数据
+  *          uint16_t tOut: 超时
+  *@retval   状态 EOK 成功； EWAIT 超时
+  */
+uint8_t mcuI2c::write(uint8_t slaveAddr,uint8_t regAddr,uint8_t data,uint16_t tOut)
+{
+#if	(USE_TIMEOUT != 0)
+  uint32_t end = GetEndTime(200);
+#endif
+  LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,2,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_WRITE);
+
+  while (!LL_I2C_IsActiveFlag_STOP(_i2cx))
+  {
+    if (LL_I2C_IsActiveFlag_TXIS(_i2cx))
+    {
+      LL_I2C_TransmitData8(_i2cx,regAddr);
+    }
+        if (LL_I2C_IsActiveFlag_TXIS(_i2cx))
+    {
+      LL_I2C_TransmitData8(_i2cx,data);
+    }
+#if	(USE_TIMEOUT != 0)
+    if (IsTimeOut(end,200)) return EWAIT;
 #endif
   }
   LL_I2C_ClearFlag_STOP(_i2cx);
@@ -332,9 +365,9 @@ uint8_t mcuI2c::writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16
   *          uint16_t tOut: 超时
   *@retval   读取到的数据
   */
-uint8_t mcuI2c::read(uint8_t slaveAddr,uint16_t tOut){
+uint8_t mcuI2c::read(uint8_t slaveAddr){
   uint8_t ret = 0;
-  readBuf(slaveAddr,&ret,1,tOut);
+  readBuf(slaveAddr,&ret,1,200);
   return ret;
 }
 
@@ -370,8 +403,7 @@ uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t 
   {
     if (LL_I2C_IsActiveFlag_RXNE(_i2cx))
     {
-//      *data++ = LL_I2C_ReceiveData8(_i2cx);
-      I2C_DEBUG("n %d read is %d \r\n",nRead,LL_I2C_ReceiveData8(_i2cx));
+      *data++ = LL_I2C_ReceiveData8(_i2cx);
     }
 #if	(USE_TIMEOUT != 0)
     if (IsTimeOut(end,tOut)) return EWAIT;

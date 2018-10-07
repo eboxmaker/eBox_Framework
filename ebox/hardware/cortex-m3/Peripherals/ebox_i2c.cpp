@@ -24,7 +24,7 @@
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
-#define debug 1
+#define debug 0
 #endif
 
 #if debug
@@ -107,15 +107,34 @@ uint32_t mcuI2c::readConfig()
   *          uint16_t tOut: 超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t mcuI2c::write(uint8_t slaveAddr, uint8_t data,uint16_t tOut)
+uint8_t mcuI2c::write(uint8_t slaveAddr, uint8_t data)
+{
+  uint8_t err = EOK;
+  I2C_DEBUG("I2C state sr2 = %d, sr1 = %d \r\n",_i2cx->SR2,_i2cx->SR1);
+  err += _start(200);
+  err +=_send7bitsAddress(slaveAddr,WRITE,200);
+  err +=_sendByte(data,200);
+  _stop();
+  return err;
+}
+
+/**
+  *@brief    指定位置写入一个字节. start->data->stop
+  *@param    uint8_t slaveAddr:  从机地址
+  *          uint8_t data:  要写入的数据
+  *          uint16_t tOut: 超时
+  *@retval   状态 EOK 成功； EWAIT 超时
+  */
+uint8_t mcuI2c::write(uint8_t slaveAddr,uint8_t regAddr,uint8_t data,uint16_t tOut)
 {
   uint8_t err = EOK;
   I2C_DEBUG("I2C state sr2 = %d, sr1 = %d \r\n",_i2cx->SR2,_i2cx->SR1);
   err += _start(tOut);
   err +=_send7bitsAddress(slaveAddr,WRITE,tOut);
+  err +=_sendByte(regAddr,tOut);
   err +=_sendByte(data,tOut);
   _stop();
-  return EOK;
+  return err;
 }
 
 /**
@@ -170,13 +189,13 @@ uint8_t mcuI2c::writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16
   *          uint16_t tOut: 超时
   *@retval   读取到的数据
   */
-uint8_t mcuI2c::read(uint8_t slaveAddr,uint16_t tOut){
+uint8_t mcuI2c::read(uint8_t slaveAddr){
   uint8_t data ;
-  _start(tOut);
-  _send7bitsAddress(slaveAddr,READ,tOut);
+  _start(200);
+  _send7bitsAddress(slaveAddr,READ,200);
   _sendNack();
   _stop();
-  _receiveByte(&data,tOut);
+  _receiveByte(&data,200);
   _sendAck();
   return data;
 }
@@ -269,21 +288,21 @@ uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_
 uint8_t mcuI2c:: checkBusy(uint8_t slaveAddr,uint16_t tOut)
 {
   uint32_t end = GetEndTime(tOut);
-  __IO uint16_t SR1_Tmp = 0;
+//  __IO uint16_t SR1_Tmp = 0;
 
   do
   {
     I2C_ClearFlag(_i2cx, I2C_FLAG_AF);
     I2C_GenerateSTART(_i2cx, ENABLE);
 
-    SR1_Tmp = I2C_ReadRegister(_i2cx, I2C_Register_SR1);
+//    SR1_Tmp = I2C_ReadRegister(_i2cx, I2C_Register_SR1);
 
     I2C_Send7bitAddress(_i2cx, slaveAddr, I2C_Direction_Transmitter);
     if (IsTimeOut(end,tOut))
     {
-//      I2C_ClearFlag(_i2cx, I2C_FLAG_AF|I2C_FLAG_ADDR|I2C_FLAG_SB);
-//      I2C_SendData(_i2cx, slaveAddr);
-//      I2C_GenerateSTOP(_i2cx, ENABLE);
+      I2C_ClearFlag(_i2cx, I2C_FLAG_AF|I2C_FLAG_ADDR|I2C_FLAG_SB);
+      I2C_SendData(_i2cx, slaveAddr);
+      I2C_GenerateSTOP(_i2cx, ENABLE);
 //            I2C_DEBUG("I2C state sr2 = %d, sr1 = %d \r\n",_i2cx->SR2,_i2cx->SR1);
       return 1;
     }

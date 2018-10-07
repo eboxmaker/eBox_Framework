@@ -68,7 +68,7 @@ extern mcuI2c i2c1;
 extern mcuI2c i2c2;
 //extern SoftI2c si2c;
 extern SoftI2c si2c1;
-//extern SoftI2c si2c2;
+extern SoftI2c si2c2;
 
 //extern Can can1;
 
