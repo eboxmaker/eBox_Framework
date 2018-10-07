@@ -26,7 +26,7 @@
 
 #include "itoa.h"
 #include "ebox_core.h"
-
+#include "ebox_mem.h"
 
 #include "WString.h"
 
@@ -632,8 +632,7 @@ int String::lastIndexOf(const String &s2, unsigned int fromIndex) const
 	}
 	return found;
 }
-
-String String::substring(unsigned int left, unsigned int right) const
+String String::substring(unsigned int left, unsigned int right) 
 {
 	if (left > right) {
 		unsigned int temp = right;
@@ -647,6 +646,7 @@ String String::substring(unsigned int left, unsigned int right) const
 	buffer[right] = '\0';	
 	out = buffer + left;  // pointer arithmetic
 	buffer[right] = temp;  //restore character
+
 	return out;
 }
 

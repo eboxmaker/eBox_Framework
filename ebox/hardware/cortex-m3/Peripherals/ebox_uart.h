@@ -75,22 +75,7 @@
 #define USE_UART5 0
 #define UART_NUM (USE_UART1 + USE_UART2 + USE_UART3 + USE_UART4 + USE_UART5)
 
-
-
-#define TX_BUFFER_SIZE_UART1 100
-#define RX_BUFFER_SIZE_UART1 100
-
-#define TX_BUFFER_SIZE_UART2 100
-#define RX_BUFFER_SIZE_UART2 100
-
-#define TX_BUFFER_SIZE_UART3 100
-#define RX_BUFFER_SIZE_UART3 100
-
-#define TX_BUFFER_SIZE_UART4 100
-#define RX_BUFFER_SIZE_UART4 100
-
-#define TX_BUFFER_SIZE_UART5 100
-#define RX_BUFFER_SIZE_UART5 100
+#define UART_BUFFER_SIZE 256
 
 enum IrqType {
     RxIrq = 0,
@@ -115,7 +100,7 @@ typedef void (*uart_irq_handler)(uint32_t id, IrqType type);
 class Uart:public Stream
 {
 public:
-    Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin);
+    Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin, uint16_t tx_buffer_size = 128, uint16_t rx_buffer_size = 256);
 
     //initial uart
     void    begin(uint32_t baud_rate,RxMode_t mode = RxDMA);
@@ -171,6 +156,8 @@ private:
     USART_TypeDef       *_USARTx;
     Gpio                *_tx_pin;
     Gpio                *_rx_pin;
+    uint16_t            rx_buffer_size;
+    uint16_t            tx_buffer_size;
 
     RxMode_t            mode;
     Dma                 *dma_rx;

@@ -18,7 +18,7 @@ void ebox_init(void)
     mcu_init();
     
     #if USE_PRINTF 
-    ebox_printf_init();
+//    ebox_printf_init();
     #endif
     
     
@@ -30,22 +30,46 @@ extern "C"{
      *@param    NONE
      *@retval   NONE
     */
-    void ebox_printf_flush(void)
+    size_t ebox_printf(const char *fmt, ...)
     {
-        uint16_t len;
-        uint8_t buffer[64];
-        while(1)
-        {
-            len = ebox_fifo_get(uart_fifo_ptr,buffer,64);
-            if(len >= 1)
+        int     size1 = 0;
+        size_t  size2 = 64;
+        char    *p;
+
+        va_list va_params;
+        va_start(va_params, fmt);
+        
+        
+        do{
+            p = (char *)ebox_malloc(size2);
+            if(p == NULL)
+                return 0;
+
+            size1 =  ebox_vsnprintf(p, size2,fmt, va_params);
+
+            if(size1 == -1  || size1 >= size2)
             {
-                uart1.write(buffer,len);
+                size2+=64;
+                size1 = -1;
+                ebox_free(p);
             }
-            else
-            {
-                break;
-            }
-        }
+        }while(size1 == -1);
+        va_end(va_params);
+        uart1.write(p, size1);
+        ebox_free(p);
+        return size1;
     }
+    
+    void hard_fault_isr()
+    {
+            ebox_printf("[LOG Debug: ");
+            ebox_printf((const char*)__FILE__);
+            ebox_printf(",");
+            ebox_printf("%d",(unsigned int)__LINE__);
+            ebox_printf(",");
+            ebox_printf((const char*)__FUNCTION__);
+            ebox_printf("] ");
+            uart1.flush();
+   }
 }
 #endif

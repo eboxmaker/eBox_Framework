@@ -50,7 +50,7 @@ extern "C" {
         return millis_seconds;
     }
 
-    void mcu_delay_ms(uint64_t ms)
+    void mcu_delay_ms(uint32_t ms)
     {
         uint64_t end ;
         end = mcu_micros() + ms * 1000 - 3;
@@ -68,7 +68,7 @@ extern "C" {
    *@param    uint16_t us  要延时的时长，最小1us
    *@retval   none
   */
-  void  mcu_delay_us(uint64_t us)
+  void  mcu_delay_us(uint32_t us)
   {
     uint32_t ticks;
     uint32_t told,tnow,tcnt=0;

@@ -14,14 +14,9 @@ extern "C" {
 #endif
 
 
+size_t ebox_printf(const char *fmt, ...);
+      void hard_fault_isr();
 
-    
-extern struct ebox_fifo *uart_fifo_ptr;
-
-void ebox_printf_init(void);
-
-void ebox_printf(const char *fmt, ...);
-    
 #ifdef __cplusplus
 }
 #endif

@@ -22,9 +22,9 @@ size_t  ebox_get_sizeof_ptr(void *ptr);// get ptr mem size
 size_t  ebox_get_free(void);// get free mem size 
 
 
-//void    *malloc(size_t size);
-//void    free(void *ptr);
-//void    *realloc(void *ptr, size_t size);
+void    *malloc(size_t size);
+void    free(void *ptr);
+void    *realloc(void *ptr, size_t size);
 
 float   ebox_mem_usage(void);
 float   ebox_mem_used(void);

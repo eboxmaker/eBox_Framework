@@ -36,8 +36,8 @@ typedef void (*callback_fun_type)(void);
     void mcu_init(void);
     uint64_t mcu_micros(void);
     uint64_t mcu_millis( void );
-    void mcu_delay_ms(uint64_t ms);
-    void mcu_delay_us(uint64_t us);
+    void mcu_delay_ms(uint32_t ms);
+    void mcu_delay_us(uint32_t us);
     void set_systick_user_event_per_sec(u16 frq);
     void attach_systick_user_event(void (*callback_fun)(void));
 #ifdef __cplusplus
