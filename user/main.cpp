@@ -93,19 +93,10 @@ int main(void)
 //        delay_ms(1000);
 
 
-        printf("123xxxxx\r\n");
+        ebox_printf("123xxxxx\r\n");
         delay_ms(1000);
 	}
 }
 
-#include "stdio.h"
 
-extern "C"
-{
-    int fputc(int ch, FILE *f)
-    {
-        uart1.write(ch);  
-        return ch;
-    }
-}
 

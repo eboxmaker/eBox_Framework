@@ -21,7 +21,6 @@
 
 #include "ebox_core.h"
 #include "mcu.h"
-#include "ebox_printf.h"
 
 #include "ebox_timer_it.h"
 /*

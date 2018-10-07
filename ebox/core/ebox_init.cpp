@@ -1,6 +1,5 @@
 #include "ebox.h"
 #include "mcu.h"
-#include "ebox_printf.h"
 #include "ebox_core.h"
 #include "ebox_mem.h"
 
@@ -16,10 +15,6 @@ void ebox_init(void)
     millis      = mcu_millis;
 
     mcu_init();
-    
-    #if USE_PRINTF 
-//    ebox_printf_init();
-    #endif
     
     
 }
@@ -60,16 +55,6 @@ extern "C"{
         return size1;
     }
     
-    void hard_fault_isr()
-    {
-            ebox_printf("[LOG Debug: ");
-            ebox_printf((const char*)__FILE__);
-            ebox_printf(",");
-            ebox_printf("%d",(unsigned int)__LINE__);
-            ebox_printf(",");
-            ebox_printf((const char*)__FUNCTION__);
-            ebox_printf("] ");
-            uart1.flush();
-   }
+
 }
 #endif
