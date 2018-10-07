@@ -991,7 +991,6 @@
                     <File RelativePath="..\..\..\ebox\hardware\cortex-m0\object.cpp" FileType="3" Output="object.o" ro="0" bss="0" rw="0" />
                     <File RelativePath="..\..\..\ebox\hardware\cortex-m0\rcc.cpp" FileType="3" Output="rcc.o" ro="0" bss="0" rw="0" />
                     <File RelativePath="..\..\..\ebox\hardware\cortex-m0\rcc.h" FileType="4" ro="0" bss="0" rw="0" />
-                    <File RelativePath="..\..\..\ebox\hardware\cortex-m0\stm32f10x_conf.h" FileType="4" ro="0" bss="0" rw="0" />
                     <Filter Name="Peripherals">
                         <File RelativePath="..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_3steper.cpp" FileType="3" Output="ebox_3steper.o" ro="0" bss="0" rw="0" />
                         <File RelativePath="..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_3steper.h" FileType="4" ro="0" bss="0" rw="0" />
@@ -1559,6 +1558,7 @@
                     <File RelativePath="..\..\..\user\board\Nucleo_f0\bsp_ebox.h" FileType="4" ro="0" bss="0" rw="0" />
                 </Filter>
             </Filter>
+            <File RelativePath="..\..\..\user\ebox_config.h" FileType="4" ro="0" bss="0" rw="0" />
         </Filter>
     </Files>
 </TKStudioProject>

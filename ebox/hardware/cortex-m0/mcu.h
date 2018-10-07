@@ -59,6 +59,10 @@ extern "C" {
   // systick中断回调函数
   extern uint16_t attachSystickCallBack(fun_noPara_t fun,uint16_t multiple = 1); // 绑定中断回调函数，允许则定义周期 = multiple * 1ms; 最大65535
 
+#define GetEndTime(timeOut)					(millis_seconds + timeOut)
+// 超时,返回1 否则返回0   这里采用millis()获取millis_seconds,可以防止因为关闭中断导致程序死在延时函数里
+#define IsTimeOut(endTime,delay)		    ((uint32_t)(endTime - millis())>delay)      
+      
 #ifdef __cplusplus
 }
 #endif

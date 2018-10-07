@@ -1,10 +1,9 @@
 /**
   ******************************************************************************
-  * @file    i2c.cpp
-  * @author  shentq
-  * @version V2.1
-  * @date    2016/08/14
-  * @brief
+  * @file    ebox_i2c.cpp
+  * @author  cat_li
+  * @brief   仅工作在主模式
+		1  2017/5/30  增加超时，防止程序死掉。读写函数增加返回状态
   ******************************************************************************
   * @attention
   *
@@ -16,462 +15,474 @@
   ******************************************************************************
   */
 
-
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_i2c.h"
+#include "ebox_core.h"
+#include "ebox_gpio.h"
 
-// ��Ƶ�����������֣��ߵ�ƽ���͵�ƽ
-#define	C16M10K	 	__LL_I2C_CONVERT_TIMINGS(0x3, 0xc7, 0xc3, 0x02, 0x04)		//10k@16M
-#define	C16M100K	__LL_I2C_CONVERT_TIMINGS(0x3, 0x13, 0xf, 0x02, 0x04)		//100k@16M
-#define	C16M400K	__LL_I2C_CONVERT_TIMINGS(0x1, 0x9, 0x3, 0x2, 0x3)			//400k@16M
+#include "ebox_config.h"
 
-#define	C48M10K	 	__LL_I2C_CONVERT_TIMINGS(0xb, 0xc7, 0xc3, 0x02, 0x04)		//10k@48M
-#define	C48M100K	__LL_I2C_CONVERT_TIMINGS(0xb, 0x13, 0xf, 0x02, 0x04)		//100k@48M
-#define	C48M400K	__LL_I2C_CONVERT_TIMINGS(0x5, 0x9, 0x3, 0x3, 0x3)			//400k@48M
+#if EBOX_DEBUG
+// 是否打印调试信息, 1打印,0不打印
+#define debug 1
+#endif
 
-#define	C8M10K	 	__LL_I2C_CONVERT_TIMINGS(0x1, 0xc7, 0xc3, 0x02, 0x04)		//10k@48M
-#define	C8M100K	 	__LL_I2C_CONVERT_TIMINGS(0x1, 0x13, 0xf, 0x02, 0x04)		//100k@48M
-#define	C8M400K	 	__LL_I2C_CONVERT_TIMINGS(0x0, 0x9, 0x3, 0x1, 0x3)			//400k@48M
+#if debug
+#define  I2C_DEBUG(...) DBG("[I2C]  "),DBG(__VA_ARGS__)
+#else
+#define  I2C_DEBUG(...)
+#endif
 
-mcuI2c::mcuI2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin)
+/**
+ *@name     I2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin)
+ *@brief      I2C构造函数
+ *@param    I2Cx:  I2C1,I2C2
+ *          scl_pin:  时钟Pin
+ *          sda_pin:  数据Pin
+ *@retval   None
+*/
+mcuI2c::mcuI2c(I2C_TypeDef *I2Cx,Gpio *scl_pin, Gpio *sda_pin)
 {
-  busy = 0;
-  this->I2Cx = I2Cx;
-  this->scl_pin = scl_pin;
-  this->sda_pin = sda_pin;
-
+  _busy = 0;
+  _i2cx = I2Cx;
+  _scl = scl_pin;
+  _sda = sda_pin;
 }
-void  mcuI2c::begin(uint32_t _speed)
+
+/**
+  *@brief    根据i2c时钟和设置速率speed计算timing。默认400k @8M
+  *@param    speed:  速率 10,100,400 分别代表10k，100k，400k
+  *@retval   None
+  */
+void  mcuI2c::begin(uint16_t speed)
 {
   switch (cpu.clock.pclk1/1000000){
   case 16:
-    switch (_speed){
+    switch (speed){
     case 10:
-      this->speed = C16M10K;	// 10k 	@16M
+      _timing = C16M10K;	// 10k 	@16M
       break;
     case 100:
-      this->speed = C16M100K;		// 100k @16M
+      _timing = C16M100K;		// 100k @16M
       break;
     case 400:
     default:
-      this->speed = C16M400K;			// 400k @16M
+      _timing = C16M400K;			// 400k @16M
     }
     break;
   case 48:
     switch (speed){
     case 10:
-      this->speed = C48M10K;	// 10k 	@48M
+      _timing = C48M10K;	// 10k 	@48M
       break;
     case 100:
-      this->speed = C48M100K;		// 100k @48M
+      _timing = C48M100K;		// 100k @48M
       break;
     case 400:
     default:
-      this->speed = C48M400K;			// 400k @48M
+      _timing = C48M400K;			// 400k @48M
     }
     break;
   case 8:
-  default:	// Ĭ��ϵͳʱ��Ϊ8M
+  default:	// 默认系统时钟为8M
     switch (speed){
     case 10:
-      this->speed = C8M10K;	// 10k 	@8M
+      _timing = C8M10K;	// 10k 	@8M
       break;
     case 100:
-      this->speed = C8M100K;		// 100k @8M
+      _timing = C8M100K;		// 100k @8M
       break;
     case 400:
     default:
-      this->speed = C8M400K;			// 400k @8M
+      _timing = C8M400K;			// 400k @8M
     }
   }
-  this->speed = _speed;
-//    I2C_InitTypeDef I2C_InitStructure;
-
-
-  rcc_clock_cmd((uint32_t)I2Cx,ENABLE);
-  sda_pin->mode(AF_PP_PU,LL_GPIO_AF_1);
-  scl_pin->mode(AF_PP_PU,LL_GPIO_AF_1);
-
-  config(this->speed);
-
-  /* I2c ���� */
-//    I2C_InitStructure.I2C_Mode = I2C_Mode_I2C ;
-//    I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
-//    //I2C_InitStructure.I2C_OwnAddress1 = SlaveAddress;
-//    I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
-//    I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
-//    I2C_InitStructure.I2C_ClockSpeed = this->speed;
-
-//    /* I2C1 ��ʼ�� */
-//    I2C_DeInit(I2Cx);
-//    I2C_Init(I2Cx, &I2C_InitStructure);
-
-//    /* ʹ�� I2C1 */
-//    I2C_Cmd  (I2Cx, ENABLE);
-
+  _scl->mode(AF_PP_PU,LL_GPIO_AF_1);
+  _sda->mode(AF_PP_PU,LL_GPIO_AF_1);
+  config(_timing);
 }
 
 void mcuI2c::config(uint32_t speed)
 {
-  this->speed = speed;
-//    I2C_InitTypeDef I2C_InitStructure;
+  _timing = speed;
+  rcc_clock_cmd((uint32_t)_i2cx,ENABLE);
+  // I2C1 需要选择特定的时钟
+  (_i2cx == I2C1)?(LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_SYSCLK)):(void());
 
-//    /* I2c ���� */
-//    I2C_InitStructure.I2C_Mode = I2C_Mode_I2C ;
-//    I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
-//    //I2C_InitStructure.I2C_OwnAddress1 = SlaveAddress;
-//    I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
-//    I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
-
-//    I2C_InitStructure.I2C_ClockSpeed = this->speed;
-//    I2C_Init(I2Cx, &I2C_InitStructure);
-//    /* ʹ�� I2C1 */
-//    I2C_Cmd  (I2Cx, ENABLE);
-//    /*����Ӧ��ģʽ*/
-//    I2C_AcknowledgeConfig(I2Cx, ENABLE);
-  (I2Cx == I2C1)?(LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_SYSCLK)):(void());
-
-  LL_I2C_Disable(I2Cx);
-  LL_I2C_SetTiming(I2Cx,speed);
-  LL_I2C_Enable(I2Cx);
-
-}
-uint32_t mcuI2c::read_config()
-{
-  return this->speed;
-}
-int8_t mcuI2c::start()
-{
-//    uint16_t times = 1000;
-  int8_t err = 0;
-//    I2C_GenerateSTART(I2Cx, ENABLE);
-
-//    while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_MODE_SELECT))
-//    {
-//        times--;
-//        if(times == 0)
-//        {
-//            err = -1;
-//            break;
-//        }
-//    }
-  return err;
-}
-int8_t mcuI2c::stop()
-{
-  int8_t err = 0;
-//    I2C_GenerateSTOP(I2Cx, ENABLE);
-  return err;
-}
-int8_t mcuI2c::send_no_ack()
-{
-  int8_t err = 0;
-//    I2C_AcknowledgeConfig(I2Cx, DISABLE);
-  return err;
-}
-int8_t mcuI2c::send_ack()
-{
-  int8_t err = 0;
-//    I2C_AcknowledgeConfig(I2Cx, ENABLE);
-  return err;
+  LL_I2C_Disable(_i2cx);
+  LL_I2C_SetTiming(_i2cx,_timing);
+  LL_I2C_Enable(_i2cx);
 }
 
-
-int8_t mcuI2c::send_byte(uint8_t data)
+uint32_t mcuI2c::readConfig()
 {
-//    uint16_t times = 1000;
-  int8_t err = 0;
-//    I2C_SendData(I2Cx, data);
-//    while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_BYTE_TRANSMITTED))
-//    {
-//        times--;
-//        if(times == 0)
-//        {
-//            err = -2;
-//            break;
-//        }
-//    }
-  return err;
-}
-int8_t mcuI2c::send_7bits_address(uint8_t slave_address)
-{
-//    uint16_t times = 5000;
-  int8_t err = 0;
-//    if(slave_address & 0x01)
-//    {
-//        I2C_Send7bitAddress(I2Cx, slave_address, I2C_Direction_Receiver);
-//        while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
-//        {
-//            times--;
-//            if(times == 0)
-//            {
-//                err = -3;
-//                break;
-//            }
-//        }
-//    }
-//    else
-//    {
-//        I2C_Send7bitAddress(I2Cx, slave_address, I2C_Direction_Transmitter);
-//        while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
-//        {
-//            times--;
-//            if(times == 0)
-//            {
-//                err = -4;
-//                break;
-//            }
-//        }
-//    }
-  return err;
-
-}
-int8_t mcuI2c::receive_byte(uint8_t *data)
-{
-//    uint16_t times = 1000;
-  int8_t err = 0;
-//    while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_BYTE_RECEIVED))
-//    {
-//        times--;
-//        if(times == 0)
-//        {
-//            err = -5;
-//            break;
-//        }
-//    }
-//    *data = I2C_ReceiveData(I2Cx);//�����Ĵ�������
-  return err;
+  return _timing;
 }
 
-
-int8_t mcuI2c::write_byte(uint8_t slave_address, uint8_t data)
+/**
+  *@brief    I2C写入一个字节. start->data->stop
+  *@param    uint8_t slaveAddr:  从机地址
+  *          uint8_t data:  要写入的数据
+  *          uint16_t tOut: 超时
+  *@retval   状态 EOK 成功； EWAIT 超时
+  */
+uint8_t mcuI2c::write(uint8_t slaveAddr, uint8_t data,uint16_t tOut)
 {
-  uint16_t err = 0;
-
-#if	(TIMEOUT != 0)
-  uint32_t end = GetEndTime(timeout_us);
+#if	(USE_TIMEOUT != 0)
+  uint32_t end = GetEndTime(tOut);
 #endif
-  LL_I2C_HandleTransfer(I2Cx,slave_address,LL_I2C_ADDRESSING_MODE_7BIT,1,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_WRITE);
+  LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,1,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_WRITE);
 
-  while (!LL_I2C_IsActiveFlag_STOP(I2Cx))
+  while (!LL_I2C_IsActiveFlag_STOP(_i2cx))
   {
-    if (LL_I2C_IsActiveFlag_TXIS(I2Cx))
+    if (LL_I2C_IsActiveFlag_TXIS(_i2cx))
     {
-      LL_I2C_TransmitData8(I2Cx,data);
+      LL_I2C_TransmitData8(_i2cx,data);
     }
-#if	(TIMEOUT != 0)
-    if (IsTimeOut(end,timeout_us)) return E_TIMEOUT;
+#if	(USE_TIMEOUT != 0)
+    if (IsTimeOut(end,tOut)) return EWAIT;
 #endif
   }
-  LL_I2C_ClearFlag_STOP(I2Cx);
+  LL_I2C_ClearFlag_STOP(_i2cx);
 
-//	return E_OK;
-
-  return err;
+  return EOK;
 }
 
-int8_t mcuI2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t data){
-    return 0;
-}
-
-int8_t mcuI2c::write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t len)
+/**
+  *@brief    I2C连续写 start->data....->stop
+  *@param    uint8_t slaveAddr:  从机地址
+  *          uint8_t *data:  要写入的数据
+  *          uint16_t nWrite  要写入的数据长度
+  *          uint16_t tOut:  超时
+  *@retval   状态 EOK 成功； EWAIT 超时
+  */
+uint8_t mcuI2c::writeBuf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite,uint16_t tOut)
 {
-  uint16_t err = 0;
-
-#if	(TIMEOUT != 0)
-  uint64_t end = GetEndTime(timeout_us);
+#if	(USE_TIMEOUT != 0)
+  uint32_t end = GetEndTime(tOut);
 #endif
-  if (len >255){
+  if (nWrite >255){
     // num_to_writ>255: RELOAD,NBYTE=0xFF,START
-    LL_I2C_HandleTransfer(I2Cx,slave_address,LL_I2C_ADDRESSING_MODE_7BIT,0xFF,LL_I2C_MODE_RELOAD,LL_I2C_GENERATE_START_WRITE);
+    LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,0xFF,LL_I2C_MODE_RELOAD,LL_I2C_GENERATE_START_WRITE);
 
-    while (!LL_I2C_IsActiveFlag_TCR(I2Cx))
+    while (!LL_I2C_IsActiveFlag_TCR(_i2cx))
     {
-      if (LL_I2C_IsActiveFlag_TXIS(I2Cx))
+      if (LL_I2C_IsActiveFlag_TXIS(_i2cx))
       {
-        LL_I2C_TransmitData8(I2Cx,*data++);
+        LL_I2C_TransmitData8(_i2cx,*data++);
       }
-#if	(TIMEOUT != 0)
-      if (IsTimeOut(end,timeout_us))	return E_TIMEOUT;
+#if	(USE_TIMEOUT != 0)
+      if (IsTimeOut(end,tOut))	return EWAIT;
 #endif
     }
-    len = len - 255;
+    nWrite = nWrite - 255;
     // num_to_writ>255: RELOAD,NBYTE=0xFF,NOSTART
 
-    while (len > 255){
-      // ���͵�ַ�Ĵ���
-      LL_I2C_HandleTransfer(I2Cx,slave_address,LL_I2C_ADDRESSING_MODE_7BIT,0xFF,LL_I2C_MODE_RELOAD,LL_I2C_GENERATE_NOSTARTSTOP);
-#if	(TIMEOUT != 0)
-      end = GetEndTime(timeout_us);
+    while (nWrite > 255){
+      // 发送地址寄存器
+      LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,0xFF,LL_I2C_MODE_RELOAD,LL_I2C_GENERATE_NOSTARTSTOP);
+#if	(USE_TIMEOUT != 0)
+      end = GetEndTime(tOut);
 #endif
-      while (!LL_I2C_IsActiveFlag_TCR(I2Cx))
+      while (!LL_I2C_IsActiveFlag_TCR(_i2cx))
       {
-        if (LL_I2C_IsActiveFlag_TXIS(I2Cx))
+        if (LL_I2C_IsActiveFlag_TXIS(_i2cx))
         {
-          LL_I2C_TransmitData8(I2Cx,*data++);
+          LL_I2C_TransmitData8(_i2cx,*data++);
         }
-#if	(TIMEOUT != 0)
-        if (IsTimeOut(end,timeout_us))	return E_TIMEOUT;
+#if	(USE_TIMEOUT != 0)
+        if (IsTimeOut(end,tOut))	return EWAIT;
 #endif
       }
-      len = len - 255;
+      nWrite = nWrite - 255;
     }
     // num_to_writ<=255: AUTOEND,NBYTE=num_to_writ,NOSTART
-    LL_I2C_HandleTransfer(I2Cx,slave_address,LL_I2C_ADDRESSING_MODE_7BIT,len,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_NOSTARTSTOP);
-#if	(TIMEOUT != 0)
-    end = GetEndTime(timeout_us);
+    LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,nWrite,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_NOSTARTSTOP);
+#if	(USE_TIMEOUT != 0)
+    end = GetEndTime(tOut);
 #endif
-    while (!LL_I2C_IsActiveFlag_STOP(I2Cx))
+    while (!LL_I2C_IsActiveFlag_STOP(_i2cx))
     {
-      if (LL_I2C_IsActiveFlag_TXIS(I2Cx))
+      if (LL_I2C_IsActiveFlag_TXIS(_i2cx))
       {
-        LL_I2C_TransmitData8(I2Cx,*data++);
+        LL_I2C_TransmitData8(_i2cx,*data++);
       }
-#if	(TIMEOUT != 0)
-      if (IsTimeOut(end,timeout_us))	return E_TIMEOUT;
+#if	(USE_TIMEOUT != 0)
+      if (IsTimeOut(end,tOut))	return EWAIT;
 #endif
     }
-    LL_I2C_ClearFlag_STOP(I2Cx);
+    LL_I2C_ClearFlag_STOP(_i2cx);
   }else{
-    // д���ַ�Ĵ���������
-    LL_I2C_HandleTransfer(I2Cx,slave_address,LL_I2C_ADDRESSING_MODE_7BIT,len,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_WRITE);
-#if	(TIMEOUT != 0)
-    end = GetEndTime(timeout_us);
+    // 写入地址寄存器和数据
+    LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,nWrite,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_WRITE);
+#if	(USE_TIMEOUT != 0)
+    end = GetEndTime(tOut);
 #endif
-    while (!LL_I2C_IsActiveFlag_STOP(I2Cx))
+    while (!LL_I2C_IsActiveFlag_STOP(_i2cx))
     {
-      if (LL_I2C_IsActiveFlag_TXIS(I2Cx))
+      if (LL_I2C_IsActiveFlag_TXIS(_i2cx))
       {
-        LL_I2C_TransmitData8(I2Cx,*data++);
+        LL_I2C_TransmitData8(_i2cx,*data++);
       }
-#if	(TIMEOUT != 0)
-      if (IsTimeOut(end,timeout_us))	return E_TIMEOUT;
+#if	(USE_TIMEOUT != 0)
+      if (IsTimeOut(end,tOut))	return EWAIT;
 #endif
     }
-    LL_I2C_ClearFlag_STOP(I2Cx);
+    LL_I2C_ClearFlag_STOP(_i2cx);
   }
 
-  return err;
-
-}
-int8_t mcuI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data)
-{
-//    start();
-//    send_7bits_address(slave_address);
-//    I2C_Cmd(I2Cx, ENABLE);
-//    send_byte(reg_address);
-//    start();
-//    send_7bits_address(slave_address + 1);
-//    send_no_ack();
-//    stop();
-//    receive_byte(data);
-//    send_ack();
-  read_byte(slave_address,reg_address,data,1);
-  return 0;
+  return EOK;
 }
 
-int8_t mcuI2c::read_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t len)
+/**
+  *@brief    在指定寄存器连续写 start->regAddr->data....->stop
+  *@param    uint8_t slaveAddr:  从机地址
+  *          uint8_t regAddr：要写入的寄存器地址
+  *          uint8_t *data:  要写入的数据
+  *          uint16_t nWrite  要写入的数据长度
+  *          uint16_t tOut:  超时
+  *@retval   状态 EOK 成功； EWAIT 超时
+  */
+uint8_t mcuI2c::writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut)
 {
-  uint8_t i = 0;
-//    start();
-//    send_7bits_address(slave_address);
-//    I2C_Cmd(I2Cx, ENABLE);
-//    send_byte(reg_address);
-//    start();
-//    send_7bits_address(slave_address + 1);
-
-//    while(len)
-//    {
-//        if(len == 1)
-//        {
-//            send_no_ack();
-//            stop();
-//        }
-//        receive_byte(data);
-//        data++;
-//        len--;
-//        i++;
-//    }
-//    send_ack();
-
-#if	(TIMEOUT != 0)
-  uint64_t end = GetEndTime(timeout_us);
+#if	(USE_TIMEOUT != 0)
+  uint32_t end = GetEndTime(tOut);
 #endif
-  // ���͵�ַ�Ĵ���
-  LL_I2C_HandleTransfer(I2Cx,slave_address,LL_I2C_ADDRESSING_MODE_7BIT,1,LL_I2C_MODE_SOFTEND,LL_I2C_GENERATE_START_WRITE);
-  while (!LL_I2C_IsActiveFlag_TC(I2Cx))
+  // 发送地址寄存器
+  LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,1,LL_I2C_MODE_SOFTEND,LL_I2C_GENERATE_START_WRITE);
+
+  while (!LL_I2C_IsActiveFlag_TC(_i2cx))
   {
-    if (LL_I2C_IsActiveFlag_TXIS(I2Cx))
+    if (LL_I2C_IsActiveFlag_TXIS(_i2cx))
     {
-      LL_I2C_TransmitData8(I2Cx,reg_address);
+      LL_I2C_TransmitData8(_i2cx,regAddr);
     }
-//		if (IsTimeOut(end,timeout_us))
-//		{
-//			return E_TIMEOUT;
-//		}
-  }
-  // ���Ͷ�ָ��ӵ�ǰ��ַ��ʼ��ȡ����
-  LL_I2C_HandleTransfer(I2Cx,slave_address,LL_I2C_ADDRESSING_MODE_7BIT,len,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_READ);
-#if	(TIMEOUT != 0)
-  end = GetEndTime(timeout_us);
+#if	(USE_TIMEOUT != 0)
+    if (IsTimeOut(end,tOut)) return EWAIT;
 #endif
-  while (!LL_I2C_IsActiveFlag_STOP(I2Cx))
+  }
+  // 发送数据
+  if (nWrite >255){
+    // num_to_writ>255: RELOAD,NBYTE=0xFF,NOSTART
+    while (nWrite > 255){
+      // 发送地址寄存器
+      LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,0xFF,LL_I2C_MODE_RELOAD,LL_I2C_GENERATE_NOSTARTSTOP);
+#if	(USE_TIMEOUT != 0)
+      end = GetEndTime(tOut);
+#endif
+      while (!LL_I2C_IsActiveFlag_TCR(_i2cx))
+      {
+        if (LL_I2C_IsActiveFlag_TXIS(_i2cx))
+        {
+          LL_I2C_TransmitData8(_i2cx,*data++);
+        }
+#if	(USE_TIMEOUT != 0)
+        if (IsTimeOut(end,tOut)) return EWAIT;
+#endif
+      }
+      nWrite = nWrite - 255;
+    }
+    // num_to_writ<=255: AUTOEND,NBYTE=num_to_writ,NOSTART
+    LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,nWrite,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_NOSTARTSTOP);
+#if	(USE_TIMEOUT != 0)
+    end = GetEndTime(tOut);
+#endif
+    while (!LL_I2C_IsActiveFlag_STOP(_i2cx))
+    {
+      if (LL_I2C_IsActiveFlag_TXIS(_i2cx))
+      {
+        LL_I2C_TransmitData8(_i2cx,*data++);
+      }
+#if	(USE_TIMEOUT != 0)
+      if (IsTimeOut(end,tOut)) return EWAIT;
+#endif
+    }
+    LL_I2C_ClearFlag_STOP(_i2cx);
+  }else{
+    // 写入地址寄存器和数据
+    LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,nWrite,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_NOSTARTSTOP);
+#if	(USE_TIMEOUT != 0)
+    end = GetEndTime(tOut);
+#endif
+    while (!LL_I2C_IsActiveFlag_STOP(_i2cx))
+    {
+      if (LL_I2C_IsActiveFlag_TXIS(_i2cx))
+      {
+        LL_I2C_TransmitData8(_i2cx,*data++);
+      }
+#if	(USE_TIMEOUT != 0)
+      if (IsTimeOut(end,tOut)) return EWAIT;
+#endif
+    }
+    LL_I2C_ClearFlag_STOP(_i2cx);
+  }
+  return EOK;
+}
+
+
+/**
+  *@brief    I2C读入一个字节. start->Nack->stop->data
+  *@param    uint8_t slaveAddr:  从机地址
+  *          uint16_t tOut: 超时
+  *@retval   读取到的数据
+  */
+uint8_t mcuI2c::read(uint8_t slaveAddr,uint16_t tOut){
+  uint8_t ret = 0;
+  readBuf(slaveAddr,&ret,1,tOut);
+  return ret;
+}
+
+/**
+  *@brief    读指定寄存器. start->WslaveAddr->regAddr->RslaveAddr->Nack->stop->data
+  *@param    uint8_t slaveAddr:  从机地址
+  *          uint8_t regAddr：   要读取的寄存器
+  *          uint16_t tOut: 超时
+  *@retval   读取到的数据
+  */
+uint8_t mcuI2c::read(uint8_t slaveAddr,uint8_t regAddr,uint16_t tOut){
+  uint8_t ret = 0;
+  readBuf(slaveAddr,regAddr,&ret,1,tOut);
+  return ret;  
+}
+
+/**
+  *@brief    连续读取. start->data...->nRead==1->Nack->stop->data
+  *@param    uint8_t slaveAddr:  从机地址
+  *          uint8_t *data: 读取到的数据
+  *          uint16_t nRead：要读取的数据长度
+  *          uint16_t tOut: 超时
+  *@retval   EOK，EWAIT
+  */
+uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t tOut)
+{
+#if	(USE_TIMEOUT != 0)
+  uint32_t end = GetEndTime(tOut);
+#endif
+  // 发送读指令，从当前地址开始读取数据
+  LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,nRead,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_READ);
+  while (!LL_I2C_IsActiveFlag_STOP(_i2cx))
   {
-    if (LL_I2C_IsActiveFlag_RXNE(I2Cx))
+    if (LL_I2C_IsActiveFlag_RXNE(_i2cx))
     {
-      *data++ = LL_I2C_ReceiveData8(I2Cx);
+//      *data++ = LL_I2C_ReceiveData8(_i2cx);
+      I2C_DEBUG("n %d read is %d \r\n",nRead,LL_I2C_ReceiveData8(_i2cx));
     }
-#if	(TIMEOUT != 0)
-    if (IsTimeOut(end,timeout_us)) return E_TIMEOUT;
+#if	(USE_TIMEOUT != 0)
+    if (IsTimeOut(end,tOut)) return EWAIT;
 #endif
   }
-  LL_I2C_ClearFlag_STOP(I2Cx);
-//	return E_OK;
-
-  return i;
+  LL_I2C_ClearFlag_STOP(_i2cx);
+  return EOK;
 }
 
-int8_t mcuI2c::wait_dev_busy(uint8_t slave_address){
-    return wait_dev_busy1(slave_address,300);
-}
-
-#define GetEndTime(timeOut)					(millis_seconds + timeOut)
-// ��ʱ,����1 ���򷵻�0   �������millis()��ȡmillis_seconds,���Է�ֹ��Ϊ�ر��жϵ��³���������ʱ������
-#define IsTimeOut(endTime,delay)		((uint32_t)(endTime - millis())>delay)
-
-int8_t mcuI2c::wait_dev_busy1(uint8_t slave_address,uint16_t timeout_us)
+/**
+  *@brief    指定寄存器连续读取. start->WslaveAddr->regAddr->RSlaverAddr->data...->nRead==1->Nack->stop->data
+  *@param    uint8_t slaveAddr:  从机地址
+  *          uint8_t regAddr: 寄存器地址
+  *          uint8_t *data: 读取到的数据
+  *          uint16_t nRead：要读取的数据长度
+  *          uint16_t tOut: 超时
+  *@retval   EOK，EWAIT
+  */
+uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut)
 {
-	uint64_t end = GetEndTime(timeout_us);
-	do
-	{
-		// clear STOP & NACK flag
-		SET_BIT(I2Cx->ICR,LL_I2C_ICR_NACKCF | LL_I2C_ICR_STOPCF);
-
-		LL_I2C_HandleTransfer(I2Cx,slave_address,LL_I2C_ADDRESSING_MODE_7BIT,0,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_WRITE);
-		delay_us(100);
-		if (IsTimeOut(end,timeout_us))
-		{
-			return 1;
-		}
-	}while (LL_I2C_IsActiveFlag_NACK(I2Cx) == 1); //�������Ӧ��������ȴ�
-
-	LL_I2C_ClearFlag_STOP(I2Cx);
-
-	return 0;
+#if	(USE_TIMEOUT != 0)
+  uint32_t end = GetEndTime(tOut);
+#endif
+  // 发送地址寄存器
+  LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,1,LL_I2C_MODE_SOFTEND,LL_I2C_GENERATE_START_WRITE);
+  while (!LL_I2C_IsActiveFlag_TC(_i2cx))
+  {
+    if (LL_I2C_IsActiveFlag_TXIS(_i2cx))
+    {
+      LL_I2C_TransmitData8(_i2cx,regAddr);
+    }
+#if	(USE_TIMEOUT != 0)
+    if (IsTimeOut(end,tOut))
+    {
+      return EWAIT;
+    }
+#endif
+  }
+  // 发送读指令，从当前地址开始读取数据
+  LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,nRead,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_READ);
+#if	(USE_TIMEOUT != 0)
+  end = GetEndTime(tOut);
+#endif
+  while (!LL_I2C_IsActiveFlag_STOP(_i2cx))
+  {
+    if (LL_I2C_IsActiveFlag_RXNE(_i2cx))
+    {
+      *data++ = LL_I2C_ReceiveData8(_i2cx);
+    }
+#if	(USE_TIMEOUT != 0)
+    if (IsTimeOut(end,tOut)) return EWAIT;
+#endif
+  }
+  LL_I2C_ClearFlag_STOP(_i2cx);
+  return EOK;
 }
-int8_t mcuI2c::take_i2c_right(uint32_t speed)
+
+
+
+
+
+
+
+/**
+  *@brief    等待设备响应。向指定设备发送start指令，如果设备忙，则返回NACK,否则返回ACK,主设备发送stop指令
+  *@param    slaveAddr:  设备地址
+  *@retval   uint8_t: EOK,EWAIT
+  */
+uint8_t mcuI2c:: waitAck(uint8_t slaveAddr,uint16_t tOut)
 {
-  while (busy == 1)
+  uint32_t end = GetEndTime(tOut);
+  do
+  {
+    // clear STOP & NACK flag
+    SET_BIT(_i2cx->ICR,LL_I2C_ICR_NACKCF | LL_I2C_ICR_STOPCF);
+
+    LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,0,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_WRITE);
+    delay_us(100);
+    if (IsTimeOut(end,tOut))
+    {
+      I2C_DEBUG("fail,ISR reg is %d \r\n",_i2cx->ISR);  
+      return EWAIT;
+    }
+  }while (LL_I2C_IsActiveFlag_NACK(_i2cx) == 1); //如果无响应，则继续等待
+
+  LL_I2C_ClearFlag_STOP(_i2cx);
+
+  return EOK;
+}
+
+/**
+  *@brief    获取I2C控制权
+  *@param    timing:  时钟时序，通过readConfig获取
+  *@retval   uint8_t: EOK,E_BUSY
+  */
+uint8_t mcuI2c::takeRight(uint32_t timing,uint16_t tOut)
+{
+#if	(USE_TIMEOUT != 0)
+  uint32_t end = GetEndTime(tOut);
+#endif
+  while (_busy == 1)
   {
     delay_ms(1);
+#if	(USE_TIMEOUT != 0)
+    if (IsTimeOut(end,tOut)) return EWAIT;
+#endif
   }
-  if (this->speed != speed)
-    config(this->speed);
-  busy = 1;
-  return 0;
+  if (_timing != timing) config(timing);
+    _busy = 1;
+  return EOK;
 }
-int8_t mcuI2c::release_i2c_right(void)
+/**
+ *@brief    释放I2C控制权
+ *@param    none
+ *@retval   none
+*/
+void mcuI2c::releaseRight(void)
 {
-  busy = 0;
-  return 0;
+  _busy = 0;
 }
