@@ -67,10 +67,10 @@ public:
 		//_pin = new E_PinBase(id);
 		_index = getIndex(pin->id,t,TIM_MAP);
 		//_pin->mode(TIM_MAP[_index]._pin_date,TIM_MAP[_index]._pin_af);
-        pin->mode(TIM_MAP[_index]._pin_date,TIM_MAP[_index]._pin_af);
+        pin->mode(TIM_MAP[_index]._pinMode,TIM_MAP[_index]._pinAf);
 		_timx = TIMx;
 		
-		t = (TIM_MAP[_index]._periph_OR_ch) - (uint32_t)_timx;
+		t = (TIM_MAP[_index]._periph) - (uint32_t)_timx;
 		switch (t)
 		{
 		case TIMxCH1:

@@ -119,6 +119,8 @@ STM32F417VG     LQFP 100    168     1024    192
 //Õ‚…Ë≈‰÷√
 #define USE_DMA 1
 
+//#include "stm32f072_define.h"
+
 
 
 
@@ -174,11 +176,5 @@ STM32F417VG     LQFP 100    168     1024    192
 #define MCU_FLASH_USED          (MCU_FLASH_PRG_END - MCU_FLASH_BEGIN)
 #define MCU_FLASH_REMAIND       (MCU_FLASH_END - MCU_FLASH_PRG_END)
 //--------------------------------------------------------
-
-
-
-
-
-
 
 #endif

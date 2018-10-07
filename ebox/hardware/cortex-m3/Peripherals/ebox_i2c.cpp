@@ -33,10 +33,6 @@
 #define  I2C_DEBUG(...)
 #endif
 
-#define GetEndTime(timeOut)					(millis_seconds + timeOut)
-// 超时,返回1 否则返回0   这里采用millis()获取millis_seconds,可以防止因为关闭中断导致程序死在延时函数里
-#define IsTimeOut(endTime,delay)		((uint32_t)(endTime - millis())>delay)
-
 /**
  *@name     I2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin)
  *@brief      I2C构造函数
@@ -54,7 +50,7 @@ mcuI2c::mcuI2c(I2C_TypeDef *I2Cx,Gpio *scl_pin, Gpio *sda_pin)
 }
 /**
  *@name     begin(uint16_t speed)
- *@brief    根据i2c时钟和设置速率speed计算timing。默认400k @8M
+ *@brief    根据i2c时钟和设置速率speed计算timing。默认200k
  *@param    speed:  速率 10,100,400 分别代表10k，100k，400k
  *@retval   None
 */
@@ -67,7 +63,7 @@ void  mcuI2c::begin(uint16_t speed)
   switch (speed)
   {
   case 10:
-    config(10000);
+    config(100000);
     break;
   case 100:
     config(100000);
@@ -270,7 +266,7 @@ uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_
   *@param    slaveAddr:  设备地址
   *@retval   uint8_t: EOK,EWAIT
   */
-uint8_t mcuI2c:: waitAck(uint8_t slaveAddr,uint16_t tOut)
+uint8_t mcuI2c:: checkBusy(uint8_t slaveAddr,uint16_t tOut)
 {
   uint32_t end = GetEndTime(tOut);
   __IO uint16_t SR1_Tmp = 0;
@@ -278,30 +274,24 @@ uint8_t mcuI2c:: waitAck(uint8_t slaveAddr,uint16_t tOut)
   do
   {
     I2C_ClearFlag(_i2cx, I2C_FLAG_AF);
-//        I2C_ClearFlag(_i2cx, I2C_FLAG_AF |I2C_FLAG_STOPF);
-    /* Send START condition */
     I2C_GenerateSTART(_i2cx, ENABLE);
 
-    /* Read I2C_EE SR1 register to clear pending flags */
     SR1_Tmp = I2C_ReadRegister(_i2cx, I2C_Register_SR1);
 
     I2C_Send7bitAddress(_i2cx, slaveAddr, I2C_Direction_Transmitter);
     if (IsTimeOut(end,tOut))
     {
-      I2C_ClearFlag(_i2cx, I2C_FLAG_AF|I2C_FLAG_ADDR|I2C_FLAG_SB);
-      I2C_SendData(_i2cx, slaveAddr);
-      I2C_GenerateSTOP(_i2cx, ENABLE);
+//      I2C_ClearFlag(_i2cx, I2C_FLAG_AF|I2C_FLAG_ADDR|I2C_FLAG_SB);
+//      I2C_SendData(_i2cx, slaveAddr);
+//      I2C_GenerateSTOP(_i2cx, ENABLE);
 //            I2C_DEBUG("I2C state sr2 = %d, sr1 = %d \r\n",_i2cx->SR2,_i2cx->SR1);
       return 1;
     }
-
   }while (!I2C_CheckEvent(_i2cx, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
 
-//  /* Clear AF flag */
   I2C_ClearFlag(_i2cx, I2C_FLAG_AF|I2C_FLAG_ADDR|I2C_FLAG_SB);
   /* STOP condition */
   I2C_GenerateSTOP(_i2cx, ENABLE);
-//  I2C_ClearFlag(_i2cx, I2C_FLAG_AF|I2C_FLAG_ADDR|I2C_FLAG_SB);
   return EOK;
 }
 
@@ -390,6 +380,7 @@ int8_t mcuI2c::_sendByte(uint8_t data,uint16_t tOut)
     }
 #endif
   }
+  return EOK;
 }
 int8_t mcuI2c::_send7bitsAddress(uint8_t slaveAddr,uint8_t WR,uint16_t tOut)
 {

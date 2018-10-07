@@ -263,7 +263,7 @@ uint8_t SoftI2c::readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16
  *
  * @return 从机状态.返回0表示从机空闲，返回-1表示从机忙.
  */
-uint8_t SoftI2c::waitAck(uint8_t slaveAddr,uint16_t tOut)
+uint8_t SoftI2c::checkBusy(uint8_t slaveAddr,uint16_t tOut)
 {
     int8_t ret;
     uint8_t i = 0;
