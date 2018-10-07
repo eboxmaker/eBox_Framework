@@ -62,7 +62,7 @@ public:
   virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t tOut = 300);
   virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut = 300);
   // 等待设备响应
-  virtual uint8_t waitAck(uint8_t slaveAddr,uint16_t tOut = 2000);
+  virtual uint8_t checkBusy(uint8_t slaveAddr,uint16_t tOut = 2000);
 
   // 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
   virtual uint8_t takeRight(uint32_t timing,uint16_t tOut = 300);
@@ -114,36 +114,15 @@ public:
   virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t tOut = 300);
   virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut = 300);
   // 等待设备响应
-  virtual uint8_t waitAck(uint8_t slaveAddr,uint16_t tOut = 2000);
+  virtual uint8_t checkBusy(uint8_t slaveAddr,uint16_t tOut = 2000);
 
   // 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
   virtual uint8_t takeRight(uint32_t timing,uint16_t tOut = 300);
   // 释放I2C控制权
   virtual void    releaseRight(void);
-  
-//  virtual void 		begin(uint32_t speed);
-//  virtual void 		config(uint32_t speed);
-//  virtual uint32_t	read_config();
-
-//  virtual int8_t		write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t data);
-//  virtual int8_t 		write_byte(uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t len);
-//  virtual int8_t 		read_byte (uint8_t slave_address, uint8_t reg_address, uint8_t *data);
-//  virtual int8_t 		read_byte (uint8_t slave_address, uint8_t reg_address, uint8_t *data, uint16_t len);
-//  virtual int8_t		wait_dev_busy (uint8_t slave_address);
-//public:
-//  virtual int8_t      take_i2c_right(uint32_t speed);
-//  virtual int8_t      release_i2c_right(void);
 
 private:
-//  virtual int8_t 	start();
-//  virtual int8_t 	stop();
-//  virtual int8_t 	send_ack();
-//  virtual int8_t 	send_no_ack();
-
-//  virtual int8_t 	send_byte(uint8_t Byte);
-//  virtual int8_t	send_7bits_address(uint8_t slave_address);
-//  virtual int8_t  receive_byte(uint8_t *data);
-  
+ 
     int8_t _start(uint16_t tOut);
     void _stop();
     int8_t _sendAck();

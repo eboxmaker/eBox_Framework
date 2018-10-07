@@ -19,7 +19,7 @@
 #include "ebox_i2c.h"
 #include "ebox_core.h"
 #include "ebox_gpio.h"
-
+#include "stm32f072_define.h"
 #include "ebox_config.h"
 
 #if EBOX_DEBUG
@@ -56,6 +56,7 @@ mcuI2c::mcuI2c(I2C_TypeDef *I2Cx,Gpio *scl_pin, Gpio *sda_pin)
   */
 void  mcuI2c::begin(uint16_t speed)
 {
+    uint8_t index = 0;
   switch (cpu.clock.pclk1/1000000){
   case 16:
     switch (speed){
@@ -97,8 +98,13 @@ void  mcuI2c::begin(uint16_t speed)
       _timing = C8M400K;			// 400k @8M
     }
   }
-  _scl->mode(AF_PP_PU,LL_GPIO_AF_1);
-  _sda->mode(AF_PP_PU,LL_GPIO_AF_1);
+  index = getIndex1(_scl->id,I2C_MAP);
+  
+//  _scl->mode(AF_PP_PU,LL_GPIO_AF_1);
+//  _sda->mode(AF_PP_PU,LL_GPIO_AF_1);
+  
+    _scl->mode(I2C_MAP[index]._pinMode ,I2C_MAP[index]._pinAf);
+  _sda->mode(I2C_MAP[index]._pinMode ,I2C_MAP[index]._pinAf);
   config(_timing);
 }
 
@@ -424,17 +430,12 @@ uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_
 }
 
 
-
-
-
-
-
 /**
   *@brief    等待设备响应。向指定设备发送start指令，如果设备忙，则返回NACK,否则返回ACK,主设备发送stop指令
   *@param    slaveAddr:  设备地址
   *@retval   uint8_t: EOK,EWAIT
   */
-uint8_t mcuI2c:: waitAck(uint8_t slaveAddr,uint16_t tOut)
+uint8_t mcuI2c:: checkBusy(uint8_t slaveAddr,uint16_t tOut)
 {
   uint32_t end = GetEndTime(tOut);
   do

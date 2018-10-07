@@ -34,7 +34,7 @@ public:
 	virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t *data, uint16_t num_to_read,uint16_t tOut) = 0;
 	virtual uint8_t	readBuf(uint8_t slaveAddr, uint8_t regAddr, uint8_t *data,uint16_t num_to_read,uint16_t tOut) = 0;
 	// 等待设备响应
-	virtual uint8_t waitAck(uint8_t slaveAddr,uint16_t tOut)=0;
+	virtual uint8_t checkBusy(uint8_t slaveAddr,uint16_t tOut)=0;
 	
 	// 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
 	virtual uint8_t takeRight(uint32_t timing,uint16_t tOut )=0;
