@@ -51,7 +51,7 @@ public:
     int8_t write_page(uint8_t *buf, uint32_t addr, uint8_t num_to_write);
 private:
     I2c *i2c;
-    uint32_t speed;
+    uint32_t _timing;
 };
 
 #endif

@@ -42,15 +42,15 @@ public:
 	virtual uint32_t    readConfig();
 	// 单字节读写
 	virtual uint8_t	write(uint8_t slaveAddr, uint8_t data);
-    virtual uint8_t write(uint8_t slaveAddr,uint8_t regAddr, uint8_t data,uint16_t tOut= 300);
+    virtual uint8_t write(uint8_t slaveAddr,uint16_t regAddr, uint8_t data,uint16_t tOut= 300);
 	virtual uint8_t read(uint8_t slaveAddr);	
-	virtual uint8_t read(uint8_t slaveAddr,uint8_t regAddr,uint16_t tOut= 300);
+	virtual uint8_t read(uint8_t slaveAddr,uint16_t regAddr,uint16_t tOut= 300);
 	// 读写n字节
 	virtual uint8_t writeBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nWrite,uint16_t tOut = 300);
-	virtual uint8_t	writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut = 300);
+	virtual uint8_t	writeBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut = 300);
 	
 	virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t tOut = 300);
-	virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut = 300);
+	virtual uint8_t	readBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut = 300);
 	// 等待设备响应
 	virtual uint8_t checkBusy(uint8_t slaveAddr,uint16_t tOut = 200);
 	
@@ -95,15 +95,15 @@ public:
   virtual uint32_t  readConfig();
   // 单字节读写
   virtual uint8_t   write(uint8_t slaveAddr,uint8_t data);
-  virtual uint8_t   write(uint8_t slaveAddr,uint8_t regAddr, uint8_t data,uint16_t tOut= 300);
+  virtual uint8_t   write(uint8_t slaveAddr,uint16_t regAddr, uint8_t data,uint16_t tOut= 300);
   virtual uint8_t   read(uint8_t slaveAddr);
-  virtual uint8_t   read(uint8_t slaveAddr,uint8_t regAddr,uint16_t tOut= 300);
+  virtual uint8_t   read(uint8_t slaveAddr,uint16_t regAddr,uint16_t tOut= 300);
   // 读写n字节
   virtual uint8_t   writeBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nWrite,uint16_t tOut = 300);
-  virtual uint8_t	writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut = 300);
+  virtual uint8_t	writeBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut = 300);
 
   virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t tOut = 300);
-  virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut = 300);
+  virtual uint8_t	readBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut = 300);
   // 等待设备响应
   virtual uint8_t   checkBusy(uint8_t slaveAddr,uint16_t tOut = 200);
 

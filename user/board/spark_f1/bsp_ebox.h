@@ -43,9 +43,9 @@
 #define	UART    uart1
 #define	Serial  uart1
 //#define I2C     i2c1
-#define I2C     i2c2
+//#define I2C     i2c2
 //#define I2C     si2c1
-//#define I2C     si2c2
+#define I2C     si2c2
 
 //#define	ADC_0   PA0
 //#define	ADC_1   PA1
