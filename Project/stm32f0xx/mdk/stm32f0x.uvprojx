@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F072xB,USE_FULL_LL_DRIVER,ARM_MATH_CM0</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f0xx\Libraries\STM32F0xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Device\ST\STM32F0xx\Include;..\..\..\ebox\core;..\..\..\ebox\core\port;..\..\..\ebox\hardware\cortex-m0;..\..\..\ebox\hardware\cortex-m0\Peripherals;..\..\..\user;..\..\..\user\board\Nucleo_f0;..\..\..\component\edriver</IncludePath>
+              <IncludePath>..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f0xx\Libraries\STM32F0xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Device\ST\STM32F0xx\Include;..\..\..\ebox\core;..\..\..\ebox\core\port;..\..\..\ebox\hardware\cortex-m0;..\..\..\ebox\hardware\cortex-m0\Peripherals;..\..\..\user;..\..\..\user\board\Nucleo_f0;..\..\..\component\edriver;..\..\..\ebox\hardware\cortex-m0\mcu</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

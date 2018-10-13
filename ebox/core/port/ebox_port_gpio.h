@@ -57,7 +57,7 @@ typedef enum
     
     PI0_ID = 0x80,  PI1_ID,     PI2_ID,     PI3_ID,     PI4_ID,     PI5_ID,     PI6_ID,     PI7_ID,
     PI8_ID,         PI9_ID,     PI10_ID,    PI11_ID,    PI12_ID,    PI13_ID,    PI14_ID,    PI15_ID,
-    
+    P_NC = 0xff    
 }PIN_ID_t;///<引脚的名字
 
 class Gpio

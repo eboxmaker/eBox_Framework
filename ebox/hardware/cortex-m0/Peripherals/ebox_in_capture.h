@@ -71,12 +71,12 @@ public:
 		uint8_t _index;
 		uint32_t t = (uint32_t)TIMx;
 		_index = getIndex(pin->id,t,TIM_MAP);
-		pin->mode(TIM_MAP[_index]._pin_date,TIM_MAP[_index]._pin_af);
+		pin->mode(TIM_MAP[_index]._pinMode,TIM_MAP[_index]._pinAf);
 		_timx = TIMx;
 //		_overflow_times = &t1_overflow_times;
 		_last_value 		= 0;
 
-		_chNum = (TIM_MAP[_index]._periph_OR_ch) - (uint32_t)_timx;
+		_chNum = (TIM_MAP[_index]._periph) - (uint32_t)_timx;
 		switch (_chNum)
 		{
 		case TIMxCH1:

@@ -103,12 +103,31 @@ uint32_t SoftI2c::readConfig()
   *          uint16_t tOut: 超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t SoftI2c::write(uint8_t slaveAddr, uint8_t data,uint16_t tOut)
+uint8_t SoftI2c::write(uint8_t slaveAddr, uint8_t data)
+{
+  uint8_t err = EOK;
+  I2C_DEBUG("I2C Bus state,SCL is %d, SDA is %d \r\n",_scl->read(),_sda->read());
+  err += _start(200);
+  err +=_send7bitsAddress(slaveAddr,WRITE,200);
+  err +=_sendByte(data,200);
+  _stop();
+  return err;
+}
+
+/**
+  *@brief    指定位置写入一个字节. start->data->stop
+  *@param    uint8_t slaveAddr:  从机地址
+  *          uint8_t data:  要写入的数据
+  *          uint16_t tOut: 超时
+  *@retval   状态 EOK 成功； EWAIT 超时
+  */
+uint8_t SoftI2c::write(uint8_t slaveAddr,uint8_t regAddr,uint8_t data,uint16_t tOut)
 {
   uint8_t err = EOK;
   I2C_DEBUG("I2C Bus state,SCL is %d, SDA is %d \r\n",_scl->read(),_sda->read());
   err += _start(tOut);
   err +=_send7bitsAddress(slaveAddr,WRITE,tOut);
+  err +=_sendByte(regAddr,tOut);
   err +=_sendByte(data,tOut);
   _stop();
   return err;
@@ -167,11 +186,11 @@ uint8_t SoftI2c::writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint1
   *          uint16_t tOut: 超时
   *@retval   读取到的数据
   */
-uint8_t SoftI2c::read(uint8_t slaveAddr,uint16_t tOut){
+uint8_t SoftI2c::read(uint8_t slaveAddr){
   uint8_t data ;
-  _start(tOut);
-  _send7bitsAddress(slaveAddr,READ,tOut);
-  _receiveByte(&data,tOut);
+  _start(200);
+  _send7bitsAddress(slaveAddr,READ,200);
+  _receiveByte(&data,200);
   _sendNack();
   _stop();
   return data;
@@ -263,7 +282,7 @@ uint8_t SoftI2c::readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16
  *
  * @return 从机状态.返回0表示从机空闲，返回-1表示从机忙.
  */
-uint8_t SoftI2c::waitAck(uint8_t slaveAddr,uint16_t tOut)
+uint8_t SoftI2c::checkBusy(uint8_t slaveAddr,uint16_t tOut)
 {
     int8_t ret;
     uint8_t i = 0;
