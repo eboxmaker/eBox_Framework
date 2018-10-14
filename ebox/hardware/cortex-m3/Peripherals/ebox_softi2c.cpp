@@ -24,7 +24,7 @@
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
-#define debug 1
+#define debug 0
 #endif
 
 #if debug
@@ -49,13 +49,13 @@ SoftI2c::SoftI2c(Gpio *scl, Gpio *sda)
 
 /**
   *@brief    根据i2c时钟和设置速率speed计算timing,默认80K
-  *@param    speed:  速率 10,100,200,300,400 分别代表10k，100k，200k,300k,400k
+  *@param    speed:  速率 10,100,200,400 分别代表10k，100k，200k,400k
   *@retval   None
   */
 void SoftI2c::begin(uint16_t speed)
 {
-    _sda->mode(OUTPUT_OD);
-    _scl->mode(OUTPUT_OD);
+    _sda->mode(OUTPUT_OD_PU);
+    _scl->mode(OUTPUT_OD_PU);
     _sda->set();
     _scl->set();
 
@@ -510,7 +510,7 @@ int8_t SoftI2c::_receiveByte(uint8_t *data,uint16_t tOut)
 {
     uint8_t i = 8;
     uint8_t byte = 0;
-//    _sda->mode(INPUT_PU);
+    _sda->set();
     while(i--)
     {
         byte += byte;

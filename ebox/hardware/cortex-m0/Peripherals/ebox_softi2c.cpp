@@ -24,7 +24,7 @@
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
-#define debug 1
+#define debug 0
 #endif
 
 #if debug
@@ -128,9 +128,9 @@ uint8_t SoftI2c::write(uint8_t slaveAddr,uint16_t regAddr,uint8_t data,uint16_t 
 {
   uint8_t err = EOK;
   err += _start(1000);
-  err +=_send7bitsAddress(slaveAddr,WRITE,tOut);
-  err +=_sendByte(regAddr,tOut);
-  err +=_sendByte(data,tOut);
+  err += _send7bitsAddress(slaveAddr,WRITE,tOut);
+  err += _sendByte(regAddr,tOut);
+  err += _sendByte(data,tOut);
   _stop();
   delay_us(10);
   return err;
@@ -148,7 +148,7 @@ uint8_t SoftI2c::writeBuf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite,uint
 {
   uint8_t err = 0;
   err += _start(1000);
-  err +=_send7bitsAddress(slaveAddr,WRITE,tOut);
+  err += _send7bitsAddress(slaveAddr,WRITE,tOut);
   while (nWrite--)
   {
     err +=_sendByte(*data,tOut);
@@ -171,8 +171,8 @@ uint8_t SoftI2c::writeBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint
 {
   uint8_t err = 0;
   err += _start(1000);
-  err +=_send7bitsAddress(slaveAddr,WRITE,tOut);
-  err+= _sendByte(regAddr,tOut);
+  err += _send7bitsAddress(slaveAddr,WRITE,tOut);
+  err += _sendByte(regAddr,tOut);
   while (nWrite--)
   {
     err +=_sendByte(*data,tOut);
@@ -346,7 +346,7 @@ int8_t SoftI2c::_start(uint16_t tOut)
   uint32_t end = GetEndTime(tOut);
 #endif
   _scl->set();          // SCL高  
-  while (!(_sda->read() && _scl->read())){
+  while (!(_sda->read() && _scl->read())){      // scl,sda 均为高电平，总线空闲
 #if	(USE_TIMEOUT != 0)
     if (IsTimeOut(end,tOut)){
       I2C_DEBUG("start fail,bus busy SDA is %d，SCL is %d,time is %d us \r\n",_sda->read(),_scl->read(),_timing);
@@ -383,6 +383,7 @@ void SoftI2c::_stop()
     delay_us(_timing);  
     _sda->set();        // SDA拉高
     delay_us(_timing);
+    
 }
 
 /**

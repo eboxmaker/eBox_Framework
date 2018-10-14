@@ -24,7 +24,7 @@
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
-#define debug 1
+#define debug 0
 #endif
 
 #if debug
@@ -51,7 +51,7 @@ mcuI2c::mcuI2c(I2C_TypeDef *I2Cx,Gpio *scl_pin, Gpio *sda_pin)
 /**
  *@name     begin(uint16_t speed)
  *@brief    根据i2c时钟和设置速率speed计算timing。默认200k
- *@param    speed:  速率 10,100,400 分别代表10k，100k，400k
+ *@param    speed:  速率 10,100，200,400 分别代表10k，100k,200k，400k
  *@retval   None
 */
 void  mcuI2c::begin(uint16_t speed)
@@ -63,10 +63,13 @@ void  mcuI2c::begin(uint16_t speed)
   switch (speed)
   {
   case 10:
-    config(100000);
+    config(10000);
     break;
   case 100:
     config(100000);
+    break;
+  case 200:
+    config(200000);
     break;
   case 400:
     config(400000);
