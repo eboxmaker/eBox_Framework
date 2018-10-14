@@ -14,12 +14,14 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "at24c02.h"
 
 /**
-	*	1	此例程需要调用eDrive目录下的si4432驱动
-	*	2	此例程演示了si4432无线模块收发
+    *	1	此例程需要调用eDrive目录下的at24c02驱动
+	*	2	此例程演示了at24c02的读写操作
+    *   3   通过begin可以设置i2c速率为10k，100k，200k，400k
+    *   4   通过config可以自由设置i2c速率，注意f0需要借助官方工具生成timing传入
 	*/
 
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"si4432 example"
+#define EXAMPLE_NAME	"AT24C02 example"
 #define EXAMPLE_DATE	"2018-08-11"
 
 At24c02 ee(&I2C);
@@ -30,9 +32,7 @@ void setup()
     ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-//    ee.begin(1);
-  	I2C.begin(10);
-
+    ee.begin(1);
 }
 int16_t x, i;
 uint8_t wbuf[512];
@@ -45,79 +45,48 @@ int main(void)
     
     while(1)
     {
-        UART.printf("\r\n wbuf：");
+        ret = 0;
+
+        uart1.printf("=================wbuf================\r\n");
         for(uint16_t i = 0; i < MAX_LEN; i++)
         {
             wbuf[i] = random() % 256;
         }
         for(uint16_t i = 0; i < MAX_LEN; i++)
         {
-                UART.printf(" %02x ", wbuf[i ]);
+                uart1.printf(" %02x ", wbuf[i ]);
                 //ee.byteWrite(i*16+j,buf[i*16+j]);
         }
-//        I2C.writeBuf(0xA0,0x00,wbuf,MAX_LEN);
-        I2C.checkBusy(0xA0);
-//        delay_ms(2000);
-        UART.printf("\r\n rbuf：");
-        I2C.readBuf(0xA0,0,rbuf,MAX_LEN);
+        uart1.printf("\r\n ");
+        ee.write_byte(256, wbuf, MAX_LEN);
 
+        uart1.printf("==================rbuf==============\r\n");
+
+        data = ee.read_byte(256, rbuf, MAX_LEN);
         for(uint16_t i = 0; i < MAX_LEN; i++)
         {
-                UART.printf(" %02x ", rbuf[i]);
+                uart1.printf(" %02x ", rbuf[i]);
         }
-
-//        for(i = 0xa0;i< 0xb0;i++){
-//            UART.printf("slave address 0x%02x check busy %d \r\n",i,I2C.checkBusy(i));
-//            delay_ms(500);
-//        }
-        delay_ms(15000);
+        uart1.printf("\r\n ");
+        for(int i = 0; i < MAX_LEN; i++)
+        {
+            if(wbuf[i] != rbuf[i])
+            {
+                ret = 1;
+                break;
+            }
+        }
+        if(ret == 1)
+        {
+            uart1.printf("eeprom check ......[err]");
+            ee.begin(4000);
+        }
+        else
+            uart1.printf("eeprom check ......[OK]");
+            
+        uart1.printf("\r\n================================\r\n");
+        delay_ms(1000);
     }
-
-
-//    while(1)
-//    {
-//        ret = 0;
-
-//        uart1.printf("=================wbuf================\r\n");
-//        for(uint16_t i = 0; i < MAX_LEN; i++)
-//        {
-//            wbuf[i] = random() % 256;
-//        }
-//        for(uint16_t i = 0; i < MAX_LEN; i++)
-//        {
-//                uart1.printf(" %02x ", wbuf[i ]);
-//                //ee.byteWrite(i*16+j,buf[i*16+j]);
-//        }
-//        uart1.printf("\r\n ");
-//        ee.write_byte(256, wbuf, MAX_LEN);
-
-//        uart1.printf("==================rbuf==============\r\n");
-
-//        data = ee.read_byte(256, rbuf, MAX_LEN);
-//        for(uint16_t i = 0; i < MAX_LEN; i++)
-//        {
-//                uart1.printf(" %02x ", rbuf[i]);
-//        }
-//        uart1.printf("\r\n ");
-//        for(int i = 0; i < MAX_LEN; i++)
-//        {
-//            if(wbuf[i] != rbuf[i])
-//            {
-//                ret = 1;
-//                break;
-//            }
-//        }
-//        if(ret == 1)
-//        {
-//            uart1.printf("eeprom check ......[err]");
-//            ee.begin(4000);
-//        }
-//        else
-//            uart1.printf("eeprom check ......[OK]");
-//            
-//        uart1.printf("\r\n================================\r\n");
-//        delay_ms(1000);
-//    }
 
 
 }

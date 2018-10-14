@@ -24,7 +24,7 @@
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
-#define debug 1
+#define debug 0
 #endif
 
 #if debug
@@ -438,7 +438,7 @@ uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16
 #if	(USE_TIMEOUT != 0)
   uint32_t end = GetEndTime(tOut);
 #endif
-   while(LL_I2C_IsActiveFlag_STOP(_i2cx));
+//   while(LL_I2C_IsActiveFlag_STOP(_i2cx)) I2C_DEBUG("ISR reg is %d \r\n",_i2cx->ISR);;
   // 发送地址寄存器
   LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,1,LL_I2C_MODE_SOFTEND,LL_I2C_GENERATE_START_WRITE);
   while (!LL_I2C_IsActiveFlag_TC(_i2cx))
@@ -481,25 +481,23 @@ uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16
   */
 uint8_t mcuI2c:: checkBusy(uint8_t slaveAddr,uint16_t tOut)
 {
-  uint32_t end = GetEndTime(tOut);
+  uint8_t tmp = 0;
+  //uint32_t end = GetEndTime(tOut);
   do
   {
     // clear STOP & NACK flag
     SET_BIT(_i2cx->ICR,LL_I2C_ICR_NACKCF | LL_I2C_ICR_STOPCF);
-
     LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,0,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_WRITE);
-    if (IsTimeOut(end,tOut))
+    // 等待发出停止位，并清除
+    while (!LL_I2C_IsActiveFlag_STOP(_i2cx));
+    LL_I2C_ClearFlag_STOP(_i2cx);
+    if (tOut-- == 0)
     {
       I2C_DEBUG("fail,ISR reg is %d \r\n",_i2cx->ISR);
       return EWAIT;
     }
-  }while (LL_I2C_IsActiveFlag_NACK(_i2cx) == 1); //如果无响应，则继续等待
-
-// I2C_DEBUG("busy is %d \r\n", LL_I2C_IsActiveFlag_BUSY(_i2cx));
-//  delay_ms(1);
-  
-//  LL_I2C_IsActiveFlag_BUSY(_i2cx);
-
+    tmp = LL_I2C_IsActiveFlag_NACK(_i2cx);
+  }while (tmp == 1); //如果无响应，则继续等待
   return EOK;
 }
 
