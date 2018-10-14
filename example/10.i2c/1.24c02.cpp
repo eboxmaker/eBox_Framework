@@ -30,9 +30,8 @@ void setup()
     ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-    UART.printf("pin id 0x%x , 0x%x",PB10.id,PB11.id );
-    ee.begin(1);
-//  	I2C.begin(1);
+//    ee.begin(1);
+  	I2C.begin(10);
 
 }
 int16_t x, i;
@@ -46,30 +45,31 @@ int main(void)
     
     while(1)
     {
-        uart1.printf("\r\n=================wbuf================\r\n");
+        UART.printf("\r\n wbuf£º");
         for(uint16_t i = 0; i < MAX_LEN; i++)
         {
             wbuf[i] = random() % 256;
         }
         for(uint16_t i = 0; i < MAX_LEN; i++)
         {
-                uart1.printf(" %02x ", wbuf[i ]);
+                UART.printf(" %02x ", wbuf[i ]);
                 //ee.byteWrite(i*16+j,buf[i*16+j]);
         }
-        I2C.writeBuf(0xA0,0x00,wbuf,MAX_LEN);
+//        I2C.writeBuf(0xA0,0x00,wbuf,MAX_LEN);
         I2C.checkBusy(0xA0);
-        uart1.printf("\r\n==================rbuf==============\r\n");
-        I2C.readBuf(0xA0,0x00,rbuf,MAX_LEN);
+//        delay_ms(2000);
+        UART.printf("\r\n rbuf£º");
+        I2C.readBuf(0xA0,0,rbuf,MAX_LEN);
 
         for(uint16_t i = 0; i < MAX_LEN; i++)
         {
-                uart1.printf(" %02x ", rbuf[i]);
+                UART.printf(" %02x ", rbuf[i]);
         }
 
-        for(i = 0xa0;i< 0xb0;i++){
-            UART.printf("slave address 0x%02x check busy %d \r\n",i,I2C.checkBusy(i));
-            delay_ms(500);
-        }
+//        for(i = 0xa0;i< 0xb0;i++){
+//            UART.printf("slave address 0x%02x check busy %d \r\n",i,I2C.checkBusy(i));
+//            delay_ms(500);
+//        }
         delay_ms(15000);
     }
 

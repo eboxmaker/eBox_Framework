@@ -126,7 +126,7 @@ private:
     int8_t _waitAck();
 
 private:
-    Gpio            *_sda;
+  Gpio            *_sda;
   Gpio            *_scl;
   uint32_t   	 	_timing;	// i2c ±–Ú
   uint8_t 	_busy;
