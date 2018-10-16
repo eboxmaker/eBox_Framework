@@ -1,9 +1,14 @@
 #include "ebox.h"
 #include "bsp_ebox.h"
 
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"independent wdg example"
+#define EXAMPLE_DATE	"2018-08-08"
+
+
 Flash flash;//创建一个内部flash读写对象
 
-// 从用户区起始地址创建一个闪存，默认为1 page,大小等于1*pagesize
+//从用户区起始地址创建一个闪存，默认为1 page,大小等于1*pagesize
 //Flash flash(0);
 //// 从用户区起始地址+2page处，创建一个闪存，3 page,大小等于3*pagesize
 //Flash flash(0,63);
@@ -15,20 +20,19 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-
+    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
 }
 int main(void)
 {
     setup();
-
     random_seed(10);
+    UART.printf("flash size %d kb \r\n",flash.getSize());
     while(1)
     {
         for(int i = 0; i <10; i++)//使用random函数给写缓冲区赋值
         {
             wbuf[i] = random(100);
-        }
-        
+        }   
         flash.write(0,wbuf,10);//将写缓冲区的内容写入内部flash
         UART.printf("write data\r\n");
         for(int i = 0; i <10; i++)
