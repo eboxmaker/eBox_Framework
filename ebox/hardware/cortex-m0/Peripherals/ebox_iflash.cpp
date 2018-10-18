@@ -28,13 +28,10 @@
 
 #if USE_PRINTF
 // 是否打印调试信息, 1打印,0不打印
-#define debug 0
+#define debug 1
 #endif
 
 #if debug
-#include "ebox_uart.h"
-extern Uart uart1;
-#define DBG(...) uart1.printf(__VA_ARGS__)
 #define  IFLASH_DEBUG(...) DBG("[IFLASH]  "),DBG(__VA_ARGS__)
 #else
 #define  IFLASH_DEBUG(...)

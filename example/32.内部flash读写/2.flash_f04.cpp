@@ -1,15 +1,24 @@
 #include "ebox.h"
 #include "bsp_ebox.h"
 
+/**
+    *	1	此例程演示了内部flash操作
+	*	2	可以通过不同的起始地址，不同的页面数定义不同的flash区
+	*	3	flash的起始地址在mcu_config中定义
+	*   4	如果保存少量参数，建议每个page中存放一个参数，同时将ebox_config中的FLASH_OVERRIDE设置为1
+    *       这样写入是直接覆盖当前page区内容，无需采用读入缓冲区，修改缓冲区，写回的流程，减少资源
+	*/
+
+
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"independent wdg example"
+#define EXAMPLE_NAME	"independent flash example"
 #define EXAMPLE_DATE	"2018-08-08"
 
 
-Flash flash;//创建一个内部flash读写对象
+//Flash flash;//将所有的可用flasj创建一个内部flash读写对象
 
 //从用户区起始地址创建一个闪存，默认为1 page,大小等于1*pagesize
-//Flash flash(0);
+Flash flash(0);
 //// 从用户区起始地址+2page处，创建一个闪存，3 page,大小等于3*pagesize
 //Flash flash(0,63);
 
@@ -50,33 +59,3 @@ int main(void)
         delay_ms(1000);
     }
 }
-
-//uint8_t buf[] = "flash test -  ";
-//char rec[20];
-
-//int main(void)
-//{
-//	int i = 20,j=0;
-//	setup();
-//	// 从地址0处读取1个字节，结果保存在rec中
-//	Fh.read(0,(uint8_t*)rec,1);
-//	UART.printf("flash test; 第 %d 次开机！ \r\n",rec[0]);
-//	rec[0]++;
-//	// 将读取到的rec[0]自加后重新写入iflash中，作为开机次数
-//	Fh.write(0,(uint8_t*)rec,1);
-//	while (1)
-//	{	
-//			while(j<2){
-//				j++;
-//				buf[13] = j+0x30;
-//				i = fl.write(0,buf,sizeof(buf)/sizeof(buf[0]));
-//				delay_ms(10);
-//				if(i>0) {
-//				fl.read(0,(uint8_t*)rec,i);
-//				UART.write(rec,i-1);
-//				UART.printf("\r\n");
-//				}
-//			 delay_ms(2000);
-//			}
-//	}
-//}

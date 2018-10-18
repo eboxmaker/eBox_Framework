@@ -18,14 +18,17 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "ebox_mem.h"
-#include "ebox_iflash.h"
-
 #include "ebox_config.h"
+#include "ebox_iflash.h"
+#if USE_EBOX_MEM
+    #include "ebox_mem.h"
+#endif
+
+
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
-#define debug 0
+#define debug 1
 #endif
 
 #if debug
@@ -57,7 +60,7 @@ __INLINE  uint16_t write_without_check(uint32_t iAddress, uint8_t *buf, uint16_t
     volatile FLASH_Status FLASHStatus = FLASH_COMPLETE;
     i = 0;
 
-    //    FLASH_UnlockBank1();
+
     while((i < iNumByteToWrite) && (FLASHStatus == FLASH_COMPLETE))
     {
         FLASHStatus = FLASH_ProgramHalfWord(iAddress, *(uint16_t *)buf);
@@ -65,6 +68,7 @@ __INLINE  uint16_t write_without_check(uint32_t iAddress, uint8_t *buf, uint16_t
         iAddress = iAddress + 2;
         buf = buf + 2;
     }
+
 
     return iNumByteToWrite;
 }
@@ -134,8 +138,8 @@ int Flash::write(uint32_t offsetAdd, uint8_t *buf, uint32_t iNbrToWrite)
 		IFLASH_DEBUG("write: flash 定义错误，请检查起始地址和页数量 s：%d e:0x%x,i:%d\r\n",_start_addr,_end_addr,iAddress);
 		return 0;
 	}
-    
-    FLASH_UnlockBank1();
+        FLASH_UnlockBank1();
+
     secpos = iAddress & (~(FLASH_PAGE_SIZE - 1 )) ; //扇区地址
     secoff = iAddress & (FLASH_PAGE_SIZE - 1);  //在扇区内的偏移
     secremain = FLASH_PAGE_SIZE - secoff;       //扇区剩余空间大小
@@ -202,7 +206,7 @@ int Flash::write(uint32_t offsetAdd, uint8_t *buf, uint32_t iNbrToWrite)
 		IFLASH_DEBUG("write: flash 定义错误，请检查起始地址和页数量\r\n");
 		return 0;
 	}
-
+    FLASH_UnlockBank1();
 	secpos = iAddress & (~(FLASH_PAGE_SIZE - 1 )) ; //扇区地址(取12-31bit位)
 	secoff = iAddress & (FLASH_PAGE_SIZE - 1);  	//在扇区内的偏移(0-11bit位)
 	secremain = FLASH_PAGE_SIZE - secoff;       	//扇区剩余空间大小
@@ -235,6 +239,7 @@ int Flash::write(uint32_t offsetAdd, uint8_t *buf, uint32_t iNbrToWrite)
 			}
 		}
 	}
+    FLASH_LockBank1();
 	return iNbrToWrite;
 }
 #endif
