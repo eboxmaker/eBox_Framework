@@ -29,7 +29,7 @@ extern "C" {
 
 #include "mcu.h"
 
-#define FLASH_USER_START_ADDR   MCU_FLASH_PRG_END   
+#define FLASH_USER_START_ADDR   MCU_FLASH_PRG_END  +  FLASH_PAGE_SIZE
 #define FLASH_USER_END_ADDR     MCU_FLASH_END   
 
 class Flash

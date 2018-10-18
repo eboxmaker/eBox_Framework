@@ -51,7 +51,7 @@
  * 0 写入新数据，并保留当前区块其他位置旧数据。 需要占用FLASH_PAGE_SIZE大小的内存作为缓冲区
  * 1 只保留新写入的数据。 节省内存
  */
-#define FLASH_OVERRIDE  0
+#define FLASH_OVERRIDE  1
 
 #endif
 

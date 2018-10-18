@@ -29,8 +29,8 @@ extern "C" {
 
 #include "mcu.h"
 
-#define FLASH_USER_START_ADDR   MCU_FLASH_PRG_END
-#define FLASH_USER_END_ADDR     MCU_FLASH_END
+#define FLASH_USER_START_ADDR   MCU_FLASH_PRG_END  +  FLASH_PAGE_SIZE
+#define FLASH_USER_END_ADDR     MCU_FLASH_END   
 
 
 #if defined (STM32F10X_HD) || defined (STM32F10X_HD_VL) || defined (STM32F10X_CL) || defined (STM32F10X_XL)
