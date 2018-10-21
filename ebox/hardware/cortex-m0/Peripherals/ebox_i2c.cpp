@@ -110,9 +110,10 @@ void  mcuI2c::begin(uint16_t speed)
     _timing = C8M10K;	        // 10k 	@8M
     I2C_DEBUG("PCLK频率为%Mhz,没有该主频下I2C timing配置，默认为8M10Ktiming，建议通过config直接给timing参数",cpu.clock.pclk1/1000000);
   }
-  index = getIndex1(_scl->id,I2C_MAP);
-
+  
+  index = getIndex(_scl->id,I2C_MAP);
   _scl->mode(I2C_MAP[index]._pinMode ,I2C_MAP[index]._pinAf);
+  index = getIndex(_sda->id,I2C_MAP);
   _sda->mode(I2C_MAP[index]._pinMode ,I2C_MAP[index]._pinAf);
 
   config(_timing);

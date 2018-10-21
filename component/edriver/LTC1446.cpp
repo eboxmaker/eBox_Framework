@@ -4,7 +4,9 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief   liner出品12bitDAC芯片，spi接口,内置基准电压，满量程输出4.095v，单电
+  *          源（4.5-5v）供电。sck极型为正，上升沿读数，即 spi mode3
+  * 2018/10/21   修正spimode错误bug
   ******************************************************************************
   * @attention
   *
@@ -26,8 +28,8 @@ void LTCX::begin()
 
     if(initialized == 0)
     {      
-        spi_dev_LTC1446.dev_num = spi->get_new_dev_num();;
-        spi_dev_LTC1446.mode = SPI_MODE0;
+        spi_dev_LTC1446.dev_num = cs->id ;      // 用cs pinid作为设备id
+        spi_dev_LTC1446.mode = SPI_MODE3;
         spi_dev_LTC1446.prescaler = SPI_CLOCK_DIV256;
         spi_dev_LTC1446.bit_order = MSB_FIRST; 
     }
@@ -49,13 +51,13 @@ void LTCX::begin()
 void LTCX::write(uint16_t _DACA, uint16_t _DACB)
 {
     uint32_t _DAC_volue = _DACA << 12 | (_DACB & 0x0fff);
-    spi->take_spi_right(&spi_dev_LTC1446);
+    spi->takeRight(&spi_dev_LTC1446);
     cs->reset();
     // 将_DAC_volue的值从24-->0的顺序写入设备，每次8bit
     spi->write(((uint8_t *)(&(_DAC_volue)))[2]);
     spi->write(((uint8_t *)(&(_DAC_volue)))[1]);
     spi->write(((uint8_t *)(&(_DAC_volue)))[0]);
     cs->set();
-    spi->release_spi_right();
+    spi->releaseRight();
 }
 

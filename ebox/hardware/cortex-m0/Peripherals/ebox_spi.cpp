@@ -15,10 +15,21 @@
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
   ******************************************************************************
   */
-
-
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_spi.h"
+#include "ebox_config.h"
+#include "stm32f072_define.h"
+
+#if EBOX_DEBUG
+// 是否打印调试信息, 1打印,0不打印
+#define debug 1
+#endif
+
+#if debug
+#define  SPI_DEBUG(...) DBG("[SPI]  "),DBG(__VA_ARGS__)
+#else
+#define  SPI_DEBUG(...)
+#endif
 
 mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 {
@@ -30,9 +41,14 @@ mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 
 void mcuSpi::begin(SpiConfig_t *spi_config)
 {
-    _sck->mode(AF_PP);
-    _miso->mode(AF_PP);
-    _mosi->mode(AF_PP);
+    uint8_t index = 0;
+    
+    index = getIndex(_sck->id,SPI_MAP);
+	_sck->mode(SPI_MAP[index]._pinMode,SPI_MAP[index]._pinAf);
+	index = getIndex(_miso->id,SPI_MAP);
+	_miso->mode(SPI_MAP[index]._pinMode,SPI_MAP[index]._pinAf);
+	index = getIndex(_mosi->id,SPI_MAP);
+	_mosi->mode(SPI_MAP[index]._pinMode,SPI_MAP[index]._pinAf);
 
     rcc_clock_cmd((uint32_t)_spi,ENABLE);
     config(spi_config);
@@ -42,6 +58,8 @@ void mcuSpi::begin(SpiConfig_t *spi_config)
 
 void mcuSpi::config(SpiConfig_t *spi_config)
 {
+    current_dev_num = spi_config->dev_num;
+    SPI_DEBUG("dev num 0x%x \r\n",current_dev_num);
     LL_SPI_Disable(_spi);
 
     switch (spi_config->mode)
@@ -102,243 +120,110 @@ void mcuSpi::config(SpiConfig_t *spi_config)
     LL_SPI_Enable(_spi);
 }
 
-int8_t mcuSpi::write(uint8_t data)
+/**
+  *@brief    读取配置信息
+  *@param    void
+  *@retval   返回当前设备id
+  */
+uint8_t mcuSpi::readConfig(void)
 {
-	while(!LL_SPI_IsActiveFlag_TXE(_spi));
-	*((__IO uint8_t *)&_spi->DR) = data;
-//	LL_SPI_TransmitData8(_spi,data);
-		while(!LL_SPI_IsActiveFlag_RXNE(_spi));
-	return LL_SPI_ReceiveData8(_spi);
-//	return 0;
+    return current_dev_num;
 }
 
-int8_t mcuSpi::write(uint8_t *data, uint16_t data_length)
+/**
+  *@brief    transfer
+  *@param    data 要发送的数据
+  *@retval   uint8_t 接受到的数据
+  */
+uint8_t mcuSpi::transfer(uint8_t data)
+{
+    while ((_spi->SR & LL_SPI_SR_TXE) == RESET);
+	*((__IO uint8_t *)&_spi->DR) = data;
+	while ((_spi->SR & LL_SPI_SR_RXNE) == RESET);
+	return (uint8_t)_spi->DR;
+}
+/**
+  *@brief    写数据
+  *@param    data 要写入的数据
+  *@retval   none
+  */
+int8_t mcuSpi::write(uint8_t data)
+{
+    return transfer(data);
+}
+
+/**
+  *@brief    连续写数据
+  *@param    data 要写入的数据，data_length 长度
+  *@retval   none
+  */
+int8_t mcuSpi::writeBuf(uint8_t *data, uint16_t data_length)
 {
 	__IO uint8_t dummyByte;
 	if (data_length == 0)
 		return -1;
 	while (data_length--)
 	{
-		while ((_spi->SR & LL_SPI_SR_TXE) == RESET)
-			;
-		*((__IO uint8_t *)&_spi->DR) = *data;
+        transfer(*data++);
 	}
 	return 0;
 }
 
 uint8_t mcuSpi::read()
 {
-	while ((_spi->SR & LL_SPI_SR_TXE) == RESET)
-		;
-	*((__IO uint8_t *)&_spi->DR) = 0xff;
-//	LL_SPI_TransmitData8(_spi,0xff);
-	while ((_spi->SR & LL_SPI_SR_RXNE) == RESET)
-		;
-	 return (LL_SPI_ReceiveData8(_spi));
-	//return(_spi->DR);
+    return transfer(0xff);
 
 }
 
 int8_t mcuSpi::read(uint8_t *recv_data)
 {
-	while ((_spi->SR & LL_SPI_SR_TXE) == RESET)
-		;
-	*((__IO uint8_t *)&_spi->DR) = 0xff;
-	while ((_spi->SR & LL_SPI_SR_RXNE) == RESET)
-		;
-	*recv_data = _spi->DR;
-
+    *recv_data = transfer(0xff);
 	return 0;
 }
 
-int8_t mcuSpi::read(uint8_t *recv_data, uint16_t data_length)
+/**
+  *@brief    连续读取数据
+  *@param    recv_data 读取到的数据，data_length 要读取的数据长度
+  *@retval   返回当前设备id
+  */
+int8_t mcuSpi::readBuf(uint8_t *recv_data, uint16_t data_length)
 {
 	if (data_length == 0)
 		return -1;
 	while (data_length--)
 	{
-		while ((_spi->SR & LL_SPI_SR_TXE) == RESET)
-			;
-		*((__IO uint8_t *)&_spi->DR) = 0xff;
-		while ((_spi->SR & LL_SPI_SR_RXNE) == RESET)
-			;
-		*recv_data = _spi->DR;
+        *recv_data++ = transfer(0xff);
 	}
 	return 0;
 }
 
-
-//void mcuSpi::config(SpiConfig_t *spi_config)
-//{
-//    SPI_InitTypeDef SPI_InitStructure;
-
-//    current_dev_num = spi_config->dev_num;
-
-
-//    SPI_Cmd(spi, DISABLE);
-
-//    SPI_I2S_DeInit(spi);
-//    SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex; //全双工
-//    SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b; //8位数据模式
-//    SPI_InitStructure.SPI_NSS = SPI_NSS_Soft; //NSS软件管理
-//    SPI_InitStructure.SPI_CRCPolynomial = 7; //CRC多项式
-//    SPI_InitStructure.SPI_Mode = SPI_Mode_Master; //主机模式
-
-//    if(spi_config->mode == SPI_MODE0)
-//    {
-//        SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
-//        SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
-//    }
-//    else if(spi_config->mode == SPI_MODE1)
-//    {
-//        SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
-//        SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
-//    }
-//    else if(spi_config->mode == SPI_MODE2)
-//    {
-//        SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
-//        SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
-//    }
-//    else if(spi_config->mode == SPI_MODE3)
-//    {
-//        SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
-//        SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
-//    }
-//    switch(spi_config->prescaler)
-//    {
-//        case SPI_CLOCK_DIV2:
-//            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;break;
-//        case SPI_CLOCK_DIV4:
-//            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;break;
-//        case SPI_CLOCK_DIV8:
-//            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8;break;
-//        case SPI_CLOCK_DIV16:
-//            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;break;
-//        case SPI_CLOCK_DIV32:
-//            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_32;break;
-//        case SPI_CLOCK_DIV64:
-//            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;break;
-//        case SPI_CLOCK_DIV128:
-//            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128;break;
-//        case SPI_CLOCK_DIV256:
-//            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;break;
-//        default :
-//            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;break;
-
-//    }
-//    
-//    switch(spi_config->bit_order)
-//    {
-//        case MSB_FIRST:
-//            SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;break;
-//        case LSB_FIRST:
-//            SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_LSB;break;
-//        default :
-//            SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;break;
-
-//    }
-//    SPI_Init(spi, &SPI_InitStructure);
-//    SPI_Cmd(spi, ENABLE);
-
-//}
-
-uint8_t mcuSpi::read_config(void)
+/**
+  *@brief    获取控制权
+  *@param    none
+  *@retval   none
+  */
+int8_t mcuSpi::takeRight(SpiConfig_t *spi_config)
 {
-    return current_dev_num;
-}
-
-uint8_t mcuSpi::transfer(uint8_t data)
-{
-    while ((_spi->SR & LL_SPI_SR_TXE) == RESET)
-		;
-	*((__IO uint8_t *)&_spi->DR) = 0xff;
-	while ((_spi->SR & LL_SPI_SR_RXNE) == RESET)
-		;
-	return   _spi->DR;
-}
-
-//int8_t mcuSpi::write(uint8_t data)
-//{
-//    __IO uint8_t dummyByte;
-//    while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
-//        ;
-//    spi->DR = data;
-//    while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
-//        ;
-//    dummyByte = spi->DR;
-
-//    return 0;
-//}
-//int8_t mcuSpi::write(uint8_t *data, uint16_t len)
-//{
-//    __IO uint8_t dummyByte;
-//    if(len == 0)
-//        return -1;
-//    while(len--)
-//    {
-//        while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
-//            ;
-//        spi->DR = *data++;
-//        while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
-//            ;
-//        dummyByte = spi->DR;
-//    }
-//    return 0;
-//}
-//uint8_t mcuSpi::read()
-//{
-//    while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
-//        ;
-//    spi->DR = 0xff;
-//    while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
-//        ;
-//    return(spi->DR);
-
-//}
-//int8_t mcuSpi::read(uint8_t *recv_data)
-//{
-//    while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
-//        ;
-//    spi->DR = 0xff;
-//    while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
-//        ;
-//    *recv_data = spi->DR;
-
-//    return 0;
-//}
-
-//int8_t mcuSpi::read(uint8_t *recv_data, uint16_t len)
-//{
-//    if(len == 0)
-//        return -1;
-//    while(len--)
-//    {
-//        while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
-//            ;
-//        spi->DR = 0xff;
-//        while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
-//            ;
-//        *recv_data++ = spi->DR;
-//    }
-//    return 0;
-//}
-
-int8_t mcuSpi::take_spi_right(SpiConfig_t *spi_config)
-{
-    while((busy == 1) && (spi_config->dev_num != read_config()))
+    while((_busy == 1) && (spi_config->dev_num != readConfig()))
         delay_ms(1);
-    if(spi_config->dev_num == read_config())
+    if(spi_config->dev_num == readConfig())
     {
-        busy = 1;
+        _busy = 1;
         return 0;
     }
     config(spi_config);
-    busy = 1;
+    _busy = 1;
     return 0;
 }
-int8_t mcuSpi::release_spi_right(void)
+
+/**
+  *@brief    释放控制权
+  *@param    none
+  *@retval   none
+  */
+int8_t mcuSpi::releaseRight(void)
 {
-    busy = 0;
+    _busy = 0;
     return 0;
 }
 

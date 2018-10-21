@@ -28,7 +28,7 @@
 
 #if USE_PRINTF
 // 是否打印调试信息, 1打印,0不打印
-#define debug 1
+#define debug 0
 #endif
 
 #if debug
