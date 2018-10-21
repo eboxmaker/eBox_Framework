@@ -20,34 +20,46 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_spi.h"
 
+#include "ebox_config.h"
+
+#if EBOX_DEBUG
+// 是否打印调试信息, 1打印,0不打印
+#define debug 1
+#endif
+
+#if debug
+#define  SPI_DEBUG(...) DBG("[SPI]  "),DBG(__VA_ARGS__)
+#else
+#define  SPI_DEBUG(...)
+#endif
 SoftSpi::SoftSpi(Gpio *sck, Gpio *miso, Gpio *mosi)
 {
-    this->sck_pin =  sck;
-    this->miso_pin = miso;
-    this->mosi_pin = mosi;
+    _sck =  sck;
+    _miso = miso;
+    _mosi = mosi;
 
 }
 void SoftSpi::begin(SpiConfig_t *spi_config)
 {
 
-    sck_pin->mode(OUTPUT_PP);
-    miso_pin->mode(INPUT);
-    mosi_pin->mode(OUTPUT_PP);
+    _sck->mode(OUTPUT_PP);
+    _miso->mode(INPUT);
+    _mosi->mode(OUTPUT_PP);
 
     config(spi_config);
     switch(mode)
     {
     case SPI_MODE0:
-        sck_pin->reset();
+        _sck->reset();
         break;
     case SPI_MODE1:
-        sck_pin->reset();
+        _sck->reset();
         break;
     case SPI_MODE2:
-        sck_pin->set();
+        _sck->set();
         break;
     case SPI_MODE3:
-        sck_pin->set();
+        _sck->set();
         break;
     }
 }
@@ -58,28 +70,28 @@ void SoftSpi::config(SpiConfig_t *spi_config)
     bit_order = spi_config->bit_order;
     switch(spi_config->prescaler)
     {
-    case SPI_BaudRatePrescaler_2:
+    case SPI_CLOCK_DIV2:
         spi_delay = 0;
         break;
-    case SPI_BaudRatePrescaler_4:
+    case SPI_CLOCK_DIV4:
         spi_delay = 1;
         break;
-    case SPI_BaudRatePrescaler_8:
+    case SPI_CLOCK_DIV8:
         spi_delay = 2;
         break;
-    case SPI_BaudRatePrescaler_16:
+    case SPI_CLOCK_DIV16:
         spi_delay = 4;
         break;
-    case SPI_BaudRatePrescaler_32:
+    case SPI_CLOCK_DIV32:
         spi_delay = 8;
         break;
-    case SPI_BaudRatePrescaler_64:
+    case SPI_CLOCK_DIV64:
         spi_delay = 16;
         break;
-    case SPI_BaudRatePrescaler_128:
+    case SPI_CLOCK_DIV128:
         spi_delay = 32;
         break;
-    case SPI_BaudRatePrescaler_256:
+    case SPI_CLOCK_DIV256:
         spi_delay = 64;
         break;
     default:
@@ -87,7 +99,7 @@ void SoftSpi::config(SpiConfig_t *spi_config)
         break;
     }
 }
-uint8_t SoftSpi::read_config(void)
+uint8_t SoftSpi::readConfig(void)
 {
     return current_dev_num;
 }
@@ -107,25 +119,25 @@ uint8_t SoftSpi::transfer0(uint8_t data)
         ///////////////////上升沿之前主机准备数据//////////
         if (bit_order == LSB_FIRST)
         {
-            mosi_pin->write(!!(data & (1 << i)));
+            _mosi->write(!!(data & (1 << i)));
         }
         else
         {
-            mosi_pin->write(!!(data & (1 << (7 - i))));
+            _mosi->write(!!(data & (1 << (7 - i))));
         }
         delay_us(spi_delay);//保持一段时间，保证主机信号到达从机
         /////////////////上升沿之后主机接收数据（通知从机接收主机之前准备好的数据）////////////
-        sck_pin->set();
+        _sck->set();
         if (bit_order == LSB_FIRST)
         {
-            RcvData |= miso_pin->read() << i;
+            RcvData |= _miso->read() << i;
         }
         else
         {
-            RcvData |= (miso_pin->read() << (7 - i));
+            RcvData |= (_miso->read() << (7 - i));
         }
         delay_us(spi_delay);
-        sck_pin->reset();
+        _sck->reset();
     }
     return RcvData;
 }
@@ -143,25 +155,25 @@ uint8_t SoftSpi::transfer1(uint8_t data)
     for (i = 0; i < 8; i++)
     {
         ///////////////////上升沿之后主机准备数据//////////
-        sck_pin->set();
+        _sck->set();
         if (bit_order == LSB_FIRST)
         {
-            mosi_pin->write(!!(data & (1 << i)));
+            _mosi->write(!!(data & (1 << i)));
         }
         else
         {
-            mosi_pin->write(!!(data & (1 << (7 - i))));
+            _mosi->write(!!(data & (1 << (7 - i))));
         }
         delay_us(spi_delay);//保持一段时间，保证主机发送信号到达从机。
         /////////////////下降沿之后主机接收数据（通知从机接收主机之前准备好的数据）////////////
-        sck_pin->reset();
+        _sck->reset();
         if (bit_order == LSB_FIRST)
         {
-            RcvData |= miso_pin->read() << i;
+            RcvData |= _miso->read() << i;
         }
         else
         {
-            RcvData |= (miso_pin->read() << (7 - i));
+            RcvData |= (_miso->read() << (7 - i));
         }
         delay_us(spi_delay);
     }
@@ -182,25 +194,25 @@ uint8_t SoftSpi::transfer2(uint8_t data)
         ///////////////////下降沿之前主机准备数据//////////
         if (bit_order == LSB_FIRST)
         {
-            mosi_pin->write(!!(data & (1 << i)));
+            _mosi->write(!!(data & (1 << i)));
         }
         else
         {
-            mosi_pin->write(!!(data & (1 << (7 - i))));
+            _mosi->write(!!(data & (1 << (7 - i))));
         }
         delay_us(spi_delay);//保持一段时间，保证主机发送信号到达从机。
         /////////////////下降沿之后主机接收数据（通知从机接收主机之前准备好的数据）////////////
-        sck_pin->reset();
+        _sck->reset();
         if (bit_order == LSB_FIRST)
         {
-            RcvData |= miso_pin->read() << i;
+            RcvData |= _miso->read() << i;
         }
         else
         {
-            RcvData |= (miso_pin->read() << (7 - i));
+            RcvData |= (_miso->read() << (7 - i));
         }
         delay_us(spi_delay);
-        sck_pin->set();
+        _sck->set();
     }
 
     return RcvData;
@@ -217,25 +229,25 @@ uint8_t SoftSpi::transfer3(uint8_t data)
     for (i = 0; i < 8; i++)
     {
         ///////////////////下降沿之后主机准备数据//////////
-        sck_pin->reset();
+        _sck->reset();
         if (bit_order == LSB_FIRST)
         {
-            mosi_pin->write(!!(data & (1 << i)));
+            _mosi->write(!!(data & (1 << i)));
         }
         else
         {
-            mosi_pin->write(!!(data & (1 << (7 - i))));
+            _mosi->write(!!(data & (1 << (7 - i))));
         }
         delay_us(spi_delay);//保持一段时间，保证主机发送信号到达从机。
         /////////////////上升沿之后主机接收数据（通知从机接收主机之前准备好的数据）////////////
-        sck_pin->set();
+        _sck->set();
         if (bit_order == LSB_FIRST)
         {
-            RcvData |= miso_pin->read() << i;
+            RcvData |= _miso->read() << i;
         }
         else
         {
-            RcvData |= (miso_pin->read() << (7 - i));
+            RcvData |= (_miso->read() << (7 - i));
         }
         delay_us(spi_delay);
     }
@@ -272,7 +284,7 @@ int8_t  SoftSpi::write(uint8_t data)
     transfer(data);
     return 0;
 }
-int8_t  SoftSpi::write(uint8_t *data, uint16_t len)
+int8_t  SoftSpi::writeBuf(uint8_t *data, uint16_t len)
 {
     if(len == 0)
         return -1;
@@ -293,7 +305,7 @@ int8_t  SoftSpi::read(uint8_t *data)
     return 0;
 
 }
-int8_t  SoftSpi::read(uint8_t *rcvdata, uint16_t len)
+int8_t  SoftSpi::readBuf(uint8_t *rcvdata, uint16_t len)
 {
     if(len == 0)
         return -1;
@@ -304,11 +316,11 @@ int8_t  SoftSpi::read(uint8_t *rcvdata, uint16_t len)
     return 0;
 }
 
-int8_t SoftSpi::take_spi_right(SpiConfig_t *spi_config)
+int8_t SoftSpi::takeRight(SpiConfig_t *spi_config)
 {
-    while((busy == 1) && (spi_config->dev_num != read_config()))
+    while((busy == 1) && (spi_config->dev_num != readConfig()))
         delay_ms(1);
-    if(spi_config->dev_num == read_config())
+    if(spi_config->dev_num == readConfig())
     {
         busy = 1;
         return 0;
@@ -317,7 +329,7 @@ int8_t SoftSpi::take_spi_right(SpiConfig_t *spi_config)
     busy = 1;
     return 0;
 }
-int8_t SoftSpi::release_spi_right(void)
+int8_t SoftSpi::releaseRight(void)
 {
     busy = 0;
     return 0;

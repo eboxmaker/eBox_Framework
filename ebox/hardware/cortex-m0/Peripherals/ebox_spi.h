@@ -30,75 +30,39 @@
 		在读写前需要获得SPI的控制权，如果获取不到则一直等待！主要是为了兼容操作系统，
 		如果不使用操作系统也必须加上获得控制权的代码，在是用完SPI后一定要释放SPI总线，
 		如果不释放总线会导致别的SPI设备一直处于等待的状态
+    4.得益于f0系列灵活的pin配置，可以使用不同的io组合来使用spi资源，默认spi1为PA5，PA6，PA7
+      也可以使用PB3，PA6，PA7作为spi1，在stm32f072_define中做好定义即可
 */
 //默认配置 空，只依靠结构体SPICONFIG来初始化
 class mcuSpi: public Spi{
 public:
 	mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
 
-//    void     begin (SpiConfig_t *spi_config);
-//	void 	 config(SpiConfig_t *spi_config);
-
-//    virtual int8_t  write(uint8_t data);
-//	int8_t 	 write(uint8_t *data, uint16_t data_length);
-//	uint8_t   read();
-//	int8_t   read(uint8_t *recv_data);
-//	int8_t   read(uint8_t *recv_data, uint16_t data_length);
-
     virtual void    begin (SpiConfig_t *spi_config);
     virtual void    config(SpiConfig_t *spi_config);
-    virtual uint8_t read_config(void);
+    virtual uint8_t readConfig(void);
 
     virtual uint8_t transfer(uint8_t data);
 
     virtual int8_t  write(uint8_t data);
-    virtual int8_t  write(uint8_t *data, uint16_t len);
-
     virtual uint8_t read();
     virtual int8_t  read(uint8_t  *recv_data);
-    virtual int8_t  read(uint8_t *recv_data, uint16_t len);
+
+    virtual int8_t  writeBuf(uint8_t *data, uint16_t len);
+    virtual int8_t  readBuf(uint8_t *recv_data, uint16_t len);
 public:
-    virtual int8_t take_spi_right(SpiConfig_t *spi_config);
-    virtual int8_t release_spi_right(void);
+    virtual int8_t  takeRight(SpiConfig_t *spi_config);
+    virtual int8_t  releaseRight(void);
 
 private:
 	SPI_TypeDef *_spi;
-//	E_LOCK_T     _lock;
-    uint8_t     busy;
-	uint8_t _index;
-    Gpio *_sck;
-    Gpio *_miso;
-    Gpio *_mosi;
+    Gpio        *_sck;
+    Gpio        *_miso;
+    Gpio        *_mosi;
+
+    uint8_t     _busy;
 };
 
-//class	mcuSpi : public Spi
-//{
-//public:
-//    mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
-
-//    virtual void    begin (SpiConfig_t *spi_config);
-//    virtual void    config(SpiConfig_t *spi_config);
-//    virtual uint8_t read_config(void);
-
-//    virtual uint8_t transfer(uint8_t data);
-
-//    virtual int8_t  write(uint8_t data);
-//    virtual int8_t  write(uint8_t *data, uint16_t len);
-
-//    virtual uint8_t read();
-//    virtual int8_t  read(uint8_t  *recv_data);
-//    virtual int8_t  read(uint8_t *recv_data, uint16_t len);
-//public:
-//    virtual int8_t take_spi_right(SpiConfig_t *spi_config);
-//    virtual int8_t release_spi_right(void);
-//private:
-//    SPI_TypeDef *spi;
-//    uint8_t     busy;
-
-//    Gpio *sck;
-//    Gpio *miso;
-//    Gpio *mosi;
-//};
 /*
 	注意：1.该类的SPI_CLOCK_DIV是由delay_us延时函数控制。略有不准，比硬件SPI会慢很多
 				2.speed设置只能为SPI_CLOCK_DIVx。如果不是此值，则会将SPI_CLOCK_DIV的值直接传递给delay_us.即delay_us(SPI_CONFIG_TYPE->prescaler);
@@ -110,28 +74,27 @@ class SoftSpi: public Spi
 public:
     SoftSpi(Gpio *sck, Gpio *miso, Gpio *mosi);
 
-    virtual void    begin(SpiConfig_t *spi_config);
+    virtual void    begin (SpiConfig_t *spi_config);
     virtual void    config(SpiConfig_t *spi_config);
-    virtual uint8_t read_config(void);
+    virtual uint8_t readConfig(void);
 
     virtual uint8_t transfer(uint8_t data);
 
-
     virtual int8_t  write(uint8_t data);
-    virtual int8_t  write(uint8_t *data, uint16_t len);
-
     virtual uint8_t read();
-    virtual int8_t  read(uint8_t *data);
-    virtual int8_t  read(uint8_t *rcvdata, uint16_t len);
+    virtual int8_t  read(uint8_t  *recv_data);
+
+    virtual int8_t  writeBuf(uint8_t *data, uint16_t len);
+    virtual int8_t  readBuf(uint8_t *recv_data, uint16_t len);
 
 public:
-    virtual int8_t take_spi_right(SpiConfig_t *spi_config);
-    virtual int8_t release_spi_right(void);
+    virtual int8_t takeRight(SpiConfig_t *spi_config);
+    virtual int8_t releaseRight(void);
 
 private:
-    Gpio    *sck_pin;
-    Gpio    *mosi_pin;
-    Gpio    *miso_pin;
+    Gpio    *_sck;
+    Gpio    *_miso;
+    Gpio    *_mosi;
 
     uint8_t mode;
     uint8_t bit_order;

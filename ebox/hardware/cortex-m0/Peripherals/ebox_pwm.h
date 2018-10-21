@@ -65,7 +65,7 @@ public:
 		uint32_t t = (uint32_t)TIMx;
 		//E_PinBase *_pin;
 		//_pin = new E_PinBase(id);
-		_index = getIndex(pin->id,t,TIM_MAP);
+		_index = getIndex(pin->id,TIM_MAP,t);
 		//_pin->mode(TIM_MAP[_index]._pin_date,TIM_MAP[_index]._pin_af);
         pin->mode(TIM_MAP[_index]._pinMode,TIM_MAP[_index]._pinAf);
 		_timx = TIMx;

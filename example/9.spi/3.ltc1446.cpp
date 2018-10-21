@@ -30,8 +30,12 @@ Copyright 2015 shentq. All Rights Reserved.
 
 #define ADCA	PA0
 #define ADCB	PA1
+
+mcuSpi sp(SPI1,&PB3,&PA6,&PA7);
+
+LTCX ltc1(&PA6, &sp);
 //LTCX ltc1(&PA6, &spi1);
-LTCX ltc1(&PA6, &sspi1);
+//LTCX ltc1(&PA6, &sspi1);
 Adc adc(ADC1);
 
 void setup()
@@ -48,6 +52,8 @@ void setup()
 }
 int main(void)
 {
+    uint8_t tmp[3];
+    uint32_t _DAC_volue; 
     uint32_t i = 2048, t = 0;
     setup();
 
@@ -56,8 +62,15 @@ int main(void)
         if(i != t)
         {
             i--;
+//            _DAC_volue = (4096 - i) << 12 | (i & 0x0fff);
+//            tmp[0] = ((uint8_t *)(&(_DAC_volue)))[2];
+//            tmp[1] = ((uint8_t *)(&(_DAC_volue)))[1];
+//            tmp[2] = ((uint8_t *)(&(_DAC_volue)))[0];
+//            PA6.reset();
+//            sspi1.writeBuf(tmp,3);
+//            PA6.set();
             ltc1.write(4096 - i, i);
-            UART.printf("通道A电压 = %d; 通道B电压 = %d \r\n", adc.read(&ADCA), adc.read(&ADCB));
+            UART.printf("通道A电压 = %.01f mv; 通道B电压 = %.01f mv \r\n", adc.read_voltage(&ADCA), adc.read_voltage(&ADCB));
             delay_ms(1000);
         }
     }
