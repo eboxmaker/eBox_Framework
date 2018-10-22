@@ -49,7 +49,7 @@ SoftI2c::SoftI2c(Gpio *scl, Gpio *sda)
 
 /**
   *@brief    根据i2c时钟和设置速率speed计算timing,默认80K
-  *@param    speed:  速率 10,100,200,400 分别代表10k，100k，200k,400k
+  *@param    speed:  速率 10,100,200,300,400 分别代表10k，100k，200k,300k,400k
   *@retval   None
   */
 void SoftI2c::begin(uint16_t speed)
