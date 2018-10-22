@@ -703,9 +703,9 @@
               </FileOption>
             </File>
             <File>
-              <FileName>ebox_encoder.cpp</FileName>
+              <FileName>ebox_rtc.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_encoder.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_rtc.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1802,7 +1802,7 @@
                   <RVCTZI>0</RVCTZI>
                   <RVCTOtherData>0</RVCTOtherData>
                   <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
+                  <IncludeInBuild>0</IncludeInBuild>
                   <AlwaysBuild>2</AlwaysBuild>
                   <GenerateAssemblyFile>2</GenerateAssemblyFile>
                   <AssembleAssemblyFile>2</AssembleAssemblyFile>
@@ -2238,6 +2238,11 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+            <File>
+              <FileName>rtc_calendar F0.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\example\8.rtc\rtc_calendar F0.cpp</FilePath>
             </File>
           </Files>
         </Group>
