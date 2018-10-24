@@ -4,7 +4,7 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/08/14
-  * @brief   
+  * @brief   2018/10/15 改用查表法，减少指数运算 
   ******************************************************************************
   * @attention
   *
@@ -19,22 +19,26 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_wdg.h"
+
+const uint16_t PR[7] = {4,8,16,32,64,128,256};
+
 void Iwdg::begin(uint16_t ms)
 {
-
-    uint8_t pr;
-    uint16_t rlr;
-
-    for(pr = 1; pr < 6; pr++)
-    {
-        rlr = ms * 40 / (4 * pow(2.0, pr));
-        if(rlr <= 0x0fff) break;
-    }
-    if(pr == 5 || rlr > 0x0fff)
-    {
-        pr = 5;
-        rlr = 0xfff;
-    }
+	uint8_t pr  = 0;	//分频数 0-7
+	uint16_t rlr = 0;	//重载寄存器值，12位有效位，最大值4095
+	// 计算重载值
+	for (pr = 0; pr < 7; pr++)
+	{
+		rlr = ms * 40 / PR[pr];
+		if (rlr <= 0x0fff) break;
+	}
+	// 当计算出的重载值大于0xfff时，取最大值rlr = 4095, pr = 6;
+	// 此时延时Tout=(256*4095)/40 (ms)
+	if ( rlr > 0x0fff || pr >= 7 )
+	{
+		pr = 6;
+		rlr = 0xfff;
+	}
 
     IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
     IWDG_SetPrescaler(pr);

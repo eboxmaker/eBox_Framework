@@ -24,7 +24,7 @@
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
-#define debug 1
+#define debug 0
 #endif
 
 #if debug
@@ -54,9 +54,12 @@ SoftI2c::SoftI2c(Gpio *scl, Gpio *sda)
   */
 void SoftI2c::begin(uint16_t speed)
 {
-    _sda->mode(OUTPUT_PP);
-    _scl->mode(OUTPUT_PP);
-    
+    _sda->mode(OUTPUT_OD_PU);
+    _scl->mode(OUTPUT_OD_PU);
+    _sda->set();
+    _scl->set();
+
+    I2C_DEBUG("scl pin id 0x%x state is %d , sda pin id 0x%x  state is %d \r\n",_scl->id,_scl->read(),_sda->id,_sda->read());
     switch(speed)
     {
     case 400:
@@ -106,10 +109,10 @@ uint32_t SoftI2c::readConfig()
 uint8_t SoftI2c::write(uint8_t slaveAddr, uint8_t data)
 {
   uint8_t err = EOK;
-  I2C_DEBUG("I2C Bus state,SCL is %d, SDA is %d \r\n",_scl->read(),_sda->read());
-  err += _start(200);
-  err +=_send7bitsAddress(slaveAddr,WRITE,200);
-  err +=_sendByte(data,200);
+//  I2C_DEBUG("I2C Bus state,SCL is %d, SDA is %d \r\n",_scl->read(),_sda->read());
+  err += _start(1000);
+  err += _send7bitsAddress(slaveAddr,WRITE,200);
+  err += _sendByte(data,200);
   _stop();
   return err;
 }
@@ -121,15 +124,15 @@ uint8_t SoftI2c::write(uint8_t slaveAddr, uint8_t data)
   *          uint16_t tOut: 超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t SoftI2c::write(uint8_t slaveAddr,uint8_t regAddr,uint8_t data,uint16_t tOut)
+uint8_t SoftI2c::write(uint8_t slaveAddr,uint16_t regAddr,uint8_t data,uint16_t tOut)
 {
   uint8_t err = EOK;
-  I2C_DEBUG("I2C Bus state,SCL is %d, SDA is %d \r\n",_scl->read(),_sda->read());
-  err += _start(tOut);
-  err +=_send7bitsAddress(slaveAddr,WRITE,tOut);
-  err +=_sendByte(regAddr,tOut);
-  err +=_sendByte(data,tOut);
+  err += _start(1000);
+  err += _send7bitsAddress(slaveAddr,WRITE,tOut);
+  err += _sendByte(regAddr,tOut);
+  err += _sendByte(data,tOut);
   _stop();
+  delay_us(10);
   return err;
 }
 
@@ -144,8 +147,8 @@ uint8_t SoftI2c::write(uint8_t slaveAddr,uint8_t regAddr,uint8_t data,uint16_t t
 uint8_t SoftI2c::writeBuf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite,uint16_t tOut)
 {
   uint8_t err = 0;
-  err += _start(tOut);
-  err +=_send7bitsAddress(slaveAddr,WRITE,tOut);
+  err += _start(1000);
+  err += _send7bitsAddress(slaveAddr,WRITE,tOut);
   while (nWrite--)
   {
     err +=_sendByte(*data,tOut);
@@ -164,12 +167,12 @@ uint8_t SoftI2c::writeBuf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite,uint
   *          uint16_t tOut:  超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t SoftI2c::writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut)
+uint8_t SoftI2c::writeBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut)
 {
   uint8_t err = 0;
-  err += _start(tOut);
-  err +=_send7bitsAddress(slaveAddr,WRITE,tOut);
-  err+= _sendByte(regAddr,tOut);
+  err += _start(1000);
+  err += _send7bitsAddress(slaveAddr,WRITE,tOut);
+  err += _sendByte(regAddr,tOut);
   while (nWrite--)
   {
     err +=_sendByte(*data,tOut);
@@ -188,7 +191,7 @@ uint8_t SoftI2c::writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint1
   */
 uint8_t SoftI2c::read(uint8_t slaveAddr){
   uint8_t data ;
-  _start(200);
+  _start(1000);
   _send7bitsAddress(slaveAddr,READ,200);
   _receiveByte(&data,200);
   _sendNack();
@@ -203,7 +206,7 @@ uint8_t SoftI2c::read(uint8_t slaveAddr){
   *          uint16_t tOut: 超时
   *@retval   读取到的数据
   */
-uint8_t SoftI2c::read(uint8_t slaveAddr,uint8_t regAddr,uint16_t tOut){
+uint8_t SoftI2c::read(uint8_t slaveAddr,uint16_t regAddr,uint16_t tOut){
   uint8_t data ;
   _start(tOut);
   _send7bitsAddress(slaveAddr,WRITE,tOut);
@@ -252,14 +255,14 @@ uint8_t SoftI2c::readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t
   *          uint16_t tOut: 超时
   *@retval   EOK，EWAIT
   */
-uint8_t SoftI2c::readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut)
+uint8_t SoftI2c::readBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut)
 {
   uint8_t err = 0;
   err += _start(tOut);
   err += _send7bitsAddress(slaveAddr,WRITE,tOut);
   err += _sendByte(regAddr,tOut);
   err += _start(tOut);
-  err +=_send7bitsAddress(slaveAddr,READ,tOut);
+  err += _send7bitsAddress(slaveAddr,READ,tOut);
   while (nRead--)
   {
     err +=_receiveByte(data,tOut);
@@ -290,8 +293,6 @@ uint8_t SoftI2c::checkBusy(uint8_t slaveAddr,uint16_t tOut)
     {
         _start(tOut);
         ret = _send7bitsAddress(slaveAddr,WRITE,tOut);
-        _sendAck();
-        _sendByte(slaveAddr,tOut);
         _stop();
         if(i++ == 100)
         {
@@ -344,8 +345,8 @@ int8_t SoftI2c::_start(uint16_t tOut)
 #if	(USE_TIMEOUT != 0)
   uint32_t end = GetEndTime(tOut);
 #endif
-  // scl,sda 均为高电平，总线空闲
-  while (!(_sda->read() && _scl->read())){
+  _scl->set();          // SCL高  
+  while (!(_sda->read() && _scl->read())){      // scl,sda 均为高电平，总线空闲
 #if	(USE_TIMEOUT != 0)
     if (IsTimeOut(end,tOut)){
       I2C_DEBUG("start fail,bus busy SDA is %d，SCL is %d,time is %d us \r\n",_sda->read(),_scl->read(),_timing);
@@ -353,13 +354,13 @@ int8_t SoftI2c::_start(uint16_t tOut)
     }
 #endif
   }
-  _sda->mode(OUTPUT_PP);
   _sda->set();
-  _scl->set();        // SCL高
+  _scl->set();          // SCL高
   delay_us(_timing);
-  _sda->reset();      // SDA拉低
+  _sda->reset();        // SDA拉低
   delay_us(_timing);
   _scl->reset();
+  delay_us(_timing);
   return EOK;
 }
 
@@ -370,13 +371,19 @@ int8_t SoftI2c::_start(uint16_t tOut)
   */
 void SoftI2c::_stop()
 {
-    _sda->mode(OUTPUT_PP);
-    _scl->reset();
+//    _sda->mode(OUTPUT_PP);
+//    _scl->reset();
+//    _sda->reset();      // SDA低电平
+//    delay_us(_timing);
+//    _scl->set();        // SCL拉高并保持
+//    delay_us(_timing);  
+//    _sda->set();        // SDA拉高
     _sda->reset();      // SDA低电平
-    delay_us(_timing);
     _scl->set();        // SCL拉高并保持
     delay_us(_timing);  
     _sda->set();        // SDA拉高
+    delay_us(_timing);
+    
 }
 
 /**
@@ -386,25 +393,39 @@ void SoftI2c::_stop()
  */
 int8_t SoftI2c::_waitAck()
 {
-    uint8_t cErrTime = 10;
-    _sda->mode(INPUT_PU);
-    _scl->set();
-    delay_us(_timing);
-    while(_sda->read())       // 等待SDA被拉低，即ACK响应
-    {
-        cErrTime--;
-        delay_us(_timing);
-        if(cErrTime == 0)     // 无响应，发送stop信号
-        {
-            _sda->mode(OUTPUT_PP);
-            _stop();
-            //I2C_DEBUG(" slave device no ack \r\n");
-            return EWAIT;
-        }
-    }
-    _scl->reset();
-    delay_us(_timing);
-    return EOK;
+    uint8_t re;
+//    uint8_t cErrTime = 100;
+//    _sda->mode(INPUT_PU);
+//    _scl->set();
+//    delay_us(_timing);
+//    while(_sda->read())       // 等待SDA被拉低，即ACK响应
+//    {
+//        cErrTime--;
+//        delay_us(_timing);
+//        if(cErrTime == 0)     // 无响应，发送stop信号
+//        {
+//            _sda->mode(OUTPUT_PP);
+//            _stop();
+//            return EWAIT;
+//        }
+//    }
+//    _scl->reset();
+//    delay_us(_timing);
+    _sda->set();
+	delay_us(_timing);
+	_scl->set();
+	delay_us(_timing);
+	if (!_sda->read())	//SDA为低则从设备返回Ack，否则没返回
+	{
+		re = 0;
+	}
+	else
+	{
+		re = 1;
+	}
+	_scl->reset();
+	delay_us(_timing);
+    return re;
 }
 
 /**
@@ -414,10 +435,10 @@ int8_t SoftI2c::_waitAck()
  */
 int8_t SoftI2c::_sendAck()
 {
-    _sda->mode(OUTPUT_PP);
-    _sda->reset();
+//    _sda->mode(OUTPUT_PP);
+    _sda->reset();          // 拉低SDA，
     delay_us(_timing);
-    _scl->set();
+    _scl->set();            // 给出一个时钟
     delay_us(_timing);
     _scl->reset();
     delay_us(_timing);
@@ -431,7 +452,6 @@ int8_t SoftI2c::_sendAck()
   */
 int8_t SoftI2c::_sendNack()
 {
-    _sda->mode(OUTPUT_PP);
     _sda->set();
     delay_us(_timing);
     _scl->set();
@@ -451,7 +471,6 @@ int8_t SoftI2c::_sendByte(uint8_t byte,uint16_t tOut)
     int8_t ret = EOK;
 
     uint8_t ii = 8;
-    _sda->mode(OUTPUT_PP);
     _scl->reset();
     while( ii-- )
     {
@@ -491,7 +510,7 @@ int8_t SoftI2c::_receiveByte(uint8_t *data,uint16_t tOut)
 {
     uint8_t i = 8;
     uint8_t byte = 0;
-    _sda->mode(INPUT_PU);
+    _sda->set();
     while(i--)
     {
         byte += byte;

@@ -70,7 +70,7 @@ public:
 	InCapture(TIM_TypeDef *TIMx,mcuGpio *pin):T_base(TIMx){
 		uint8_t _index;
 		uint32_t t = (uint32_t)TIMx;
-		_index = getIndex(pin->id,t,TIM_MAP);
+		_index = getIndex(pin->id,TIM_MAP,t);
 		pin->mode(TIM_MAP[_index]._pinMode,TIM_MAP[_index]._pinAf);
 		_timx = TIMx;
 //		_overflow_times = &t1_overflow_times;

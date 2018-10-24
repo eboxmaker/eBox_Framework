@@ -14,15 +14,17 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "at24c02.h"
 
 /**
-	*	1	此例程需要调用eDrive目录下的si4432驱动
-	*	2	此例程演示了si4432无线模块收发
+    *	1	此例程需要调用eDrive目录下的at24c02驱动
+	*	2	此例程演示了at24c02的读写操作
+    *   3   通过begin可以设置i2c速率为10k，100k，200k，400k
+    *   4   通过config可以自由设置i2c速率，注意f0需要借助官方工具生成timing传入
 	*/
 
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"si4432 example"
+#define EXAMPLE_NAME	"AT24C02 example"
 #define EXAMPLE_DATE	"2018-08-11"
 
-At24c02 ee(&i2c2);
+At24c02 ee(&I2C);
 uint8_t data;
 
 void setup()
@@ -30,10 +32,7 @@ void setup()
     ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-
-    ee.begin(400000);
-
-
+    ee.begin(1);
 }
 int16_t x, i;
 uint8_t wbuf[512];
@@ -43,8 +42,7 @@ int ret = 0;
 int main(void)
 {
     setup();
-
-
+    
     while(1)
     {
         ret = 0;

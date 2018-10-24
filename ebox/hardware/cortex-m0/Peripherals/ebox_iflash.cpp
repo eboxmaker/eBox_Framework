@@ -18,8 +18,13 @@
 
 
 /* Includes ------------------------------------------------------------------*/
+#include "ebox_config.h"
 #include "ebox_iflash.h"
 #include "stm32f0xx_hal_flash_ex.h"
+
+#if USE_EBOX_MEM
+    #include "ebox_mem.h"
+#endif
 
 #if USE_PRINTF
 // 是否打印调试信息, 1打印,0不打印
@@ -27,9 +32,6 @@
 #endif
 
 #if debug
-#include "ebox_uart.h"
-extern Uart uart1;
-#define DBG(...) uart1.printf(__VA_ARGS__)
 #define  IFLASH_DEBUG(...) DBG("[IFLASH]  "),DBG(__VA_ARGS__)
 #else
 #define  IFLASH_DEBUG(...)
@@ -199,7 +201,7 @@ __INLINE int ebox_flashRead(uint32_t iAddress, uint8_t *buf, uint32_t iNbrToRead
  *@param    uint32_t iAddress 起始地址， uint8_t *buf,要写入的数据 uint16_t iNumByteToWrite 数据长度
  *@retval   写入的数据长度
 */
-__INLINE uint16_t write_without_check(uint32_t iAddress, uint8_t *buf, uint16_t iNumByteToWrite)
+__INLINE  uint16_t write_without_check(uint32_t iAddress, uint8_t *buf, uint16_t iNumByteToWrite)
 {
 	uint16_t i;
 
@@ -270,8 +272,12 @@ int Flash::write(uint32_t offsetAdd, uint8_t *buf, uint32_t iNbrToWrite)
 	uint16_t secoff;
 	uint16_t secremain;
 	uint16_t i = 0;
+#if USE_EBOX_MEM
+    uint8_t *tmp = (uint8_t *)ebox_malloc(FLASH_PAGE_SIZE);
+#else
 	// 定义缓冲区，保存读出的页数据
-	static uint8_t tmp[FLASH_PAGE_S];
+	static uint8_t tmp[FLASH_PAGE_SIZE];
+#endif
 
 	if ((_start_addr == 0)||(iAddress == _end_addr)){
 		IFLASH_DEBUG("write: flash 定义错误，请检查起始地址和页数量 s：%d e:%d\r\n",_start_addr,_end_addr);
@@ -286,7 +292,7 @@ int Flash::write(uint32_t offsetAdd, uint8_t *buf, uint32_t iNbrToWrite)
 
 	while ( 1 )
 	{
-		ebox_flashRead(secpos, tmp, FLASH_PAGE_S);   //读出整个扇区
+		ebox_flashRead(secpos, tmp, FLASH_PAGE_SIZE);   //读出整个扇区
 		// 判断需要写入的部分是否为空
 		for (i = 0; i < secremain; i++)  	//校验数据
 		{
@@ -301,7 +307,7 @@ int Flash::write(uint32_t offsetAdd, uint8_t *buf, uint32_t iNbrToWrite)
 				tmp[i + secoff] = buf[i];
 			}
 			// 将缓冲区数据写入扇区
-			write_without_check(secpos , tmp , FLASH_PAGE_S); //写入整个扇区
+			write_without_check(secpos , tmp , FLASH_PAGE_SIZE); //写入整个扇区
 		}
 		else
 		{
@@ -328,6 +334,9 @@ int Flash::write(uint32_t offsetAdd, uint8_t *buf, uint32_t iNbrToWrite)
 			}
 		}
 	}
+#if USE_EBOX_MEM
+    ebox_free(tmp);
+#endif
 	return iNbrToWrite;
 }
 #else
@@ -396,9 +405,11 @@ int Flash::read(uint32_t offsetAdd, uint8_t *buf, uint32_t iNbrToRead)
 		IFLASH_DEBUG("read: flash 定义错误，请检查起始地址和页数量\r\n");
 		return 0;
 	}
-
 	return ebox_flashRead(iAddress,buf,iNbrToRead);
 }
 
+uint32_t Flash::getSize(){
+    return (_end_addr-_start_addr)/1024;
+}
 
 
