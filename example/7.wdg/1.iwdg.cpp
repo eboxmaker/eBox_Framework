@@ -34,17 +34,15 @@ void setup()
 
 int main(void)
 {
-
+    uint32_t current,i = 0;
     setup();
-
+    current = millis();
     while(1)
     {
         dog.feed();//在常见的应用中喂狗应该在定时器中断中定时喂狗
-        UART.printf("running!\r\n");
+        UART.printf("feed %d running %.02fs interval %.02f s!\r\n",i++,(millis()/1000.0),(float)((millis()-current)/1000.0));
+        current = millis();
         delay_ms(25000);
-        //        delay_ms(1900);
-        //        delay_ms(2000);
-        //        delay_ms(3000);
     }
 }
 

@@ -55,7 +55,6 @@ void Iwdg::begin(uint16_t ms)
 	LL_IWDG_SetReloadCounter(IWDG, rlr);           /* (4) */
 }
 void Iwdg::feed()
-{
-      /*reload*/
-	LL_IWDG_ReloadCounter(IWDG);
+{      
+	LL_IWDG_ReloadCounter(IWDG);        /*reload*/
 }

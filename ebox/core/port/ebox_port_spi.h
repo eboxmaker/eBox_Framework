@@ -29,34 +29,25 @@ typedef struct
 } SpiConfig_t;
 class Spi
 {
-    private:
-        uint8_t dev_num_acc;
     protected:
-        uint8_t current_dev_num;
-
+        uint8_t current_dev_num;        // 设备ID，用来区分spi总线上挂载的不同设备，建议使用cs pinid 作为设备id
     public:
-        Spi():dev_num_acc(0),current_dev_num(0){ };
 
         virtual void    begin (SpiConfig_t *spi_config)  = 0;
         virtual void    config(SpiConfig_t *spi_config)  = 0;
-        virtual uint8_t read_config(void)  = 0;
+        virtual uint8_t readConfig(void)  = 0;
 
         virtual uint8_t transfer(uint8_t data)  = 0;
-
+        // 单字节读写
         virtual int8_t  write(uint8_t data)  = 0;
-        virtual int8_t  write(uint8_t *data, uint16_t data_length)  = 0;
-
         virtual uint8_t read()  = 0;
         virtual int8_t  read(uint8_t  *recv_data)  = 0;
-        virtual int8_t  read(uint8_t *recv_data, uint16_t data_length)  = 0;
+        // buf读写
+        virtual int8_t  writeBuf(uint8_t *data, uint16_t data_length)  = 0;
+        virtual int8_t  readBuf(uint8_t *recv_data, uint16_t data_length)  = 0;
 
-        virtual int8_t take_spi_right(SpiConfig_t *spi_config)  = 0;
-        virtual int8_t release_spi_right(void)  = 0;
-        uint8_t get_new_dev_num()
-        {
-            dev_num_acc++;
-            return dev_num_acc;
-        }
+        virtual int8_t  takeRight(SpiConfig_t *spi_config)  = 0;
+        virtual int8_t  releaseRight(void)  = 0;
 };
 
 #endif

@@ -2,10 +2,10 @@
   ******************************************************************************
   * @file    ebox_i2c.h
   * @author  cat_li
-  * @brief   ä»…å·¥ä½œåœ¨ä¸»æ¨¡å¼
-		1    2017/5/30  å¢åŠ è¶…æ—¶ï¼Œé˜²æ­¢ç¨‹åºæ­»æ‰ã€‚è¯»å†™å‡½æ•°å¢åŠ è¿”å›çŠ¶æ€
-		2    2017/7/24  ä¿®æ”¹è¶…æ—¶æ¨¡å¼,I2C2éªŒè¯ok,å¢åŠ è¯»å­—èŠ‚å†™å­—èŠ‚å‡½æ•°
-  *	æ³¨æ„ï¼šè·å–é‡Šæ”¾æƒé™å‡ºéœ€è¦ä¼˜åŒ–ã€‚
+  * @brief   ½ö¹¤×÷ÔÚÖ÷Ä£Ê½
+		1    2017/5/30  Ôö¼Ó³¬Ê±£¬·ÀÖ¹³ÌĞòËÀµô¡£¶ÁĞ´º¯ÊıÔö¼Ó·µ»Ø×´Ì¬
+		2    2017/7/24  ĞŞ¸Ä³¬Ê±Ä£Ê½,I2C2ÑéÖ¤ok,Ôö¼Ó¶Á×Ö½ÚĞ´×Ö½Úº¯Êı
+  *	×¢Òâ£º»ñÈ¡ÊÍ·ÅÈ¨ÏŞ³öĞèÒªÓÅ»¯¡£
   ******************************************************************************
   * @attention
   *
@@ -28,47 +28,38 @@
 #define WRITE   0
 #define READ    1
 
-// åˆ†é¢‘ï¼Œå»ºç«‹ï¼Œä¿æŒï¼Œé«˜ç”µå¹³ï¼Œä½ç”µå¹³
-#define	C16M10K	 	__LL_I2C_CONVERT_TIMINGS(0x3, 0xc7, 0xc3, 0x02, 0x04)		//10k@16M
-#define	C16M100K	__LL_I2C_CONVERT_TIMINGS(0x3, 0x13, 0xf, 0x02, 0x04)		//100k@16M
-#define	C16M400K	__LL_I2C_CONVERT_TIMINGS(0x1, 0x9, 0x3, 0x2, 0x3)			//400k@16M
-
-#define	C48M10K	 	__LL_I2C_CONVERT_TIMINGS(0xb, 0xc7, 0xc3, 0x02, 0x04)		//10k@48M
-#define	C48M100K	__LL_I2C_CONVERT_TIMINGS(0xb, 0x13, 0xf, 0x02, 0x04)		//100k@48M
-#define	C48M400K	__LL_I2C_CONVERT_TIMINGS(0x5, 0x9, 0x3, 0x3, 0x3)			//400k@48M
-
-#define	C8M10K	 	__LL_I2C_CONVERT_TIMINGS(0x1, 0xc7, 0xc3, 0x02, 0x04)		//10k@48M
-#define	C8M100K	 	__LL_I2C_CONVERT_TIMINGS(0x1, 0x13, 0xf, 0x02, 0x04)		//100k@48M
-#define	C8M400K	 	__LL_I2C_CONVERT_TIMINGS(0x0, 0x9, 0x3, 0x1, 0x3)			//400k@48M
-
+/*
+	1.Ö§³ÖI2C1ºÍI2C2,Á½¸ö¾ùÊ¹ÓÃPCLKclock
+	2.Ö§³Öremap,ÔÚstm32f072defineÖĞ¶¨Òå
+*/
 
 class mcuI2c :public I2c
 {
 
 public:
   mcuI2c(I2C_TypeDef *I2Cx,Gpio *scl_pin, Gpio *sda_pin);
-  // å¯åŠ¨I2C, speed - 10,100,400 åˆ†åˆ«ä»£è¡¨10kï¼Œ100kï¼Œ400k
+  // Æô¶¯I2C, speed - 10,100,400 ·Ö±ğ´ú±í10k£¬100k£¬400k
   virtual void	begin(uint16_t speed);
   virtual void    config(uint32_t speed);
   virtual uint32_t    readConfig();
-  // å•å­—èŠ‚è¯»å†™
+  // µ¥×Ö½Ú¶ÁĞ´
 	virtual uint8_t	write(uint8_t slaveAddr, uint8_t data);
-    virtual uint8_t write(uint8_t slaveAddr,uint8_t regAddr, uint8_t data,uint16_t tOut= 300);
+    virtual uint8_t write(uint8_t slaveAddr,uint16_t regAddr, uint8_t data,uint16_t tOut= 300);
 	virtual uint8_t read(uint8_t slaveAddr);	
-	virtual uint8_t read(uint8_t slaveAddr,uint8_t regAddr,uint16_t tOut= 300);
-  // è¯»å†™nå­—èŠ‚
-  virtual uint8_t writeBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nWrite,uint16_t tOut = 300);
-  virtual uint8_t	writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut = 300);
-
-  virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t tOut = 300);
-  virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut = 300);
-	// ç­‰å¾…è®¾å¤‡å“åº”
+	virtual uint8_t read(uint8_t slaveAddr,uint16_t regAddr,uint16_t tOut= 300);
+	// ¶ÁĞ´n×Ö½Ú
+	virtual uint8_t writeBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nWrite,uint16_t tOut = 300);
+	virtual uint8_t	writeBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut = 300);
+	
+	virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t tOut = 300);
+	virtual uint8_t	readBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut = 300);
+	// µÈ´ıÉè±¸ÏìÓ¦
 	virtual uint8_t checkBusy(uint8_t slaveAddr,uint16_t tOut = 200);
-
-  // è·å–I2Cæ§åˆ¶æƒ,æˆåŠŸè¿”å›E_OK,E_BUSY;éœ€è¦å’ŒreleaseRightæˆå¯¹ä½¿ç”¨
-  virtual uint8_t takeRight(uint32_t timing,uint16_t tOut = 300);
-  // é‡Šæ”¾I2Cæ§åˆ¶æƒ
-  virtual void    releaseRight(void);
+	
+	// »ñÈ¡I2C¿ØÖÆÈ¨,³É¹¦·µ»ØE_OK,E_BUSY;ĞèÒªºÍreleaseRight³É¶ÔÊ¹ÓÃ
+	virtual uint8_t takeRight(uint32_t timing,uint16_t tOut = 300);
+	// ÊÍ·ÅI2C¿ØÖÆÈ¨
+	virtual void    releaseRight(void);
 
 private:
 //    virtual int8_t start();
@@ -79,48 +70,48 @@ private:
 //    virtual int8_t sendByte(uint8_t regData);
 //    virtual int8_t send_7bits_address(uint8_t slave_address);
 //    virtual int8_t receiveByte(uint8_t *data);
-//    virtual int8_t wait_ack(){return 0;};//ç”±ç¡¬ä»¶æ¥å®Œæˆã€‚å·²ç»é›†æˆåœ¨å„ä¸ªå‡½æ•°å†…éƒ¨ã€‚
+//    virtual int8_t wait_ack(){return 0;};//ÓÉÓ²¼şÀ´Íê³É¡£ÒÑ¾­¼¯³ÉÔÚ¸÷¸öº¯ÊıÄÚ²¿¡£
 
-  I2C_TypeDef 	*_i2cx;		// i2cå¤–è®¾
-  uint32_t   	 _timing;	// i2cæ—¶åº
-  uint8_t     	_busy;
-  Gpio            *_sda;
-  Gpio            *_scl;
+	I2C_TypeDef 	*_i2cx;		// i2cÍâÉè
+	uint32_t   	 	_timing;	// i2cÊ±Ğò
+	uint8_t     	_busy;
+    Gpio            *_sda;
+    Gpio            *_scl;
 };
 
 /*
-	1.æ”¯æŒä»»ä½•IOå¼•è„šï¼›
-	2.å‡½æ•°æ¥å£å’Œç¡¬ä»¶I2Cå®Œå…¨ä¸€æ ·å¯ä»¥äº’ç›¸æ›¿ä»£
-	æ³¨æ„ï¼š
-				1.è¯¥ç±»çš„speedæ˜¯ç”±delay_uså»¶æ—¶å‡½æ•°æ§åˆ¶ã€‚ç•¥æœ‰ä¸å‡†
-				2.speedè®¾ç½®åªèƒ½ä¸º100000ï¼Œ200000,300k,400kã€‚å¦‚æœä¸æ˜¯æ­¤å€¼ï¼Œåˆ™ä¼šå°†speedçš„å€¼ç›´æ¥ä¼ é€’ç»™delay_us.å³delay_us(speed);
-				3.åˆæœŸè°ƒè¯•I2Cè®¾å¤‡å»ºè®®ä½¿ç”¨100kã€‚æˆ–è€…å¤§äº10çš„å€¼
+	1.Ö§³ÖÈÎºÎIOÒı½Å£»
+	2.º¯Êı½Ó¿ÚºÍÓ²¼şI2CÍêÈ«Ò»Ñù¿ÉÒÔ»¥ÏàÌæ´ú
+	×¢Òâ£º
+				1.¸ÃÀàµÄspeedÊÇÓÉdelay_usÑÓÊ±º¯Êı¿ØÖÆ¡£ÂÔÓĞ²»×¼
+				2.speedÉèÖÃÖ»ÄÜÎª100000£¬200000,300k,400k¡£Èç¹û²»ÊÇ´ËÖµ£¬Ôò»á½«speedµÄÖµÖ±½Ó´«µİ¸ødelay_us.¼´delay_us(speed);
+				3.³õÆÚµ÷ÊÔI2CÉè±¸½¨ÒéÊ¹ÓÃ100k¡£»òÕß´óÓÚ10µÄÖµ
 */
 class SoftI2c :public I2c
 {
 public:
   SoftI2c(Gpio *scl, Gpio *sda);
-    // å¯åŠ¨I2C, speed - 10,100,400 åˆ†åˆ«ä»£è¡¨10kï¼Œ100kï¼Œ400k
-  virtual void	begin(uint16_t speed);
-  virtual void    config(uint32_t speed);
-  virtual uint32_t    readConfig();
-  // å•å­—èŠ‚è¯»å†™
+    // Æô¶¯I2C, speed - 10,100,400 ·Ö±ğ´ú±í10k£¬100k£¬400k
+  virtual void	    begin(uint16_t speed);
+  virtual void      config(uint32_t speed);
+  virtual uint32_t  readConfig();
+  // µ¥×Ö½Ú¶ÁĞ´
   virtual uint8_t   write(uint8_t slaveAddr,uint8_t data);
-  virtual uint8_t   write(uint8_t slaveAddr,uint8_t regAddr, uint8_t data,uint16_t tOut= 300);
+  virtual uint8_t   write(uint8_t slaveAddr,uint16_t regAddr, uint8_t data,uint16_t tOut= 300);
   virtual uint8_t   read(uint8_t slaveAddr);
-  virtual uint8_t   read(uint8_t slaveAddr,uint8_t regAddr,uint16_t tOut= 300);
-  // è¯»å†™nå­—èŠ‚
-  virtual uint8_t writeBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nWrite,uint16_t tOut = 300);
-  virtual uint8_t	writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut = 300);
+  virtual uint8_t   read(uint8_t slaveAddr,uint16_t regAddr,uint16_t tOut= 300);
+  // ¶ÁĞ´n×Ö½Ú
+  virtual uint8_t   writeBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nWrite,uint16_t tOut = 300);
+  virtual uint8_t	writeBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut = 300);
 
   virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t tOut = 300);
-  virtual uint8_t	readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut = 300);
-  // ç­‰å¾…è®¾å¤‡å“åº”
+  virtual uint8_t	readBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut = 300);
+  // µÈ´ıÉè±¸ÏìÓ¦
   virtual uint8_t   checkBusy(uint8_t slaveAddr,uint16_t tOut = 200);
 
-  // è·å–I2Cæ§åˆ¶æƒ,æˆåŠŸè¿”å›E_OK,E_BUSY;éœ€è¦å’ŒreleaseRightæˆå¯¹ä½¿ç”¨
-  virtual uint8_t takeRight(uint32_t timing,uint16_t tOut = 300);
-  // é‡Šæ”¾I2Cæ§åˆ¶æƒ
+  // »ñÈ¡I2C¿ØÖÆÈ¨,³É¹¦·µ»ØE_OK,E_BUSY;ĞèÒªºÍreleaseRight³É¶ÔÊ¹ÓÃ
+  virtual uint8_t   takeRight(uint32_t timing,uint16_t tOut = 300);
+  // ÊÍ·ÅI2C¿ØÖÆÈ¨
   virtual void    releaseRight(void);
 
 private:
@@ -139,7 +130,7 @@ private:
 private:
   Gpio            *_sda;
   Gpio            *_scl;
-  uint32_t   	 	_timing;	// i2cæ—¶åº
+  uint32_t   	 	_timing;	// i2cÊ±Ğò
   uint8_t 	_busy;
 };
 

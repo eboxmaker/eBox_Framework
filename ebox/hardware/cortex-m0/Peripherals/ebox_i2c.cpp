@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    ebox_i2c.cpp
   * @author  cat_li
-  * @brief   ä»…å·¥ä½œåœ¨ä¸»æ¨¡å¼
-		1  2017/5/30  å¢åŠ è¶…æ—¶ï¼Œé˜²æ­¢ç¨‹åºæ­»æ‰ã€‚è¯»å†™å‡½æ•°å¢åŠ è¿”å›çŠ¶æ€
+  * @brief   ½ö¹¤×÷ÔÚÖ÷Ä£Ê½
+		1  2017/5/30  Ôö¼Ó³¬Ê±£¬·ÀÖ¹³ÌĞòËÀµô¡£¶ÁĞ´º¯ÊıÔö¼Ó·µ»Ø×´Ì¬
   ******************************************************************************
   * @attention
   *
@@ -23,8 +23,8 @@
 #include "ebox_config.h"
 
 #if EBOX_DEBUG
-// æ˜¯å¦æ‰“å°è°ƒè¯•ä¿¡æ¯, 1æ‰“å°,0ä¸æ‰“å°
-#define debug 1
+// ÊÇ·ñ´òÓ¡µ÷ÊÔĞÅÏ¢, 1´òÓ¡,0²»´òÓ¡
+#define debug 0
 #endif
 
 #if debug
@@ -33,12 +33,28 @@
 #define  I2C_DEBUG(...)
 #endif
 
+// ·ÖÆµ£¬½¨Á¢£¬±£³Ö£¬¸ßµçÆ½£¬µÍµçÆ½
+#define	C16M10K	 	__LL_I2C_CONVERT_TIMINGS(0x3, 0xc7, 0xc3, 0x02, 0x04)		//10k@16M
+#define	C16M100K	__LL_I2C_CONVERT_TIMINGS(0x3, 0x13, 0xf, 0x02, 0x04)		//100k@16M
+#define	C16M400K	__LL_I2C_CONVERT_TIMINGS(0x1, 0x9, 0x3, 0x2, 0x3)			//400k@16M
+
+#define	C48M10K	 	0xA010B2FF		//10k@48M,stand mode
+#define	C48M100K	0x10805E89		//100k@48M,stand mode
+#define C48M200K    0x00905E82      //200K@48M,Fast mode
+#define	C48M400K	0x00901850   	//400k@48M,Fast mode
+
+
+#define	C8M10K	 	0x101098F3		//10k@8M,stand mode
+#define	C8M100K	 	0x00201D2B		//100k@8M,stand mode
+#define C8M200K     0x0010021E      //200K@8M,Fast mode     ´íÎóÂÊ¸ß£¬²»½¨ÒéÊ¹ÓÃ
+#define	C8M400K	 	0x0010020A		//400k@8M,Fast mode     ´íÎóÂÊ¸ß£¬²»½¨ÒéÊ¹ÓÃ
+
 /**
  *@name     I2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin)
- *@brief      I2Cæ„é€ å‡½æ•°
+ *@brief      I2C¹¹Ôìº¯Êı
  *@param    I2Cx:  I2C1,I2C2
- *          scl_pin:  æ—¶é’ŸPin
- *          sda_pin:  æ•°æ®Pin
+ *          scl_pin:  Ê±ÖÓPin
+ *          sda_pin:  Êı¾İPin
  *@retval   None
 */
 mcuI2c::mcuI2c(I2C_TypeDef *I2Cx,Gpio *scl_pin, Gpio *sda_pin)
@@ -50,61 +66,56 @@ mcuI2c::mcuI2c(I2C_TypeDef *I2Cx,Gpio *scl_pin, Gpio *sda_pin)
 }
 
 /**
-  *@brief    æ ¹æ®i2cæ—¶é’Ÿå’Œè®¾ç½®é€Ÿç‡speedè®¡ç®—timingã€‚é»˜è®¤400k @8M
-  *@param    speed:  é€Ÿç‡ 10,100,400 åˆ†åˆ«ä»£è¡¨10kï¼Œ100kï¼Œ400k
+  *@brief    ¸ù¾İi2cÊ±ÖÓºÍÉèÖÃËÙÂÊspeed¼ÆËãtiming¡£8M£¬48MÖ÷ÆµÄ¬ÈÏ100k£¬ÆäËûÆµÂÊÄ¬ÈÏ10k @8M
+  *@param    speed:  ËÙÂÊ 10,100£¬200,400 ·Ö±ğ´ú±í10k£¬100k£¬200k£¬400k
   *@retval   None
   */
 void  mcuI2c::begin(uint16_t speed)
 {
-    uint8_t index = 0;
+  uint8_t index = 0;
   switch (cpu.clock.pclk1/1000000){
-  case 16:
-    switch (speed){
-    case 10:
-      _timing = C16M10K;	// 10k 	@16M
-      break;
-    case 100:
-      _timing = C16M100K;		// 100k @16M
-      break;
-    case 400:
-    default:
-      _timing = C16M400K;			// 400k @16M
-    }
-    break;
   case 48:
     switch (speed){
     case 10:
       _timing = C48M10K;	// 10k 	@48M
       break;
-    case 100:
-      _timing = C48M100K;		// 100k @48M
-      break;
     case 400:
+      _timing = C48M400K;		// 400k @48M
+      break;
+    case 200:
+      _timing = C48M200K;		// 200k @48M
+      break;
+    case 100:
     default:
-      _timing = C48M400K;			// 400k @48M
+      _timing = C48M100K;			// 100k @48M
     }
     break;
   case 8:
-  default:	// é»˜è®¤ç³»ç»Ÿæ—¶é’Ÿä¸º8M
     switch (speed){
     case 10:
-      _timing = C8M10K;	// 10k 	@8M
-      break;
-    case 100:
-      _timing = C8M100K;		// 100k @8M
+      _timing = C8M10K;	        // 10k 	@8M
       break;
     case 400:
+      _timing = C8M400K;		// 100k @8M
+      break;
+    case 200:
+      _timing = C8M200K;		// 100k @8M
+      break;
+    case 100:
     default:
-      _timing = C8M400K;			// 400k @8M
+      _timing = C8M100K;		// 100k @8M
     }
+    break;
+  default:
+    _timing = C8M10K;	        // 10k 	@8M
+    I2C_DEBUG("PCLKÆµÂÊÎª%Mhz,Ã»ÓĞ¸ÃÖ÷ÆµÏÂI2C timingÅäÖÃ£¬Ä¬ÈÏÎª8M10Ktiming£¬½¨ÒéÍ¨¹ıconfigÖ±½Ó¸øtiming²ÎÊı",cpu.clock.pclk1/1000000);
   }
-  index = getIndex1(_scl->id,I2C_MAP);
   
-//  _scl->mode(AF_PP_PU,LL_GPIO_AF_1);
-//  _sda->mode(AF_PP_PU,LL_GPIO_AF_1);
-  
-    _scl->mode(I2C_MAP[index]._pinMode ,I2C_MAP[index]._pinAf);
+  index = getIndex(_scl->id,I2C_MAP);
+  _scl->mode(I2C_MAP[index]._pinMode ,I2C_MAP[index]._pinAf);
+  index = getIndex(_sda->id,I2C_MAP);
   _sda->mode(I2C_MAP[index]._pinMode ,I2C_MAP[index]._pinAf);
+
   config(_timing);
 }
 
@@ -112,7 +123,7 @@ void mcuI2c::config(uint32_t speed)
 {
   _timing = speed;
   rcc_clock_cmd((uint32_t)_i2cx,ENABLE);
-  // I2C1 éœ€è¦é€‰æ‹©ç‰¹å®šçš„æ—¶é’Ÿ
+  // I2C1 ĞèÒªÑ¡ÔñÌØ¶¨µÄÊ±ÖÓ
   (_i2cx == I2C1)?(LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_SYSCLK)):(void());
 
   LL_I2C_Disable(_i2cx);
@@ -126,11 +137,11 @@ uint32_t mcuI2c::readConfig()
 }
 
 /**
-  *@brief    I2Cå†™å…¥ä¸€ä¸ªå­—èŠ‚. start->data->stop
-  *@param    uint8_t slaveAddr:  ä»æœºåœ°å€
-  *          uint8_t data:  è¦å†™å…¥çš„æ•°æ®
-  *          uint16_t tOut: è¶…æ—¶
-  *@retval   çŠ¶æ€ EOK æˆåŠŸï¼› EWAIT è¶…æ—¶
+  *@brief    I2CĞ´ÈëÒ»¸ö×Ö½Ú. start->data->stop
+  *@param    uint8_t slaveAddr:  ´Ó»úµØÖ·
+  *          uint8_t data:  ÒªĞ´ÈëµÄÊı¾İ
+  *          uint16_t tOut: ³¬Ê±
+  *@retval   ×´Ì¬ EOK ³É¹¦£» EWAIT ³¬Ê±
   */
 uint8_t mcuI2c::write(uint8_t slaveAddr, uint8_t data)
 {
@@ -155,13 +166,13 @@ uint8_t mcuI2c::write(uint8_t slaveAddr, uint8_t data)
 }
 
 /**
-  *@brief    æŒ‡å®šä½ç½®å†™å…¥ä¸€ä¸ªå­—èŠ‚. start->data->stop
-  *@param    uint8_t slaveAddr:  ä»æœºåœ°å€
-  *          uint8_t data:  è¦å†™å…¥çš„æ•°æ®
-  *          uint16_t tOut: è¶…æ—¶
-  *@retval   çŠ¶æ€ EOK æˆåŠŸï¼› EWAIT è¶…æ—¶
+  *@brief    Ö¸¶¨Î»ÖÃĞ´ÈëÒ»¸ö×Ö½Ú. start->data->stop
+  *@param    uint8_t slaveAddr:  ´Ó»úµØÖ·
+  *          uint8_t data:  ÒªĞ´ÈëµÄÊı¾İ
+  *          uint16_t tOut: ³¬Ê±
+  *@retval   ×´Ì¬ EOK ³É¹¦£» EWAIT ³¬Ê±
   */
-uint8_t mcuI2c::write(uint8_t slaveAddr,uint8_t regAddr,uint8_t data,uint16_t tOut)
+uint8_t mcuI2c::write(uint8_t slaveAddr,uint16_t regAddr,uint8_t data,uint16_t tOut)
 {
 #if	(USE_TIMEOUT != 0)
   uint32_t end = GetEndTime(200);
@@ -174,7 +185,7 @@ uint8_t mcuI2c::write(uint8_t slaveAddr,uint8_t regAddr,uint8_t data,uint16_t tO
     {
       LL_I2C_TransmitData8(_i2cx,regAddr);
     }
-        if (LL_I2C_IsActiveFlag_TXIS(_i2cx))
+    if (LL_I2C_IsActiveFlag_TXIS(_i2cx))
     {
       LL_I2C_TransmitData8(_i2cx,data);
     }
@@ -188,12 +199,12 @@ uint8_t mcuI2c::write(uint8_t slaveAddr,uint8_t regAddr,uint8_t data,uint16_t tO
 }
 
 /**
-  *@brief    I2Cè¿ç»­å†™ start->data....->stop
-  *@param    uint8_t slaveAddr:  ä»æœºåœ°å€
-  *          uint8_t *data:  è¦å†™å…¥çš„æ•°æ®
-  *          uint16_t nWrite  è¦å†™å…¥çš„æ•°æ®é•¿åº¦
-  *          uint16_t tOut:  è¶…æ—¶
-  *@retval   çŠ¶æ€ EOK æˆåŠŸï¼› EWAIT è¶…æ—¶
+  *@brief    I2CÁ¬ĞøĞ´ start->data....->stop
+  *@param    uint8_t slaveAddr:  ´Ó»úµØÖ·
+  *          uint8_t *data:  ÒªĞ´ÈëµÄÊı¾İ
+  *          uint16_t nWrite  ÒªĞ´ÈëµÄÊı¾İ³¤¶È
+  *          uint16_t tOut:  ³¬Ê±
+  *@retval   ×´Ì¬ EOK ³É¹¦£» EWAIT ³¬Ê±
   */
 uint8_t mcuI2c::writeBuf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite,uint16_t tOut)
 {
@@ -218,7 +229,7 @@ uint8_t mcuI2c::writeBuf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite,uint1
     // num_to_writ>255: RELOAD,NBYTE=0xFF,NOSTART
 
     while (nWrite > 255){
-      // å‘é€åœ°å€å¯„å­˜å™¨
+      // ·¢ËÍµØÖ·¼Ä´æÆ÷
       LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,0xFF,LL_I2C_MODE_RELOAD,LL_I2C_GENERATE_NOSTARTSTOP);
 #if	(USE_TIMEOUT != 0)
       end = GetEndTime(tOut);
@@ -252,7 +263,7 @@ uint8_t mcuI2c::writeBuf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite,uint1
     }
     LL_I2C_ClearFlag_STOP(_i2cx);
   }else{
-    // å†™å…¥åœ°å€å¯„å­˜å™¨å’Œæ•°æ®
+    // Ğ´ÈëµØÖ·¼Ä´æÆ÷ºÍÊı¾İ
     LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,nWrite,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_WRITE);
 #if	(USE_TIMEOUT != 0)
     end = GetEndTime(tOut);
@@ -274,23 +285,23 @@ uint8_t mcuI2c::writeBuf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite,uint1
 }
 
 /**
-  *@brief    åœ¨æŒ‡å®šå¯„å­˜å™¨è¿ç»­å†™ start->regAddr->data....->stop
-  *@param    uint8_t slaveAddr:  ä»æœºåœ°å€
-  *          uint8_t regAddrï¼šè¦å†™å…¥çš„å¯„å­˜å™¨åœ°å€
-  *          uint8_t *data:  è¦å†™å…¥çš„æ•°æ®
-  *          uint16_t nWrite  è¦å†™å…¥çš„æ•°æ®é•¿åº¦
-  *          uint16_t tOut:  è¶…æ—¶
-  *@retval   çŠ¶æ€ EOK æˆåŠŸï¼› EWAIT è¶…æ—¶
+  *@brief    ÔÚÖ¸¶¨¼Ä´æÆ÷Á¬ĞøĞ´ start->regAddr->data....->stop
+  *@param    uint8_t slaveAddr:  ´Ó»úµØÖ·
+  *          uint8_t regAddr£ºÒªĞ´ÈëµÄ¼Ä´æÆ÷µØÖ·
+  *          uint8_t *data:  ÒªĞ´ÈëµÄÊı¾İ
+  *          uint16_t nWrite  ÒªĞ´ÈëµÄÊı¾İ³¤¶È
+  *          uint16_t tOut:  ³¬Ê±
+  *@retval   ×´Ì¬ EOK ³É¹¦£» EWAIT ³¬Ê±
   */
-uint8_t mcuI2c::writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut)
+uint8_t mcuI2c::writeBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut)
 {
 #if	(USE_TIMEOUT != 0)
   uint32_t end = GetEndTime(tOut);
 #endif
-  // å‘é€åœ°å€å¯„å­˜å™¨
-  LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,1,LL_I2C_MODE_SOFTEND,LL_I2C_GENERATE_START_WRITE);
+  // ·¢ËÍµØÖ·¼Ä´æÆ÷
+  LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,1,LL_I2C_MODE_RELOAD,LL_I2C_GENERATE_START_WRITE);
 
-  while (!LL_I2C_IsActiveFlag_TC(_i2cx))
+  while (!LL_I2C_IsActiveFlag_TCR(_i2cx))
   {
     if (LL_I2C_IsActiveFlag_TXIS(_i2cx))
     {
@@ -300,11 +311,11 @@ uint8_t mcuI2c::writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16
     if (IsTimeOut(end,tOut)) return EWAIT;
 #endif
   }
-  // å‘é€æ•°æ®
+  // ·¢ËÍÊı¾İ
   if (nWrite >255){
     // num_to_writ>255: RELOAD,NBYTE=0xFF,NOSTART
     while (nWrite > 255){
-      // å‘é€åœ°å€å¯„å­˜å™¨
+      // ·¢ËÍµØÖ·¼Ä´æÆ÷
       LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,0xFF,LL_I2C_MODE_RELOAD,LL_I2C_GENERATE_NOSTARTSTOP);
 #if	(USE_TIMEOUT != 0)
       end = GetEndTime(tOut);
@@ -338,7 +349,7 @@ uint8_t mcuI2c::writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16
     }
     LL_I2C_ClearFlag_STOP(_i2cx);
   }else{
-    // å†™å…¥åœ°å€å¯„å­˜å™¨å’Œæ•°æ®
+    // Ğ´ÈëµØÖ·¼Ä´æÆ÷ºÍÊı¾İ
     LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,nWrite,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_NOSTARTSTOP);
 #if	(USE_TIMEOUT != 0)
     end = GetEndTime(tOut);
@@ -360,10 +371,10 @@ uint8_t mcuI2c::writeBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16
 
 
 /**
-  *@brief    I2Cè¯»å…¥ä¸€ä¸ªå­—èŠ‚. start->Nack->stop->data
-  *@param    uint8_t slaveAddr:  ä»æœºåœ°å€
-  *          uint16_t tOut: è¶…æ—¶
-  *@retval   è¯»å–åˆ°çš„æ•°æ®
+  *@brief    I2C¶ÁÈëÒ»¸ö×Ö½Ú. start->Nack->stop->data
+  *@param    uint8_t slaveAddr:  ´Ó»úµØÖ·
+  *          uint16_t tOut: ³¬Ê±
+  *@retval   ¶ÁÈ¡µ½µÄÊı¾İ
   */
 uint8_t mcuI2c::read(uint8_t slaveAddr){
   uint8_t ret = 0;
@@ -372,32 +383,33 @@ uint8_t mcuI2c::read(uint8_t slaveAddr){
 }
 
 /**
-  *@brief    è¯»æŒ‡å®šå¯„å­˜å™¨. start->WslaveAddr->regAddr->RslaveAddr->Nack->stop->data
-  *@param    uint8_t slaveAddr:  ä»æœºåœ°å€
-  *          uint8_t regAddrï¼š   è¦è¯»å–çš„å¯„å­˜å™¨
-  *          uint16_t tOut: è¶…æ—¶
-  *@retval   è¯»å–åˆ°çš„æ•°æ®
+  *@brief    ¶ÁÖ¸¶¨¼Ä´æÆ÷. start->WslaveAddr->regAddr->RslaveAddr->Nack->stop->data
+  *@param    uint8_t slaveAddr:  ´Ó»úµØÖ·
+  *          uint8_t regAddr£º   Òª¶ÁÈ¡µÄ¼Ä´æÆ÷
+  *          uint16_t tOut: ³¬Ê±
+  *@retval   ¶ÁÈ¡µ½µÄÊı¾İ
   */
-uint8_t mcuI2c::read(uint8_t slaveAddr,uint8_t regAddr,uint16_t tOut){
+uint8_t mcuI2c::read(uint8_t slaveAddr,uint16_t regAddr,uint16_t tOut)
+{
   uint8_t ret = 0;
   readBuf(slaveAddr,regAddr,&ret,1,tOut);
-  return ret;  
+  return ret;
 }
 
 /**
-  *@brief    è¿ç»­è¯»å–. start->data...->nRead==1->Nack->stop->data
-  *@param    uint8_t slaveAddr:  ä»æœºåœ°å€
-  *          uint8_t *data: è¯»å–åˆ°çš„æ•°æ®
-  *          uint16_t nReadï¼šè¦è¯»å–çš„æ•°æ®é•¿åº¦
-  *          uint16_t tOut: è¶…æ—¶
-  *@retval   EOKï¼ŒEWAIT
+  *@brief    Á¬Ğø¶ÁÈ¡. start->data...->nRead==1->Nack->stop->data
+  *@param    uint8_t slaveAddr:  ´Ó»úµØÖ·
+  *          uint8_t *data: ¶ÁÈ¡µ½µÄÊı¾İ
+  *          uint16_t nRead£ºÒª¶ÁÈ¡µÄÊı¾İ³¤¶È
+  *          uint16_t tOut: ³¬Ê±
+  *@retval   EOK£¬EWAIT
   */
 uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t tOut)
 {
 #if	(USE_TIMEOUT != 0)
   uint32_t end = GetEndTime(tOut);
 #endif
-  // å‘é€è¯»æŒ‡ä»¤ï¼Œä»å½“å‰åœ°å€å¼€å§‹è¯»å–æ•°æ®
+  // ·¢ËÍ¶ÁÖ¸Áî£¬´Óµ±Ç°µØÖ·¿ªÊ¼¶ÁÈ¡Êı¾İ
   LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,nRead,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_READ);
   while (!LL_I2C_IsActiveFlag_STOP(_i2cx))
   {
@@ -414,20 +426,21 @@ uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t 
 }
 
 /**
-  *@brief    æŒ‡å®šå¯„å­˜å™¨è¿ç»­è¯»å–. start->WslaveAddr->regAddr->RSlaverAddr->data...->nRead==1->Nack->stop->data
-  *@param    uint8_t slaveAddr:  ä»æœºåœ°å€
-  *          uint8_t regAddr: å¯„å­˜å™¨åœ°å€
-  *          uint8_t *data: è¯»å–åˆ°çš„æ•°æ®
-  *          uint16_t nReadï¼šè¦è¯»å–çš„æ•°æ®é•¿åº¦
-  *          uint16_t tOut: è¶…æ—¶
-  *@retval   EOKï¼ŒEWAIT
+  *@brief    Ö¸¶¨¼Ä´æÆ÷Á¬Ğø¶ÁÈ¡. start->WslaveAddr->regAddr->RSlaverAddr->data...->nRead==1->Nack->stop->data
+  *@param    uint8_t slaveAddr:  ´Ó»úµØÖ·
+  *          uint8_t regAddr: ¼Ä´æÆ÷µØÖ·
+  *          uint8_t *data: ¶ÁÈ¡µ½µÄÊı¾İ
+  *          uint16_t nRead£ºÒª¶ÁÈ¡µÄÊı¾İ³¤¶È
+  *          uint16_t tOut: ³¬Ê±
+  *@retval   EOK£¬EWAIT
   */
-uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut)
+uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut)
 {
 #if	(USE_TIMEOUT != 0)
   uint32_t end = GetEndTime(tOut);
 #endif
-  // å‘é€åœ°å€å¯„å­˜å™¨
+//   while(LL_I2C_IsActiveFlag_STOP(_i2cx)) I2C_DEBUG("ISR reg is %d \r\n",_i2cx->ISR);;
+  // ·¢ËÍµØÖ·¼Ä´æÆ÷
   LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,1,LL_I2C_MODE_SOFTEND,LL_I2C_GENERATE_START_WRITE);
   while (!LL_I2C_IsActiveFlag_TC(_i2cx))
   {
@@ -442,7 +455,7 @@ uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_
     }
 #endif
   }
-  // å‘é€è¯»æŒ‡ä»¤ï¼Œä»å½“å‰åœ°å€å¼€å§‹è¯»å–æ•°æ®
+  // ·¢ËÍ¶ÁÖ¸Áî£¬´Óµ±Ç°µØÖ·¿ªÊ¼¶ÁÈ¡Êı¾İ
   LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,nRead,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_READ);
 #if	(USE_TIMEOUT != 0)
   end = GetEndTime(tOut);
@@ -463,35 +476,35 @@ uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint8_t regAddr,uint8_t *data, uint16_
 
 
 /**
-  *@brief    ç­‰å¾…è®¾å¤‡å“åº”ã€‚å‘æŒ‡å®šè®¾å¤‡å‘é€startæŒ‡ä»¤ï¼Œå¦‚æœè®¾å¤‡å¿™ï¼Œåˆ™è¿”å›NACK,å¦åˆ™è¿”å›ACK,ä¸»è®¾å¤‡å‘é€stopæŒ‡ä»¤
-  *@param    slaveAddr:  è®¾å¤‡åœ°å€
+  *@brief    µÈ´ıÉè±¸ÏìÓ¦¡£ÏòÖ¸¶¨Éè±¸·¢ËÍstartÖ¸Áî£¬Èç¹ûÉè±¸Ã¦£¬Ôò·µ»ØNACK,·ñÔò·µ»ØACK,Ö÷Éè±¸·¢ËÍstopÖ¸Áî
+  *@param    slaveAddr:  Éè±¸µØÖ·
   *@retval   uint8_t: EOK,EWAIT
   */
 uint8_t mcuI2c:: checkBusy(uint8_t slaveAddr,uint16_t tOut)
 {
-  uint32_t end = GetEndTime(tOut);
+  uint8_t tmp = 0;
+  //uint32_t end = GetEndTime(tOut);
   do
   {
     // clear STOP & NACK flag
     SET_BIT(_i2cx->ICR,LL_I2C_ICR_NACKCF | LL_I2C_ICR_STOPCF);
-
     LL_I2C_HandleTransfer(_i2cx,slaveAddr,LL_I2C_ADDRESSING_MODE_7BIT,0,LL_I2C_MODE_AUTOEND,LL_I2C_GENERATE_START_WRITE);
-    delay_us(100);
-    if (IsTimeOut(end,tOut))
+    // µÈ´ı·¢³öÍ£Ö¹Î»£¬²¢Çå³ı
+    while (!LL_I2C_IsActiveFlag_STOP(_i2cx));
+    LL_I2C_ClearFlag_STOP(_i2cx);
+    if (tOut-- == 0)
     {
-      I2C_DEBUG("fail,ISR reg is %d \r\n",_i2cx->ISR);  
+      I2C_DEBUG("fail,ISR reg is %d \r\n",_i2cx->ISR);
       return EWAIT;
     }
-  }while (LL_I2C_IsActiveFlag_NACK(_i2cx) == 1); //å¦‚æœæ— å“åº”ï¼Œåˆ™ç»§ç»­ç­‰å¾…
-
-  LL_I2C_ClearFlag_STOP(_i2cx);
-
+    tmp = LL_I2C_IsActiveFlag_NACK(_i2cx);
+  }while (tmp == 1); //Èç¹ûÎŞÏìÓ¦£¬Ôò¼ÌĞøµÈ´ı
   return EOK;
 }
 
 /**
-  *@brief    è·å–I2Cæ§åˆ¶æƒ
-  *@param    timing:  æ—¶é’Ÿæ—¶åºï¼Œé€šè¿‡readConfigè·å–
+  *@brief    »ñÈ¡I2C¿ØÖÆÈ¨
+  *@param    timing:  Ê±ÖÓÊ±Ğò£¬Í¨¹ıreadConfig»ñÈ¡
   *@retval   uint8_t: EOK,E_BUSY
   */
 uint8_t mcuI2c::takeRight(uint32_t timing,uint16_t tOut)
@@ -507,11 +520,11 @@ uint8_t mcuI2c::takeRight(uint32_t timing,uint16_t tOut)
 #endif
   }
   if (_timing != timing) config(timing);
-    _busy = 1;
+  _busy = 1;
   return EOK;
 }
 /**
- *@brief    é‡Šæ”¾I2Cæ§åˆ¶æƒ
+ *@brief    ÊÍ·ÅI2C¿ØÖÆÈ¨
  *@param    none
  *@retval   none
 */

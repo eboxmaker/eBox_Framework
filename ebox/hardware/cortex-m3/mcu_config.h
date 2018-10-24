@@ -77,7 +77,8 @@
 
 
 //FLASH «¯”Ú∂®“Â
-#define MCU_FLASH_SIZE        STM32_FLASH*1024 
+//#define MCU_FLASH_SIZE        STM32_FLASH*1024 
+#define MCU_FLASH_SIZE        128*1024 
 
 
 #ifdef __CC_ARM

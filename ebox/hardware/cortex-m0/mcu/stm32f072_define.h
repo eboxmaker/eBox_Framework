@@ -102,12 +102,7 @@
 //	NC
 //};
 
-//static const AF_FUN_S SPI_MAP[] = {
-//	PA_5,AF_PP_PU,0,SPI1_BASE,
-//	PA_6,AF_PP_PU,0,SPI1_BASE,
-//	PA_7,AF_PP_PU,0,SPI1_BASE,
-//	P_NC
-//};
+
 		
 //static const Periph_S SPI_INFO[] = {
 //	SPI1_BASE,LL_APB1_GRP2_PERIPH_SPI1,USART1_IRQn,Irq1,
@@ -149,6 +144,15 @@ static const AF_FUN_S I2C_MAP[]={
 	(PIN_ID_t)0xff
 };
 
+// sck,miso,mosi
+static const AF_FUN_S SPI_MAP[] = {
+	PA5_ID,AF_PP_PU,0,SPI1_BASE,
+	PA6_ID,AF_PP_PU,0,SPI1_BASE,
+	PA7_ID,AF_PP_PU,0,SPI1_BASE,
+    PB3_ID,AF_PP_PU,0,SPI1_BASE,
+	P_NC
+};
+
 static const AF_FUN_S TIM_MAP[] ={
 	// TIM3,CH1,CH2,CH4
 	PA6_ID,AF_PP,LL_GPIO_AF_1,TIM3_BASE+TIMxCH1,
@@ -168,11 +172,11 @@ static const AF_FUN_S TIM_MAP[] ={
 };
 
 /**
- *@brief    根据Pin_id获取对应外设索引
+ *@brief    根据Pin_id和periph获取索引
  *@param    val：1：输出高电平；0：输出低电平
  *@retval   NONE
 */
-__STATIC_INLINE uint8_t getIndex(PIN_ID_t pin_id,uint32_t periph,const AF_FUN_S *emap)
+__STATIC_INLINE uint8_t getIndex(PIN_ID_t pin_id,const AF_FUN_S *emap,uint32_t periph)
 {
 	uint8_t i = 0;
 	while (!((0xffffff00 & (emap+i)->_periph) == periph) || !((emap+i)->_pinId == pin_id))
@@ -187,10 +191,10 @@ __STATIC_INLINE uint8_t getIndex(PIN_ID_t pin_id,uint32_t periph,const AF_FUN_S 
 
 /**
  *@brief    根据Pin_id获取对应外设索引
- *@param    val：1：输出高电平；0：输出低电平
+ *@param    pin_id：pin_id     *emap  外设里列表
  *@retval   NONE
 */
-__STATIC_INLINE uint8_t getIndex1(PIN_ID_t pin_id,const AF_FUN_S *emap)
+__STATIC_INLINE uint8_t getIndex(PIN_ID_t pin_id,const AF_FUN_S *emap)
 {
 	uint8_t i = 0;
 	while (!((emap+i)->_pinId  == pin_id ))
