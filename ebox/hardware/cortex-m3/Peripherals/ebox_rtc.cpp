@@ -212,8 +212,55 @@ void Rtc::_setTimeFlag(uint16_t configFlag)
   */
 void Rtc::setDate(Date_T date)
 {
-      
+   uint32_t counter_time = 0, counter_alarm = 0, hours = 0;
+
+    /* Change the current date */
+    gDate.Year  = date.Year;
+    gDate.Month = date.Month;
+    gDate.Day  = date.Day;
+
+  /* WeekDay set by user can be ignored because automatically calculated */
+  gDate.WeekDay = _RTC_WeekDayNum(gDate.Year,gDate.Month,gDate.Day);
+  date.WeekDay = gDate.WeekDay;
+
+  /* Reset time to be aligned on the same day */
+  /* Read the time counter*/
+  counter_time = get_counter();
+
+  /* Fill the structure fields with the read parameters */
+  hours = counter_time / 3600;
+  if (hours > 24)
+  {
+    /* Set updated time in decreasing counter by number of days elapsed */
+    counter_time -= ((hours / 24) * 24 * 3600);
+    /* Write time counter in RTC registers */
+    set_counter(counter_time);
+
+    /* Read current Alarm counter in RTC registers */
+    counter_alarm = _getAlarmCount();
+
+    /* Set again alarm to match with new time if enabled */
+    if (counter_alarm != (uint32_t)0xFFFFFFFF)
+    {
+      if(counter_alarm < counter_time)
+      {
+        /* Add 1 day to alarm counter*/
+        counter_alarm += (uint32_t)(24 * 3600);
+        RTC_WaitForLastTask();    
+        RTC_SetAlarm(counter_alarm);
+      }
+    }  
+
+  }
+     
 }
+
+void Rtc::getDate(Date_T *date){
+    date->Year = gDate.Year;
+    date->Month = gDate.Month;
+    date->Day = gDate.Day;
+    date->WeekDay = gDate.WeekDay;
+}    
 
 /**
  *@name     setTime
@@ -254,57 +301,40 @@ void Rtc::getTime(Time_T *time)
     
     if (hours >= 24)
     {
-    /* Get number of days elapsed from last calculation */
-    days_elapsed = (hours / 24);
-    /* Set Hours in RTC_TimeTypeDef structure*/
-    time->Hours = (hours % 24);
-//    /* Read Alarm counter in RTC registers */
-//    counter_alarm = RTC_ReadAlarmCounter(hrtc);
+        /* Get number of days elapsed from last calculation */
+        days_elapsed = (hours / 24);
+        /* Set Hours in RTC_TimeTypeDef structure*/
+        time->Hours = (hours % 24);
+        /* Read Alarm counter in RTC registers */
+        counter_alarm = _getAlarmCount() ;
 
-//    /* Calculate remaining time to reach alarm (only if set and not yet expired)*/
-//    if ((counter_alarm != RTC_ALARM_RESETVALUE) && (counter_alarm > counter_time))
-//    {
-//    counter_alarm -= counter_time;
-//    }
-//    else 
-//    {
-//    /* In case of counter_alarm < counter_time */
-//    /* Alarm expiration already occurred but alarm not deactivated */
-//    counter_alarm = RTC_ALARM_RESETVALUE;
-//    }
+        /* 计算alarm剩余时间 (only if set and not yet expired)*/
+        if ((counter_alarm != (uint32_t)0xFFFFFFFF) && (counter_alarm > counter_time))
+        {
+            counter_alarm -= counter_time;
+        } else 
+        {
+        /* 如果 counter_alarm < counter_time ，alarm 已经发生且没有解除*/
+            counter_alarm = (uint32_t)0xFFFFFFFF;
+        }
 
-    /* Set updated time in decreasing counter by number of days elapsed */
-    counter_time -= (days_elapsed * 24 * 3600);
+        /* Set updated time in decreasing counter by number of days elapsed */
+        counter_time -= (days_elapsed * 24 * 3600);
+        /* Write time counter in RTC registers */
+        RTC_SetCounter(counter_time);
 
-    RTC_SetCounter(counter_time);
-    /* Write time counter in RTC registers */
-//    if (RTC_WriteTimeCounter(hrtc, counter_time) != HAL_OK)
-//    {
-//    return HAL_ERROR;
-//    }
 
-    /* Set updated alarm to be set */
-//    if (counter_alarm != RTC_ALARM_RESETVALUE)
-//    {
-//    counter_alarm += counter_time;
+        /* Set updated alarm to be set */
+        if (counter_alarm != (uint32_t)0xFFFFFFFF)
+        {
+            counter_alarm += counter_time;
+        }
+        /* Write time counter in RTC registers */
+        RTC_WaitForLastTask();    
+        RTC_SetAlarm(counter_alarm);
 
-    /* Write time counter in RTC registers */
-//    if (RTC_WriteAlarmCounter(hrtc, counter_alarm) != HAL_OK)
-//    {
-//    return HAL_ERROR;
-//    }
-//    }
-//    else
-//    {
-//    /* Alarm already occurred. Set it to reset values to avoid unexpected expiration */
-//    if (RTC_WriteAlarmCounter(hrtc, counter_alarm) != HAL_OK)
-//    {
-//    return HAL_ERROR;
-//    }
-//    }
-
-    /* Update date */
-//    RTC_DateUpdate(hrtc, days_elapsed);
+        /* Update date */
+        _updateDate(days_elapsed);
     }
     else 
     {
@@ -314,6 +344,109 @@ void Rtc::getTime(Time_T *time)
 	time->Format12_24 = 0;
 }
 
+void Rtc::_updateDate(uint32_t dayElapsed){
+    uint32_t year = 0, month = 0, day = 0;
+    uint32_t loop = 0;
+
+    /* Get the current year*/
+    year = gDate.Year;
+
+    /* Get the current month and day */
+    month = gDate.Month;
+    day = gDate.Day;
+
+    for (loop = 0; loop < dayElapsed; loop++)
+    {
+        if((month == 1) || (month == 3) || (month == 5) || (month == 7) || \
+        (month == 8) || (month == 10) || (month == 12))
+        {
+            if(day < 31)
+            {
+                day++;
+            } else     /* Date structure member: day = 31 */
+            {
+                if(month != 12)
+                {
+                      month++;
+                      day = 1;
+                }else     /* Date structure member: day = 31 & month =12 */
+                {
+                  month = 1;
+                  day = 1;
+                  year++;
+                }
+            }
+        }else if((month == 4) || (month == 6) || (month == 9) || (month == 11))
+        {
+            if(day < 30)
+            {
+                day++;
+            } else /* Date structure member: day = 30 */
+            {
+                month++;
+                day = 1;
+            }
+        }else if(month == 2)
+        {
+            if(day < 28)
+            {
+            day++;
+            }
+        else if(day == 28)
+        {
+            /* Leap year */
+            if(_isLeapYear(year))
+            {
+              day++;
+            }
+            else
+            {
+              month++;
+              day = 1;
+            }
+        } else if(day == 29)
+        {
+            month++;
+            day = 1;
+        }
+    }
+    }
+
+    /* Update year */
+    gDate.Year = year;
+    /* Update day and month */
+    gDate.Month = month;
+    gDate.Day = day;
+    /* Update day of the week */
+    gDate.WeekDay = _RTC_WeekDayNum(year, month, day);
+}
+
+/**
+  *@brief    设置时间,时间格式为bin
+  *@param    nYear 年份
+  *@retval   1 闰年，0 平年
+  */
+uint8_t  Rtc::_isLeapYear(uint16_t nYear){
+      if((nYear % 4) != 0) 
+  {
+    return 0;
+  }
+  
+  if((nYear % 100) != 0) 
+  {
+    return 1;
+  }
+  
+  if((nYear % 400) == 0)
+  {
+    return 1;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
 void Rtc::set_counter(uint32_t count)
 {
     /* Wait until last write operation on RTC registers has finished */
@@ -321,6 +454,16 @@ void Rtc::set_counter(uint32_t count)
     /* Change the current time */
     RTC_SetCounter(count);
 }
+
+uint32_t Rtc::_getAlarmCount(void){
+    uint16_t high1 = 0, low = 0;
+
+    high1 = READ_REG(RTC->ALRH & RTC_CNTH_RTC_CNT);
+    low   = READ_REG(RTC->ALRL & RTC_CNTL_RTC_CNT);
+
+    return (((uint32_t) high1 << 16 ) | low);
+}
+
 void Rtc::setAlarm(Time_T alarm,uint32_t mask)
 {
     uint32_t counter_alarm = 0, counter_time;
@@ -343,12 +486,9 @@ void Rtc::setAlarm(Time_T alarm,uint32_t mask)
     /* Add 1 day to alarm counter*/
     counter_alarm += (uint32_t)(24 * 3600);
     }
-    
-    /* Wait for RTC registers synchronization */
 //    RTC_WaitForSynchro();
     /* Wait until last write operation on RTC registers has finished */
-    RTC_WaitForLastTask();
-    
+    RTC_WaitForLastTask();    
     RTC_SetAlarm(counter_alarm);
 }
 
