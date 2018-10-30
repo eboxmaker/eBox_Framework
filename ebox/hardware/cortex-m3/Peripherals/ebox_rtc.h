@@ -109,7 +109,6 @@ public:
 	void getDate(Date_T *date); 
 
     void attach_overflow_interrupt(void (*cb_fun)(void));
-    //void attach_alarm_interrupt(void (*cb_fun)(void));
     void attach_sec_interrupt(void (*cb_fun)(void));
 
     void overflow_interrupt(FunctionalState state);
@@ -143,10 +142,13 @@ public:
 		static void _irq_handler(uint32_t id, Rtc_IrqType irq_type);
 
 private:
-    int    	_config(ClockS clock);
-    void    _setTimeFlag(uint16_t configFlag);
-	uint8_t _getTimeFlag(void);
-    void    nvic(FunctionalState state);
+    int    	    _config(ClockS clock);
+    void        _setTimeFlag(uint16_t configFlag);
+	uint8_t     _getTimeFlag(void);
+    void        nvic(FunctionalState state);
+    uint32_t    _getAlarmCount(void);
+    void        _updateDate(uint32_t dayElapsed);
+    uint8_t     _isLeapYear(uint16_t nYear);
 protected:
     FunctionPointer _irq[3];
 };

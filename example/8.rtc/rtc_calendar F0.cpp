@@ -52,6 +52,7 @@ void setup()
 {
 //	Date_T date = {LL_RTC_WEEKDAY_WEDNESDAY, 13, LL_RTC_MONTH_SEPTEMBER, 16};
 //	Time_T time = {LL_RTC_TIME_FORMAT_AM_OR_24, 22, 56, 1};
+    Date_T date = {1, 13, 10, 18};
     Time_T time = {0, 22, 56, 1};
 
 	ebox_init();
@@ -61,11 +62,11 @@ void setup()
 // EOK,初始化成功，并且RTC时间在运行，不需要设置日期，时间。否则需要设置
 	if (rtc.begin(clock_lse) != EOK)
 	{
-//		rtc.setDate(date);
+		rtc.setDate(date);
 		rtc.setTime(time);
 	}
 	// 设置闹铃
-//    delay_ms(10);
+
 	rtc.getTime(&time);
 	time.Minutes += 1;
 	time.Seconds += 0;
@@ -82,13 +83,15 @@ int main(void)
 {
 	// date_time_t 声明在common.h中，包含年月日时分秒星期信息
 	Time_T time;
+    Date_T date;
 	setup();
 	while (1)
 	{
 		// 每30s读取一次时间
 		rtc.getTime(&time);
+        rtc.getDate(&date);
 		UART.printf("\n\r %2d:%02d:%02d秒",time.Hours ,time.Minutes ,time.Seconds);
-//		UART.printf("\n\r 20%2d年%02d月%2d日 星期%02d",dtime.year,dtime.month,dtime.date,dtime.week);
+		UART.printf("\n\r 20%2d年%02d月%2d日 星期%02d",date.Year,date.Month,date.Day,date.WeekDay);
 		delay_ms(30000);
 	}
 }
