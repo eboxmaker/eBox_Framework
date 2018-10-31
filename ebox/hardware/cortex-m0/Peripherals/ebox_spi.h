@@ -23,6 +23,7 @@
 
 #include "ebox_core.h"
 #include "mcu.h"
+
 /*
 	1.目前只测试了SPI1、SPI2，spi3望网友测试
 	2.该spi功能强大，总线支持同时挂载不同MODE ,SPEED,bit_oder的设备

@@ -23,7 +23,7 @@
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
-#define debug 1
+#define debug 0
 #endif
 
 #if debug
@@ -39,7 +39,7 @@ mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
     _miso = miso;
     _mosi = mosi;
 
-};
+}
 
 void mcuSpi::begin(SpiConfig_t *spi_config)
 {
