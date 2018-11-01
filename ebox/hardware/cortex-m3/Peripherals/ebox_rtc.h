@@ -97,7 +97,7 @@ public:
 
     // 设置闹铃，默认不匹配日期
     void setAlarm(Time_T time,uint32_t mask = eRtc_MaskDateWeekDay);	
-    void attach_alarm_interrupt(void (*cb_fun)(void));
+//    void attach_alarm_interrupt(void (*cb_fun)(void));
 	void alarmOnOff(FunctionalState state);
   
   // 设置日期，时间
@@ -111,9 +111,9 @@ public:
     void attach_overflow_interrupt(void (*cb_fun)(void));
     void attach_sec_interrupt(void (*cb_fun)(void));
 
-    void overflow_interrupt(FunctionalState state);
+//    void overflow_interrupt(FunctionalState state);
     void alarm_interrupt(FunctionalState state);
-    void sec_interrupt(FunctionalState state);
+//    void sec_interrupt(FunctionalState state);
 
 
     void set_counter(uint32_t count);
@@ -145,40 +145,13 @@ private:
     int    	    _config(ClockS clock);
     void        _setTimeFlag(uint16_t configFlag);
 	uint8_t     _getTimeFlag(void);
-    void        nvic(FunctionalState state);
+    void        _nvic(FunctionalState state);
     uint32_t    _getAlarmCount(void);
     void        _updateDate(uint32_t dayElapsed);
     uint8_t     _isLeapYear(uint16_t nYear);
 protected:
     FunctionPointer _irq[3];
 };
-class RtcClock
-{
-    public:
-        uint8_t sec;
-        uint8_t min;
-        uint8_t hour;
-    public:
-        void begin();
-        void sec_event()
-        {
-            count ++;
-            count %=3600*24;
-            sec  = (count % 60);
-            min  = (count % 3600)/ 60;
-            hour = (count / 3600);
-        }
-        void set_clock(uint8_t h,uint8_t m,uint8_t s)
-        {
-            count = h*3600 + m*60 + s;        
-        }
-    private:
-       uint32_t count;
-};
-extern Rtc 	rtc;
-
-
-
 
 #ifdef __cplusplus
 extern "C" {

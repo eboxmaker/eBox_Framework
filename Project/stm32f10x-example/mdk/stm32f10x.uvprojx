@@ -542,11 +542,6 @@
               <FilePath>..\..\..\ebox\core\ebox_mem.c</FilePath>
             </File>
             <File>
-              <FileName>ebox_printf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\ebox_printf.c</FilePath>
-            </File>
-            <File>
               <FileName>fifo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\ebox\core\fifo.c</FilePath>
