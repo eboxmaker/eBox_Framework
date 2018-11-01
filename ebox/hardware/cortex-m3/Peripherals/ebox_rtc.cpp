@@ -36,8 +36,7 @@
 
 
 #define RTC_CFG_FLAG 0XA5A5
-//Rtc rtc;
-//callback_fun_type rtc_callback_table[3];//
+
 static uint32_t rtc_irq_id;
 static rtc_irq_handler irq_handler;
 
@@ -183,7 +182,7 @@ int Rtc::_config(ClockS clock)
     /* Wait until last write operation on RTC registers has finished */
     RTC_WaitForLastTask();       
     
-    nvic(ENABLE);
+    _nvic(ENABLE);
     return EOK;
 }
 /**
@@ -494,17 +493,14 @@ void Rtc::setAlarm(Time_T alarm,uint32_t mask)
 
 void Rtc::alarmOnOff(FunctionalState state){
     alarm_interrupt(state);
-    nvic(ENABLE);
+    _nvic(state);
 }
 
 
-void Rtc::nvic(FunctionalState state)
+void Rtc::_nvic(FunctionalState state)
 {
 
     NVIC_InitTypeDef NVIC_InitStructure;
-
-    /* Configure one bit for preemption priority */
-    //	NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
 
     /* Enable the RTC Interrupt */
     NVIC_InitStructure.NVIC_IRQChannel = RTC_IRQn;
@@ -514,30 +510,30 @@ void Rtc::nvic(FunctionalState state)
     NVIC_Init(&NVIC_InitStructure);
 }
 
-void Rtc::attach_sec_interrupt(void (*cb_fun)(void))
-{
-   // rtc_callback_table[0] = cb_fun;
-}
-void Rtc::attach_alarm_interrupt(void (*cb_fun)(void))
-{
-//    rtc_callback_table[1] = cb_fun;
-}
-void Rtc::attach_overflow_interrupt(void (*cb_fun)(void))
-{
-   // rtc_callback_table[2] = cb_fun;
-}
+//void Rtc::attach_sec_interrupt(void (*cb_fun)(void))
+//{
+//   // rtc_callback_table[0] = cb_fun;
+//}
+//void Rtc::attach_alarm_interrupt(void (*cb_fun)(void))
+//{
+////    rtc_callback_table[1] = cb_fun;
+//}
+//void Rtc::attach_overflow_interrupt(void (*cb_fun)(void))
+//{
+//   // rtc_callback_table[2] = cb_fun;
+//}
 
-void Rtc::sec_interrupt(FunctionalState state)
-{
-    /* Wait for RTC registers synchronization */
-    RTC_WaitForSynchro();
-    /* Wait until last write operation on RTC registers has finished */
-    RTC_WaitForLastTask();
-    if(state == ENABLE)
-        RTC->CRH |= (1<<0);
-    else
-         RTC->CRH &= ~(1<<0);
-}
+//void Rtc::sec_interrupt(FunctionalState state)
+//{
+//    /* Wait for RTC registers synchronization */
+//    RTC_WaitForSynchro();
+//    /* Wait until last write operation on RTC registers has finished */
+//    RTC_WaitForLastTask();
+//    if(state == ENABLE)
+//        RTC->CRH |= (1<<0);
+//    else
+//         RTC->CRH &= ~(1<<0);
+//}
 
 void Rtc::alarm_interrupt(FunctionalState state)
 {
@@ -551,18 +547,18 @@ void Rtc::alarm_interrupt(FunctionalState state)
          RTC->CRH &= ~(1<<1);
 }
 
-void Rtc::overflow_interrupt(FunctionalState state)
-{
-     
-    /* Wait for RTC registers synchronization */
-    RTC_WaitForSynchro();
-    /* Wait until last write operation on RTC registers has finished */
-    RTC_WaitForLastTask();
-    if(state == ENABLE)
-        RTC->CRH |= (1<<2);
-    else
-         RTC->CRH &= ~(1<<2);
-}
+//void Rtc::overflow_interrupt(FunctionalState state)
+//{
+//     
+//    /* Wait for RTC registers synchronization */
+//    RTC_WaitForSynchro();
+//    /* Wait until last write operation on RTC registers has finished */
+//    RTC_WaitForLastTask();
+//    if(state == ENABLE)
+//        RTC->CRH |= (1<<2);
+//    else
+//         RTC->CRH &= ~(1<<2);
+//}
 
 
 void Rtc::attach(void (*fptr)(void), Rtc_IrqType type) {
