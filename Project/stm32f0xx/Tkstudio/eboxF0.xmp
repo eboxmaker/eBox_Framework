@@ -1018,8 +1018,6 @@
                         <File RelativePath="..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_pwm.h" FileType="4" ro="0" bss="0" rw="0" />
                         <File RelativePath="..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_rtc.cpp" FileType="3" Output="ebox_rtc.o" ro="0" bss="0" rw="0" />
                         <File RelativePath="..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_rtc.h" FileType="4" ro="0" bss="0" rw="0" />
-                        <File RelativePath="..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_slave_spi.cpp" FileType="3" Output="ebox_slave_spi.o" ro="0" bss="0" rw="0" />
-                        <File RelativePath="..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_slave_spi.h" FileType="4" ro="0" bss="0" rw="0" />
                         <File RelativePath="..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_softi2c.cpp" FileType="3" Output="ebox_softi2c.o" ro="0" bss="0" rw="0" />
                         <File RelativePath="..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_softspi.cpp" FileType="3" Output="ebox_softspi.o" ro="0" bss="0" rw="0" />
                         <File RelativePath="..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_spi.cpp" FileType="3" Output="ebox_spi.o" ro="0" bss="0" rw="0" />
@@ -1277,6 +1275,7 @@
                 <File RelativePath="..\..\..\example\8.rtc\1.rtc_basic.cpp" FileType="3" Output="1.rtc_basic.o" ro="0" bss="0" rw="0" />
                 <File RelativePath="..\..\..\example\8.rtc\2.rtc_clock.cpp" FileType="3" Output="2.rtc_clock.o" ro="0" bss="0" rw="0" />
                 <File RelativePath="..\..\..\example\8.rtc\3.calendar.cpp" FileType="3" Output="3.calendar.o" ro="0" bss="0" rw="0" />
+                <File RelativePath="..\..\..\example\8.rtc\rtc_calendar F0.cpp" FileType="3" Output="rtc_calendar F0.o" ro="0" bss="0" rw="0" />
             </Filter>
             <Filter Name="9.spi">
                 <File RelativePath="..\..\..\example\9.spi\1.w25x16.cpp" FileType="3" Output="1.w25x16.o" ro="0" bss="0" rw="0" />
