@@ -41,7 +41,7 @@ public:
 
     virtual void    begin (SpiConfig_t *spi_config);
     virtual void    config(SpiConfig_t *spi_config);
-    virtual uint8_t readConfig(void);
+    virtual uint8_t read_config(void);
 
     virtual uint8_t transfer(uint8_t data);
 
@@ -49,11 +49,11 @@ public:
     virtual uint8_t read();
     virtual int8_t  read(uint8_t  *recv_data);
 
-    virtual int8_t  writeBuf(uint8_t *data, uint16_t len);
-    virtual int8_t  readBuf(uint8_t *recv_data, uint16_t len);
+    virtual int8_t  write_buf(uint8_t *data, uint16_t len);
+    virtual int8_t  read_buf(uint8_t *recv_data, uint16_t len);
 public:
-    virtual int8_t  takeRight(SpiConfig_t *spi_config);
-    virtual int8_t  releaseRight(void);
+    virtual int8_t  take(SpiConfig_t *spi_config);
+    virtual int8_t  release(void);
 
 private:
 	SPI_TypeDef *_spi;
@@ -77,7 +77,7 @@ public:
 
     virtual void    begin (SpiConfig_t *spi_config);
     virtual void    config(SpiConfig_t *spi_config);
-    virtual uint8_t readConfig(void);
+    virtual uint8_t read_config(void);
 
     virtual uint8_t transfer(uint8_t data);
 
@@ -85,12 +85,12 @@ public:
     virtual uint8_t read();
     virtual int8_t  read(uint8_t  *recv_data);
 
-    virtual int8_t  writeBuf(uint8_t *data, uint16_t len);
-    virtual int8_t  readBuf(uint8_t *recv_data, uint16_t len);
+    virtual int8_t  write_buf(uint8_t *data, uint16_t len);
+    virtual int8_t  read_buf(uint8_t *recv_data, uint16_t len);
 
 public:
-    virtual int8_t takeRight(SpiConfig_t *spi_config);
-    virtual int8_t releaseRight(void);
+    virtual int8_t take(SpiConfig_t *spi_config);
+    virtual int8_t release(void);
 
 private:
     Gpio    *_sck;

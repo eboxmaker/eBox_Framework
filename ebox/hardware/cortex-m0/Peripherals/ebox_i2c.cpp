@@ -131,7 +131,7 @@ void mcuI2c::config(uint32_t speed)
   LL_I2C_Enable(_i2cx);
 }
 
-uint32_t mcuI2c::readConfig()
+uint32_t mcuI2c::read_config()
 {
   return _timing;
 }
@@ -206,7 +206,7 @@ uint8_t mcuI2c::write(uint8_t slaveAddr,uint16_t regAddr,uint8_t data,uint16_t t
   *          uint16_t tOut:  超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t mcuI2c::writeBuf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite,uint16_t tOut)
+uint8_t mcuI2c::write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite,uint16_t tOut)
 {
 #if	(USE_TIMEOUT != 0)
   uint32_t end = GetEndTime(tOut);
@@ -293,7 +293,7 @@ uint8_t mcuI2c::writeBuf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite,uint1
   *          uint16_t tOut:  超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t mcuI2c::writeBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut)
+uint8_t mcuI2c::write_buf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nWrite,uint16_t tOut)
 {
 #if	(USE_TIMEOUT != 0)
   uint32_t end = GetEndTime(tOut);
@@ -378,7 +378,7 @@ uint8_t mcuI2c::writeBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint1
   */
 uint8_t mcuI2c::read(uint8_t slaveAddr){
   uint8_t ret = 0;
-  readBuf(slaveAddr,&ret,1,200);
+  read_buf(slaveAddr,&ret,1,200);
   return ret;
 }
 
@@ -392,7 +392,7 @@ uint8_t mcuI2c::read(uint8_t slaveAddr){
 uint8_t mcuI2c::read(uint8_t slaveAddr,uint16_t regAddr,uint16_t tOut)
 {
   uint8_t ret = 0;
-  readBuf(slaveAddr,regAddr,&ret,1,tOut);
+  read_buf(slaveAddr,regAddr,&ret,1,tOut);
   return ret;
 }
 
@@ -404,7 +404,7 @@ uint8_t mcuI2c::read(uint8_t slaveAddr,uint16_t regAddr,uint16_t tOut)
   *          uint16_t tOut: 超时
   *@retval   EOK，EWAIT
   */
-uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t tOut)
+uint8_t mcuI2c::read_buf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t tOut)
 {
 #if	(USE_TIMEOUT != 0)
   uint32_t end = GetEndTime(tOut);
@@ -434,7 +434,7 @@ uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint8_t *data,uint16_t nRead,uint16_t 
   *          uint16_t tOut: 超时
   *@retval   EOK，EWAIT
   */
-uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut)
+uint8_t mcuI2c::read_buf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16_t nRead,uint16_t tOut)
 {
 #if	(USE_TIMEOUT != 0)
   uint32_t end = GetEndTime(tOut);
@@ -480,7 +480,7 @@ uint8_t mcuI2c::readBuf(uint8_t slaveAddr,uint16_t regAddr,uint8_t *data, uint16
   *@param    slaveAddr:  设备地址
   *@retval   uint8_t: EOK,EWAIT
   */
-uint8_t mcuI2c:: checkBusy(uint8_t slaveAddr,uint16_t tOut)
+uint8_t mcuI2c:: check_busy(uint8_t slaveAddr,uint16_t tOut)
 {
   uint8_t tmp = 0;
   //uint32_t end = GetEndTime(tOut);
@@ -507,7 +507,7 @@ uint8_t mcuI2c:: checkBusy(uint8_t slaveAddr,uint16_t tOut)
   *@param    timing:  时钟时序，通过readConfig获取
   *@retval   uint8_t: EOK,E_BUSY
   */
-uint8_t mcuI2c::takeRight(uint32_t timing,uint16_t tOut)
+uint8_t mcuI2c::take(uint32_t timing,uint16_t tOut)
 {
 #if	(USE_TIMEOUT != 0)
   uint32_t end = GetEndTime(tOut);
@@ -528,7 +528,7 @@ uint8_t mcuI2c::takeRight(uint32_t timing,uint16_t tOut)
  *@param    none
  *@retval   none
 */
-void mcuI2c::releaseRight(void)
+void mcuI2c::release(void)
 {
   _busy = 0;
 }

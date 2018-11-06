@@ -51,13 +51,13 @@ void LTCX::begin()
 void LTCX::write(uint16_t _DACA, uint16_t _DACB)
 {
     uint32_t _DAC_volue = _DACA << 12 | (_DACB & 0x0fff);
-    spi->takeRight(&spi_dev_LTC1446);
+    spi->take(&spi_dev_LTC1446);
     cs->reset();
     // 将_DAC_volue的值从24-->0的顺序写入设备，每次8bit
     spi->write(((uint8_t *)(&(_DAC_volue)))[2]);
     spi->write(((uint8_t *)(&(_DAC_volue)))[1]);
     spi->write(((uint8_t *)(&(_DAC_volue)))[0]);
     cs->set();
-    spi->releaseRight();
+    spi->release();
 }
 
