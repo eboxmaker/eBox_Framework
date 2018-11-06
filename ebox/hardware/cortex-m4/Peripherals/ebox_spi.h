@@ -18,7 +18,7 @@
 class mcuSpi: public Spi
 {
 public:
-    mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
+	mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
 
     virtual void    begin (SpiConfig_t *spi_config);
     virtual void    config(SpiConfig_t *spi_config);
@@ -27,21 +27,21 @@ public:
     virtual uint8_t transfer(uint8_t data);
 
     virtual int8_t  write(uint8_t data);
-    virtual int8_t  write(uint8_t *data, uint16_t data_length);
-
     virtual uint8_t read();
     virtual int8_t  read(uint8_t  *recv_data);
-    virtual int8_t  read(uint8_t *recv_data, uint16_t data_length);
-public:
-    virtual int8_t take_spi_right(SpiConfig_t *spi_config);
-    virtual int8_t release_spi_right(void);
-private:
-    SPI_TypeDef *spi;
-    uint8_t     busy;
 
-    Gpio *sck;
-    Gpio *miso;
-    Gpio *mosi;
+    virtual int8_t  write_buf(uint8_t *data, uint16_t len);
+    virtual int8_t  read_buf(uint8_t *recv_data, uint16_t len);
+public:
+    virtual int8_t  take(SpiConfig_t *spi_config);
+    virtual int8_t  release(void);
+private:
+	SPI_TypeDef *_spi;
+    Gpio        *_sck;
+    Gpio        *_miso;
+    Gpio        *_mosi;
+
+    uint8_t     _busy;
 		
 };
 /*
@@ -50,42 +50,43 @@ private:
 				3.初期调试I2C设备建议使用SPI_CLOCK_DIV256。
 				4.函数接口和硬件SPI完全一样可以互相替换。
 */
-class SoftSpi
+class SoftSpi: public Spi
 {
 public:
     SoftSpi(Gpio *sck, Gpio *miso, Gpio *mosi);
 
-    void    begin(SpiConfig_t *spi_config);
-    void    config(SpiConfig_t *spi_config);
-    uint8_t read_config(void);
+    virtual void    begin (SpiConfig_t *spi_config);
+    virtual void    config(SpiConfig_t *spi_config);
+    virtual uint8_t read_config(void);
 
-    int8_t  write(uint8_t data);
-    int8_t  write(uint8_t *data, uint16_t data_length);
+    virtual uint8_t transfer(uint8_t data);
 
-    uint8_t read();
-    int8_t  read(uint8_t *data);
-    int8_t  read(uint8_t *rcvdata, uint16_t data_length);
+    virtual int8_t  write(uint8_t data);
+    virtual uint8_t read();
+    virtual int8_t  read(uint8_t  *recv_data);
+
+    virtual int8_t  write_buf(uint8_t *data, uint16_t len);
+    virtual int8_t  read_buf(uint8_t *recv_data, uint16_t len);
+
 public:
-    int8_t take_spi_right(SpiConfig_t *spi_config);
-    int8_t release_spi_right(void);
+    virtual int8_t take(SpiConfig_t *spi_config);
+    virtual int8_t release(void);
 
 private:
-    Gpio    *sck_pin;
-    Gpio    *mosi_pin;
-    Gpio    *miso_pin;
+    Gpio    *_sck;
+    Gpio    *_miso;
+    Gpio    *_mosi;
 
     uint8_t mode;
     uint8_t bit_order;
     uint8_t spi_delay;
 
-    uint8_t current_dev_num;
     uint8_t busy;
 
     uint8_t transfer0(uint8_t data);
     uint8_t transfer1(uint8_t data);
     uint8_t transfer2(uint8_t data);
     uint8_t transfer3(uint8_t data);
-    uint8_t transfer(uint8_t data);
 };
 
 #endif
