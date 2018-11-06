@@ -22,7 +22,8 @@
 
 
 
-USBAudio::USBAudio(uint32_t frequency_in, uint8_t channel_nb_in, uint32_t frequency_out, uint8_t channel_nb_out, uint16_t vendor_id, uint16_t product_id, uint16_t product_release): USBDevice(vendor_id, product_id, product_release) {
+USBAudio::USBAudio(uint32_t frequency_in, uint8_t channel_nb_in, uint32_t frequency_out, uint8_t channel_nb_out, uint16_t vendor_id, uint16_t product_id, uint16_t product_release): USBDevice(vendor_id, product_id, product_release)
+{
     mute = 0;
     volCur = 0x0080;
     volMin = 0x0000;
@@ -60,7 +61,8 @@ USBAudio::USBAudio(uint32_t frequency_in, uint8_t channel_nb_in, uint32_t freque
     USBDevice::connect();
 }
 
-bool USBAudio::read(uint8_t * buf) {
+bool USBAudio::read(uint8_t *buf)
+{
     buf_stream_in = buf;
     SOF_handler = false;
     while (!available || !SOF_handler);
@@ -68,11 +70,13 @@ bool USBAudio::read(uint8_t * buf) {
     return true;
 }
 
-bool USBAudio::readNB(uint8_t * buf) {
+bool USBAudio::readNB(uint8_t *buf)
+{
     buf_stream_in = buf;
     SOF_handler = false;
     while (!SOF_handler);
-    if (available) {
+    if (available)
+    {
         available = false;
         buf_stream_in = NULL;
         return true;
@@ -80,17 +84,22 @@ bool USBAudio::readNB(uint8_t * buf) {
     return false;
 }
 
-bool USBAudio::readWrite(uint8_t * buf_read, uint8_t * buf_write) {
+bool USBAudio::readWrite(uint8_t *buf_read, uint8_t *buf_write)
+{
     buf_stream_in = buf_read;
     SOF_handler = false;
     writeIN = false;
-    if (interruptIN) {
+    if (interruptIN)
+    {
         USBDevice::writeNB(EP3IN, buf_write, PACKET_SIZE_ISO_OUT, PACKET_SIZE_ISO_OUT);
-    } else {
+    }
+    else
+    {
         buf_stream_out = buf_write;
     }
     while (!available);
-    if (interruptIN) {
+    if (interruptIN)
+    {
         while (!writeIN);
     }
     while (!SOF_handler);
@@ -98,31 +107,39 @@ bool USBAudio::readWrite(uint8_t * buf_read, uint8_t * buf_write) {
 }
 
 
-bool USBAudio::write(uint8_t * buf) {
+bool USBAudio::write(uint8_t *buf)
+{
     writeIN = false;
     SOF_handler = false;
-    if (interruptIN) {
+    if (interruptIN)
+    {
         USBDevice::writeNB(EP3IN, buf, PACKET_SIZE_ISO_OUT, PACKET_SIZE_ISO_OUT);
-    } else {
+    }
+    else
+    {
         buf_stream_out = buf;
     }
     while (!SOF_handler);
-    if (interruptIN) {
+    if (interruptIN)
+    {
         while (!writeIN);
     }
     return true;
 }
 
 
-float USBAudio::getVolume() {
+float USBAudio::getVolume()
+{
     return (mute) ? 0.0 : volume;
 }
 
 
-bool USBAudio::EPISO_OUT_callback() {
+bool USBAudio::EPISO_OUT_callback()
+{
     uint32_t size = 0;
     interruptOUT = true;
-    if (buf_stream_in != NULL) {
+    if (buf_stream_in != NULL)
+    {
         readEP(EP3OUT, (uint8_t *)buf_stream_in, &size, PACKET_SIZE_ISO_IN);
         available = true;
         buf_stream_in = NULL;
@@ -132,7 +149,8 @@ bool USBAudio::EPISO_OUT_callback() {
 }
 
 
-bool USBAudio::EPISO_IN_callback() {
+bool USBAudio::EPISO_IN_callback()
+{
     interruptIN = true;
     writeIN = true;
     return true;
@@ -141,14 +159,19 @@ bool USBAudio::EPISO_IN_callback() {
 
 
 // Called in ISR context on each start of frame
-void USBAudio::SOF(int frameNumber) {
+void USBAudio::SOF(int frameNumber)
+{
     uint32_t size = 0;
 
-    if (!interruptOUT) {
+    if (!interruptOUT)
+    {
         // read the isochronous endpoint
-        if (buf_stream_in != NULL) {
-            if (USBDevice::readEP_NB(EP3OUT, (uint8_t *)buf_stream_in, &size, PACKET_SIZE_ISO_IN)) {
-                if (size) {
+        if (buf_stream_in != NULL)
+        {
+            if (USBDevice::readEP_NB(EP3OUT, (uint8_t *)buf_stream_in, &size, PACKET_SIZE_ISO_IN))
+            {
+                if (size)
+                {
                     available = true;
                     readStart(EP3OUT, PACKET_SIZE_ISO_IN);
                     buf_stream_in = NULL;
@@ -157,9 +180,11 @@ void USBAudio::SOF(int frameNumber) {
         }
     }
 
-    if (!interruptIN) {
+    if (!interruptIN)
+    {
         // write if needed
-        if (buf_stream_out != NULL) {
+        if (buf_stream_out != NULL)
+        {
             USBDevice::writeNB(EP3IN, (uint8_t *)buf_stream_out, PACKET_SIZE_ISO_OUT, PACKET_SIZE_ISO_OUT);
             buf_stream_out = NULL;
         }
@@ -171,8 +196,10 @@ void USBAudio::SOF(int frameNumber) {
 
 // Called in ISR context
 // Set configuration. Return false if the configuration is not supported.
-bool USBAudio::USBCallback_setConfiguration(uint8_t configuration) {
-    if (configuration != DEFAULT_CONFIGURATION) {
+bool USBAudio::USBCallback_setConfiguration(uint8_t configuration)
+{
+    if (configuration != DEFAULT_CONFIGURATION)
+    {
         return false;
     }
 
@@ -188,14 +215,18 @@ bool USBAudio::USBCallback_setConfiguration(uint8_t configuration) {
 
 // Called in ISR context
 // Set alternate setting. Return false if the alternate setting is not supported
-bool USBAudio::USBCallback_setInterface(uint16_t interface, uint8_t alternate) {
-    if (interface == 0 && alternate == 0) {
+bool USBAudio::USBCallback_setInterface(uint16_t interface, uint8_t alternate)
+{
+    if (interface == 0 && alternate == 0)
+    {
         return true;
     }
-    if (interface == 1 && (alternate == 0 || alternate == 1)) {
+    if (interface == 1 && (alternate == 0 || alternate == 1))
+    {
         return true;
     }
-    if (interface == 2 && (alternate == 0 || alternate == 1)) {
+    if (interface == 2 && (alternate == 0 || alternate == 1))
+    {
         return true;
     }
     return false;
@@ -207,94 +238,101 @@ bool USBAudio::USBCallback_setInterface(uint16_t interface, uint8_t alternate) {
 // Called by USBDevice on Endpoint0 request
 // This is used to handle extensions to standard requests and class specific requests.
 // Return true if class handles this request
-bool USBAudio::USBCallback_request() {
+bool USBAudio::USBCallback_request()
+{
     bool success = false;
-    CONTROL_TRANSFER * transfer = getTransferPtr();
+    CONTROL_TRANSFER *transfer = getTransferPtr();
 
     // Process class-specific requests
-    if (transfer->setup.bmRequestType.Type == CLASS_TYPE) {
+    if (transfer->setup.bmRequestType.Type == CLASS_TYPE)
+    {
 
         // Feature Unit: Interface = 0, ID = 2
-        if (transfer->setup.wIndex == 0x0200) {
+        if (transfer->setup.wIndex == 0x0200)
+        {
 
             // Master Channel
-            if ((transfer->setup.wValue & 0xff) == 0) {
+            if ((transfer->setup.wValue & 0xff) == 0)
+            {
 
-                switch (transfer->setup.wValue >> 8) {
-                    case MUTE_CONTROL:
-                        switch (transfer->setup.bRequest) {
-                            case REQUEST_GET_CUR:
-                                transfer->remaining = 1;
-                                transfer->ptr = &mute;
-                                transfer->direction = DEVICE_TO_HOST;
-                                success = true;
-                                break;
-
-                            case REQUEST_SET_CUR:
-                                transfer->remaining = 1;
-                                transfer->notify = true;
-                                transfer->direction = HOST_TO_DEVICE;
-                                success = true;
-                                break;
-                            default:
-                                break;
-                        }
+                switch (transfer->setup.wValue >> 8)
+                {
+                case MUTE_CONTROL:
+                    switch (transfer->setup.bRequest)
+                    {
+                    case REQUEST_GET_CUR:
+                        transfer->remaining = 1;
+                        transfer->ptr = &mute;
+                        transfer->direction = DEVICE_TO_HOST;
+                        success = true;
                         break;
-                    case VOLUME_CONTROL:
-                        switch (transfer->setup.bRequest) {
-                            case REQUEST_GET_CUR:
-                                transfer->remaining = 2;
-                                transfer->ptr = (uint8_t *)&volCur;
-                                transfer->direction = DEVICE_TO_HOST;
-                                success = true;
-                                break;
-                            case REQUEST_GET_MIN:
-                                transfer->remaining = 2;
-                                transfer->ptr = (uint8_t *)&volMin;
-                                transfer->direction = DEVICE_TO_HOST;
-                                success = true;
-                                break;
-                            case REQUEST_GET_MAX:
-                                transfer->remaining = 2;
-                                transfer->ptr = (uint8_t *)&volMax;
-                                transfer->direction = DEVICE_TO_HOST;
-                                success = true;
-                                break;
-                            case REQUEST_GET_RES:
-                                transfer->remaining = 2;
-                                transfer->ptr = (uint8_t *)&volRes;
-                                transfer->direction = DEVICE_TO_HOST;
-                                success = true;
-                                break;
 
-                            case REQUEST_SET_CUR:
-                                transfer->remaining = 2;
-                                transfer->notify = true;
-                                transfer->direction = HOST_TO_DEVICE;
-                                success = true;
-                                break;
-                            case REQUEST_SET_MIN:
-                                transfer->remaining = 2;
-                                transfer->notify = true;
-                                transfer->direction = HOST_TO_DEVICE;
-                                success = true;
-                                break;
-                            case REQUEST_SET_MAX:
-                                transfer->remaining = 2;
-                                transfer->notify = true;
-                                transfer->direction = HOST_TO_DEVICE;
-                                success = true;
-                                break;
-                            case REQUEST_SET_RES:
-                                transfer->remaining = 2;
-                                transfer->notify = true;
-                                transfer->direction = HOST_TO_DEVICE;
-                                success = true;
-                                break;
-                        }
+                    case REQUEST_SET_CUR:
+                        transfer->remaining = 1;
+                        transfer->notify = true;
+                        transfer->direction = HOST_TO_DEVICE;
+                        success = true;
                         break;
                     default:
                         break;
+                    }
+                    break;
+                case VOLUME_CONTROL:
+                    switch (transfer->setup.bRequest)
+                    {
+                    case REQUEST_GET_CUR:
+                        transfer->remaining = 2;
+                        transfer->ptr = (uint8_t *)&volCur;
+                        transfer->direction = DEVICE_TO_HOST;
+                        success = true;
+                        break;
+                    case REQUEST_GET_MIN:
+                        transfer->remaining = 2;
+                        transfer->ptr = (uint8_t *)&volMin;
+                        transfer->direction = DEVICE_TO_HOST;
+                        success = true;
+                        break;
+                    case REQUEST_GET_MAX:
+                        transfer->remaining = 2;
+                        transfer->ptr = (uint8_t *)&volMax;
+                        transfer->direction = DEVICE_TO_HOST;
+                        success = true;
+                        break;
+                    case REQUEST_GET_RES:
+                        transfer->remaining = 2;
+                        transfer->ptr = (uint8_t *)&volRes;
+                        transfer->direction = DEVICE_TO_HOST;
+                        success = true;
+                        break;
+
+                    case REQUEST_SET_CUR:
+                        transfer->remaining = 2;
+                        transfer->notify = true;
+                        transfer->direction = HOST_TO_DEVICE;
+                        success = true;
+                        break;
+                    case REQUEST_SET_MIN:
+                        transfer->remaining = 2;
+                        transfer->notify = true;
+                        transfer->direction = HOST_TO_DEVICE;
+                        success = true;
+                        break;
+                    case REQUEST_SET_MAX:
+                        transfer->remaining = 2;
+                        transfer->notify = true;
+                        transfer->direction = HOST_TO_DEVICE;
+                        success = true;
+                        break;
+                    case REQUEST_SET_RES:
+                        transfer->remaining = 2;
+                        transfer->notify = true;
+                        transfer->direction = HOST_TO_DEVICE;
+                        success = true;
+                        break;
+                    }
+                    break;
+                default:
+                    break;
                 }
             }
         }
@@ -304,34 +342,39 @@ bool USBAudio::USBCallback_request() {
 
 
 // Called in ISR context when a data OUT stage has been performed
-void USBAudio::USBCallback_requestCompleted(uint8_t * buf, uint32_t length) {
-    if ((length == 1) || (length == 2)) {
+void USBAudio::USBCallback_requestCompleted(uint8_t *buf, uint32_t length)
+{
+    if ((length == 1) || (length == 2))
+    {
         uint16_t data = (length == 1) ? *buf : *((uint16_t *)buf);
-        CONTROL_TRANSFER * transfer = getTransferPtr();
-        switch (transfer->setup.wValue >> 8) {
-            case MUTE_CONTROL:
-                switch (transfer->setup.bRequest) {
-                    case REQUEST_SET_CUR:
-                        mute = data & 0xff;
-                        updateVol.call();
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case VOLUME_CONTROL:
-                switch (transfer->setup.bRequest) {
-                    case REQUEST_SET_CUR:
-                        volCur = data;
-                        volume = (float)volCur/(float)volMax;
-                        updateVol.call();
-                        break;
-                    default:
-                        break;
-                }
+        CONTROL_TRANSFER *transfer = getTransferPtr();
+        switch (transfer->setup.wValue >> 8)
+        {
+        case MUTE_CONTROL:
+            switch (transfer->setup.bRequest)
+            {
+            case REQUEST_SET_CUR:
+                mute = data & 0xff;
+                updateVol.call();
                 break;
             default:
                 break;
+            }
+            break;
+        case VOLUME_CONTROL:
+            switch (transfer->setup.bRequest)
+            {
+            case REQUEST_SET_CUR:
+                volCur = data;
+                volume = (float)volCur / (float)volMax;
+                updateVol.call();
+                break;
+            default:
+                break;
+            }
+            break;
+        default:
+            break;
         }
     }
 }
@@ -354,8 +397,10 @@ void USBAudio::USBCallback_requestCompleted(uint8_t * buf, uint32_t length) {
                                       FEATURE_UNIT_DESCRIPTOR_LENGTH    + \
                                       2*OUTPUT_TERMINAL_DESCRIPTOR_LENGTH)
 
-uint8_t * USBAudio::configurationDesc() {
-    static uint8_t configDescriptor[] = {
+uint8_t *USBAudio::configurationDesc()
+{
+    static uint8_t configDescriptor[] =
+    {
         // Configuration 1
         CONFIGURATION_DESCRIPTOR_LENGTH,        // bLength
         CONFIGURATION_DESCRIPTOR,               // bDescriptorType
@@ -599,20 +644,24 @@ uint8_t * USBAudio::configurationDesc() {
     return configDescriptor;
 }
 
-uint8_t * USBAudio::stringIinterfaceDesc() {
-    static uint8_t stringIinterfaceDescriptor[] = {
+uint8_t *USBAudio::stringIinterfaceDesc()
+{
+    static uint8_t stringIinterfaceDescriptor[] =
+    {
         0x0c,                           //bLength
         STRING_DESCRIPTOR,              //bDescriptorType 0x03
-        'A',0,'u',0,'d',0,'i',0,'o',0   //bString iInterface - Audio
+        'A', 0, 'u', 0, 'd', 0, 'i', 0, 'o', 0 //bString iInterface - Audio
     };
     return stringIinterfaceDescriptor;
 }
 
-uint8_t * USBAudio::stringIproductDesc() {
-    static uint8_t stringIproductDescriptor[] = {
+uint8_t *USBAudio::stringIproductDesc()
+{
+    static uint8_t stringIproductDescriptor[] =
+    {
         0x16,                                                       //bLength
         STRING_DESCRIPTOR,                                          //bDescriptorType 0x03
-        'M',0,'b',0,'e',0,'d',0,' ',0,'A',0,'u',0,'d',0,'i',0,'o',0 //bString iProduct - Mbed Audio
+        'M', 0, 'b', 0, 'e', 0, 'd', 0, ' ', 0, 'A', 0, 'u', 0, 'd', 0, 'i', 0, 'o', 0 //bString iProduct - Mbed Audio
     };
     return stringIproductDescriptor;
 }

@@ -28,204 +28,207 @@
 #define systick_interrupt()     SysTick->CTRL |=0x0002
 
 extern "C" {
-  __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
-  __IO uint16_t micro_para;
+    __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
+    __IO uint16_t micro_para;
 
-  static void update_system_clock(CpuClock_t *clock);
-  static void update_chip_info(void);
+    static void update_system_clock(CpuClock_t *clock);
+    static void update_chip_info(void);
 
-  /**
-  *@brief    配置clock,默认使用HSI，48M
-  *@param    mcu
-  *@retval   none
-  */
-  __weak void SystemClock_Config()
-  {
-    /* Configuration will allow to reach a SYSCLK frequency set to 24MHz:
-     Syst freq = ((HSI_VALUE * PLLMUL)/ PLLDIV)
-                 ((8MHz * 12)/ 4)                  = 24MHz             */
-    LL_UTILS_PLLInitTypeDef sUTILS_PLLInitStruct = {LL_RCC_PLL_MUL_12 , LL_RCC_PREDIV_DIV_2}; ;
-
-    /* Variable to store AHB and APB buses clock configuration */
-    /* Settings to have HCLK set to 12MHz and APB to 6 MHz */
-    LL_UTILS_ClkInitTypeDef sUTILS_ClkInitStruct = {LL_RCC_SYSCLK_DIV_1, LL_RCC_APB1_DIV_1};
-
-    /* Switch to PLL with HSI as clock source             */
-    LL_PLL_ConfigSystemClock_HSI(&sUTILS_PLLInitStruct, &sUTILS_ClkInitStruct);
-  }
-
-  /**
-    *@brief    初始化，设置时钟，systemtick，systemtick callback，禁用jtag
+    /**
+    *@brief    配置clock,默认使用HSI，48M
     *@param    mcu
     *@retval   none
     */
-  void mcu_init(void)
-  {
-    SystemClock_Config();
-    update_system_clock(&cpu.clock);
+    __weak void SystemClock_Config()
+    {
+        /* Configuration will allow to reach a SYSCLK frequency set to 24MHz:
+         Syst freq = ((HSI_VALUE * PLLMUL)/ PLLDIV)
+                     ((8MHz * 12)/ 4)                  = 24MHz             */
+        LL_UTILS_PLLInitTypeDef sUTILS_PLLInitStruct = {LL_RCC_PLL_MUL_12, LL_RCC_PREDIV_DIV_2}; ;
+
+        /* Variable to store AHB and APB buses clock configuration */
+        /* Settings to have HCLK set to 12MHz and APB to 6 MHz */
+        LL_UTILS_ClkInitTypeDef sUTILS_ClkInitStruct = {LL_RCC_SYSCLK_DIV_1, LL_RCC_APB1_DIV_1};
+
+        /* Switch to PLL with HSI as clock source             */
+        LL_PLL_ConfigSystemClock_HSI(&sUTILS_PLLInitStruct, &sUTILS_ClkInitStruct);
+    }
+
+    /**
+      *@brief    初始化，设置时钟，systemtick，systemtick callback，禁用jtag
+      *@param    mcu
+      *@retval   none
+      */
+    void mcu_init(void)
+    {
+        SystemClock_Config();
+        update_system_clock(&cpu.clock);
 
 
-    SysTick_Config(cpu.clock.core/1000);//  每隔 1ms产生一次中断
-    LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);//systemticks clock；
-    micro_para = cpu.clock.core/1000000;//减少micros函数计算量
+        SysTick_Config(cpu.clock.core / 1000); //  每隔 1ms产生一次中断
+        LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);//systemticks clock；
+        micro_para = cpu.clock.core / 1000000; //减少micros函数计算量
 
 
-    attachSystickCallBack(nullFun);
-    update_chip_info();
-  }
+        attachSystickCallBack(nullFun);
+        update_chip_info();
+    }
 
-  void mcu_reset(void)
-  {
-    NVIC_SystemReset();
-  }
+    void mcu_reset(void)
+    {
+        NVIC_SystemReset();
+    }
 
-  /**
-    *@brief    获取us
-    *@param    mcu
-    *@retval   none
+    /**
+      *@brief    获取us
+      *@param    mcu
+      *@retval   none
+      */
+    uint64_t mcu_micros(void)
+    {
+        uint64_t micro;
+        uint32_t temp = __get_PRIMASK();//保存之前中断设置
+        no_interrupts();
+        if (SysTick->CTRL & (1 << 16))//发生了溢出
+        {
+            if ( __get_IPSR() ||  (temp) ) //如果此时屏蔽了所有中断或者被别的中断打断无法执行，systick中断函数，则需要对millis_secend进行补偿
+                millis_seconds++;
+        }
+        micro = (millis_seconds * 1000 + (1000 - (SysTick->VAL) / (micro_para)));
+        __set_PRIMASK(temp);//恢复之前中断设置
+
+        return  micro;
+    }
+
+    /**
+      *@brief    获取ms
+      *@param    mcu
+      *@retval   none
+      */
+    uint64_t mcu_millis( void )
+    {
+        return millis_seconds;
+    }
+
+    /**
+      *@brief    ms延时
+      *@param    uint32_t ms  要延时的时长，最小1ms
+      *@retval   none
+     */
+    void mcu_delay_ms(uint32_t ms)
+    {
+        uint64_t end ;
+        end = mcu_micros() + ms * 1000 - 3;
+        while (mcu_micros() < end);
+    }
+    /**
+      *@brief    us延时,使用systick计数器。48Mhz及以上时钟时可以满足us(1.3)精度。
+      *          8Mhz时最小6-7us,24Mhz时最小2.2us,16Mhz时最小3.5us
+      *@param    uint32_t us  要延时的时长，最小1us
+      *@retval   none
+     */
+    void  mcu_delay_us(uint32_t us)
+    {
+        uint32_t ticks;
+        uint32_t told, tnow, tcnt = 0;
+
+        ticks = (us - 1) * micro_para;          /* 计数周期 */
+        tcnt = 0;
+        told = SysTick->VAL;               /* 保存当前计数值 */
+
+        while (1)
+        {
+            tnow = SysTick->VAL;
+            tcnt += (tnow < told) ? (told - tnow) : (SysTick->LOAD - tnow + told);
+            if (tcnt >= ticks)break;
+            told = tnow;
+        }
+    }
+
+    // systick 中断回调函数指针，
+    fun_noPara_t  callBackFun;
+    static uint16_t _multiple = 1;
+
+    /**
+    *@brief    注册中断回调函数，可以指定调用周期 = 中断周期 * multiple
+    *@param    SystickCallBack_T fun 回调函数（无参）, uint8_t multiple 倍数。用来设定调用周期
+    *@retval   E_OK  注册成功， E_NG 注册失败
     */
-  uint64_t mcu_micros(void)
-  {
-    uint64_t micro;
-    uint32_t temp = __get_PRIMASK();//保存之前中断设置
-    no_interrupts();
-    if (SysTick->CTRL & (1 << 16))//发生了溢出
+    uint16_t attachSystickCallBack(fun_noPara_t fun, uint16_t multiple)
     {
-      if ( __get_IPSR() ||  (temp) ) //如果此时屏蔽了所有中断或者被别的中断打断无法执行，systick中断函数，则需要对millis_secend进行补偿
-        millis_seconds++;
+
+        if (callBackFun == NULL || callBackFun == nullFun)
+        {
+            callBackFun = fun;
+            _multiple = multiple == 0 ? 1 : multiple;
+            return EOK;
+        }
+        else
+        {
+            return ENG;
+        }
     }
-    micro = (millis_seconds * 1000 + (1000 - (SysTick->VAL)/(micro_para)));
-    __set_PRIMASK(temp);//恢复之前中断设置
-
-    return  micro;
-  }
-
-  /**
-    *@brief    获取ms
-    *@param    mcu
-    *@retval   none
+    /**
+     *@brief    systick中断处理函数
+     *@param    none
+     *@retval   none
     */
-  uint64_t mcu_millis( void )
-  {
-    return millis_seconds;
-  }
-  
-  /**
-    *@brief    ms延时
-    *@param    uint32_t ms  要延时的时长，最小1ms
-    *@retval   none
-   */
-  void mcu_delay_ms(uint32_t ms)
-  {
-    uint64_t end ;
-    end = mcu_micros() + ms * 1000 - 3;
-    while (mcu_micros() < end);
-  }
-  /**
-    *@brief    us延时,使用systick计数器。48Mhz及以上时钟时可以满足us(1.3)精度。
-    *          8Mhz时最小6-7us,24Mhz时最小2.2us,16Mhz时最小3.5us
-    *@param    uint32_t us  要延时的时长，最小1us
-    *@retval   none
-   */
-  void  mcu_delay_us(uint32_t us)
-  {
-    uint32_t ticks;
-    uint32_t told,tnow,tcnt=0;
-
-    ticks = (us-1) *micro_para;             /* 计数周期 */
-    tcnt = 0;
-    told = SysTick->VAL;               /* 保存当前计数值 */
-
-    while (1)
+    void SysTick_Handler(void)
     {
-      tnow = SysTick->VAL;
-      tcnt += (tnow < told)? (told-tnow):(SysTick->LOAD - tnow + told);
-      if (tcnt >= ticks)break;
-      told = tnow;
+        if (millis_seconds++ % _multiple == 0)
+        {
+            callBackFun();
+        }
     }
-  }
 
-  // systick 中断回调函数指针，
-  fun_noPara_t  callBackFun;
-  static uint16_t _multiple = 1;
-
-  /**
-  *@brief    注册中断回调函数，可以指定调用周期 = 中断周期 * multiple
-  *@param    SystickCallBack_T fun 回调函数（无参）, uint8_t multiple 倍数。用来设定调用周期
-  *@retval   E_OK  注册成功， E_NG 注册失败
-  */
-  uint16_t attachSystickCallBack(fun_noPara_t fun,uint16_t multiple){
-
-    if (callBackFun == NULL || callBackFun == nullFun)
+    /**
+     *@brief    获取系统时钟
+     *@param    *clock：  时钟指针，返回系统时钟
+     *@retval   none
+    */
+    static void update_system_clock(CpuClock_t *clock)
     {
-      callBackFun = fun;
-      _multiple = multiple == 0 ? 1 : multiple;
-      return EOK;
-    }else{
-      return ENG;
+        LL_RCC_ClocksTypeDef RCC_Clock;
+
+        SystemCoreClockUpdate();
+        LL_RCC_GetSystemClocksFreq(&RCC_Clock);
+
+        clock->core = RCC_Clock.SYSCLK_Frequency;
+        clock->hclk = RCC_Clock.HCLK_Frequency;
+        clock->pclk2 = 0;
+        clock->pclk1 = RCC_Clock.PCLK1_Frequency;
     }
-  }
-  /**
-   *@brief    systick中断处理函数
-   *@param    none
-   *@retval   none
-  */
-  void SysTick_Handler(void)
-  {
-    if (millis_seconds++ % _multiple == 0)
+
+    /**
+     *@brief    获取系统信息，CPU_ID,flashsize
+     *@param    none
+     *@retval   none
+    */
+    static void update_chip_info()
     {
-      callBackFun();
+        cpu.type = MCU_TYPE;
+        cpu.pins = MCU_PINS;
+        memcpy(cpu.company, MCU_COMPANY, sizeof(MCU_COMPANY));
+
+
+        cpu.chip_id[2] = (uint32_t)(READ_REG(*((uint32_t *)UID_BASE_ADDRESS)));         //低字节
+        cpu.chip_id[1] = (uint32_t)(READ_REG(*((uint32_t *)(UID_BASE_ADDRESS + 4U))));
+        cpu.chip_id[0] = (uint32_t)(READ_REG(*((uint32_t *)(UID_BASE_ADDRESS + 8U))));  //高字节
+
+        cpu.flash_size = (uint16_t)(READ_REG(*((uint32_t *)FLASHSIZE_BASE_ADDRESS)));   //芯片flash容量
+
+
+
+        millis_seconds = 0;
+        SysTick->VAL = 0;
+        //统计cpu计算能力//////////////////
+        do
+        {
+            cpu.ability++;//统计cpu计算能力
+        }
+        while (millis_seconds < 1);
+        cpu.ability = cpu.ability  * 1000 * 2;
+        ////////////////////////////////
     }
-  }
-
-  /**
-   *@brief    获取系统时钟
-   *@param    *clock：  时钟指针，返回系统时钟
-   *@retval   none
-  */
-  static void update_system_clock(CpuClock_t *clock)
-  {
-    LL_RCC_ClocksTypeDef RCC_Clock;
-
-    SystemCoreClockUpdate();
-    LL_RCC_GetSystemClocksFreq(&RCC_Clock);
-
-    clock->core = RCC_Clock.SYSCLK_Frequency;
-    clock->hclk = RCC_Clock.HCLK_Frequency;
-    clock->pclk2 = 0;
-    clock->pclk1 = RCC_Clock.PCLK1_Frequency;
-  }
-
-  /**
-   *@brief    获取系统信息，CPU_ID,flashsize
-   *@param    none
-   *@retval   none
-  */
-  static void update_chip_info()
-  {
-    cpu.type = MCU_TYPE;
-    cpu.pins = MCU_PINS;
-    memcpy(cpu.company,MCU_COMPANY,sizeof(MCU_COMPANY));
-
-
-    cpu.chip_id[2] = (uint32_t)(READ_REG(*((uint32_t *)UID_BASE_ADDRESS)));         //低字节
-    cpu.chip_id[1] = (uint32_t)(READ_REG(*((uint32_t *)(UID_BASE_ADDRESS + 4U))));
-    cpu.chip_id[0] = (uint32_t)(READ_REG(*((uint32_t *)(UID_BASE_ADDRESS + 8U))));  //高字节
-
-    cpu.flash_size = (uint16_t)(READ_REG(*((uint32_t *)FLASHSIZE_BASE_ADDRESS)));   //芯片flash容量
-
-
-
-    millis_seconds = 0;
-    SysTick->VAL = 0;
-    //统计cpu计算能力//////////////////
-    do
-    {
-      cpu.ability++;//统计cpu计算能力
-    }
-    while (millis_seconds < 1);
-    cpu.ability = cpu.ability  * 1000 * 2;
-    ////////////////////////////////
-  }
 
 }

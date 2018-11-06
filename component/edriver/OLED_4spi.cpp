@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -25,7 +25,7 @@
 /**********************************************************
  *                    函 数 声 明 区                      *
  **********************************************************/
-Oled4Spi::Oled4Spi(Gpio *cs, Gpio *dc, Gpio *res,Gpio *scl_d0, Gpio *sda_d1)
+Oled4Spi::Oled4Spi(Gpio *cs, Gpio *dc, Gpio *res, Gpio *scl_d0, Gpio *sda_d1)
 {
     this->cs_pin	= cs;
     this->res_pin	= res;
@@ -109,11 +109,11 @@ set_pos(uint16_t x, uint16_t y)
     write_cmd(((x & 0xf0) >> 4) | 0x10);
     write_cmd((x & 0x0f) | 0x01);
 }
-void Oled4Spi::draw_point(uint8_t x,uint8_t y)
+void Oled4Spi::draw_point(uint8_t x, uint8_t y)
 {
     uint8_t temp = 1 << (y % 8);
-    set_pos(x,y/8);
-    
+    set_pos(x, y / 8);
+
     write_data(temp);
 
 }
@@ -172,7 +172,7 @@ void Oled4Spi::display_off(void)
 *   返回结果：
 *   备    注：在指定位置显示一个字符,包括部分字符
 ***********************************************************/
-void Oled4Spi::show_char(uint8_t x, uint8_t y, uint8_t chr,uint8_t Char_Size)
+void Oled4Spi::show_char(uint8_t x, uint8_t y, uint8_t chr, uint8_t Char_Size)
 {
     unsigned char c = 0, i = 0;
     c = chr - ' '; //得到偏移后的值
@@ -205,12 +205,12 @@ void Oled4Spi::show_char(uint8_t x, uint8_t y, uint8_t chr,uint8_t Char_Size)
 *   返回结果：
 *   备    注：在指定位置显示一个字符串
 ***********************************************************/
-void Oled4Spi::show_string(uint8_t x, uint8_t y, char *chr,uint8_t Char_Size)
+void Oled4Spi::show_string(uint8_t x, uint8_t y, char *chr, uint8_t Char_Size)
 {
     unsigned char j = 0;
     while (chr[j] != '\0')
     {
-        show_char(x, y, chr[j],Char_Size);
+        show_char(x, y, chr[j], Char_Size);
         x += 8;
         if(x > 120)
         {
@@ -240,13 +240,13 @@ void Oled4Spi::show_num(uint8_t x, uint8_t y, uint32_t num, uint8_t len, uint8_t
         {
             if(temp == 0)
             {
-                show_char(x + (size / 2)*t, y, ' ',size);
+                show_char(x + (size / 2)*t, y, ' ', size);
                 continue;
             }
             else enshow = 1;
 
         }
-        show_char(x + (size / 2)*t, y, temp + '0',size);
+        show_char(x + (size / 2)*t, y, temp + '0', size);
     }
 }
 

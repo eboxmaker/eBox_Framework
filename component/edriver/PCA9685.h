@@ -1,5 +1,5 @@
 /*  PCA9685 library for Arduino
-    Copyright (C) 2012 Kasper Skårhøj    <kasperskaarhoj@gmail.com> 
+    Copyright (C) 2012 Kasper Sk?rh?j    <kasperskaarhoj@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
   Version 1.0.0
 	(Semantic Versioning)
 **/
- 
+
 //Register defines from data sheet
 #define PCA9685_MODE1 0x00 // location for Mode1 register address
 #define PCA9685_MODE2 0x01 // location for Mode2 reigster address
@@ -34,25 +34,25 @@
 
 class PCA9685
 {
-  public:
+public:
     //NB the i2c address here is the value of the A0, A1, A2, A3, A4 and A5 pins ONLY
     //as the class takes care of its internal base address.
     //so i2cAddress should be between 0 and 63
     PCA9685(SoftI2c *i2c);
-    void begin(uint32_t speed,int i2cAddress);
+    void begin(uint32_t speed, int i2cAddress);
     bool init();
 
-	void setLEDOn(int ledNumber);
-	void setLEDOff(int ledNumber);
-	void setLEDDimmed(int ledNumber, uint8_t amount);
-	void writeLED(int ledNumber, uint32_t outputStart, uint32_t outputEnd);
-	
-  private:
-	void writeRegister(int regaddress, uint8_t val);
-	uint32_t readRegister(int regAddress);
-	// Our actual i2c address:
-	uint8_t _i2cAddress;
+    void setLEDOn(int ledNumber);
+    void setLEDOff(int ledNumber);
+    void setLEDDimmed(int ledNumber, uint8_t amount);
+    void writeLED(int ledNumber, uint32_t outputStart, uint32_t outputEnd);
+
+private:
+    void writeRegister(int regaddress, uint8_t val);
+    uint32_t readRegister(int regAddress);
+    // Our actual i2c address:
+    uint8_t _i2cAddress;
     SoftI2c *i2c;
     uint32_t speed;
 };
-#endif 
+#endif

@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -31,7 +31,7 @@ extern "C" {
 void USB_LP_CAN1_RX0_IRQHandler(void)
 {
     irq_handler(can_irq_id);
-    CAN_FIFORelease(CAN1, CAN_FIFO0);	
+    CAN_FIFORelease(CAN1, CAN_FIFO0);
 }
 
 void can_irq_init(can_irq_handler handler, uint32_t id)
@@ -106,75 +106,77 @@ void Can::set_bps(BSP_CAN_BAUD bps)
 }
 
 
- /**
- *@brief    CAN接收消息使用过滤器方式以及其设置
- *@param    nCanType：CAN_ID_STD或者CAN_ID_EXT
- *@param    num：0-13  过滤器组编号
- *@param    ID：类似于网络的IP
- *@param    mask：类似于网络的子网掩码
- *@retval   NONE
+/**
+*@brief    CAN接收消息使用过滤器方式以及其设置
+*@param    nCanType：CAN_ID_STD或者CAN_ID_EXT
+*@param    num：0-13  过滤器组编号
+*@param    ID：类似于网络的IP
+*@param    mask：类似于网络的子网掩码
+*@retval   NONE
 */
-void Can::set_filter_idmask(u8 nCanType,u8 num,u32 ID,u32 mask)
+void Can::set_filter_idmask(u8 nCanType, u8 num, u32 ID, u32 mask)
 {
     CAN_FilterInitTypeDef  CAN_FilterInitStructure;
 
-    CAN_FilterInitStructure.CAN_FilterNumber=num;						
-    CAN_FilterInitStructure.CAN_FilterMode=CAN_FilterMode_IdMask;		
+    CAN_FilterInitStructure.CAN_FilterNumber = num;
+    CAN_FilterInitStructure.CAN_FilterMode = CAN_FilterMode_IdMask;
     CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_32bit;
 
     if(nCanType == CAN_ID_STD)
-    {/* std id  */
-        CAN_FilterInitStructure.CAN_FilterIdHigh= ID<<5;
-        CAN_FilterInitStructure.CAN_FilterIdLow=0|CAN_ID_STD;
-    }
-    else
     {
-    /* ext id  */
-        CAN_FilterInitStructure.CAN_FilterIdHigh= ((ID<<3)>>16) & 0xffff;
-        CAN_FilterInitStructure.CAN_FilterIdLow= ((ID<<3)& 0xffff) | CAN_ID_EXT;
-    }
-
-    CAN_FilterInitStructure.CAN_FilterMaskIdHigh=(mask>>16)&0xffff;
-    CAN_FilterInitStructure.CAN_FilterMaskIdLow=mask&0xffff;
-
-    CAN_FilterInitStructure.CAN_FilterFIFOAssignment=CAN_Filter_FIFO0 ;
-    CAN_FilterInitStructure.CAN_FilterActivation=ENABLE;
-    CAN_FilterInit(&CAN_FilterInitStructure);
-}
-
- /**
- *@brief    CAN接收消息使用列表的方式只接收指定ID的数据，其等效于
-            将子网掩码全部设置成1.
- *@param    nCanType：CAN_ID_STD或者CAN_ID_EXT
- *@param    num：0-13  过滤器组编号
- *@param    ID：消息帧头ID筛选设置
- *@retval   NONE
-*/
-void Can::set_filter_idlist(u8 nCanType,u8 num,u32 ID)
-{
-    CAN_FilterInitTypeDef  CAN_FilterInitStructure;
-
-    CAN_FilterInitStructure.CAN_FilterNumber=num;						
-    CAN_FilterInitStructure.CAN_FilterMode=CAN_FilterMode_IdList;	
-    CAN_FilterInitStructure.CAN_FilterScale=CAN_FilterScale_32bit;
-    
-    if(nCanType == CAN_ID_STD)
-    {/* std id  */
-        CAN_FilterInitStructure.CAN_FilterIdHigh= ID<<5;	
-        CAN_FilterInitStructure.CAN_FilterIdLow= 0|CAN_ID_STD;
+        /* std id  */
+        CAN_FilterInitStructure.CAN_FilterIdHigh = ID << 5;
+        CAN_FilterInitStructure.CAN_FilterIdLow = 0 | CAN_ID_STD;
     }
     else
     {
         /* ext id  */
-        CAN_FilterInitStructure.CAN_FilterIdHigh= ((ID<<3)>>16) & 0xffff;
-        CAN_FilterInitStructure.CAN_FilterIdLow= ((ID<<3)& 0xffff) | CAN_ID_EXT;				
+        CAN_FilterInitStructure.CAN_FilterIdHigh = ((ID << 3) >> 16) & 0xffff;
+        CAN_FilterInitStructure.CAN_FilterIdLow = ((ID << 3) & 0xffff) | CAN_ID_EXT;
     }
-    
-    CAN_FilterInitStructure.CAN_FilterMaskIdHigh = 0;			
-    CAN_FilterInitStructure.CAN_FilterMaskIdLow = 0;			
 
-    CAN_FilterInitStructure.CAN_FilterFIFOAssignment=CAN_Filter_FIFO0 ;
-    CAN_FilterInitStructure.CAN_FilterActivation=ENABLE;
+    CAN_FilterInitStructure.CAN_FilterMaskIdHigh = (mask >> 16) & 0xffff;
+    CAN_FilterInitStructure.CAN_FilterMaskIdLow = mask & 0xffff;
+
+    CAN_FilterInitStructure.CAN_FilterFIFOAssignment = CAN_Filter_FIFO0 ;
+    CAN_FilterInitStructure.CAN_FilterActivation = ENABLE;
+    CAN_FilterInit(&CAN_FilterInitStructure);
+}
+
+/**
+*@brief    CAN接收消息使用列表的方式只接收指定ID的数据，其等效于
+           将子网掩码全部设置成1.
+*@param    nCanType：CAN_ID_STD或者CAN_ID_EXT
+*@param    num：0-13  过滤器组编号
+*@param    ID：消息帧头ID筛选设置
+*@retval   NONE
+*/
+void Can::set_filter_idlist(u8 nCanType, u8 num, u32 ID)
+{
+    CAN_FilterInitTypeDef  CAN_FilterInitStructure;
+
+    CAN_FilterInitStructure.CAN_FilterNumber = num;
+    CAN_FilterInitStructure.CAN_FilterMode = CAN_FilterMode_IdList;
+    CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_32bit;
+
+    if(nCanType == CAN_ID_STD)
+    {
+        /* std id  */
+        CAN_FilterInitStructure.CAN_FilterIdHigh = ID << 5;
+        CAN_FilterInitStructure.CAN_FilterIdLow = 0 | CAN_ID_STD;
+    }
+    else
+    {
+        /* ext id  */
+        CAN_FilterInitStructure.CAN_FilterIdHigh = ((ID << 3) >> 16) & 0xffff;
+        CAN_FilterInitStructure.CAN_FilterIdLow = ((ID << 3) & 0xffff) | CAN_ID_EXT;
+    }
+
+    CAN_FilterInitStructure.CAN_FilterMaskIdHigh = 0;
+    CAN_FilterInitStructure.CAN_FilterMaskIdLow = 0;
+
+    CAN_FilterInitStructure.CAN_FilterFIFOAssignment = CAN_Filter_FIFO0 ;
+    CAN_FilterInitStructure.CAN_FilterActivation = ENABLE;
     CAN_FilterInit(&CAN_FilterInitStructure);
 }
 
@@ -193,8 +195,8 @@ void Can::begin(BSP_CAN_BAUD bps)
     pin_tx->mode(AF_PP);
 
     set_bps(bps);
-    for(u8 i=0;i<3;i++)
-        CAN_CancelTransmit(CAN1,i);
+    for(u8 i = 0; i < 3; i++)
+        CAN_CancelTransmit(CAN1, i);
     can_irq_init(Can::_irq_handler, (uint32_t)this);
 }
 
@@ -228,13 +230,16 @@ u8 Can::available(void)
     return CAN_MessagePending(CAN1, CAN_FIFO0);
 }
 
-void Can::attach(void (*fptr)(void)) {
-    if (fptr) {
+void Can::attach(void (*fptr)(void))
+{
+    if (fptr)
+    {
         _irq.attach(fptr);
     }
 }
 
-void Can::_irq_handler(uint32_t id) {
-    Can *handler = (Can*)id;
+void Can::_irq_handler(uint32_t id)
+{
+    Can *handler = (Can *)id;
     handler->_irq.call();
 }

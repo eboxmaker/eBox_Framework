@@ -19,14 +19,16 @@
 #include "stdint.h"
 #include "USBSerial.h"
 
-int USBSerial::_putc(int c) {
+int USBSerial::_putc(int c)
+{
     if (!terminal_connected)
         return 0;
     send((uint8_t *)&c, 1);
     return 1;
 }
 
-int USBSerial::_getc() {
+int USBSerial::_getc()
+{
     uint8_t c = 0;
     while (buf.isEmpty());
     buf.dequeue(&c);
@@ -34,11 +36,14 @@ int USBSerial::_getc() {
 }
 
 
-bool USBSerial::writeBlock(uint8_t * buf, uint16_t size) {
-    if(size > MAX_PACKET_SIZE_EPBULK) {
+bool USBSerial::writeBlock(uint8_t *buf, uint16_t size)
+{
+    if(size > MAX_PACKET_SIZE_EPBULK)
+    {
         return false;
     }
-    if(!send(buf, size)) {
+    if(!send(buf, size))
+    {
         return false;
     }
     return true;
@@ -47,7 +52,7 @@ bool USBSerial::writeBlock(uint8_t * buf, uint16_t size) {
 void USBSerial::printf(const char *fmt, ...)
 {
     char buf[128];
-    uint8_t i=0;
+    uint8_t i = 0;
     va_list va_params;
     va_start(va_params, fmt);
     vsprintf(buf, fmt, va_params);
@@ -55,19 +60,21 @@ void USBSerial::printf(const char *fmt, ...)
 
     while(buf[i] != '\0')
     {
-       _putc(buf[i++]);
+        _putc(buf[i++]);
     }
 }
 
 
 
-bool USBSerial::EPBULK_OUT_callback() {
+bool USBSerial::EPBULK_OUT_callback()
+{
     uint8_t c[65];
     uint32_t size = 0;
 
     //we read the packet received and put it on the circular buffer
     readEP(c, &size);
-    for (uint32_t i = 0; i < size; i++) {
+    for (uint32_t i = 0; i < size; i++)
+    {
         buf.queue(c[i]);
     }
 
@@ -77,6 +84,7 @@ bool USBSerial::EPBULK_OUT_callback() {
     return true;
 }
 
-uint8_t USBSerial::available() {
+uint8_t USBSerial::available()
+{
     return buf.available();
 }

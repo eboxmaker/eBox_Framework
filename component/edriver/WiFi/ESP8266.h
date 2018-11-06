@@ -23,7 +23,8 @@
 
 #define RX_BUFFER_SIZE 1024
 #define NET_DATA_BUFFER_SIZE 1024
-typedef enum {
+typedef enum
+{
     WIFI_NO_SHIELD        = 255,   // for compatibility with WiFi Shield library
     WIFI_IDLE_STATUS      = 0,
     WIFI_NO_SSID_AVAIL    = 1,
@@ -53,15 +54,15 @@ typedef enum
 typedef enum
 {
     NEED_PLUS = 0,
-    NEED_I ,
-    NEED_P ,
-    NEED_D ,
-    NEED_DOT ,
+    NEED_I,
+    NEED_P,
+    NEED_D,
+    NEED_DOT,
     NEED_ID_DATA,
     NEED_LEN_DATA,
-    NEED_COLON ,
-    NEED_USER_DATA ,
-    STATE_ERROR ,
+    NEED_COLON,
+    NEED_USER_DATA,
+    STATE_ERROR,
 } NET_DATA_STATE_T;
 /**
  * Provide an easy-to-use way to manipulate ESP8266.
@@ -122,7 +123,7 @@ public:
     bool stop_TCPServer(void);
     bool start_Server(uint32_t port = 333);
     bool stop_Server(void);
-    
+
     bool ping(const char *host, char *msg);
     /////AT√¸¡Ó//////////////////////////////////////////////////////////////////////////////////////////////
 private:

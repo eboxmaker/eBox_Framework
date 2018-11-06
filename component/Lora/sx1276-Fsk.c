@@ -1,18 +1,18 @@
 /*
- * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND 
+ * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND
  * (2)TO ENABLE ACCESS TO CODING INFORMATION TO GUIDE AND FACILITATE CUSTOMER.
  * CONSEQUENTLY, SEMTECH SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT OR
  * CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE CONTENT
  * OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING INFORMATION
  * CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
- * 
+ *
  * Copyright (C) SEMTECH S.A.
  */
-/*! 
+/*!
  * \file       sx1276.c
  * \brief      SX1276 RF chip driver
  *
- * \version    2.0.0 
+ * \version    2.0.0
  * \date       May 6 2013
  * \author     Gregory Cristian
  *
@@ -34,7 +34,7 @@
 #include "sx1276-Fsk.h"
 
 // Default settings
-tFskSettings FskSettings = 
+tFskSettings FskSettings =
 {
     870000000,      // RFFrequency
     9600,           // Bitrate
@@ -43,14 +43,14 @@ tFskSettings FskSettings =
     100000,         // RxBw
     150000,         // RxBwAfc
     true,           // CrcOn
-    true,           // AfcOn    
+    true,           // AfcOn
     255             // PayloadLength (set payload size to the maximum for variable mode, else set the exact payload length)
 };
 
 /*!
  * SX1276 FSK registers variable
  */
-tSX1276* SX1276;
+tSX1276 *SX1276;
 
 /*!
  * Local RF buffer for communication support
@@ -58,7 +58,7 @@ tSX1276* SX1276;
 static uint8_t RFBuffer[RF_BUFFER_SIZE];
 
 /*!
- * Chunk size of data write in buffer 
+ * Chunk size of data write in buffer
  */
 static uint8_t DataChunkSize = 32;
 
@@ -114,7 +114,7 @@ void SX1276FskInit( void )
     RFState = RF_STATE_IDLE;
 
     SX1276FskSetDefaults( );
-    
+
     SX1276ReadBuffer( REG_OPMODE, SX1276Regs + 1, 0x70 - 1 );
 
     // Set the device in FSK mode and Sleep Mode
@@ -139,7 +139,7 @@ void SX1276FskInit( void )
     }
 
     SX1276->RegPreambleLsb = 8;
-    
+
     SX1276->RegPreambleDetect = RF_PREAMBLEDETECT_DETECTOR_ON | RF_PREAMBLEDETECT_DETECTORSIZE_2 |
                                 RF_PREAMBLEDETECT_DETECTORTOL_10;
 
@@ -164,7 +164,7 @@ void SX1276FskInit( void )
     // we can now update the registers with our configuration
     SX1276WriteBuffer( REG_OPMODE, SX1276Regs + 1, 0x70 - 1 );
 
-    // then we need to set the RF settings 
+    // then we need to set the RF settings
     SX1276FskSetRFFrequency( FskSettings.RFFrequency );
     SX1276FskSetBitrate( FskSettings.Bitrate );
     SX1276FskSetFdev( FskSettings.Fdev );
@@ -187,7 +187,7 @@ void SX1276FskInit( void )
         SX1276FskSetPa20dBm( true );
         FskSettings.Power = 20;
         SX1276FskSetRFPower( FskSettings.Power );
-    } 
+    }
 #elif( MODULE_SX1276RF1JAS == 1 )
     if( FskSettings.RFFrequency > 860000000 )
     {
@@ -202,7 +202,7 @@ void SX1276FskInit( void )
         SX1276FskSetPa20dBm( false );
         FskSettings.Power = 14;
         SX1276FskSetRFPower( FskSettings.Power );
-    } 
+    }
 #endif
 
     SX1276FskSetOpMode( RF_OPMODE_STANDBY );
@@ -243,14 +243,14 @@ void SX1276FskSetOpMode( uint8_t opMode )
         }
         SX1276->RegOpMode = ( SX1276->RegOpMode & RF_OPMODE_MASK ) | opMode;
 
-        SX1276Write( REG_OPMODE, SX1276->RegOpMode );        
+        SX1276Write( REG_OPMODE, SX1276->RegOpMode );
     }
 }
 
 uint8_t SX1276FskGetOpMode( void )
 {
     SX1276Read( REG_OPMODE, &SX1276->RegOpMode );
-    
+
     return SX1276->RegOpMode & ~RF_OPMODE_MASK;
 }
 
@@ -310,7 +310,7 @@ void SX1276FskGetRxPacket( void *buffer, uint16_t *size )
 void SX1276FskSetTxPacket( const void *buffer, uint16_t size )
 {
     TxPacketSize = size;
-    memcpy( ( void * )RFBuffer, buffer, ( size_t )TxPacketSize ); 
+    memcpy( ( void * )RFBuffer, buffer, ( size_t )TxPacketSize );
 
     RFState = RF_STATE_TX_INIT;
 }
@@ -329,7 +329,7 @@ uint16_t SX1276FskGetPacketPayloadSize( void )
     addressSize = ( ( SX1276->RegPacketConfig1 & 0x06 ) != 0x00 ) ? 1 : 0;
     payloadSize = SX1276->RegPayloadLength;
     crcSize = ( ( SX1276->RegPacketConfig1 & 0x10 ) == 0x10 ) ? 2 : 0;
-    
+
     return syncSize + variableSize + addressSize + payloadSize + crcSize;
 }
 
@@ -341,7 +341,7 @@ uint16_t SX1276FskGetPacketHeaderSize( void )
 
     preambleSize = ( ( uint16_t )SX1276->RegPreambleMsb << 8 ) | ( uint16_t )SX1276->RegPreambleLsb;
     syncSize = ( SX1276->RegSyncConfig & 0x07 ) + 1;
-    
+
     return preambleSize + syncSize;
 }
 
@@ -381,7 +381,7 @@ uint32_t SX1276FskProcess( void )
         SX1276WriteBuffer( REG_DIOMAPPING1, &SX1276->RegDioMapping1, 2 );
 
         SX1276FskSetOpMode( RF_OPMODE_RECEIVER );
-    
+
         memset( RFBuffer, 0, ( size_t )RF_BUFFER_SIZE );
 
         PacketTimeout = ( uint16_t )( round( ( 8.0 * ( ( double )SX1276FskGetPacketPayloadSize( ) ) / ( double )FskSettings.Bitrate ) * 1000.0 ) + 1.0 );
@@ -410,12 +410,12 @@ uint32_t SX1276FskProcess( void )
         if( ( DIO2 == 1 ) && ( PreambleDetected == true ) && ( SyncWordDetected == false ) ) // SyncAddr
         {
             SyncWordDetected = true;
-        
+
             RxPacketRssiValue = SX1276FskReadRssi( );
 
             RxPacketAfcValue = SX1276FskReadAfc( );
             RxGain = SX1276FskReadRxGain( );
-        
+
             Preamble2SyncTimer = RxTimeoutTimer = GET_TICK_COUNT( );
 
             RFState = RF_STATE_RX_RUNNING;
@@ -428,9 +428,9 @@ uint32_t SX1276FskProcess( void )
             SX1276Write( REG_RXCONFIG, SX1276->RegRxConfig | RF_RXCONFIG_RESTARTRXWITHPLLLOCK );
         }
         if( ( SyncWordDetected == false ) &&
-            ( PreambleDetected == false ) &&
-            ( PacketDetected == false ) &&
-            ( ( GET_TICK_COUNT( ) - RxTimeoutTimer ) > PacketTimeout ) )
+                ( PreambleDetected == false ) &&
+                ( PacketDetected == false ) &&
+                ( ( GET_TICK_COUNT( ) - RxTimeoutTimer ) > PacketTimeout ) )
         {
             RFState = RF_STATE_RX_TIMEOUT;
         }
@@ -448,7 +448,7 @@ uint32_t SX1276FskProcess( void )
             {
                 if( ( SX1276->RegPacketConfig1 & RF_PACKETCONFIG1_PACKETFORMAT_VARIABLE ) == RF_PACKETCONFIG1_PACKETFORMAT_VARIABLE )
                 {
-                    SX1276ReadFifo( ( uint8_t* )&RxPacketSize, 1 );
+                    SX1276ReadFifo( ( uint8_t * )&RxPacketSize, 1 );
                 }
                 else
                 {
@@ -475,7 +475,7 @@ uint32_t SX1276FskProcess( void )
             {
                 if( ( SX1276->RegPacketConfig1 & RF_PACKETCONFIG1_PACKETFORMAT_VARIABLE ) == RF_PACKETCONFIG1_PACKETFORMAT_VARIABLE )
                 {
-                    SX1276ReadFifo( ( uint8_t* )&RxPacketSize, 1 );
+                    SX1276ReadFifo( ( uint8_t * )&RxPacketSize, 1 );
                 }
                 else
                 {
@@ -494,7 +494,7 @@ uint32_t SX1276FskProcess( void )
                 RFState = RF_STATE_RX_DONE;
             }
         }
-        
+
         // Packet timeout
         if( ( PacketDetected == false ) && ( ( GET_TICK_COUNT( ) - RxTimeoutTimer ) > PacketTimeout ) )
         {
@@ -541,9 +541,9 @@ uint32_t SX1276FskProcess( void )
         {
             if( ( SX1276->RegPacketConfig1 & RF_PACKETCONFIG1_PACKETFORMAT_VARIABLE ) == RF_PACKETCONFIG1_PACKETFORMAT_VARIABLE )
             {
-                SX1276WriteFifo( ( uint8_t* )&TxPacketSize, 1 );
+                SX1276WriteFifo( ( uint8_t * )&TxPacketSize, 1 );
             }
-            
+
             if( ( TxPacketSize > 0 ) && ( TxPacketSize <= 64 ) )
             {
                 DataChunkSize = TxPacketSize;
@@ -552,7 +552,7 @@ uint32_t SX1276FskProcess( void )
             {
                 DataChunkSize = 32;
             }
-            
+
             SX1276WriteFifo( RFBuffer, DataChunkSize );
             TxBytesSent += DataChunkSize;
             TxTimeoutTimer = GET_TICK_COUNT( );
@@ -562,13 +562,13 @@ uint32_t SX1276FskProcess( void )
 
     case RF_STATE_TX_RUNNING:
         if( DIO1 == 0 )    // FifoLevel below thresold
-        {  
+        {
             if( ( TxPacketSize - TxBytesSent ) > DataChunkSize )
             {
                 SX1276WriteFifo( ( RFBuffer + TxBytesSent ), DataChunkSize );
                 TxBytesSent += DataChunkSize;
             }
-            else 
+            else
             {
                 // we write the last chunk of data
                 SX1276WriteFifo( RFBuffer + TxBytesSent, TxPacketSize - TxBytesSent );
@@ -582,7 +582,7 @@ uint32_t SX1276FskProcess( void )
             RFState = RF_STATE_TX_DONE;
             SX1276FskSetOpMode( RF_OPMODE_STANDBY );
         }
-         
+
         // Packet timeout
         if( ( GET_TICK_COUNT( ) - TxTimeoutTimer ) > TICK_RATE_MS( 1000 ) )
         {

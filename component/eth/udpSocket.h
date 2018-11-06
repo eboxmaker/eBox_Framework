@@ -13,7 +13,7 @@ public:
      *
      * @param ether The Ethernet interface to attach the socket to
      */
-    UDPSocket(Ether &ether){};
+    UDPSocket(Ether &ether) {};
 };
 
 #endif

@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -31,7 +31,7 @@ void OSD::begin()
         spi_dev_max7456.dev_num = spi->get_new_dev_num();
         spi_dev_max7456.mode = SPI_MODE0;
         spi_dev_max7456.prescaler = SPI_CLOCK_DIV128;
-        spi_dev_max7456.bit_order = MSB_FIRST;    
+        spi_dev_max7456.bit_order = MSB_FIRST;
     }
 
     spi->begin(&spi_dev_max7456);
@@ -290,7 +290,7 @@ OSD::write(uint8_t c)
 void OSD::printf(const char *fmt, ...)
 {
     char buf[32];
-    uint8_t i=0;
+    uint8_t i = 0;
     va_list va_params;
     va_start(va_params, fmt);
     ebox_vsprintf(buf, fmt, va_params);
@@ -332,7 +332,7 @@ OSD::control(uint8_t ctrl)
 void
 OSD::write_NVM(int font_count, uint8_t *character_bitmap)
 {
-    uint8_t x,ret;
+    uint8_t x, ret;
     uint8_t char_address_hi;
     //uint8_t char_address_lo;
     uint8_t screen_char;
@@ -365,17 +365,17 @@ OSD::write_NVM(int font_count, uint8_t *character_bitmap)
     spi->write(WRITE_nvr);
 
     // wait until bit 5 in the status register returns to 0 (12ms)
-  //while (( spi->write(MAX7456_STAT_reg_read) & STATUS_reg_nvr_busy) != 0x00);
- 
-		while(1)
-		{
-			spi->write(MAX7456_STAT_reg_read);
-			ret = spi->read();
-			if((ret & STATUS_reg_nvr_busy) ==0)
-			{
-				break;
-			}	
-		}
+    //while (( spi->write(MAX7456_STAT_reg_read) & STATUS_reg_nvr_busy) != 0x00);
+
+    while(1)
+    {
+        spi->write(MAX7456_STAT_reg_read);
+        ret = spi->read();
+        if((ret & STATUS_reg_nvr_busy) == 0)
+        {
+            break;
+        }
+    }
 
     spi->write(MAX7456_VM0_reg); // turn on screen next vertical
     spi->write(MAX7456_ENABLE_display_vert);

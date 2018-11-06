@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -51,33 +51,33 @@
 
 class FM25V
 {
-	public:
-		FM25V(Gpio *cs,Spi *spi)
-		{
-			this->cs  = cs;
-			this->spi = spi;
-		}
-		void begin();//
-		void read_id(uint16_t *id); //
-		void read(uint8_t *buf,uint32_t read_addr,uint16_t num_to_read);// 
-		void fast_read(uint8_t *buf,uint32_t read_addr,uint16_t num_to_read);//
-		void write(uint8_t *buf,uint32_t write_addr,uint16_t num_to_write);
+public:
+    FM25V(Gpio *cs, Spi *spi)
+    {
+        this->cs  = cs;
+        this->spi = spi;
+    }
+    void begin();//
+    void read_id(uint16_t *id); //
+    void read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read); //
+    void fast_read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read); //
+    void write(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
 
-	private:
-		uint8_t     spi_flash_buf[1024];
-		SpiConfig_t spi_dev_FM25V;
-		Gpio        *cs;
-		Spi         *spi;
-        uint8_t     initialized;
+private:
+    uint8_t     spi_flash_buf[1024];
+    SpiConfig_t spi_dev_FM25V;
+    Gpio        *cs;
+    Spi         *spi;
+    uint8_t     initialized;
 
-		uint8_t   readSR(void);  //
-		void _waitBusy(void);//
-		void powerDown(void);//	
-		void wakeUp(void);   //
-		void writeSR(uint8_t sr);//
-		void writeEnable(void);//
-		void writeDisable(void); //
-	
+    uint8_t   readSR(void);  //
+    void _waitBusy(void);//
+    void powerDown(void);//
+    void wakeUp(void);   //
+    void writeSR(uint8_t sr);//
+    void writeEnable(void);//
+    void writeDisable(void); //
+
 
 };
 

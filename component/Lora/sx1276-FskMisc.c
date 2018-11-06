@@ -1,14 +1,14 @@
 /*
- * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND 
+ * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND
  * (2)TO ENABLE ACCESS TO CODING INFORMATION TO GUIDE AND FACILITATE CUSTOMER.
  * CONSEQUENTLY, SEMTECH SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT OR
  * CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE CONTENT
  * OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING INFORMATION
  * CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
- * 
+ *
  * Copyright (C) SEMTECH S.A.
  */
-/*! 
+/*!
  * \file       sx1276-FskMisc.c
  * \brief      SX1276 RF chip high level functions driver
  *
@@ -20,7 +20,7 @@
  *             Removing these functions will greatly reduce the final firmware
  *             size.
  *
- * \version    2.0.0 
+ * \version    2.0.0
  * \date       May 6 2013
  * \author     Gregory Cristian
  *
@@ -78,7 +78,7 @@ void SX1276FskRxCalibrate( void )
     SX1276FskSetRFFrequency( 860000000 );
 
     // Rx chain re-calibration workaround
-    SX1276Read( REG_IMAGECAL, &SX1276->RegImageCal );    
+    SX1276Read( REG_IMAGECAL, &SX1276->RegImageCal );
     SX1276->RegImageCal = ( SX1276->RegImageCal & RF_IMAGECAL_IMAGECAL_MASK ) | RF_IMAGECAL_IMAGECAL_START;
     SX1276Write( REG_IMAGECAL, SX1276->RegImageCal );
 
@@ -100,11 +100,11 @@ void SX1276FskRxCalibrate( void )
 void SX1276FskSetBitrate( uint32_t bitrate )
 {
     FskSettings.Bitrate = bitrate;
-    
+
     bitrate = ( uint16_t )( ( double )XTAL_FREQ / ( double )bitrate );
     SX1276->RegBitrateMsb    = ( uint8_t )( bitrate >> 8 );
     SX1276->RegBitrateLsb    = ( uint8_t )( bitrate & 0xFF );
-    SX1276WriteBuffer( REG_BITRATEMSB, &SX1276->RegBitrateMsb, 2 );    
+    SX1276WriteBuffer( REG_BITRATEMSB, &SX1276->RegBitrateMsb, 2 );
 }
 
 uint32_t SX1276FskGetBitrate( void )
@@ -120,12 +120,12 @@ void SX1276FskSetFdev( uint32_t fdev )
 {
     FskSettings.Fdev = fdev;
 
-    SX1276Read( REG_FDEVMSB, &SX1276->RegFdevMsb ); 
+    SX1276Read( REG_FDEVMSB, &SX1276->RegFdevMsb );
 
     fdev = ( uint16_t )( ( double )fdev / ( double )FREQ_STEP );
     SX1276->RegFdevMsb    = ( ( SX1276->RegFdevMsb & RF_FDEVMSB_FDEV_MASK ) | ( ( ( uint8_t )( fdev >> 8 ) ) & ~RF_FDEVMSB_FDEV_MASK ) );
     SX1276->RegFdevLsb    = ( uint8_t )( fdev & 0xFF );
-    SX1276WriteBuffer( REG_FDEVMSB, &SX1276->RegFdevMsb, 2 );    
+    SX1276WriteBuffer( REG_FDEVMSB, &SX1276->RegFdevMsb, 2 );
 }
 
 uint32_t SX1276FskGetFdev( void )
@@ -141,7 +141,7 @@ void SX1276FskSetRFPower( int8_t power )
 {
     SX1276Read( REG_PACONFIG, &SX1276->RegPaConfig );
     SX1276Read( REG_PADAC, &SX1276->RegPaDac );
-    
+
     if( ( SX1276->RegPaConfig & RF_PACONFIG_PASELECT_PABOOST ) == RF_PACONFIG_PASELECT_PABOOST )
     {
         if( ( SX1276->RegPaDac & 0x87 ) == 0x87 )
@@ -238,7 +238,7 @@ static uint32_t SX1276FskComputeRxBw( uint8_t mantisse, uint8_t exponent )
  * \param [OUT] mantisse Mantisse of the bandwidth value
  * \param [OUT] exponent Exponent of the bandwidth value
  */
-static void SX1276FskComputeRxBwMantExp( uint32_t rxBwValue, uint8_t* mantisse, uint8_t* exponent )
+static void SX1276FskComputeRxBwMantExp( uint32_t rxBwValue, uint8_t *mantisse, uint8_t *exponent )
 {
     uint8_t tmpExp = 0;
     uint8_t tmpMant = 0;
@@ -268,11 +268,11 @@ static void SX1276FskComputeRxBwMantExp( uint32_t rxBwValue, uint8_t* mantisse, 
     }
 }
 
-void SX1276FskSetDccBw( uint8_t* reg, uint32_t dccValue, uint32_t rxBwValue )
+void SX1276FskSetDccBw( uint8_t *reg, uint32_t dccValue, uint32_t rxBwValue )
 {
     uint8_t mantisse = 0;
     uint8_t exponent = 0;
-    
+
     if( reg == &SX1276->RegRxBw )
     {
         *reg = ( uint8_t )dccValue & 0x60;
@@ -286,18 +286,18 @@ void SX1276FskSetDccBw( uint8_t* reg, uint32_t dccValue, uint32_t rxBwValue )
 
     switch( mantisse )
     {
-        case 16:
-            *reg |= ( uint8_t )( 0x00 | ( exponent & 0x07 ) );
-            break;
-        case 20:
-            *reg |= ( uint8_t )( 0x08 | ( exponent & 0x07 ) );
-            break;
-        case 24:
-            *reg |= ( uint8_t )( 0x10 | ( exponent & 0x07 ) );
-            break;
-        default:
-            // Something went terribely wrong
-            break;
+    case 16:
+        *reg |= ( uint8_t )( 0x00 | ( exponent & 0x07 ) );
+        break;
+    case 20:
+        *reg |= ( uint8_t )( 0x08 | ( exponent & 0x07 ) );
+        break;
+    case 24:
+        *reg |= ( uint8_t )( 0x10 | ( exponent & 0x07 ) );
+        break;
+    default:
+        // Something went terribely wrong
+        break;
     }
 
     if( reg == &SX1276->RegRxBw )
@@ -312,25 +312,25 @@ void SX1276FskSetDccBw( uint8_t* reg, uint32_t dccValue, uint32_t rxBwValue )
     }
 }
 
-uint32_t SX1276FskGetBw( uint8_t* reg )
+uint32_t SX1276FskGetBw( uint8_t *reg )
 {
     uint32_t rxBwValue = 0;
     uint8_t mantisse = 0;
     switch( ( *reg & 0x18 ) >> 3 )
     {
-        case 0:
-            mantisse = 16;
-            break;
-        case 1:
-            mantisse = 20;
-            break;
-        case 2:
-            mantisse = 24;
-            break;
-        default:
-            break;
+    case 0:
+        mantisse = 16;
+        break;
+    case 1:
+        mantisse = 20;
+        break;
+    case 2:
+        mantisse = 24;
+        break;
+    default:
+        break;
     }
-    rxBwValue = SX1276FskComputeRxBw( mantisse, ( uint8_t )*reg & 0x07 );
+    rxBwValue = SX1276FskComputeRxBw( mantisse, ( uint8_t ) * reg & 0x07 );
     if( reg == &SX1276->RegRxBw )
     {
         return FskSettings.RxBw = rxBwValue;
@@ -391,7 +391,7 @@ void SX1276FskSetPa20dBm( bool enale )
     SX1276Read( REG_PACONFIG, &SX1276->RegPaConfig );
 
     if( ( SX1276->RegPaConfig & RF_PACONFIG_PASELECT_PABOOST ) == RF_PACONFIG_PASELECT_PABOOST )
-    {    
+    {
         if( enale == true )
         {
             SX1276->RegPaDac = 0x87;
@@ -407,7 +407,7 @@ void SX1276FskSetPa20dBm( bool enale )
 bool SX1276FskGetPa20dBm( void )
 {
     SX1276Read( REG_PADAC, &SX1276->RegPaDac );
-    
+
     return ( ( SX1276->RegPaDac & 0x07 ) == 0x07 ) ? true : false;
 }
 
@@ -454,15 +454,15 @@ void SX1276FskSetRssiOffset( int8_t offset )
 int8_t SX1276FskGetRssiOffset( void )
 {
     //需要全部打开shentq
-//    SX1276Read( REG_RSSICONFIG, &SX1276->RegRssiConfig );
-//    int8_t offset = SX1276->RegRssiConfig >> 3;
-//    if( ( offset & 0x10 ) == 0x10 )
-//    {
-//        offset = ( ~offset & 0x1F );
-//        offset += 1;
-//        offset = -offset;
-//    }
-//    return offset;
+    //    SX1276Read( REG_RSSICONFIG, &SX1276->RegRssiConfig );
+    //    int8_t offset = SX1276->RegRssiConfig >> 3;
+    //    if( ( offset & 0x10 ) == 0x10 )
+    //    {
+    //        offset = ( ~offset & 0x1F );
+    //        offset += 1;
+    //        offset = -offset;
+    //    }
+    //    return offset;
 }
 
 int8_t SX1276FskGetRawTemp( void )
@@ -470,7 +470,7 @@ int8_t SX1276FskGetRawTemp( void )
     int8_t temp = 0;
     uint8_t previousOpMode;
     uint32_t startTick;
-    
+
     // Enable Temperature reading
     SX1276Read( REG_IMAGECAL, &SX1276->RegImageCal );
     SX1276->RegImageCal = ( SX1276->RegImageCal & RF_IMAGECAL_TEMPMONITOR_MASK ) | RF_IMAGECAL_TEMPMONITOR_ON;
@@ -486,7 +486,7 @@ int8_t SX1276FskGetRawTemp( void )
 
     // Wait 1ms
     startTick = GET_TICK_COUNT( );
-    while( ( GET_TICK_COUNT( ) - startTick ) < TICK_RATE_MS( 1 ) );  
+    while( ( GET_TICK_COUNT( ) - startTick ) < TICK_RATE_MS( 1 ) );
 
     // Disable Temperature reading
     SX1276Read( REG_IMAGECAL, &SX1276->RegImageCal );
@@ -495,9 +495,9 @@ int8_t SX1276FskGetRawTemp( void )
 
     // Read temperature
     SX1276Read( REG_TEMP, &SX1276->RegTemp );
-    
+
     temp = SX1276->RegTemp & 0x7F;
-    
+
     if( ( SX1276->RegTemp & 0x80 ) == 0x80 )
     {
         temp *= -1;

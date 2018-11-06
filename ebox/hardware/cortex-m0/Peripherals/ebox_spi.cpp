@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -34,7 +34,7 @@
 mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 {
     _busy = 0;
-	_spi = SPIx;
+    _spi = SPIx;
     _sck = sck;
     _miso = miso;
     _mosi = mosi;
@@ -43,15 +43,15 @@ mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 void mcuSpi::begin(SpiConfig_t *spi_config)
 {
     uint8_t index = 0;
-    
-    index = getIndex(_sck->id,SPI_MAP);
-	_sck->mode(SPI_MAP[index]._pinMode,SPI_MAP[index]._pinAf);
-	index = getIndex(_miso->id,SPI_MAP);
-	_miso->mode(SPI_MAP[index]._pinMode,SPI_MAP[index]._pinAf);
-	index = getIndex(_mosi->id,SPI_MAP);
-	_mosi->mode(SPI_MAP[index]._pinMode,SPI_MAP[index]._pinAf);
 
-    rcc_clock_cmd((uint32_t)_spi,ENABLE);
+    index = getIndex(_sck->id, SPI_MAP);
+    _sck->mode(SPI_MAP[index]._pinMode, SPI_MAP[index]._pinAf);
+    index = getIndex(_miso->id, SPI_MAP);
+    _miso->mode(SPI_MAP[index]._pinMode, SPI_MAP[index]._pinAf);
+    index = getIndex(_mosi->id, SPI_MAP);
+    _mosi->mode(SPI_MAP[index]._pinMode, SPI_MAP[index]._pinAf);
+
+    rcc_clock_cmd((uint32_t)_spi, ENABLE);
     config(spi_config);
 }
 
@@ -60,7 +60,7 @@ void mcuSpi::begin(SpiConfig_t *spi_config)
 void mcuSpi::config(SpiConfig_t *spi_config)
 {
     current_dev_num = spi_config->dev_num;
-    SPI_DEBUG("dev num 0x%x \r\n",current_dev_num);
+    SPI_DEBUG("dev num 0x%x \r\n", current_dev_num);
     LL_SPI_Disable(_spi);
 
     switch (spi_config->mode)
@@ -84,27 +84,36 @@ void mcuSpi::config(SpiConfig_t *spi_config)
     default:
         break;
     }
-    
+
     switch(spi_config->prescaler)
     {
-        case SPI_CLOCK_DIV2:
-            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV2;break;
-        case SPI_CLOCK_DIV4:
-            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV2;break;
-        case SPI_CLOCK_DIV8:
-            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV4;break;
-        case SPI_CLOCK_DIV16:
-            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV8;break;
-        case SPI_CLOCK_DIV32:
-            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV16;break;
-        case SPI_CLOCK_DIV64:
-            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV32;break;
-        case SPI_CLOCK_DIV128:
-            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV64;break;
-        case SPI_CLOCK_DIV256:
-            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV128;break;
-        default :
-            spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV256;break;
+    case SPI_CLOCK_DIV2:
+        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV2;
+        break;
+    case SPI_CLOCK_DIV4:
+        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV2;
+        break;
+    case SPI_CLOCK_DIV8:
+        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV4;
+        break;
+    case SPI_CLOCK_DIV16:
+        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV8;
+        break;
+    case SPI_CLOCK_DIV32:
+        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV16;
+        break;
+    case SPI_CLOCK_DIV64:
+        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV32;
+        break;
+    case SPI_CLOCK_DIV128:
+        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV64;
+        break;
+    case SPI_CLOCK_DIV256:
+        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV128;
+        break;
+    default :
+        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV256;
+        break;
 
     }
 
@@ -112,10 +121,10 @@ void mcuSpi::config(SpiConfig_t *spi_config)
     LL_SPI_SetBaudRatePrescaler(_spi, spi_config->prescaler);
     LL_SPI_SetTransferBitOrder(_spi, spi_config->bit_order);
 
-    LL_SPI_SetTransferDirection(_spi,LL_SPI_FULL_DUPLEX);
+    LL_SPI_SetTransferDirection(_spi, LL_SPI_FULL_DUPLEX);
     LL_SPI_SetDataWidth(_spi, LL_SPI_DATAWIDTH_8BIT);
     LL_SPI_SetNSSMode(_spi, LL_SPI_NSS_SOFT);
-	LL_SPI_SetRxFIFOThreshold(_spi, LL_SPI_RX_FIFO_TH_QUARTER);
+    LL_SPI_SetRxFIFOThreshold(_spi, LL_SPI_RX_FIFO_TH_QUARTER);
 
     LL_SPI_SetMode(_spi, LL_SPI_MODE_MASTER);
     LL_SPI_Enable(_spi);
@@ -139,9 +148,9 @@ uint8_t mcuSpi::read_config(void)
 uint8_t mcuSpi::transfer(uint8_t data)
 {
     while ((_spi->SR & LL_SPI_SR_TXE) == RESET);
-	*((__IO uint8_t *)&_spi->DR) = data;
-	while ((_spi->SR & LL_SPI_SR_RXNE) == RESET);
-	return (uint8_t)_spi->DR;
+    *((__IO uint8_t *)&_spi->DR) = data;
+    while ((_spi->SR & LL_SPI_SR_RXNE) == RESET);
+    return (uint8_t)_spi->DR;
 }
 /**
   *@brief    Ð´Êý¾Ý
@@ -160,14 +169,14 @@ int8_t mcuSpi::write(uint8_t data)
   */
 int8_t mcuSpi::write_buf(uint8_t *data, uint16_t data_length)
 {
-	__IO uint8_t dummyByte;
-	if (data_length == 0)
-		return -1;
-	while (data_length--)
-	{
+    __IO uint8_t dummyByte;
+    if (data_length == 0)
+        return -1;
+    while (data_length--)
+    {
         transfer(*data++);
-	}
-	return 0;
+    }
+    return 0;
 }
 
 uint8_t mcuSpi::read()
@@ -179,7 +188,7 @@ uint8_t mcuSpi::read()
 int8_t mcuSpi::read(uint8_t *recv_data)
 {
     *recv_data = transfer(0xff);
-	return 0;
+    return 0;
 }
 
 /**
@@ -189,13 +198,13 @@ int8_t mcuSpi::read(uint8_t *recv_data)
   */
 int8_t mcuSpi::read_buf(uint8_t *recv_data, uint16_t data_length)
 {
-	if (data_length == 0)
-		return -1;
-	while (data_length--)
-	{
+    if (data_length == 0)
+        return -1;
+    while (data_length--)
+    {
         *recv_data++ = transfer(0xff);
-	}
-	return 0;
+    }
+    return 0;
 }
 
 /**

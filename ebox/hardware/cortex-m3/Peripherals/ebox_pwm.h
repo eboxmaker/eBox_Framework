@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/11/04
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -36,13 +36,13 @@
             2.使用了相应的timx为pwm服务后，该tim就不能再初始化成另外的功能
             3.初始化pwm后，只有调用setDuty函数后才会输出pwm
             4.如果duty大于等于1000则输出持续高电平
-                
+
     定时器引脚对应列表
     通道 CH1  CH2  CH3  CH4
-    TIM1 PA8  PA9  PA10 PA11 
-    TIM2 PA0  PA1  PA2  PA3 
-    TIM3 PA6  PA7  PA0  PA1 
-    TIM4 PB6  PB7  PB8  PB9 
+    TIM1 PA8  PA9  PA10 PA11
+    TIM2 PA0  PA1  PA2  PA3
+    TIM3 PA6  PA7  PA0  PA1
+    TIM4 PB6  PB7  PB8  PB9
 */
 /**
  * Modification History:
@@ -74,7 +74,7 @@ public:
     uint32_t get_timer_source_clock();
     uint32_t get_max_frq();
     float    get_accuracy();
-		
+
     void enable_pin(void);
     void disable_pin(void);
 private:
@@ -88,7 +88,7 @@ private:
     void init_info(Gpio *pwm_pin);
     void base_init(uint16_t Period, uint16_t Prescaler);
     void _set_duty(uint16_t duty);
-//-------------------------------------------------------------
+    //-------------------------------------------------------------
 
 };
 void analog_write(Gpio *pwm_pin, uint16_t duty);

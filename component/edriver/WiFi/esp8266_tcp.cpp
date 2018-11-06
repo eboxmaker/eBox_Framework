@@ -29,7 +29,7 @@
 WIFI_TCP::WIFI_TCP(ESP8266 *wifi)
 {
     this->wifi = wifi;
-    
+
 }
 
 /**
@@ -120,13 +120,16 @@ uint16_t WIFI_TCP::read(uint8_t *buf)
 	* @retval >0 - read length.
 	* @retval 0 - failure.
 */
-uint16_t WIFI_TCP::read_until(uint8_t *buf,char ch)
+uint16_t WIFI_TCP::read_until(uint8_t *buf, char ch)
 {
     int len = 0;
-    while(1){
-        if(available()){
+    while(1)
+    {
+        if(available())
+        {
             buf[len] = wifi->read_one();
-            if(buf[len] == ch){
+            if(buf[len] == ch)
+            {
                 len++;
                 break;
             }

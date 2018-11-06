@@ -136,31 +136,33 @@
  * The following struct gives the addresses of procedures to call
  * for a particular lower link level protocol.
  */
-struct link_callbacks {
-  /* Start a connection (e.g. Initiate discovery phase) */
-  void (*connect) (ppp_pcb *pcb, void *ctx);
+struct link_callbacks
+{
+    /* Start a connection (e.g. Initiate discovery phase) */
+    void (*connect) (ppp_pcb *pcb, void *ctx);
 #if PPP_SERVER
-  /* Listen for an incoming connection (Passive mode) */
-  void (*listen) (ppp_pcb *pcb, void *ctx);
+    /* Listen for an incoming connection (Passive mode) */
+    void (*listen) (ppp_pcb *pcb, void *ctx);
 #endif /* PPP_SERVER */
-  /* End a connection (i.e. initiate disconnect phase) */
-  void (*disconnect) (ppp_pcb *pcb, void *ctx);
-  /* Free lower protocol control block */
-  err_t (*free) (ppp_pcb *pcb, void *ctx);
-  /* Write a pbuf to a ppp link, only used from PPP functions to send PPP packets. */
-  err_t (*write)(ppp_pcb *pcb, void *ctx, struct pbuf *p);
-  /* Send a packet from lwIP core (IPv4 or IPv6) */
-  err_t (*netif_output)(ppp_pcb *pcb, void *ctx, struct pbuf *p, u_short protocol);
-  /* configure the transmit-side characteristics of the PPP interface */
-  void (*send_config)(ppp_pcb *pcb, void *ctx, u32_t accm, int pcomp, int accomp);
-  /* confire the receive-side characteristics of the PPP interface */
-  void (*recv_config)(ppp_pcb *pcb, void *ctx, u32_t accm, int pcomp, int accomp);
+    /* End a connection (i.e. initiate disconnect phase) */
+    void (*disconnect) (ppp_pcb *pcb, void *ctx);
+    /* Free lower protocol control block */
+    err_t (*free) (ppp_pcb *pcb, void *ctx);
+    /* Write a pbuf to a ppp link, only used from PPP functions to send PPP packets. */
+    err_t (*write)(ppp_pcb *pcb, void *ctx, struct pbuf *p);
+    /* Send a packet from lwIP core (IPv4 or IPv6) */
+    err_t (*netif_output)(ppp_pcb *pcb, void *ctx, struct pbuf *p, u_short protocol);
+    /* configure the transmit-side characteristics of the PPP interface */
+    void (*send_config)(ppp_pcb *pcb, void *ctx, u32_t accm, int pcomp, int accomp);
+    /* confire the receive-side characteristics of the PPP interface */
+    void (*recv_config)(ppp_pcb *pcb, void *ctx, u32_t accm, int pcomp, int accomp);
 };
 
 /*
  * What to do with network protocol (NP) packets.
  */
-enum NPmode {
+enum NPmode
+{
     NPMODE_PASS,		/* pass the packet through */
     NPMODE_DROP,		/* silently drop the packet */
     NPMODE_ERROR,		/* return an error */
@@ -171,7 +173,8 @@ enum NPmode {
  * Statistics.
  */
 #if PPP_STATS_SUPPORT
-struct pppstat	{
+struct pppstat
+{
     unsigned int ppp_ibytes;	/* bytes received */
     unsigned int ppp_ipackets;	/* packets received */
     unsigned int ppp_ierrors;	/* receive errors */
@@ -181,7 +184,8 @@ struct pppstat	{
 };
 
 #if VJ_SUPPORT
-struct vjstat {
+struct vjstat
+{
     unsigned int vjs_packets;	/* outbound packets */
     unsigned int vjs_compressed; /* outbound compressed packets */
     unsigned int vjs_searches;	/* searches for connection state */
@@ -193,7 +197,8 @@ struct vjstat {
 };
 #endif /* VJ_SUPPORT */
 
-struct ppp_stats {
+struct ppp_stats
+{
     struct pppstat p;		/* basic PPP statistics */
 #if VJ_SUPPORT
     struct vjstat vj;		/* VJ header compression statistics */
@@ -201,7 +206,8 @@ struct ppp_stats {
 };
 
 #if CCP_SUPPORT
-struct compstat {
+struct compstat
+{
     unsigned int unc_bytes;	/* total uncompressed bytes */
     unsigned int unc_packets;	/* total uncompressed packets */
     unsigned int comp_bytes;	/* compressed bytes */
@@ -211,7 +217,8 @@ struct compstat {
     unsigned int ratio;		/* recent compression ratio << 8 */
 };
 
-struct ppp_comp_stats {
+struct ppp_comp_stats
+{
     struct compstat c;		/* packet compression statistics */
     struct compstat d;		/* packet decompression statistics */
 };
@@ -224,7 +231,8 @@ struct ppp_comp_stats {
  * The following structure records the time in seconds since
  * the last NP packet was sent or received.
  */
-struct ppp_idle {
+struct ppp_idle
+{
     time_t xmit_idle;		/* time since last NP packet sent */
     time_t recv_idle;		/* time since last NP packet received */
 };
@@ -274,7 +282,8 @@ extern int       maxoctets_timeout;  /* Timeout for check of octets limit */
  * The following struct gives the addresses of procedures to call
  * for a particular protocol.
  */
-struct protent {
+struct protent
+{
     u_short protocol;		/* PPP protocol number */
     /* Initialization procedure */
     void (*init) (ppp_pcb *pcb);
@@ -293,8 +302,8 @@ struct protent {
 #if PRINTPKT_SUPPORT
     /* Print a packet in readable form */
     int  (*printpkt) (const u_char *pkt, int len,
-			  void (*printer) (void *, const char *, ...),
-			  void *arg);
+                      void (*printer) (void *, const char *, ...),
+                      void *arg);
 #endif /* PRINTPKT_SUPPORT */
 #if PPP_DATAINPUT
     /* Process a received data packet */
@@ -318,7 +327,7 @@ struct protent {
 };
 
 /* Table of pointers to supported protocols */
-extern const struct protent* const protocols[];
+extern const struct protent *const protocols[];
 
 
 /* Values for auth_pending, auth_done */
@@ -365,7 +374,8 @@ extern const struct protent* const protocols[];
 /*
  * PPP statistics structure
  */
-struct pppd_stats {
+struct pppd_stats
+{
     unsigned int	bytes_in;
     unsigned int	bytes_out;
     unsigned int	pkts_in;
@@ -378,7 +388,7 @@ struct pppd_stats {
  * PPP private functions
  */
 
- 
+
 /*
  * Functions called from lwIP core.
  */
@@ -480,7 +490,7 @@ int get_loop_output(void);
 
 /* Optional protocol names list, to make our messages a little more informative. */
 #if PPP_PROTOCOLNAME
-const char * protocol_name(int proto);
+const char *protocol_name(int proto);
 #endif /* PPP_PROTOCOLNAME  */
 
 /* Optional stats support, to get some statistics on the PPP interface */
@@ -559,23 +569,23 @@ void continue_networks(ppp_pcb *pcb); /* start network [ip, etc] control protos 
 #if PPP_AUTH_SUPPORT
 #if PPP_SERVER
 int auth_check_passwd(ppp_pcb *pcb, char *auser, int userlen, char *apasswd, int passwdlen, const char **msg, int *msglen);
-                                /* check the user name and passwd against configuration */
+/* check the user name and passwd against configuration */
 void auth_peer_fail(ppp_pcb *pcb, int protocol);
-				/* peer failed to authenticate itself */
+/* peer failed to authenticate itself */
 void auth_peer_success(ppp_pcb *pcb, int protocol, int prot_flavor, const char *name, int namelen);
-				/* peer successfully authenticated itself */
+/* peer successfully authenticated itself */
 #endif /* PPP_SERVER */
 void auth_withpeer_fail(ppp_pcb *pcb, int protocol);
-				/* we failed to authenticate ourselves */
+/* we failed to authenticate ourselves */
 void auth_withpeer_success(ppp_pcb *pcb, int protocol, int prot_flavor);
-				/* we successfully authenticated ourselves */
+/* we successfully authenticated ourselves */
 #endif /* PPP_AUTH_SUPPORT */
 void np_up(ppp_pcb *pcb, int proto);    /* a network protocol has come up */
 void np_down(ppp_pcb *pcb, int proto);  /* a network protocol has gone down */
 void np_finished(ppp_pcb *pcb, int proto); /* a network protocol no longer needs link */
 #if PPP_AUTH_SUPPORT
 int get_secret(ppp_pcb *pcb, const char *client, const char *server, char *secret, int *secret_len, int am_server);
-				/* get "secret" for chap */
+/* get "secret" for chap */
 #endif /* PPP_AUTH_SUPPORT */
 
 /* Procedures exported from ipcp.c */
@@ -621,7 +631,7 @@ void ppp_error(const char *fmt, ...);     /* log an error message */
 void ppp_fatal(const char *fmt, ...);     /* log an error message and die(1) */
 #if PRINTPKT_SUPPORT
 void ppp_dump_packet(ppp_pcb *pcb, const char *tag, unsigned char *p, int len);
-                                /* dump packet to debug log if interesting */
+/* dump packet to debug log if interesting */
 #endif /* PRINTPKT_SUPPORT */
 
 

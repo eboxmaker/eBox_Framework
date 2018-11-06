@@ -1,13 +1,13 @@
-/*************************************************** 
+/***************************************************
   This is a library for the MCP23017 i2c port expander
 
-  These displays use I2C to communicate, 2 pins are required to  
+  These displays use I2C to communicate, 2 pins are required to
   interface
-  Adafruit invests time and resources providing this open source code, 
-  please support Adafruit and open-source hardware by purchasing 
+  Adafruit invests time and resources providing this open source code,
+  please support Adafruit and open-source hardware by purchasing
   products from Adafruit!
 
-  Written by Limor Fried/Ladyada for Adafruit Industries.  
+  Written by Limor Fried/Ladyada for Adafruit Industries.
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
@@ -18,46 +18,47 @@
 #include "ebox_i2c.h"
 
 
-class MCP23017 {
+class MCP23017
+{
 public:
     MCP23017(SoftI2c *i2c)
     {
         this->i2c = i2c;
         speed = 400000;
     };
-  void begin(uint32_t speed,uint8_t addr);
-  void begin(void);
+    void begin(uint32_t speed, uint8_t addr);
+    void begin(void);
 
-  void pinMode(uint8_t p, uint8_t d);
-  void digitalWrite(uint8_t p, uint8_t d);
-  void pullUp(uint8_t p, uint8_t d);
-  uint8_t digitalRead(uint8_t p);
+    void pinMode(uint8_t p, uint8_t d);
+    void digitalWrite(uint8_t p, uint8_t d);
+    void pullUp(uint8_t p, uint8_t d);
+    uint8_t digitalRead(uint8_t p);
 
-  void writeGPIOAB(uint16_t);
-  uint16_t readGPIOAB();
-  uint8_t readGPIO(uint8_t b);
+    void writeGPIOAB(uint16_t);
+    uint16_t readGPIOAB();
+    uint8_t readGPIO(uint8_t b);
 
-  void setupInterrupts(uint8_t mirroring, uint8_t open, uint8_t polarity);
-  void setupInterruptPin(uint8_t p, uint8_t mode);
-  uint8_t getLastInterruptPin();
-  uint8_t getLastInterruptPinValue();
+    void setupInterrupts(uint8_t mirroring, uint8_t open, uint8_t polarity);
+    void setupInterruptPin(uint8_t p, uint8_t mode);
+    uint8_t getLastInterruptPin();
+    uint8_t getLastInterruptPinValue();
 
- private:
+private:
     uint8_t i2caddr;
     SoftI2c *i2c;
     uint32_t speed;
 
-  uint8_t bitForPin(uint8_t pin);
-  uint8_t regForPin(uint8_t pin, uint8_t portAaddr, uint8_t portBaddr);
+    uint8_t bitForPin(uint8_t pin);
+    uint8_t regForPin(uint8_t pin, uint8_t portAaddr, uint8_t portBaddr);
 
-  uint8_t readRegister(uint8_t addr);
-  void writeRegister(uint8_t addr, uint8_t value);
+    uint8_t readRegister(uint8_t addr);
+    void writeRegister(uint8_t addr, uint8_t value);
 
-  /**
-   * Utility private method to update a register associated with a pin (whether port A/B)
-   * reads its value, updates the particular bit, and writes its value.
-   */
-  void updateRegisterBit(uint8_t p, uint8_t pValue, uint8_t portAaddr, uint8_t portBaddr);
+    /**
+     * Utility private method to update a register associated with a pin (whether port A/B)
+     * reads its value, updates the particular bit, and writes its value.
+     */
+    void updateRegisterBit(uint8_t p, uint8_t pValue, uint8_t portAaddr, uint8_t portBaddr);
 
 };
 

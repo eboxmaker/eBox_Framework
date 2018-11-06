@@ -89,7 +89,8 @@ extern "C" {
 #endif /* LWIP_DNS_API_DEFINE_FLAGS */
 
 #if LWIP_DNS_API_DECLARE_STRUCTS
-struct hostent {
+struct hostent
+{
     char  *h_name;      /* Official name of the host. */
     char **h_aliases;   /* A pointer to an array of pointers to alternative host names,
                            terminated by a null pointer. */
@@ -100,7 +101,8 @@ struct hostent {
 #define h_addr h_addr_list[0] /* for backward compatibility */
 };
 
-struct addrinfo {
+struct addrinfo
+{
     int               ai_flags;      /* Input flags. */
     int               ai_family;     /* Address family of socket. */
     int               ai_socktype;   /* Socket type. */
@@ -121,12 +123,12 @@ extern int h_errno;
 
 struct hostent *lwip_gethostbyname(const char *name);
 int lwip_gethostbyname_r(const char *name, struct hostent *ret, char *buf,
-                size_t buflen, struct hostent **result, int *h_errnop);
+                         size_t buflen, struct hostent **result, int *h_errnop);
 void lwip_freeaddrinfo(struct addrinfo *ai);
 int lwip_getaddrinfo(const char *nodename,
-       const char *servname,
-       const struct addrinfo *hints,
-       struct addrinfo **res);
+                     const char *servname,
+                     const struct addrinfo *hints,
+                     struct addrinfo **res);
 
 #if LWIP_COMPAT_SOCKETS
 /** @ingroup netdbapi */

@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -37,7 +37,7 @@ void Iwdg::begin(uint16_t ms)
         pr = 5;
         rlr = 0xfff;
     }
-////    ebox_printf("pr:%d\trlr:%d",pr,rlr);
+    ////    ebox_printf("pr:%d\trlr:%d",pr,rlr);
     IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
     IWDG_SetPrescaler(pr);
     IWDG_SetReload(rlr);

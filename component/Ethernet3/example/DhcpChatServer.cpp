@@ -33,8 +33,9 @@ Copyright 2015 shentq. All Rights Reserved.
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network.
 // gateway and subnet are optional:
-uint8_t mac[] = {
-  0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02
+uint8_t mac[] =
+{
+    0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02
 };
 IPAddress ip(192, 168, 1, 177);
 IPAddress gateway(192, 168, 1, 1);
@@ -48,27 +49,29 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-    
-    
-  // start the Ethernet connection:
-  Serial.println("Trying to get an IP address using DHCP");
-  if (Ethernet.begin(mac) == 0) {
-    Serial.println("Failed to configure Ethernet using DHCP");
-    // initialize the ethernet device not using DHCP:
-    Ethernet.begin(mac, ip, subnet, gateway);
-  }
-  // print your local IP address:
-  Serial.print("My IP address: ");
-  ip = Ethernet.localIP();
-  for (uint8_t thisByte = 0; thisByte < 4; thisByte++) {
-    // print the value of each uint8_t of the IP address:
-    Serial.print(ip[thisByte], DEC);
-    Serial.print(".");
-  }
-  Serial.println();
-  // start listening for clients
-  server.begin();
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
+
+
+    // start the Ethernet connection:
+    Serial.println("Trying to get an IP address using DHCP");
+    if (Ethernet.begin(mac) == 0)
+    {
+        Serial.println("Failed to configure Ethernet using DHCP");
+        // initialize the ethernet device not using DHCP:
+        Ethernet.begin(mac, ip, subnet, gateway);
+    }
+    // print your local IP address:
+    Serial.print("My IP address: ");
+    ip = Ethernet.localIP();
+    for (uint8_t thisByte = 0; thisByte < 4; thisByte++)
+    {
+        // print the value of each uint8_t of the IP address:
+        Serial.print(ip[thisByte], DEC);
+        Serial.print(".");
+    }
+    Serial.println();
+    // start listening for clients
+    server.begin();
 }
 int main(void)
 {
@@ -76,27 +79,29 @@ int main(void)
 
     while(1)
     {
-  // wait for a new client:
-  EthernetClient client = server.available();
+        // wait for a new client:
+        EthernetClient client = server.available();
 
-  // when the client sends the first uint8_t, say hello:
-  if (client) {
-    if (!gotAMessage) {
-      Serial.println("We have a new client");
-      client.println("Hello, client!");
-      gotAMessage = true;
-    }
+        // when the client sends the first uint8_t, say hello:
+        if (client)
+        {
+            if (!gotAMessage)
+            {
+                Serial.println("We have a new client");
+                client.println("Hello, client!");
+                gotAMessage = true;
+            }
 
-    // read the bytes incoming from the client:
-    char thisChar = client.read();
-    // echo the bytes back to the client:
-    server.write(thisChar);
-    // echo the bytes to the server as well:
-    Serial.print(thisChar);
-  }
+            // read the bytes incoming from the client:
+            char thisChar = client.read();
+            // echo the bytes back to the client:
+            server.write(thisChar);
+            // echo the bytes to the server as well:
+            Serial.print(thisChar);
+        }
     }
 
 }
 
-   
+
 

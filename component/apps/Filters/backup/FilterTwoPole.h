@@ -2,11 +2,12 @@
 #define FilterTwoPole_h
 #include "ebox.h"
 
-enum OSCILLATOR_TYPE {
-  LOWPASS_BESSEL,
-  //HIGHPASS_BESSEL,
-  LOWPASS_BUTTERWORTH,
-  //HIGHPASS_BUTTERWORTH,
+enum OSCILLATOR_TYPE
+{
+    LOWPASS_BESSEL,
+    //HIGHPASS_BESSEL,
+    LOWPASS_BUTTERWORTH,
+    //HIGHPASS_BUTTERWORTH,
 };
 
 // implements a driven harmonic oscillator, which can be used as a filter
@@ -27,39 +28,40 @@ enum OSCILLATOR_TYPE {
 //  this has a rise time / impulse response of about 0.4
 // (i.e., the intergration time is about 0.4 * tau)
 
-struct FilterTwoPole {
+struct FilterTwoPole
+{
 
-  //OSCILLATOR_TYPE FT;
-  float X;        // position
-  float Vprev;    // previously computed velocity
-  float Vavg;     // average of the last two calculated velocities
-  float Fprev;    // previous driving force (not frequency!)
+    //OSCILLATOR_TYPE FT;
+    float X;        // position
+    float Vprev;    // previously computed velocity
+    float Vavg;     // average of the last two calculated velocities
+    float Fprev;    // previous driving force (not frequency!)
 
-  float Q;        // quality factor, must be > 0
-  float W0;       // undamped resonance frequency
+    float Q;        // quality factor, must be > 0
+    float W0;       // undamped resonance frequency
 
-  bool IsHighpass;  // false for normal output, true will make a lowpass into a highpass
+    bool IsHighpass;  // false for normal output, true will make a lowpass into a highpass
 
-  long LastTimeUS;  // last time measured
+    long LastTimeUS;  // last time measured
 
-  FilterTwoPole( float frequency0 = 1, float qualityFactor = 1, float xInit = 0);
+    FilterTwoPole( float frequency0 = 1, float qualityFactor = 1, float xInit = 0);
 
-  void setQ( float qualityFactor );
+    void setQ( float qualityFactor );
 
-  void setFrequency0( float f );
+    void setFrequency0( float f );
 
-  void setAsFilter( OSCILLATOR_TYPE ft, float frequency3db, float initialValue=0 );
+    void setAsFilter( OSCILLATOR_TYPE ft, float frequency3db, float initialValue = 0 );
 
-  float input( float drive = 0 );
+    float input( float drive = 0 );
 
-  float output();
-  
-  // as a measure for the energy of the oscillator, returns the maxium amplitude
-  float getMaxAmp();
+    float output();
 
-  void print();
+    // as a measure for the energy of the oscillator, returns the maxium amplitude
+    float getMaxAmp();
 
-  void test();
+    void print();
+
+    void test();
 
 };
 

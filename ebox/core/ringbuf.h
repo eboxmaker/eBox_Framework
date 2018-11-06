@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -64,19 +64,19 @@ public:
         tail = 0;
         ptr = 0;
     }
-    
-    
+
+
     ~RingBuf()
     {
         ebox_free(ptr);
     }
-    
+
     bool begin(uint16_t size)
     {
-        ptr = (T *)ebox_malloc(size*sizeof(T));
+        ptr = (T *)ebox_malloc(size * sizeof(T));
         max = size;
-//        ebox_printf("xx\r\n");
-//        ebox_printf_flush();
+        //        ebox_printf("xx\r\n");
+        //        ebox_printf_flush();
         if(ptr != NULL)
             return true;
         else
@@ -84,7 +84,7 @@ public:
     }
     bool write(T c)
     {
-//        __disable_irq();
+        //        __disable_irq();
         int seek = (head + 1) % max;
 
         // If the output buffer is full, there's nothing for it other than to
@@ -92,16 +92,16 @@ public:
         if (seek == tail) return false;
         ptr[head] = c;
         head = seek;
-//        __enable_irq();
+        //        __enable_irq();
         return true;
 
     }
-    
-    
-    
+
+
+
     T read(void)
     {
-//        __disable_irq();
+        //        __disable_irq();
         // if the head isn't ahead of the tail, we don't have any characters
         if (head == tail)
         {
@@ -113,15 +113,15 @@ public:
             tail = (unsigned int)(tail + 1) % max;
             return c;
         }
-//        __enable_irq();
+        //        __enable_irq();
 
     }
     int available()
     {
-//        __disable_irq();
+        //        __disable_irq();
         int len = (int)(max + head - tail) % max;
-//        __enable_irq();
-        
+        //        __enable_irq();
+
         return len;
     }
     void clear()
@@ -136,10 +136,10 @@ public:
 
     bool isfull()
     {
-//        __disable_irq();
+        //        __disable_irq();
         int seek = ((head + 1) % max);
-//        __enable_irq();
-        
+        //        __enable_irq();
+
         if(seek == tail)
             return true;
         else

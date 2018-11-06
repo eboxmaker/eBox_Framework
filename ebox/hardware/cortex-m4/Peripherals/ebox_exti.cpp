@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -19,7 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_exti.h"
-/** @defgroup exti 
+/** @defgroup exti
   * @brief exti driver modules
   * @{
   */
@@ -27,11 +27,11 @@
 /**
   * @}
   */
-  
-  /** @defgroup analog私有宏定义
-  * @{
-  */  
-  
+
+/** @defgroup analog私有宏定义
+* @{
+*/
+
 /**
   * @}
   */
@@ -40,15 +40,15 @@
   */
 static exti_irq_handler irq_handler;
 static uint32_t exti_irq_ids[16];
-int exti_irq_init(uint8_t index,exti_irq_handler handler,uint32_t id)
+int exti_irq_init(uint8_t index, exti_irq_handler handler, uint32_t id)
 {
- exti_irq_ids[index] = id;
- irq_handler =  handler;
- return 0;
+    exti_irq_ids[index] = id;
+    irq_handler =  handler;
+    return 0;
 }
 
- 
-  
+
+
 /**
   * @}
   */
@@ -67,7 +67,7 @@ int exti_irq_init(uint8_t index,exti_irq_handler handler,uint32_t id)
 Exti::Exti(Gpio *pin, uint8_t trigger)
 {
 
-    
+
     this->pin = pin;
     this->trigger = trigger;
 
@@ -76,61 +76,61 @@ Exti::Exti(Gpio *pin, uint8_t trigger)
 /**
  * @brief   初始化外部中断引脚的配置信息。
  * @param   NONE
- *          
+ *
  * @return  NONE
  * @note    初始化会默认开启中断，如果用户想禁用中断，
  *          可以调用interrupt(DISABLE)关闭中断。
- */ 
+ */
 void Exti::begin()
 {
-    
-	
-    port_source = (uint32_t)pin->id>>4;
-    pin_source = pin->id&0x0f;
-    exti_line = 1<<pin_source;
-    
-    exti_irq_init(this->pin_source,(&Exti::_irq_handler),(uint32_t)this);
+
+
+    port_source = (uint32_t)pin->id >> 4;
+    pin_source = pin->id & 0x0f;
+    exti_line = 1 << pin_source;
+
+    exti_irq_init(this->pin_source, (&Exti::_irq_handler), (uint32_t)this);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
 
-    
+
     pin->mode(INPUT_PU);
-    nvic(ENABLE,0,0);
+    nvic(ENABLE, 0, 0);
     interrupt(ENABLE);
 
 }
 
 void Exti::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
-    nvic_dev_set_priority((uint32_t)exti_line,0,0,0);
+    nvic_dev_set_priority((uint32_t)exti_line, 0, 0, 0);
     if(enable != DISABLE)
-        nvic_dev_enable((uint32_t)exti_line,0);
+        nvic_dev_enable((uint32_t)exti_line, 0);
     else
-        nvic_dev_disable((uint32_t)exti_line,0);
+        nvic_dev_disable((uint32_t)exti_line, 0);
 }
 
 /**
  * @brief   外部中断引脚的中断允许、禁止控制函数
  * @param   enable: 允许或者禁止中断
- *          - ENABLE: 允许该外部中断   
- *          - DISABLE: 禁止该外部中断   
- *          
+ *          - ENABLE: 允许该外部中断
+ *          - DISABLE: 禁止该外部中断
+ *
  * @return  NONE
- */ 
+ */
 void Exti::interrupt(FunctionalState enable)
 {
 
     EXTI_InitTypeDef EXTI_InitStructure;
     switch(trigger)
     {
-        case RISING:
-            EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //上升沿沿中断
-            break;
-        case FALLING:
-            EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; //下降沿中断
-            break;
-        case CHANGE:
-            EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling; //上升，下降沿都中断
-            break;
+    case RISING:
+        EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //上升沿沿中断
+        break;
+    case FALLING:
+        EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; //下降沿中断
+        break;
+    case CHANGE:
+        EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling; //上升，下降沿都中断
+        break;
     }
     SYSCFG_EXTILineConfig(port_source, pin_source);
     EXTI_InitStructure.EXTI_Line = exti_line;
@@ -141,17 +141,17 @@ void Exti::interrupt(FunctionalState enable)
 }
 
 void Exti::_irq_handler( uint32_t id)
-{ 
-    Exti *handler = (Exti*)id;
+{
+    Exti *handler = (Exti *)id;
     handler->_irq.call();
 }
 /**
  * @brief   绑定中断的回调函数，产生中断后程序将执行callback_fun()
  * @param   void (*fptr)(void)类型函数的指针。
- *          
+ *
  * @return  NONE
- */ 
-void Exti::attach(void (*fptr)(void)) 
+ */
+void Exti::attach(void (*fptr)(void))
 {
     if (fptr)
     {

@@ -18,9 +18,9 @@
 #include "FirmataMarshaller.h"
 
 #if defined(__cplusplus) && !defined(ARDUINO)
-  #include <cstring>
+#include <cstring>
 #else
-  #include <string.h>
+#include <string.h>
 #endif
 
 #include "FirmataConstants.h"
@@ -43,10 +43,13 @@ using namespace firmata;
 void FirmataMarshaller::reportAnalog(uint8_t pin, bool stream_enable)
 const
 {
-  if ( (Stream *)NULL == FirmataStream ) { return; }
-  // pin can only be 0-15, so chop higher bits
-  FirmataStream->write(REPORT_ANALOG | (pin & 0xF));
-  FirmataStream->write(stream_enable);
+    if ( (Stream *)NULL == FirmataStream )
+    {
+        return;
+    }
+    // pin can only be 0-15, so chop higher bits
+    FirmataStream->write(REPORT_ANALOG | (pin & 0xF));
+    FirmataStream->write(stream_enable);
 }
 
 /**
@@ -60,9 +63,12 @@ const
 void FirmataMarshaller::reportDigitalPort(uint8_t portNumber, bool stream_enable)
 const
 {
-  if ( (Stream *)NULL == FirmataStream ) { return; }
-  FirmataStream->write(REPORT_DIGITAL | (portNumber & 0xF));
-  FirmataStream->write(stream_enable);
+    if ( (Stream *)NULL == FirmataStream )
+    {
+        return;
+    }
+    FirmataStream->write(REPORT_DIGITAL | (portNumber & 0xF));
+    FirmataStream->write(stream_enable);
 }
 
 /**
@@ -72,15 +78,18 @@ const
  * @param bytec The size of the storage for the analog value
  * @param bytev The pointer to the location of the analog value
  */
-void FirmataMarshaller::sendExtendedAnalog(uint8_t pin, size_t bytec, uint8_t * bytev)
+void FirmataMarshaller::sendExtendedAnalog(uint8_t pin, size_t bytec, uint8_t *bytev)
 const
 {
-  if ( (Stream *)NULL == FirmataStream ) { return; }
-  FirmataStream->write(START_SYSEX);
-  FirmataStream->write(EXTENDED_ANALOG);
-  FirmataStream->write(pin);
-  encodeByteStream(bytec, bytev, bytec);
-  FirmataStream->write(END_SYSEX);
+    if ( (Stream *)NULL == FirmataStream )
+    {
+        return;
+    }
+    FirmataStream->write(START_SYSEX);
+    FirmataStream->write(EXTENDED_ANALOG);
+    FirmataStream->write(pin);
+    encodeByteStream(bytec, bytev, bytec);
+    FirmataStream->write(END_SYSEX);
 }
 
 /**
@@ -89,34 +98,40 @@ const
  * @param bytev A pointer to the array of data bytes to send in the message.
  * @param max_bytes Force message to be n bytes, regardless of data bits.
  */
-void FirmataMarshaller::encodeByteStream (size_t bytec, uint8_t * bytev, size_t max_bytes)
+void FirmataMarshaller::encodeByteStream (size_t bytec, uint8_t *bytev, size_t max_bytes)
 const
 {
-  static const size_t transmit_bits = 7;
-  static const uint8_t transmit_mask = ((1 << transmit_bits) - 1);
+    static const size_t transmit_bits = 7;
+    static const uint8_t transmit_mask = ((1 << transmit_bits) - 1);
 
-  size_t bytes_sent = 0;
-  size_t outstanding_bits = 0;
-  uint8_t outstanding_bit_cache = *bytev;
+    size_t bytes_sent = 0;
+    size_t outstanding_bits = 0;
+    uint8_t outstanding_bit_cache = *bytev;
 
-  if ( !max_bytes ) { max_bytes = static_cast<size_t>(-1); }
-  for (size_t i = 0 ; (i < bytec) && (bytes_sent < max_bytes) ; ++i) {
-    uint8_t transmit_byte = (outstanding_bit_cache|(bytev[i] << outstanding_bits));
-    FirmataStream->write(transmit_mask & transmit_byte);
-    ++bytes_sent;
-    outstanding_bit_cache = (bytev[i] >> (transmit_bits - outstanding_bits));
-    outstanding_bits = (outstanding_bits + (8 - transmit_bits));
-    for ( ; (outstanding_bits >= transmit_bits) && (bytes_sent < max_bytes) ; ) {
-      transmit_byte = outstanding_bit_cache;
-    FirmataStream->write(transmit_mask & transmit_byte);
-      ++bytes_sent;
-      outstanding_bit_cache >>= transmit_bits;
-      outstanding_bits -= transmit_bits;
+    if ( !max_bytes )
+    {
+        max_bytes = static_cast<size_t>(-1);
     }
-  }
-  if ( outstanding_bits && (bytes_sent < max_bytes) ) {
-    FirmataStream->write(static_cast<uint8_t>((1 << outstanding_bits) - 1) & outstanding_bit_cache);
-  }
+    for (size_t i = 0 ; (i < bytec) && (bytes_sent < max_bytes) ; ++i)
+    {
+        uint8_t transmit_byte = (outstanding_bit_cache | (bytev[i] << outstanding_bits));
+        FirmataStream->write(transmit_mask & transmit_byte);
+        ++bytes_sent;
+        outstanding_bit_cache = (bytev[i] >> (transmit_bits - outstanding_bits));
+        outstanding_bits = (outstanding_bits + (8 - transmit_bits));
+        for ( ; (outstanding_bits >= transmit_bits) && (bytes_sent < max_bytes) ; )
+        {
+            transmit_byte = outstanding_bit_cache;
+            FirmataStream->write(transmit_mask & transmit_byte);
+            ++bytes_sent;
+            outstanding_bit_cache >>= transmit_bits;
+            outstanding_bits -= transmit_bits;
+        }
+    }
+    if ( outstanding_bits && (bytes_sent < max_bytes) )
+    {
+        FirmataStream->write(static_cast<uint8_t>((1 << outstanding_bits) - 1) & outstanding_bit_cache);
+    }
 }
 
 //******************************************************************************
@@ -127,8 +142,8 @@ const
  * The FirmataMarshaller class.
  */
 FirmataMarshaller::FirmataMarshaller()
-:
-  FirmataStream((Stream *)NULL)
+    :
+    FirmataStream((Stream *)NULL)
 {
 }
 
@@ -144,7 +159,7 @@ FirmataMarshaller::FirmataMarshaller()
  */
 void FirmataMarshaller::begin(Stream &s)
 {
-  FirmataStream = &s;
+    FirmataStream = &s;
 }
 
 /**
@@ -152,7 +167,7 @@ void FirmataMarshaller::begin(Stream &s)
  */
 void FirmataMarshaller::end(void)
 {
-  FirmataStream = (Stream *)NULL;
+    FirmataStream = (Stream *)NULL;
 }
 
 //******************************************************************************
@@ -165,10 +180,13 @@ void FirmataMarshaller::end(void)
 void FirmataMarshaller::queryFirmwareVersion(void)
 const
 {
-  if ( (Stream *)NULL == FirmataStream ) { return; }
-  FirmataStream->write(START_SYSEX);
-  FirmataStream->write(REPORT_FIRMWARE);
-  FirmataStream->write(END_SYSEX);
+    if ( (Stream *)NULL == FirmataStream )
+    {
+        return;
+    }
+    FirmataStream->write(START_SYSEX);
+    FirmataStream->write(REPORT_FIRMWARE);
+    FirmataStream->write(END_SYSEX);
 }
 
 /**
@@ -177,8 +195,11 @@ const
 void FirmataMarshaller::queryVersion(void)
 const
 {
-  if ( (Stream *)NULL == FirmataStream ) { return; }
-  FirmataStream->write(REPORT_VERSION);
+    if ( (Stream *)NULL == FirmataStream )
+    {
+        return;
+    }
+    FirmataStream->write(REPORT_VERSION);
 }
 
 /**
@@ -191,7 +212,7 @@ const
 void FirmataMarshaller::reportAnalogDisable(uint8_t pin)
 const
 {
-  reportAnalog(pin, false);
+    reportAnalog(pin, false);
 }
 
 /**
@@ -204,7 +225,7 @@ const
 void FirmataMarshaller::reportAnalogEnable(uint8_t pin)
 const
 {
-  reportAnalog(pin, true);
+    reportAnalog(pin, true);
 }
 
 /**
@@ -217,7 +238,7 @@ const
 void FirmataMarshaller::reportDigitalPortDisable(uint8_t portNumber)
 const
 {
-  reportDigitalPort(portNumber, false);
+    reportDigitalPort(portNumber, false);
 }
 
 /**
@@ -230,7 +251,7 @@ const
 void FirmataMarshaller::reportDigitalPortEnable(uint8_t portNumber)
 const
 {
-  reportDigitalPort(portNumber, true);
+    reportDigitalPort(portNumber, true);
 }
 
 /**
@@ -245,13 +266,19 @@ const
 void FirmataMarshaller::sendAnalog(uint8_t pin, uint16_t value)
 const
 {
-  if ( (Stream *)NULL == FirmataStream ) { return; }
-  if ( (0xF >= pin) && (0x3FFF >= value) ) {
-    FirmataStream->write(ANALOG_MESSAGE|pin);
-    encodeByteStream(sizeof(value), reinterpret_cast<uint8_t *>(&value), sizeof(value));
-  } else {
-    sendExtendedAnalog(pin, sizeof(value), reinterpret_cast<uint8_t *>(&value));
-  }
+    if ( (Stream *)NULL == FirmataStream )
+    {
+        return;
+    }
+    if ( (0xF >= pin) && (0x3FFF >= value) )
+    {
+        FirmataStream->write(ANALOG_MESSAGE | pin);
+        encodeByteStream(sizeof(value), reinterpret_cast<uint8_t *>(&value), sizeof(value));
+    }
+    else
+    {
+        sendExtendedAnalog(pin, sizeof(value), reinterpret_cast<uint8_t *>(&value));
+    }
 }
 
 /**
@@ -262,7 +289,7 @@ const
 void FirmataMarshaller::sendAnalogMappingQuery(void)
 const
 {
-  sendSysex(ANALOG_MAPPING_QUERY, 0, NULL);
+    sendSysex(ANALOG_MAPPING_QUERY, 0, NULL);
 }
 
 /**
@@ -273,7 +300,7 @@ const
 void FirmataMarshaller::sendCapabilityQuery(void)
 const
 {
-  sendSysex(CAPABILITY_QUERY, 0, NULL);
+    sendSysex(CAPABILITY_QUERY, 0, NULL);
 }
 
 /**
@@ -284,10 +311,13 @@ const
 void FirmataMarshaller::sendDigital(uint8_t pin, uint8_t value)
 const
 {
-  if ( (Stream *)NULL == FirmataStream ) { return; }
-  FirmataStream->write(SET_DIGITAL_PIN_VALUE);
-  FirmataStream->write(pin & 0x7F);
-  FirmataStream->write(value != 0);
+    if ( (Stream *)NULL == FirmataStream )
+    {
+        return;
+    }
+    FirmataStream->write(SET_DIGITAL_PIN_VALUE);
+    FirmataStream->write(pin & 0x7F);
+    FirmataStream->write(value != 0);
 }
 
 
@@ -302,11 +332,14 @@ const
 void FirmataMarshaller::sendDigitalPort(uint8_t portNumber, uint16_t portData)
 const
 {
-  if ( (Stream *)NULL == FirmataStream ) { return; }
-  FirmataStream->write(DIGITAL_MESSAGE | (portNumber & 0xF));
-  // Tx bits  0-6 (protocol v1 and higher)
-  // Tx bits 7-13 (bit 7 only for protocol v2 and higher)
-  encodeByteStream(sizeof(portData), reinterpret_cast<uint8_t *>(&portData), sizeof(portData));
+    if ( (Stream *)NULL == FirmataStream )
+    {
+        return;
+    }
+    FirmataStream->write(DIGITAL_MESSAGE | (portNumber & 0xF));
+    // Tx bits  0-6 (protocol v1 and higher)
+    // Tx bits 7-13 (bit 7 only for protocol v2 and higher)
+    encodeByteStream(sizeof(portData), reinterpret_cast<uint8_t *>(&portData), sizeof(portData));
 }
 
 /**
@@ -319,16 +352,20 @@ const
 void FirmataMarshaller::sendFirmwareVersion(uint8_t major, uint8_t minor, size_t bytec, uint8_t *bytev)
 const
 {
-  if ( (Stream *)NULL == FirmataStream ) { return; }
-  size_t i;
-  FirmataStream->write(START_SYSEX);
-  FirmataStream->write(REPORT_FIRMWARE);
-  FirmataStream->write(major);
-  FirmataStream->write(minor);
-  for (i = 0; i < bytec; ++i) {
-    encodeByteStream(sizeof(bytev[i]), reinterpret_cast<uint8_t *>(&bytev[i]));
-  }
-  FirmataStream->write(END_SYSEX);
+    if ( (Stream *)NULL == FirmataStream )
+    {
+        return;
+    }
+    size_t i;
+    FirmataStream->write(START_SYSEX);
+    FirmataStream->write(REPORT_FIRMWARE);
+    FirmataStream->write(major);
+    FirmataStream->write(minor);
+    for (i = 0; i < bytec; ++i)
+    {
+        encodeByteStream(sizeof(bytev[i]), reinterpret_cast<uint8_t *>(&bytev[i]));
+    }
+    FirmataStream->write(END_SYSEX);
 }
 
 /**
@@ -339,10 +376,13 @@ const
 void FirmataMarshaller::sendVersion(uint8_t major, uint8_t minor)
 const
 {
-  if ( (Stream *)NULL == FirmataStream ) { return; }
-  FirmataStream->write(REPORT_VERSION);
-  FirmataStream->write(major);
-  FirmataStream->write(minor);
+    if ( (Stream *)NULL == FirmataStream )
+    {
+        return;
+    }
+    FirmataStream->write(REPORT_VERSION);
+    FirmataStream->write(major);
+    FirmataStream->write(minor);
 }
 
 /**
@@ -355,10 +395,13 @@ const
 void FirmataMarshaller::sendPinMode(uint8_t pin, uint8_t config)
 const
 {
-  if ( (Stream *)NULL == FirmataStream ) { return; }
-  FirmataStream->write(SET_PIN_MODE);
-  FirmataStream->write(pin);
-  FirmataStream->write(config);
+    if ( (Stream *)NULL == FirmataStream )
+    {
+        return;
+    }
+    FirmataStream->write(SET_PIN_MODE);
+    FirmataStream->write(pin);
+    FirmataStream->write(config);
 }
 
 /**
@@ -371,11 +414,14 @@ const
 void FirmataMarshaller::sendPinStateQuery(uint8_t pin)
 const
 {
-  if ( (Stream *)NULL == FirmataStream ) { return; }
-  FirmataStream->write(START_SYSEX);
-  FirmataStream->write(PIN_STATE_QUERY);
-  FirmataStream->write(pin);
-  FirmataStream->write(END_SYSEX);
+    if ( (Stream *)NULL == FirmataStream )
+    {
+        return;
+    }
+    FirmataStream->write(START_SYSEX);
+    FirmataStream->write(PIN_STATE_QUERY);
+    FirmataStream->write(pin);
+    FirmataStream->write(END_SYSEX);
 }
 
 /**
@@ -388,14 +434,18 @@ const
 void FirmataMarshaller::sendSysex(uint8_t command, size_t bytec, uint8_t *bytev)
 const
 {
-  if ( (Stream *)NULL == FirmataStream ) { return; }
-  size_t i;
-  FirmataStream->write(START_SYSEX);
-  FirmataStream->write(command);
-  for (i = 0; i < bytec; ++i) {
-    encodeByteStream(sizeof(bytev[i]), reinterpret_cast<uint8_t *>(&bytev[i]));
-  }
-  FirmataStream->write(END_SYSEX);
+    if ( (Stream *)NULL == FirmataStream )
+    {
+        return;
+    }
+    size_t i;
+    FirmataStream->write(START_SYSEX);
+    FirmataStream->write(command);
+    for (i = 0; i < bytec; ++i)
+    {
+        encodeByteStream(sizeof(bytev[i]), reinterpret_cast<uint8_t *>(&bytev[i]));
+    }
+    FirmataStream->write(END_SYSEX);
 }
 
 /**
@@ -405,7 +455,7 @@ const
 void FirmataMarshaller::sendString(const char *string)
 const
 {
-  sendSysex(STRING_DATA, strlen(string), reinterpret_cast<uint8_t *>(const_cast<char *>(string)));
+    sendSysex(STRING_DATA, strlen(string), reinterpret_cast<uint8_t *>(const_cast<char *>(string)));
 }
 
 /**
@@ -416,7 +466,7 @@ const
 void FirmataMarshaller::setSamplingInterval(uint16_t interval_ms)
 const
 {
-  sendSysex(SAMPLING_INTERVAL, sizeof(interval_ms), reinterpret_cast<uint8_t *>(&interval_ms));
+    sendSysex(SAMPLING_INTERVAL, sizeof(interval_ms), reinterpret_cast<uint8_t *>(&interval_ms));
 }
 
 /**
@@ -426,6 +476,9 @@ const
 void FirmataMarshaller::systemReset(void)
 const
 {
-  if ( (Stream *)NULL == FirmataStream ) { return; }
-  FirmataStream->write(SYSTEM_RESET);
+    if ( (Stream *)NULL == FirmataStream )
+    {
+        return;
+    }
+    FirmataStream->write(SYSTEM_RESET);
 }

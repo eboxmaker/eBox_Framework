@@ -10,7 +10,7 @@
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
- *  
+ *
  *    * Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above copyright
@@ -19,7 +19,7 @@
  *    * Neither the names of PolarSSL or XySSL nor the names of its contributors
  *      may be used to endorse or promote products derived from this software
  *      without specific prior written permission.
- *  
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -308,18 +308,22 @@ static void des_setkey( unsigned long SK[32], unsigned char key[8] )
     /*
      * Permuted Choice 1
      */
-    T =  ((Y >>  4) ^ X) & 0x0F0F0F0F;  X ^= T; Y ^= (T <<  4);
-    T =  ((Y      ) ^ X) & 0x10101010;  X ^= T; Y ^= (T      );
+    T =  ((Y >>  4) ^ X) & 0x0F0F0F0F;
+    X ^= T;
+    Y ^= (T <<  4);
+    T =  ((Y      ) ^ X) & 0x10101010;
+    X ^= T;
+    Y ^= (T      );
 
     X =   (LHs[ (X      ) & 0xF] << 3) | (LHs[ (X >>  8) & 0xF ] << 2)
-        | (LHs[ (X >> 16) & 0xF] << 1) | (LHs[ (X >> 24) & 0xF ]     )
-        | (LHs[ (X >>  5) & 0xF] << 7) | (LHs[ (X >> 13) & 0xF ] << 6)
-        | (LHs[ (X >> 21) & 0xF] << 5) | (LHs[ (X >> 29) & 0xF ] << 4);
+          | (LHs[ (X >> 16) & 0xF] << 1) | (LHs[ (X >> 24) & 0xF ]     )
+          | (LHs[ (X >>  5) & 0xF] << 7) | (LHs[ (X >> 13) & 0xF ] << 6)
+          | (LHs[ (X >> 21) & 0xF] << 5) | (LHs[ (X >> 29) & 0xF ] << 4);
 
     Y =   (RHs[ (Y >>  1) & 0xF] << 3) | (RHs[ (Y >>  9) & 0xF ] << 2)
-        | (RHs[ (Y >> 17) & 0xF] << 1) | (RHs[ (Y >> 25) & 0xF ]     )
-        | (RHs[ (Y >>  4) & 0xF] << 7) | (RHs[ (Y >> 12) & 0xF ] << 6)
-        | (RHs[ (Y >> 20) & 0xF] << 5) | (RHs[ (Y >> 28) & 0xF ] << 4);
+          | (RHs[ (Y >> 17) & 0xF] << 1) | (RHs[ (Y >> 25) & 0xF ]     )
+          | (RHs[ (Y >>  4) & 0xF] << 7) | (RHs[ (Y >> 12) & 0xF ] << 6)
+          | (RHs[ (Y >> 20) & 0xF] << 5) | (RHs[ (Y >> 28) & 0xF ] << 4);
 
     X &= 0x0FFFFFFF;
     Y &= 0x0FFFFFFF;
@@ -341,28 +345,28 @@ static void des_setkey( unsigned long SK[32], unsigned char key[8] )
         }
 
         *SK++ =   ((X <<  4) & 0x24000000) | ((X << 28) & 0x10000000)
-                | ((X << 14) & 0x08000000) | ((X << 18) & 0x02080000)
-                | ((X <<  6) & 0x01000000) | ((X <<  9) & 0x00200000)
-                | ((X >>  1) & 0x00100000) | ((X << 10) & 0x00040000)
-                | ((X <<  2) & 0x00020000) | ((X >> 10) & 0x00010000)
-                | ((Y >> 13) & 0x00002000) | ((Y >>  4) & 0x00001000)
-                | ((Y <<  6) & 0x00000800) | ((Y >>  1) & 0x00000400)
-                | ((Y >> 14) & 0x00000200) | ((Y      ) & 0x00000100)
-                | ((Y >>  5) & 0x00000020) | ((Y >> 10) & 0x00000010)
-                | ((Y >>  3) & 0x00000008) | ((Y >> 18) & 0x00000004)
-                | ((Y >> 26) & 0x00000002) | ((Y >> 24) & 0x00000001);
+                  | ((X << 14) & 0x08000000) | ((X << 18) & 0x02080000)
+                  | ((X <<  6) & 0x01000000) | ((X <<  9) & 0x00200000)
+                  | ((X >>  1) & 0x00100000) | ((X << 10) & 0x00040000)
+                  | ((X <<  2) & 0x00020000) | ((X >> 10) & 0x00010000)
+                  | ((Y >> 13) & 0x00002000) | ((Y >>  4) & 0x00001000)
+                  | ((Y <<  6) & 0x00000800) | ((Y >>  1) & 0x00000400)
+                  | ((Y >> 14) & 0x00000200) | ((Y      ) & 0x00000100)
+                  | ((Y >>  5) & 0x00000020) | ((Y >> 10) & 0x00000010)
+                  | ((Y >>  3) & 0x00000008) | ((Y >> 18) & 0x00000004)
+                  | ((Y >> 26) & 0x00000002) | ((Y >> 24) & 0x00000001);
 
         *SK++ =   ((X << 15) & 0x20000000) | ((X << 17) & 0x10000000)
-                | ((X << 10) & 0x08000000) | ((X << 22) & 0x04000000)
-                | ((X >>  2) & 0x02000000) | ((X <<  1) & 0x01000000)
-                | ((X << 16) & 0x00200000) | ((X << 11) & 0x00100000)
-                | ((X <<  3) & 0x00080000) | ((X >>  6) & 0x00040000)
-                | ((X << 15) & 0x00020000) | ((X >>  4) & 0x00010000)
-                | ((Y >>  2) & 0x00002000) | ((Y <<  8) & 0x00001000)
-                | ((Y >> 14) & 0x00000808) | ((Y >>  9) & 0x00000400)
-                | ((Y      ) & 0x00000200) | ((Y <<  7) & 0x00000100)
-                | ((Y >>  7) & 0x00000020) | ((Y >>  3) & 0x00000011)
-                | ((Y <<  2) & 0x00000004) | ((Y >> 21) & 0x00000002);
+                  | ((X << 10) & 0x08000000) | ((X << 22) & 0x04000000)
+                  | ((X >>  2) & 0x02000000) | ((X <<  1) & 0x01000000)
+                  | ((X << 16) & 0x00200000) | ((X << 11) & 0x00100000)
+                  | ((X <<  3) & 0x00080000) | ((X >>  6) & 0x00040000)
+                  | ((X << 15) & 0x00020000) | ((X >>  4) & 0x00010000)
+                  | ((Y >>  2) & 0x00002000) | ((Y <<  8) & 0x00001000)
+                  | ((Y >> 14) & 0x00000808) | ((Y >>  9) & 0x00000400)
+                  | ((Y      ) & 0x00000200) | ((Y <<  7) & 0x00000100)
+                  | ((Y >>  7) & 0x00000020) | ((Y >>  3) & 0x00000011)
+                  | ((Y <<  2) & 0x00000004) | ((Y >> 21) & 0x00000002);
     }
 }
 

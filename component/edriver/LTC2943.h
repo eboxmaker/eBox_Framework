@@ -11,7 +11,7 @@ use with multicell batteries up to 20V. A precision coulomb
 counter integrates current through a sense resistor between
 the battery’s positive terminal and the load or charger.
 Voltage, current and temperature are measured with an
-internal 14-bit No Latency ΔΣ™ ADC. The measurements
+internal 14-bit No Latency ΔΣ? ADC. The measurements
 are stored in internal registers accessible via the onboard
 I2C/SMBus Interface.
 
@@ -235,84 +235,84 @@ const float LTC2943_FULLSCALE_TEMPERATURE = 510;
 
 class Ltc2943
 {
-    public:
-        
-        Ltc2943(SoftI2c *i2c)
-        {
-            this->i2c = i2c;
-        }
-        
-        void begin(uint32_t speed);
-        
-        //! Write an 8-bit code to the LTC2943.
-        //! @return The function returns the state of the acknowledge bit after the I2C address write. 0=acknowledge, 1=no acknowledge.
-        int8_t write(uint8_t i2c_address, //!< Register address for the LTC2943
-                             uint8_t adc_command, //!< The "command byte" for the LTC2943
-                             uint8_t code         //!< Value that will be written to the register.
-                            );
+public:
 
-        //! Write a 16-bit code to the LTC2943.
-        //! @return The function returns the state of the acknowledge bit after the I2C address write. 0=acknowledge, 1=no acknowledge.
-        int8_t write_16_bits(uint8_t i2c_address, //!< Register address for the LTC2943
-                                     uint8_t adc_command, //!< The "command byte" for the LTC2943
-                                     uint16_t code        //!< Value that will be written to the register.
+    Ltc2943(SoftI2c *i2c)
+    {
+        this->i2c = i2c;
+    }
+
+    void begin(uint32_t speed);
+
+    //! Write an 8-bit code to the LTC2943.
+    //! @return The function returns the state of the acknowledge bit after the I2C address write. 0=acknowledge, 1=no acknowledge.
+    int8_t write(uint8_t i2c_address, //!< Register address for the LTC2943
+                 uint8_t adc_command, //!< The "command byte" for the LTC2943
+                 uint8_t code         //!< Value that will be written to the register.
+                );
+
+    //! Write a 16-bit code to the LTC2943.
+    //! @return The function returns the state of the acknowledge bit after the I2C address write. 0=acknowledge, 1=no acknowledge.
+    int8_t write_16_bits(uint8_t i2c_address, //!< Register address for the LTC2943
+                         uint8_t adc_command, //!< The "command byte" for the LTC2943
+                         uint16_t code        //!< Value that will be written to the register.
+                        );
+
+
+    //! Reads an 8-bit adc_code from LTC2943
+    //! @return The function returns the state of the acknowledge bit after the I2C address write. 0=acknowledge, 1=no acknowledge.
+    int8_t read(uint8_t i2c_address, //!< Register address for the LTC2943
+                uint8_t adc_command, //!< The "command byte" for the LTC2943
+                uint8_t *adc_code    //!< Value that will be read from the register.
+               );
+
+    //! Reads a 16-bit adc_code from LTC2943
+    //! @return The function returns the state of the acknowledge bit after the I2C address write. 0=acknowledge, 1=no acknowledge.
+    int8_t read_16_bits(uint8_t i2c_address, //!< Register address for the LTC2943
+                        uint8_t adc_command, //!< The "command byte" for the LTC2943
+                        uint16_t *adc_code   //!< Value that will be read from the register.
+                       );
+
+
+
+
+    //! Calculate the LTC2943 charge in Coulombs
+    //! @return Returns the Coulombs of charge in the ACR register.
+    float code_to_coulombs(uint16_t adc_code,        //!< The RAW ADC value
+                           float resistor,         //!< The sense resistor value
+                           uint16_t prescalar      //!< The prescalar value
+                          );
+
+    //! Calculate the LTC2943 charge in mAh
+    //! @return Returns the Coulombs of charge in the ACR register.
+    float code_to_mAh(uint16_t adc_code,            //!< The RAW ADC value
+                      float resistor,       //!< The sense resistor value
+                      uint16_t prescalar    //!< The prescalar value
+                     );
+
+    //! Calculate the LTC2943 SENSE+ voltage
+    //! @return Returns the SENSE+ Voltage in Volts
+    float code_to_voltage(uint16_t adc_code              //!< The RAW ADC value
+                         );
+
+    //! Calculate the LTC2943 current with a sense resistor
+    //! @return Returns the current through the sense resisor
+    float code_to_current(uint16_t adc_code,                //!< The RAW ADC value
+                          float resistor                   //!< The sense resistor value
+                         );
+
+    //! Calculate the LTC2943 temperature
+    //! @return Returns the temperature in Kelvin
+    float code_to_kelvin_temperature(uint16_t adc_code           //!< The RAW ADC value
                                     );
 
-
-        //! Reads an 8-bit adc_code from LTC2943
-        //! @return The function returns the state of the acknowledge bit after the I2C address write. 0=acknowledge, 1=no acknowledge.
-        int8_t read(uint8_t i2c_address, //!< Register address for the LTC2943
-                            uint8_t adc_command, //!< The "command byte" for the LTC2943
-                            uint8_t *adc_code    //!< Value that will be read from the register.
-                           );
-
-        //! Reads a 16-bit adc_code from LTC2943
-        //! @return The function returns the state of the acknowledge bit after the I2C address write. 0=acknowledge, 1=no acknowledge.
-        int8_t read_16_bits(uint8_t i2c_address, //!< Register address for the LTC2943
-                                    uint8_t adc_command, //!< The "command byte" for the LTC2943
-                                    uint16_t *adc_code   //!< Value that will be read from the register.
-                                   );
-
-
-
-
-        //! Calculate the LTC2943 charge in Coulombs
-        //! @return Returns the Coulombs of charge in the ACR register.
-        float code_to_coulombs(uint16_t adc_code,        //!< The RAW ADC value
-                                       float resistor,         //!< The sense resistor value
-                                       uint16_t prescalar      //!< The prescalar value
-                                      );
-
-        //! Calculate the LTC2943 charge in mAh
-        //! @return Returns the Coulombs of charge in the ACR register.
-        float code_to_mAh(uint16_t adc_code,            //!< The RAW ADC value
-                                  float resistor,       //!< The sense resistor value
-                                  uint16_t prescalar    //!< The prescalar value
-                                 );
-
-        //! Calculate the LTC2943 SENSE+ voltage
-        //! @return Returns the SENSE+ Voltage in Volts
-        float code_to_voltage(uint16_t adc_code              //!< The RAW ADC value
+    //! Calculate the LTC2943 temperature
+    //! @return Returns the temperature in Celcius
+    float code_to_celcius_temperature(uint16_t adc_code          //!< The RAW ADC value
                                      );
+    int8_t register_set_clear_bits(uint8_t i2c_address, uint8_t register_address, uint8_t bits_to_set, uint8_t bits_to_clear);
 
-        //! Calculate the LTC2943 current with a sense resistor
-        //! @return Returns the current through the sense resisor
-        float code_to_current(uint16_t adc_code,                //!< The RAW ADC value
-                                      float resistor                   //!< The sense resistor value
-                                     );
-
-        //! Calculate the LTC2943 temperature
-        //! @return Returns the temperature in Kelvin
-        float code_to_kelvin_temperature(uint16_t adc_code           //!< The RAW ADC value
-                                                );
-
-        //! Calculate the LTC2943 temperature
-        //! @return Returns the temperature in Celcius
-        float code_to_celcius_temperature(uint16_t adc_code          //!< The RAW ADC value
-                                                 );
-        int8_t register_set_clear_bits(uint8_t i2c_address, uint8_t register_address, uint8_t bits_to_set, uint8_t bits_to_clear);
-            
-    private:
-        SoftI2c *i2c;
+private:
+    SoftI2c *i2c;
 };
 #endif  // LTC2943_H

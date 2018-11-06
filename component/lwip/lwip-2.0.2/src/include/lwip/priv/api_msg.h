@@ -76,71 +76,81 @@ extern "C" {
 /** This struct includes everything that is necessary to execute a function
     for a netconn in another thread context (mainly used to process netconns
     in the tcpip_thread context to be thread safe). */
-struct api_msg {
-  /** The netconn which to process - always needed: it includes the semaphore
-      which is used to block the application thread until the function finished. */
-  struct netconn *conn;
-  /** The return value of the function executed in tcpip_thread. */
-  err_t err;
-  /** Depending on the executed function, one of these union members is used */
-  union {
-    /** used for lwip_netconn_do_send */
-    struct netbuf *b;
-    /** used for lwip_netconn_do_newconn */
-    struct {
-      u8_t proto;
-    } n;
-    /** used for lwip_netconn_do_bind and lwip_netconn_do_connect */
-    struct {
-      API_MSG_M_DEF_C(ip_addr_t, ipaddr);
-      u16_t port;
-    } bc;
-    /** used for lwip_netconn_do_getaddr */
-    struct {
-      ip_addr_t API_MSG_M_DEF(ipaddr);
-      u16_t API_MSG_M_DEF(port);
-      u8_t local;
-    } ad;
-    /** used for lwip_netconn_do_write */
-    struct {
-      const void *dataptr;
-      size_t len;
-      u8_t apiflags;
+struct api_msg
+{
+    /** The netconn which to process - always needed: it includes the semaphore
+        which is used to block the application thread until the function finished. */
+    struct netconn *conn;
+    /** The return value of the function executed in tcpip_thread. */
+    err_t err;
+    /** Depending on the executed function, one of these union members is used */
+    union
+    {
+        /** used for lwip_netconn_do_send */
+        struct netbuf *b;
+        /** used for lwip_netconn_do_newconn */
+        struct
+        {
+            u8_t proto;
+        } n;
+        /** used for lwip_netconn_do_bind and lwip_netconn_do_connect */
+        struct
+        {
+            API_MSG_M_DEF_C(ip_addr_t, ipaddr);
+            u16_t port;
+        } bc;
+        /** used for lwip_netconn_do_getaddr */
+        struct
+        {
+            ip_addr_t API_MSG_M_DEF(ipaddr);
+            u16_t API_MSG_M_DEF(port);
+            u8_t local;
+        } ad;
+        /** used for lwip_netconn_do_write */
+        struct
+        {
+            const void *dataptr;
+            size_t len;
+            u8_t apiflags;
 #if LWIP_SO_SNDTIMEO
-      u32_t time_started;
+            u32_t time_started;
 #endif /* LWIP_SO_SNDTIMEO */
-    } w;
-    /** used for lwip_netconn_do_recv */
-    struct {
-      u32_t len;
-    } r;
+        } w;
+        /** used for lwip_netconn_do_recv */
+        struct
+        {
+            u32_t len;
+        } r;
 #if LWIP_TCP
-    /** used for lwip_netconn_do_close (/shutdown) */
-    struct {
-      u8_t shut;
+        /** used for lwip_netconn_do_close (/shutdown) */
+        struct
+        {
+            u8_t shut;
 #if LWIP_SO_SNDTIMEO || LWIP_SO_LINGER
-      u32_t time_started;
+            u32_t time_started;
 #else /* LWIP_SO_SNDTIMEO || LWIP_SO_LINGER */
-      u8_t polls_left;
+            u8_t polls_left;
 #endif /* LWIP_SO_SNDTIMEO || LWIP_SO_LINGER */
-    } sd;
+        } sd;
 #endif /* LWIP_TCP */
 #if LWIP_IGMP || (LWIP_IPV6 && LWIP_IPV6_MLD)
-    /** used for lwip_netconn_do_join_leave_group */
-    struct {
-      API_MSG_M_DEF_C(ip_addr_t, multiaddr);
-      API_MSG_M_DEF_C(ip_addr_t, netif_addr);
-      enum netconn_igmp join_or_leave;
-    } jl;
+        /** used for lwip_netconn_do_join_leave_group */
+        struct
+        {
+            API_MSG_M_DEF_C(ip_addr_t, multiaddr);
+            API_MSG_M_DEF_C(ip_addr_t, netif_addr);
+            enum netconn_igmp join_or_leave;
+        } jl;
 #endif /* LWIP_IGMP || (LWIP_IPV6 && LWIP_IPV6_MLD) */
 #if TCP_LISTEN_BACKLOG
-    struct {
-      u8_t backlog;
-    } lb;
+        struct
+        {
+            u8_t backlog;
+        } lb;
 #endif /* TCP_LISTEN_BACKLOG */
-  } msg;
+    } msg;
 #if LWIP_NETCONN_SEM_PER_THREAD
-  sys_sem_t* op_completed_sem;
+    sys_sem_t *op_completed_sem;
 #endif /* LWIP_NETCONN_SEM_PER_THREAD */
 };
 
@@ -156,24 +166,25 @@ struct api_msg {
     it has its own struct (to avoid struct api_msg getting bigger than necessary).
     lwip_netconn_do_gethostbyname must be called using tcpip_callback instead of tcpip_apimsg
     (see netconn_gethostbyname). */
-struct dns_api_msg {
-  /** Hostname to query or dotted IP address string */
+struct dns_api_msg
+{
+    /** Hostname to query or dotted IP address string */
 #if LWIP_MPU_COMPATIBLE
-  char name[DNS_MAX_NAME_LENGTH];
+    char name[DNS_MAX_NAME_LENGTH];
 #else /* LWIP_MPU_COMPATIBLE */
-  const char *name;
+    const char *name;
 #endif /* LWIP_MPU_COMPATIBLE */
-  /** The resolved address is stored here */
-  ip_addr_t API_MSG_M_DEF(addr);
+    /** The resolved address is stored here */
+    ip_addr_t API_MSG_M_DEF(addr);
 #if LWIP_IPV4 && LWIP_IPV6
-  /** Type of resolve call */
-  u8_t dns_addrtype;
+    /** Type of resolve call */
+    u8_t dns_addrtype;
 #endif /* LWIP_IPV4 && LWIP_IPV6 */
-  /** This semaphore is posted when the name is resolved, the application thread
-      should wait on it. */
-  sys_sem_t API_MSG_M_DEF_SEM(sem);
-  /** Errors are given back here */
-  err_t API_MSG_M_DEF(err);
+    /** This semaphore is posted when the name is resolved, the application thread
+        should wait on it. */
+    sys_sem_t API_MSG_M_DEF_SEM(sem);
+    /** Errors are given back here */
+    err_t API_MSG_M_DEF(err);
 };
 #endif /* LWIP_DNS */
 
@@ -204,7 +215,7 @@ void lwip_netconn_do_join_leave_group(void *m);
 void lwip_netconn_do_gethostbyname(void *arg);
 #endif /* LWIP_DNS */
 
-struct netconn* netconn_alloc(enum netconn_type t, netconn_callback callback);
+struct netconn *netconn_alloc(enum netconn_type t, netconn_callback callback);
 void netconn_free(struct netconn *conn);
 
 #ifdef __cplusplus

@@ -1,14 +1,14 @@
 /*
- * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND 
+ * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND
  * (2)TO ENABLE ACCESS TO CODING INFORMATION TO GUIDE AND FACILITATE CUSTOMER.
  * CONSEQUENTLY, SEMTECH SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT OR
  * CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE CONTENT
  * OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING INFORMATION
  * CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
- * 
+ *
  * Copyright (C) SEMTECH S.A.
  */
-/*! 
+/*!
  * \file       sx1276-LoRaMisc.c
  * \brief      SX1276 RF chip high level functions driver
  *
@@ -20,7 +20,7 @@
  *             Removing these functions will greatly reduce the final firmware
  *             size.
  *
- * \version    2.0.0 
+ * \version    2.0.0
  * \date       May 6 2013
  * \author     Gregory Cristian
  *
@@ -68,7 +68,7 @@ void SX1276LoRaSetRFPower( int8_t power )
 {
     SX1276Read( REG_LR_PACONFIG, &SX1276LR->RegPaConfig );
     SX1276Read( REG_LR_PADAC, &SX1276LR->RegPaDac );
-    
+
     if( ( SX1276LR->RegPaConfig & RFLR_PACONFIG_PASELECT_PABOOST ) == RFLR_PACONFIG_PASELECT_PABOOST )
     {
         if( ( SX1276LR->RegPaDac & 0x87 ) == 0x87 )
@@ -174,15 +174,15 @@ void SX1276LoRaSetSpreadingFactor( uint8_t factor )
         SX1276LoRaSetNbTrigPeaks( 3 );
     }
 
-    SX1276Read( REG_LR_MODEMCONFIG2, &SX1276LR->RegModemConfig2 );    
+    SX1276Read( REG_LR_MODEMCONFIG2, &SX1276LR->RegModemConfig2 );
     SX1276LR->RegModemConfig2 = ( SX1276LR->RegModemConfig2 & RFLR_MODEMCONFIG2_SF_MASK ) | ( factor << 4 );
-    SX1276Write( REG_LR_MODEMCONFIG2, SX1276LR->RegModemConfig2 );    
+    SX1276Write( REG_LR_MODEMCONFIG2, SX1276LR->RegModemConfig2 );
     LoRaSettings.SpreadingFactor = factor;
 }
 
 uint8_t SX1276LoRaGetSpreadingFactor( void )
 {
-    SX1276Read( REG_LR_MODEMCONFIG2, &SX1276LR->RegModemConfig2 );   
+    SX1276Read( REG_LR_MODEMCONFIG2, &SX1276LR->RegModemConfig2 );
     LoRaSettings.SpreadingFactor = ( SX1276LR->RegModemConfig2 & ~RFLR_MODEMCONFIG2_SF_MASK ) >> 4;
     return LoRaSettings.SpreadingFactor;
 }
@@ -321,7 +321,7 @@ void SX1276LoRaSetPa20dBm( bool enale )
     SX1276Read( REG_LR_PACONFIG, &SX1276LR->RegPaConfig );
 
     if( ( SX1276LR->RegPaConfig & RFLR_PACONFIG_PASELECT_PABOOST ) == RFLR_PACONFIG_PASELECT_PABOOST )
-    {    
+    {
         if( enale == true )
         {
             SX1276LR->RegPaDac = 0x87;
@@ -337,7 +337,7 @@ void SX1276LoRaSetPa20dBm( bool enale )
 bool SX1276LoRaGetPa20dBm( void )
 {
     SX1276Read( REG_LR_PADAC, &SX1276LR->RegPaDac );
-    
+
     return ( ( SX1276LR->RegPaDac & 0x07 ) == 0x07 ) ? true : false;
 }
 

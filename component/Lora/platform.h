@@ -1,16 +1,16 @@
 /*
- * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND 
+ * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND
  * (2)TO ENABLE ACCESS TO CODING INFORMATION TO GUIDE AND FACILITATE CUSTOMER.
  * CONSEQUENTLY, SEMTECH SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT OR
  * CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE CONTENT
  * OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING INFORMATION
  * CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
- * 
+ *
  * Copyright (C) SEMTECH S.A.
  */
-/*! 
+/*!
  * \file       platform.h
- * \brief        
+ * \brief
  *
  * \version    1.0
  * \date       Nov 21 2012
@@ -57,7 +57,7 @@
 #define MODULE_SX1276RF1KAS                         1
 #endif
 
-    #define USE_UART                                1
+#define USE_UART                                1
 
 #elif( PLATFORM == SX12000DVK )
 /*!
@@ -73,13 +73,13 @@
 #elif( PLATFORM == SX1243ska )
 
 #elif( PLATFORM == Bleeper )
-    #define USE_SX1272_RADIO
-    
-    #include "bleeper/bleeper.h"
-    #define USE_UART                                0
+#define USE_SX1272_RADIO
+
+#include "bleeper/bleeper.h"
+#define USE_UART                                0
 
 #else
-    #error "Missing define: Platform (ie. SX12xxEiger)"
+#error "Missing define: Platform (ie. SX12xxEiger)"
 #endif
 
 #endif // __PLATFORM_H__

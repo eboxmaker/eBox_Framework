@@ -47,10 +47,10 @@ typedef void (*exti_irq_handler)(uint32_t pObj);
 static exti_irq_handler  exti_handler;   // 声明函数指针变量，指向类的静态成员
 static uint32_t  exti_irq_ids[16];    	 // 保存对象地址，供静态成员识别对象，并访问对象的普通成员
 
-void exti_irq_init(uint8_t index,exti_irq_handler handler,uint32_t id)
+void exti_irq_init(uint8_t index, exti_irq_handler handler, uint32_t id)
 {
-  exti_irq_ids[index] = id;       // 保存对象地址
-  exti_handler =  handler;        // 指向回调函数
+    exti_irq_ids[index] = id;       // 保存对象地址
+    exti_handler =  handler;        // 指向回调函数
 }
 
 
@@ -61,52 +61,53 @@ void exti_irq_init(uint8_t index,exti_irq_handler handler,uint32_t id)
  */
 Exti::Exti(Gpio *pin)
 {
-  _pin = pin;
-  _extiLine = GETEXTILINE(_pin->id);
-  exti_irq_init(GETPINNUMBER(_pin->id),(&Exti::_irq_handler),(uint32_t)this);
+    _pin = pin;
+    _extiLine = GETEXTILINE(_pin->id);
+    exti_irq_init(GETPINNUMBER(_pin->id), (&Exti::_irq_handler), (uint32_t)this);
 }
 /**
  * @brief    Exti构造函数，实例化一个对象
  * @param    mode: gpio模式，type 中断类型，IT，EVENT,IT_EVENT。默认为中断
  * @return   NONE
  */
-void Exti::begin(PIN_MODE mode,ExtiType type){
-  // f1系列不能设置为
-  _pin->mode((mode == INPUT)?(INPUT_PU):(mode));
+void Exti::begin(PIN_MODE mode, ExtiType type)
+{
+    // f1系列不能设置为
+    _pin->mode((mode == INPUT) ? (INPUT_PU) : (mode));
 
-//  LL_APB1_GRP2_EnableClock(LL_APB1_GRP2_PERIPH_SYSCFG);
-  GPIO_EXTILineConfig(GETEXTIPORT(_pin->id), GETPINNUMBER(_pin->id));
+    //  LL_APB1_GRP2_EnableClock(LL_APB1_GRP2_PERIPH_SYSCFG);
+    GPIO_EXTILineConfig(GETEXTIPORT(_pin->id), GETPINNUMBER(_pin->id));
 
-  EXTI_DEBUG("extiLine is %d , %d \r\n",_extiLine,GETEXTILINE(_pin->id));
-  EXTI_DEBUG("pinNumber is %d \r\n",GETPINNUMBER(_pin->id));
+    EXTI_DEBUG("extiLine is %d , %d \r\n", _extiLine, GETEXTILINE(_pin->id));
+    EXTI_DEBUG("pinNumber is %d \r\n", GETPINNUMBER(_pin->id));
 
-  switch (type)
-  {
-  case IT:
-//    LL_EXTI_EnableIT_0_31(_extiLine);
-//    LL_EXTI_DisableEvent_0_31(_extiLine);
-    SET_BIT(EXTI->IMR, _extiLine);
-    CLEAR_BIT(EXTI->EMR, _extiLine);
-    break;
-  case EVENT:
-//    LL_EXTI_EnableEvent_0_31(_extiLine);
-//    LL_EXTI_DisableIT_0_31(_extiLine);
-    SET_BIT(EXTI->EMR, _extiLine);
-    CLEAR_BIT(EXTI->IMR, _extiLine);
-    break;
-  case IT_EVENT:
-//    LL_EXTI_EnableIT_0_31(_extiLine);
-//    LL_EXTI_EnableEvent_0_31(_extiLine);
-    SET_BIT(EXTI->EMR, _extiLine);
-    SET_BIT(EXTI->IMR, _extiLine);
-    break;
-  default:
-//    LL_EXTI_EnableIT_0_31(_extiLine);
-//    LL_EXTI_DisableEvent_0_31(_extiLine);
-    SET_BIT(EXTI->IMR, _extiLine);
-    CLEAR_BIT(EXTI->EMR, _extiLine);
-    break;
-  }
+    switch (type)
+    {
+    case IT:
+        //    LL_EXTI_EnableIT_0_31(_extiLine);
+        //    LL_EXTI_DisableEvent_0_31(_extiLine);
+        SET_BIT(EXTI->IMR, _extiLine);
+        CLEAR_BIT(EXTI->EMR, _extiLine);
+        break;
+    case EVENT:
+        //    LL_EXTI_EnableEvent_0_31(_extiLine);
+        //    LL_EXTI_DisableIT_0_31(_extiLine);
+        SET_BIT(EXTI->EMR, _extiLine);
+        CLEAR_BIT(EXTI->IMR, _extiLine);
+        break;
+    case IT_EVENT:
+        //    LL_EXTI_EnableIT_0_31(_extiLine);
+        //    LL_EXTI_EnableEvent_0_31(_extiLine);
+        SET_BIT(EXTI->EMR, _extiLine);
+        SET_BIT(EXTI->IMR, _extiLine);
+        break;
+    default:
+        //    LL_EXTI_EnableIT_0_31(_extiLine);
+        //    LL_EXTI_DisableEvent_0_31(_extiLine);
+        SET_BIT(EXTI->IMR, _extiLine);
+        CLEAR_BIT(EXTI->EMR, _extiLine);
+        break;
+    }
 }
 
 //void Exti::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
@@ -123,33 +124,34 @@ void Exti::begin(PIN_MODE mode,ExtiType type){
   *@param    trig 触发类型
   *@retval   NONE
   */
-void Exti::enable(TrigType trig,uint32_t priority){
-  switch (trig) // 使能触发类型
-  {
-  case FALL:
-//    LL_EXTI_EnableFallingTrig_0_31(_extiLine);
-//    LL_EXTI_DisableRisingTrig_0_31(_extiLine);
-    SET_BIT(EXTI->FTSR, _extiLine);
-    CLEAR_BIT(EXTI->RTSR, _extiLine);
-    break;
-  case RISE:
-//    LL_EXTI_EnableRisingTrig_0_31(_extiLine);
-//    LL_EXTI_DisableFallingTrig_0_31(_extiLine);
-    SET_BIT(EXTI->RTSR, _extiLine);
-    CLEAR_BIT(EXTI->FTSR, _extiLine);
-    break;
-  case FALL_RISING:
-//    LL_EXTI_EnableFallingTrig_0_31(_extiLine);
-//    LL_EXTI_EnableRisingTrig_0_31(_extiLine);
-    SET_BIT(EXTI->FTSR, _extiLine);
-    SET_BIT(EXTI->RTSR, _extiLine);
-    break;
-  default:
-    break;
-  }
+void Exti::enable(TrigType trig, uint32_t priority)
+{
+    switch (trig) // 使能触发类型
+    {
+    case FALL:
+        //    LL_EXTI_EnableFallingTrig_0_31(_extiLine);
+        //    LL_EXTI_DisableRisingTrig_0_31(_extiLine);
+        SET_BIT(EXTI->FTSR, _extiLine);
+        CLEAR_BIT(EXTI->RTSR, _extiLine);
+        break;
+    case RISE:
+        //    LL_EXTI_EnableRisingTrig_0_31(_extiLine);
+        //    LL_EXTI_DisableFallingTrig_0_31(_extiLine);
+        SET_BIT(EXTI->RTSR, _extiLine);
+        CLEAR_BIT(EXTI->FTSR, _extiLine);
+        break;
+    case FALL_RISING:
+        //    LL_EXTI_EnableFallingTrig_0_31(_extiLine);
+        //    LL_EXTI_EnableRisingTrig_0_31(_extiLine);
+        SET_BIT(EXTI->FTSR, _extiLine);
+        SET_BIT(EXTI->RTSR, _extiLine);
+        break;
+    default:
+        break;
+    }
 
-  nvic_dev_set_priority((uint32_t)_extiLine,0,0,0);
-  nvic_dev_enable((uint32_t)_extiLine,0);
+    nvic_dev_set_priority((uint32_t)_extiLine, 0, 0, 0);
+    nvic_dev_enable((uint32_t)_extiLine, 0);
 }
 
 /**
@@ -157,27 +159,28 @@ void Exti::enable(TrigType trig,uint32_t priority){
   *@param    trig 触发类型
   *@retval   NONE
   */
-void Exti::disable(TrigType trig){
+void Exti::disable(TrigType trig)
+{
 
-  switch (trig)
-  {
-  case FALL:
-//    LL_EXTI_DisableFallingTrig_0_31(_extiLine);
-    CLEAR_BIT(EXTI->FTSR, _extiLine);
-    break;
-  case RISE:
-//    LL_EXTI_DisableRisingTrig_0_31(_extiLine);
-    CLEAR_BIT(EXTI->RTSR, _extiLine);
-    break;
-  case FALL_RISING:
-//    LL_EXTI_DisableRisingTrig_0_31(_extiLine);
-//    LL_EXTI_DisableFallingTrig_0_31(_extiLine);
-    CLEAR_BIT(EXTI->RTSR, _extiLine);
-    CLEAR_BIT(EXTI->FTSR, _extiLine);
-    break;
-  default:
-    break;
-  }
+    switch (trig)
+    {
+    case FALL:
+        //    LL_EXTI_DisableFallingTrig_0_31(_extiLine);
+        CLEAR_BIT(EXTI->FTSR, _extiLine);
+        break;
+    case RISE:
+        //    LL_EXTI_DisableRisingTrig_0_31(_extiLine);
+        CLEAR_BIT(EXTI->RTSR, _extiLine);
+        break;
+    case FALL_RISING:
+        //    LL_EXTI_DisableRisingTrig_0_31(_extiLine);
+        //    LL_EXTI_DisableFallingTrig_0_31(_extiLine);
+        CLEAR_BIT(EXTI->RTSR, _extiLine);
+        CLEAR_BIT(EXTI->FTSR, _extiLine);
+        break;
+    default:
+        break;
+    }
 }
 /**
  *@brief    EXTI 静态成员函数，在中断中调用，解析执行相关回调函数
@@ -186,8 +189,8 @@ void Exti::disable(TrigType trig){
 */
 void Exti::_irq_handler(uint32_t pObj)
 {
-  Exti *handler = (Exti*)pObj;  // 指向回调函数地址
-  handler->_pirq[handler->_pin->read()].call();
+    Exti *handler = (Exti *)pObj; // 指向回调函数地址
+    handler->_pirq[handler->_pin->read()].call();
 
 }
 /**
@@ -196,81 +199,84 @@ void Exti::_irq_handler(uint32_t pObj)
  *
  * @return  NONE
  */
-void Exti::attach(void (*fptr)(void),TrigType type)
+void Exti::attach(void (*fptr)(void), TrigType type)
 {
-  if (type == FALL_RISING){
-    _pirq[FALL].attach(fptr);
-    _pirq[RISE].attach(fptr);
-  }else{
-    _pirq[type].attach(fptr);
-  }
+    if (type == FALL_RISING)
+    {
+        _pirq[FALL].attach(fptr);
+        _pirq[RISE].attach(fptr);
+    }
+    else
+    {
+        _pirq[type].attach(fptr);
+    }
 }
 
 extern "C" {
 
-  void EXTI0_IRQHandler(void)
-  {
-    if (EXTI_GetITStatus(EXTI_Line0) != RESET)
+    void EXTI0_IRQHandler(void)
     {
-      exti_handler(exti_irq_ids[0]);
-      EXTI_ClearITPendingBit(EXTI_Line0);
+        if (EXTI_GetITStatus(EXTI_Line0) != RESET)
+        {
+            exti_handler(exti_irq_ids[0]);
+            EXTI_ClearITPendingBit(EXTI_Line0);
+        }
     }
-  }
-  void EXTI1_IRQHandler(void)
-  {
-    if (EXTI_GetITStatus(EXTI_Line1) != RESET)
+    void EXTI1_IRQHandler(void)
     {
-      exti_handler(exti_irq_ids[1]);
-      EXTI_ClearITPendingBit(EXTI_Line1);
+        if (EXTI_GetITStatus(EXTI_Line1) != RESET)
+        {
+            exti_handler(exti_irq_ids[1]);
+            EXTI_ClearITPendingBit(EXTI_Line1);
+        }
     }
-  }
-  void EXTI2_IRQHandler(void)
-  {
-    if (EXTI_GetITStatus(EXTI_Line2) != RESET)
+    void EXTI2_IRQHandler(void)
     {
-      exti_handler(exti_irq_ids[2]);
-      EXTI_ClearITPendingBit(EXTI_Line2);
+        if (EXTI_GetITStatus(EXTI_Line2) != RESET)
+        {
+            exti_handler(exti_irq_ids[2]);
+            EXTI_ClearITPendingBit(EXTI_Line2);
+        }
     }
-  }
-  void EXTI3_IRQHandler(void)
-  {
-    if (EXTI_GetITStatus(EXTI_Line3) != RESET)
+    void EXTI3_IRQHandler(void)
     {
-      exti_handler(exti_irq_ids[3]);
-      EXTI_ClearITPendingBit(EXTI_Line3);
+        if (EXTI_GetITStatus(EXTI_Line3) != RESET)
+        {
+            exti_handler(exti_irq_ids[3]);
+            EXTI_ClearITPendingBit(EXTI_Line3);
+        }
     }
-  }
-  void EXTI4_IRQHandler(void)
-  {
-    if (EXTI_GetITStatus(EXTI_Line4) != RESET)
+    void EXTI4_IRQHandler(void)
     {
-      exti_handler(exti_irq_ids[4]);
-      EXTI_ClearITPendingBit(EXTI_Line4);
+        if (EXTI_GetITStatus(EXTI_Line4) != RESET)
+        {
+            exti_handler(exti_irq_ids[4]);
+            EXTI_ClearITPendingBit(EXTI_Line4);
+        }
     }
-  }
 
-  void EXTI9_5_IRQHandler(void)
-  {
-    for (uint8_t i = 5;i<=9;i++)
+    void EXTI9_5_IRQHandler(void)
     {
-      if (EXTI_GetITStatus(1<<i) != RESET)
-      {
-        exti_handler(exti_irq_ids[i]);
-        EXTI_ClearITPendingBit(1<<i);
-      }
+        for (uint8_t i = 5; i <= 9; i++)
+        {
+            if (EXTI_GetITStatus(1 << i) != RESET)
+            {
+                exti_handler(exti_irq_ids[i]);
+                EXTI_ClearITPendingBit(1 << i);
+            }
+        }
     }
-  }
 
-  void EXTI15_10_IRQHandler(void)
-  {
-    for (uint8_t i = 10;i<=15;i++)
+    void EXTI15_10_IRQHandler(void)
     {
-      if (EXTI_GetITStatus(1<<i) != RESET)
-      {
-        exti_handler(exti_irq_ids[i]);
-        EXTI_ClearITPendingBit(1<<i);
-      }
+        for (uint8_t i = 10; i <= 15; i++)
+        {
+            if (EXTI_GetITStatus(1 << i) != RESET)
+            {
+                exti_handler(exti_irq_ids[i]);
+                EXTI_ClearITPendingBit(1 << i);
+            }
+        }
     }
-  }
 
 }

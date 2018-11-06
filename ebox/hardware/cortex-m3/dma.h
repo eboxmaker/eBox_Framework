@@ -7,59 +7,61 @@
 
 //”√ªß≈‰÷√//////////////
 #define DMA_NUM (7)
-enum DmaIrqType {
-		DmaItTc = 0,
-		DmaItTe ,
-		DmaItHt 
+enum DmaIrqType
+{
+    DmaItTc = 0,
+    DmaItTe,
+    DmaItHt
 };
 
-enum DmaItIndex{
+enum DmaItIndex
+{
     DMA1_CH1  = 0,
     DMA1_CH2  = 1,
     DMA1_CH3  = 2,
     DMA1_CH4  = 3,
-    DMA1_CH5  = 4,	
+    DMA1_CH5  = 4,
     DMA1_CH6  = 5,
-    DMA1_CH7  = 6,	
-} ; 
+    DMA1_CH7  = 6,
+} ;
 
 typedef void (*DmaIrqHandler_t)(uint32_t id, DmaIrqType type);
 class Dma
 {
-    public:
-        DMA_Channel_TypeDef* DMAy_Channelx;
-    
-    
-    public:
-        Dma(DMA_Channel_TypeDef* DMAy_Channelx);
-        
-        void rcc_enable();
-        void rcc_disable();
-        void nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority );
-        void interrupt(DmaIrqType DMA_IT,FunctionalState enable);
+public:
+    DMA_Channel_TypeDef *DMAy_Channelx;
 
 
-        void deInit();
-        
-        void init(DMA_InitTypeDef* DMA_InitStruct);
-        void enable();
-        void disable();
-        void set_current_len(uint16_t len);
-        bool get_flag_status();
-        void clear_flag();
+public:
+    Dma(DMA_Channel_TypeDef *DMAy_Channelx);
 
-        DMA_Channel_TypeDef* get_dma_ch();
+    void rcc_enable();
+    void rcc_disable();
+    void nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority );
+    void interrupt(DmaIrqType DMA_IT, FunctionalState enable);
 
-    
-    
-        /** Attach a function to call whenever a serial interrupt is generated
-     *
-     *  @param fptr A pointer to a void function, or 0 to set as none
-     *  @param type Which serial interrupt to attach the member function to (Seriall::RxIrq for receive, TxIrq for transmit buffer empty)
-     */
+
+    void deInit();
+
+    void init(DMA_InitTypeDef *DMA_InitStruct);
+    void enable();
+    void disable();
+    void set_current_len(uint16_t len);
+    bool get_flag_status();
+    void clear_flag();
+
+    DMA_Channel_TypeDef *get_dma_ch();
+
+
+
+    /** Attach a function to call whenever a serial interrupt is generated
+    *
+    *  @param fptr A pointer to a void function, or 0 to set as none
+    *  @param type Which serial interrupt to attach the member function to (Seriall::RxIrq for receive, TxIrq for transmit buffer empty)
+    */
     //attach user event
     void attach(void (*fptr)(void), DmaIrqType type);
-//    void interrupt(DmaIrqType type, FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
+    //    void interrupt(DmaIrqType type, FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
 
 
     /** Attach a member function to call whenever a serial interrupt is generated
@@ -69,18 +71,20 @@ class Dma
      *  @param type Which serial interrupt to attach the member function to (Seriall::RxIrq for receive, TxIrq for transmit buffer empty)
      */
     template<typename T>
-    void attach(T* tptr, void (T::*mptr)(void), DmaIrqType type) {
-        if((mptr != NULL) && (tptr != NULL)) {
+    void attach(T *tptr, void (T::*mptr)(void), DmaIrqType type)
+    {
+        if((mptr != NULL) && (tptr != NULL))
+        {
             _irq[type].attach(tptr, mptr);
         }
     }
-		
+
     static void _irq_handler(uint32_t id, DmaIrqType irq_type);
 
-    
-    
-    protected:
-        FunctionPointer _irq[3];
+
+
+protected:
+    FunctionPointer _irq[3];
 
 };
 

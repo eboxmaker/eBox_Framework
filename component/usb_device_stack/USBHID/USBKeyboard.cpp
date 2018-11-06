@@ -24,7 +24,8 @@
 #define REPORT_ID_VOLUME   3
 
 
-typedef struct {
+typedef struct
+{
     unsigned char usage;
     unsigned char modifier;
 } KEYMAP;
@@ -32,7 +33,8 @@ typedef struct {
 #ifdef US_KEYBOARD
 /* US keyboard (as HID standard) */
 #define KEYMAP_SIZE (152)
-const KEYMAP keymap[KEYMAP_SIZE] = {
+const KEYMAP keymap[KEYMAP_SIZE] =
+{
     {0, 0},             /* NUL */
     {0, 0},             /* SOH */
     {0, 0},             /* STX */
@@ -160,7 +162,7 @@ const KEYMAP keymap[KEYMAP_SIZE] = {
     {0x31, KEY_SHIFT},      /* | */
     {0x30, KEY_SHIFT},      /* } */
     {0x35, KEY_SHIFT},      /* ~ */
-    {0,0},              /* DEL */
+    {0, 0},             /* DEL */
 
     {0x3a, 0},          /* F1 */
     {0x3b, 0},          /* F2 */
@@ -193,7 +195,8 @@ const KEYMAP keymap[KEYMAP_SIZE] = {
 #else
 /* UK keyboard */
 #define KEYMAP_SIZE (152)
-const KEYMAP keymap[KEYMAP_SIZE] = {
+const KEYMAP keymap[KEYMAP_SIZE] =
+{
     {0, 0},             /* NUL */
     {0, 0},             /* SOH */
     {0, 0},             /* STX */
@@ -321,7 +324,7 @@ const KEYMAP keymap[KEYMAP_SIZE] = {
     {0x64, KEY_SHIFT},      /* | */
     {0x30, KEY_SHIFT},      /* } */
     {0x32, KEY_SHIFT},      /* ~ */
-    {0,0},             /* DEL */
+    {0, 0},            /* DEL */
 
     {0x3a, 0},          /* F1 */
     {0x3b, 0},          /* F2 */
@@ -352,8 +355,10 @@ const KEYMAP keymap[KEYMAP_SIZE] = {
 };
 #endif
 
-uint8_t * USBKeyboard::reportDesc() {
-    static uint8_t reportDescriptor[] = {
+uint8_t *USBKeyboard::reportDesc()
+{
+    static uint8_t reportDescriptor[] =
+    {
         USAGE_PAGE(1), 0x01,                    // Generic Desktop
         USAGE(1), 0x06,                         // Keyboard
         COLLECTION(1), 0x01,                    // Application
@@ -420,7 +425,8 @@ uint8_t * USBKeyboard::reportDesc() {
 }
 
 
-bool USBKeyboard::EPINT_OUT_callback() {
+bool USBKeyboard::EPINT_OUT_callback()
+{
     uint32_t bytesRead = 0;
     uint8_t led[65];
     USBDevice::readEP(EPINT_OUT, led, &bytesRead, MAX_HID_REPORT_SIZE);
@@ -434,24 +440,27 @@ bool USBKeyboard::EPINT_OUT_callback() {
     return true;
 }
 
-uint8_t USBKeyboard::lockStatus() {
+uint8_t USBKeyboard::lockStatus()
+{
     return lock_status;
 }
 
-int USBKeyboard::_putc(int c) {
+int USBKeyboard::_putc(int c)
+{
     return keyCode(c, keymap[c].modifier);
 }
 
 void USBKeyboard::printf(const char *str)
 {
-	while(*str != '\0')
-	{
-	   _putc(*str);
-		 str++;
-	}
+    while(*str != '\0')
+    {
+        _putc(*str);
+        str++;
+    }
 }
 
-bool USBKeyboard::keyCode(uint8_t key, uint8_t modifier) {
+bool USBKeyboard::keyCode(uint8_t key, uint8_t modifier)
+{
     // Send a simulated keyboard keypress. Returns true if successful.
     HID_REPORT report;
 
@@ -467,14 +476,16 @@ bool USBKeyboard::keyCode(uint8_t key, uint8_t modifier) {
 
     report.length = 9;
 
-    if (!send(&report)) {
+    if (!send(&report))
+    {
         return false;
     }
 
     report.data[1] = 0;
     report.data[3] = 0;
 
-    if (!send(&report)) {
+    if (!send(&report))
+    {
         return false;
     }
 
@@ -483,7 +494,8 @@ bool USBKeyboard::keyCode(uint8_t key, uint8_t modifier) {
 }
 
 
-bool USBKeyboard::mediaControl(MEDIA_KEY key) {
+bool USBKeyboard::mediaControl(MEDIA_KEY key)
+{
     HID_REPORT report;
 
     report.data[0] = REPORT_ID_VOLUME;
@@ -491,7 +503,8 @@ bool USBKeyboard::mediaControl(MEDIA_KEY key) {
 
     report.length = 2;
 
-    if (!send(&report)) {
+    if (!send(&report))
+    {
         return false;
     }
 
@@ -510,8 +523,10 @@ bool USBKeyboard::mediaControl(MEDIA_KEY key) {
                                + (1 * HID_DESCRIPTOR_LENGTH) \
                                + (2 * ENDPOINT_DESCRIPTOR_LENGTH))
 
-uint8_t * USBKeyboard::configurationDesc() {
-    static uint8_t configurationDescriptor[] = {
+uint8_t *USBKeyboard::configurationDesc()
+{
+    static uint8_t configurationDescriptor[] =
+    {
         CONFIGURATION_DESCRIPTOR_LENGTH,// bLength
         CONFIGURATION_DESCRIPTOR,       // bDescriptorType
         LSB(TOTAL_DESCRIPTOR_LENGTH),   // wTotalLength (LSB)

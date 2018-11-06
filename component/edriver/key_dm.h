@@ -1,30 +1,30 @@
 #ifndef _USE_KEY_H
 #define _USE_KEY_H  1
 /*==================================================================
- *   声明库说明：					                       
- *   版	     本：  V4.0                                        
- *   作      者：  施飞峰                                   
- *   创建  日期：  2016/3/20                              
+ *   声明库说明：
+ *   版	     本：  V4.0
+ *   作      者：  施飞峰
+ *   创建  日期：  2016/3/20
  * ------------------------------------------------------------------
- *  硬件环境:                                                                                 
- *     		           			
+ *  硬件环境:
+ *
  *-------------------------------------------------------------------
- *  软件环境:                                                                                                  
- *     		               			              
+ *  软件环境:
+ *
  * ------------------------------------------------------------------
- *  [支 持 库]                                              
- *   支持库名称：                                           
- *   需要版本：                                             
- *   支持库说明：										   
+ *  [支 持 库]
+ *   支持库名称：
+ *   需要版本：
+ *   支持库说明：
  * ------------------------------------------------------------------
- *  [版本更新]                                              
- *   修改：                                                 
- *   修改日期：                                             
- *   版本：                                                 
+ *  [版本更新]
+ *   修改：
+ *   修改日期：
+ *   版本：
  * -------------------------------------------------------------------
- *  [使用说明]    
- *			
- *	                                                                     
+ *  [使用说明]
+ *
+ *
  =====================================================================*/
 
 /***********************************************************
@@ -36,19 +36,19 @@
  *--------------------------------------------------------*/
 
 //#define DDR_IN	        GPIOB->CRH.B.MODE13 = 0X0;\
-//											  GPIOB->CRH.B.CNF13 = 2;        //设置输入	
-//						
+//											  GPIOB->CRH.B.CNF13 = 2;        //设置输入
+//
 //#define DDR_OUT	        GPIOB->CRH.B.MODE13 = 0X3;\
-//											  GPIOB->CRH.B.CNF13 = 0;        //DDRC  |= (1 << PC0)//设置输出		
-//						
+//											  GPIOB->CRH.B.CNF13 = 0;        //DDRC  |= (1 << PC0)//设置输出
+//
 //#define PORT_L	    		PBout(13) = 0;//PORTC &=~(1 << PC0)		//置低电平
 //#define PORT_H	   			PBout(13) = 1;//PORTC |= (1 << PC0)		//置高电平
 
 //#define PIN_RED	        PBin(13)      //(PINC &  (1 << PC0))	//读电平
 
 //#define  AM2302_DATA_IN()	   GPIOB->IDR.B.IO13//PCin(1)//PIN_RED//(GPIO_AM2302,PIN_AM2302)
-// 
-// 
+//
+//
 //#define 	KEY_DDR			DDRA
 //#define 	KEY_PORT		PORTA
 //#define 	KEY_PIN			PINA
@@ -88,23 +88,23 @@
 //	unsigned char (* con_mul)(void);
 //	}KEY_T;
 //extern KEY_T key;
-//	
-//	
+//
+//
 class BUTTON
 {
-	public:
-		
-		BUTTON(Gpio *pin);
-		void begin();
-		void initialize(void);
-		char mode(uint8_t key_num);
-		char control_mul(void);
-		uint8_t bmode;	
-	
-	private:		
-		Gpio    *data_pin;           //arduino pin number
-		uint16_t count1;
-		uint16_t count2;
+public:
+
+    BUTTON(Gpio *pin);
+    void begin();
+    void initialize(void);
+    char mode(uint8_t key_num);
+    char control_mul(void);
+    uint8_t bmode;
+
+private:
+    Gpio    *data_pin;           //arduino pin number
+    uint16_t count1;
+    uint16_t count2;
 
 };
 

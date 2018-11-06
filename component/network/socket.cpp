@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -28,7 +28,7 @@ W5500 *eth;
 
 void attach_eth_to_socket(void *e)
 {
-    eth = (W5500*)e;
+    eth = (W5500 *)e;
 }
 /**
 @brief   This Socket function initialize the channel in perticular mode, and set the port and wait for W5200 done it.
@@ -42,19 +42,19 @@ int _socket(SOCKET s, int8_t protocol, uint16_t port, int8_t flag)
             ((protocol & 0x0F) == Sn_MR_MACRAW) || (protocol & 0x0F) == Sn_MR_PPPOE)
     {
         _close(s);
-        eth->write(Sn_MR(s) , protocol | flag);
+        eth->write(Sn_MR(s), protocol | flag);
         if (port != 0)
         {
-            eth->write( Sn_PORT0(s) , (int8_t)((port & 0xff00) >> 8));
-            eth->write( Sn_PORT1(s) , (int8_t)(port & 0x00ff));
+            eth->write( Sn_PORT0(s), (int8_t)((port & 0xff00) >> 8));
+            eth->write( Sn_PORT1(s), (int8_t)(port & 0x00ff));
         }
         else
         {
             local_port++; // if don't set the source port, set local_port number.
-            eth->write(Sn_PORT0(s) , (int8_t)((local_port & 0xff00) >> 8));
-            eth->write(Sn_PORT1(s) , (int8_t)(local_port & 0x00ff));
+            eth->write(Sn_PORT0(s), (int8_t)((local_port & 0xff00) >> 8));
+            eth->write(Sn_PORT1(s), (int8_t)(local_port & 0x00ff));
         }
-        eth->write( Sn_CR(s) , Sn_CR_OPEN); // run sockinit Sn_CR
+        eth->write( Sn_CR(s), Sn_CR_OPEN);  // run sockinit Sn_CR
 
         /* wait to process the command... */
         while( eth->read(Sn_CR(s)) )
@@ -82,14 +82,14 @@ void _close(SOCKET s)
 {
 
 
-    eth->write( Sn_CR(s) , Sn_CR_CLOSE);
+    eth->write( Sn_CR(s), Sn_CR_CLOSE);
 
     /* wait to process the command... */
     while( eth->read(Sn_CR(s) ) )
         ;
     /* ------- */
     /* all clear */
-    eth->write( Sn_IR(s) , 0xFF);
+    eth->write( Sn_IR(s), 0xFF);
 }
 /**
 @brief   This function established  the connection for the channel in passive (server) mode. This function waits for the request from the peer.
@@ -100,7 +100,7 @@ bool _listen(SOCKET s)
     bool ret ;
     if (eth->read( Sn_SR(s) ) == SOCK_INIT)
     {
-        eth->write( Sn_CR(s) , Sn_CR_LISTEN);
+        eth->write( Sn_CR(s), Sn_CR_LISTEN);
         /* wait to process the command... */
         while( eth->read(Sn_CR(s) ) )
             ;
@@ -137,7 +137,7 @@ int _connect(SOCKET s, uint8_t *addr, uint16_t port)
         eth->write( Sn_DIPR3(s), addr[3]);
         eth->write( Sn_DPORT0(s), (int8_t)((port & 0xff00) >> 8));
         eth->write( Sn_DPORT1(s), (int8_t)(port & 0x00ff));
-        eth->write( Sn_CR(s) , Sn_CR_CONNECT);
+        eth->write( Sn_CR(s), Sn_CR_CONNECT);
         /* wait for completion */
         while ( eth->read(Sn_CR(s) ) ) ;
         while(eth->read(Sn_SR(s)) != SOCK_ESTABLISHED)
@@ -177,7 +177,7 @@ int _connect(SOCKET s, uint8_t *addr, uint16_t port)
 */
 bool _disconnect(SOCKET s)
 {
-    eth->write( Sn_CR(s) , Sn_CR_DISCON);
+    eth->write( Sn_CR(s), Sn_CR_DISCON);
 
     /* wait to process the command... */
     while( eth->read(Sn_CR(s)) )
@@ -216,7 +216,7 @@ int _send(SOCKET s, const uint8_t *buf, uint16_t len)
 
     // copy data
     eth->send_data_processing(s, (uint8_t *)buf, ret);
-    eth->write( Sn_CR(s) , Sn_CR_SEND);
+    eth->write( Sn_CR(s), Sn_CR_SEND);
 
     /* wait to process the command... */
     while( eth->read(Sn_CR(s) ) );
@@ -231,12 +231,12 @@ int _send(SOCKET s, const uint8_t *buf, uint16_t len)
             return 0;
         }
     }
-    eth->write( Sn_IR(s) , Sn_IR_SEND_OK);
+    eth->write( Sn_IR(s), Sn_IR_SEND_OK);
 
     //#ifdef __DEF_IINCHIP_INT__
     //   putISR(s, getISR(s) & (~Sn_IR_SEND_OK));
     //#else
-    eth->write( Sn_IR(s) , Sn_IR_SEND_OK);
+    eth->write( Sn_IR(s), Sn_IR_SEND_OK);
     //#endif
 
     return ret;
@@ -253,7 +253,7 @@ int _recv(SOCKET s, uint8_t *buf, uint16_t len)
     if ( len > 0 )
     {
         eth->recv_data_processing(s, buf, len);
-        eth->write( Sn_CR(s) , Sn_CR_RECV);
+        eth->write( Sn_CR(s), Sn_CR_RECV);
         /* wait to process the command... */
         while( eth->read(Sn_CR(s) ));
         /* ------- */
@@ -291,7 +291,7 @@ int _sendto(SOCKET s, const uint8_t *buf, uint16_t len, uint8_t *addr, uint16_t 
         eth->write( Sn_DPORT1(s), (int8_t)(port & 0x00ff));
         // copy data
         eth->send_data_processing(s, (uint8_t *)buf, ret);
-        eth->write( Sn_CR(s) , Sn_CR_SEND);
+        eth->write( Sn_CR(s), Sn_CR_SEND);
         /* wait to process the command... */
         while( eth->read( Sn_CR(s) ) )
             ;
@@ -302,11 +302,11 @@ int _sendto(SOCKET s, const uint8_t *buf, uint16_t len, uint8_t *addr, uint16_t 
             if (eth->read( Sn_IR(s) ) & Sn_IR_TIMEOUT)
             {
                 /* clear interrupt */
-                eth->write( Sn_IR(s) , (Sn_IR_SEND_OK | Sn_IR_TIMEOUT)); /* clear SEND_OK & TIMEOUT */
+                eth->write( Sn_IR(s), (Sn_IR_SEND_OK | Sn_IR_TIMEOUT));  /* clear SEND_OK & TIMEOUT */
                 return 0;
             }
         }
-        eth->write( Sn_IR(s) , Sn_IR_SEND_OK);
+        eth->write( Sn_IR(s), Sn_IR_SEND_OK);
     }
     return ret;
 }
@@ -392,7 +392,7 @@ int _recvfrom(SOCKET s, uint8_t *buf, uint16_t len, uint8_t *addr, uint16_t *por
         default :
             break;
         }
-        eth->write( Sn_CR(s) , Sn_CR_RECV);
+        eth->write( Sn_CR(s), Sn_CR_RECV);
 
         /* wait to process the command... */
         while( eth->read( Sn_CR(s)) ) ;
@@ -474,25 +474,25 @@ char *inet_ntoa_pad(unsigned long addr)
 
 
 
-void inet_addr_(unsigned char* addr,unsigned char *ip)
+void inet_addr_(unsigned char *addr, unsigned char *ip)
 {
-	int i;
-//	uint32_t inetaddr = 0;
-	char taddr[30];
-	char * nexttok;
-	char num;
-	strcpy(taddr,(char *)addr);
+    int i;
+    //	uint32_t inetaddr = 0;
+    char taddr[30];
+    char *nexttok;
+    char num;
+    strcpy(taddr, (char *)addr);
 
-	nexttok = taddr;
-	for(i = 0; i < 4 ; i++)
-	{
-		nexttok = strtok(nexttok,".");
-		if(nexttok[0] == '0' && nexttok[1] == 'x') num = atoi(nexttok+2,0x10);
-		else num = atoi(nexttok,10);
+    nexttok = taddr;
+    for(i = 0; i < 4 ; i++)
+    {
+        nexttok = strtok(nexttok, ".");
+        if(nexttok[0] == '0' && nexttok[1] == 'x') num = atoi(nexttok + 2, 0x10);
+        else num = atoi(nexttok, 10);
 
-		ip[i] = num;
-		nexttok = NULL;
-	}
+        ip[i] = num;
+        nexttok = NULL;
+    }
 }
 
 /**

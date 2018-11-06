@@ -37,7 +37,8 @@
 //#define __packed __attribute__ ((__packed__))
 //#endif
 
-class USBHAL {
+class USBHAL
+{
 public:
     /* Configuration */
     USBHAL();
@@ -70,53 +71,143 @@ public:
     uint32_t endpointReadcore(uint8_t endpoint, uint8_t *buffer);
 
 protected:
-    virtual void busReset(void){};
-    virtual void EP0setupCallback(void){};
-    virtual void EP0out(void){};
-    virtual void EP0in(void){};
-    virtual void connectStateChanged(unsigned int connected){};
-    virtual void suspendStateChanged(unsigned int suspended){};
-    virtual void SOF(int frameNumber){};
-			
-    virtual bool EP1_OUT_callback(){return false;};
-    virtual bool EP1_IN_callback(){return false;};
-    virtual bool EP2_OUT_callback(){return false;};
-    virtual bool EP2_IN_callback(){return false;};
-    virtual bool EP3_OUT_callback(){return false;};
-    virtual bool EP3_IN_callback(){return false;};
+    virtual void busReset(void) {};
+    virtual void EP0setupCallback(void) {};
+    virtual void EP0out(void) {};
+    virtual void EP0in(void) {};
+    virtual void connectStateChanged(unsigned int connected) {};
+    virtual void suspendStateChanged(unsigned int suspended) {};
+    virtual void SOF(int frameNumber) {};
+
+    virtual bool EP1_OUT_callback()
+    {
+        return false;
+    };
+    virtual bool EP1_IN_callback()
+    {
+        return false;
+    };
+    virtual bool EP2_OUT_callback()
+    {
+        return false;
+    };
+    virtual bool EP2_IN_callback()
+    {
+        return false;
+    };
+    virtual bool EP3_OUT_callback()
+    {
+        return false;
+    };
+    virtual bool EP3_IN_callback()
+    {
+        return false;
+    };
 #if !defined(TARGET_STM32F4)
-    virtual bool EP4_OUT_callback(){return false;};
-    virtual bool EP4_IN_callback(){return false;};
+    virtual bool EP4_OUT_callback()
+    {
+        return false;
+    };
+    virtual bool EP4_IN_callback()
+    {
+        return false;
+    };
 #if !(defined(TARGET_LPC11UXX) || defined(TARGET_LPC11U6X) || defined(TARGET_LPC1347) || defined(TARGET_LPC1549))
-    virtual bool EP5_OUT_callback(){return false;};
-    virtual bool EP5_IN_callback(){return false;};
-    virtual bool EP6_OUT_callback(){return false;};
-    virtual bool EP6_IN_callback(){return false;};
-    virtual bool EP7_OUT_callback(){return false;};
-    virtual bool EP7_IN_callback(){return false;};
-    virtual bool EP8_OUT_callback(){return false;};
-    virtual bool EP8_IN_callback(){return false;};
-    virtual bool EP9_OUT_callback(){return false;};
-    virtual bool EP9_IN_callback(){return false;};
-    virtual bool EP10_OUT_callback(){return false;};
-    virtual bool EP10_IN_callback(){return false;};
-    virtual bool EP11_OUT_callback(){return false;};
-    virtual bool EP11_IN_callback(){return false;};
-    virtual bool EP12_OUT_callback(){return false;};
-    virtual bool EP12_IN_callback(){return false;};
-    virtual bool EP13_OUT_callback(){return false;};
-    virtual bool EP13_IN_callback(){return false;};
-    virtual bool EP14_OUT_callback(){return false;};
-    virtual bool EP14_IN_callback(){return false;};
-    virtual bool EP15_OUT_callback(){return false;};
-    virtual bool EP15_IN_callback(){return false;};
+    virtual bool EP5_OUT_callback()
+    {
+        return false;
+    };
+    virtual bool EP5_IN_callback()
+    {
+        return false;
+    };
+    virtual bool EP6_OUT_callback()
+    {
+        return false;
+    };
+    virtual bool EP6_IN_callback()
+    {
+        return false;
+    };
+    virtual bool EP7_OUT_callback()
+    {
+        return false;
+    };
+    virtual bool EP7_IN_callback()
+    {
+        return false;
+    };
+    virtual bool EP8_OUT_callback()
+    {
+        return false;
+    };
+    virtual bool EP8_IN_callback()
+    {
+        return false;
+    };
+    virtual bool EP9_OUT_callback()
+    {
+        return false;
+    };
+    virtual bool EP9_IN_callback()
+    {
+        return false;
+    };
+    virtual bool EP10_OUT_callback()
+    {
+        return false;
+    };
+    virtual bool EP10_IN_callback()
+    {
+        return false;
+    };
+    virtual bool EP11_OUT_callback()
+    {
+        return false;
+    };
+    virtual bool EP11_IN_callback()
+    {
+        return false;
+    };
+    virtual bool EP12_OUT_callback()
+    {
+        return false;
+    };
+    virtual bool EP12_IN_callback()
+    {
+        return false;
+    };
+    virtual bool EP13_OUT_callback()
+    {
+        return false;
+    };
+    virtual bool EP13_IN_callback()
+    {
+        return false;
+    };
+    virtual bool EP14_OUT_callback()
+    {
+        return false;
+    };
+    virtual bool EP14_IN_callback()
+    {
+        return false;
+    };
+    virtual bool EP15_OUT_callback()
+    {
+        return false;
+    };
+    virtual bool EP15_IN_callback()
+    {
+        return false;
+    };
 #endif
 #endif
 
 private:
     void usbisr(void);
     static void _usbisr(void);
-    static USBHAL * instance;
+    static USBHAL *instance;
 
     bool (USBHAL::*epCallback[8 - 2])(void);
 

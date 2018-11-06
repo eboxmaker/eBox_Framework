@@ -4,90 +4,107 @@
 */
 #include "ModbusSerial.h"
 
-ModbusSerial::ModbusSerial() {
+ModbusSerial::ModbusSerial()
+{
 
 }
 
-bool ModbusSerial::setSlaveId(byte slaveId){
+bool ModbusSerial::setSlaveId(byte slaveId)
+{
     _slaveId = slaveId;
     return true;
 }
 
-byte ModbusSerial::getSlaveId() {
+byte ModbusSerial::getSlaveId()
+{
     return _slaveId;
 }
 
-bool ModbusSerial::config(Uart* port, long baud, Gpio* txPin) {
+bool ModbusSerial::config(Uart *port, long baud, Gpio *txPin)
+{
     this->_port = port;
     this->_txPin = txPin;
     (*port).begin(baud);
 
     delay_ms(2000);
 
-    if (txPin != NULL) {
+    if (txPin != NULL)
+    {
 
         txPin->mode(OUTPUT);
         txPin->write(LOW);
     }
 
-    if (baud > 19200) {
+    if (baud > 19200)
+    {
         _t15 = 750;
         _t35 = 1750;
-    } else {
-        _t15 = 15000000/baud; // 1T * 1.5 = T1.5
-        _t35 = 35000000/baud; // 1T * 3.5 = T3.5
+    }
+    else
+    {
+        _t15 = 15000000 / baud; // 1T * 1.5 = T1.5
+        _t35 = 35000000 / baud; // 1T * 3.5 = T3.5
     }
 
     return true;
 }
 
 
-bool ModbusSerial::receive(byte* frame) {
+bool ModbusSerial::receive(byte *frame)
+{
     //first byte of frame = address
     byte address = frame[0];
     //Last two bytes = crc
     u_int crc = ((frame[_len - 2] << 8) | frame[_len - 1]);
 
     //Slave Check
-    if (address != 0xFF && address != this->getSlaveId()) {
-		return false;
-	}
+    if (address != 0xFF && address != this->getSlaveId())
+    {
+        return false;
+    }
 
     //CRC Check
-    if (crc != this->calcCrc(_frame[0], _frame+1, _len-3)) {
-		return false;
+    if (crc != this->calcCrc(_frame[0], _frame + 1, _len - 3))
+    {
+        return false;
     }
 
     //PDU starts after first byte
     //framesize PDU = framesize - address(1) - crc(2)
-    this->receivePDU(frame+1);
+    this->receivePDU(frame + 1);
     //No reply to Broadcasts
     if (address == 0xFF) _reply = MB_REPLY_OFF;
     return true;
 }
 
-bool ModbusSerial::send(byte* frame) {
+bool ModbusSerial::send(byte *frame)
+{
     byte i;
 
-    if (this->_txPin != NULL) {
+    if (this->_txPin != NULL)
+    {
         this->_txPin->write(HIGH);
         delay_ms(1);
     }
 
-    for (i = 0 ; i < _len ; i++) {
+    for (i = 0 ; i < _len ; i++)
+    {
         (*_port).write(frame[i]);
     }
 
     (*_port).flush();
     delay_us(_t35);
 
-    if (this->_txPin != NULL) {
+    if (this->_txPin != NULL)
+    {
         this->_txPin->write(LOW);
     }
 }
 
-bool ModbusSerial::sendPDU(byte* pduframe) {
-    if (this->_txPin != NULL) {
+bool ModbusSerial::sendPDU(byte *pduframe)
+{
+    if (this->_txPin != NULL)
+    {
         this->_txPin->write(HIGH);
         delay_ms(1);
     }
@@ -97,7 +114,8 @@ bool ModbusSerial::sendPDU(byte* pduframe) {
 
     //Send PDU
     byte i;
-    for (i = 0 ; i < _len ; i++) {
+    for (i = 0 ; i < _len ; i++)
+    {
         (*_port).write(pduframe[i]);
     }
 
@@ -109,15 +127,18 @@ bool ModbusSerial::sendPDU(byte* pduframe) {
     (*_port).flush();
     delay_us(_t35);
 
-    if (this->_txPin != NULL) {
+    if (this->_txPin != NULL)
+    {
         this->_txPin->write(LOW);
     }
 }
 
-void ModbusSerial::task() {
+void ModbusSerial::task()
+{
     _len = 0;
 
-    while ((*_port).available() > _len)	{
+    while ((*_port).available() > _len)
+    {
         _len = (*_port).available();
         delay_us(_t15);
     }
@@ -125,14 +146,14 @@ void ModbusSerial::task() {
     if (_len == 0) return;
 
     byte i;
-    _frame = (byte*) malloc(_len);
-    for (i=0 ; i < _len ; i++) _frame[i] = (*_port).read();
+    _frame = (byte *) malloc(_len);
+    for (i = 0 ; i < _len ; i++) _frame[i] = (*_port).read();
 
-    if (this->receive(_frame)) {
+    if (this->receive(_frame))
+    {
         if (_reply == MB_REPLY_NORMAL)
             this->sendPDU(_frame);
-        else
-        if (_reply == MB_REPLY_ECHO)
+        else if (_reply == MB_REPLY_ECHO)
             this->send(_frame);
     }
 
@@ -140,14 +161,16 @@ void ModbusSerial::task() {
     _len = 0;
 }
 
-word ModbusSerial::calcCrc(byte address, byte* pduFrame, byte pduLen) {
-	byte CRCHi = 0xFF, CRCLo = 0x0FF, Index;
+word ModbusSerial::calcCrc(byte address, byte *pduFrame, byte pduLen)
+{
+    byte CRCHi = 0xFF, CRCLo = 0x0FF, Index;
 
     Index = CRCHi ^ address;
     CRCHi = CRCLo ^ _auchCRCHi[Index];
     CRCLo = _auchCRCLo[Index];
 
-    while (pduLen--) {
+    while (pduLen--)
+    {
         Index = CRCHi ^ *pduFrame++;
         CRCHi = CRCLo ^ _auchCRCHi[Index];
         CRCLo = _auchCRCLo[Index];

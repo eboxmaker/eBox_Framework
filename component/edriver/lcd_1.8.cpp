@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -41,7 +41,7 @@
 //              SDA   接PA7（SDA）
 //              RES   接PB3 (RST)
 //              DC    接PB4 (RS)
-//              CS    接PB5 
+//              CS    接PB5
 //              BL    接PB6
 
 *******************************/
@@ -54,7 +54,7 @@
 
 void Lcd::begin()
 {
-    
+
     width = X_MAX_PIXEL;
     height = Y_MAX_PIXEL;
     cs->mode(OUTPUT_PP);

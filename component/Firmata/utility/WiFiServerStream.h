@@ -31,76 +31,76 @@
 class WiFiServerStream : public WiFiStream
 {
 protected:
-  WiFiServer _server = WiFiServer(3030);
-  bool _listening = false;
+    WiFiServer _server = WiFiServer(3030);
+    bool _listening = false;
 
-  /**
-   * check if TCP client is connected
-   * @return true if connected
-   */
-  virtual inline bool connect_client()
-  {
-    if ( _connected )
+    /**
+     * check if TCP client is connected
+     * @return true if connected
+     */
+    virtual inline bool connect_client()
     {
-      if ( _client && _client.connected() ) return true;
-      stop();
-    }
+        if ( _connected )
+        {
+            if ( _client && _client.connected() ) return true;
+            stop();
+        }
 
-    // passive TCP connect (accept)
-    WiFiClient newClient = _server.available();
-    if ( !newClient ) return false;
-    _client = newClient;
-    _connected = true;
-    if ( _currentHostConnectionCallback )
-    {
-      (*_currentHostConnectionCallback)(HOST_CONNECTION_CONNECTED);
-    }
+        // passive TCP connect (accept)
+        WiFiClient newClient = _server.available();
+        if ( !newClient ) return false;
+        _client = newClient;
+        _connected = true;
+        if ( _currentHostConnectionCallback )
+        {
+            (*_currentHostConnectionCallback)(HOST_CONNECTION_CONNECTED);
+        }
 
-    return true;
-  }
+        return true;
+    }
 
 public:
-  /**
-   * create a WiFi stream with a TCP server
-   */
-  WiFiServerStream(uint16_t server_port) : WiFiStream(server_port) {}
+    /**
+     * create a WiFi stream with a TCP server
+     */
+    WiFiServerStream(uint16_t server_port) : WiFiStream(server_port) {}
 
-  /**
-   * maintain WiFi and TCP connection
-   * @return true if WiFi and TCP connection are established
-   */
-  virtual inline bool maintain()
-  {
-    if ( connect_client() ) return true;
-
-    stop();
-
-    if ( !_listening && WiFi.status() == WL_CONNECTED )
+    /**
+     * maintain WiFi and TCP connection
+     * @return true if WiFi and TCP connection are established
+     */
+    virtual inline bool maintain()
     {
-      // start TCP server after first WiFi connect
-      _server = WiFiServer(_port);
-      _server.begin();
-      _listening = true;
+        if ( connect_client() ) return true;
+
+        stop();
+
+        if ( !_listening && WiFi.status() == WL_CONNECTED )
+        {
+            // start TCP server after first WiFi connect
+            _server = WiFiServer(_port);
+            _server.begin();
+            _listening = true;
+        }
+
+        return false;
     }
 
-    return false;
-  }
-
-  /**
-   * stop client connection
-   */
-  virtual inline void stop()
-  {
-    if ( _client)
+    /**
+     * stop client connection
+     */
+    virtual inline void stop()
     {
-      _client.stop();
-      if ( _currentHostConnectionCallback )
-      {
-        (*_currentHostConnectionCallback)(HOST_CONNECTION_DISCONNECTED);
-      }
+        if ( _client)
+        {
+            _client.stop();
+            if ( _currentHostConnectionCallback )
+            {
+                (*_currentHostConnectionCallback)(HOST_CONNECTION_DISCONNECTED);
+            }
+        }
+        _connected = false;
     }
-    _connected = false;
-  }
 
 };
 

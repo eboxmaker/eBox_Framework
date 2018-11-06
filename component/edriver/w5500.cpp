@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -23,8 +23,8 @@
 
 void W5500::begin(uint8_t *mac)
 {
-    uint8_t ip_0[4]={0,};
-    begin(mac,ip_0,ip_0,ip_0,ip_0);
+    uint8_t ip_0[4] = {0,};
+    begin(mac, ip_0, ip_0, ip_0, ip_0);
 }
 
 void W5500::begin( uint8_t *mac, uint8_t *ip, uint8_t *subnet, uint8_t *gateway, uint8_t *dns)
@@ -428,7 +428,7 @@ void W5500::setSn_MSS(SOCKET s, uint16_t Sn_MSSR)
 
 void W5500::setSn_TTL(SOCKET s, uint8_t ttl)
 {
-    write( Sn_TTL(s) , ttl);
+    write( Sn_TTL(s), ttl);
 }
 /**
 @brief  get socket interrupt status
@@ -529,7 +529,7 @@ void W5500::send_data_processing(SOCKET s, uint8_t *data, uint16_t len)
     write(addrbsb, data, len);
 
     ptr += len;
-    write( Sn_TX_WR0(s) , (uint8_t)((ptr & 0xff00) >> 8));
+    write( Sn_TX_WR0(s), (uint8_t)((ptr & 0xff00) >> 8));
     write( Sn_TX_WR1(s), (uint8_t)(ptr & 0x00ff));
 }
 

@@ -71,12 +71,13 @@
 /*
  * Each FSM is described by an fsm structure and fsm callbacks.
  */
-typedef struct fsm {
+typedef struct fsm
+{
     ppp_pcb *pcb;		/* PPP Interface */
     const struct fsm_callbacks *callbacks;	/* Callback routines */
     const char *term_reason;	/* Reason for closing protocol */
     u8_t seen_ack;		/* Have received valid Ack/Nak/Rej to Req */
-				  /* -- This is our only flag, we might use u_int :1 if we have more flags */
+    /* -- This is our only flag, we might use u_int :1 if we have more flags */
     u16_t protocol;		/* Data Link Layer Protocol field value */
     u8_t state;			/* State */
     u8_t flags;			/* Contains option bits */
@@ -91,35 +92,36 @@ typedef struct fsm {
 } fsm;
 
 
-typedef struct fsm_callbacks {
+typedef struct fsm_callbacks
+{
     void (*resetci)		/* Reset our Configuration Information */
-		(fsm *);
+    (fsm *);
     int  (*cilen)		/* Length of our Configuration Information */
-		(fsm *);
+    (fsm *);
     void (*addci) 		/* Add our Configuration Information */
-		(fsm *, u_char *, int *);
+    (fsm *, u_char *, int *);
     int  (*ackci)		/* ACK our Configuration Information */
-		(fsm *, u_char *, int);
+    (fsm *, u_char *, int);
     int  (*nakci)		/* NAK our Configuration Information */
-		(fsm *, u_char *, int, int);
+    (fsm *, u_char *, int, int);
     int  (*rejci)		/* Reject our Configuration Information */
-		(fsm *, u_char *, int);
+    (fsm *, u_char *, int);
     int  (*reqci)		/* Request peer's Configuration Information */
-		(fsm *, u_char *, int *, int);
+    (fsm *, u_char *, int *, int);
     void (*up)			/* Called when fsm reaches PPP_FSM_OPENED state */
-		(fsm *);
+    (fsm *);
     void (*down)		/* Called when fsm leaves PPP_FSM_OPENED state */
-		(fsm *);
+    (fsm *);
     void (*starting)		/* Called when we want the lower layer */
-		(fsm *);
+    (fsm *);
     void (*finished)		/* Called when we don't want the lower layer */
-		(fsm *);
+    (fsm *);
     void (*protreject)		/* Called when Protocol-Reject received */
-		(int);
+    (int);
     void (*retransmit)		/* Retransmission is necessary */
-		(fsm *);
+    (fsm *);
     int  (*extcode)		/* Called when unknown code received */
-		(fsm *, int, int, u_char *, int);
+    (fsm *, int, int, u_char *, int);
     const char *proto_name;	/* String name for protocol (for messages) */
 } fsm_callbacks;
 

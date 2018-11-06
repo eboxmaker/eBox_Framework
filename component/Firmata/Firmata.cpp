@@ -51,7 +51,7 @@ systemCallbackFunction FirmataClass::currentSystemResetCallback = (systemCallbac
  */
 void FirmataClass::sendValueAsTwo7bitBytes(int value)
 {
-  marshaller.encodeByteStream(sizeof(value), reinterpret_cast<uint8_t *>(&value), sizeof(value));
+    marshaller.encodeByteStream(sizeof(value), reinterpret_cast<uint8_t *>(&value), sizeof(value));
 }
 
 /**
@@ -59,7 +59,7 @@ void FirmataClass::sendValueAsTwo7bitBytes(int value)
  */
 void FirmataClass::startSysex(void)
 {
-  FirmataStream->write(START_SYSEX);
+    FirmataStream->write(START_SYSEX);
 }
 
 /**
@@ -67,7 +67,7 @@ void FirmataClass::startSysex(void)
  */
 void FirmataClass::endSysex(void)
 {
-  FirmataStream->write(END_SYSEX);
+    FirmataStream->write(END_SYSEX);
 }
 
 //******************************************************************************
@@ -79,25 +79,25 @@ void FirmataClass::endSysex(void)
  * An instance named "Firmata" is created automatically for the user.
  */
 FirmataClass::FirmataClass()
-:
-  parser(FirmataParser(parserBuffer, MAX_DATA_BYTES))
+    :
+    parser(FirmataParser(parserBuffer, MAX_DATA_BYTES))
 {
-  firmwareVersionCount = 0;
-  firmwareVersionVector = 0;
-  blinkVersionDisabled = false;
+    firmwareVersionCount = 0;
+    firmwareVersionVector = 0;
+    blinkVersionDisabled = false;
 
-  // Establish callback translation to parser callbacks
-  parser.attach(ANALOG_MESSAGE, (FirmataParser::callbackFunction)staticAnalogCallback, (void *)NULL);
-  parser.attach(DIGITAL_MESSAGE, (FirmataParser::callbackFunction)staticDigitalCallback, (void *)NULL);
-  parser.attach(REPORT_ANALOG, (FirmataParser::callbackFunction)staticReportAnalogCallback, (void *)NULL);
-  parser.attach(REPORT_DIGITAL, (FirmataParser::callbackFunction)staticReportDigitalCallback, (void *)NULL);
-  parser.attach(SET_PIN_MODE, (FirmataParser::callbackFunction)staticPinModeCallback, (void *)NULL);
-  parser.attach(SET_DIGITAL_PIN_VALUE, (FirmataParser::callbackFunction)staticPinValueCallback, (void *)NULL);
-  parser.attach(STRING_DATA, (FirmataParser::stringCallbackFunction)staticStringCallback, (void *)NULL);
-  parser.attach(START_SYSEX, (FirmataParser::sysexCallbackFunction)staticSysexCallback, (void *)NULL);
-  parser.attach(REPORT_FIRMWARE, (FirmataParser::versionCallbackFunction)staticReportFirmwareCallback, this);
-  parser.attach(REPORT_VERSION, (FirmataParser::systemCallbackFunction)staticReportVersionCallback, this);
-  parser.attach(SYSTEM_RESET, (FirmataParser::systemCallbackFunction)staticSystemResetCallback, (void *)NULL);
+    // Establish callback translation to parser callbacks
+    parser.attach(ANALOG_MESSAGE, (FirmataParser::callbackFunction)staticAnalogCallback, (void *)NULL);
+    parser.attach(DIGITAL_MESSAGE, (FirmataParser::callbackFunction)staticDigitalCallback, (void *)NULL);
+    parser.attach(REPORT_ANALOG, (FirmataParser::callbackFunction)staticReportAnalogCallback, (void *)NULL);
+    parser.attach(REPORT_DIGITAL, (FirmataParser::callbackFunction)staticReportDigitalCallback, (void *)NULL);
+    parser.attach(SET_PIN_MODE, (FirmataParser::callbackFunction)staticPinModeCallback, (void *)NULL);
+    parser.attach(SET_DIGITAL_PIN_VALUE, (FirmataParser::callbackFunction)staticPinValueCallback, (void *)NULL);
+    parser.attach(STRING_DATA, (FirmataParser::stringCallbackFunction)staticStringCallback, (void *)NULL);
+    parser.attach(START_SYSEX, (FirmataParser::sysexCallbackFunction)staticSysexCallback, (void *)NULL);
+    parser.attach(REPORT_FIRMWARE, (FirmataParser::versionCallbackFunction)staticReportFirmwareCallback, this);
+    parser.attach(REPORT_VERSION, (FirmataParser::systemCallbackFunction)staticReportVersionCallback, this);
+    parser.attach(SYSTEM_RESET, (FirmataParser::systemCallbackFunction)staticSystemResetCallback, (void *)NULL);
 }
 
 //******************************************************************************
@@ -109,7 +109,7 @@ FirmataClass::FirmataClass()
  */
 void FirmataClass::begin(void)
 {
-  begin(57600);
+    begin(57600);
 }
 
 /**
@@ -121,9 +121,9 @@ void FirmataClass::begin(void)
  */
 void FirmataClass::begin(long speed)
 {
-  Serial.begin(speed);
-  blinkVersion();
-  begin(Serial);
+    Serial.begin(speed);
+    blinkVersion();
+    begin(Serial);
 }
 
 /**
@@ -134,12 +134,12 @@ void FirmataClass::begin(long speed)
  */
 void FirmataClass::begin(Stream &s)
 {
-  FirmataStream = &s;
-  marshaller.begin(s);
-  // do not call blinkVersion() here because some hardware such as the
-  // Ethernet shield use pin 13
-  printVersion();         // send the protocol version
-  printFirmwareVersion(); // send the firmware name and version
+    FirmataStream = &s;
+    marshaller.begin(s);
+    // do not call blinkVersion() here because some hardware such as the
+    // Ethernet shield use pin 13
+    printVersion();         // send the protocol version
+    printFirmwareVersion(); // send the firmware name and version
 }
 
 /**
@@ -147,7 +147,7 @@ void FirmataClass::begin(Stream &s)
  */
 void FirmataClass::printVersion(void)
 {
-  marshaller.sendVersion(FIRMATA_PROTOCOL_MAJOR_VERSION, FIRMATA_PROTOCOL_MINOR_VERSION);
+    marshaller.sendVersion(FIRMATA_PROTOCOL_MAJOR_VERSION, FIRMATA_PROTOCOL_MINOR_VERSION);
 }
 
 /**
@@ -160,13 +160,13 @@ void FirmataClass::printVersion(void)
 void FirmataClass::blinkVersion(void)
 {
 #if defined(VERSION_BLINK_PIN)
-  if (blinkVersionDisabled) return;
-  // flash the pin with the protocol version
-  pinMode(VERSION_BLINK_PIN, OUTPUT);
-  strobeBlinkPin(VERSION_BLINK_PIN, FIRMATA_FIRMWARE_MAJOR_VERSION, 40, 210);
-  delay(250);
-  strobeBlinkPin(VERSION_BLINK_PIN, FIRMATA_FIRMWARE_MINOR_VERSION, 40, 210);
-  delay(125);
+    if (blinkVersionDisabled) return;
+    // flash the pin with the protocol version
+    pinMode(VERSION_BLINK_PIN, OUTPUT);
+    strobeBlinkPin(VERSION_BLINK_PIN, FIRMATA_FIRMWARE_MAJOR_VERSION, 40, 210);
+    delay(250);
+    strobeBlinkPin(VERSION_BLINK_PIN, FIRMATA_FIRMWARE_MINOR_VERSION, 40, 210);
+    delay(125);
 #endif
 }
 
@@ -177,7 +177,7 @@ void FirmataClass::blinkVersion(void)
  */
 void FirmataClass::disableBlinkVersion()
 {
-  blinkVersionDisabled = true;
+    blinkVersionDisabled = true;
 }
 
 /**
@@ -187,9 +187,10 @@ void FirmataClass::disableBlinkVersion()
  */
 void FirmataClass::printFirmwareVersion(void)
 {
-  if (firmwareVersionCount) { // make sure that the name has been set before reporting
-    marshaller.sendFirmwareVersion(static_cast<uint8_t>(firmwareVersionVector[0]), static_cast<uint8_t>(firmwareVersionVector[1]), (firmwareVersionCount - 2), reinterpret_cast<uint8_t *>(&firmwareVersionVector[2]));
-  }
+    if (firmwareVersionCount)   // make sure that the name has been set before reporting
+    {
+        marshaller.sendFirmwareVersion(static_cast<uint8_t>(firmwareVersionVector[0]), static_cast<uint8_t>(firmwareVersionVector[1]), (firmwareVersionCount - 2), reinterpret_cast<uint8_t *>(&firmwareVersionVector[2]));
+    }
 }
 
 /**
@@ -201,38 +202,45 @@ void FirmataClass::printFirmwareVersion(void)
  */
 void FirmataClass::setFirmwareNameAndVersion(const char *name, byte major, byte minor)
 {
-  const char *firmwareName;
-  const char *extension;
+    const char *firmwareName;
+    const char *extension;
 
-  // parse out ".cpp" and "applet/" that comes from using __FILE__
-  extension = strstr(name, ".cpp");
-  firmwareName = strrchr(name, '/');
+    // parse out ".cpp" and "applet/" that comes from using __FILE__
+    extension = strstr(name, ".cpp");
+    firmwareName = strrchr(name, '/');
 
-  if (!firmwareName) {
-    // windows
-    firmwareName = strrchr(name, '\\');
-  }
-  if (!firmwareName) {
-    // user passed firmware name
-    firmwareName = name;
-  } else {
-    firmwareName ++;
-  }
+    if (!firmwareName)
+    {
+        // windows
+        firmwareName = strrchr(name, '\\');
+    }
+    if (!firmwareName)
+    {
+        // user passed firmware name
+        firmwareName = name;
+    }
+    else
+    {
+        firmwareName ++;
+    }
 
-  if (!extension) {
-    firmwareVersionCount = strlen(firmwareName) + 2;
-  } else {
-    firmwareVersionCount = extension - firmwareName + 2;
-  }
+    if (!extension)
+    {
+        firmwareVersionCount = strlen(firmwareName) + 2;
+    }
+    else
+    {
+        firmwareVersionCount = extension - firmwareName + 2;
+    }
 
-  // in case anyone calls setFirmwareNameAndVersion more than once
-  free(firmwareVersionVector);
+    // in case anyone calls setFirmwareNameAndVersion more than once
+    free(firmwareVersionVector);
 
-  firmwareVersionVector = (byte *) malloc(firmwareVersionCount + 1);
-  firmwareVersionVector[firmwareVersionCount] = 0;
-  firmwareVersionVector[0] = major;
-  firmwareVersionVector[1] = minor;
-  strncpy((char *)firmwareVersionVector + 2, firmwareName, firmwareVersionCount - 2);
+    firmwareVersionVector = (byte *) malloc(firmwareVersionCount + 1);
+    firmwareVersionVector[firmwareVersionCount] = 0;
+    firmwareVersionVector[0] = major;
+    firmwareVersionVector[1] = minor;
+    strncpy((char *)firmwareVersionVector + 2, firmwareName, firmwareVersionCount - 2);
 }
 
 //------------------------------------------------------------------------------
@@ -244,7 +252,7 @@ void FirmataClass::setFirmwareNameAndVersion(const char *name, byte major, byte 
  */
 int FirmataClass::available(void)
 {
-  return FirmataStream->available();
+    return FirmataStream->available();
 }
 
 /**
@@ -252,10 +260,11 @@ int FirmataClass::available(void)
  */
 void FirmataClass::processInput(void)
 {
-  int inputData = FirmataStream->read(); // this is 'int' to handle -1 when no data
-  if (inputData != -1) {
-    parser.parse(inputData);
-  }
+    int inputData = FirmataStream->read(); // this is 'int' to handle -1 when no data
+    if (inputData != -1)
+    {
+        parser.parse(inputData);
+    }
 }
 
 /**
@@ -272,7 +281,7 @@ void FirmataClass::parse(byte inputData)
  */
 boolean FirmataClass::isParsingMessage(void)
 {
-  return parser.isParsingMessage();
+    return parser.isParsingMessage();
 }
 
 //------------------------------------------------------------------------------
@@ -289,7 +298,7 @@ boolean FirmataClass::isParsingMessage(void)
  */
 void FirmataClass::sendAnalog(byte pin, int value)
 {
-  marshaller.sendAnalog(pin, value);
+    marshaller.sendAnalog(pin, value);
 }
 
 /* (intentionally left out asterix here)
@@ -300,23 +309,23 @@ void FirmataClass::sendAnalog(byte pin, int value)
  */
 void FirmataClass::sendDigital(byte pin, int value)
 {
-  (void)pin;
-  (void)value;
-  /* TODO add single pin digital messages to the protocol, this needs to
-   * track the last digital data sent so that it can be sure to change just
-   * one bit in the packet.  This is complicated by the fact that the
-   * numbering of the pins will probably differ on Arduino, Wiring, and
-   * other boards.
-   */
+    (void)pin;
+    (void)value;
+    /* TODO add single pin digital messages to the protocol, this needs to
+     * track the last digital data sent so that it can be sure to change just
+     * one bit in the packet.  This is complicated by the fact that the
+     * numbering of the pins will probably differ on Arduino, Wiring, and
+     * other boards.
+     */
 
-  // TODO: the digital message should not be sent on the serial port every
-  // time sendDigital() is called.  Instead, it should add it to an int
-  // which will be sent on a schedule.  If a pin changes more than once
-  // before the digital message is sent on the serial port, it should send a
-  // digital message for each change.
+    // TODO: the digital message should not be sent on the serial port every
+    // time sendDigital() is called.  Instead, it should add it to an int
+    // which will be sent on a schedule.  If a pin changes more than once
+    // before the digital message is sent on the serial port, it should send a
+    // digital message for each change.
 
-  //    if(value == 0)
-  //        sendDigitalPortPair();
+    //    if(value == 0)
+    //        sendDigitalPortPair();
 }
 
 
@@ -330,7 +339,7 @@ void FirmataClass::sendDigital(byte pin, int value)
  */
 void FirmataClass::sendDigitalPort(byte portNumber, int portData)
 {
-  marshaller.sendDigitalPort(portNumber, portData);
+    marshaller.sendDigitalPort(portNumber, portData);
 }
 
 /**
@@ -342,7 +351,7 @@ void FirmataClass::sendDigitalPort(byte portNumber, int portData)
  */
 void FirmataClass::sendSysex(byte command, byte bytec, byte *bytev)
 {
-  marshaller.sendSysex(command, bytec, bytev);
+    marshaller.sendSysex(command, bytec, bytev);
 }
 
 /**
@@ -352,9 +361,10 @@ void FirmataClass::sendSysex(byte command, byte bytec, byte *bytev)
  */
 void FirmataClass::sendString(byte command, const char *string)
 {
-  if (command == STRING_DATA) {
-    marshaller.sendString(string);
-  }
+    if (command == STRING_DATA)
+    {
+        marshaller.sendString(string);
+    }
 }
 
 /**
@@ -363,7 +373,7 @@ void FirmataClass::sendString(byte command, const char *string)
  */
 void FirmataClass::sendString(const char *string)
 {
-  marshaller.sendString(string);
+    marshaller.sendString(string);
 }
 
 /**
@@ -373,7 +383,7 @@ void FirmataClass::sendString(const char *string)
  */
 void FirmataClass::write(byte c)
 {
-  FirmataStream->write(c);
+    FirmataStream->write(c);
 }
 
 /**
@@ -384,26 +394,27 @@ void FirmataClass::write(byte c)
  */
 void FirmataClass::attach(uint8_t command, ::callbackFunction newFunction)
 {
-  switch (command) {
+    switch (command)
+    {
     case ANALOG_MESSAGE:
-      currentAnalogCallback = newFunction;
-      break;
+        currentAnalogCallback = newFunction;
+        break;
     case DIGITAL_MESSAGE:
-      currentDigitalCallback = newFunction;
-      break;
+        currentDigitalCallback = newFunction;
+        break;
     case REPORT_ANALOG:
-      currentReportAnalogCallback = newFunction;
-      break;
+        currentReportAnalogCallback = newFunction;
+        break;
     case REPORT_DIGITAL:
-      currentReportDigitalCallback = newFunction;
-      break;
+        currentReportDigitalCallback = newFunction;
+        break;
     case SET_PIN_MODE:
-      currentPinModeCallback = newFunction;
-      break;
+        currentPinModeCallback = newFunction;
+        break;
     case SET_DIGITAL_PIN_VALUE:
-      currentPinValueCallback = newFunction;
-      break;
-  }
+        currentPinValueCallback = newFunction;
+        break;
+    }
 }
 
 /**
@@ -413,11 +424,12 @@ void FirmataClass::attach(uint8_t command, ::callbackFunction newFunction)
  */
 void FirmataClass::attach(uint8_t command, systemCallbackFunction newFunction)
 {
-  switch (command) {
+    switch (command)
+    {
     case SYSTEM_RESET:
-      currentSystemResetCallback = newFunction;
-      break;
-  }
+        currentSystemResetCallback = newFunction;
+        break;
+    }
 }
 
 /**
@@ -427,11 +439,12 @@ void FirmataClass::attach(uint8_t command, systemCallbackFunction newFunction)
  */
 void FirmataClass::attach(uint8_t command, stringCallbackFunction newFunction)
 {
-  switch (command) {
+    switch (command)
+    {
     case STRING_DATA:
-      currentStringCallback = newFunction;
-      break;
-  }
+        currentStringCallback = newFunction;
+        break;
+    }
 }
 
 /**
@@ -441,8 +454,8 @@ void FirmataClass::attach(uint8_t command, stringCallbackFunction newFunction)
  */
 void FirmataClass::attach(uint8_t command, sysexCallbackFunction newFunction)
 {
-  (void)command;
-  currentSysexCallback = newFunction;
+    (void)command;
+    currentSysexCallback = newFunction;
 }
 
 /**
@@ -452,20 +465,21 @@ void FirmataClass::attach(uint8_t command, sysexCallbackFunction newFunction)
  */
 void FirmataClass::detach(uint8_t command)
 {
-  switch (command) {
+    switch (command)
+    {
     case SYSTEM_RESET:
-      attach(command, (systemCallbackFunction)NULL);
-      break;
+        attach(command, (systemCallbackFunction)NULL);
+        break;
     case STRING_DATA:
-      attach(command, (stringCallbackFunction)NULL);
-      break;
+        attach(command, (stringCallbackFunction)NULL);
+        break;
     case START_SYSEX:
-      attach(command, (sysexCallbackFunction)NULL);
-      break;
+        attach(command, (sysexCallbackFunction)NULL);
+        break;
     default:
-      attach(command, (callbackFunction)NULL);
-      break;
-  }
+        attach(command, (callbackFunction)NULL);
+        break;
+    }
 }
 
 /**
@@ -474,7 +488,7 @@ void FirmataClass::detach(uint8_t command)
  */
 byte FirmataClass::getPinMode(byte pin)
 {
-  return pinConfig[pin];
+    return pinConfig[pin];
 }
 
 /**
@@ -486,10 +500,10 @@ byte FirmataClass::getPinMode(byte pin)
  */
 void FirmataClass::setPinMode(byte pin, byte config)
 {
-  if (pinConfig[pin] == PIN_MODE_IGNORE)
-    return;
+    if (pinConfig[pin] == PIN_MODE_IGNORE)
+        return;
 
-  pinConfig[pin] = config;
+    pinConfig[pin] = config;
 }
 
 /**
@@ -498,7 +512,7 @@ void FirmataClass::setPinMode(byte pin, byte config)
  */
 int FirmataClass::getPinState(byte pin)
 {
-  return pinState[pin];
+    return pinState[pin];
 }
 
 /**
@@ -509,7 +523,7 @@ int FirmataClass::getPinState(byte pin)
  */
 void FirmataClass::setPinState(byte pin, int state)
 {
-  pinState[pin] = state;
+    pinState[pin] = state;
 }
 
 // sysex callbacks
@@ -544,12 +558,13 @@ void FirmataClass::setPinState(byte pin, int state)
  */
 void FirmataClass::strobeBlinkPin(byte pin, int count, int onInterval, int offInterval)
 {
-  byte i;
-  for (i = 0; i < count; i++) {
-    delay(offInterval);
-    digitalWrite(pin, HIGH);
-    delay(onInterval);
-    digitalWrite(pin, LOW);
-  }
+    byte i;
+    for (i = 0; i < count; i++)
+    {
+        delay(offInterval);
+        digitalWrite(pin, HIGH);
+        delay(onInterval);
+        digitalWrite(pin, LOW);
+    }
 }
 

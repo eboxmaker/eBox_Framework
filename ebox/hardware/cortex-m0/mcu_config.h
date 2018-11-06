@@ -23,10 +23,10 @@
 #include "stm32f0xx_ll_cortex.h"
 #include "stm32f0xx_ll_spi.h"
 #include "stm32f0xx_ll_i2c.h"
-#include "stm32f0xx_ll_RTC.h"    
+#include "stm32f0xx_ll_RTC.h"
 
 /*
-MCU_TYPE        MCU_PINS   CLOCK    FLASH   RAM     
+MCU_TYPE        MCU_PINS   CLOCK    FLASH   RAM
 STM32F050C4     LQFP 48     48      16      4
 STM32F050C6     LQFP 48     48      32      4
 STM32F050F4     TSSOP 20    48      16      4
@@ -45,10 +45,10 @@ STM32F051R4     LQFP 64     48      16      4
 STM32F051R6     LQFP 64     48      32      4
 STM32F051R8     LQFP 64     48      64      8
 
-MCU_TYPE        MCU_PINS   CLOCK    FLASH   RAM     
+MCU_TYPE        MCU_PINS   CLOCK    FLASH   RAM
 STM32F072RB     LQFP 64     48      128     16
 
-MCU_TYPE        MCU_PINS   CLOCK    FLASH   RAM     
+MCU_TYPE        MCU_PINS   CLOCK    FLASH   RAM
 STM32F103C4      48         72      16      6
 STM32F103C6      48         72      32      10
 STM32F103C8      48         72      64      20
@@ -110,7 +110,7 @@ STM32F417VG     LQFP 100    168     1024    192
 
 //用户配置区域
 #define STM32_TYPE    STM32F072RB
-#define STM32_PINS    48 
+#define STM32_PINS    48
 #define STM32_FLASH   128
 #define STM32_RAM1    16
 #define STM32_COMPANY "ST\0"
@@ -140,12 +140,12 @@ STM32F417VG     LQFP 100    168     1024    192
 
 
 #ifdef __CC_ARM
-    extern int Image$$RW_IRAM1$$ZI$$Limit;
-    #define MCU_HEAP_BEGIN 	((uint32_t)&Image$$RW_IRAM1$$ZI$$Limit)
+extern int Image$$RW_IRAM1$$ZI$$Limit;
+#define MCU_HEAP_BEGIN 	((uint32_t)&Image$$RW_IRAM1$$ZI$$Limit)
 #elif __ICCARM__
-    #pragma section="HEAP"
+#pragma section="HEAP"
 #else
-    extern int __bss_end;
+extern int __bss_end;
 #endif
 #define MCU_HEAP_END        MCU_SRAM1_END
 #define MCU_HEAP_SIZE       (MCU_HEAP_END - MCU_HEAP_BEGIN)
@@ -161,12 +161,12 @@ STM32F417VG     LQFP 100    168     1024    192
 
 
 //FLASH 区域定义
-#define MCU_FLASH_SIZE        STM32_FLASH*1024 
+#define MCU_FLASH_SIZE        STM32_FLASH*1024
 
 
 #ifdef __CC_ARM
-    extern int SHT$$INIT_ARRAY$$Limit;
-    #define MCU_FLASH_PRG_END 	((uint32_t)&SHT$$INIT_ARRAY$$Limit)
+extern int SHT$$INIT_ARRAY$$Limit;
+#define MCU_FLASH_PRG_END 	((uint32_t)&SHT$$INIT_ARRAY$$Limit)
 #endif
 
 #define MCU_FLASH_BEGIN         0x8000000

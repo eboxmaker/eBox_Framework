@@ -83,7 +83,8 @@
 
 #define MAX_HID_REPORT_SIZE (64)
 
-typedef struct {
+typedef struct
+{
     uint32_t length;
     uint8_t data[MAX_HID_REPORT_SIZE];
 } HID_REPORT;

@@ -184,8 +184,8 @@ bool ESP8266::begin(Gpio *rst, Uart *uart, uint32_t baud)
     this->uart  = uart;
 
     this->uart->begin(baud);
-    this->uart->attach(uart_interrupt_event,RxIrq);
-    this->uart->interrupt(RxIrq,ENABLE);
+    this->uart->attach(uart_interrupt_event, RxIrq);
+    this->uart->interrupt(RxIrq, ENABLE);
     this->rst->mode(OUTPUT_PP);
 
     wifi_mode = NET_MODE;
@@ -509,16 +509,18 @@ WIFI_STATUS_T ESP8266::get_IP_status()
 {
     char buf[100];
     char status;
-    if( exc_AT_CIPSTATUS(buf)){
-        if(search_str(buf, "STATUS:") != -1){
+    if( exc_AT_CIPSTATUS(buf))
+    {
+        if(search_str(buf, "STATUS:") != -1)
+        {
             get_str(buf, "STATUS:", 1, "\r\n", 1, &status);
-            status -= 0x30; 
+            status -= 0x30;
         }
         else
             status = 0;
 
-    }      
-    return (WIFI_STATUS_T)status;    
+    }
+    return (WIFI_STATUS_T)status;
 }
 
 /**
@@ -729,7 +731,7 @@ bool ESP8266::stop_Server(void)
 
 bool ESP8266::ping(const char *host, char *msg)
 {
-    return exc_AT_PING(host,msg);
+    return exc_AT_PING(host, msg);
 }
 
 /**
@@ -1704,7 +1706,9 @@ bool ESP8266::set_AT_CIPSEND_single(const uint8_t *buffer, uint32_t len)
         }
         else
             ret = false;
-    }else{
+    }
+    else
+    {
         ESP_DEBUG("SEND TIMEOUT!");
         ret = false;
     }
@@ -1762,7 +1766,7 @@ bool ESP8266::set_AT_CIPSEND_multiple(uint8_t mux_id, const uint8_t *buffer, uin
     if (state == 1)
     {
         clear_rx_cdm_buffer();
-        uart->write(buffer,len);
+        uart->write(buffer, len);
 
         if(wait_cmd("SEND OK", TIMEOUT_TIME) == RECEIVED)
         {
@@ -2017,7 +2021,7 @@ CMD_STATE_T ESP8266::wait_cmd(uint32_t wait_time)
             break;
         }
     }
-//    print_cmd(cmd_state);
+    //    print_cmd(cmd_state);
 
     return cmd_state;
 
@@ -2048,7 +2052,7 @@ CMD_STATE_T ESP8266::wait_cmd(const char *spacial_target, uint32_t wait_time)
             break;
         }
     }
-//    print_cmd(cmd_state);
+    //    print_cmd(cmd_state);
 
     return cmd_state;
 
@@ -2107,7 +2111,7 @@ int  ESP8266::available()
  */
 char ESP8266::read_one()
 {
-   return net_buf.read();
+    return net_buf.read();
 }
 /**
  * Send data based on TCP or UDP builded already in single mode.

@@ -3,7 +3,7 @@
 #include "stdio.h"
 
 #include "eth_port.h"
-Enc28j60 eth(&spi1,&PA4,&PE1);
+Enc28j60 eth(&spi1, &PA4, &PE1);
 
 
 void ebox_printf(const char *fmt, ...)
@@ -22,7 +22,7 @@ void ENC28J60_InitSend(uint16_t len)
 }
 void    ENC28J60_WriteBuf(uint8_t *p, uint16_t len)
 {
-    eth.write_buf(p,len);
+    eth.write_buf(p, len);
 }
 
 void    ENC28J60_BeginSend()
@@ -36,13 +36,13 @@ uint16_t    ENC28J60_GetPacketLength()
 
 }
 
- void    ENC28J60_ReadBuf(uint8_t *p, uint16_t len)
- {
-     eth.read_buf(p,len);
- 
- }
- void    ENC28J60_EndReceive(void)
- {
+void    ENC28J60_ReadBuf(uint8_t *p, uint16_t len)
+{
+    eth.read_buf(p, len);
+
+}
+void    ENC28J60_EndReceive(void)
+{
     eth.end_receive();
- }
+}
 

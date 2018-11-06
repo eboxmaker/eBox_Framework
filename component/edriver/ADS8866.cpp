@@ -1,6 +1,6 @@
 #include "ADS8866.h"
 
-Ads8866::Ads8866(Gpio *clk,Gpio *data,Gpio *convst)
+Ads8866::Ads8866(Gpio *clk, Gpio *data, Gpio *convst)
 {
     this->clk = clk;
     this->data = data;
@@ -19,7 +19,7 @@ uint16_t Ads8866::read()
     convst->set();
     for(int i = 0; i < 16; i++)
     {
-        clk->set();        
+        clk->set();
         delay_us(1);
         clk->reset();
         delay_us(1);
@@ -27,7 +27,7 @@ uint16_t Ads8866::read()
     convst->reset();
     for(int i = 0; i < 16; i++)
     {
-        clk->set();        
+        clk->set();
         delay_us(1);
         clk->reset();
         delay_us(1);

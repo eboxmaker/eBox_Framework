@@ -1,11 +1,11 @@
 /**
  * @file doxygen.h
  *
- * Define modules in API doc. 
- * 
+ * Define modules in API doc.
+ *
  * @author  Wu Pengfei (email:<pengfei.wu@itead.cc>)
  * @date    2014/11/20
- * @copyright 
+ * @copyright
  * Copyright (C) 2013-2014 ITEAD Intelligent Systems Co., Ltd. \n
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as

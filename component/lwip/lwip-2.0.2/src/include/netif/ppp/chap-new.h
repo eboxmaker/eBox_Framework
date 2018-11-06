@@ -124,47 +124,50 @@
 /*
  * The code for each digest type has to supply one of these.
  */
-struct chap_digest_type {
-	int code;
+struct chap_digest_type
+{
+    int code;
 
 #if PPP_SERVER
-	/*
-	 * Note: challenge and response arguments below are formatted as
-	 * a length byte followed by the actual challenge/response data.
-	 */
-	void (*generate_challenge)(ppp_pcb *pcb, unsigned char *challenge);
-	int (*verify_response)(ppp_pcb *pcb, int id, const char *name,
-		const unsigned char *secret, int secret_len,
-		const unsigned char *challenge, const unsigned char *response,
-		char *message, int message_space);
+    /*
+     * Note: challenge and response arguments below are formatted as
+     * a length byte followed by the actual challenge/response data.
+     */
+    void (*generate_challenge)(ppp_pcb *pcb, unsigned char *challenge);
+    int (*verify_response)(ppp_pcb *pcb, int id, const char *name,
+                           const unsigned char *secret, int secret_len,
+                           const unsigned char *challenge, const unsigned char *response,
+                           char *message, int message_space);
 #endif /* PPP_SERVER */
-	void (*make_response)(ppp_pcb *pcb, unsigned char *response, int id, const char *our_name,
-		const unsigned char *challenge, const char *secret, int secret_len,
-		unsigned char *priv);
-	int (*check_success)(ppp_pcb *pcb, unsigned char *pkt, int len, unsigned char *priv);
-	void (*handle_failure)(ppp_pcb *pcb, unsigned char *pkt, int len);
+    void (*make_response)(ppp_pcb *pcb, unsigned char *response, int id, const char *our_name,
+                          const unsigned char *challenge, const char *secret, int secret_len,
+                          unsigned char *priv);
+    int (*check_success)(ppp_pcb *pcb, unsigned char *pkt, int len, unsigned char *priv);
+    void (*handle_failure)(ppp_pcb *pcb, unsigned char *pkt, int len);
 };
 
 /*
  * Each interface is described by chap structure.
  */
 #if CHAP_SUPPORT
-typedef struct chap_client_state {
-	u8_t flags;
-	const char *name;
-	const struct chap_digest_type *digest;
-	unsigned char priv[64];		/* private area for digest's use */
+typedef struct chap_client_state
+{
+    u8_t flags;
+    const char *name;
+    const struct chap_digest_type *digest;
+    unsigned char priv[64];		/* private area for digest's use */
 } chap_client_state;
 
 #if PPP_SERVER
-typedef struct chap_server_state {
-	u8_t flags;
-	u8_t id;
-	const char *name;
-	const struct chap_digest_type *digest;
-	int challenge_xmits;
-	int challenge_pktlen;
-	unsigned char challenge[CHAL_MAX_PKTLEN];
+typedef struct chap_server_state
+{
+    u8_t flags;
+    u8_t id;
+    const char *name;
+    const struct chap_digest_type *digest;
+    int challenge_xmits;
+    int challenge_pktlen;
+    unsigned char challenge[CHAL_MAX_PKTLEN];
 } chap_server_state;
 #endif /* PPP_SERVER */
 #endif /* CHAP_SUPPORT */
@@ -172,9 +175,9 @@ typedef struct chap_server_state {
 #if 0 /* UNUSED */
 /* Hook for a plugin to validate CHAP challenge */
 extern int (*chap_verify_hook)(char *name, char *ourname, int id,
-			const struct chap_digest_type *digest,
-			unsigned char *challenge, unsigned char *response,
-			char *message, int message_space);
+                               const struct chap_digest_type *digest,
+                               unsigned char *challenge, unsigned char *response,
+                               char *message, int message_space);
 #endif /* UNUSED */
 
 #if PPP_SERVER

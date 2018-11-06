@@ -1,37 +1,37 @@
- /*
- * Dht11.cpp
- *
- * Version 0.6
- *
- * DHT11 Temperature and humidity sensor library for eBOX.
- *
- * See http://playground.arduino.cc/main/DHT11Lib
- *
- * License:   GPL v3 (http://www.gnu.org/licenses/gpl.html)
- * Datasheet: http://www.micro4you.com/files/sensor/DHT11.pdf
- *
- * Modification History:
- *   - George Hadjikyriacou                     - Version 0.1 (??)
- *   - SimKard                                  - Version 0.2 (24/11/2010)
- *   - Rob Tillaart                             - Version 0.3 (28/03/2011)
- *       * Added comments
- *       * Removed all non-DHT11 specific code
- *       * Added References
- *   - Rob Tillaart                             - Version 0.4 (17/03/2012)
- *       * Added Arduino 1.0 support
- *   - Rob Tillaart                             - Version 0.4.1 (19/05/2012)
- *       * Added error codes
- *   - Andy Dalton                              - Version 0.5 (13/09/2013)
- *       * Replaced magic numbers with named constants
- *       * Factored out repeated code into a helper method.
- *       * Made pin a parameter to the constructor instead of a parameter
- *         to read()
- *       * Changed the error codes to an enumeration
- *       * Update the temp/humidity only if the checksum is correct
- *       * Added more comments
- *    - Link                            			  - Version 0.6 (2016/01/03)
- *       * port from ardunio to eBox
- */
+/*
+* Dht11.cpp
+*
+* Version 0.6
+*
+* DHT11 Temperature and humidity sensor library for eBOX.
+*
+* See http://playground.arduino.cc/main/DHT11Lib
+*
+* License:   GPL v3 (http://www.gnu.org/licenses/gpl.html)
+* Datasheet: http://www.micro4you.com/files/sensor/DHT11.pdf
+*
+* Modification History:
+*   - George Hadjikyriacou                     - Version 0.1 (??)
+*   - SimKard                                  - Version 0.2 (24/11/2010)
+*   - Rob Tillaart                             - Version 0.3 (28/03/2011)
+*       * Added comments
+*       * Removed all non-DHT11 specific code
+*       * Added References
+*   - Rob Tillaart                             - Version 0.4 (17/03/2012)
+*       * Added Arduino 1.0 support
+*   - Rob Tillaart                             - Version 0.4.1 (19/05/2012)
+*       * Added error codes
+*   - Andy Dalton                              - Version 0.5 (13/09/2013)
+*       * Replaced magic numbers with named constants
+*       * Factored out repeated code into a helper method.
+*       * Made pin a parameter to the constructor instead of a parameter
+*         to read()
+*       * Changed the error codes to an enumeration
+*       * Update the temp/humidity only if the checksum is correct
+*       * Added more comments
+*    - Link                            			  - Version 0.6 (2016/01/03)
+*       * port from ardunio to eBox
+*/
 #include "Dht11.h"
 
 #define BITS_IN(object) (8 * sizeof((object)))

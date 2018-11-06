@@ -19,45 +19,52 @@
 #include "stdint.h"
 #include "USBMouse.h"
 
-bool USBMouse::update(int16_t x, int16_t y, uint8_t button, int8_t z) {
-    switch (mouse_type) {
-        case REL_MOUSE:
-            while (x > 127) {
-                if (!mouseSend(127, 0, button, z)) return false;
-                x = x - 127;
-            }
-            while (x < -128) {
-                if (!mouseSend(-128, 0, button, z)) return false;
-                x = x + 128;
-            }
-            while (y > 127) {
-                if (!mouseSend(0, 127, button, z)) return false;
-                y = y - 127;
-            }
-            while (y < -128) {
-                if (!mouseSend(0, -128, button, z)) return false;
-                y = y + 128;
-            }
-            return mouseSend(x, y, button, z);
-        case ABS_MOUSE:
-            HID_REPORT report;
+bool USBMouse::update(int16_t x, int16_t y, uint8_t button, int8_t z)
+{
+    switch (mouse_type)
+    {
+    case REL_MOUSE:
+        while (x > 127)
+        {
+            if (!mouseSend(127, 0, button, z)) return false;
+            x = x - 127;
+        }
+        while (x < -128)
+        {
+            if (!mouseSend(-128, 0, button, z)) return false;
+            x = x + 128;
+        }
+        while (y > 127)
+        {
+            if (!mouseSend(0, 127, button, z)) return false;
+            y = y - 127;
+        }
+        while (y < -128)
+        {
+            if (!mouseSend(0, -128, button, z)) return false;
+            y = y + 128;
+        }
+        return mouseSend(x, y, button, z);
+    case ABS_MOUSE:
+        HID_REPORT report;
 
-            report.data[0] = x & 0xff;
-            report.data[1] = (x >> 8) & 0xff;
-            report.data[2] = y & 0xff;
-            report.data[3] = (y >> 8) & 0xff;
-            report.data[4] = -z;
-            report.data[5] = button & 0x07;
+        report.data[0] = x & 0xff;
+        report.data[1] = (x >> 8) & 0xff;
+        report.data[2] = y & 0xff;
+        report.data[3] = (y >> 8) & 0xff;
+        report.data[4] = -z;
+        report.data[5] = button & 0x07;
 
-            report.length = 6;
+        report.length = 6;
 
-            return send(&report);
-        default:
-            return false;
+        return send(&report);
+    default:
+        return false;
     }
 }
 
-bool USBMouse::mouseSend(int8_t x, int8_t y, uint8_t buttons, int8_t z) {
+bool USBMouse::mouseSend(int8_t x, int8_t y, uint8_t buttons, int8_t z)
+{
     HID_REPORT report;
     report.data[0] = buttons & 0x07;
     report.data[1] = x;
@@ -69,44 +76,53 @@ bool USBMouse::mouseSend(int8_t x, int8_t y, uint8_t buttons, int8_t z) {
     return send(&report);
 }
 
-bool USBMouse::move(int16_t x, int16_t y) {
+bool USBMouse::move(int16_t x, int16_t y)
+{
     return update(x, y, button, 0);
 }
 
-bool USBMouse::scroll(int8_t z) {
+bool USBMouse::scroll(int8_t z)
+{
     return update(0, 0, button, z);
 }
 
 
-bool USBMouse::doubleClick() {
+bool USBMouse::doubleClick()
+{
     if (!click(MOUSE_LEFT))
         return false;
-//    wait(0.1); //tu do
+    //    wait(0.1); //tu do
     return click(MOUSE_LEFT);
 }
 
-bool USBMouse::click(uint8_t button) {
+bool USBMouse::click(uint8_t button)
+{
     if (!update(0, 0, button, 0))
         return false;
-//    wait(0.01); // to do 
+    //    wait(0.01); // to do
     return update(0, 0, 0, 0);
 }
 
-bool USBMouse::press(uint8_t button_) {
+bool USBMouse::press(uint8_t button_)
+{
     button = button_ & 0x07;
     return update(0, 0, button, 0);
 }
 
-bool USBMouse::release(uint8_t button_) {
+bool USBMouse::release(uint8_t button_)
+{
     button = (button & (~button_)) & 0x07;
     return update(0, 0, button, 0);
 }
 
 
-uint8_t * USBMouse::reportDesc() {
+uint8_t *USBMouse::reportDesc()
+{
 
-    if (mouse_type == REL_MOUSE) {
-        static uint8_t reportDescriptor[] = {
+    if (mouse_type == REL_MOUSE)
+    {
+        static uint8_t reportDescriptor[] =
+        {
             USAGE_PAGE(1),      0x01,       // Genric Desktop
             USAGE(1),           0x02,       // Mouse
             COLLECTION(1),      0x01,       // Application
@@ -140,8 +156,11 @@ uint8_t * USBMouse::reportDesc() {
         };
         reportLength = sizeof(reportDescriptor);
         return reportDescriptor;
-    } else if (mouse_type == ABS_MOUSE) {
-        static uint8_t reportDescriptor[] = {
+    }
+    else if (mouse_type == ABS_MOUSE)
+    {
+        static uint8_t reportDescriptor[] =
+        {
 
             USAGE_PAGE(1), 0x01,           // Generic Desktop
             USAGE(1), 0x02,                // Mouse
@@ -193,8 +212,10 @@ uint8_t * USBMouse::reportDesc() {
                                + (1 * HID_DESCRIPTOR_LENGTH) \
                                + (2 * ENDPOINT_DESCRIPTOR_LENGTH))
 
-uint8_t * USBMouse::configurationDesc() {
-    static uint8_t configurationDescriptor[] = {
+uint8_t *USBMouse::configurationDesc()
+{
+    static uint8_t configurationDescriptor[] =
+    {
         CONFIGURATION_DESCRIPTOR_LENGTH,// bLength
         CONFIGURATION_DESCRIPTOR,       // bDescriptorType
         LSB(TOTAL_DESCRIPTOR_LENGTH),   // wTotalLength (LSB)

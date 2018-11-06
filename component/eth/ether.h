@@ -8,7 +8,7 @@ public:
     /**
      * Default Constructor
      */
-    Ether(){};
+    Ether() {};
     /*virtual*/ bool begin();
 };
 

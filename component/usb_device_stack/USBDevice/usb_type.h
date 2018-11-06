@@ -61,7 +61,7 @@ typedef enum { ERROR = 0, SUCCESS  = !ERROR} ErrorStatus;
 
 typedef enum
 {
-  FALSE = 0, TRUE  = !FALSE
+    FALSE = 0, TRUE  = !FALSE
 }
 boolean;
 

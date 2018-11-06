@@ -9,18 +9,18 @@
 class WifiIPStack
 {
 public:
-    WifiIPStack(WIFI_TCP* ptcp)
+    WifiIPStack(WIFI_TCP *ptcp)
     {
         tcp = ptcp;
         tcp->begin();
     }
 
-    int        connect(char* hostname, int port)
+    int        connect(char *hostname, int port)
     {
         return tcp->connect(hostname, port, 7200);
     }
 
-    int        read(unsigned char* buffer, int len, int timeout = 1000)
+    int        read(unsigned char *buffer, int len, int timeout = 1000)
     {
         //set timeout
         if( tcp->available())
@@ -47,10 +47,10 @@ public:
         }
     }
 
-    int        write(unsigned char* buffer, int len, int timeout = 1000)
+    int        write(unsigned char *buffer, int len, int timeout = 1000)
     {
         //set timeout
-        return tcp->send((uint8_t*)buffer, len);
+        return tcp->send((uint8_t *)buffer, len);
     }
 
     int        disconnect()
@@ -59,7 +59,7 @@ public:
     }
 
 private:
-    WIFI_TCP *      tcp;
+    WIFI_TCP       *tcp;
 
 };
 

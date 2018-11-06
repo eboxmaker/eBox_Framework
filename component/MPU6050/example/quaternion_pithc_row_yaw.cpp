@@ -37,7 +37,7 @@ FourAxle sender;
 MPU6050 mpu(&si2c1);
 
 //姿态和算法
-Vector na,ng;
+Vector na, ng;
 float pitch, yaw, roll;
 
 //窗口滤波器
@@ -58,14 +58,14 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
     mpu.begin(400000);
     sender.begin(uartStream);
 
     // Read the WHO_AM_I register, this is a good test of communication
     uint8_t c = mpu.readByte(MPU6050_ADDRESS, WHO_AM_I_MPU6050);  // Read WHO_AM_I register for MPU-6050
-    if (c == 0x68) 
+    if (c == 0x68)
     {
         if(mpu.MPU6050SelfTest()) // Start by performing self test and reporting values
         {
@@ -83,7 +83,7 @@ void setup()
         Serial.print("Could not connect to MPU6050: 0x");
         Serial.println(c, HEX);
         while (1) ; // Loop forever if communication doesn't happen
-    }    
+    }
 }
 uint32_t lastUpdate = 0;         // used to calculate integration interval
 int main(void)
@@ -98,22 +98,22 @@ int main(void)
         {
             lastUpdate = millis();
 
-            
+
             //扩大100倍用于显示
-            status.roll = roll*100;
-            status.pitch = -pitch*100;
-            status.yaw = -yaw*100;
-            
-            senser.ax = na.XAxis*100;
-            senser.ay = na.YAxis*100;
-            senser.az = na.ZAxis*100;
-            
-            senser.gx = ng.XAxis*100;
-            senser.gy = ng.YAxis*100;
-            senser.gz = ng.ZAxis*100;
-            
-            
-                
+            status.roll = roll * 100;
+            status.pitch = -pitch * 100;
+            status.yaw = -yaw * 100;
+
+            senser.ax = na.XAxis * 100;
+            senser.ay = na.YAxis * 100;
+            senser.az = na.ZAxis * 100;
+
+            senser.gx = ng.XAxis * 100;
+            senser.gy = ng.YAxis * 100;
+            senser.gz = ng.ZAxis * 100;
+
+
+
             sender.sendNMSenser(senser);
             sender.sendNMStatues(status);
         }
@@ -127,26 +127,26 @@ void update()
     if(millis() - count >= 10)
     {
         delta_t = millis() - count;
-        double dt = delta_t/1000.0;
+        double dt = delta_t / 1000.0;
         count = millis();
         if (mpu.readByte(MPU6050_ADDRESS, INT_STATUS) & 0x01) // check if data ready interrupt
-        { 
+        {
             na = mpu.readNormalizeAccel();
             ng = mpu.readAngleGyro();
-            
-            
-            
-//            na.XAxis = filterx.in(na.XAxis);
-//            na.YAxis = filtery.in(na.YAxis);
-//            na.ZAxis = filterz.in(na.ZAxis);
-//            ng.XAxis = filtergx.in(ng.XAxis);
-//            ng.YAxis = filtergy.in(ng.YAxis);
-//            ng.ZAxis = filtergz.in(ng.ZAxis);
-
-        IMUupdate(ng.XAxis,ng.YAxis,ng.ZAxis,na.XAxis,na.YAxis,na.ZAxis,&roll,&pitch,&yaw);
 
 
-          
+
+            //            na.XAxis = filterx.in(na.XAxis);
+            //            na.YAxis = filtery.in(na.YAxis);
+            //            na.ZAxis = filterz.in(na.ZAxis);
+            //            ng.XAxis = filtergx.in(ng.XAxis);
+            //            ng.YAxis = filtergy.in(ng.YAxis);
+            //            ng.ZAxis = filtergz.in(ng.ZAxis);
+
+            IMUupdate(ng.XAxis, ng.YAxis, ng.ZAxis, na.XAxis, na.YAxis, na.ZAxis, &roll, &pitch, &yaw);
+
+
+
         }
     }
 

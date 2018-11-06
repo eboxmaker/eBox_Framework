@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V2.1
   * @date    2017/07/23
-  * @brief  
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -36,9 +36,9 @@ InCapture::InCapture(Gpio *capture_pin)
     low_capture = 0;
     _capture = 0;
 }
-void InCapture::begin(uint16_t prescaler ,ICMode_t mode)
+void InCapture::begin(uint16_t prescaler, ICMode_t mode)
 {
-	  uint8_t index;
+    uint8_t index;
     capture_pin->mode(INPUT_PU);
     init_info(this->capture_pin);
 
@@ -68,39 +68,39 @@ void InCapture::begin(uint16_t prescaler ,ICMode_t mode)
     {
     case (uint32_t)TIM1_BASE:
         overflow_times = &t1_overflow_times;
-        if(ch== TIM_Channel_1) index = TIM1_IT_CC1;
-        if(ch== TIM_Channel_2) index = TIM1_IT_CC2;
-        if(ch== TIM_Channel_3) index = TIM1_IT_CC3;
-        if(ch== TIM_Channel_4) index = TIM1_IT_CC4;		
+        if(ch == TIM_Channel_1) index = TIM1_IT_CC1;
+        if(ch == TIM_Channel_2) index = TIM1_IT_CC2;
+        if(ch == TIM_Channel_3) index = TIM1_IT_CC3;
+        if(ch == TIM_Channel_4) index = TIM1_IT_CC4;
         break;
     case (uint32_t)TIM2_BASE:
         overflow_times = &t2_overflow_times;
-        if(ch== TIM_Channel_1) index = TIM2_IT_CC1;
-        if(ch== TIM_Channel_2) index = TIM2_IT_CC2;
-        if(ch== TIM_Channel_3) index = TIM2_IT_CC3;
-        if(ch== TIM_Channel_4) index = TIM2_IT_CC4;	
+        if(ch == TIM_Channel_1) index = TIM2_IT_CC1;
+        if(ch == TIM_Channel_2) index = TIM2_IT_CC2;
+        if(ch == TIM_Channel_3) index = TIM2_IT_CC3;
+        if(ch == TIM_Channel_4) index = TIM2_IT_CC4;
         break;
     case (uint32_t)TIM3_BASE:
         overflow_times = &t3_overflow_times;
-        if(ch== TIM_Channel_1) index = TIM3_IT_CC1;
-        if(ch== TIM_Channel_2) index = TIM3_IT_CC2;
-        if(ch== TIM_Channel_3) index = TIM3_IT_CC3;
-        if(ch== TIM_Channel_4) index = TIM3_IT_CC4;	
+        if(ch == TIM_Channel_1) index = TIM3_IT_CC1;
+        if(ch == TIM_Channel_2) index = TIM3_IT_CC2;
+        if(ch == TIM_Channel_3) index = TIM3_IT_CC3;
+        if(ch == TIM_Channel_4) index = TIM3_IT_CC4;
         break;
     case (uint32_t)TIM4_BASE:
         overflow_times = &t4_overflow_times;
-        if(ch== TIM_Channel_1) index = TIM4_IT_CC1;
-        if(ch== TIM_Channel_2) index = TIM4_IT_CC2;
-        if(ch== TIM_Channel_3) index = TIM4_IT_CC3;
-        if(ch== TIM_Channel_4) index = TIM4_IT_CC4;	
+        if(ch == TIM_Channel_1) index = TIM4_IT_CC1;
+        if(ch == TIM_Channel_2) index = TIM4_IT_CC2;
+        if(ch == TIM_Channel_3) index = TIM4_IT_CC3;
+        if(ch == TIM_Channel_4) index = TIM4_IT_CC4;
         break;
 
     }
-    tim_irq_init(index,(&InCapture::_irq_handler),(uint32_t)this);
+    tim_irq_init(index, (&InCapture::_irq_handler), (uint32_t)this);
     if(mode == SIMPLE)
-        attach(this,&InCapture::simple_event);
+        attach(this, &InCapture::simple_event);
     else
-        attach(this,&InCapture::complex_event);
+        attach(this, &InCapture::complex_event);
 
 }
 void InCapture::base_init(uint16_t period, uint16_t prescaler)
@@ -184,60 +184,60 @@ void InCapture::init_info(Gpio *capture_pin)
 {
     switch((uint8_t)capture_pin->id)
     {
-        case PA0_ID :
-            TIMx = TIM2;
-            ch = TIM_Channel_1;//irq = TIM2_IRQn;
-            break;
-        case PA1_ID:
-            TIMx = TIM2;
-            ch = TIM_Channel_2;//irq = TIM2_IRQn;
-            break;
-        case PA2_ID:
-            TIMx = TIM2;
-            ch = TIM_Channel_3;//irq = TIM2_IRQn;
-            break;
-        case PA3_ID:
-            TIMx = TIM2;
-            ch = TIM_Channel_4;//irq = TIM2_IRQn;
-            break;        
-    
-        case PA6_ID:
-            TIMx = TIM3;
-            ch = TIM_Channel_1;//irq = TIM3_IRQn;
-            break;
-        case PA7_ID:
-            TIMx = TIM3;
-            ch = TIM_Channel_2;//irq = TIM3_IRQn;
-            break;
-        
-        
-        case PB0_ID:
-            TIMx = TIM3;
-            ch = TIM_Channel_3;//irq = TIM3_IRQn;
-            break;
-        case PB1_ID:
-            TIMx = TIM3;
-            ch = TIM_Channel_4;//irq = TIM3_IRQn;
-            break;
+    case PA0_ID :
+        TIMx = TIM2;
+        ch = TIM_Channel_1;//irq = TIM2_IRQn;
+        break;
+    case PA1_ID:
+        TIMx = TIM2;
+        ch = TIM_Channel_2;//irq = TIM2_IRQn;
+        break;
+    case PA2_ID:
+        TIMx = TIM2;
+        ch = TIM_Channel_3;//irq = TIM2_IRQn;
+        break;
+    case PA3_ID:
+        TIMx = TIM2;
+        ch = TIM_Channel_4;//irq = TIM2_IRQn;
+        break;
 
-        case PB6_ID:
-            TIMx = TIM4;
-            ch = TIM_Channel_1;//irq = TIM4_IRQn;
-            break;
-        case PB7_ID:
-            TIMx = TIM4;
-            ch = TIM_Channel_2;//irq = TIM4_IRQn;
-            break;
-        case PB8_ID:
-            TIMx = TIM4;
-            ch = TIM_Channel_3;//irq = TIM4_IRQn;
-            break;
-        case PB9_ID:
-            TIMx = TIM4;
-            ch = TIM_Channel_4;//irq = TIM4_IRQn;
-            break;
+    case PA6_ID:
+        TIMx = TIM3;
+        ch = TIM_Channel_1;//irq = TIM3_IRQn;
+        break;
+    case PA7_ID:
+        TIMx = TIM3;
+        ch = TIM_Channel_2;//irq = TIM3_IRQn;
+        break;
+
+
+    case PB0_ID:
+        TIMx = TIM3;
+        ch = TIM_Channel_3;//irq = TIM3_IRQn;
+        break;
+    case PB1_ID:
+        TIMx = TIM3;
+        ch = TIM_Channel_4;//irq = TIM3_IRQn;
+        break;
+
+    case PB6_ID:
+        TIMx = TIM4;
+        ch = TIM_Channel_1;//irq = TIM4_IRQn;
+        break;
+    case PB7_ID:
+        TIMx = TIM4;
+        ch = TIM_Channel_2;//irq = TIM4_IRQn;
+        break;
+    case PB8_ID:
+        TIMx = TIM4;
+        ch = TIM_Channel_3;//irq = TIM4_IRQn;
+        break;
+    case PB9_ID:
+        TIMx = TIM4;
+        ch = TIM_Channel_4;//irq = TIM4_IRQn;
+        break;
     }
-    
+
 
 }
 
@@ -262,7 +262,7 @@ uint32_t InCapture::get_capture()
     else
         _capture = 0xffffffff + now - last_value;
     last_value = now;
-    return _capture;    
+    return _capture;
 }
 
 float InCapture::get_zone_time_us()
@@ -282,7 +282,7 @@ void InCapture::complex_event()
     else
         capture = 0xffffffff + now - last_value;
     last_value = now;
-    
+
     if(polarity == TIM_ICPOLARITY_FALLING)//检测到下降沿，测量高电平时间完成
     {
         high_capture = capture;
@@ -293,9 +293,9 @@ void InCapture::complex_event()
         low_capture = capture;
         set_polarity_falling();//切换检测下降沿
     }
-    if((high_capture!= 0) && (low_capture != 0))
+    if((high_capture != 0) && (low_capture != 0))
         _available = true;
-    
+
 }
 void InCapture::simple_event()
 {
@@ -306,8 +306,8 @@ void InCapture::simple_event()
     else
         _capture = 0xffffffff + now - last_value;
     last_value = now;
-    
-    _available = true;  
+
+    _available = true;
 }
 
 bool InCapture::available()
@@ -318,24 +318,24 @@ float InCapture::get_wave_frq()
 {
     _available = false;
     if(_capture == 0)
-        return  (timer_clock/((high_capture + low_capture)));
+        return  (timer_clock / ((high_capture + low_capture)));
     else
-        return (timer_clock/_capture);
+        return (timer_clock / _capture);
 }
 float InCapture::get_wave_peroid()
 {
     _available = false;
     if(_capture == 0)
-        return  ((high_capture + low_capture)*1000000.0/(timer_clock));
+        return  ((high_capture + low_capture) * 1000000.0 / (timer_clock));
     else
-        return  (_capture*1000000.0/(timer_clock));
+        return  (_capture * 1000000.0 / (timer_clock));
 }
 
 float InCapture::get_wave_high_duty()
 {
     _available = false;
     if(_capture == 0)
-       return  (high_capture*100.0/(high_capture + low_capture));
+        return  (high_capture * 100.0 / (high_capture + low_capture));
     else
         return 0;
 }
@@ -343,7 +343,7 @@ float InCapture::get_wave_low_duty()
 {
     _available = false;
     if(_capture == 0)
-        return  (low_capture*100.0/(high_capture + low_capture));
+        return  (low_capture * 100.0 / (high_capture + low_capture));
     else
         return  0;
 }
@@ -352,17 +352,17 @@ float InCapture::get_wave_high_time()
 {
     _available = false;
     if(_capture == 0)
-        return  ((high_capture )*1000000.0/(timer_clock));
+        return  ((high_capture ) * 1000000.0 / (timer_clock));
     else
-        return  (_capture*1000000.0/(timer_clock));
+        return  (_capture * 1000000.0 / (timer_clock));
 }
 float InCapture::get_wave_low_time()
 {
     _available = false;
     if(_capture == 0)
-        return  ((low_capture)*1000000.0/(timer_clock));
+        return  ((low_capture) * 1000000.0 / (timer_clock));
     else
-        return  (_capture*1000000.0/(timer_clock));
+        return  (_capture * 1000000.0 / (timer_clock));
 }
 
 
@@ -373,14 +373,14 @@ void InCapture::set_count(uint16_t count)
 
 uint32_t InCapture::get_timer_clock()
 {
-    return get_timer_source_clock()/this->prescaler;
+    return get_timer_source_clock() / this->prescaler;
 }
 
 uint32_t InCapture::get_timer_source_clock()
 {
     uint32_t temp = 0;
     uint32_t timer_clock = 0x00;
-    
+
     if ((uint32_t)this->TIMx == TIM1_BASE)
     {
         timer_clock = cpu.clock.pclk2;
@@ -397,15 +397,15 @@ uint32_t InCapture::get_timer_source_clock()
 }
 uint32_t InCapture::get_detect_max_frq()
 {
-    
+
     switch(get_timer_source_clock())
     {
-        case 72000000:
-            return 180000;
-        case 8000000:
-            return 18000;
-        default:
-            return 0;
+    case 72000000:
+        return 180000;
+    case 8000000:
+        return 18000;
+    default:
+        return 0;
     }
 
 }
@@ -418,26 +418,29 @@ uint8_t InCapture::get_detect_min_pulse_us()
 {
     switch(get_timer_source_clock())
     {
-        case 72000000:
-            return 4;
-        case 8000000:
-            return 30;
-        default:
-            return 0;
+    case 72000000:
+        return 4;
+    case 8000000:
+        return 30;
+    default:
+        return 0;
     }
 }
 
 
-void InCapture::_irq_handler( uint32_t id){ 
-		InCapture *handler = (InCapture*)id;
-		handler->_irq.call();
+void InCapture::_irq_handler( uint32_t id)
+{
+    InCapture *handler = (InCapture *)id;
+    handler->_irq.call();
 
 }
 
 
-void InCapture::attach(void (*fptr)(void)) {
-    if (fptr) {
+void InCapture::attach(void (*fptr)(void))
+{
+    if (fptr)
+    {
         _irq.attach(fptr);
-		}
+    }
 }
 

@@ -20,7 +20,7 @@
 #include "USBCDC.h"
 #include "ebox.h"
 
-static uint8_t cdc_line_coding[7]= {0x80, 0x25, 0x00, 0x00, 0x00, 0x00, 0x08};
+static uint8_t cdc_line_coding[7] = {0x80, 0x25, 0x00, 0x00, 0x00, 0x00, 0x08};
 
 #define DEFAULT_CONFIGURATION (1)
 
@@ -34,64 +34,76 @@ static uint8_t cdc_line_coding[7]= {0x80, 0x25, 0x00, 0x00, 0x00, 0x00, 0x08};
 
 #define MAX_CDC_REPORT_SIZE MAX_PACKET_SIZE_EPBULK
 
-USBCDC::USBCDC(uint16_t vendor_id, uint16_t product_id, uint16_t product_release, bool connect_blocking): USBDevice(vendor_id, product_id, product_release) {
+USBCDC::USBCDC(uint16_t vendor_id, uint16_t product_id, uint16_t product_release, bool connect_blocking): USBDevice(vendor_id, product_id, product_release)
+{
     terminal_connected = false;
     USBDevice::connect(connect_blocking);
 }
 
-bool USBCDC::USBCallback_request(void) {
+bool USBCDC::USBCallback_request(void)
+{
     /* Called in ISR context */
 
     bool success = false;
-    CONTROL_TRANSFER * transfer = getTransferPtr();
+    CONTROL_TRANSFER *transfer = getTransferPtr();
 
     /* Process class-specific requests */
 
-    if (transfer->setup.bmRequestType.Type == CLASS_TYPE) {
-        switch (transfer->setup.bRequest) {
-            case CDC_GET_LINE_CODING:
-                transfer->remaining = 7;
-                transfer->ptr = cdc_line_coding;
-                transfer->direction = DEVICE_TO_HOST;
-                success = true;
-                break;
-            case CDC_SET_LINE_CODING:
-                transfer->remaining = 7;
-                transfer->notify = true;
-                success = true;
-                break;
-            case CDC_SET_CONTROL_LINE_STATE:
-                if (transfer->setup.wValue & CLS_DTR) {
-                    terminal_connected = true;
-                } else {
-                    terminal_connected = true;//debug by link false->true
-                }
-                success = true;
-                break;
-            default:
-                break;
+    if (transfer->setup.bmRequestType.Type == CLASS_TYPE)
+    {
+        switch (transfer->setup.bRequest)
+        {
+        case CDC_GET_LINE_CODING:
+            transfer->remaining = 7;
+            transfer->ptr = cdc_line_coding;
+            transfer->direction = DEVICE_TO_HOST;
+            success = true;
+            break;
+        case CDC_SET_LINE_CODING:
+            transfer->remaining = 7;
+            transfer->notify = true;
+            success = true;
+            break;
+        case CDC_SET_CONTROL_LINE_STATE:
+            if (transfer->setup.wValue & CLS_DTR)
+            {
+                terminal_connected = true;
+            }
+            else
+            {
+                terminal_connected = true;//debug by link false->true
+            }
+            success = true;
+            break;
+        default:
+            break;
         }
     }
 
     return success;
 }
 
-void USBCDC::USBCallback_requestCompleted(uint8_t *buf, uint32_t length) {
+void USBCDC::USBCallback_requestCompleted(uint8_t *buf, uint32_t length)
+{
     // Request of setting line coding has 7 bytes
-    if (length != 7) {
+    if (length != 7)
+    {
         return;
     }
 
-    CONTROL_TRANSFER * transfer = getTransferPtr();
+    CONTROL_TRANSFER *transfer = getTransferPtr();
 
     /* Process class-specific requests */
-    if (transfer->setup.bmRequestType.Type == CLASS_TYPE) {
-        if (transfer->setup.bRequest == CDC_SET_LINE_CODING) {
-            if (ebox_memcmp(cdc_line_coding, buf, 7)) {
+    if (transfer->setup.bmRequestType.Type == CLASS_TYPE)
+    {
+        if (transfer->setup.bRequest == CDC_SET_LINE_CODING)
+        {
+            if (ebox_memcmp(cdc_line_coding, buf, 7))
+            {
                 ebox_memcpy(cdc_line_coding, buf, 7);
 
                 int baud = buf[0] + (buf[1] << 8)
-                         + (buf[2] << 16) + (buf[3] << 24);
+                           + (buf[2] << 16) + (buf[3] << 24);
                 int stop = buf[4];
                 int bits = buf[6];
                 int parity = buf[5];
@@ -105,8 +117,10 @@ void USBCDC::USBCallback_requestCompleted(uint8_t *buf, uint32_t length) {
 // Called in ISR context
 // Set configuration. Return false if the
 // configuration is not supported.
-bool USBCDC::USBCallback_setConfiguration(uint8_t configuration) {
-    if (configuration != DEFAULT_CONFIGURATION) {
+bool USBCDC::USBCallback_setConfiguration(uint8_t configuration)
+{
+    if (configuration != DEFAULT_CONFIGURATION)
+    {
         return false;
     }
 
@@ -120,11 +134,13 @@ bool USBCDC::USBCallback_setConfiguration(uint8_t configuration) {
     return true;
 }
 
-bool USBCDC::send(uint8_t * buffer, uint32_t size) {
+bool USBCDC::send(uint8_t *buffer, uint32_t size)
+{
     return USBDevice::write(EPBULK_IN, buffer, size, MAX_CDC_REPORT_SIZE);
 }
 
-bool USBCDC::readEP(uint8_t * buffer, uint32_t * size) {
+bool USBCDC::readEP(uint8_t *buffer, uint32_t *size)
+{
     if (!USBDevice::readEP(EPBULK_OUT, buffer, size, MAX_CDC_REPORT_SIZE))
         return false;
     if (!readStart(EPBULK_OUT, MAX_CDC_REPORT_SIZE))
@@ -132,7 +148,8 @@ bool USBCDC::readEP(uint8_t * buffer, uint32_t * size) {
     return true;
 }
 
-bool USBCDC::readEP_NB(uint8_t * buffer, uint32_t * size) {
+bool USBCDC::readEP_NB(uint8_t *buffer, uint32_t *size)
+{
     if (!USBDevice::readEP_NB(EPBULK_OUT, buffer, size, MAX_CDC_REPORT_SIZE))
         return false;
     if (!readStart(EPBULK_OUT, MAX_CDC_REPORT_SIZE))
@@ -141,8 +158,10 @@ bool USBCDC::readEP_NB(uint8_t * buffer, uint32_t * size) {
 }
 
 
-uint8_t * USBCDC::deviceDesc() {
-    static uint8_t deviceDescriptor[] = {
+uint8_t *USBCDC::deviceDesc()
+{
+    static uint8_t deviceDescriptor[] =
+    {
         18,                   // bLength
         1,                    // bDescriptorType
         0x10, 0x01,           // bcdUSB
@@ -161,20 +180,24 @@ uint8_t * USBCDC::deviceDesc() {
     return deviceDescriptor;
 }
 
-uint8_t * USBCDC::stringIinterfaceDesc() {
-    static uint8_t stringIinterfaceDescriptor[] = {
+uint8_t *USBCDC::stringIinterfaceDesc()
+{
+    static uint8_t stringIinterfaceDescriptor[] =
+    {
         0x08,
         STRING_DESCRIPTOR,
-        'C',0,'D',0,'C',0,
+        'C', 0, 'D', 0, 'C', 0,
     };
     return stringIinterfaceDescriptor;
 }
 
-uint8_t * USBCDC::stringIproductDesc() {
-    static uint8_t stringIproductDescriptor[] = {
+uint8_t *USBCDC::stringIproductDesc()
+{
+    static uint8_t stringIproductDescriptor[] =
+    {
         0x16,
         STRING_DESCRIPTOR,
-        'C',0,'D',0,'C',0,' ',0,'D',0,'E',0,'V',0,'I',0,'C',0,'E',0
+        'C', 0, 'D', 0, 'C', 0, ' ', 0, 'D', 0, 'E', 0, 'V', 0, 'I', 0, 'C', 0, 'E', 0
     };
     return stringIproductDescriptor;
 }
@@ -182,8 +205,10 @@ uint8_t * USBCDC::stringIproductDesc() {
 
 #define CONFIG1_DESC_SIZE (9+8+9+5+5+4+5+7+9+7+7)
 
-uint8_t * USBCDC::configurationDesc() {
-    static uint8_t configDescriptor[] = {
+uint8_t *USBCDC::configurationDesc()
+{
+    static uint8_t configDescriptor[] =
+    {
         // configuration descriptor
         9,                      // bLength
         2,                      // bDescriptorType

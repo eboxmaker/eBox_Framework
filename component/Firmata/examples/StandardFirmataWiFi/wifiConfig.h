@@ -39,7 +39,7 @@
 #include <WiFi101.h>
 #include "utility/WiFiClientStream.h"
 #include "utility/WiFiServerStream.h"
-  #define WIFI_LIB_INCLUDED
+#define WIFI_LIB_INCLUDED
 #endif
 
 /*
@@ -59,11 +59,11 @@
 #include <WiFi.h>
 #include "utility/WiFiClientStream.h"
 #include "utility/WiFiServerStream.h"
-  #ifdef WIFI_LIB_INCLUDED
-  #define MULTIPLE_WIFI_LIB_INCLUDES
-  #else
-  #define WIFI_LIB_INCLUDED
-  #endif
+#ifdef WIFI_LIB_INCLUDED
+#define MULTIPLE_WIFI_LIB_INCLUDES
+#else
+#define WIFI_LIB_INCLUDED
+#endif
 #endif
 
 /*
@@ -87,11 +87,11 @@
 #include <ESP8266WiFi.h>
 #include "utility/WiFiClientStream.h"
 #include "utility/WiFiServerStream.h"
-  #ifdef WIFI_LIB_INCLUDED
-  #define MULTIPLE_WIFI_LIB_INCLUDES
-  #else
-  #define WIFI_LIB_INCLUDED
-  #endif
+#ifdef WIFI_LIB_INCLUDED
+#define MULTIPLE_WIFI_LIB_INCLUDES
+#else
+#define WIFI_LIB_INCLUDED
+#endif
 #endif
 
 /*
@@ -211,9 +211,9 @@ char wep_key[] = "your_wep_key";
  *============================================================================*/
 
 #ifdef SERVER_IP
-  WiFiClientStream stream(IPAddress(SERVER_IP), SERVER_PORT);
+WiFiClientStream stream(IPAddress(SERVER_IP), SERVER_PORT);
 #else
-  WiFiServerStream stream(SERVER_PORT);
+WiFiServerStream stream(SERVER_PORT);
 #endif
 
 /*==============================================================================

@@ -97,7 +97,8 @@
  * Each interface is described by upap structure.
  */
 #if PAP_SUPPORT
-typedef struct upap_state {
+typedef struct upap_state
+{
     const char *us_user;	/* User */
     u8_t us_userlen;		/* User length */
     const char *us_passwd;	/* Password */

@@ -4,7 +4,7 @@
 
 #include "ether.h"
 
-class EtherEnc28j60 :public Ether
+class EtherEnc28j60 : public Ether
 {
 public:
     /**

@@ -54,66 +54,66 @@ typedef struct
     uint32_t hclk;
     uint32_t pclk2;
     uint32_t pclk1;
-}CpuClock_t;  
+} CpuClock_t;
 
 typedef struct
 {
     CpuType     type;
     uint8_t     pins;
     uint16_t    flash_size;
-	uint32_t    ability;//cpu calculate plus per second;
-	CpuClock_t	clock;
-	uint32_t    chip_id[3];
+    uint32_t    ability;//cpu calculate plus per second;
+    CpuClock_t	clock;
+    uint32_t    chip_id[3];
     char        company[8];
-    
-}Cpu_t;
+
+} Cpu_t;
 
 typedef union
 {
     uint8_t byte[2];
     uint16_t value;
-}DataU16_t; 
+} DataU16_t;
 
 typedef union
 {
     uint8_t byte[4];
     uint32_t value;
-}DataU32_t; 
+} DataU32_t;
 
 typedef union
 {
     uint8_t byte[2];
     int16_t value;
-}Data16_t; 
+} Data16_t;
 
 typedef union
 {
     uint8_t byte[4];
     int32_t value;
-}Data32_t; 
+} Data32_t;
 
 typedef union
 {
     uint8_t byte[4];
     float value;
-}DataFloat_t;
+} DataFloat_t;
 
 typedef union
 {
     uint8_t byte[4];
     double value;
-}DataDouble_t;
+} DataDouble_t;
 
 typedef struct
 {
-	uint8_t year;
-	uint8_t month;
-	uint8_t date;
-	uint8_t hour;
-	uint8_t min;
-	uint8_t sec;
-	uint8_t week;
-}DateTime_t;
+    uint8_t year;
+    uint8_t month;
+    uint8_t date;
+    uint8_t hour;
+    uint8_t min;
+    uint8_t sec;
+    uint8_t week;
+} DateTime_t;
 
 
 #define ALIGN(size, align)                 ((align + size - 1) & (~ (align - 1)))

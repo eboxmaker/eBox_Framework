@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -185,7 +185,7 @@ uint8_t SoftSpi::transfer2(uint8_t data)
     uint8_t i;
     uint8_t RcvData = 0 ;
 
-     //CPOL = 1; CPHA = 0
+    //CPOL = 1; CPHA = 0
     //时钟空闲输出：1,第一个边沿（即下降沿）输出，之后采样；
     //MOSI,主机在第一个时钟沿之前准备好输出数据
     //MISO,主机在第一个时钟沿之后读取数据。
@@ -222,7 +222,7 @@ uint8_t SoftSpi::transfer3(uint8_t data)
     uint8_t i;
     uint8_t RcvData = 0 ;
 
-     //CPOL = 1; CPHA = 1
+    //CPOL = 1; CPHA = 1
     //时钟空闲输出：1,第二个边沿（即上升沿）输出，之后采样；
     //MOSI,主机在第二个时钟沿之前准备好输出数据
     //MISO,主机在第二个时钟沿之后读取数据。

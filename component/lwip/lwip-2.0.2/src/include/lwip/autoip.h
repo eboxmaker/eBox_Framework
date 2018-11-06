@@ -60,18 +60,18 @@ extern "C" {
 /** AutoIP state information per netif */
 struct autoip
 {
-  /** the currently selected, probed, announced or used LL IP-Address */
-  ip4_addr_t llipaddr;
-  /** current AutoIP state machine state */
-  u8_t state;
-  /** sent number of probes or announces, dependent on state */
-  u8_t sent_num;
-  /** ticks to wait, tick is AUTOIP_TMR_INTERVAL long */
-  u16_t ttw;
-  /** ticks until a conflict can be solved by defending */
-  u8_t lastconflict;
-  /** total number of probed/used Link Local IP-Addresses */
-  u8_t tried_llipaddr;
+    /** the currently selected, probed, announced or used LL IP-Address */
+    ip4_addr_t llipaddr;
+    /** current AutoIP state machine state */
+    u8_t state;
+    /** sent number of probes or announces, dependent on state */
+    u8_t sent_num;
+    /** ticks to wait, tick is AUTOIP_TMR_INTERVAL long */
+    u16_t ttw;
+    /** ticks until a conflict can be solved by defending */
+    u8_t lastconflict;
+    /** total number of probed/used Link Local IP-Addresses */
+    u8_t tried_llipaddr;
 };
 
 

@@ -7,7 +7,7 @@
 // SquarePoor[4]：返回方差分析指标: 回归平方和，剩余平方和，回归平方差，剩余平方差
 // 返回值：0求解成功，-1错误
 
-    
+
 int linear_regression(double *data, int rows, double *a, double *b, double *SquarePoor)
 {
     int m;
@@ -57,13 +57,13 @@ int linear_equations(double *data, int count, double *Answer)
 {
     int j, m, n;
     double tmp, **dat, *d = data;
-    dat = (double**)ebox_malloc(count * sizeof(double*));
+    dat = (double **)ebox_malloc(count * sizeof(double *));
     for (m = 0; m < count; m ++, d += (count + 1))
     {
-        dat[m] = (double*)ebox_malloc((count + 1) * sizeof(double));
+        dat[m] = (double *)ebox_malloc((count + 1) * sizeof(double));
         memcpy(dat[m], d, (count + 1) * sizeof(double));
     }
-    d = (double*)ebox_malloc((count + 1) * sizeof(double));
+    d = (double *)ebox_malloc((count + 1) * sizeof(double));
     for (m = 0; m < count - 1; m ++)
     {
         // 如果主对角线元素为0，行交换
@@ -116,7 +116,7 @@ int multiple_regression(double *data, int rows, int cols, double *Answer, double
     double *dat, *p, a, b;
     if (data == 0 || Answer == 0 || rows < 2 || cols < 2)
         return -1;
-    dat = (double*)ebox_malloc(cols * (cols + 1) * sizeof(double));
+    dat = (double *)ebox_malloc(cols * (cols + 1) * sizeof(double));
     dat[0] = (double)rows;
     for (n = 0; n < count; n ++)                     // n = 0 to cols - 2
     {
@@ -161,10 +161,10 @@ int multiple_regression(double *data, int rows, int cols, double *Answer, double
             SquarePoor[1] += ((*p - a) * (*p - a));  // Q(剩余平方和)(*p = Ym)
         }
         SquarePoor[2] = SquarePoor[0] / count;       // 回归方差
-  if (rows - cols > 0.0)
-    SquarePoor[3] = SquarePoor[1] / (rows - cols); // 剩余方差
-  else
-    SquarePoor[3] = 0.0;
+        if (rows - cols > 0.0)
+            SquarePoor[3] = SquarePoor[1] / (rows - cols); // 剩余方差
+        else
+            SquarePoor[3] = 0.0;
     }
     ebox_free(dat);
     return n;

@@ -23,14 +23,16 @@
 //#include "Stream.h"
 
 /* Modifiers */
-enum MODIFIER_KEY {
+enum MODIFIER_KEY
+{
     KEY_CTRL = 1,
     KEY_SHIFT = 2,
     KEY_ALT = 4,
 };
 
 
-enum MEDIA_KEY {
+enum MEDIA_KEY
+{
     KEY_NEXT_TRACK,     /*!< next Track Button */
     KEY_PREVIOUS_TRACK, /*!< Previous track Button */
     KEY_STOP,           /*!< Stop Button */
@@ -40,7 +42,8 @@ enum MEDIA_KEY {
     KEY_VOLUME_DOWN,    /*!< Volume Down Button */
 };
 
-enum FUNCTION_KEY {
+enum FUNCTION_KEY
+{
     KEY_F1 = 128,   /* F1 key */
     KEY_F2,         /* F2 key */
     KEY_F3,         /* F3 key */
@@ -89,7 +92,8 @@ enum FUNCTION_KEY {
  *
  * @endcode
  */
-class USBKeyboard: public USBHID {
+class USBKeyboard: public USBHID
+{
 public:
 
     /**
@@ -103,7 +107,8 @@ public:
     *
     */
     USBKeyboard(uint16_t vendor_id = 0x1235, uint16_t product_id = 0x0050, uint16_t product_release = 0x0001):
-            USBHID(0, 0, vendor_id, product_id, product_release, false) {
+        USBHID(0, 0, vendor_id, product_id, product_release, false)
+    {
         lock_status = 0;
         connect();
     };
@@ -143,7 +148,7 @@ public:
     *
     * @returns pointer to the report descriptor
     */
-    virtual uint8_t * reportDesc();
+    virtual uint8_t *reportDesc();
 
     /*
     * Called when a data is received on the OUT endpoint. Useful to switch on LED of LOCK keys
@@ -161,9 +166,9 @@ public:
     * @returns status of lock keys
     */
     uint8_t lockStatus();
-		
-		
-		void printf(const char *str);
+
+
+    void printf(const char *str);
 
 protected:
     /*
@@ -171,11 +176,12 @@ protected:
     *
     * @returns pointer to the configuration descriptor
     */
-    virtual uint8_t * configurationDesc();
+    virtual uint8_t *configurationDesc();
 
 private:
     //dummy otherwise it doesn,t compile (we must define all methods of an abstract class)
-    virtual int _getc() {
+    virtual int _getc()
+    {
         return -1;
     };
 

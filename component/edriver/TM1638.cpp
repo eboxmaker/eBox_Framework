@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -18,7 +18,7 @@
 
 
 /* Includes ------------------------------------------------------------------*/
- 
+
 #include "TM1638.h"
 
 Tm1638::Tm1638(Gpio *p_data_pin, Gpio *p_sck_pin, Gpio *p_rck_pin)
@@ -110,7 +110,7 @@ uint16_t Tm1638::readkey()
 }
 
 void Tm1638::LedDisplay(uint8_t ddata0, uint8_t ddata1, uint8_t ddata2, uint8_t ddata3,
-                         uint8_t ddata4, uint8_t ddata5, uint8_t ddata6, uint8_t ddata7, uint8_t ddata8, uint8_t ddata9)
+                        uint8_t ddata4, uint8_t ddata5, uint8_t ddata6, uint8_t ddata7, uint8_t ddata8, uint8_t ddata9)
 
 {
     uint8_t writedata0, writedata1, writedata2, writedata3, writedata4, writedata5, writedata6, writedata7;
