@@ -2,15 +2,15 @@
 #define __MENU_H
 #include "ebox.h"
 
- struct _MenuItem;
- struct _MenuPage;
+struct _MenuItem;
+struct _MenuPage;
 
 typedef struct _MenuItem
 {
     const char *name;
     _MenuPage *child;
     void (*callback)(void);
-}MenuItem;
+} MenuItem;
 
 typedef struct _MenuPage
 {
@@ -21,7 +21,7 @@ typedef struct _MenuPage
     _MenuItem *item;
     _MenuPage *parent;
     void (*callback)(void);
-}MenuPage;
+} MenuPage;
 extern MenuPage main_page;
 extern MenuPage setting_page;
 extern MenuPage version_page;

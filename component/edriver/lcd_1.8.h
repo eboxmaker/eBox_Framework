@@ -6,12 +6,12 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -33,7 +33,7 @@
 //              SDA   接PA7（SDA）
 //              RES   接PB3 (RST)
 //              DC    接PB4 (RS)
-//              CS    接PB5 
+//              CS    接PB5
 //              BL    接PB6
 
 typedef enum
@@ -76,8 +76,8 @@ public:
     void row_order(uint8_t order);
 
     void set_xy(int16_t x, int16_t y);
-    
-    
+
+
     virtual void draw_pixel(int16_t x, int16_t y, uint32_t color);
     virtual void draw_h_line(int16_t x0, int16_t y0, int16_t x1, uint32_t color);
     virtual void draw_v_line(int16_t x0, int16_t y0, int16_t y1, uint32_t color);
@@ -87,8 +87,8 @@ public:
     virtual void fill_screen(uint32_t color);
     virtual void draw_circle(int16_t x, int16_t y, int16_t r, uint32_t color);
 
-    
-    
+
+
     int16_t read_point(int16_t x, int16_t y);
     void h_disp_char8x16(int16_t x, int16_t y, uint8_t ch);
     void disp_char8x16(int16_t x, int16_t y, uint8_t ch);
@@ -96,7 +96,7 @@ public:
     void draw_font_gbk16(int16_t x, int16_t y, uint8_t *s);
 
     void draw_bitmap(const unsigned char *p); //显示40*40 QQ图片
-    
+
 
 private:
     Gpio *cs;
@@ -105,7 +105,7 @@ private:
     Gpio *rst;
     Spi  *spi;
     SpiConfig_t config;
-    uint16_t width,height;
+    uint16_t width, height;
     uint8_t initialized;
 
     void reset(void);

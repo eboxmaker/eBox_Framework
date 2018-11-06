@@ -105,46 +105,50 @@
  * we saw from the conversation together with a small identifier
  * the transmit & receive ends of the line use to locate saved header.
  */
-struct cstate {
-  struct cstate *cs_next; /* next most recently used state (xmit only) */
-  u16_t cs_hlen;        /* size of hdr (receive only) */
-  u8_t cs_id;           /* connection # associated with this state */
-  u8_t cs_filler;
-  union {
-    char csu_hdr[MAX_HDR];
-    struct ip_hdr csu_ip;     /* ip/tcp hdr from most recent packet */
-  } vjcs_u;
+struct cstate
+{
+    struct cstate *cs_next; /* next most recently used state (xmit only) */
+    u16_t cs_hlen;        /* size of hdr (receive only) */
+    u8_t cs_id;           /* connection # associated with this state */
+    u8_t cs_filler;
+    union
+    {
+        char csu_hdr[MAX_HDR];
+        struct ip_hdr csu_ip;     /* ip/tcp hdr from most recent packet */
+    } vjcs_u;
 };
 #define cs_ip vjcs_u.csu_ip
 #define cs_hdr vjcs_u.csu_hdr
 
 
-struct vjstat {
-  u32_t vjs_packets;        /* outbound packets */
-  u32_t vjs_compressed;     /* outbound compressed packets */
-  u32_t vjs_searches;       /* searches for connection state */
-  u32_t vjs_misses;         /* times couldn't find conn. state */
-  u32_t vjs_uncompressedin; /* inbound uncompressed packets */
-  u32_t vjs_compressedin;   /* inbound compressed packets */
-  u32_t vjs_errorin;        /* inbound unknown type packets */
-  u32_t vjs_tossed;         /* inbound packets tossed because of error */
+struct vjstat
+{
+    u32_t vjs_packets;        /* outbound packets */
+    u32_t vjs_compressed;     /* outbound compressed packets */
+    u32_t vjs_searches;       /* searches for connection state */
+    u32_t vjs_misses;         /* times couldn't find conn. state */
+    u32_t vjs_uncompressedin; /* inbound uncompressed packets */
+    u32_t vjs_compressedin;   /* inbound compressed packets */
+    u32_t vjs_errorin;        /* inbound unknown type packets */
+    u32_t vjs_tossed;         /* inbound packets tossed because of error */
 };
 
 /*
  * all the state data for one serial line (we need one of these per line).
  */
-struct vjcompress {
-  struct cstate *last_cs;          /* most recently used tstate */
-  u8_t last_recv;                /* last rcvd conn. id */
-  u8_t last_xmit;                /* last sent conn. id */
-  u16_t flags;
-  u8_t maxSlotIndex;
-  u8_t compressSlot;             /* Flag indicating OK to compress slot ID. */
+struct vjcompress
+{
+    struct cstate *last_cs;          /* most recently used tstate */
+    u8_t last_recv;                /* last rcvd conn. id */
+    u8_t last_xmit;                /* last sent conn. id */
+    u16_t flags;
+    u8_t maxSlotIndex;
+    u8_t compressSlot;             /* Flag indicating OK to compress slot ID. */
 #if LINK_STATS
-  struct vjstat stats;
+    struct vjstat stats;
 #endif
-  struct cstate tstate[MAX_SLOTS]; /* xmit connection states */
-  struct cstate rstate[MAX_SLOTS]; /* receive connection states */
+    struct cstate tstate[MAX_SLOTS]; /* xmit connection states */
+    struct cstate rstate[MAX_SLOTS]; /* receive connection states */
 };
 
 /* flag values */

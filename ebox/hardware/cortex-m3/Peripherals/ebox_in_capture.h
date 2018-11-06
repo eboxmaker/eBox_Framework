@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V2.1
   * @date    2017/07/23
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -52,19 +52,19 @@
     在采用低分频系数的时候，可以保证测量精度，但是会增大定时器溢出频率，进而增大cpu开销，
     在采用高分频系数的时候，测量精度较低，但是会降低定时器溢出频率，进而降低cpu开销，
     stm32在72M主频下，最高可测160Khz的信号。如果再大，将无法测量。
-    
+
 
 */
-typedef enum 
+typedef enum
 {
     SIMPLE = 0,
     COMPLEX = 1
-}ICMode_t;
+} ICMode_t;
 class InCapture
 {
 public:
     InCapture(Gpio *capture_pin);
-    void        begin(uint16_t prescaler = 1,ICMode_t mode = SIMPLE);//使用默认参数，分频系数为1；最大量程为120s
+    void        begin(uint16_t prescaler = 1, ICMode_t mode = SIMPLE); //使用默认参数，分频系数为1；最大量程为120s
     void        set_count(uint16_t count);
     void        set_polarity_falling();
     void        set_polarity_rising();
@@ -84,16 +84,17 @@ public:
     float       get_wave_high_time();///<波形的高电平时间
     float       get_wave_low_time();///<波形的低电平时间
     bool        available();///<波形的测量完成
-    
+
     //绑定中断
-	void attach(void (*fptr)(void));
+    void attach(void (*fptr)(void));
     template<typename T>
-    void attach(T* tptr, void (T::*mptr)(void)) {
+    void attach(T *tptr, void (T::*mptr)(void))
+    {
         _irq.attach(tptr, mptr);
     }
 
-	static void _irq_handler( uint32_t id);
-    
+    static void _irq_handler( uint32_t id);
+
     uint32_t    get_timer_clock();
     uint32_t    get_timer_source_clock();
     uint32_t    get_detect_max_frq();
@@ -101,8 +102,8 @@ public:
     uint8_t     get_detect_min_pulse_us();
 
     uint8_t     polarity;
-		
-		
+
+
 
 private:
     Gpio        *capture_pin;

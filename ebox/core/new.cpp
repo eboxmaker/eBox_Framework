@@ -19,19 +19,23 @@
 #include <stdlib.h>
 #include "ebox_mem.h"
 
-void *operator new(size_t size) {
-  return ebox_malloc(size);
+void *operator new(size_t size)
+{
+    return ebox_malloc(size);
 }
 
-void *operator new[](size_t size) {
-  return ebox_malloc(size);
+void *operator new[](size_t size)
+{
+    return ebox_malloc(size);
 }
 
-void operator delete(void * ptr) {
-  ebox_free(ptr);
+void operator delete(void *ptr)
+{
+    ebox_free(ptr);
 }
 
-void operator delete[](void * ptr) {
-  ebox_free(ptr);
+void operator delete[](void *ptr)
+{
+    ebox_free(ptr);
 }
 

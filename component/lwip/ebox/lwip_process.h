@@ -1,7 +1,7 @@
 #ifndef __LWIP_PROCESS_H
 #define __LWIP_PROCESS_H
 
-     
+
 #include "ebox.h"
 #include "enc28j60.h"
 

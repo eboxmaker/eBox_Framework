@@ -16,7 +16,7 @@
  License along with this library; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
- #include <stdio.h>
+#include <stdio.h>
 #include "ebox_core.h"
 
 #include "IPAddress.h"
@@ -45,27 +45,28 @@ IPAddress::IPAddress(const uint8_t *address)
     memcpy(_address.bytes, address, sizeof(_address.bytes));
 }
 
-IPAddress& IPAddress::operator=(const uint8_t *address)
+IPAddress &IPAddress::operator=(const uint8_t *address)
 {
     memcpy(_address.bytes, address, sizeof(_address.bytes));
     return *this;
 }
 
-IPAddress& IPAddress::operator=(uint32_t address)
+IPAddress &IPAddress::operator=(uint32_t address)
 {
     _address.dword = address;
     return *this;
 }
 
-bool IPAddress::operator==(const uint8_t* addr) const
+bool IPAddress::operator==(const uint8_t *addr) const
 {
     return memcmp(addr, _address.bytes, sizeof(_address.bytes)) == 0;
 }
 
-size_t IPAddress::printTo(Print& p) const
+size_t IPAddress::printTo(Print &p) const
 {
     size_t n = 0;
-    for(int i = 0; i < 3; i++) {
+    for(int i = 0; i < 3; i++)
+    {
         n += p.print(_address.bytes[i], DEC);
         n += p.print('.');
     }
@@ -75,10 +76,10 @@ size_t IPAddress::printTo(Print& p) const
 String IPAddress::toString() const
 {
     char szRet[16];
-//    sprintf(szRet,"%u.%u.%u.%u", _address.bytes[0], _address.bytes[1], _address.bytes[2], _address.bytes[3]);
-    #if USE_PRINTF
-    ebox_snprintf(szRet,16,"%u.%u.%u.%u", _address.bytes[0], _address.bytes[1], _address.bytes[2], _address.bytes[3]);
-    #endif
+    //    sprintf(szRet,"%u.%u.%u.%u", _address.bytes[0], _address.bytes[1], _address.bytes[2], _address.bytes[3]);
+#if USE_PRINTF
+    ebox_snprintf(szRet, 16, "%u.%u.%u.%u", _address.bytes[0], _address.bytes[1], _address.bytes[2], _address.bytes[3]);
+#endif
     return String(szRet);
 }
 
@@ -95,14 +96,16 @@ bool IPAddress::fromString(const char *address)
         if (c >= '0' && c <= '9')
         {
             acc = acc * 10 + (c - '0');
-            if (acc > 255) {
+            if (acc > 255)
+            {
                 // Value out of [0..255] range
                 return false;
             }
         }
         else if (c == '.')
         {
-            if (dots == 3) {
+            if (dots == 3)
+            {
                 // Too much dots (there must be 3 dots)
                 return false;
             }
@@ -116,7 +119,8 @@ bool IPAddress::fromString(const char *address)
         }
     }
 
-    if (dots != 3) {
+    if (dots != 3)
+    {
         // Too few dots (there must be 3 dots)
         return false;
     }

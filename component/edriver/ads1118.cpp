@@ -1,6 +1,6 @@
 #include "ads1118.h"
 #include "ebox.h"
-Ads1118::Ads1118(Gpio *cs,Spi *spi)
+Ads1118::Ads1118(Gpio *cs, Spi *spi)
 {
     this->cs = cs;
     this->spi = spi;
@@ -18,11 +18,11 @@ Ads1118::Ads1118(Gpio *cs,Spi *spi)
     cfg.bit.mux = ADC_AIN0;
     cfg.bit.pga = PGA6144;
     cfg.bit.mode = MODE_CONTINU;
-    
+
     cfg.bit.dr = DR_860;
     cfg.bit.ts_mode = TS_MODE_ADC;
     cfg.bit.pu_en = PU_EN;
-    
+
     cfg.bit.nop = NOP_A;
     cfg.bit.reserv = 1;
 
@@ -40,7 +40,7 @@ void Ads1118::begin(uint8_t dev_num)
     spi->begin(&config);
     cs->mode(OUTPUT_PP);
     cs->set();
-    
+
     temp_cfg = update_cfg(&cfg);
     if(temp_cfg.value != cfg.value)
     {
@@ -73,7 +73,7 @@ uint16_t Ads1118::read(uint8_t ch)
     cs->reset();
     last = millis();
     while(miso->read() == 1)
-    {   
+    {
         if(millis() - last > 10)
             break;
     }
@@ -85,14 +85,14 @@ uint16_t Ads1118::read(uint8_t ch)
 }
 AdsConfig_t Ads1118::update_cfg(AdsConfig_t *cfg)
 {
-    
+
     uint32_t last = millis();
     AdsConfig_t temp;
     spi->take_spi_right(&config);
     cs->reset();
 
     while(miso->read() == 1)
-    {   
+    {
         if(millis() - last > 10)
             break;
     }
@@ -113,7 +113,7 @@ double Ads1118::read_voltage(uint8_t ch)
     double gain_table[8] = {6144, 4096, 2048, 1024, 512, 256, 256, 256};
     gain = gain_table[cfg.bit.pga];
     //temp -=32768;
-    voltage = (double)temp*gain/(double)32768;
+    voltage = (double)temp * gain / (double)32768;
     return voltage;
 }
 
@@ -127,7 +127,7 @@ float Ads1118::read_average(uint8_t ch)
         //delay_ms(10);
         //uart3.printf("\r\n\r\n__%f___ \r\n\r\n",sum);
     }
-    sum = sum/20.0;
+    sum = sum / 20.0;
     return sum;
 }
 double Ads1118::read_vol_average(uint8_t ch)
@@ -135,7 +135,7 @@ double Ads1118::read_vol_average(uint8_t ch)
     double sum = 0;
     for(int i = 0; i < 10; i++)
         sum += read_voltage(ch);
-    sum = sum/10.0;
+    sum = sum / 10.0;
     return sum;
 
 }
@@ -148,7 +148,7 @@ double Ads1118::adc_to_voltage(double hex)
     double gain_table[8] = {6144, 4096, 2048, 1024, 512, 256, 256, 256};
     gain = gain_table[cfg.bit.pga];
     //temp -=32768;
-    voltage = ((double)gain/(double)32768)*temp;
+    voltage = ((double)gain / (double)32768) * temp;
     return voltage;
 }
 void Ads1118::read_temperature()

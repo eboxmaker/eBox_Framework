@@ -39,7 +39,8 @@ extern "C" {
 /**
  * flash program(write) data mode
  */
-enum sfud_write_mode {
+enum sfud_write_mode
+{
     SFUD_WM_PAGE_256B = 1 << 0,                            /**< write 1 to 256 bytes per page */
     SFUD_WM_BYTE = 1 << 1,                                 /**< byte write */
     SFUD_WM_AAI = 1 << 2,                                  /**< auto address increment */
@@ -47,13 +48,15 @@ enum sfud_write_mode {
 };
 
 /* manufacturer information */
-typedef struct {
+typedef struct
+{
     char *name;
     uint8_t id;
 } sfud_mf;
 
 /* flash chip information */
-typedef struct {
+typedef struct
+{
     char *name;                                  /**< flash chip name */
     uint8_t mf_id;                               /**< manufacturer ID */
     uint8_t type_id;                             /**< memory type ID */

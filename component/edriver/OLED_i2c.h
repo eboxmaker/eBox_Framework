@@ -15,41 +15,41 @@
 #define XLevelH		0x10
 #define Max_Column	128
 #define Max_Row		64
-#define	Brightness	0xFF 
+#define	Brightness	0xFF
 #define X_WIDTH 	128
-#define Y_WIDTH 	64	 
+#define Y_WIDTH 	64
 
 
 class OledI2c
 {
-    public:
-        OledI2c(SoftI2c *i2c)
-        {
-            this->i2c = i2c;
-            speed = 0;
-        }
-        bool begin(uint32_t speed);
-        
-        void clear(void);
-        void on(void);  
-        void display_on(void);
-        void display_off(void);
-        
-        void show_char(uint8_t x,uint8_t y,uint8_t chr,uint8_t Char_Size);
-        void show_string(uint8_t x,uint8_t y,char  *chr,uint8_t Char_Size);
-        void show_num(uint8_t x,uint8_t y,u32 num,uint8_t len,uint8_t size2);
-        void show_chinese(uint8_t x,uint8_t y,uint8_t no);
+public:
+    OledI2c(SoftI2c *i2c)
+    {
+        this->i2c = i2c;
+        speed = 0;
+    }
+    bool begin(uint32_t speed);
 
-        
-        void fill_picture(unsigned char fill_Data);
-        void draw_bmp(unsigned char x0, unsigned char y0,unsigned char x1, unsigned char y1,unsigned char BMP[]);
+    void clear(void);
+    void on(void);
+    void display_on(void);
+    void display_off(void);
 
-    private:
-        SoftI2c *i2c;
-        uint32_t speed;
-        void write_cmd(uint8_t cmd);
-        void write_data(uint8_t data);
-        void set_pos(unsigned char x, unsigned char y) ;
+    void show_char(uint8_t x, uint8_t y, uint8_t chr, uint8_t Char_Size);
+    void show_string(uint8_t x, uint8_t y, char  *chr, uint8_t Char_Size);
+    void show_num(uint8_t x, uint8_t y, u32 num, uint8_t len, uint8_t size2);
+    void show_chinese(uint8_t x, uint8_t y, uint8_t no);
+
+
+    void fill_picture(unsigned char fill_Data);
+    void draw_bmp(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1, unsigned char BMP[]);
+
+private:
+    SoftI2c *i2c;
+    uint32_t speed;
+    void write_cmd(uint8_t cmd);
+    void write_data(uint8_t data);
+    void set_pos(unsigned char x, unsigned char y) ;
 
 };
 

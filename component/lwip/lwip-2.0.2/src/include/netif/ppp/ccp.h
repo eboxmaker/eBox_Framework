@@ -122,18 +122,19 @@
 #define CILEN_PREDICTOR_2	2	/* length of its config option */
 #endif /* PREDICTOR_SUPPORT */
 
-typedef struct ccp_options {
+typedef struct ccp_options
+{
 #if DEFLATE_SUPPORT
-    unsigned int deflate          :1; /* do Deflate? */
-    unsigned int deflate_correct  :1; /* use correct code for deflate? */
-    unsigned int deflate_draft    :1; /* use draft RFC code for deflate? */
+    unsigned int deflate          : 1; /* do Deflate? */
+    unsigned int deflate_correct  : 1; /* use correct code for deflate? */
+    unsigned int deflate_draft    : 1; /* use draft RFC code for deflate? */
 #endif /* DEFLATE_SUPPORT */
 #if BSDCOMPRESS_SUPPORT
-    unsigned int bsd_compress     :1; /* do BSD Compress? */
+    unsigned int bsd_compress     : 1; /* do BSD Compress? */
 #endif /* BSDCOMPRESS_SUPPORT */
 #if PREDICTOR_SUPPORT
-    unsigned int predictor_1      :1; /* do Predictor-1? */
-    unsigned int predictor_2      :1; /* do Predictor-2? */
+    unsigned int predictor_1      : 1; /* do Predictor-1? */
+    unsigned int predictor_2      : 1; /* do Predictor-2? */
 #endif /* PREDICTOR_SUPPORT */
 
 #if MPPE_SUPPORT

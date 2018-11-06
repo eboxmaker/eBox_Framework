@@ -38,31 +38,31 @@
 class Si4432
 {
 public:
-	Si4432(Gpio *irq, Gpio *ce, Gpio *cs, Spi *spi);
-	void begin();
-	void start(void);
-	void set_config(void);
-	uint8_t read(uint8_t *rxbuf);
-	void write(uint8_t *txdata, uint8_t len_tx);
-	void set_rx_mode(void);		//模式设置:接收
-	void set_tx_mode(void);		//模式设置:发送
-	void set_idle_mode(void);	//模式设置:空闲
-	uint8_t read_rssi(void);	//读取接收信号强度
-	uint8_t read_irq(void);		//读取irq管脚状态
-	uint8_t SpiWriteRegister (uint8_t reg, uint8_t value); //SPI写无线模块寄存器
-	uint8_t SpiReadRegister (uint8_t reg);	//SPI读无线模块寄存器
+    Si4432(Gpio *irq, Gpio *ce, Gpio *cs, Spi *spi);
+    void begin();
+    void start(void);
+    void set_config(void);
+    uint8_t read(uint8_t *rxbuf);
+    void write(uint8_t *txdata, uint8_t len_tx);
+    void set_rx_mode(void);		//模式设置:接收
+    void set_tx_mode(void);		//模式设置:发送
+    void set_idle_mode(void);	//模式设置:空闲
+    uint8_t read_rssi(void);	//读取接收信号强度
+    uint8_t read_irq(void);		//读取irq管脚状态
+    uint8_t SpiWriteRegister (uint8_t reg, uint8_t value); //SPI写无线模块寄存器
+    uint8_t SpiReadRegister (uint8_t reg);	//SPI读无线模块寄存器
 
 private:
-	uint8_t         spi_flash_buf[256];
-	SpiConfig_t     spi_dev_si4432;
-	Gpio            *irq;
-	Gpio            *ce;
-	Gpio            *cs;
-	Spi             *spi;
+    uint8_t         spi_flash_buf[256];
+    SpiConfig_t     spi_dev_si4432;
+    Gpio            *irq;
+    Gpio            *ce;
+    Gpio            *cs;
+    Spi             *spi;
     uint8_t         initialized;
 
-	
-	void reset(void);
+
+    void reset(void);
 #define TxGPIOSetting()   SpiWriteRegister(0x0E, 0x01)
 #define RxGPIOSetting()   SpiWriteRegister(0x0E, 0x02)
 #define IdleGPIOSetting() SpiWriteRegister(0x0E, 0x00)

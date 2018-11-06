@@ -14,9 +14,9 @@
 #define LED_COUNT		COLUMBS*ROWS
 
 // Buffer size needs to be the number of LEDs times 24 bits plus 42 trailing bit to signify the end of the data being transmitted.
-#define LED_BUFFER_SIZE		24*LED_COUNT+42 
+#define LED_BUFFER_SIZE		24*LED_COUNT+42
 
-class WS2812 
+class WS2812
 {
 public:
     WS2812(Gpio *p_pin)
@@ -26,11 +26,11 @@ public:
     }
     void begin();
     void reset();
-    void display(uint8_t *ptr,uint16_t height,uint16_t width);
-    
+    void display(uint8_t *ptr, uint16_t height, uint16_t width);
+
     void rainbow_Loop();
     void rainbow_Loop1();
-    
+
 
 
 private:

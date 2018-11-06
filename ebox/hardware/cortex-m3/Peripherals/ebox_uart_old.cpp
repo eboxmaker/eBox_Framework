@@ -4,13 +4,13 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/08/14
-  * @brief   
+  * @brief
   *         2018/8/6  将Tx pin 设置放在串口初始化之后，防止发送0x00
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -52,9 +52,9 @@ Uart::Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin)
  *@param    _use_dma:   是否使用DMA，默认值1：使用DMA，0：不适用DMA;
  *@retval   None
 */
-void    Uart::begin(uint32_t baud_rate,uint8_t use_dma)
+void    Uart::begin(uint32_t baud_rate, uint8_t use_dma)
 {
-    Uart::begin(baud_rate,8,0,1,use_dma);
+    Uart::begin(baud_rate, 8, 0, 1, use_dma);
 }
 
 
@@ -68,95 +68,95 @@ void    Uart::begin(uint32_t baud_rate,uint8_t use_dma)
  *          _use_dma:   是否使用DMA，默认值1：使用DMA，0：不适用DMA;
  *@retval   None
 */
-void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit,uint8_t use_dma)
+void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit, uint8_t use_dma)
 {
     uint8_t             index;
     USART_InitTypeDef   USART_InitStructure;
-        
-    rcc_clock_cmd((uint32_t)_USARTx,ENABLE);
 
-    
+    rcc_clock_cmd((uint32_t)_USARTx, ENABLE);
+
+
 #if USE_UART_DMA
     _use_dma = use_dma;
     switch((uint32_t)_USARTx)
     {
-        
-    #if USE_UART1
+
+#if USE_UART1
     case (uint32_t)USART1_BASE:
         dma_tx = &Dma1Ch4;
         index = NUM_UART1;
         break;
-    #endif
+#endif
 
-    #if USE_UART2 
+#if USE_UART2
     case (uint32_t)USART2_BASE:
         dma_tx = &Dma1Ch7;
         index = NUM_UART2;
         break;
-    #endif
-    
-    #if USE_UART3
+#endif
+
+#if USE_UART3
     case (uint32_t)USART3_BASE:
         dma_tx = &Dma1Ch2;
         index = NUM_UART3;
         break;
-    #endif
+#endif
 
 #if defined (STM32F10X_HD)
-    #if USE_UART4
+#if USE_UART4
     case (uint32_t)UART4_BASE:
         index = NUM_UART4;
         break;
-    #endif
+#endif
 
-    #if USE_UART5
+#if USE_UART5
     case (uint32_t)UART5_BASE:
         index = NUM_UART5;
         break;
-    #endif
+#endif
 #endif
     }
 #else
     switch((uint32_t)_USARTx)
     {
-        
-    #if USE_UART1
+
+#if USE_UART1
     case (uint32_t)USART1_BASE:
         index = NUM_UART1;
         break;
-    #endif
+#endif
 
-    #if USE_UART2 
+#if USE_UART2
     case (uint32_t)USART2_BASE:
         index = NUM_UART2;
         break;
-    #endif
-    
-    #if USE_UART3
+#endif
+
+#if USE_UART3
     case (uint32_t)USART3_BASE:
         index = NUM_UART3;
         break;
-    #endif
+#endif
 
 #if defined (STM32F10X_HD)
-    #if USE_UART4
+#if USE_UART4
     case (uint32_t)UART4_BASE:
         index = NUM_UART4;
         break;
-    #endif
+#endif
 
-    #if USE_UART5
+#if USE_UART5
     case (uint32_t)UART5_BASE:
         index = NUM_UART5;
         break;
-    #endif
+#endif
 #endif
     }
 #endif
 
     serial_irq_handler(index, Uart::_irq_handler, (uint32_t)this);
-    
-    
+
+
     USART_InitStructure.USART_BaudRate = baud_rate;
     switch(data_bit)
     {
@@ -193,7 +193,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
         USART_InitStructure.USART_StopBits = USART_StopBits_1_5;
     else if(stop_bit == 2)
         USART_InitStructure.USART_StopBits = USART_StopBits_2;
-		
+
     USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
     USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
     USART_Init(_USARTx, &USART_InitStructure);
@@ -203,31 +203,31 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     {
         USART_DMACmd(_USARTx, USART_DMAReq_Tx, ENABLE);
         dma_tx->rcc_enable();
-        dma_tx->nvic(DISABLE,0,0);
-        dma_tx->interrupt(DmaItTc,DISABLE);
-        dma_tx->interrupt(DmaItTe,DISABLE);
-        dma_tx->interrupt(DmaItHt,DISABLE);
+        dma_tx->nvic(DISABLE, 0, 0);
+        dma_tx->interrupt(DmaItTc, DISABLE);
+        dma_tx->interrupt(DmaItTe, DISABLE);
+        dma_tx->interrupt(DmaItHt, DISABLE);
     }
 #endif
     USART_Cmd(_USARTx, ENABLE);
-    
 
-    nvic(ENABLE,0,0);
-    interrupt(RxIrq,DISABLE);
-    interrupt(TcIrq,DISABLE);
 
-    
+    nvic(ENABLE, 0, 0);
+    interrupt(RxIrq, DISABLE);
+    interrupt(TcIrq, DISABLE);
+
+
     _tx_pin->mode(AF_PP);
     _rx_pin->mode(INPUT);
 
 }
 void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
-    nvic_dev_set_priority((uint32_t)_USARTx,0,0,0);
+    nvic_dev_set_priority((uint32_t)_USARTx, 0, 0, 0);
     if(enable != DISABLE)
-        nvic_dev_enable((uint32_t)_USARTx,0);
+        nvic_dev_enable((uint32_t)_USARTx, 0);
     else
-        nvic_dev_disable((uint32_t)_USARTx,0);
+        nvic_dev_disable((uint32_t)_USARTx, 0);
 }
 ///////////////////////////////////////////////////////////////
 
@@ -255,10 +255,10 @@ void Uart::interrupt(IrqType type, FunctionalState enable)
 */
 size_t Uart::write(uint8_t c)
 {
-//    while(USART_GetFlagStatus(_USARTx, USART_FLAG_TXE) == RESET);//单字节等待，等待寄存器空
-//    USART_SendData(_USARTx, c);
-//    return 1;
-    write(&c,1);
+    //    while(USART_GetFlagStatus(_USARTx, USART_FLAG_TXE) == RESET);//单字节等待，等待寄存器空
+    //    USART_SendData(_USARTx, c);
+    //    return 1;
+    write(&c, 1);
     return 1;
 }
 
@@ -273,7 +273,7 @@ size_t Uart::write(const uint8_t *buffer, size_t size)
 {
     if(size <= 0 ) return 0;
     wait_busy();
-    #if USE_UART_DMA
+#if USE_UART_DMA
     if((_USARTx == USART1 || _USARTx == USART2 || _USARTx == USART3 ) && (_use_dma == 1))
     {
         if(tx_buf_ptr != NULL)
@@ -289,7 +289,7 @@ size_t Uart::write(const uint8_t *buffer, size_t size)
         dma_write(tx_buf_ptr, size);
     }
     else
-    #endif
+#endif
     {
         while(size--)
         {
@@ -297,7 +297,7 @@ size_t Uart::write(const uint8_t *buffer, size_t size)
             USART_SendData(_USARTx, *buffer++);
         }
     }
-	return size;
+    return size;
 }
 
 
@@ -327,29 +327,29 @@ uint16_t Uart::read()
 #if USE_UART_DMA
 uint16_t Uart::dma_write(const char *str, uint16_t length)
 {
-//    DMA_DeInit(_DMA1_Channelx);   //将DMA的通道1寄存器重设为缺省值
-//    _DMA1_Channelx->CPAR = (uint32_t)&_USARTx->DR; //外设地址
-//    _DMA1_Channelx->CMAR = (uint32_t) str; //mem地址
-//    _DMA1_Channelx->CNDTR = length ; //传输长度
-//    _DMA1_Channelx->CCR = (0 << 14) | // 非存储器到存储器模式
-//                          (2 << 12) | // 通道优先级高
-//                          (0 << 11) | // 存储器数据宽度8bit
-//                          (0 << 10) | // 存储器数据宽度8bit
-//                          (0 <<  9) | // 外设数据宽度8bit
-//                          (0 <<  8) | // 外设数据宽度8bit
-//                          (1 <<  7) | // 存储器地址增量模式
-//                          (0 <<  6) | // 外设地址增量模式(不增)
-//                          (0 <<  5) | // 非循环模式
-//                          (1 <<  4) | // 从存储器读
-//                          (0 <<  3) | // 是否允许传输错误中断
-//                          (0 <<  2) | // 是否允许半传输中断
-//                          (0 <<  1) | // 是否允许传输完成中断
-//                          (0);        // 通道开启
-    
+    //    DMA_DeInit(_DMA1_Channelx);   //将DMA的通道1寄存器重设为缺省值
+    //    _DMA1_Channelx->CPAR = (uint32_t)&_USARTx->DR; //外设地址
+    //    _DMA1_Channelx->CMAR = (uint32_t) str; //mem地址
+    //    _DMA1_Channelx->CNDTR = length ; //传输长度
+    //    _DMA1_Channelx->CCR = (0 << 14) | // 非存储器到存储器模式
+    //                          (2 << 12) | // 通道优先级高
+    //                          (0 << 11) | // 存储器数据宽度8bit
+    //                          (0 << 10) | // 存储器数据宽度8bit
+    //                          (0 <<  9) | // 外设数据宽度8bit
+    //                          (0 <<  8) | // 外设数据宽度8bit
+    //                          (1 <<  7) | // 存储器地址增量模式
+    //                          (0 <<  6) | // 外设地址增量模式(不增)
+    //                          (0 <<  5) | // 非循环模式
+    //                          (1 <<  4) | // 从存储器读
+    //                          (0 <<  3) | // 是否允许传输错误中断
+    //                          (0 <<  2) | // 是否允许半传输中断
+    //                          (0 <<  1) | // 是否允许传输完成中断
+    //                          (0);        // 通道开启
+
     DMA_InitTypeDef DMA_InitStructure;
 
     dma_tx->deInit();
-    
+
     DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&_USARTx->DR;
     DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t) str;
     DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;
@@ -379,68 +379,78 @@ void Uart::wait_busy()
 {
     switch((uint32_t)_USARTx)
     {
-    #if USE_UART1
-        case (uint32_t)USART1_BASE:
-            while(busy[0] == 1 ){
-                while((USART1->SR & 0X80) == 0);
-                if(USART1->SR & 0X40){
-                    busy[0] = 0;
-                    USART_ClearITPendingBit(USART1, USART_IT_TC);
-                    break;
-                }
-            }
-            break;
-    #endif
-            
-    #if USE_UART2
-        case (uint32_t)USART2_BASE:
-            while(busy[1] == 1 ){
-                while((USART2->SR & 0X80) == 0);
-                if(USART2->SR & 0X40){
-                    busy[1] = 0;
-                    USART_ClearITPendingBit(USART2, USART_IT_TC);
-                    break;
-                }
-            }
-            break;
-    #endif
-            
-    #if USE_UART3
-        case (uint32_t)USART3_BASE:
-            while(busy[2] == 1 ){
-                if(USART3->SR & 0X40){
-                    busy[2] = 0;
-                    USART_ClearITPendingBit(USART3, USART_IT_TC);
-                    break;
-                }
-            }
-            break;
-    #endif
-    
-    #if USE_UART4
-        case (uint32_t)UART4_BASE:
-            while(busy[3] == 1 ){
-                if(UART4->SR & 0X40){
-                    busy[3] = 0;
-                    USART_ClearITPendingBit(UART4, USART_IT_TC);
-                    break;
-                }
-            }
-            break;
-    #endif
-    
-    #if USE_UART5
-        case (uint32_t)UART5_BASE:
-            while(busy[4] == 1 ){
-                if(UART5->SR & 0X40){
-                    busy[4] = 0;
-                    irq_handler(serial_irq_ids[NUM_UART5],TcIrq);
-                    USART_ClearITPendingBit(UART5, USART_IT_TC);
+#if USE_UART1
+    case (uint32_t)USART1_BASE:
+        while(busy[0] == 1 )
+        {
+            while((USART1->SR & 0X80) == 0);
+            if(USART1->SR & 0X40)
+            {
+                busy[0] = 0;
+                USART_ClearITPendingBit(USART1, USART_IT_TC);
                 break;
-                }
             }
+        }
         break;
-    #endif
+#endif
+
+#if USE_UART2
+    case (uint32_t)USART2_BASE:
+        while(busy[1] == 1 )
+        {
+            while((USART2->SR & 0X80) == 0);
+            if(USART2->SR & 0X40)
+            {
+                busy[1] = 0;
+                USART_ClearITPendingBit(USART2, USART_IT_TC);
+                break;
+            }
+        }
+        break;
+#endif
+
+#if USE_UART3
+    case (uint32_t)USART3_BASE:
+        while(busy[2] == 1 )
+        {
+            if(USART3->SR & 0X40)
+            {
+                busy[2] = 0;
+                USART_ClearITPendingBit(USART3, USART_IT_TC);
+                break;
+            }
+        }
+        break;
+#endif
+
+#if USE_UART4
+    case (uint32_t)UART4_BASE:
+        while(busy[3] == 1 )
+        {
+            if(UART4->SR & 0X40)
+            {
+                busy[3] = 0;
+                USART_ClearITPendingBit(UART4, USART_IT_TC);
+                break;
+            }
+        }
+        break;
+#endif
+
+#if USE_UART5
+    case (uint32_t)UART5_BASE:
+        while(busy[4] == 1 )
+        {
+            if(UART5->SR & 0X40)
+            {
+                busy[4] = 0;
+                irq_handler(serial_irq_ids[NUM_UART5], TcIrq);
+                USART_ClearITPendingBit(UART5, USART_IT_TC);
+                break;
+            }
+        }
+        break;
+#endif
     }
 }
 
@@ -455,147 +465,155 @@ void Uart::set_busy()
 {
     switch((uint32_t)_USARTx)
     {
-    #if USE_UART1
-        case (uint32_t)USART1_BASE:
-            busy[0] = 1;break;
-    #endif
-        
-    #if USE_UART2
-        case (uint32_t)USART2_BASE:
-            busy[1] = 1;break;
-    #endif
-        
-        
-    #if USE_UART3
-        case (uint32_t)USART3_BASE:
-            busy[2] = 1;break;
-    #endif
-        
-        
-    #if USE_UART4
-        case (uint32_t)UART4_BASE:
-            busy[3] = 1;break;
-    #endif
-        
-        
-    #if USE_UART5
-        case (uint32_t)UART5_BASE:
-            busy[4] = 1;break;
-    #endif
-        
-        
+#if USE_UART1
+    case (uint32_t)USART1_BASE:
+        busy[0] = 1;
+        break;
+#endif
+
+#if USE_UART2
+    case (uint32_t)USART2_BASE:
+        busy[1] = 1;
+        break;
+#endif
+
+
+#if USE_UART3
+    case (uint32_t)USART3_BASE:
+        busy[2] = 1;
+        break;
+#endif
+
+
+#if USE_UART4
+    case (uint32_t)UART4_BASE:
+        busy[3] = 1;
+        break;
+#endif
+
+
+#if USE_UART5
+    case (uint32_t)UART5_BASE:
+        busy[4] = 1;
+        break;
+#endif
+
+
     }
 }
 
-void Uart::attach(void (*fptr)(void), IrqType type) {
-    if (fptr) {
+void Uart::attach(void (*fptr)(void), IrqType type)
+{
+    if (fptr)
+    {
         _irq[type].attach(fptr);
     }
 }
 
-void Uart::_irq_handler(uint32_t id, IrqType irq_type) {
-    Uart *handler = (Uart*)id;
+void Uart::_irq_handler(uint32_t id, IrqType irq_type)
+{
+    Uart *handler = (Uart *)id;
     handler->_irq[irq_type].call();
 }
 
 
 extern "C" {
 
-    #if USE_UART1
+#if USE_UART1
     void USART1_IRQHandler(void)
     {
         if(USART_GetITStatus(USART1, USART_IT_RXNE) == SET)
         {
-            irq_handler(serial_irq_ids[NUM_UART1],RxIrq);
+            irq_handler(serial_irq_ids[NUM_UART1], RxIrq);
             USART_ClearITPendingBit(USART1, USART_IT_RXNE);
         }
         if(USART_GetITStatus(USART1, USART_IT_TC) == SET)
         {
-            busy[0] = 0;   
-            irq_handler(serial_irq_ids[NUM_UART1],TcIrq);
+            busy[0] = 0;
+            irq_handler(serial_irq_ids[NUM_UART1], TcIrq);
             USART_ClearITPendingBit(USART1, USART_IT_TC);
-        }        
+        }
     }
-    #endif
+#endif
 
 
-    #if USE_UART2
+#if USE_UART2
     void USART2_IRQHandler(void)
     {
         if(USART_GetITStatus(USART2, USART_IT_RXNE) == SET)
         {
-            irq_handler(serial_irq_ids[NUM_UART2],RxIrq);
+            irq_handler(serial_irq_ids[NUM_UART2], RxIrq);
             USART_ClearITPendingBit(USART2, USART_IT_RXNE);
         }
         if(USART_GetITStatus(USART2, USART_IT_TC) == SET)
         {
             busy[1] = 0;
-            irq_handler(serial_irq_ids[NUM_UART2],TcIrq);
+            irq_handler(serial_irq_ids[NUM_UART2], TcIrq);
             USART_ClearITPendingBit(USART2, USART_IT_TC);
         }
     }
-    #endif
+#endif
 
 
-    #if USE_UART3
+#if USE_UART3
     void USART3_IRQHandler(void)
     {
         if(USART_GetITStatus(USART3, USART_IT_RXNE) == SET)
         {
-            irq_handler(serial_irq_ids[NUM_UART3],RxIrq);
+            irq_handler(serial_irq_ids[NUM_UART3], RxIrq);
             USART_ClearITPendingBit(USART3, USART_IT_RXNE);
         }
         if(USART_GetITStatus(USART3, USART_IT_TC) == SET)
         {
             busy[2] = 0;
-            irq_handler(serial_irq_ids[NUM_UART3],TcIrq);
+            irq_handler(serial_irq_ids[NUM_UART3], TcIrq);
             USART_ClearITPendingBit(USART3, USART_IT_TC);
         }
     }
-    #endif
+#endif
 
 #if defined (STM32F10X_HD)
-    #if USE_UART4
+#if USE_UART4
     void UART4_IRQHandler(void)
     {
         if(USART_GetITStatus(UART4, USART_IT_RXNE) == SET)
         {
-            irq_handler(serial_irq_ids[NUM_UART4],RxIrq);
+            irq_handler(serial_irq_ids[NUM_UART4], RxIrq);
             USART_ClearITPendingBit(UART4, USART_IT_RXNE);
         }
         if(USART_GetITStatus(UART4, USART_IT_TC) == SET)
         {
             busy[3] = 0;
-            irq_handler(serial_irq_ids[NUM_UART4],TcIrq);
+            irq_handler(serial_irq_ids[NUM_UART4], TcIrq);
             USART_ClearITPendingBit(UART4, USART_IT_TC);
         }
     }
-    #endif
+#endif
 
-    #if USE_UART5
+#if USE_UART5
     void UART5_IRQHandler(void)
     {
         if(USART_GetITStatus(UART5, USART_IT_RXNE) == SET)
         {
-            irq_handler(serial_irq_ids[NUM_UART5],RxIrq);
+            irq_handler(serial_irq_ids[NUM_UART5], RxIrq);
             USART_ClearITPendingBit(UART5, USART_IT_RXNE);
         }
         if(USART_GetITStatus(UART5, USART_IT_TC) == SET)
         {
             busy[4] = 0;
-            irq_handler(serial_irq_ids[NUM_UART5],TcIrq);
+            irq_handler(serial_irq_ids[NUM_UART5], TcIrq);
             USART_ClearITPendingBit(UART5, USART_IT_TC);
         }
     }
-    #endif
+#endif
 
 #endif
-		
-void serial_irq_handler(uint8_t index, uart_irq_handler handler, uint32_t id)
-{
-    irq_handler = handler;
-    serial_irq_ids[index] = id;
-}
+
+    void serial_irq_handler(uint8_t index, uart_irq_handler handler, uint32_t id)
+    {
+        irq_handler = handler;
+        serial_irq_ids[index] = id;
+    }
 }
 
 

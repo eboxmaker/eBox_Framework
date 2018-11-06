@@ -70,86 +70,91 @@
 #define SERIAL_STOP_READING         0x01
 #define SERIAL_MODE_MASK            0xF0
 
-namespace {
+namespace
+{
 
-  struct serial_pins {
-    uint8_t rx;
-    uint8_t tx;
-  };
+    struct serial_pins
+    {
+        uint8_t rx;
+        uint8_t tx;
+    };
 
-  /*
-   * Get the serial serial pin type (RX1, TX1, RX2, TX2, etc) for the specified pin.
-   */
-  inline uint8_t getSerialPinType(uint8_t pin) {
-  #if defined(PIN_SERIAL_RX)
-    // TODO when use of HW_SERIAL0 is enabled
-  #endif
-  #if defined(PIN_SERIAL1_RX)
-    if (pin == PIN_SERIAL1_RX) return RES_RX1;
-    if (pin == PIN_SERIAL1_TX) return RES_TX1;
-  #endif
-  #if defined(PIN_SERIAL2_RX)
-    if (pin == PIN_SERIAL2_RX) return RES_RX2;
-    if (pin == PIN_SERIAL2_TX) return RES_TX2;
-  #endif
-  #if defined(PIN_SERIAL3_RX)
-    if (pin == PIN_SERIAL3_RX) return RES_RX3;
-    if (pin == PIN_SERIAL3_TX) return RES_TX3;
-  #endif
-    return 0;
-  }
-
-  /*
-   * Get the RX and TX pins numbers for the specified HW serial port.
-   */
-  inline serial_pins getSerialPinNumbers(uint8_t portId) {
-    serial_pins pins;
-    switch (portId) {
-  #if defined(PIN_SERIAL_RX)
-        // case HW_SERIAL0:
-        //   // TODO when use of HW_SERIAL0 is enabled
-        //   break;
-  #endif
-  #if defined(PIN_SERIAL1_RX)
-      case HW_SERIAL1:
-        pins.rx = PIN_SERIAL1_RX;
-        pins.tx = PIN_SERIAL1_TX;
-        break;
-  #endif
-  #if defined(PIN_SERIAL2_RX)
-      case HW_SERIAL2:
-        pins.rx = PIN_SERIAL2_RX;
-        pins.tx = PIN_SERIAL2_TX;
-        break;
-  #endif
-  #if defined(PIN_SERIAL3_RX)
-      case HW_SERIAL3:
-        pins.rx = PIN_SERIAL3_RX;
-        pins.tx = PIN_SERIAL3_TX;
-        break;
-  #endif
-      default:
-        pins.rx = 0;
-        pins.tx = 0;
+    /*
+     * Get the serial serial pin type (RX1, TX1, RX2, TX2, etc) for the specified pin.
+     */
+    inline uint8_t getSerialPinType(uint8_t pin)
+    {
+#if defined(PIN_SERIAL_RX)
+        // TODO when use of HW_SERIAL0 is enabled
+#endif
+#if defined(PIN_SERIAL1_RX)
+        if (pin == PIN_SERIAL1_RX) return RES_RX1;
+        if (pin == PIN_SERIAL1_TX) return RES_TX1;
+#endif
+#if defined(PIN_SERIAL2_RX)
+        if (pin == PIN_SERIAL2_RX) return RES_RX2;
+        if (pin == PIN_SERIAL2_TX) return RES_TX2;
+#endif
+#if defined(PIN_SERIAL3_RX)
+        if (pin == PIN_SERIAL3_RX) return RES_RX3;
+        if (pin == PIN_SERIAL3_TX) return RES_TX3;
+#endif
+        return 0;
     }
-    return pins;
-  }
+
+    /*
+     * Get the RX and TX pins numbers for the specified HW serial port.
+     */
+    inline serial_pins getSerialPinNumbers(uint8_t portId)
+    {
+        serial_pins pins;
+        switch (portId)
+        {
+#if defined(PIN_SERIAL_RX)
+            // case HW_SERIAL0:
+            //   // TODO when use of HW_SERIAL0 is enabled
+            //   break;
+#endif
+#if defined(PIN_SERIAL1_RX)
+        case HW_SERIAL1:
+            pins.rx = PIN_SERIAL1_RX;
+            pins.tx = PIN_SERIAL1_TX;
+            break;
+#endif
+#if defined(PIN_SERIAL2_RX)
+        case HW_SERIAL2:
+            pins.rx = PIN_SERIAL2_RX;
+            pins.tx = PIN_SERIAL2_TX;
+            break;
+#endif
+#if defined(PIN_SERIAL3_RX)
+        case HW_SERIAL3:
+            pins.rx = PIN_SERIAL3_RX;
+            pins.tx = PIN_SERIAL3_TX;
+            break;
+#endif
+        default:
+            pins.rx = 0;
+            pins.tx = 0;
+        }
+        return pins;
+    }
 
 } // end namespace
 
 
 class SerialFirmata: public FirmataFeature
 {
-  public:
+public:
     SerialFirmata();
     boolean handlePinMode(byte pin, int mode);
     void handleCapability(byte pin);
-    boolean handleSysex(byte command, byte argc, byte* argv);
+    boolean handleSysex(byte command, byte argc, byte *argv);
     void update();
     void reset();
     void checkSerial();
 
-  private:
+private:
     byte reportSerial[MAX_SERIAL_PORTS];
     int serialBytesToRead[SERIAL_READ_ARR_LEN];
     signed char serialIndex;
@@ -161,7 +166,7 @@ class SerialFirmata: public FirmataFeature
     Stream *swSerial3;
 #endif
 
-    Stream* getPortFromId(byte portId);
+    Stream *getPortFromId(byte portId);
 
 };
 

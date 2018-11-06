@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -54,7 +54,7 @@ bool TCPClient::connect(uint8_t *IP, uint16_t Port)
         {
         case SOCK_INIT:
             TCP_DBG("sending connect cmd...\r\n", local_port, s);
-            ret = _connect(s, remote_ip , remote_port); /*在TCP模式下向服务器发送连接请求*/
+            ret = _connect(s, remote_ip, remote_port);  /*在TCP模式下向服务器发送连接请求*/
             if(ret == 1)
             {
                 TCP_DBG("send connect cmd ok !\r\n");

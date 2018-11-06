@@ -18,19 +18,19 @@ int atoi(
     uint16_t base	/**< is a base value (must be in the range 2 - 16) */
 )
 {
-    int c;              /* current char */  
-    int total = 0;         /* current total */  
-    int sign;           /* if '-', then negative, otherwise positive */  
+    int c;              /* current char */
+    int total = 0;         /* current total */
+    int sign;           /* if '-', then negative, otherwise positive */
 
-    /* skip whitespace */  
-    while ( isspace((char)*str) )  
-            str++;  
-    
-    c = (int)(unsigned char)*str;  
-    sign = c;           /* save sign indication */  
-    if (c == '-' || c == '+')  
-        c = (int)(unsigned char)*str++;    /* skip sign */  
-        
+    /* skip whitespace */
+    while ( isspace((char)*str) )
+        str++;
+
+    c = (int)(unsigned char) * str;
+    sign = c;           /* save sign indication */
+    if (c == '-' || c == '+')
+        c = (int)(unsigned char) * str++;  /* skip sign */
+
     while (*str != 0)
         total = total * base + C2D(*str++);
     if(sign == '-')

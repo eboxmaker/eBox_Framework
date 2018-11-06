@@ -3,7 +3,7 @@
   Copyright by Andr¨¦ Sarmento Barbosa
   http://github.com/andresarmento/modbus-arduino
 */
- 
+
 
 #include "bsp_ebox.h"
 #include "ESP8266.h"
@@ -26,48 +26,63 @@ void setup()
     ebox_init();
 
 
-    wifi.begin(&uart2,PA4,115200);
+    wifi.begin(&uart2, PA4, 115200);
     uart1.begin(115200);
 
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
     uart1.print("setup begin\r\n");
     uart1.print("FW Version:");
 
     String str = wifi.getVersion();
     uart1.println(str);
 
-     
-    if (wifi.setOprToStationSoftAP()) {
+
+    if (wifi.setOprToStationSoftAP())
+    {
         uart1.print("to station + softap ok\r\n");
-    } else {
+    }
+    else
+    {
         uart1.print("to station + softap err\r\n");
     }
- 
-    if (wifi.joinAP(SSID, PASSWORD)) {
+
+    if (wifi.joinAP(SSID, PASSWORD))
+    {
         uart1.print("Join AP success\r\n");
         uart1.print("IP:");
-        uart1.println( wifi.getLocalIP().c_str());       
-    } else {
+        uart1.println( wifi.getLocalIP().c_str());
+    }
+    else
+    {
         uart1.print("Join AP failure\r\n");
     }
-    
-    if (wifi.enableMUX()) {
+
+    if (wifi.enableMUX())
+    {
         uart1.print("single ok\r\n");
-    } else {
+    }
+    else
+    {
         uart1.print("single err\r\n");
     }
-        if (wifi.startTCPServer(8090)) {
+    if (wifi.startTCPServer(8090))
+    {
         Serial.print("start tcp server ok\r\n");
-    } else {
+    }
+    else
+    {
         Serial.print("start tcp server err\r\n");
     }
-    
-    if (wifi.setTCPServerTimeout(10)) { 
+
+    if (wifi.setTCPServerTimeout(10))
+    {
         Serial.print("set tcp server timout 10 seconds\r\n");
-    } else {
+    }
+    else
+    {
         Serial.print("set tcp server timout err\r\n");
     }
-    
+
     uart1.print("setup end\r\n");
 
 }
@@ -79,35 +94,43 @@ int main()
         uint8_t buffer[128] = {0};
         uint8_t mux_id;
         uint32_t len = wifi.recv(&mux_id, buffer, sizeof(buffer), 100);
-        if (len > 0) {
+        if (len > 0)
+        {
             Serial.print("Status:[");
             Serial.print(wifi.getIPStatus().c_str());
             Serial.println("]");
-            
+
             Serial.print("Received from :");
             Serial.print(mux_id);
             Serial.print("[");
-            for(uint32_t i = 0; i < len; i++) {
+            for(uint32_t i = 0; i < len; i++)
+            {
                 Serial.print((char)buffer[i]);
             }
             Serial.print("]\r\n");
-            
-            if(wifi.send(mux_id, buffer, len)) {
+
+            if(wifi.send(mux_id, buffer, len))
+            {
                 Serial.print("send back ok\r\n");
-            } else {
+            }
+            else
+            {
                 Serial.print("send back err\r\n");
             }
-            
-            if (wifi.releaseTCP(mux_id)) {
+
+            if (wifi.releaseTCP(mux_id))
+            {
                 Serial.print("release tcp ");
                 Serial.print(mux_id);
                 Serial.println(" ok");
-            } else {
+            }
+            else
+            {
                 Serial.print("release tcp");
                 Serial.print(mux_id);
                 Serial.println(" err");
             }
-            
+
             Serial.print("Status:[");
             Serial.print(wifi.getIPStatus().c_str());
             Serial.println("]");

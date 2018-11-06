@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/11/04
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -38,13 +38,13 @@
             2.使用了相应的timx为pwm服务后，该tim就不能再初始化成另外的功能
             3.初始化pwm后，只有调用setDuty函数后才会输出pwm
             4.如果duty大于等于1000则输出持续高电平
-                
+
     定时器引脚对应列表
     通道 CH1  CH2  CH3  CH4
-    TIM1 PA8  PA9  PA10 PA11 
-    TIM2 PA0  PA1  PA2  PA3 
-    TIM3 PA6  PA7  PA0  PA1 
-    TIM4 PB6  PB7  PB8  PB9 
+    TIM1 PA8  PA9  PA10 PA11
+    TIM2 PA0  PA1  PA2  PA3
+    TIM3 PA6  PA7  PA0  PA1
+    TIM4 PB6  PB7  PB8  PB9
 */
 /**
  * Modification History:
@@ -58,63 +58,80 @@
 
 
 
-class Pwm:T_base{
+class Pwm: T_base
+{
 public:
-	Pwm(TIM_TypeDef *TIMx,mcuGpio *pin):T_base(TIMx){
-		uint8_t _index;
-		uint32_t t = (uint32_t)TIMx;
-		//E_PinBase *_pin;
-		//_pin = new E_PinBase(id);
-		_index = getIndex(pin->id,TIM_MAP,t);
-		//_pin->mode(TIM_MAP[_index]._pin_date,TIM_MAP[_index]._pin_af);
-        pin->mode(TIM_MAP[_index]._pinMode,TIM_MAP[_index]._pinAf);
-		_timx = TIMx;
-		
-		t = (TIM_MAP[_index]._periph) - (uint32_t)_timx;
-		switch (t)
-		{
-		case TIMxCH1:
-			_channel = LL_TIM_CHANNEL_CH1;
-			_OCsetCompare = &LL_TIM_OC_SetCompareCH1;
-			break;
-		case TIMxCH2:
-			_channel = LL_TIM_CHANNEL_CH2;
-			_OCsetCompare = &LL_TIM_OC_SetCompareCH2;
-			break;
-		case TIMxCH3:
-			_channel = LL_TIM_CHANNEL_CH3;
-			_OCsetCompare = &LL_TIM_OC_SetCompareCH3;
-			break;
-		case TIMxCH4:
-			_channel = LL_TIM_CHANNEL_CH4;
-			_OCsetCompare = &LL_TIM_OC_SetCompareCH4;
-			break;
-		}
-	}
-	void begin(uint32_t frq,uint16_t duty);
+    Pwm(TIM_TypeDef *TIMx, mcuGpio *pin): T_base(TIMx)
+    {
+        uint8_t _index;
+        uint32_t t = (uint32_t)TIMx;
+        //E_PinBase *_pin;
+        //_pin = new E_PinBase(id);
+        _index = getIndex(pin->id, TIM_MAP, t);
+        //_pin->mode(TIM_MAP[_index]._pin_date,TIM_MAP[_index]._pin_af);
+        pin->mode(TIM_MAP[_index]._pinMode, TIM_MAP[_index]._pinAf);
+        _timx = TIMx;
 
-	void SetPorlicy(uint8_t porlicy);
-	void SetFrequency(uint32_t frq);
-	void SetDutyCycle(uint16_t duty);
+        t = (TIM_MAP[_index]._periph) - (uint32_t)_timx;
+        switch (t)
+        {
+        case TIMxCH1:
+            _channel = LL_TIM_CHANNEL_CH1;
+            _OCsetCompare = &LL_TIM_OC_SetCompareCH1;
+            break;
+        case TIMxCH2:
+            _channel = LL_TIM_CHANNEL_CH2;
+            _OCsetCompare = &LL_TIM_OC_SetCompareCH2;
+            break;
+        case TIMxCH3:
+            _channel = LL_TIM_CHANNEL_CH3;
+            _OCsetCompare = &LL_TIM_OC_SetCompareCH3;
+            break;
+        case TIMxCH4:
+            _channel = LL_TIM_CHANNEL_CH4;
+            _OCsetCompare = &LL_TIM_OC_SetCompareCH4;
+            break;
+        }
+    }
+    void begin(uint32_t frq, uint16_t duty);
 
-	uint32_t GetMaxFrequency(void);
-    
+    void SetPorlicy(uint8_t porlicy);
+    void SetFrequency(uint32_t frq);
+    void SetDutyCycle(uint16_t duty);
+
+    uint32_t GetMaxFrequency(void);
+
     // 端口匹配
-    void set_frq(uint32_t frq){SetFrequency(frq);};
-    void set_duty(uint16_t duty){SetDutyCycle(duty);};//保证以最快的速度分配完成
-    void set_oc_polarity(uint8_t flag){SetPorlicy(flag);};//设置输出极性1：比较匹配后输出低电平（默认设置），0：比较匹配后输出高电平
+    void set_frq(uint32_t frq)
+    {
+        SetFrequency(frq);
+    };
+    void set_duty(uint16_t duty)
+    {
+        SetDutyCycle(duty);
+    };//保证以最快的速度分配完成
+    void set_oc_polarity(uint8_t flag)
+    {
+        SetPorlicy(flag);
+    };//设置输出极性1：比较匹配后输出低电平（默认设置），0：比较匹配后输出高电平
 
-    uint32_t get_timer_source_clock(){return GetMaxFrequency();};
-    uint32_t get_max_frq(){return GetMaxFrequency()/100;};
+    uint32_t get_timer_source_clock()
+    {
+        return GetMaxFrequency();
+    };
+    uint32_t get_max_frq()
+    {
+        return GetMaxFrequency() / 100;
+    };
     float    get_accuracy();
 private:
-	uint32_t _channel;
-	uint16_t _duty;		// 占空比
-	uint8_t	 _accuracy; // 精度
+    uint32_t _channel;
+    uint16_t _duty;		// 占空比
+    uint8_t	 _accuracy; // 精度
 
-	pfun  _OCsetCompare;
+    pfun  _OCsetCompare;
 
-	void _setMode(void);
+    void _setMode(void);
 };
 
 //class Pwm

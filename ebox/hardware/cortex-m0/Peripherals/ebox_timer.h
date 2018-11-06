@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -37,7 +37,7 @@
  *      *增加了get_timer_clock(),get_max_frq()两个函数接口
  *      *修复了芯片主频变动导致定时器中断频率变化的bug，支持任意主频下正常工作
  */
-extern uint32_t GetClock(void); 
+extern uint32_t GetClock(void);
 
 #define TIMxCH1 0x01
 #define TIMxCH2 0x02
@@ -45,58 +45,71 @@ extern uint32_t GetClock(void);
 #define TIMxCH4 0x04
 
 // 函数指针,指向LL_TIM_OC_SetCompareCH4(TIM_TypeDef *TIMx, uint32_t CompareValue) 函数
-typedef void (*pfun)(TIM_TypeDef *,uint32_t);
+typedef void (*pfun)(TIM_TypeDef *, uint32_t);
 
-class T_base{
+class T_base
+{
 public:
-	T_base(TIM_TypeDef *TIMx);
-protected:	
-	TIM_TypeDef  *_timx;		// TIM外设
-	uint8_t		 _tIndex;		// TIM索引
-	uint32_t 	 _period;		// 周期 0-65535
-	uint32_t	 _prescaler;	// TIM预分频值,赋值范围1-65536,程序最终会转为0-65535
-	
-	void _calculate(uint32_t frq);
-	void _setCountMode(uint32_t CounterMode);
-	void _enableClock();
-	void _start();
-	void _setPerPsc();
-	void _setMode(void);
-	void _enInterrupt();		// 使能中断
+    T_base(TIM_TypeDef *TIMx);
+protected:
+    TIM_TypeDef  *_timx;		// TIM外设
+    uint8_t		 _tIndex;		// TIM索引
+    uint32_t 	 _period;		// 周期 0-65535
+    uint32_t	 _prescaler;	// TIM预分频值,赋值范围1-65536,程序最终会转为0-65535
+
+    void _calculate(uint32_t frq);
+    void _setCountMode(uint32_t CounterMode);
+    void _enableClock();
+    void _start();
+    void _setPerPsc();
+    void _setMode(void);
+    void _enInterrupt();		// 使能中断
     void _nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority);
 };
 
-class Timer:T_base{
+class Timer: T_base
+{
 public:
-	Timer(TIM_TypeDef *TIMx):T_base(TIMx){};
-	// 设置time周期,us
-	void setUs(uint32_t us);
-	void setMs(uint32_t ms);
-	// 设置time频率,hz
-	void setFrequency(uint32_t frq);
-	void start();
-	void stop();
+    Timer(TIM_TypeDef *TIMx): T_base(TIMx) {};
+    // 设置time周期,us
+    void setUs(uint32_t us);
+    void setMs(uint32_t ms);
+    // 设置time频率,hz
+    void setFrequency(uint32_t frq);
+    void start();
+    void stop();
 
-	
-	uint32_t GetMaxFrequency(void);
-        
-    // 保持接口一致    
-    void begin(uint32_t frq){setFrequency(frq);};
-    uint32_t get_timer_source_clock(){return GetMaxFrequency();};
-    uint32_t get_max_frq(){return GetMaxFrequency()/400;};
-    void interrupt(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0){};
-		
-	void attach(void (*fptr)(void)){
-		_pirq.attach(fptr);
-	}
-	template<typename T>
-	void attach(T* tptr, void (T::*mptr)(void)){
-			_pirq.attach(tptr, mptr);
-	}
+
+    uint32_t GetMaxFrequency(void);
+
+    // 保持接口一致
+    void begin(uint32_t frq)
+    {
+        setFrequency(frq);
+    };
+    uint32_t get_timer_source_clock()
+    {
+        return GetMaxFrequency();
+    };
+    uint32_t get_max_frq()
+    {
+        return GetMaxFrequency() / 400;
+    };
+    void interrupt(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0) {};
+
+    void attach(void (*fptr)(void))
+    {
+        _pirq.attach(fptr);
+    }
+    template<typename T>
+    void attach(T *tptr, void (T::*mptr)(void))
+    {
+        _pirq.attach(tptr, mptr);
+    }
 private:
-	FunctionPointer _pirq;
-	void _setMode(void);
-	static void _irq_handler(uint32_t id);
+    FunctionPointer _pirq;
+    void _setMode(void);
+    static void _irq_handler(uint32_t id);
 };
 
 //class Timer

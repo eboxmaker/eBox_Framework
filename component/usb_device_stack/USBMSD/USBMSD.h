@@ -54,7 +54,8 @@
  * If disk_status() returns 1 (disk not initialized), then disk_initialize() is called. After this step, connect() will collect information
  * such as the number of blocks and the memory size.
  */
-class USBMSD: public USBDevice {
+class USBMSD: public USBDevice
+{
 public:
 
     /**
@@ -94,7 +95,7 @@ protected:
     * @param count number of blocks to read
     * @returns 0 if successful
     */
-    virtual int disk_read(uint8_t* data, uint64_t block, uint8_t count) = 0;
+    virtual int disk_read(uint8_t *data, uint64_t block, uint8_t count) = 0;
 
     /*
     * write one or more blocks on a storage chip
@@ -104,7 +105,7 @@ protected:
     * @param count number of blocks to write
     * @returns 0 if successful
     */
-    virtual int disk_write(const uint8_t* data, uint64_t block, uint8_t count) = 0;
+    virtual int disk_write(const uint8_t *data, uint64_t block, uint8_t count) = 0;
 
     /*
     * Disk initilization
@@ -138,21 +139,21 @@ protected:
     *
     * @returns pointer to the string product descriptor
     */
-    virtual uint8_t * stringIproductDesc();
+    virtual uint8_t *stringIproductDesc();
 
     /*
     * Get string interface descriptor
     *
     * @returns pointer to the string interface descriptor
     */
-    virtual uint8_t * stringIinterfaceDesc();
+    virtual uint8_t *stringIinterfaceDesc();
 
     /*
     * Get configuration descriptor
     *
     * @returns pointer to the configuration descriptor
     */
-    virtual uint8_t * configurationDesc();
+    virtual uint8_t *configurationDesc();
 
     /*
     * Callback called when a packet is received
@@ -178,7 +179,8 @@ protected:
 private:
 
     // MSC Bulk-only Stage
-    enum Stage {
+    enum Stage
+    {
         READ_CBW,     // wait a CBW
         ERROR,        // error
         PROCESS_CBW,  // process a CBW request
@@ -187,7 +189,8 @@ private:
     };
 
     // Bulk-only CBW
-    typedef struct {
+    typedef struct
+    {
         uint32_t Signature;
         uint32_t Tag;
         uint32_t DataLength;
@@ -198,7 +201,8 @@ private:
     } __attribute__ ((packed)) CBW;
 
     // Bulk-only CSW
-    typedef struct {
+    typedef struct
+    {
         uint32_t Signature;
         uint32_t Tag;
         uint32_t DataResidue;
@@ -224,16 +228,16 @@ private:
     bool memOK;
 
     // cache in RAM before writing in memory. Useful also to read a block.
-    uint8_t * page;
+    uint8_t *page;
 
     int BlockSize;
     uint64_t MemorySize;
     uint64_t BlockCount;
 
-    void CBWDecode(uint8_t * buf, uint16_t size);
+    void CBWDecode(uint8_t *buf, uint16_t size);
     void sendCSW (void);
     bool inquiryRequest (void);
-    bool write (uint8_t * buf, uint16_t size);
+    bool write (uint8_t *buf, uint16_t size);
     bool readFormatCapacity();
     bool readCapacity (void);
     bool infoTransfer (void);
@@ -241,8 +245,8 @@ private:
     bool modeSense6 (void);
     void testUnitReady (void);
     bool requestSense (void);
-    void memoryVerify (uint8_t * buf, uint16_t size);
-    void memoryWrite (uint8_t * buf, uint16_t size);
+    void memoryVerify (uint8_t *buf, uint16_t size);
+    void memoryWrite (uint8_t *buf, uint16_t size);
     void reset();
     void fail();
 };

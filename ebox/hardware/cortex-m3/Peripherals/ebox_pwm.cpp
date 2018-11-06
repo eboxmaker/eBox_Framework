@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -21,7 +21,7 @@
 #include "ebox_pwm.h"
 #define PWM_DEBUG 0
 #if PWM_DEBUG
-    #include "ebox.h"
+#include "ebox.h"
 #endif
 
 
@@ -49,14 +49,14 @@ void Pwm::base_init(uint16_t period, uint16_t prescaler)
 {
     this->period = period;//更新period
 
-    rcc_clock_cmd((uint32_t)TIMx,ENABLE);
+    rcc_clock_cmd((uint32_t)TIMx, ENABLE);
 
 
     if(TIMx == TIM1 ||  TIMx == TIM8 )
     {
-        TIM_CtrlPWMOutputs(TIMx,ENABLE); 
+        TIM_CtrlPWMOutputs(TIMx, ENABLE);
     }
-        
+
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
     TIM_TimeBaseStructure.TIM_Period = this->period - 1; //ARR
     TIM_TimeBaseStructure.TIM_Prescaler = prescaler - 1;
@@ -89,7 +89,7 @@ void Pwm::init_info(Gpio *pwm_pin)
         TIMx = TIM2;
         ch = TIMxCH4;//irq = TIM2_IRQn;
         break;
-    
+
     //TIM3
     case PA6_ID:
         TIMx = TIM3;
@@ -99,7 +99,7 @@ void Pwm::init_info(Gpio *pwm_pin)
         TIMx = TIM3;
         ch = TIMxCH2;//irq = TIM3_IRQn;
         break;
-    
+
     //TIM1
     case PA8_ID:
         TIMx = TIM1;
@@ -135,7 +135,7 @@ void Pwm::init_info(Gpio *pwm_pin)
         TIMx = TIM4;
         ch = TIMxCH4;//irq = TIM4_IRQn;
         break;
-    
+
     //TIM3
     case PB0_ID:
         TIMx = TIM3;
@@ -162,11 +162,11 @@ void Pwm::set_frq(uint32_t frq)
 {
     uint32_t period  = 0;
     uint32_t prescaler = 1;
-    
+
     if(frq >= get_max_frq())//控制频率，保证其有1%精度
         frq = get_max_frq();
 
-    
+
     //千分之一精度分配方案
     for(; prescaler <= 0xffff; prescaler++)
     {
@@ -180,7 +180,7 @@ void Pwm::set_frq(uint32_t frq)
             }
         }
     }
-    
+
     if(prescaler == 65536)//上述算法分配失败
     {
         //百分之一分配方案
@@ -193,10 +193,10 @@ void Pwm::set_frq(uint32_t frq)
                 {
                     accuracy = 2;
                     break;
-                }         
+                }
             }
         }
-    } 
+    }
     if(prescaler == 65536)//上述算法分配失败
     {
         //百分之二分配方案
@@ -209,10 +209,10 @@ void Pwm::set_frq(uint32_t frq)
                 {
                     accuracy = 3;
                     break;
-                }   
-            }            
+                }
+            }
         }
-    }     
+    }
     base_init(period, prescaler);
     _set_duty(duty);
 
@@ -295,7 +295,7 @@ uint32_t Pwm::get_timer_source_clock()
 {
     uint32_t temp = 0;
     uint32_t timer_clock = 0x00;
-    
+
     if ((uint32_t)this->TIMx == TIM1_BASE)
     {
         timer_clock = cpu.clock.pclk2;
@@ -312,22 +312,22 @@ uint32_t Pwm::get_timer_source_clock()
 }
 uint32_t Pwm::get_max_frq()
 {
-    return get_timer_source_clock()/50;
+    return get_timer_source_clock() / 50;
 
 }
 float Pwm::get_accuracy()
 {
-    
+
     switch(accuracy)
     {
-        case 0:
-            return 0;
-        case 1:
-            return 0.001;
-        case 2:
-            return 0.01;
-        case 3:
-            return 0.02;
+    case 0:
+        return 0;
+    case 1:
+        return 0.001;
+    case 2:
+        return 0.01;
+    case 3:
+        return 0.02;
 
     }
     return 0.001;
@@ -344,7 +344,7 @@ void Pwm::disable_pin()
 }
 void Pwm::end()
 {
-    
+
 }
 //duty:0-1000对应0%-100.0%
 void analog_write(Gpio *pwm_pin, uint16_t duty)

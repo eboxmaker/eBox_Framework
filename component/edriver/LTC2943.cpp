@@ -11,7 +11,7 @@ use with multicell batteries up to 20V. A precision coulomb
 counter integrates current through a sense resistor between
 the battery’s positive terminal and the load or charger.
 Voltage, current and temperature are measured with an
-internal 14-bit No Latency ΔΣ™ ADC. The measurements
+internal 14-bit No Latency ΔΣ? ADC. The measurements
 are stored in internal registers accessible via the onboard
 I2C/SMBus Interface
 
@@ -81,10 +81,10 @@ void Ltc2943::begin(uint32_t speed)
 int8_t Ltc2943::write(uint8_t i2c_address, uint8_t adc_command, uint8_t code)
 // The function returns the state of the acknowledge bit after the I2C address write. 0=acknowledge, 1=no acknowledge.
 {
-  int32_t ack;
+    int32_t ack;
 
-  ack = i2c->write_byte(i2c_address, adc_command, code);
-  return(ack);
+    ack = i2c->write_byte(i2c_address, adc_command, code);
+    return(ack);
 }
 
 
@@ -92,96 +92,96 @@ int8_t Ltc2943::write(uint8_t i2c_address, uint8_t adc_command, uint8_t code)
 int8_t Ltc2943::write_16_bits(uint8_t i2c_address, uint8_t adc_command, uint16_t code)
 // The function returns the state of the acknowledge bit after the I2C address write. 0=acknowledge, 1=no acknowledge.
 {
-  int8_t ack;
+    int8_t ack;
 
-  ack = i2c->write_byte(i2c_address, adc_command, code);
-  return(ack);
+    ack = i2c->write_byte(i2c_address, adc_command, code);
+    return(ack);
 }
 
 // Reads an 8-bit adc_code from LTC2943
 int8_t Ltc2943::read(uint8_t i2c_address, uint8_t adc_command, uint8_t *adc_code)
 // The function returns the state of the acknowledge bit after the I2C address write. 0=acknowledge, 1=no acknowledge.
 {
-  int32_t ack;
+    int32_t ack;
 
-  ack = i2c->read_byte(i2c_address, adc_command, adc_code);
+    ack = i2c->read_byte(i2c_address, adc_command, adc_code);
 
-  return(ack);
+    return(ack);
 }
 
 // Reads a 16-bit adc_code from LTC2943
 int8_t Ltc2943::read_16_bits(uint8_t i2c_address, uint8_t adc_command, uint16_t *adc_code)
 // The function returns the state of the acknowledge bit after the I2C address write. 0=acknowledge, 1=no acknowledge.
 {
-  int32_t ack;
-  uint8_t *p = (uint8_t *)adc_code;
-  ack = i2c->read_byte(i2c_address, adc_command, p,2);
+    int32_t ack;
+    uint8_t *p = (uint8_t *)adc_code;
+    ack = i2c->read_byte(i2c_address, adc_command, p, 2);
 
-  return(ack);
+    return(ack);
 }
 
 
 float Ltc2943::code_to_coulombs(uint16_t adc_code, float resistor, uint16_t prescalar)
 // The function converts the 16-bit RAW adc_code to Coulombs
 {
-  float coulomb_charge;
-  coulomb_charge =  1000*(float)(adc_code*LTC2943_CHARGE_lsb*prescalar*50E-3)/(resistor*4096);
-  coulomb_charge = coulomb_charge*3.6f;
-  return(coulomb_charge);
+    float coulomb_charge;
+    coulomb_charge =  1000 * (float)(adc_code * LTC2943_CHARGE_lsb * prescalar * 50E-3) / (resistor * 4096);
+    coulomb_charge = coulomb_charge * 3.6f;
+    return(coulomb_charge);
 }
 
 float Ltc2943::code_to_mAh(uint16_t adc_code, float resistor, uint16_t prescalar )
 // The function converts the 16-bit RAW adc_code to mAh
 {
-  float mAh_charge;
-  mAh_charge = 1000*(float)(adc_code*LTC2943_CHARGE_lsb*prescalar*50E-3)/(resistor*4096);
-  return(mAh_charge);
+    float mAh_charge;
+    mAh_charge = 1000 * (float)(adc_code * LTC2943_CHARGE_lsb * prescalar * 50E-3) / (resistor * 4096);
+    return(mAh_charge);
 }
 
 float Ltc2943::code_to_voltage(uint16_t adc_code)
 // The function converts the 16-bit RAW adc_code to Volts
 {
-  float voltage;
-  voltage = ((float)adc_code/(65535))*LTC2943_FULLSCALE_VOLTAGE;
-  return(voltage);
+    float voltage;
+    voltage = ((float)adc_code / (65535)) * LTC2943_FULLSCALE_VOLTAGE;
+    return(voltage);
 }
 
 float Ltc2943::code_to_current(uint16_t adc_code, float resistor)
 // The function converts the 16-bit RAW adc_code to Amperes
 {
-  float current;
-  current = (((float)adc_code-32767)/(32767))*((float)(LTC2943_FULLSCALE_CURRENT)/resistor);
-  return(current);
+    float current;
+    current = (((float)adc_code - 32767) / (32767)) * ((float)(LTC2943_FULLSCALE_CURRENT) / resistor);
+    return(current);
 }
 
 float Ltc2943::code_to_kelvin_temperature(uint16_t adc_code)
 // The function converts the 16-bit RAW adc_code to Kelvin
 {
-  float temperature;
-  temperature = adc_code*((float)(LTC2943_FULLSCALE_TEMPERATURE)/65535);
-  return(temperature);
+    float temperature;
+    temperature = adc_code * ((float)(LTC2943_FULLSCALE_TEMPERATURE) / 65535);
+    return(temperature);
 }
 
 float Ltc2943::code_to_celcius_temperature(uint16_t adc_code)
 // The function converts the 16-bit RAW adc_code to Celcius
 {
-  float temperature;
-  temperature = adc_code*((float)(LTC2943_FULLSCALE_TEMPERATURE)/65535) - 273.15;
-  return(temperature);
+    float temperature;
+    temperature = adc_code * ((float)(LTC2943_FULLSCALE_TEMPERATURE) / 65535) - 273.15;
+    return(temperature);
 }
 
 // Used to set and clear bits in a control register.  bits_to_set will be bitwise OR'd with the register.
 // bits_to_clear will be inverted and bitwise AND'd with the register so that every location with a 1 will result in a 0 in the register.
 int8_t Ltc2943::register_set_clear_bits(uint8_t i2c_address, uint8_t register_address, uint8_t bits_to_set, uint8_t bits_to_clear)
 {
-  uint8_t register_data;
-  int8_t ack = 0;
+    uint8_t register_data;
+    int8_t ack = 0;
 
-  ack |= read(i2c_address, register_address, &register_data);
-  register_data = register_data & (~bits_to_clear);
-  register_data = register_data | bits_to_set;
-  ack |= write(i2c_address, register_address, register_data);
-  return(ack);
+    ack |= read(i2c_address, register_address, &register_data);
+    register_data = register_data & (~bits_to_clear);
+    register_data = register_data | bits_to_set;
+    ack |= write(i2c_address, register_address, register_data);
+    return(ack);
 }
 
 

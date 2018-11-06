@@ -26,7 +26,7 @@
 
 class BLEStream : public BLEPeripheral, public Stream
 {
-  public:
+public:
     BLEStream(unsigned char req = 0, unsigned char rdy = 0, unsigned char rst = 0);
 
     void begin(...);
@@ -42,11 +42,11 @@ class BLEStream : public BLEPeripheral, public Stream
     using Print::write;
     virtual operator bool();
 
-  private:
+private:
     bool _connected;
     unsigned long _flushed;
     int _flushInterval;
-    static BLEStream* _instance;
+    static BLEStream *_instance;
 
     size_t _rxHead;
     size_t _rxTail;
@@ -62,8 +62,8 @@ class BLEStream : public BLEPeripheral, public Stream
     BLECharacteristic _txCharacteristic = BLECharacteristic("6E400003-B5A3-F393-E0A9-E50E24DCCA9E", BLENotify, _MAX_ATTR_DATA_LEN_);
     BLEDescriptor _txNameDescriptor = BLEDescriptor("2901", "TX - Transfer Data (Notify)");
 
-    void _received(const unsigned char* data, size_t size);
-    static void _received(BLECentral& /*central*/, BLECharacteristic& rxCharacteristic);
+    void _received(const unsigned char *data, size_t size);
+    static void _received(BLECentral & /*central*/, BLECharacteristic &rxCharacteristic);
 };
 
 
@@ -73,170 +73,175 @@ class BLEStream : public BLEPeripheral, public Stream
  * not needed.
  */
 
-BLEStream* BLEStream::_instance = NULL;
+BLEStream *BLEStream::_instance = NULL;
 
 BLEStream::BLEStream(unsigned char req, unsigned char rdy, unsigned char rst) :
 #if defined(_VARIANT_ARDUINO_101_X_)
-  BLEPeripheral()
+    BLEPeripheral()
 #else
-  BLEPeripheral(req, rdy, rst)
+    BLEPeripheral(req, rdy, rst)
 #endif
 {
-  this->_txCount = 0;
-  this->_rxHead = this->_rxTail = 0;
-  this->_flushed = 0;
-  this->_flushInterval = BLESTREAM_TXBUFFER_FLUSH_INTERVAL;
-  BLEStream::_instance = this;
+    this->_txCount = 0;
+    this->_rxHead = this->_rxTail = 0;
+    this->_flushed = 0;
+    this->_flushInterval = BLESTREAM_TXBUFFER_FLUSH_INTERVAL;
+    BLEStream::_instance = this;
 
-  addAttribute(this->_uartService);
-  addAttribute(this->_uartNameDescriptor);
-  setAdvertisedServiceUuid(this->_uartService.uuid());
-  addAttribute(this->_rxCharacteristic);
-  addAttribute(this->_rxNameDescriptor);
-  this->_rxCharacteristic.setEventHandler(BLEWritten, BLEStream::_received);
-  addAttribute(this->_txCharacteristic);
-  addAttribute(this->_txNameDescriptor);
+    addAttribute(this->_uartService);
+    addAttribute(this->_uartNameDescriptor);
+    setAdvertisedServiceUuid(this->_uartService.uuid());
+    addAttribute(this->_rxCharacteristic);
+    addAttribute(this->_rxNameDescriptor);
+    this->_rxCharacteristic.setEventHandler(BLEWritten, BLEStream::_received);
+    addAttribute(this->_txCharacteristic);
+    addAttribute(this->_txNameDescriptor);
 }
 
 void BLEStream::begin(...)
 {
-  BLEPeripheral::begin();
+    BLEPeripheral::begin();
 #ifdef BLE_SERIAL_DEBUG
-  Serial.println(F("BLEStream::begin()"));
+    Serial.println(F("BLEStream::begin()"));
 #endif
 }
 
 bool BLEStream::poll()
 {
-  // BLEPeripheral::poll is called each time connected() is called
-  this->_connected = BLEPeripheral::connected();
-  if (millis() > this->_flushed + this->_flushInterval) {
-    flush();
-  }
-  return this->_connected;
+    // BLEPeripheral::poll is called each time connected() is called
+    this->_connected = BLEPeripheral::connected();
+    if (millis() > this->_flushed + this->_flushInterval)
+    {
+        flush();
+    }
+    return this->_connected;
 }
 
 void BLEStream::end()
 {
-  this->_rxCharacteristic.setEventHandler(BLEWritten, (void(*)(BLECentral&, BLECharacteristic&))NULL);
-  this->_rxHead = this->_rxTail = 0;
-  flush();
-  BLEPeripheral::disconnect();
+    this->_rxCharacteristic.setEventHandler(BLEWritten, (void(*)(BLECentral &, BLECharacteristic &))NULL);
+    this->_rxHead = this->_rxTail = 0;
+    flush();
+    BLEPeripheral::disconnect();
 }
 
 int BLEStream::available(void)
 {
-// BLEPeripheral::poll only calls delay(1) in CurieBLE so skipping it here to avoid the delay
+    // BLEPeripheral::poll only calls delay(1) in CurieBLE so skipping it here to avoid the delay
 #ifndef _VARIANT_ARDUINO_101_X_
-  // TODO Need to do more testing to determine if all of these calls to BLEPeripheral::poll are
-  // actually necessary. Seems to run fine without them, but only minimal testing so far.
-  BLEPeripheral::poll();
+    // TODO Need to do more testing to determine if all of these calls to BLEPeripheral::poll are
+    // actually necessary. Seems to run fine without them, but only minimal testing so far.
+    BLEPeripheral::poll();
 #endif
-  int retval = (this->_rxHead - this->_rxTail + sizeof(this->_rxBuffer)) % sizeof(this->_rxBuffer);
+    int retval = (this->_rxHead - this->_rxTail + sizeof(this->_rxBuffer)) % sizeof(this->_rxBuffer);
 #ifdef BLE_SERIAL_DEBUG
-  if (retval > 0) {
-    Serial.print(F("BLEStream::available() = "));
-    Serial.println(retval);
-  }
+    if (retval > 0)
+    {
+        Serial.print(F("BLEStream::available() = "));
+        Serial.println(retval);
+    }
 #endif
-  return retval;
+    return retval;
 }
 
 int BLEStream::peek(void)
 {
 #ifndef _VARIANT_ARDUINO_101_X_
-  BLEPeripheral::poll();
+    BLEPeripheral::poll();
 #endif
-  if (this->_rxTail == this->_rxHead) return -1;
-  uint8_t byte = this->_rxBuffer[this->_rxTail];
+    if (this->_rxTail == this->_rxHead) return -1;
+    uint8_t byte = this->_rxBuffer[this->_rxTail];
 #ifdef BLE_SERIAL_DEBUG
-  Serial.print(F("BLEStream::peek() = 0x"));
-  Serial.println(byte, HEX);
+    Serial.print(F("BLEStream::peek() = 0x"));
+    Serial.println(byte, HEX);
 #endif
-  return byte;
+    return byte;
 }
 
 int BLEStream::read(void)
 {
 #ifndef _VARIANT_ARDUINO_101_X_
-  BLEPeripheral::poll();
+    BLEPeripheral::poll();
 #endif
-  if (this->_rxTail == this->_rxHead) return -1;
-  this->_rxTail = (this->_rxTail + 1) % sizeof(this->_rxBuffer);
-  uint8_t byte = this->_rxBuffer[this->_rxTail];
+    if (this->_rxTail == this->_rxHead) return -1;
+    this->_rxTail = (this->_rxTail + 1) % sizeof(this->_rxBuffer);
+    uint8_t byte = this->_rxBuffer[this->_rxTail];
 #ifdef BLE_SERIAL_DEBUG
-  Serial.print(F("BLEStream::read() = 0x"));
-  Serial.println(byte, HEX);
+    Serial.print(F("BLEStream::read() = 0x"));
+    Serial.println(byte, HEX);
 #endif
-  return byte;
+    return byte;
 }
 
 void BLEStream::flush(void)
 {
-  if (this->_txCount == 0) return;
+    if (this->_txCount == 0) return;
 #ifndef _VARIANT_ARDUINO_101_X_
-  // ensure there are available packets before sending
-  while(!this->_txCharacteristic.canNotify()) {
-    BLEPeripheral::poll();
-  }
+    // ensure there are available packets before sending
+    while(!this->_txCharacteristic.canNotify())
+    {
+        BLEPeripheral::poll();
+    }
 #endif
-  this->_txCharacteristic.setValue(this->_txBuffer, this->_txCount);
-  this->_flushed = millis();
-  this->_txCount = 0;
+    this->_txCharacteristic.setValue(this->_txBuffer, this->_txCount);
+    this->_flushed = millis();
+    this->_txCount = 0;
 #ifdef BLE_SERIAL_DEBUG
-  Serial.println(F("BLEStream::flush()"));
+    Serial.println(F("BLEStream::flush()"));
 #endif
 }
 
 size_t BLEStream::write(uint8_t byte)
 {
 #ifndef _VARIANT_ARDUINO_101_X_
-  BLEPeripheral::poll();
+    BLEPeripheral::poll();
 #endif
-  if (this->_txCharacteristic.subscribed() == false) return 0;
-  this->_txBuffer[this->_txCount++] = byte;
-  if (this->_txCount == sizeof(this->_txBuffer)) flush();
+    if (this->_txCharacteristic.subscribed() == false) return 0;
+    this->_txBuffer[this->_txCount++] = byte;
+    if (this->_txCount == sizeof(this->_txBuffer)) flush();
 #ifdef BLE_SERIAL_DEBUG
-  Serial.print(F("BLEStream::write( 0x"));
-  Serial.print(byte, HEX);
-  Serial.println(F(") = 1"));
+    Serial.print(F("BLEStream::write( 0x"));
+    Serial.print(byte, HEX);
+    Serial.println(F(") = 1"));
 #endif
-  return 1;
+    return 1;
 }
 
 BLEStream::operator bool()
 {
-  bool retval = this->_connected = BLEPeripheral::connected();
+    bool retval = this->_connected = BLEPeripheral::connected();
 #ifdef BLE_SERIAL_DEBUG
-  Serial.print(F("BLEStream::operator bool() = "));
-  Serial.println(retval);
+    Serial.print(F("BLEStream::operator bool() = "));
+    Serial.println(retval);
 #endif
-  return retval;
+    return retval;
 }
 
 void BLEStream::setFlushInterval(int interval)
 {
-  if (interval > BLESTREAM_MIN_FLUSH_INTERVAL) {
-    this->_flushInterval = interval;
-  }
+    if (interval > BLESTREAM_MIN_FLUSH_INTERVAL)
+    {
+        this->_flushInterval = interval;
+    }
 }
 
-void BLEStream::_received(const unsigned char* data, size_t size)
+void BLEStream::_received(const unsigned char *data, size_t size)
 {
-  for (size_t i = 0; i < size; i++) {
-    this->_rxHead = (this->_rxHead + 1) % sizeof(this->_rxBuffer);
-    this->_rxBuffer[this->_rxHead] = data[i];
-  }
+    for (size_t i = 0; i < size; i++)
+    {
+        this->_rxHead = (this->_rxHead + 1) % sizeof(this->_rxBuffer);
+        this->_rxBuffer[this->_rxHead] = data[i];
+    }
 #ifdef BLE_SERIAL_DEBUG
-  Serial.print(F("BLEStream::received("));
-  for (int i = 0; i < size; i++) Serial.print(data[i], HEX);
-  Serial.println(F(")"));
+    Serial.print(F("BLEStream::received("));
+    for (int i = 0; i < size; i++) Serial.print(data[i], HEX);
+    Serial.println(F(")"));
 #endif
 }
 
-void BLEStream::_received(BLECentral& /*central*/, BLECharacteristic& rxCharacteristic)
+void BLEStream::_received(BLECentral & /*central*/, BLECharacteristic &rxCharacteristic)
 {
-  BLEStream::_instance->_received(rxCharacteristic.value(), rxCharacteristic.valueLength());
+    BLEStream::_instance->_received(rxCharacteristic.value(), rxCharacteristic.valueLength());
 }
 
 

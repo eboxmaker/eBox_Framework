@@ -18,7 +18,8 @@ This specification is preliminary and is subject to change at any time without n
 #include "ebox_core.h"
 
 
-enum Tim_It_Index{
+enum Tim_It_Index
+{
     TIM1_IT_Update  = 0,
     TIM2_IT_Update  = 1,
     TIM3_IT_Update  = 2,
@@ -57,8 +58,8 @@ extern "C" {
 
 typedef void (*tim_irq_handler)(uint32_t id);
 
-int tim_irq_init(uint8_t index,tim_irq_handler handler,uint32_t id);
-	
+int tim_irq_init(uint8_t index, tim_irq_handler handler, uint32_t id);
+
 void tim_irq_callback(uint8_t index);
 
 #ifdef __cplusplus

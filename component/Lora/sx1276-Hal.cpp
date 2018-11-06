@@ -1,18 +1,18 @@
 /*
- * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND 
+ * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND
  * (2)TO ENABLE ACCESS TO CODING INFORMATION TO GUIDE AND FACILITATE CUSTOMER.
  * CONSEQUENTLY, SEMTECH SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT OR
  * CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE CONTENT
  * OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING INFORMATION
  * CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
- * 
+ *
  * Copyright (C) SEMTECH S.A.
  */
-/*! 
+/*!
  * \file       sx1276-Hal.c
  * \brief      SX1276 Hardware Abstraction Layer
  *
- * \version    2.0.B2 
+ * \version    2.0.B2
  * \date       Nov 21 2012
  * \author     Miguel Luis
  *
@@ -39,32 +39,32 @@
 SPI_CONFIG_TYPE sx1276_spi_config;
 void SX1276InitIo( void )
 {
-    
+
     // Configure NSS as output
     NSS_PIN.mode(OUTPUT_PP);
 
     // Configure radio DIO as inputs float
 
-    
+
     // Configure DIO0
     DIO0_PIN.mode(INPUT);
 
-    
+
     // Configure DIO1
-        DIO1_PIN.mode(INPUT);
+    DIO1_PIN.mode(INPUT);
 
     // Configure DIO2
-        DIO2_PIN.mode(INPUT);
+    DIO2_PIN.mode(INPUT);
 
     // REAMARK: DIO3/4/5 configured are connected to IO expander
 
     // Configure DIO3 as input
-        DIO3_PIN.mode(INPUT);
+    DIO3_PIN.mode(INPUT);
 
     // Configure DIO4 as input
-    
+
     // Configure DIO5 as input
-    
+
     //init spi
     sx1276_spi_config.dev_num = 1;
     sx1276_spi_config.mode = SPI_MODE0;
@@ -86,7 +86,7 @@ void SX1276SetReset( uint8_t state )
     else
     {
         // Set RESET pin as input pull down
-        RST_PIN.mode(INPUT_PD);        
+        RST_PIN.mode(INPUT_PD);
     }
 }
 
@@ -180,13 +180,13 @@ inline void SX1276WriteRxTx( uint8_t txEnable )
 {
     if( txEnable != 0 )
     {
-//        IoePinOn( FEM_CTX_PIN );
-//        IoePinOff( FEM_CPS_PIN );
+        //        IoePinOn( FEM_CTX_PIN );
+        //        IoePinOff( FEM_CPS_PIN );
     }
     else
     {
-//        IoePinOff( FEM_CTX_PIN );
-//        IoePinOn( FEM_CPS_PIN );
+        //        IoePinOff( FEM_CTX_PIN );
+        //        IoePinOn( FEM_CPS_PIN );
     }
 }
 

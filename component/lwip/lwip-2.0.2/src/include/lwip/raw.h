@@ -65,32 +65,33 @@ struct raw_pcb;
  * if it's not used any more.
  */
 typedef u8_t (*raw_recv_fn)(void *arg, struct raw_pcb *pcb, struct pbuf *p,
-    const ip_addr_t *addr);
+                            const ip_addr_t *addr);
 
 /** the RAW protocol control block */
-struct raw_pcb {
-  /* Common members of all PCB types */
-  IP_PCB;
+struct raw_pcb
+{
+    /* Common members of all PCB types */
+    IP_PCB;
 
-  struct raw_pcb *next;
+    struct raw_pcb *next;
 
-  u8_t protocol;
+    u8_t protocol;
 
-  /** receive callback function */
-  raw_recv_fn recv;
-  /* user-supplied argument for the recv callback */
-  void *recv_arg;
+    /** receive callback function */
+    raw_recv_fn recv;
+    /* user-supplied argument for the recv callback */
+    void *recv_arg;
 #if LWIP_IPV6
-  /* fields for handling checksum computations as per RFC3542. */
-  u16_t chksum_offset;
-  u8_t  chksum_reqd;
+    /* fields for handling checksum computations as per RFC3542. */
+    u16_t chksum_offset;
+    u8_t  chksum_reqd;
 #endif
 };
 
 /* The following functions is the application layer interface to the
    RAW code. */
-struct raw_pcb * raw_new        (u8_t proto);
-struct raw_pcb * raw_new_ip_type(u8_t type, u8_t proto);
+struct raw_pcb *raw_new        (u8_t proto);
+struct raw_pcb *raw_new_ip_type(u8_t type, u8_t proto);
 void             raw_remove     (struct raw_pcb *pcb);
 err_t            raw_bind       (struct raw_pcb *pcb, const ip_addr_t *ipaddr);
 err_t            raw_connect    (struct raw_pcb *pcb, const ip_addr_t *ipaddr);
@@ -104,7 +105,7 @@ void             raw_recv       (struct raw_pcb *pcb, raw_recv_fn recv, void *re
 u8_t             raw_input      (struct pbuf *p, struct netif *inp);
 #define raw_init() /* Compatibility define, no init needed. */
 
-void raw_netif_ip_addr_changed(const ip_addr_t* old_addr, const ip_addr_t* new_addr);
+void raw_netif_ip_addr_changed(const ip_addr_t *old_addr, const ip_addr_t *new_addr);
 
 /* for compatibility with older implementation */
 #define raw_new_ip6(proto) raw_new_ip_type(IPADDR_TYPE_V6, proto)

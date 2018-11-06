@@ -7,7 +7,7 @@ Author: 何飞                              Version : 1.0                         
 Description: 模拟操作系统的格式输出
 Version: 	无
 Function List: printf	格式输出到终端显示
-			vsprintf	格式输出到buf			
+			vsprintf	格式输出到buf
 **************************************************************************************************************/
 #ifndef _MY_PRINTF_H
 #define _MY_PRINTF_H
@@ -19,12 +19,12 @@ Function List: printf	格式输出到终端显示
 extern "C" {
 #endif
 
-    
-    
-int _ebox_vsnprintf(char *buf,size_t size,const char *format,va_list args);
-int _ebox_snprintf(char *str, size_t size,const char *format,...);
+
+
+int _ebox_vsnprintf(char *buf, size_t size, const char *format, va_list args);
+int _ebox_snprintf(char *str, size_t size, const char *format, ...);
 int _ebox_vsprintf(char *ret, const char *format, va_list ap);
-int _ebox_sprintf(char *str,const char *format,...);
+int _ebox_sprintf(char *str, const char *format, ...);
 
 #ifdef __cplusplus
 }

@@ -15,13 +15,13 @@
  *    Sergio R. Caprile - "commonalization" from prior samples and/or documentation extension
  *******************************************************************************/
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
-int transport_init(int local_sock,int local_port);
-int transport_sendPacketBuffer(unsigned char* buf, int buflen);
-int transport_getdata(unsigned char* buf, int count);
-int transport_getdatanb(void *sck, unsigned char* buf, int count);
-int transport_open(char* host, int port);
+int transport_init(int local_sock, int local_port);
+int transport_sendPacketBuffer(unsigned char *buf, int buflen);
+int transport_getdata(unsigned char *buf, int count);
+int transport_getdatanb(void *sck, unsigned char *buf, int count);
+int transport_open(char *host, int port);
 int transport_close(int sock);
 int transport_connnected();
 #ifdef __cplusplus

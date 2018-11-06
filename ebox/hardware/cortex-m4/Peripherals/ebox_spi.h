@@ -18,7 +18,7 @@
 class mcuSpi: public Spi
 {
 public:
-	mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
+    mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
 
     virtual void    begin (SpiConfig_t *spi_config);
     virtual void    config(SpiConfig_t *spi_config);
@@ -36,13 +36,13 @@ public:
     virtual int8_t  take(SpiConfig_t *spi_config);
     virtual int8_t  release(void);
 private:
-	SPI_TypeDef *_spi;
+    SPI_TypeDef *_spi;
     Gpio        *_sck;
     Gpio        *_miso;
     Gpio        *_mosi;
 
     uint8_t     _busy;
-		
+
 };
 /*
 	注意：1.该类的SPI_CLOCK_DIV是由delay_us延时函数控制。略有不准，比硬件SPI会慢很多

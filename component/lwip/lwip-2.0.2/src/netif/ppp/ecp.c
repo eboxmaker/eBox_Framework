@@ -68,11 +68,16 @@
 #include "netif/ppp/ecp.h"
 
 #if PPP_OPTIONS
-static option_t ecp_option_list[] = {
-    { "noecp", o_bool, &ecp_protent.enabled_flag,
-      "Disable ECP negotiation" },
-    { "-ecp", o_bool, &ecp_protent.enabled_flag,
-      "Disable ECP negotiation", OPT_ALIAS },
+static option_t ecp_option_list[] =
+{
+    {
+        "noecp", o_bool, &ecp_protent.enabled_flag,
+        "Disable ECP negotiation"
+    },
+    {
+        "-ecp", o_bool, &ecp_protent.enabled_flag,
+        "Disable ECP negotiation", OPT_ALIAS
+    },
 
     { NULL }
 };
@@ -92,14 +97,15 @@ static void ecp_protrej (int unit);
 */
 #if PRINTPKT_SUPPORT
 static int  ecp_printpkt (const u_char *pkt, int len,
-			      void (*printer) (void *, char *, ...),
-			      void *arg);
+                          void (*printer) (void *, char *, ...),
+                          void *arg);
 #endif /* PRINTPKT_SUPPORT */
 /*
 static void ecp_datainput (int unit, u_char *pkt, int len);
 */
 
-const struct protent ecp_protent = {
+const struct protent ecp_protent =
+{
     PPP_ECP,
     ecp_init,
     NULL, /* ecp_input, */
@@ -134,7 +140,8 @@ ecp_options ecp_gotoptions[NUM_PPP];	/* what the peer agreed to do */
 ecp_options ecp_allowoptions[NUM_PPP];	/* what we'll agree to do */
 ecp_options ecp_hisoptions[NUM_PPP];	/* what we agreed to do */
 
-static const fsm_callbacks ecp_callbacks = {
+static const fsm_callbacks ecp_callbacks =
+{
     NULL, /* ecp_resetci, */
     NULL, /* ecp_cilen, */
     NULL, /* ecp_addci, */
@@ -157,7 +164,7 @@ static const fsm_callbacks ecp_callbacks = {
  */
 static void
 ecp_init(unit)
-    int unit;
+int unit;
 {
     fsm *f = &ecp_fsm[unit];
 
@@ -179,10 +186,10 @@ ecp_init(unit)
 #if PRINTPKT_SUPPORT
 static int
 ecp_printpkt(p, plen, printer, arg)
-    const u_char *p;
-    int plen;
-    void (*printer) (void *, char *, ...);
-    void *arg;
+const u_char *p;
+int plen;
+void (*printer) (void *, char *, ...);
+void *arg;
 {
     return 0;
 }

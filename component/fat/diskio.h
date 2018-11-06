@@ -19,12 +19,13 @@ extern "C" {
 typedef BYTE	DSTATUS;
 
 /* Results of Disk Functions */
-typedef enum {
-	RES_OK = 0,		/* 0: Successful */
-	RES_ERROR,		/* 1: R/W Error */
-	RES_WRPRT,		/* 2: Write Protected */
-	RES_NOTRDY,		/* 3: Not Ready */
-	RES_PARERR		/* 4: Invalid Parameter */
+typedef enum
+{
+    RES_OK = 0,		/* 0: Successful */
+    RES_ERROR,		/* 1: R/W Error */
+    RES_WRPRT,		/* 2: Write Protected */
+    RES_NOTRDY,		/* 3: Not Ready */
+    RES_PARERR		/* 4: Invalid Parameter */
 } DRESULT;
 
 
@@ -34,9 +35,9 @@ typedef enum {
 
 DSTATUS disk_initialize (BYTE pdrv);
 DSTATUS disk_status (BYTE pdrv);
-DRESULT disk_read (BYTE pdrv, BYTE* buff, DWORD sector, UINT count);
-DRESULT disk_write (BYTE pdrv, const BYTE* buff, DWORD sector, UINT count);
-DRESULT disk_ioctl (BYTE pdrv, BYTE cmd, void* buff);
+DRESULT disk_read (BYTE pdrv, BYTE *buff, DWORD sector, UINT count);
+DRESULT disk_write (BYTE pdrv, const BYTE *buff, DWORD sector, UINT count);
+DRESULT disk_ioctl (BYTE pdrv, BYTE cmd, void *buff);
 
 
 /* Disk Status Bits (DSTATUS) */

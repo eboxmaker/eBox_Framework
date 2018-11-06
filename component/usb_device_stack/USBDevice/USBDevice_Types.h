@@ -51,8 +51,10 @@
 #define DESCRIPTOR_TYPE(wValue)  (wValue >> 8)
 #define DESCRIPTOR_INDEX(wValue) (wValue & 0xff)
 
-typedef struct {
-    struct {
+typedef struct
+{
+    struct
+    {
         uint8_t dataTransferDirection;
         uint8_t Type;
         uint8_t Recipient;
@@ -63,7 +65,8 @@ typedef struct {
     uint16_t wLength;
 } SETUP_PACKET;
 
-typedef struct {
+typedef struct
+{
     SETUP_PACKET setup;
     uint8_t *ptr;
     uint32_t remaining;
@@ -74,7 +77,8 @@ typedef struct {
 
 typedef enum {ATTACHED, POWERED, DEFAULT, ADDRESS, CONFIGURED} DEVICE_STATE;
 
-typedef struct {
+typedef struct
+{
     volatile DEVICE_STATE state;
     uint8_t configuration;
     bool suspended;

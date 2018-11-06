@@ -103,7 +103,7 @@
 //};
 
 
-		
+
 //static const Periph_S SPI_INFO[] = {
 //	SPI1_BASE,LL_APB1_GRP2_PERIPH_SPI1,USART1_IRQn,Irq1,
 //	NC
@@ -129,46 +129,50 @@
 //	USART2_BASE,LL_APB1_GRP1_EnableClock,LL_APB1_GRP1_PERIPH_USART2,USART2_IRQn,Irq2,
 //	NC
 //};
-typedef struct{
-	PIN_ID_t	_pinId;		//pin_id
-	PIN_MODE	_pinMode;	    //pin 参数， mode，outputtyper,updown
-	uint8_t		_pinAf;		//af功能
-	uint32_t	_periph;	//外设名或通道号
-}AF_FUN_S;
+typedef struct
+{
+    PIN_ID_t	_pinId;		//pin_id
+    PIN_MODE	_pinMode;	    //pin 参数， mode，outputtyper,updown
+    uint8_t		_pinAf;		//af功能
+    uint32_t	_periph;	//外设名或通道号
+} AF_FUN_S;
 
-// PB9 scl,PB9 SDA	
-static const AF_FUN_S I2C_MAP[]={
-	// i2c1
-	PB8_ID,AF_PP_PU,LL_GPIO_AF_1,I2C1_BASE,
-	PB9_ID,AF_PP_PU,LL_GPIO_AF_1,I2C1_BASE,
-	(PIN_ID_t)0xff
+// PB9 scl,PB9 SDA
+static const AF_FUN_S I2C_MAP[] =
+{
+    // i2c1
+    PB8_ID, AF_PP_PU, LL_GPIO_AF_1, I2C1_BASE,
+    PB9_ID, AF_PP_PU, LL_GPIO_AF_1, I2C1_BASE,
+    (PIN_ID_t)0xff
 };
 
 // sck,miso,mosi
-static const AF_FUN_S SPI_MAP[] = {
-	PA5_ID,AF_PP_PU,0,SPI1_BASE,
-	PA6_ID,AF_PP_PU,0,SPI1_BASE,
-	PA7_ID,AF_PP_PU,0,SPI1_BASE,
-    PB3_ID,AF_PP_PU,0,SPI1_BASE,
-	P_NC
+static const AF_FUN_S SPI_MAP[] =
+{
+    PA5_ID, AF_PP_PU, 0, SPI1_BASE,
+    PA6_ID, AF_PP_PU, 0, SPI1_BASE,
+    PA7_ID, AF_PP_PU, 0, SPI1_BASE,
+    PB3_ID, AF_PP_PU, 0, SPI1_BASE,
+    P_NC
 };
 
-static const AF_FUN_S TIM_MAP[] ={
-	// TIM3,CH1,CH2,CH4
-	PA6_ID,AF_PP,LL_GPIO_AF_1,TIM3_BASE+TIMxCH1,
-	PA7_ID,AF_PP,LL_GPIO_AF_1,TIM3_BASE+TIMxCH2,
-	PB1_ID,AF_PP,LL_GPIO_AF_1,TIM3_BASE+TIMxCH4,
-	// TIM16,CH1
-	PA6_ID,AF_PP,LL_GPIO_AF_5,TIM16_BASE+TIMxCH1,
-	// TIM17,CH1
-	PA7_ID,AF_PP,LL_GPIO_AF_5,TIM17_BASE+TIMxCH1,
-	// TIM14,CH1
-	PA4_ID,AF_PP,LL_GPIO_AF_4,TIM14_BASE+TIMxCH1,
-	// TIM1,CH2,CH3
-	PA8_ID,AF_PP,LL_GPIO_AF_2,TIM1_BASE+TIMxCH1,
-	PA9_ID,AF_PP,LL_GPIO_AF_2,TIM1_BASE+TIMxCH2,
-	PA10_ID,AF_PP,LL_GPIO_AF_2,TIM1_BASE+TIMxCH3,
-	(PIN_ID_t)0xff
+static const AF_FUN_S TIM_MAP[] =
+{
+    // TIM3,CH1,CH2,CH4
+    PA6_ID, AF_PP, LL_GPIO_AF_1, TIM3_BASE + TIMxCH1,
+    PA7_ID, AF_PP, LL_GPIO_AF_1, TIM3_BASE + TIMxCH2,
+    PB1_ID, AF_PP, LL_GPIO_AF_1, TIM3_BASE + TIMxCH4,
+    // TIM16,CH1
+    PA6_ID, AF_PP, LL_GPIO_AF_5, TIM16_BASE + TIMxCH1,
+    // TIM17,CH1
+    PA7_ID, AF_PP, LL_GPIO_AF_5, TIM17_BASE + TIMxCH1,
+    // TIM14,CH1
+    PA4_ID, AF_PP, LL_GPIO_AF_4, TIM14_BASE + TIMxCH1,
+    // TIM1,CH2,CH3
+    PA8_ID, AF_PP, LL_GPIO_AF_2, TIM1_BASE + TIMxCH1,
+    PA9_ID, AF_PP, LL_GPIO_AF_2, TIM1_BASE + TIMxCH2,
+    PA10_ID, AF_PP, LL_GPIO_AF_2, TIM1_BASE + TIMxCH3,
+    (PIN_ID_t)0xff
 };
 
 /**
@@ -176,17 +180,18 @@ static const AF_FUN_S TIM_MAP[] ={
  *@param    val：1：输出高电平；0：输出低电平
  *@retval   NONE
 */
-__STATIC_INLINE uint8_t getIndex(PIN_ID_t pin_id,const AF_FUN_S *emap,uint32_t periph)
+__STATIC_INLINE uint8_t getIndex(PIN_ID_t pin_id, const AF_FUN_S *emap, uint32_t periph)
 {
-	uint8_t i = 0;
-	while (!((0xffffff00 & (emap+i)->_periph) == periph) || !((emap+i)->_pinId == pin_id))
-	{
-		if ((emap+i)->_pinId == 0xff){
-			return (uint8_t)0xff;
-		}
-		i++;
-	}
-	return i;
+    uint8_t i = 0;
+    while (!((0xffffff00 & (emap + i)->_periph) == periph) || !((emap + i)->_pinId == pin_id))
+    {
+        if ((emap + i)->_pinId == 0xff)
+        {
+            return (uint8_t)0xff;
+        }
+        i++;
+    }
+    return i;
 }
 
 /**
@@ -194,17 +199,18 @@ __STATIC_INLINE uint8_t getIndex(PIN_ID_t pin_id,const AF_FUN_S *emap,uint32_t p
  *@param    pin_id：pin_id     *emap  外设里列表
  *@retval   NONE
 */
-__STATIC_INLINE uint8_t getIndex(PIN_ID_t pin_id,const AF_FUN_S *emap)
+__STATIC_INLINE uint8_t getIndex(PIN_ID_t pin_id, const AF_FUN_S *emap)
 {
-	uint8_t i = 0;
-	while (!((emap+i)->_pinId  == pin_id ))
-	{
-		if ((emap+i)->_pinId == 0xff){
-			return (uint8_t)0xff;
-		}
-		i++;
-	}
-	return i;
+    uint8_t i = 0;
+    while (!((emap + i)->_pinId  == pin_id ))
+    {
+        if ((emap + i)->_pinId == 0xff)
+        {
+            return (uint8_t)0xff;
+        }
+        i++;
+    }
+    return i;
 }
 
 #endif

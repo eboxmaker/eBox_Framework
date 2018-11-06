@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -22,49 +22,49 @@
 
 
 
-Pwm::Pwm(Gpio *pwm_pin,TIM_TypeDef *timer,uint8_t ch)
+Pwm::Pwm(Gpio *pwm_pin, TIM_TypeDef *timer, uint8_t ch)
 {
     this->pwm_pin = pwm_pin;
-	this->TIMx = timer;
-	this->ch = ch;
-	switch((uint32_t)timer)
-	{
-		case TIM1_BASE:
-			af_timer_x = GPIO_AF_TIM1;
-			break;
-		case TIM2_BASE:
-			af_timer_x = GPIO_AF_TIM2;
-			break;
-		case TIM3_BASE:
-			af_timer_x = GPIO_AF_TIM3;
-			break;
-		case TIM4_BASE:
+    this->TIMx = timer;
+    this->ch = ch;
+    switch((uint32_t)timer)
+    {
+    case TIM1_BASE:
+        af_timer_x = GPIO_AF_TIM1;
+        break;
+    case TIM2_BASE:
+        af_timer_x = GPIO_AF_TIM2;
+        break;
+    case TIM3_BASE:
+        af_timer_x = GPIO_AF_TIM3;
+        break;
+    case TIM4_BASE:
 
-			af_timer_x = GPIO_AF_TIM4;
-			break;
-		case TIM5_BASE:
+        af_timer_x = GPIO_AF_TIM4;
+        break;
+    case TIM5_BASE:
 
-			af_timer_x = GPIO_AF_TIM5;
-			break;
-		case TIM8_BASE:
+        af_timer_x = GPIO_AF_TIM5;
+        break;
+    case TIM8_BASE:
 
-			af_timer_x = GPIO_AF_TIM8;
-			break;
-		case TIM9_BASE:
+        af_timer_x = GPIO_AF_TIM8;
+        break;
+    case TIM9_BASE:
 
-			af_timer_x = GPIO_AF_TIM9;
-			break;
-		case TIM10_BASE:
+        af_timer_x = GPIO_AF_TIM9;
+        break;
+    case TIM10_BASE:
 
-			af_timer_x = GPIO_AF_TIM10;
-			break;
-		case TIM11_BASE:
+        af_timer_x = GPIO_AF_TIM10;
+        break;
+    case TIM11_BASE:
 
-			af_timer_x = GPIO_AF_TIM11;
-			break;
-		default :
-			break;	
-	}
+        af_timer_x = GPIO_AF_TIM11;
+        break;
+    default :
+        break;
+    }
 
 }
 
@@ -72,10 +72,10 @@ void Pwm::begin(uint32_t frq, uint16_t duty)
 {
     this->duty = duty;
 
-    pwm_pin->mode(AF_PP,af_timer_x);
+    pwm_pin->mode(AF_PP, af_timer_x);
 
 
-    rcc_clock_cmd((uint32_t)TIMx,ENABLE);
+    rcc_clock_cmd((uint32_t)TIMx, ENABLE);
     set_oc_polarity(1);
     set_frq(frq);
     _set_duty(duty);
@@ -85,10 +85,10 @@ void Pwm::set_frq(uint32_t frq)
 {
     uint32_t _period  = 0;
     uint32_t _prescaler = 1;
-    
+
     if(frq >= get_max_frq())//控制频率，保证其有1%精度
         frq = get_max_frq();
-    
+
     //千分之一精度分配方案
     for(; _prescaler <= 0xffff; _prescaler++)
     {
@@ -99,7 +99,7 @@ void Pwm::set_frq(uint32_t frq)
             break;
         }
     }
-    
+
     if(_prescaler == 65536)//上述算法分配失败
     {
         //百分之一分配方案
@@ -108,8 +108,8 @@ void Pwm::set_frq(uint32_t frq)
             _period = get_timer_source_clock() / _prescaler / frq;
             if((0xffff >= _period) && (_period >= 100))
             {
-            accuracy = 2;
-            break;
+                accuracy = 2;
+                break;
             }
         }
     }
@@ -205,12 +205,12 @@ void Pwm::base_init(uint32_t _period, uint32_t _prescaler)
     this->period = _period;//更新period
 
     if( TIMx == TIM1 ||
-        TIMx == TIM8 ||
-        TIMx == TIM9 ||
-        TIMx == TIM10 ||
-        TIMx == TIM11 )
+            TIMx == TIM8 ||
+            TIMx == TIM9 ||
+            TIMx == TIM10 ||
+            TIMx == TIM11 )
     {
-        TIM_CtrlPWMOutputs(TIMx,ENABLE); 
+        TIM_CtrlPWMOutputs(TIMx, ENABLE);
     }
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 
@@ -230,12 +230,12 @@ uint32_t Pwm::get_timer_source_clock()
 {
     uint32_t temp = 0;
     uint32_t timer_clock = 0x00;
-    
+
     if ((uint32_t)this->TIMx == TIM1_BASE ||
-        (uint32_t)this->TIMx == TIM8_BASE ||
-        (uint32_t)this->TIMx == TIM9_BASE ||
-        (uint32_t)this->TIMx == TIM10_BASE ||
-        (uint32_t)this->TIMx == TIM11_BASE )
+            (uint32_t)this->TIMx == TIM8_BASE ||
+            (uint32_t)this->TIMx == TIM9_BASE ||
+            (uint32_t)this->TIMx == TIM10_BASE ||
+            (uint32_t)this->TIMx == TIM11_BASE )
     {
         timer_clock = cpu.clock.pclk2;
     }
@@ -252,21 +252,21 @@ uint32_t Pwm::get_timer_source_clock()
 
 uint32_t Pwm::get_max_frq()
 {
-    return get_timer_source_clock()/100;
+    return get_timer_source_clock() / 100;
 
 }
 
 float Pwm::get_accuracy()
 {
-    
+
     switch(accuracy)
     {
-        case 0:
-            return 0;
-        case 1:
-            return 0.001;
-        case 2:
-            return 0.01;
+    case 0:
+        return 0;
+    case 1:
+        return 0.001;
+    case 2:
+        return 0.01;
 
     }
     return 0.001;

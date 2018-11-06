@@ -17,7 +17,7 @@
 #include "stm32f0xx_ll_bus.h"
 #include "stm32f0xx_ll_gpio.h"
 #include "stm32f0xx_ll_tim.h"
-#include "stm32f0xx_ll_usart.h"	
+#include "stm32f0xx_ll_usart.h"
 #include "stm32f0xx_ll_pwr.h"
 #include "stm32f0xx_ll_spi.h"
 #include "stm32f0xx_ll_adc.h"
@@ -71,7 +71,7 @@
 //static const uint32_t GPIO_INFO[] ={
 // LL_AHB1_GRP1_PERIPH_GPIOA,
 // LL_AHB1_GRP1_PERIPH_GPIOB,
-// LL_AHB1_GRP1_PERIPH_GPIOC  
+// LL_AHB1_GRP1_PERIPH_GPIOC
 //};
 
 /* structure --------------------------------------------------------------- */
@@ -127,30 +127,33 @@
 //	P_NC = (int)0xff
 //}E_PinID;
 
-typedef struct{
-	PIN_ID_t	_pinId;		//pin_id
-	PIN_MODE	_pinMode;	    //pin 参数， mode，outputtyper,updown
-	uint8_t		_pinAf;		//af功能
-	uint32_t	_periph;	//外设名或通道号
-}AF_FUN_S;
+typedef struct
+{
+    PIN_ID_t	_pinId;		//pin_id
+    PIN_MODE	_pinMode;	    //pin 参数， mode，outputtyper,updown
+    uint8_t		_pinAf;		//af功能
+    uint32_t	_periph;	//外设名或通道号
+} AF_FUN_S;
 
 // 中断索引信息,用于中断初始化
-typedef enum{
-	Irq1 = 0,
-	Irq2,
-	Irq3,
-	Irq4,
-	Irq5,
-	Irq6,
-}IrqIndex_t;
+typedef enum
+{
+    Irq1 = 0,
+    Irq2,
+    Irq3,
+    Irq4,
+    Irq5,
+    Irq6,
+} IrqIndex_t;
 
 // 外设信息：外设基地址，时钟，中断，中断索引（中断索引需要与外设号对应，比如uart1对应irq1,i2c2对应irq2）
-typedef struct{
-	uint32_t 	_periph_base;
-	uint32_t 	_rcc;
-	IRQn_Type	_irq;
-	IrqIndex_t 	_irqIndex;
-}Periph_S;
+typedef struct
+{
+    uint32_t 	_periph_base;
+    uint32_t 	_rcc;
+    IRQn_Type	_irq;
+    IrqIndex_t 	_irqIndex;
+} Periph_S;
 
 //typedef struct{
 //	uint32_t 	_base;
@@ -165,17 +168,18 @@ typedef struct{
  *@param    Periph 外设基地址，类似 USART1_BASE  *emap 保存外设信息的数组
  *@retval   对应外设在数组中的索引；0xff 外设信息不存在
 */
-__STATIC_INLINE uint8_t getPeriphIndex(uint32_t periph_base,const Periph_S *emap)
+__STATIC_INLINE uint8_t getPeriphIndex(uint32_t periph_base, const Periph_S *emap)
 {
-	uint8_t i = 0;
-	while (!((emap+i)->_periph_base  == periph_base ))
-	{
-		if ((emap+i)->_periph_base == NC){
-			return (uint8_t)NC;
-		}
-		i++;
-	}
-	return i;
+    uint8_t i = 0;
+    while (!((emap + i)->_periph_base  == periph_base ))
+    {
+        if ((emap + i)->_periph_base == NC)
+        {
+            return (uint8_t)NC;
+        }
+        i++;
+    }
+    return i;
 }
 
 //__STATIC_INLINE uint8_t getPeriphIndex1(uint32_t periph_base,const Periph_SS *emap)
@@ -196,17 +200,18 @@ __STATIC_INLINE uint8_t getPeriphIndex(uint32_t periph_base,const Periph_S *emap
  *@param    val：1：输出高电平；0：输出低电平
  *@retval   NONE
 */
-__STATIC_INLINE uint8_t getIndex(PIN_ID_t pin_id,const AF_FUN_S *emap)
+__STATIC_INLINE uint8_t getIndex(PIN_ID_t pin_id, const AF_FUN_S *emap)
 {
-	uint8_t i = 0;
-	while (!((emap+i)->_pinId  == pin_id ))
-	{
-		if ((emap+i)->_pinId == 0xff){
-			return (uint8_t)NC;
-		}
-		i++;
-	}
-	return i;
+    uint8_t i = 0;
+    while (!((emap + i)->_pinId  == pin_id ))
+    {
+        if ((emap + i)->_pinId == 0xff)
+        {
+            return (uint8_t)NC;
+        }
+        i++;
+    }
+    return i;
 }
 
 

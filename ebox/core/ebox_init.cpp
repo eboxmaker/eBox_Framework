@@ -5,8 +5,8 @@
 
 void ebox_init(void)
 {
-    
-    ebox_heap_init((void*)MCU_HEAP_BEGIN, (void*)MCU_HEAP_END);
+
+    ebox_heap_init((void *)MCU_HEAP_BEGIN, (void *)MCU_HEAP_END);
     interrupts  = __enable_irq;
     no_interrupts = __disable_irq;
     delay_ms    = mcu_delay_ms;
@@ -15,11 +15,11 @@ void ebox_init(void)
     millis      = mcu_millis;
 
     mcu_init();
-    
-    
+
+
 }
 #if USE_PRINTF
-extern "C"{
+extern "C" {
     /**
      *@brief    定义一个ebox_printf的输出函数，其中的输出设备必须是可用的
      *@param    NONE
@@ -33,28 +33,30 @@ extern "C"{
 
         va_list va_params;
         va_start(va_params, fmt);
-        
-        
-        do{
+
+
+        do
+        {
             p = (char *)ebox_malloc(size2);
             if(p == NULL)
                 return 0;
 
-            size1 =  ebox_vsnprintf(p, size2,fmt, va_params);
+            size1 =  ebox_vsnprintf(p, size2, fmt, va_params);
 
             if(size1 == -1  || size1 >= size2)
             {
-                size2+=64;
+                size2 += 64;
                 size1 = -1;
                 ebox_free(p);
             }
-        }while(size1 == -1);
+        }
+        while(size1 == -1);
         va_end(va_params);
         uart1.write(p, size1);
         ebox_free(p);
         return size1;
     }
-    
+
 
 }
 #endif

@@ -16,36 +16,36 @@
 
 #include "ebox.h"
 #if !defined(MQTT_LOGGING_H)
- #define MQTT_LOGGING_H
+#define MQTT_LOGGING_H
 
- #define STREAM      stdout
- #if !defined(DEBUG)
-  #define DEBUG(...)    \
+#define STREAM      stdout
+#if !defined(DEBUG)
+#define DEBUG(...)    \
     { \
         uart1.printf("DEBUG:   %s L#%d ", __PRETTY_FUNCTION__, __LINE__);  \
         uart1.printf( ## __VA_ARGS__); \
     }
- #endif
- #if !defined(LOG)
-  #define LOG(...)    \
+#endif
+#if !defined(LOG)
+#define LOG(...)    \
     { \
         uart1.printf("LOG:   %s L#%d ", __PRETTY_FUNCTION__, __LINE__);  \
         uart1.printf( ## __VA_ARGS__); \
     }
- #endif
- #if !defined(WARN)
-  #define WARN(...)   \
+#endif
+#if !defined(WARN)
+#define WARN(...)   \
     { \
         uart1.printf("WARN:  %s L#%d ", __PRETTY_FUNCTION__, __LINE__);  \
         uart1.printf( ## __VA_ARGS__); \
     }
- #endif
- #if !defined(ERROR)
-  #define ERROR(...)  \
+#endif
+#if !defined(ERROR)
+#define ERROR(...)  \
     { \
         uart1.printf("ERROR: %s L#%d ", __PRETTY_FUNCTION__, __LINE__); \
         uart1.printf( ## __VA_ARGS__); \
     }
- #endif
+#endif
 
 #endif

@@ -35,7 +35,7 @@
 
 //sfud_err sfud_spi_port_init(sfud_flash *flash) {
 //    sfud_err result = SFUD_SUCCESS;
-//    
+//
 //    _sfud_spi_port_init(&flash);
 
 //    return result;

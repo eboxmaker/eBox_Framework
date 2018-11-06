@@ -35,7 +35,8 @@
 
 #define SFUD_USING_FLASH_INFO_TABLE
 
-enum {
+enum
+{
     SFUD_W25Q16CV_DEVICE_INDEX  = 0,
 };
 

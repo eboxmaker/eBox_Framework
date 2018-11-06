@@ -17,16 +17,16 @@ void Vhmi::draw_h_line(int16_t x, int16_t y, int16_t w, uint32_t color)
 void Vhmi::draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint32_t color)
 {
     int dx,             // difference in x's
-    dy,             // difference in y's
-    dx2,            // dx,dy * 2
-    dy2,
-    x_inc,          // amount in pixel space to move during drawing
-    y_inc,          // amount in pixel space to move during drawing
-    error,          // the discriminant i.e. error i.e. decision variable
-    index;          // used for looping
+        dy,             // difference in y's
+        dx2,            // dx,dy * 2
+        dy2,
+        x_inc,          // amount in pixel space to move during drawing
+        y_inc,          // amount in pixel space to move during drawing
+        error,          // the discriminant i.e. error i.e. decision variable
+        index;          // used for looping
 
 
-//            set_xy(x0, y0);
+    //            set_xy(x0, y0);
     dx = x1 - x0; //º∆À„xæ‡¿Î
     dy = y1 - y0; //º∆À„yæ‡¿Î
 
@@ -112,12 +112,12 @@ void Vhmi::draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint32_t co
 }
 void Vhmi::fill_rect(int16_t x, int16_t y, int16_t x1, int16_t y1, uint32_t color)
 {
-    int16_t tempx = x,tempy = y;
+    int16_t tempx = x, tempy = y;
     for(tempx = x; tempx < x1; tempx++)
     {
-        for(tempy = y;tempy < y1; tempy++)
-            draw_pixel(tempx,tempy,color);
-    }   
+        for(tempy = y; tempy < y1; tempy++)
+            draw_pixel(tempx, tempy, color);
+    }
 }
 void Vhmi::draw_circle(int16_t x, int16_t y, int16_t r, uint32_t color)
 {

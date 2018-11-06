@@ -1,14 +1,14 @@
 /*
- * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND 
+ * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND
  * (2)TO ENABLE ACCESS TO CODING INFORMATION TO GUIDE AND FACILITATE CUSTOMER.
  * CONSEQUENTLY, SEMTECH SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT OR
  * CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE CONTENT
  * OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING INFORMATION
  * CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
- * 
+ *
  * Copyright (C) SEMTECH S.A.
  */
-/*! 
+/*!
  * \file       sx1276-FskMisc.h
  * \brief      SX1276 RF chip high level functions driver
  *
@@ -20,7 +20,7 @@
  *             Removing these functions will greatly reduce the final firmware
  *             size.
  *
- * \version    2.0.B2 
+ * \version    2.0.B2
  * \date       May 6 2013
  * \author     Gregory Cristian
  *
@@ -44,7 +44,7 @@ void SX1276FskSetRFFrequency( uint32_t freq );
 uint32_t SX1276FskGetRFFrequency( void );
 
 /*!
- * \brief Calibrate RSSI and I/Q mismatch for HF 
+ * \brief Calibrate RSSI and I/Q mismatch for HF
  *
  * \retval none
  */
@@ -102,7 +102,7 @@ int8_t SX1276FskGetRFPower( void );
  * \param [IN] dccValue New DC offset canceller value in [Hz] ( SX1231 only )
  * \param [IN] rxBwValue New Rx bandwidth value in [Hz]
  */
-void SX1276FskSetDccBw( uint8_t* reg, uint32_t dccValue, uint32_t rxBwValue );
+void SX1276FskSetDccBw( uint8_t *reg, uint32_t dccValue, uint32_t rxBwValue );
 
 /*!
  * \brief Reads the current bandwidth setting
@@ -111,7 +111,7 @@ void SX1276FskSetDccBw( uint8_t* reg, uint32_t dccValue, uint32_t rxBwValue );
  *
  * \retval bandwidth Bandwidth value
  */
-uint32_t SX1276FskGetBw( uint8_t* reg );
+uint32_t SX1276FskGetBw( uint8_t *reg );
 
 /*!
  * \brief Enables/Disables CRC
@@ -170,7 +170,7 @@ void SX1276FskSetPa20dBm( bool enale );
 bool SX1276FskGetPa20dBm( void );
 
 /*!
- * \brief Set the RF Output pin 
+ * \brief Set the RF Output pin
  *
  * \param [IN] RF_PACONFIG_PASELECT_PABOOST or RF_PACONFIG_PASELECT_RFO
  */

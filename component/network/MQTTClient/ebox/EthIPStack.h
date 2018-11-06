@@ -15,12 +15,12 @@ public:
         tcp.begin(SOCKET7, 3000);
     }
 
-    int        dnsquery(char* name)
+    int        dnsquery(char *name)
     {
         int         ret;
         DNS         ddns;
         ddns.begin(SOCKET7, 2000);
-        ret = ddns.query((char*)name);
+        ret = ddns.query((char *)name);
         if(ret == 1)
             uart1.printf("Get [%s]'s IP address [%d.%d.%d.%d]\n", name, ddns.domain_ip[0], ddns.domain_ip[1], ddns.domain_ip[2], ddns.domain_ip[3]);
         else if(ret == -1)
@@ -35,7 +35,7 @@ public:
         return 1;
     }
 
-    int        connect(char* hostname, int port)
+    int        connect(char *hostname, int port)
     {
         if( !has_ip )
             dnsquery(hostname);
@@ -47,7 +47,7 @@ public:
         return tcp.connect(hostname, port);
     }
 
-    int        read(unsigned char* buffer, int len, int timeout = 1000)
+    int        read(unsigned char *buffer, int len, int timeout = 1000)
     {
         int         interval = 10; // all times are in milliseconds
         int         total = 0, rc = -1;
@@ -60,16 +60,16 @@ public:
             total += interval;
         }
         if (tcp.available() >= len)
-            rc = tcp.recv((uint8_t*)buffer, len);
+            rc = tcp.recv((uint8_t *)buffer, len);
         //uart1.printf("Calling read \n");
         return rc;
     }
 
-    int        write(unsigned char* buffer, int len, int timeout = 1000)
+    int        write(unsigned char *buffer, int len, int timeout = 1000)
     {
         //tcp.setTimeout(timeout);
         //uart1.printf("Calling write \n");
-        return tcp.send((uint8_t*)buffer, len);
+        return tcp.send((uint8_t *)buffer, len);
     }
 
     int        disconnect()

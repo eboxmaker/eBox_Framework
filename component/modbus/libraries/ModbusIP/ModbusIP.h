@@ -15,19 +15,20 @@
 
 //#define TCP_KEEP_ALIVE
 
-class ModbusIP : public Modbus {
-    private:
-        EthernetServer _server;
-        byte _MBAP[7];
+class ModbusIP : public Modbus
+{
+private:
+    EthernetServer _server;
+    byte _MBAP[7];
 
-    public:
-        ModbusIP();
-        void config(uint8_t *mac);
-        void config(uint8_t *mac, IPAddress ip);
-        void config(uint8_t *mac, IPAddress ip, IPAddress dns);
-        void config(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gateway);
-        void config(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gateway, IPAddress subnet);
-        void task();
+public:
+    ModbusIP();
+    void config(uint8_t *mac);
+    void config(uint8_t *mac, IPAddress ip);
+    void config(uint8_t *mac, IPAddress ip, IPAddress dns);
+    void config(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gateway);
+    void config(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gateway, IPAddress subnet);
+    void task();
 };
 
 #endif //MODBUSIP_H

@@ -9,8 +9,8 @@
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -22,9 +22,9 @@
 
 typedef struct _node
 {
- void           *data;
- struct _node   *next;
-}Node;
+    void           *data;
+    struct _node   *next;
+} Node;
 
 class List
 {
@@ -33,8 +33,11 @@ class List
     int  _size;
 public:
 
-    List(){_head = NULL;}
-    int  insert(int at,void *data);
+    List()
+    {
+        _head = NULL;
+    }
+    int  insert(int at, void *data);
     int  insert_head(void *data);
     int  insert_tail(void *data);
     int  remove(int x);
@@ -43,8 +46,11 @@ public:
     Node *tail();
     int  is_empty();
     int  clear();
-    int  modify_node(int x,void *data);
-    int  swap(int x,int y);
-    int  size(){return _size;}
+    int  modify_node(int x, void *data);
+    int  swap(int x, int y);
+    int  size()
+    {
+        return _size;
+    }
 };
 #endif

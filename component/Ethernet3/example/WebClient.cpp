@@ -51,33 +51,36 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-    
-    
-  // start the Ethernet connection:
-  if (Ethernet.begin(mac) == 0) {
-    Serial.println("Failed to configure Ethernet using DHCP");
-    // no point in carrying on, so do nothing forevermore:
-    // try to congifure using IP address instead of DHCP:
-    Ethernet.begin(mac, ip);
-  }
-  // give the Ethernet shield a second to initialize:
-  delay_ms(1000);
-  Serial.println("connecting...");
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
-  // if you get a connection, report back via serial:
-  if (client.connect(server, 80)) {
-    Serial.println("connected");
-    // Make a HTTP request:
-    client.println("GET /search?q=arduino HTTP/1.1");
-    client.println("Host: www.baidu.com");
-    client.println("Connection: close");
-    client.println();
-  }
-  else {
-    // kf you didn't get a connection to the server:
-    Serial.println("connection failed");
-  }
+
+    // start the Ethernet connection:
+    if (Ethernet.begin(mac) == 0)
+    {
+        Serial.println("Failed to configure Ethernet using DHCP");
+        // no point in carrying on, so do nothing forevermore:
+        // try to congifure using IP address instead of DHCP:
+        Ethernet.begin(mac, ip);
+    }
+    // give the Ethernet shield a second to initialize:
+    delay_ms(1000);
+    Serial.println("connecting...");
+
+    // if you get a connection, report back via serial:
+    if (client.connect(server, 80))
+    {
+        Serial.println("connected");
+        // Make a HTTP request:
+        client.println("GET /search?q=arduino HTTP/1.1");
+        client.println("Host: www.baidu.com");
+        client.println("Connection: close");
+        client.println();
+    }
+    else
+    {
+        // kf you didn't get a connection to the server:
+        Serial.println("connection failed");
+    }
 
 }
 int main(void)
@@ -86,22 +89,24 @@ int main(void)
 
     while(1)
     {
-  // if there are incoming bytes available
-  // from the server, read them and print them:
-  if (client.available()) {
-    char c = client.read();
-    Serial.print(c);
-  }
+        // if there are incoming bytes available
+        // from the server, read them and print them:
+        if (client.available())
+        {
+            char c = client.read();
+            Serial.print(c);
+        }
 
-  // if the server's disconnected, stop the client:
-  if (!client.connected()) {
-    Serial.println();
-    Serial.println("disconnecting.");
-    client.stop();
+        // if the server's disconnected, stop the client:
+        if (!client.connected())
+        {
+            Serial.println();
+            Serial.println("disconnecting.");
+            client.stop();
 
-    // do nothing forevermore:
-    while (true);
-  }
+            // do nothing forevermore:
+            while (true);
+        }
     }
 
 

@@ -33,10 +33,12 @@ Copyright 2015 shentq. All Rights Reserved.
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network.
 // gateway and subnet are optional:
-uint8_t mac[] = {
-  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192,168,1, 177);
-IPAddress gateway(192,168,1, 1);
+uint8_t mac[] =
+{
+    0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED
+};
+IPAddress ip(192, 168, 1, 177);
+IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 0, 0);
 
 
@@ -49,18 +51,18 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-    
-    
-  // initialize the ethernet device
-  Ethernet.begin(mac, ip, subnet, gateway);
-  // start listening for clients
-  server.begin();
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
 
-  Serial.print("Chat server address:");
-  Serial.println(Ethernet.localIP());
-  
+    // initialize the ethernet device
+    Ethernet.begin(mac, ip, subnet, gateway);
+    // start listening for clients
+    server.begin();
+
+
+    Serial.print("Chat server address:");
+    Serial.println(Ethernet.localIP());
+
 }
 int main(void)
 {
@@ -68,59 +70,70 @@ int main(void)
 
     while(1)
     {
-  // wait for a new client:
-  EthernetClient client = server.available();
+        // wait for a new client:
+        EthernetClient client = server.available();
 
-  // when the client sends the first uint8_t, say hello:
-  if (client) {
+        // when the client sends the first uint8_t, say hello:
+        if (client)
+        {
 
-    bool newClient = true;
-    for (uint8_t i=0;i<4;i++) {
-      //check whether this client refers to the same socket as one of the existing instances:
-      if (clients[i]==client) {
-        newClient = false;
-        break;
-      }
-    }
+            bool newClient = true;
+            for (uint8_t i = 0; i < 4; i++)
+            {
+                //check whether this client refers to the same socket as one of the existing instances:
+                if (clients[i] == client)
+                {
+                    newClient = false;
+                    break;
+                }
+            }
 
-    if (newClient) {
-      //check which of the existing clients can be overridden:
-      for (uint8_t i=0;i<4;i++) {
-        if (!clients[i] && clients[i]!=client) {
-          clients[i] = client;
-          // clead out the input buffer:
-          client.flush();
-          Serial.println("We have a new client");
-          client.print("Hello, client number: ");
-          client.print(i);
-          client.println();
-          break;
+            if (newClient)
+            {
+                //check which of the existing clients can be overridden:
+                for (uint8_t i = 0; i < 4; i++)
+                {
+                    if (!clients[i] && clients[i] != client)
+                    {
+                        clients[i] = client;
+                        // clead out the input buffer:
+                        client.flush();
+                        Serial.println("We have a new client");
+                        client.print("Hello, client number: ");
+                        client.print(i);
+                        client.println();
+                        break;
+                    }
+                }
+            }
+
+            if (client.available() > 0)
+            {
+                // read the bytes incoming from the client:
+                char thisChar = client.read();
+                // echo the bytes back to all other connected clients:
+                for (uint8_t i = 0; i < 4; i++)
+                {
+                    if (clients[i] && (clients[i] != client))
+                    {
+                        clients[i].write(thisChar);
+                    }
+                }
+                // echo the bytes to the server as well:
+                Serial.write(thisChar);
+            }
         }
-      }
-    }
-
-    if (client.available() > 0) {
-      // read the bytes incoming from the client:
-      char thisChar = client.read();
-      // echo the bytes back to all other connected clients:
-      for (uint8_t i=0;i<4;i++) {
-        if (clients[i] && (clients[i]!=client)) {
-          clients[i].write(thisChar);
+        for (uint8_t i = 0; i < 4; i++)
+        {
+            if (!(clients[i].connected()))
+            {
+                // client.stop() invalidates the internal socket-descriptor, so next use of == will allways return false;
+                clients[i].stop();
+            }
         }
-      }
-      // echo the bytes to the server as well:
-      Serial.write(thisChar);
     }
-  }
-  for (uint8_t i=0;i<4;i++) {
-    if (!(clients[i].connected())) {
-      // client.stop() invalidates the internal socket-descriptor, so next use of == will allways return false;
-      clients[i].stop();
-    }
-  }
-  }
 
 }
 
-   
+
 

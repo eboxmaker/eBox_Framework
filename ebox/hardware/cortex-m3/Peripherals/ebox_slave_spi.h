@@ -9,19 +9,21 @@
 //”√ªß≈‰÷√//////////////
 #define SPI_NUM (3)
 
-enum SpiIrqType {
-		SpiItRx = 0,
-		SpiItTc,
-        SpiItRc
+enum SpiIrqType
+{
+    SpiItRx = 0,
+    SpiItTc,
+    SpiItRc
 };
 
-enum SpiItIndex{
+enum SpiItIndex
+{
     SPI1_ID  = 0,
     SPI2_ID  = 1,
     SPI3_ID  = 2,
     SPI4_ID  = 3,
     SPI5_ID  = 4,
-} ; 
+} ;
 
 typedef void (*SpiIrqHandler_t)(uint32_t id, SpiIrqType type);
 
@@ -51,23 +53,23 @@ public:
     void    enable_dma_tx_int();
     void    disable_dma_tx_int();
 
-    
+
     void    int_rx_event();
     void    dma_rx_over_event();
     void    dma_tx_over_event();
-    
+
     uint8_t read_buf_pool[500];
     uint8_t write_buf_pool[500];
 
     uint8_t cmd_buf_pool[500];
-    
+
     RINGBUF read_buf;
     RINGBUF write_buf;
     RINGBUF cmd_buf;
 
     uint8_t     *xfet;
     uint16_t     xlen;
-    
+
     /** Attach a function to call whenever a serial interrupt is generated
      *
      *  @param fptr A pointer to a void function, or 0 to set as none
@@ -85,12 +87,14 @@ public:
      *  @param type Which serial interrupt to attach the member function to (Seriall::RxIrq for receive, TxIrq for transmit buffer empty)
      */
     template<typename T>
-    void attach(T* tptr, void (T::*mptr)(void), SpiIrqType type) {
-        if((mptr != NULL) && (tptr != NULL)) {
+    void attach(T *tptr, void (T::*mptr)(void), SpiIrqType type)
+    {
+        if((mptr != NULL) && (tptr != NULL))
+        {
             _irq[type].attach(tptr, mptr);
         }
     }
-		
+
     static void _irq_handler(uint32_t id, SpiIrqType irq_type);
 
 private:

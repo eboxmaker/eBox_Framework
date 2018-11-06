@@ -27,20 +27,20 @@
   */
 mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
 {
-  uint8_t temp1,temp2;
-  _port = port;
-  _pin = pin;
-  temp1 = (((uint32_t)port - APB2PERIPH_BASE)>>10) - 2;
+    uint8_t temp1, temp2;
+    _port = port;
+    _pin = pin;
+    temp1 = (((uint32_t)port - APB2PERIPH_BASE) >> 10) - 2;
 
-  for (int i = 0; i <= 15; i ++)
-  {
-    if (((_pin >> i) & 0xfffe) == 0)
+    for (int i = 0; i <= 15; i ++)
     {
-      temp2 = i ;
-      break;
+        if (((_pin >> i) & 0xfffe) == 0)
+        {
+            temp2 = i ;
+            break;
+        }
     }
-  }
-  this->id = (PIN_ID_t)(temp1*16 + temp2);
+    this->id = (PIN_ID_t)(temp1 * 16 + temp2);
 }
 /**
   *@brief    GPIO模式设置
@@ -49,80 +49,80 @@ mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
   */
 void mcuGpio::mode(PIN_MODE mode)
 {
-  GPIO_InitTypeDef GPIO_InitStructure;
+    GPIO_InitTypeDef GPIO_InitStructure;
 
-  rcc_clock_cmd((uint32_t)_port,ENABLE);
+    rcc_clock_cmd((uint32_t)_port, ENABLE);
 
-  switch ((uint8_t)mode)
-  {
-  /*analog input mode
-   */
-  case AIN:
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
-    break;
+    switch ((uint8_t)mode)
+    {
+    /*analog input mode
+     */
+    case AIN:
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
+        break;
 
-  /* digital input mode
-   */
-  case INPUT:
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-    break;
+    /* digital input mode
+     */
+    case INPUT:
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+        break;
 
-  case INPUT_PD:
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
-    break;
+    case INPUT_PD:
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
+        break;
 
-  case INPUT_PU:
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-    break;
+    case INPUT_PU:
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+        break;
 
-  /*digital output mode
-   */
-  case OUTPUT_OD:
-  case OUTPUT_OD_PU:
-  case OUTPUT_OD_PD:
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
-    break;
+    /*digital output mode
+     */
+    case OUTPUT_OD:
+    case OUTPUT_OD_PU:
+    case OUTPUT_OD_PD:
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
+        break;
 
-  case OUTPUT:
-  case OUTPUT_PP:
-  case OUTPUT_PP_PU:
-  case OUTPUT_PP_PD:
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    break;
-    
-  /*af mode 
-   */
-  case AF_OD:
-  case AF_OD_PU:
-  case AF_OD_PD:
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
-    break;
+    case OUTPUT:
+    case OUTPUT_PP:
+    case OUTPUT_PP_PU:
+    case OUTPUT_PP_PD:
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+        break;
 
-  case AF_PP:
-  case AF_PP_PU:
-  case AF_PP_PD:
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    break;
-  /* if parament is other mode,set as INPUT mode
-   */
-  default:
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-    break;
-  }
-  GPIO_InitStructure.GPIO_Pin = _pin;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(_port, &GPIO_InitStructure);   //初始化GPIOC端口
+    /*af mode
+     */
+    case AF_OD:
+    case AF_OD_PU:
+    case AF_OD_PD:
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
+        break;
+
+    case AF_PP:
+    case AF_PP_PU:
+    case AF_PP_PD:
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+        break;
+    /* if parament is other mode,set as INPUT mode
+     */
+    default:
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+        break;
+    }
+    GPIO_InitStructure.GPIO_Pin = _pin;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(_port, &GPIO_InitStructure);   //初始化GPIOC端口
 }
 /**
   *@brief    GPIO模式设置,f1无需af_configration参数
   *@param    mode: PIN_MODE枚举变量类型，af_configration 第二功能
   *@retval   None
   */
-void mcuGpio::mode(PIN_MODE mode,uint8_t af_configration)
+void mcuGpio::mode(PIN_MODE mode, uint8_t af_configration)
 {
-  mcuGpio::mode(mode);
+    mcuGpio::mode(mode);
 }
 /**
  *@brief    GPIO输出高电平
@@ -131,7 +131,7 @@ void mcuGpio::mode(PIN_MODE mode,uint8_t af_configration)
 */
 void mcuGpio::set()
 {
-  _port->BSRR = _pin;
+    _port->BSRR = _pin;
 }
 
 /**
@@ -141,7 +141,7 @@ void mcuGpio::set()
 */
 void mcuGpio::reset()
 {
-  _port->BRR = _pin;
+    _port->BRR = _pin;
 }
 
 
@@ -152,8 +152,8 @@ void mcuGpio::reset()
 */
 void mcuGpio::write(uint8_t val)
 {
-  // val==0,执行_port->BRR = _pin，否则，_port->BSRR = _pin
-  (val==0)?(_port->BRR = _pin):(_port->BSRR = _pin);
+    // val==0,执行_port->BRR = _pin，否则，_port->BSRR = _pin
+    (val == 0) ? (_port->BRR = _pin) : (_port->BSRR = _pin);
 }
 
 
@@ -164,7 +164,7 @@ void mcuGpio::write(uint8_t val)
 */
 void mcuGpio::read(uint8_t *val)
 {
-  *val = _port->IDR & _pin;
+    *val = _port->IDR & _pin;
 }
 
 
@@ -175,7 +175,7 @@ void mcuGpio::read(uint8_t *val)
 */
 uint8_t mcuGpio::read(void)
 {
-  return ((_port->IDR & _pin) == _pin)?(1):(0);
+    return ((_port->IDR & _pin) == _pin) ? (1) : (0);
 }
 
 /**
@@ -185,22 +185,22 @@ uint8_t mcuGpio::read(void)
 */
 void mcuGpio::toggle()
 {
-  _port->ODR ^= _pin;
+    _port->ODR ^= _pin;
 }
 
 // 相当与read()
-int mcuGpio::operator =(mcuGpio&)
+int mcuGpio::operator =(mcuGpio &)
 {
-  return ((_port->IDR & _pin) == _pin)?(1):(0);
+    return ((_port->IDR & _pin) == _pin) ? (1) : (0);
 }
 // 相当与read()
 mcuGpio::operator int()
 {
-  return ((_port->IDR & _pin) == _pin)?(1):(0);
+    return ((_port->IDR & _pin) == _pin) ? (1) : (0);
 }
 // 相当与write()
 mcuGpio mcuGpio::operator= ( int value)
 {
-  (value==0)?(_port->BRR = _pin):(_port->BSRR = _pin);
-  return *this;
+    (value == 0) ? (_port->BRR = _pin) : (_port->BSRR = _pin);
+    return *this;
 }

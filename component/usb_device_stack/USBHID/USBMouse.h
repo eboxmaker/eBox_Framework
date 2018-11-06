@@ -106,104 +106,104 @@ enum MOUSE_TYPE
  */
 class USBMouse: public USBHID
 {
-    public:
+public:
 
-        /**
-        *   Constructor
-        *
-        * @param mouse_type Mouse type: ABS_MOUSE (absolute mouse) or REL_MOUSE (relative mouse) (default: REL_MOUSE)
-        * @param vendor_id Your vendor_id (default: 0x1234)
-        * @param product_id Your product_id (default: 0x0001)
-        * @param product_release Your preoduct_release (default: 0x0001)
-        *
-        */
-        USBMouse(MOUSE_TYPE mouse_type = REL_MOUSE, uint16_t vendor_id = 0x1234, uint16_t product_id = 0x0001, uint16_t product_release = 0x0001):
-            USBHID(0, 0, vendor_id, product_id, product_release, false)
-            {
-                button = 0;
-                this->mouse_type = mouse_type;
-                connect();
-            };
+    /**
+    *   Constructor
+    *
+    * @param mouse_type Mouse type: ABS_MOUSE (absolute mouse) or REL_MOUSE (relative mouse) (default: REL_MOUSE)
+    * @param vendor_id Your vendor_id (default: 0x1234)
+    * @param product_id Your product_id (default: 0x0001)
+    * @param product_release Your preoduct_release (default: 0x0001)
+    *
+    */
+    USBMouse(MOUSE_TYPE mouse_type = REL_MOUSE, uint16_t vendor_id = 0x1234, uint16_t product_id = 0x0001, uint16_t product_release = 0x0001):
+        USBHID(0, 0, vendor_id, product_id, product_release, false)
+    {
+        button = 0;
+        this->mouse_type = mouse_type;
+        connect();
+    };
 
-        /**
-        * Write a state of the mouse
-        *
-        * @param x x-axis position
-        * @param y y-axis position
-        * @param buttons buttons state (first bit represents MOUSE_LEFT, second bit MOUSE_RIGHT and third bit MOUSE_MIDDLE)
-        * @param z wheel state (>0 to scroll down, <0 to scroll up)
-        * @returns true if there is no error, false otherwise
-        */
-        bool update(int16_t x, int16_t y, uint8_t buttons, int8_t z);
+    /**
+    * Write a state of the mouse
+    *
+    * @param x x-axis position
+    * @param y y-axis position
+    * @param buttons buttons state (first bit represents MOUSE_LEFT, second bit MOUSE_RIGHT and third bit MOUSE_MIDDLE)
+    * @param z wheel state (>0 to scroll down, <0 to scroll up)
+    * @returns true if there is no error, false otherwise
+    */
+    bool update(int16_t x, int16_t y, uint8_t buttons, int8_t z);
 
 
-        /**
-        * Move the cursor to (x, y)
-        *
-        * @param x-axis position
-        * @param y-axis position
-        * @returns true if there is no error, false otherwise
-        */
-        bool move(int16_t x, int16_t y);
+    /**
+    * Move the cursor to (x, y)
+    *
+    * @param x-axis position
+    * @param y-axis position
+    * @returns true if there is no error, false otherwise
+    */
+    bool move(int16_t x, int16_t y);
 
-        /**
-        * Press one or several buttons
-        *
-        * @param button button state (ex: press(MOUSE_LEFT))
-        * @returns true if there is no error, false otherwise
-        */
-        bool press(uint8_t button);
+    /**
+    * Press one or several buttons
+    *
+    * @param button button state (ex: press(MOUSE_LEFT))
+    * @returns true if there is no error, false otherwise
+    */
+    bool press(uint8_t button);
 
-        /**
-        * Release one or several buttons
-        *
-        * @param button button state (ex: release(MOUSE_LEFT))
-        * @returns true if there is no error, false otherwise
-        */
-        bool release(uint8_t button);
+    /**
+    * Release one or several buttons
+    *
+    * @param button button state (ex: release(MOUSE_LEFT))
+    * @returns true if there is no error, false otherwise
+    */
+    bool release(uint8_t button);
 
-        /**
-        * Double click (MOUSE_LEFT)
-        *
-        * @returns true if there is no error, false otherwise
-        */
-        bool doubleClick();
+    /**
+    * Double click (MOUSE_LEFT)
+    *
+    * @returns true if there is no error, false otherwise
+    */
+    bool doubleClick();
 
-        /**
-        * Click
-        *
-        * @param button state of the buttons ( ex: clic(MOUSE_LEFT))
-        * @returns true if there is no error, false otherwise
-        */
-        bool click(uint8_t button);
+    /**
+    * Click
+    *
+    * @param button state of the buttons ( ex: clic(MOUSE_LEFT))
+    * @returns true if there is no error, false otherwise
+    */
+    bool click(uint8_t button);
 
-        /**
-        * Scrolling
-        *
-        * @param z value of the wheel (>0 to go down, <0 to go up)
-        * @returns true if there is no error, false otherwise
-        */
-        bool scroll(int8_t z);
+    /**
+    * Scrolling
+    *
+    * @param z value of the wheel (>0 to go down, <0 to go up)
+    * @returns true if there is no error, false otherwise
+    */
+    bool scroll(int8_t z);
 
-        /*
-        * To define the report descriptor. Warning: this method has to store the length of the report descriptor in reportLength.
-        *
-        * @returns pointer to the report descriptor
-        */
-        virtual uint8_t * reportDesc();
+    /*
+    * To define the report descriptor. Warning: this method has to store the length of the report descriptor in reportLength.
+    *
+    * @returns pointer to the report descriptor
+    */
+    virtual uint8_t *reportDesc();
 
-    protected:
-        /*
-        * Get configuration descriptor
-        *
-        * @returns pointer to the configuration descriptor
-        */
-        virtual uint8_t * configurationDesc();
+protected:
+    /*
+    * Get configuration descriptor
+    *
+    * @returns pointer to the configuration descriptor
+    */
+    virtual uint8_t *configurationDesc();
 
-    private:
-        MOUSE_TYPE mouse_type;
-        uint8_t button;
-        bool mouseSend(int8_t x, int8_t y, uint8_t buttons, int8_t z);
+private:
+    MOUSE_TYPE mouse_type;
+    uint8_t button;
+    bool mouseSend(int8_t x, int8_t y, uint8_t buttons, int8_t z);
 };
 
 #endif

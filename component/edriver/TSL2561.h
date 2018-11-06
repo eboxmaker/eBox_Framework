@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*! 
+/*!
     @file     tsl2561.h
     @author   K. Townsend (microBuilder.eu)
     @section LICENSE
@@ -118,59 +118,60 @@
 
 enum
 {
-  TSL2561_REGISTER_CONTROL          = 0x00,
-  TSL2561_REGISTER_TIMING           = 0x01,
-  TSL2561_REGISTER_THRESHHOLDL_LOW  = 0x02,
-  TSL2561_REGISTER_THRESHHOLDL_HIGH = 0x03,
-  TSL2561_REGISTER_THRESHHOLDH_LOW  = 0x04,
-  TSL2561_REGISTER_THRESHHOLDH_HIGH = 0x05,
-  TSL2561_REGISTER_INTERRUPT        = 0x06,
-  TSL2561_REGISTER_CRC              = 0x08,
-  TSL2561_REGISTER_ID               = 0x0A,
-  TSL2561_REGISTER_CHAN0_LOW        = 0x0C,
-  TSL2561_REGISTER_CHAN0_HIGH       = 0x0D,
-  TSL2561_REGISTER_CHAN1_LOW        = 0x0E,
-  TSL2561_REGISTER_CHAN1_HIGH       = 0x0F
+    TSL2561_REGISTER_CONTROL          = 0x00,
+    TSL2561_REGISTER_TIMING           = 0x01,
+    TSL2561_REGISTER_THRESHHOLDL_LOW  = 0x02,
+    TSL2561_REGISTER_THRESHHOLDL_HIGH = 0x03,
+    TSL2561_REGISTER_THRESHHOLDH_LOW  = 0x04,
+    TSL2561_REGISTER_THRESHHOLDH_HIGH = 0x05,
+    TSL2561_REGISTER_INTERRUPT        = 0x06,
+    TSL2561_REGISTER_CRC              = 0x08,
+    TSL2561_REGISTER_ID               = 0x0A,
+    TSL2561_REGISTER_CHAN0_LOW        = 0x0C,
+    TSL2561_REGISTER_CHAN0_HIGH       = 0x0D,
+    TSL2561_REGISTER_CHAN1_LOW        = 0x0E,
+    TSL2561_REGISTER_CHAN1_HIGH       = 0x0F
 };
 
 typedef enum
 {
-  TSL2561_INTEGRATIONTIME_13MS      = 0x00,    // 13.7ms
-  TSL2561_INTEGRATIONTIME_101MS     = 0x01,    // 101ms
-  TSL2561_INTEGRATIONTIME_402MS     = 0x02     // 402ms
+    TSL2561_INTEGRATIONTIME_13MS      = 0x00,    // 13.7ms
+    TSL2561_INTEGRATIONTIME_101MS     = 0x01,    // 101ms
+    TSL2561_INTEGRATIONTIME_402MS     = 0x02     // 402ms
 }
 tsl2561IntegrationTime_t;
 
 typedef enum
 {
-  TSL2561_GAIN_0X                   = 0x00,    // No gain
-  TSL2561_GAIN_16X                  = 0x10,    // 16x gain
+    TSL2561_GAIN_0X                   = 0x00,    // No gain
+    TSL2561_GAIN_16X                  = 0x10,    // 16x gain
 }
 tsl2561Gain_t;
 
 
-class TSL2561 {
- public:
-  TSL2561(SoftI2c *i2c);
-  bool begin(uint32_t speed,uint8_t addr);
-  void enable(void);
-  void disable(void);
-  void write8(uint8_t r, uint8_t v);
-  uint16_t read16(uint8_t reg);
+class TSL2561
+{
+public:
+    TSL2561(SoftI2c *i2c);
+    bool begin(uint32_t speed, uint8_t addr);
+    void enable(void);
+    void disable(void);
+    void write8(uint8_t r, uint8_t v);
+    uint16_t read16(uint8_t reg);
 
-  uint32_t calculateLux(uint16_t ch0, uint16_t ch1);
-  void setTiming(tsl2561IntegrationTime_t integration);
-  void setGain(tsl2561Gain_t gain);
-  uint16_t getLuminosity (uint8_t channel);
-  uint32_t getFullLuminosity ();
+    uint32_t calculateLux(uint16_t ch0, uint16_t ch1);
+    void setTiming(tsl2561IntegrationTime_t integration);
+    void setGain(tsl2561Gain_t gain);
+    uint16_t getLuminosity (uint8_t channel);
+    uint32_t getFullLuminosity ();
 
- private:
-  int8_t _addr;
- SoftI2c *i2c;
- uint32_t speed;
-  tsl2561IntegrationTime_t _integration;
-  tsl2561Gain_t _gain;
+private:
+    int8_t _addr;
+    SoftI2c *i2c;
+    uint32_t speed;
+    tsl2561IntegrationTime_t _integration;
+    tsl2561Gain_t _gain;
 
-  bool _initialized;
+    bool _initialized;
 };
 #endif

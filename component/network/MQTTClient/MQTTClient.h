@@ -30,10 +30,10 @@
 #include "MQTTLogging.h"
 
 #if !defined(MQTTCLIENT_QOS1)
- #define MQTTCLIENT_QOS1 1
+#define MQTTCLIENT_QOS1 1
 #endif
 #if !defined(MQTTCLIENT_QOS2)
- #define MQTTCLIENT_QOS2 1
+#define MQTTCLIENT_QOS2 1
 #endif
 
 //#define MQTT_DEBUG 1
@@ -42,218 +42,218 @@ namespace MQTT
 {
 
 
-enum QoS { QOS0, QOS1, QOS2 };
+    enum QoS { QOS0, QOS1, QOS2 };
 
-// all failure return codes must be negative
-enum returnCode { BUFFER_OVERFLOW = -2, FAILURE = -1, SUCCESS = 0 };
-
-
-struct Message
-{
-    enum QoS qos;
-    bool retained;
-    bool dup;
-    unsigned short id;
-    void *payload;
-    size_t payloadlen;
-};
+    // all failure return codes must be negative
+    enum returnCode { BUFFER_OVERFLOW = -2, FAILURE = -1, SUCCESS = 0 };
 
 
-struct MessageData
-{
-    MessageData(MQTTString &aTopicName, struct Message &aMessage)  : message(aMessage), topicName(aTopicName)
+    struct Message
     {
-    }
+        enum QoS qos;
+        bool retained;
+        bool dup;
+        unsigned short id;
+        void *payload;
+        size_t payloadlen;
+    };
 
-    struct Message &message;
-    MQTTString &topicName;
-};
 
-
-class PacketId
-{
-public:
-    PacketId()
+    struct MessageData
     {
-        next = 0;
-    }
+        MessageData(MQTTString &aTopicName, struct Message &aMessage)  : message(aMessage), topicName(aTopicName)
+        {
+        }
 
-    int        getNext()
+        struct Message &message;
+        MQTTString &topicName;
+    };
+
+
+    class PacketId
     {
-        return next = (next == MAX_PACKET_ID) ? 1 : next + 1;
-    }
+    public:
+        PacketId()
+        {
+            next = 0;
+        }
 
-private:
-    static const int        MAX_PACKET_ID = 65535;
-    int                     next;
-};
+        int        getNext()
+        {
+            return next = (next == MAX_PACKET_ID) ? 1 : next + 1;
+        }
+
+    private:
+        static const int        MAX_PACKET_ID = 65535;
+        int                     next;
+    };
 
 
-/**
- * @class Client
- * @brief blocking, non-threaded MQTT client API
- *
- * This version of the API blocks on all method calls, until they are complete.  This means that only one
- * MQTT request can be in process at any one time.
- * @param Network a network class which supports send, receive
- * @param Timer a timer class with the methods:
- */
-template<class Network, class Timer, int MAX_MQTT_PACKET_SIZE = 100, int MAX_MESSAGE_HANDLERS = 5>
-class Client
-{
-
-public:
-
-    typedef void (*messageHandler)(MessageData&);
-
-    /** Construct the client
-     *  @param network - pointer to an instance of the Network class - must be connected to the endpoint
-     *      before calling MQTT connect
-     *  @param limits an instance of the Limit class - to alter limits as required
+    /**
+     * @class Client
+     * @brief blocking, non-threaded MQTT client API
+     *
+     * This version of the API blocks on all method calls, until they are complete.  This means that only one
+     * MQTT request can be in process at any one time.
+     * @param Network a network class which supports send, receive
+     * @param Timer a timer class with the methods:
      */
-    Client(Network& network, unsigned int command_timeout_ms = 30000);
-
-    /** Set the default message handling callback - used for any message which does not match a subscription message handler
-     *  @param mh - pointer to the callback function
-     */
-    void        setDefaultMessageHandler(messageHandler mh)
+    template<class Network, class Timer, int MAX_MQTT_PACKET_SIZE = 100, int MAX_MESSAGE_HANDLERS = 5>
+    class Client
     {
-        defaultMessageHandler.attach(mh);
-    }
 
-    /** MQTT Connect - send an MQTT connect packet down the network and wait for a Connack
-     *  The nework object must be connected to the network endpoint before calling this
-     *  Default connect options are used
-     *  @return success code -
-     */
-    int        connect();
+    public:
 
-    /** MQTT Connect - send an MQTT connect packet down the network and wait for a Connack
-     *  The nework object must be connected to the network endpoint before calling this
-     *  @param options - connect options
-     *  @return success code -
-     */
-    int        connect(MQTTPacket_connectData& options);
+        typedef void (*messageHandler)(MessageData &);
 
-    /** MQTT Publish - send an MQTT publish packet and wait for all acks to complete for all QoSs
-     *  @param topic - the topic to publish to
-     *  @param message - the message to send
-     *  @return success code -
-     */
-    int        publish(const char* topicName, Message& message);
+        /** Construct the client
+         *  @param network - pointer to an instance of the Network class - must be connected to the endpoint
+         *      before calling MQTT connect
+         *  @param limits an instance of the Limit class - to alter limits as required
+         */
+        Client(Network &network, unsigned int command_timeout_ms = 30000);
 
-    /** MQTT Publish - send an MQTT publish packet and wait for all acks to complete for all QoSs
-     *  @param topic - the topic to publish to
-     *  @param payload - the data to send
-     *  @param payloadlen - the length of the data
-     *  @param qos - the QoS to send the publish at
-     *  @param retained - whether the message should be retained
-     *  @return success code -
-     */
-    int        publish(const char* topicName, void* payload, size_t payloadlen, enum QoS qos = QOS0, bool retained = false);
+        /** Set the default message handling callback - used for any message which does not match a subscription message handler
+         *  @param mh - pointer to the callback function
+         */
+        void        setDefaultMessageHandler(messageHandler mh)
+        {
+            defaultMessageHandler.attach(mh);
+        }
 
-    /** MQTT Publish - send an MQTT publish packet and wait for all acks to complete for all QoSs
-     *  @param topic - the topic to publish to
-     *  @param payload - the data to send
-     *  @param payloadlen - the length of the data
-     *  @param id - the packet id used - returned
-     *  @param qos - the QoS to send the publish at
-     *  @param retained - whether the message should be retained
-     *  @return success code -
-     */
-    int        publish(const char* topicName, void* payload, size_t payloadlen, unsigned short& id, enum QoS qos = QOS1, bool retained = false);
+        /** MQTT Connect - send an MQTT connect packet down the network and wait for a Connack
+         *  The nework object must be connected to the network endpoint before calling this
+         *  Default connect options are used
+         *  @return success code -
+         */
+        int        connect();
 
-    /** MQTT Subscribe - send an MQTT subscribe packet and wait for the suback
-     *  @param topicFilter - a topic pattern which can include wildcards
-     *  @param qos - the MQTT QoS to subscribe at
-     *  @param mh - the callback function to be invoked when a message is received for this subscription
-     *  @return success code -
-     */
-    int        subscribe(const char* topicFilter, enum QoS qos, messageHandler mh);
+        /** MQTT Connect - send an MQTT connect packet down the network and wait for a Connack
+         *  The nework object must be connected to the network endpoint before calling this
+         *  @param options - connect options
+         *  @return success code -
+         */
+        int        connect(MQTTPacket_connectData &options);
 
-    /** MQTT Unsubscribe - send an MQTT unsubscribe packet and wait for the unsuback
-     *  @param topicFilter - a topic pattern which can include wildcards
-     *  @return success code -
-     */
-    int        unsubscribe(const char* topicFilter);
+        /** MQTT Publish - send an MQTT publish packet and wait for all acks to complete for all QoSs
+         *  @param topic - the topic to publish to
+         *  @param message - the message to send
+         *  @return success code -
+         */
+        int        publish(const char *topicName, Message &message);
 
-    /** MQTT Disconnect - send an MQTT disconnect packet, and clean up any state
-     *  @return success code -
-     */
-    int        disconnect();
+        /** MQTT Publish - send an MQTT publish packet and wait for all acks to complete for all QoSs
+         *  @param topic - the topic to publish to
+         *  @param payload - the data to send
+         *  @param payloadlen - the length of the data
+         *  @param qos - the QoS to send the publish at
+         *  @param retained - whether the message should be retained
+         *  @return success code -
+         */
+        int        publish(const char *topicName, void *payload, size_t payloadlen, enum QoS qos = QOS0, bool retained = false);
 
-    /** A call to this API must be made within the keepAlive interval to keep the MQTT connection alive
-     *  yield can be called if no other MQTT operation is needed.  This will also allow messages to be
-     *  received.
-     *  @param timeout_ms the time to wait, in milliseconds
-     *  @return success code - on failure, this means the client has disconnected
-     */
-    int        yield(unsigned long timeout_ms = 1000L);
+        /** MQTT Publish - send an MQTT publish packet and wait for all acks to complete for all QoSs
+         *  @param topic - the topic to publish to
+         *  @param payload - the data to send
+         *  @param payloadlen - the length of the data
+         *  @param id - the packet id used - returned
+         *  @param qos - the QoS to send the publish at
+         *  @param retained - whether the message should be retained
+         *  @return success code -
+         */
+        int        publish(const char *topicName, void *payload, size_t payloadlen, unsigned short &id, enum QoS qos = QOS1, bool retained = false);
 
-    /** Is the client connected?
-     *  @return flag - is the client connected or not?
-     */
-    bool        isConnected()
-    {
-        return isconnected;
-    }
+        /** MQTT Subscribe - send an MQTT subscribe packet and wait for the suback
+         *  @param topicFilter - a topic pattern which can include wildcards
+         *  @param qos - the MQTT QoS to subscribe at
+         *  @param mh - the callback function to be invoked when a message is received for this subscription
+         *  @return success code -
+         */
+        int        subscribe(const char *topicFilter, enum QoS qos, messageHandler mh);
 
-private:
+        /** MQTT Unsubscribe - send an MQTT unsubscribe packet and wait for the unsuback
+         *  @param topicFilter - a topic pattern which can include wildcards
+         *  @return success code -
+         */
+        int        unsubscribe(const char *topicFilter);
 
-    void                    cleanSession();
-    int                     cycle(Timer& timer);
-    int                     waitfor(int packet_type, Timer& timer);
-    int                     keepalive();
-    int                     publish(int len, Timer& timer, enum QoS qos);
+        /** MQTT Disconnect - send an MQTT disconnect packet, and clean up any state
+         *  @return success code -
+         */
+        int        disconnect();
 
-    int                     decodePacket(int* value, int timeout);
-    int                     readPacket(Timer& timer);
-    int                     sendPacket(int length, Timer& timer);
-    int                     deliverMessage(MQTTString& topicName, Message& message);
-    bool                    isTopicMatched(char* topicFilter, MQTTString& topicName);
+        /** A call to this API must be made within the keepAlive interval to keep the MQTT connection alive
+         *  yield can be called if no other MQTT operation is needed.  This will also allow messages to be
+         *  received.
+         *  @param timeout_ms the time to wait, in milliseconds
+         *  @return success code - on failure, this means the client has disconnected
+         */
+        int        yield(unsigned long timeout_ms = 1000L);
 
-    Network&                ipstack;
-    unsigned long           command_timeout_ms;
+        /** Is the client connected?
+         *  @return flag - is the client connected or not?
+         */
+        bool        isConnected()
+        {
+            return isconnected;
+        }
 
-    unsigned char           sendbuf[MAX_MQTT_PACKET_SIZE];
-    unsigned char           readbuf[MAX_MQTT_PACKET_SIZE];
+    private:
 
-    Timer                   last_sent, last_received;
-    unsigned int            keepAliveInterval;
-    bool                    ping_outstanding;
-    bool                    cleansession;
+        void                    cleanSession();
+        int                     cycle(Timer &timer);
+        int                     waitfor(int packet_type, Timer &timer);
+        int                     keepalive();
+        int                     publish(int len, Timer &timer, enum QoS qos);
 
-    PacketId                packetid;
+        int                     decodePacket(int *value, int timeout);
+        int                     readPacket(Timer &timer);
+        int                     sendPacket(int length, Timer &timer);
+        int                     deliverMessage(MQTTString &topicName, Message &message);
+        bool                    isTopicMatched(char *topicFilter, MQTTString &topicName);
 
-    struct MessageHandlers
-    {
-        const char* topicFilter;
-        FP<void, MessageData&> fp;
-    } messageHandlers[MAX_MESSAGE_HANDLERS];      // Message handlers are indexed by subscription topic
+        Network                &ipstack;
+        unsigned long           command_timeout_ms;
 
-    FP<void, MessageData&>          defaultMessageHandler;
+        unsigned char           sendbuf[MAX_MQTT_PACKET_SIZE];
+        unsigned char           readbuf[MAX_MQTT_PACKET_SIZE];
 
-    bool                            isconnected;
+        Timer                   last_sent, last_received;
+        unsigned int            keepAliveInterval;
+        bool                    ping_outstanding;
+        bool                    cleansession;
+
+        PacketId                packetid;
+
+        struct MessageHandlers
+        {
+            const char *topicFilter;
+            FP<void, MessageData &> fp;
+        } messageHandlers[MAX_MESSAGE_HANDLERS];      // Message handlers are indexed by subscription topic
+
+        FP<void, MessageData &>          defaultMessageHandler;
+
+        bool                            isconnected;
 
 #if MQTTCLIENT_QOS1 || MQTTCLIENT_QOS2
-    unsigned char           pubbuf[MAX_MQTT_PACKET_SIZE]; // store the last publish for sending on reconnect
-    int                     inflightLen;
-    unsigned short          inflightMsgid;
-    enum QoS                inflightQoS;
+        unsigned char           pubbuf[MAX_MQTT_PACKET_SIZE]; // store the last publish for sending on reconnect
+        int                     inflightLen;
+        unsigned short          inflightMsgid;
+        enum QoS                inflightQoS;
 #endif
 
 #if MQTTCLIENT_QOS2
-    bool        pubrel;
- #if !defined(MAX_INCOMING_QOS2_MESSAGES)
-  #define MAX_INCOMING_QOS2_MESSAGES 10
- #endif
-    unsigned short          incomingQoS2messages[MAX_INCOMING_QOS2_MESSAGES];
-    bool                    isQoS2msgidFree(unsigned short id);
-    bool                    useQoS2msgid(unsigned short id);
-    void                    freeQoS2msgid(unsigned short id);
+        bool        pubrel;
+#if !defined(MAX_INCOMING_QOS2_MESSAGES)
+#define MAX_INCOMING_QOS2_MESSAGES 10
+#endif
+        unsigned short          incomingQoS2messages[MAX_INCOMING_QOS2_MESSAGES];
+        bool                    isQoS2msgidFree(unsigned short id);
+        bool                    useQoS2msgid(unsigned short id);
+        void                    freeQoS2msgid(unsigned short id);
 #endif
 
-};
+    };
 
 }
 
@@ -280,7 +280,7 @@ void MQTT::Client<Network, Timer, a, MAX_MESSAGE_HANDLERS>::        cleanSession
 
 
 template<class Network, class Timer, int a, int MAX_MESSAGE_HANDLERS>
-MQTT::Client<Network, Timer, a, MAX_MESSAGE_HANDLERS>::Client(Network& network, unsigned int command_timeout_ms)  : ipstack(network), packetid()
+MQTT::Client<Network, Timer, a, MAX_MESSAGE_HANDLERS>::Client(Network &network, unsigned int command_timeout_ms)  : ipstack(network), packetid()
 {
     this->command_timeout_ms = command_timeout_ms;
     cleanSession();
@@ -331,7 +331,7 @@ void MQTT::Client<Network, Timer, a, b>::        freeQoS2msgid(unsigned short id
 
 
 template<class Network, class Timer, int a, int b>
-int MQTT::Client<Network, Timer, a, b>::        sendPacket(int length, Timer& timer)
+int MQTT::Client<Network, Timer, a, b>::        sendPacket(int length, Timer &timer)
 {
     int        rc = FAILURE,
                sent = 0;
@@ -361,7 +361,7 @@ int MQTT::Client<Network, Timer, a, b>::        sendPacket(int length, Timer& ti
 
 
 template<class Network, class Timer, int a, int b>
-int MQTT::Client<Network, Timer, a, b>::        decodePacket(int* value, int timeout)
+int MQTT::Client<Network, Timer, a, b>::        decodePacket(int *value, int timeout)
 {
     unsigned char           c;
     int                     multiplier = 1;
@@ -383,7 +383,8 @@ int MQTT::Client<Network, Timer, a, b>::        decodePacket(int* value, int tim
             goto exit;
         *value += (c & 127) * multiplier;
         multiplier *= 128;
-    } while ((c & 128) != 0);
+    }
+    while ((c & 128) != 0);
 exit:
     return len;
 }
@@ -396,7 +397,7 @@ exit:
  * @return the MQTT packet type, or -1 if none
  */
 template<class Network, class Timer, int MAX_MQTT_PACKET_SIZE, int b>
-int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        readPacket(Timer& timer)
+int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        readPacket(Timer &timer)
 {
     int                 rc = FAILURE;
     MQTTHeader          header = {0};
@@ -443,11 +444,11 @@ exit:
 // # can only be at end
 // + and # can only be next to separator
 template<class Network, class Timer, int a, int b>
-bool MQTT::Client<Network, Timer, a, b>::        isTopicMatched(char* topicFilter, MQTTString& topicName)
+bool MQTT::Client<Network, Timer, a, b>::        isTopicMatched(char *topicFilter, MQTTString &topicName)
 {
-    char*       curf = topicFilter;
-    char*       curn = topicName.lenstring.data;
-    char*       curn_end = curn + topicName.lenstring.len;
+    char       *curf = topicFilter;
+    char       *curn = topicName.lenstring.data;
+    char       *curn_end = curn + topicName.lenstring.len;
 
     while (*curf && curn < curn_end)
     {
@@ -456,8 +457,9 @@ bool MQTT::Client<Network, Timer, a, b>::        isTopicMatched(char* topicFilte
         if (*curf != '+' && *curf != '#' && *curf != *curn)
             break;
         if (*curf == '+')
-        {   // skip until we meet the next separator, or end of string
-            char*       nextpos = curn + 1;
+        {
+            // skip until we meet the next separator, or end of string
+            char       *nextpos = curn + 1;
             while (nextpos < curn_end && *nextpos != '/')
                 nextpos = ++curn + 1;
         }
@@ -473,15 +475,15 @@ bool MQTT::Client<Network, Timer, a, b>::        isTopicMatched(char* topicFilte
 
 
 template<class Network, class Timer, int a, int MAX_MESSAGE_HANDLERS>
-int MQTT::Client<Network, Timer, a, MAX_MESSAGE_HANDLERS>::        deliverMessage(MQTTString& topicName, Message& message)
+int MQTT::Client<Network, Timer, a, MAX_MESSAGE_HANDLERS>::        deliverMessage(MQTTString &topicName, Message &message)
 {
     int        rc = FAILURE;
 
     // we have to find the right message handler - indexed by topic
     for (int i = 0; i < MAX_MESSAGE_HANDLERS; ++i)
     {
-        if (messageHandlers[i].topicFilter != 0 && (MQTTPacket_equals(&topicName, (char*)messageHandlers[i].topicFilter) ||
-                                                    isTopicMatched((char*)messageHandlers[i].topicFilter, topicName)))
+        if (messageHandlers[i].topicFilter != 0 && (MQTTPacket_equals(&topicName, (char *)messageHandlers[i].topicFilter) ||
+                isTopicMatched((char *)messageHandlers[i].topicFilter, topicName)))
         {
             if (messageHandlers[i].fp.attached())
             {
@@ -525,7 +527,7 @@ int MQTT::Client<Network, Timer, a, b>::        yield(unsigned long timeout_ms)
 
 
 template<class Network, class Timer, int MAX_MQTT_PACKET_SIZE, int b>
-int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        cycle(Timer& timer)
+int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        cycle(Timer &timer)
 {
     /* get one piece of work off the wire and one pass through */
 
@@ -550,14 +552,14 @@ int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        cycle(Timer& 
         MQTTString          topicName = MQTTString_initializer;
         Message             msg;
         int                 intQoS;
-        if (MQTTDeserialize_publish((unsigned char*)&msg.dup, &intQoS, (unsigned char*)&msg.retained, (unsigned short*)&msg.id, &topicName,
-                                    (unsigned char**)&msg.payload, (int*)&msg.payloadlen, readbuf, MAX_MQTT_PACKET_SIZE) != 1)
+        if (MQTTDeserialize_publish((unsigned char *)&msg.dup, &intQoS, (unsigned char *)&msg.retained, (unsigned short *)&msg.id, &topicName,
+                                    (unsigned char **)&msg.payload, (int *)&msg.payloadlen, readbuf, MAX_MQTT_PACKET_SIZE) != 1)
             goto exit;
         msg.qos = (enum QoS)intQoS;
 #if MQTTCLIENT_QOS2
         if (msg.qos != QOS2)
 #endif
-        deliverMessage(topicName, msg);
+            deliverMessage(topicName, msg);
 #if MQTTCLIENT_QOS2
         else if (isQoS2msgidFree(msg.id))
         {
@@ -646,7 +648,7 @@ exit:
 
 // only used in single-threaded mode where one command at a time is in process
 template<class Network, class Timer, int a, int b>
-int MQTT::Client<Network, Timer, a, b>::        waitfor(int packet_type, Timer& timer)
+int MQTT::Client<Network, Timer, a, b>::        waitfor(int packet_type, Timer &timer)
 {
     int        rc = FAILURE;
 
@@ -662,7 +664,7 @@ int MQTT::Client<Network, Timer, a, b>::        waitfor(int packet_type, Timer& 
 
 
 template<class Network, class Timer, int MAX_MQTT_PACKET_SIZE, int b>
-int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        connect(MQTTPacket_connectData& options)
+int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        connect(MQTTPacket_connectData &options)
 {
     Timer           connect_timer(command_timeout_ms);
     int             rc = FAILURE;
@@ -685,7 +687,7 @@ int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        connect(MQTTP
     {
         unsigned char           connack_rc = 255;
         bool                    sessionPresent = false;
-        if (MQTTDeserialize_connack((unsigned char*)&sessionPresent, &connack_rc, readbuf, MAX_MQTT_PACKET_SIZE) == 1)
+        if (MQTTDeserialize_connack((unsigned char *)&sessionPresent, &connack_rc, readbuf, MAX_MQTT_PACKET_SIZE) == 1)
             rc = connack_rc;
         else
             rc = FAILURE;
@@ -705,11 +707,11 @@ int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        connect(MQTTP
     else
 #endif
 #if MQTTCLIENT_QOS1 || MQTTCLIENT_QOS2
-    if (inflightMsgid > 0)
-    {
-        memcpy(sendbuf, pubbuf, MAX_MQTT_PACKET_SIZE);
-        rc = publish(inflightLen, connect_timer, inflightQoS);
-    }
+        if (inflightMsgid > 0)
+        {
+            memcpy(sendbuf, pubbuf, MAX_MQTT_PACKET_SIZE);
+            rc = publish(inflightLen, connect_timer, inflightQoS);
+        }
 #endif
 
 exit:
@@ -728,17 +730,17 @@ int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        connect()
 
 
 template<class Network, class Timer, int MAX_MQTT_PACKET_SIZE, int MAX_MESSAGE_HANDLERS>
-int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, MAX_MESSAGE_HANDLERS>::        subscribe(const char* topicFilter, enum QoS qos, messageHandler messageHandler)
+int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, MAX_MESSAGE_HANDLERS>::        subscribe(const char *topicFilter, enum QoS qos, messageHandler messageHandler)
 {
     int                 rc = FAILURE;
     Timer               timer(command_timeout_ms);
     int                 len = 0;
-    MQTTString          topic = {(char*)topicFilter, {0, 0}};
+    MQTTString          topic = {(char *)topicFilter, {0, 0}};
 
     if (!isconnected)
         goto exit;
 
-    len = MQTTSerialize_subscribe(sendbuf, MAX_MQTT_PACKET_SIZE, 0, packetid.getNext(), 1, &topic, (int*)&qos);
+    len = MQTTSerialize_subscribe(sendbuf, MAX_MQTT_PACKET_SIZE, 0, packetid.getNext(), 1, &topic, (int *)&qos);
     if (len <= 0)
         goto exit;
     if ((rc = sendPacket(len, timer)) != SUCCESS) // send the subscribe packet
@@ -775,11 +777,11 @@ exit:
 
 
 template<class Network, class Timer, int MAX_MQTT_PACKET_SIZE, int MAX_MESSAGE_HANDLERS>
-int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, MAX_MESSAGE_HANDLERS>::        unsubscribe(const char* topicFilter)
+int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, MAX_MESSAGE_HANDLERS>::        unsubscribe(const char *topicFilter)
 {
     int                 rc = FAILURE;
     Timer               timer(command_timeout_ms);
-    MQTTString          topic = {(char*)topicFilter, {0, 0}};
+    MQTTString          topic = {(char *)topicFilter, {0, 0}};
     int                 len = 0;
 
     if (!isconnected)
@@ -819,7 +821,7 @@ exit:
 
 
 template<class Network, class Timer, int MAX_MQTT_PACKET_SIZE, int b>
-int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        publish(int len, Timer& timer, enum QoS qos)
+int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        publish(int len, Timer &timer, enum QoS qos)
 {
     int        rc;
 
@@ -867,7 +869,7 @@ exit:
 
 
 template<class Network, class Timer, int MAX_MQTT_PACKET_SIZE, int b>
-int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        publish(const char* topicName, void* payload, size_t payloadlen, unsigned short& id, enum QoS qos, bool retained)
+int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        publish(const char *topicName, void *payload, size_t payloadlen, unsigned short &id, enum QoS qos, bool retained)
 {
     int                 rc = FAILURE;
     Timer               timer(command_timeout_ms);
@@ -877,7 +879,7 @@ int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        publish(const
     if (!isconnected)
         goto exit;
 
-    topicString.cstring = (char*)topicName;
+    topicString.cstring = (char *)topicName;
 
 #if MQTTCLIENT_QOS1 || MQTTCLIENT_QOS2
     if (qos == QOS1 || qos == QOS2)
@@ -885,7 +887,7 @@ int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        publish(const
 #endif
 
     len = MQTTSerialize_publish(sendbuf, MAX_MQTT_PACKET_SIZE, 0, qos, retained, id,
-                                topicString, (unsigned char*)payload, payloadlen);
+                                topicString, (unsigned char *)payload, payloadlen);
     if (len <= 0)
         goto exit;
 
@@ -896,9 +898,9 @@ int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        publish(const
         inflightMsgid = id;
         inflightLen = len;
         inflightQoS = qos;
- #if MQTTCLIENT_QOS2
+#if MQTTCLIENT_QOS2
         pubrel = false;
- #endif
+#endif
     }
 #endif
 
@@ -909,7 +911,7 @@ exit:
 
 
 template<class Network, class Timer, int MAX_MQTT_PACKET_SIZE, int b>
-int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        publish(const char* topicName, void* payload, size_t payloadlen, enum QoS qos, bool retained)
+int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        publish(const char *topicName, void *payload, size_t payloadlen, enum QoS qos, bool retained)
 {
     unsigned short        id = 0; // dummy - not used for anything
     return publish(topicName, payload, payloadlen, id, qos, retained);
@@ -917,7 +919,7 @@ int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        publish(const
 
 
 template<class Network, class Timer, int MAX_MQTT_PACKET_SIZE, int b>
-int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        publish(const char* topicName, Message& message)
+int MQTT::Client<Network, Timer, MAX_MQTT_PACKET_SIZE, b>::        publish(const char *topicName, Message &message)
 {
     return publish(topicName, message.payload, message.payloadlen, message.qos, message.retained);
 }

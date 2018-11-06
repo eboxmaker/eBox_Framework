@@ -17,7 +17,7 @@ typedef u32_t mem_ptr_t;
 /**********使用KEIL/RVMDK开发工具时的宏定义**************/
 //#if defined(__arm__) && defined(__ARMCC_VERSION)
 #define PACK_STRUCT_BEGIN __packed
-#define PACK_STRUCT_STRUCT 
+#define PACK_STRUCT_STRUCT
 #define PACK_STRUCT_END
 #define PACK_STRUCT_FIELD(x) x
 /*---define (sn)printf formatters for these lwip types, for lwip DEBUG/STATS--*/

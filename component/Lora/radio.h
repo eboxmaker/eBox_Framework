@@ -1,18 +1,18 @@
 /*
- * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND 
+ * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND
  * (2)TO ENABLE ACCESS TO CODING INFORMATION TO GUIDE AND FACILITATE CUSTOMER.
  * CONSEQUENTLY, SEMTECH SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT OR
  * CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE CONTENT
  * OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING INFORMATION
  * CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
- * 
+ *
  * Copyright (C) SEMTECH S.A.
  */
-/*! 
+/*!
  * \file       radio.h
  * \brief      Generic radio driver ( radio abstraction )
  *
- * \version    2.0.B2 
+ * \version    2.0.B2
  * \date       Nov 21 2012
  * \author     Miguel Luis
  *
@@ -21,8 +21,8 @@
 #ifndef __RADIO_H__
 #define __RADIO_H__
 #ifdef __cplusplus
- extern "C" {
-#endif 
+extern "C" {
+#endif
 #include "mcu_core.h"
 /*!
  * SX1272 and SX1276 General parameters definition
@@ -43,7 +43,7 @@ typedef enum
     RF_LEN_ERROR,
     RF_CHANNEL_EMPTY,
     RF_CHANNEL_ACTIVITY_DETECTED,
-}tRFProcessReturnCodes;
+} tRFProcessReturnCodes;
 
 /*!
  * Radio driver structure defining the different function pointers
@@ -56,7 +56,7 @@ typedef struct sRadioDriver
     void ( *GetRxPacket )( void *buffer, uint16_t *size );
     void ( *SetTxPacket )( const void *buffer, uint16_t size );
     uint32_t ( *Process )( void );
-}tRadioDriver;
+} tRadioDriver;
 
 /*!
  * \brief Initializes the RadioDriver structure with specific radio
@@ -64,7 +64,7 @@ typedef struct sRadioDriver
  *
  * \retval radioDriver Pointer to the radio driver variable
  */
-tRadioDriver* RadioDriverInit( void );
+tRadioDriver *RadioDriverInit( void );
 
 #ifdef __cplusplus
 }

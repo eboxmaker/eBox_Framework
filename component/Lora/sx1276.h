@@ -1,18 +1,18 @@
 /*
- * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND 
+ * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND
  * (2)TO ENABLE ACCESS TO CODING INFORMATION TO GUIDE AND FACILITATE CUSTOMER.
  * CONSEQUENTLY, SEMTECH SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT OR
  * CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE CONTENT
  * OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING INFORMATION
  * CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
- * 
+ *
  * Copyright (C) SEMTECH S.A.
  */
-/*! 
+/*!
  * \file       sx1276.h
  * \brief      SX1276 RF chip driver
  *
- * \version    2.0.B2 
+ * \version    2.0.B2
  * \date       May 6 2013
  * \author     Gregory Cristian
  *
@@ -132,7 +132,7 @@ void SX1276SetTxPacket( const void *buffer, uint16_t size );
 /*!
  * \brief Gets the current RFState
  *
- * \retval rfState Current RF state [RF_IDLE, RF_BUSY, 
+ * \retval rfState Current RF state [RF_IDLE, RF_BUSY,
  *                                   RF_RX_DONE, RF_RX_TIMEOUT,
  *                                   RF_TX_DONE, RF_TX_TIMEOUT]
  */
@@ -149,7 +149,7 @@ void SX1276SetRFState( uint8_t state );
  * \brief Process the Rx and Tx state machines depending on the
  *       SX1276 operating mode.
  *
- * \retval rfState Current RF state [RF_IDLE, RF_BUSY, 
+ * \retval rfState Current RF state [RF_IDLE, RF_BUSY,
  *                                   RF_RX_DONE, RF_RX_TIMEOUT,
  *                                   RF_TX_DONE, RF_TX_TIMEOUT]
  */

@@ -1,18 +1,18 @@
 /*
- * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND 
+ * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND
  * (2)TO ENABLE ACCESS TO CODING INFORMATION TO GUIDE AND FACILITATE CUSTOMER.
  * CONSEQUENTLY, SEMTECH SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT OR
  * CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE CONTENT
  * OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING INFORMATION
  * CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
- * 
+ *
  * Copyright (C) SEMTECH S.A.
  */
-/*! 
+/*!
  * \file       sx1276-Hal.h
  * \brief      SX1276 Hardware Abstraction Layer
  *
- * \version    2.0.B2 
+ * \version    2.0.B2
  * \date       May 6 2013
  * \author     Gregory Cristian
  *
@@ -21,7 +21,7 @@
 #ifndef __SX1276_HAL_H__
 #define __SX1276_HAL_H__
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 //#include "ioe.h"
 
@@ -46,7 +46,7 @@ typedef enum
 {
     RADIO_RESET_OFF,
     RADIO_RESET_ON,
-}tRadioResetState;
+} tRadioResetState;
 
 /*!
  * \brief Initializes the radio interface I/Os
@@ -55,7 +55,7 @@ void SX1276InitIo( void );
 
 /*!
  * \brief Set the radio reset pin state
- * 
+ *
  * \param state New reset pin state
  */
 void SX1276SetReset( uint8_t state );

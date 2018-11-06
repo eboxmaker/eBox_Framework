@@ -18,9 +18,11 @@
 #ifndef _Kalman_h
 #define _Kalman_h
 
-class Kalman {
+class Kalman
+{
 public:
-    Kalman() {
+    Kalman()
+    {
         /* We will set the variables like so, these can also be tuned by the user */
         Q_angle = 0.01;
         Q_bias = 0.003;
@@ -35,7 +37,8 @@ public:
         P[1][1] = 0;
     };
     // The angle should be in degrees and the rate should be in degrees per second and the delta time in seconds
-    double getAngle(double newAngle, double newRate, double dt) {
+    double getAngle(double newAngle, double newRate, double dt)
+    {
         // KasBot V2  -  Kalman filter module - http://www.x-firm.com/?page_id=145
         // Modified by Kristian Lauszus
         // See my blog post for more information: http://blog.tkjelectronics.dk/2012/09/a-practical-approach-to-kalman-filter-and-how-to-implement-it
@@ -48,7 +51,7 @@ public:
 
         // Update estimation error covariance - Project the error covariance ahead
         /* Step 2 */
-        P[0][0] += dt * (dt*P[1][1] - P[0][1] - P[1][0] + Q_angle);
+        P[0][0] += dt * (dt * P[1][1] - P[0][1] - P[1][0] + Q_angle);
         P[0][1] -= dt * P[1][1];
         P[1][0] -= dt * P[1][1];
         P[1][1] += Q_bias * dt;
@@ -77,17 +80,41 @@ public:
 
         return angle;
     };
-    void setAngle(double newAngle) { angle = newAngle; }; // Used to set angle, this should be set as the starting angle
-    double getRate() { return rate; }; // Return the unbiased rate
+    void setAngle(double newAngle)
+    {
+        angle = newAngle;
+    }; // Used to set angle, this should be set as the starting angle
+    double getRate()
+    {
+        return rate;
+    }; // Return the unbiased rate
 
     /* These are used to tune the Kalman filter */
-    void setQangle(double newQ_angle) { Q_angle = newQ_angle; };
-    void setQbias(double newQ_bias) { Q_bias = newQ_bias; };
-    void setRmeasure(double newR_measure) { R_measure = newR_measure; };
+    void setQangle(double newQ_angle)
+    {
+        Q_angle = newQ_angle;
+    };
+    void setQbias(double newQ_bias)
+    {
+        Q_bias = newQ_bias;
+    };
+    void setRmeasure(double newR_measure)
+    {
+        R_measure = newR_measure;
+    };
 
-    double getQangle() { return Q_angle; };
-    double getQbias() { return Q_bias; };
-    double getRmeasure() { return R_measure; };
+    double getQangle()
+    {
+        return Q_angle;
+    };
+    double getQbias()
+    {
+        return Q_bias;
+    };
+    double getRmeasure()
+    {
+        return R_measure;
+    };
 
 private:
     /* Kalman filter variables */

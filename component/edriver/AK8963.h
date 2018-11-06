@@ -26,31 +26,31 @@
 #define AK8963_ASAZ      0x12  // Fuse ROM z-axis sensitivity adjustment value
 
 
-class AK8963:public I2c
+class AK8963: public I2c
 {
 protected:
-	uint8_t address;
-	float sensAdjustVal[3];
-	TicToc timer;
-	float magBiasSub[3], magSens[3];
+    uint8_t address;
+    float sensAdjustVal[3];
+    TicToc timer;
+    float magBiasSub[3], magSens[3];
 public:
-	AK8963(I2c* i2c, uint8_t address = AK8963_ADDRESS);
+    AK8963(I2c *i2c, uint8_t address = AK8963_ADDRESS);
 
-	//初始化为16位采样、连续测量
-	void begin(uint32_t speed = 400000);
+    //初始化为16位采样、连续测量
+    void begin(uint32_t speed = 400000);
 
 
-	//得到磁力计值(原始值)
-	//mx,my,mz:磁力计x,y,z轴的原始读数(带符号)
-	//如果mx、my、mz均为0，表明磁力计异常
-	void getMag(short *mx, short *my, short *mz);
-	//mx,my,mz:磁力计x, y, z轴的标准单位读数
-	void getMag(float *mx, float *my, float *mz);
+    //得到磁力计值(原始值)
+    //mx,my,mz:磁力计x,y,z轴的原始读数(带符号)
+    //如果mx、my、mz均为0，表明磁力计异常
+    void getMag(short *mx, short *my, short *mz);
+    //mx,my,mz:磁力计x, y, z轴的标准单位读数
+    void getMag(float *mx, float *my, float *mz);
 
-	//设置磁力计校准参数，椭球到正球的变换
-	void setMagBiasSens(
-		float bx, float by, float bz, 
-		float sx, float sy, float sz);
+    //设置磁力计校准参数，椭球到正球的变换
+    void setMagBiasSens(
+        float bx, float by, float bz,
+        float sx, float sy, float sz);
 };
 
 

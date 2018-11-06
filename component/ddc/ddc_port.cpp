@@ -10,7 +10,7 @@ void ddc_init()
 }
 void ddc_get_char(uint8_t ch)
 {
-    ebox_fifo_put(fifo_recv,&ch,1);
+    ebox_fifo_put(fifo_recv, &ch, 1);
 }
 uint16_t ddc_send_char(uint8_t ch)
 {
@@ -19,14 +19,14 @@ uint16_t ddc_send_char(uint8_t ch)
     **************/
     return 1;
 }
-uint16_t ddc_send_buf(uint8_t* buf, uint16_t buflen)
+uint16_t ddc_send_buf(uint8_t *buf, uint16_t buflen)
 {
     /**************
         user add your send api.
     **************/
-//    for(int i = 0; i < buflen;i++)
-//        uart1.printf("0X%02X ",*buf++);
-//    uart1.println();
-    uart1.write(buf,buflen);
+    //    for(int i = 0; i < buflen;i++)
+    //        uart1.printf("0X%02X ",*buf++);
+    //    uart1.println();
+    uart1.write(buf, buflen);
     return buflen;
 }

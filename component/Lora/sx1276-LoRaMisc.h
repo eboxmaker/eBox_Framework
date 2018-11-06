@@ -1,14 +1,14 @@
 /*
- * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND 
+ * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND
  * (2)TO ENABLE ACCESS TO CODING INFORMATION TO GUIDE AND FACILITATE CUSTOMER.
  * CONSEQUENTLY, SEMTECH SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT OR
  * CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE CONTENT
  * OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING INFORMATION
  * CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
- * 
+ *
  * Copyright (C) SEMTECH S.A.
  */
-/*! 
+/*!
  * \file       sx1276-LoRaMisc.h
  * \brief      SX1276 RF chip high level functions driver
  *
@@ -20,7 +20,7 @@
  *             Removing these functions will greatly reduce the final firmware
  *             size.
  *
- * \version    2.0.B2 
+ * \version    2.0.B2
  * \date       May 6 2013
  * \author     Gregory Cristian
  *
@@ -70,7 +70,7 @@ void SX1276LoRaSetSignalBandwidth( uint8_t bw );
 /*!
  * \brief Reads the current Signal Bandwidth value
  *
- * \retval factor Current Signal Bandwidth value [0: 125 kHz, 1: 250 kHz, 2: 500 kHz] 
+ * \retval factor Current Signal Bandwidth value [0: 125 kHz, 1: 250 kHz, 2: 500 kHz]
  */
 uint8_t SX1276LoRaGetSignalBandwidth( void );
 
@@ -84,7 +84,7 @@ void SX1276LoRaSetSpreadingFactor( uint8_t factor );
 /*!
  * \brief Reads the current Spreading Factor value
  *
- * \retval factor Current Spreading Factor value [7, 8, 9, 10, 11, 12] 
+ * \retval factor Current Spreading Factor value [7, 8, 9, 10, 11, 12]
  */
 uint8_t SX1276LoRaGetSpreadingFactor( void );
 
@@ -145,15 +145,15 @@ void SX1276LoRaSetRxSingleOn( bool enable );
 bool SX1276LoRaGetRxSingleOn( void );
 
 /*!
- * \brief Enables/Disables the frequency hopping 
+ * \brief Enables/Disables the frequency hopping
  *
  * \param [IN] enable [true, false]
  */
- 
+
 void SX1276LoRaSetFreqHopOn( bool enable );
 
 /*!
- * \brief Get the frequency hopping status 
+ * \brief Get the frequency hopping status
  *
  * \param [IN] enable [true, false]
  */
@@ -230,7 +230,7 @@ void SX1276LoRaSetPa20dBm( bool enale );
 bool SX1276LoRaGetPa20dBm( void );
 
 /*!
- * \brief Set the RF Output pin 
+ * \brief Set the RF Output pin
  *
  * \param [IN] RF_PACONFIG_PASELECT_PABOOST or RF_PACONFIG_PASELECT_RFO
  */

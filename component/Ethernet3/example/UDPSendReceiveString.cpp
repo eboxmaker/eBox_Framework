@@ -38,8 +38,9 @@ Copyright 2015 shentq. All Rights Reserved.
 
 u8 buf[100];
 
-uint8_t mac[] = {
-  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED
+uint8_t mac[] =
+{
+    0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED
 };
 IPAddress ip(192, 168, 1, 177);
 unsigned int localPort = 8888;      // local port to listen on
@@ -54,7 +55,7 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
     Ethernet.begin(mac, ip);
     Udp.begin(localPort);
 }
@@ -64,36 +65,36 @@ int main(void)
 
     while(1)
     {
-    int packetSize = Udp.parsePacket();
-    if (packetSize)
-    {
-        UART.print("Received packet of size ");
-        UART.println(packetSize);
-        UART.print("From ");
-        IPAddress remote = Udp.remoteIP();
-        for (int i = 0; i < 4; i++)
+        int packetSize = Udp.parsePacket();
+        if (packetSize)
         {
-            UART.print(remote[i], DEC);
-            if (i < 3)
+            UART.print("Received packet of size ");
+            UART.println(packetSize);
+            UART.print("From ");
+            IPAddress remote = Udp.remoteIP();
+            for (int i = 0; i < 4; i++)
             {
-                UART.print(".");
+                UART.print(remote[i], DEC);
+                if (i < 3)
+                {
+                    UART.print(".");
+                }
             }
+            UART.print(", port ");
+            UART.println(Udp.remotePort());
+
+            // read the packet into packetBufffer
+            Udp.read(packetBuffer, UDP_TX_PACKET_MAX_SIZE);
+            UART.println("Contents:");
+            UART.println(packetBuffer);
+
+            // send a reply, to the IP address and port that sent us the packet we received
+            Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
+            Udp.write((const uint8_t *)ReplyBuffer, sizeof(ReplyBuffer));
+            Udp.endPacket();
         }
-        UART.print(", port ");
-        UART.println(Udp.remotePort());
-
-        // read the packet into packetBufffer
-        Udp.read(packetBuffer, UDP_TX_PACKET_MAX_SIZE);
-        UART.println("Contents:");
-        UART.println(packetBuffer);
-
-        // send a reply, to the IP address and port that sent us the packet we received
-        Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
-        Udp.write((const uint8_t*)ReplyBuffer,sizeof(ReplyBuffer));
-        Udp.endPacket();
-    }
-    delay_ms(10);
-//        UART.print("Received packet of size ");
+        delay_ms(10);
+        //        UART.print("Received packet of size ");
     }
 
 

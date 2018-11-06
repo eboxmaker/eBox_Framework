@@ -1,18 +1,18 @@
 /*
- * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND 
+ * THE FOLLOWING FIRMWARE IS PROVIDED: (1) "AS IS" WITH NO WARRANTY; AND
  * (2)TO ENABLE ACCESS TO CODING INFORMATION TO GUIDE AND FACILITATE CUSTOMER.
  * CONSEQUENTLY, SEMTECH SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT OR
  * CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE CONTENT
  * OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING INFORMATION
  * CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
- * 
+ *
  * Copyright (C) SEMTECH S.A.
  */
-/*! 
+/*!
  * \file       sx1276-Fsk.h
  * \brief      SX1276 RF chip driver mode FSK
  *
- * \version    2.0.B2 
+ * \version    2.0.B2
  * \date       May 6 2013
  * \author     Gregory Cristian
  *
@@ -36,7 +36,7 @@ typedef struct sFskSettings
     bool CrcOn;
     bool AfcOn;
     uint8_t PayloadLength;
-}tFskSettings;
+} tFskSettings;
 
 /*!
  * RF packet definition
@@ -62,7 +62,7 @@ typedef enum
     RF_STATE_TX_RUNNING,
     RF_STATE_TX_DONE,
     RF_STATE_TX_TIMEOUT,
-}tRFStates;
+} tRFStates;
 
 /*!
  * SX1276 definitions
@@ -78,7 +78,7 @@ typedef enum
 #define REG_OPMODE                                  0x01
 #define REG_BITRATEMSB                              0x02
 #define REG_BITRATELSB                              0x03
-#define REG_FDEVMSB                                 0x04 
+#define REG_FDEVMSB                                 0x04
 #define REG_FDEVLSB                                 0x05
 #define REG_FRFMSB                                  0x06
 #define REG_FRFMID                                  0x07
@@ -86,7 +86,7 @@ typedef enum
 // Tx settings
 #define REG_PACONFIG                                0x09
 #define REG_PARAMP                                  0x0A
-#define REG_OCP                                     0x0B 
+#define REG_OCP                                     0x0B
 // Rx settings
 #define REG_LNA                                     0x0C
 #define REG_RXCONFIG                                0x0D
@@ -94,7 +94,7 @@ typedef enum
 #define REG_RSSICOLLISION                           0x0F
 #define REG_RSSITHRESH                              0x10
 #define REG_RSSIVALUE                               0x11
-#define REG_RXBW                                    0x12 
+#define REG_RXBW                                    0x12
 #define REG_AFCBW                                   0x13
 #define REG_OOKPEAK                                 0x14
 #define REG_OOKFIX                                  0x15
@@ -183,7 +183,7 @@ typedef enum
 
 #define RF_OPMODE_FREQMODE_ACCESS_MASK              0xF7
 #define RF_OPMODE_FREQMODE_ACCESS_LF                0x08  // Default
-#define RF_OPMODE_FREQMODE_ACCESS_HF                0x00 
+#define RF_OPMODE_FREQMODE_ACCESS_HF                0x00
 
 #define RF_OPMODE_MASK                              0xF8
 #define RF_OPMODE_SLEEP                             0x00
@@ -238,13 +238,13 @@ typedef enum
 /*!
  * RegFdev (Hz)
  */
- 
-#define RF_FDEVMSB_BANDREG_MASK                     0x3F 
+
+#define RF_FDEVMSB_BANDREG_MASK                     0x3F
 #define RF_FDEVMSB_BANDREG_AUTO                     0x00 // Default
 #define RF_FDEVMSB_BANDREG_DIV_BY_1                 0x40
 #define RF_FDEVMSB_BANDREG_DIV_BY_2                 0x80
 #define RF_FDEVMSB_BANDREG_DIV_BY_6                 0xC0
- 
+
 #define RF_FDEVMSB_FDEV_MASK                        0xC0
 
 #define RF_FDEVMSB_2000_HZ                          0x00
@@ -430,7 +430,7 @@ typedef enum
 #define RF_PACONFIG_MAX_POWER_MASK                  0x8F
 
 #define RF_PACONFIG_OUTPUTPOWER_MASK                0xF0
- 
+
 /*!
  * RegPaRamp
  */
@@ -439,9 +439,9 @@ typedef enum
 #define RF_PARAMP_MODULATIONSHAPING_01              0x20
 #define RF_PARAMP_MODULATIONSHAPING_10              0x40
 #define RF_PARAMP_MODULATIONSHAPING_11              0x60
- 
-#define RF_PARAMP_TXBANDFORCE_MASK                  0xEF 
-#define RF_PARAMP_TXBANDFORCE_BAND_SEL              0x10 
+
+#define RF_PARAMP_TXBANDFORCE_MASK                  0xEF
+#define RF_PARAMP_TXBANDFORCE_BAND_SEL              0x10
 #define RF_PARAMP_TXBANDFORCE_AUTO                  0x00 // Default
 
 #define RF_PARAMP_MASK                              0xF0
@@ -467,36 +467,36 @@ typedef enum
  */
 #define RF_OCP_MASK                                 0xDF
 #define RF_OCP_ON                                   0x20  // Default
-#define RF_OCP_OFF                                  0x00  
+#define RF_OCP_OFF                                  0x00
 
 #define RF_OCP_TRIM_MASK                            0xE0
 #define RF_OCP_TRIM_045_MA                          0x00
-#define RF_OCP_TRIM_050_MA                          0x01   
-#define RF_OCP_TRIM_055_MA                          0x02 
-#define RF_OCP_TRIM_060_MA                          0x03 
-#define RF_OCP_TRIM_065_MA                          0x04 
-#define RF_OCP_TRIM_070_MA                          0x05 
-#define RF_OCP_TRIM_075_MA                          0x06 
-#define RF_OCP_TRIM_080_MA                          0x07  
+#define RF_OCP_TRIM_050_MA                          0x01
+#define RF_OCP_TRIM_055_MA                          0x02
+#define RF_OCP_TRIM_060_MA                          0x03
+#define RF_OCP_TRIM_065_MA                          0x04
+#define RF_OCP_TRIM_070_MA                          0x05
+#define RF_OCP_TRIM_075_MA                          0x06
+#define RF_OCP_TRIM_080_MA                          0x07
 #define RF_OCP_TRIM_085_MA                          0x08
-#define RF_OCP_TRIM_090_MA                          0x09 
-#define RF_OCP_TRIM_095_MA                          0x0A 
+#define RF_OCP_TRIM_090_MA                          0x09
+#define RF_OCP_TRIM_095_MA                          0x0A
 #define RF_OCP_TRIM_100_MA                          0x0B  // Default
-#define RF_OCP_TRIM_105_MA                          0x0C 
-#define RF_OCP_TRIM_110_MA                          0x0D 
-#define RF_OCP_TRIM_115_MA                          0x0E 
-#define RF_OCP_TRIM_120_MA                          0x0F 
+#define RF_OCP_TRIM_105_MA                          0x0C
+#define RF_OCP_TRIM_110_MA                          0x0D
+#define RF_OCP_TRIM_115_MA                          0x0E
+#define RF_OCP_TRIM_120_MA                          0x0F
 #define RF_OCP_TRIM_130_MA                          0x10
-#define RF_OCP_TRIM_140_MA                          0x11   
-#define RF_OCP_TRIM_150_MA                          0x12 
-#define RF_OCP_TRIM_160_MA                          0x13 
-#define RF_OCP_TRIM_170_MA                          0x14 
-#define RF_OCP_TRIM_180_MA                          0x15 
-#define RF_OCP_TRIM_190_MA                          0x16 
-#define RF_OCP_TRIM_200_MA                          0x17  
+#define RF_OCP_TRIM_140_MA                          0x11
+#define RF_OCP_TRIM_150_MA                          0x12
+#define RF_OCP_TRIM_160_MA                          0x13
+#define RF_OCP_TRIM_170_MA                          0x14
+#define RF_OCP_TRIM_180_MA                          0x15
+#define RF_OCP_TRIM_190_MA                          0x16
+#define RF_OCP_TRIM_200_MA                          0x17
 #define RF_OCP_TRIM_210_MA                          0x18
-#define RF_OCP_TRIM_220_MA                          0x19 
-#define RF_OCP_TRIM_230_MA                          0x1A 
+#define RF_OCP_TRIM_220_MA                          0x19
+#define RF_OCP_TRIM_230_MA                          0x1A
 #define RF_OCP_TRIM_240_MA                          0x1B
 
 /*!
@@ -510,19 +510,19 @@ typedef enum
 #define RF_LNA_GAIN_G5                              0xA0
 #define RF_LNA_GAIN_G6                              0xC0
 
-#define RF_LNA_BOOST_LF_MASK                        0xE7 
+#define RF_LNA_BOOST_LF_MASK                        0xE7
 #define RF_LNA_BOOST_LF_DEFAULT                     0x00 // Default
-#define RF_LNA_BOOST_LF_GAIN                        0x08 
-#define RF_LNA_BOOST_LF_IP3                         0x10 
-#define RF_LNA_BOOST_LF_BOOST                       0x18 
+#define RF_LNA_BOOST_LF_GAIN                        0x08
+#define RF_LNA_BOOST_LF_IP3                         0x10
+#define RF_LNA_BOOST_LF_BOOST                       0x18
 
-#define RF_LNA_RXBANDFORCE_MASK                     0xFB 
+#define RF_LNA_RXBANDFORCE_MASK                     0xFB
 #define RF_LNA_RXBANDFORCE_BAND_SEL                 0x04
 #define RF_LNA_RXBANDFORCE_AUTO                     0x00 // Default
 
-#define RF_LNA_BOOST_HF_MASK                        0xFC 
+#define RF_LNA_BOOST_HF_MASK                        0xFC
 #define RF_LNA_BOOST_HF_OFF                         0x00 // Default
-#define RF_LNA_BOOST_HF_ON                          0x03 
+#define RF_LNA_BOOST_HF_ON                          0x03
 
 /*!
  * RegRxConfig
@@ -614,19 +614,19 @@ typedef enum
  * RegRxBw
  */
 #define RF_RXBW_MANT_MASK                           0xE7
-#define RF_RXBW_MANT_16                             0x00  
-#define RF_RXBW_MANT_20                             0x08  
+#define RF_RXBW_MANT_16                             0x00
+#define RF_RXBW_MANT_20                             0x08
 #define RF_RXBW_MANT_24                             0x10  // Default 
 
-#define RF_RXBW_EXP_MASK                            0xF8 
-#define RF_RXBW_EXP_0                               0x00 
-#define RF_RXBW_EXP_1                               0x01 
-#define RF_RXBW_EXP_2                               0x02 
-#define RF_RXBW_EXP_3                               0x03 
-#define RF_RXBW_EXP_4                               0x04 
+#define RF_RXBW_EXP_MASK                            0xF8
+#define RF_RXBW_EXP_0                               0x00
+#define RF_RXBW_EXP_1                               0x01
+#define RF_RXBW_EXP_2                               0x02
+#define RF_RXBW_EXP_3                               0x03
+#define RF_RXBW_EXP_4                               0x04
 #define RF_RXBW_EXP_5                               0x05  // Default
-#define RF_RXBW_EXP_6                               0x06  
-#define RF_RXBW_EXP_7                               0x07 
+#define RF_RXBW_EXP_6                               0x06
+#define RF_RXBW_EXP_7                               0x07
 
 /*!
  * RegAfcBw
@@ -634,17 +634,17 @@ typedef enum
 #define RF_AFCBW_MANTAFC_MASK                       0xE7
 #define RF_AFCBW_MANTAFC_16                         0x00
 #define RF_AFCBW_MANTAFC_20                         0x08  // Default
-#define RF_AFCBW_MANTAFC_24                         0x10  
+#define RF_AFCBW_MANTAFC_24                         0x10
 
 #define RF_AFCBW_EXPAFC_MASK                        0xF8
-#define RF_AFCBW_EXPAFC_0                           0x00 
-#define RF_AFCBW_EXPAFC_1                           0x01 
-#define RF_AFCBW_EXPAFC_2                           0x02  
+#define RF_AFCBW_EXPAFC_0                           0x00
+#define RF_AFCBW_EXPAFC_1                           0x01
+#define RF_AFCBW_EXPAFC_2                           0x02
 #define RF_AFCBW_EXPAFC_3                           0x03  // Default
-#define RF_AFCBW_EXPAFC_4                           0x04 
-#define RF_AFCBW_EXPAFC_5                           0x05 
-#define RF_AFCBW_EXPAFC_6                           0x06  
-#define RF_AFCBW_EXPAFC_7                           0x07 
+#define RF_AFCBW_EXPAFC_4                           0x04
+#define RF_AFCBW_EXPAFC_5                           0x05
+#define RF_AFCBW_EXPAFC_6                           0x06
+#define RF_AFCBW_EXPAFC_7                           0x07
 
 /*!
  * RegOokPeak
@@ -712,7 +712,7 @@ typedef enum
 /*!
  * RegAfcMsb (Read Only)
  */
- 
+
 /*!
  * RegAfcLsb (Read Only)
  */
@@ -805,7 +805,7 @@ typedef enum
 #define RF_OSC_CLKOUT_2_MHZ                         0x04
 #define RF_OSC_CLKOUT_1_MHZ                         0x05  // Default
 #define RF_OSC_CLKOUT_RC                            0x06
-#define RF_OSC_CLKOUT_OFF                           0x07  
+#define RF_OSC_CLKOUT_OFF                           0x07
 
 /*!
  * RegPreambleMsb/RegPreambleLsb
@@ -834,7 +834,7 @@ typedef enum
 #define RF_SYNCCONFIG_SYNCSIZE_MASK                 0xF8
 #define RF_SYNCCONFIG_SYNCSIZE_1                    0x00
 #define RF_SYNCCONFIG_SYNCSIZE_2                    0x01
-#define RF_SYNCCONFIG_SYNCSIZE_3                    0x02  
+#define RF_SYNCCONFIG_SYNCSIZE_3                    0x02
 #define RF_SYNCCONFIG_SYNCSIZE_4                    0x03  // Default
 #define RF_SYNCCONFIG_SYNCSIZE_5                    0x04
 #define RF_SYNCCONFIG_SYNCSIZE_6                    0x05
@@ -885,8 +885,8 @@ typedef enum
 /*!
  * RegPacketConfig2
  */
- 
-#define RF_PACKETCONFIG2_WMBUS_CRC_ENABLE_MASK      0x7F 
+
+#define RF_PACKETCONFIG2_WMBUS_CRC_ENABLE_MASK      0x7F
 #define RF_PACKETCONFIG2_WMBUS_CRC_ENABLE           0x80
 #define RF_PACKETCONFIG2_WMBUS_CRC_DISABLE          0x00  // Default
 
@@ -924,7 +924,7 @@ typedef enum
  */
 #define RF_FIFOTHRESH_TXSTARTCONDITION_MASK         0x7F
 #define RF_FIFOTHRESH_TXSTARTCONDITION_FIFOTHRESH   0x00  // Default
-#define RF_FIFOTHRESH_TXSTARTCONDITION_FIFONOTEMPTY 0x80  
+#define RF_FIFOTHRESH_TXSTARTCONDITION_FIFONOTEMPTY 0x80
 
 #define RF_FIFOTHRESH_FIFOTHRESHOLD_MASK            0xC0
 #define RF_FIFOTHRESH_FIFOTHRESHOLD_THRESHOLD       0x0F  // Default
@@ -1299,7 +1299,7 @@ typedef struct sSX1276
     uint8_t RegTestReserved4C;                      // 0x4C
     uint8_t RegPaDac;                               // 0x4D
     // Test
-    uint8_t RegTestReserved4E[0x58-0x4E];           // 0x4E-0x57
+    uint8_t RegTestReserved4E[0x58 - 0x4E];         // 0x4E-0x57
     // Additional settings
     uint8_t RegTcxo;                                // 0x58
     // Test
@@ -1320,9 +1320,9 @@ typedef struct sSX1276
     uint8_t RegTestReserved6D[0x70 - 0x6D];         // 0x6D-0x6F
     // Additional settings
     uint8_t RegBitrateFrac;                         // 0x70
-}tSX1276;
+} tSX1276;
 
-extern tSX1276* SX1276;
+extern tSX1276 *SX1276;
 
 /*!
  * \brief Initializes the SX1276
@@ -1434,7 +1434,7 @@ void SX1276FskSetTxPacket( const void *buffer, uint16_t size );
 /*!
  * \brief Gets the current RFState
  *
- * \retval rfState Current RF state [RF_IDLE, RF_BUSY, 
+ * \retval rfState Current RF state [RF_IDLE, RF_BUSY,
  *                                   RF_RX_DONE, RF_RX_TIMEOUT,
  *                                   RF_TX_DONE, RF_TX_TIMEOUT]
  */
@@ -1451,7 +1451,7 @@ void SX1276FskSetRFState( uint8_t state );
  * \brief Process the FSK modem Rx and Tx state machines depending on the
  *       SX1276 operating mode.
  *
- * \retval rfState Current RF state [RF_IDLE, RF_BUSY, 
+ * \retval rfState Current RF state [RF_IDLE, RF_BUSY,
  *                                   RF_RX_DONE, RF_RX_TIMEOUT,
  *                                   RF_TX_DONE, RF_TX_TIMEOUT]
  */

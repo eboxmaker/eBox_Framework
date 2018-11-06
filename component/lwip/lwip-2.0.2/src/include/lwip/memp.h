@@ -47,16 +47,17 @@ extern "C" {
 #include "lwip/priv/memp_std.h"
 
 /** Create the list of all memory pools managed by memp. MEMP_MAX represents a NULL pool at the end */
-typedef enum {
+typedef enum
+{
 #define LWIP_MEMPOOL(name,num,size,desc)  MEMP_##name,
 #include "lwip/priv/memp_std.h"
-  MEMP_MAX
+    MEMP_MAX
 } memp_t;
 
 #include "lwip/priv/memp_priv.h"
 #include "lwip/stats.h"
 
-extern const struct memp_desc* const memp_pools[MEMP_MAX];
+extern const struct memp_desc *const memp_pools[MEMP_MAX];
 
 /**
  * @ingroup mempool
@@ -129,9 +130,9 @@ extern const struct memp_desc* const memp_pools[MEMP_MAX];
  * This has to be defined here as it is required for pool size calculation. */
 struct memp_malloc_helper
 {
-   memp_t poolnr;
+    memp_t poolnr;
 #if MEMP_OVERFLOW_CHECK || (LWIP_STATS && MEM_STATS)
-   u16_t size;
+    u16_t size;
 #endif /* MEMP_OVERFLOW_CHECK || (LWIP_STATS && MEM_STATS) */
 };
 #endif /* MEM_USE_POOLS */
@@ -139,7 +140,7 @@ struct memp_malloc_helper
 void  memp_init(void);
 
 #if MEMP_OVERFLOW_CHECK
-void *memp_malloc_fn(memp_t type, const char* file, const int line);
+void *memp_malloc_fn(memp_t type, const char *file, const int line);
 #define memp_malloc(t) memp_malloc_fn((t), __FILE__, __LINE__)
 #else
 void *memp_malloc(memp_t type);

@@ -33,72 +33,72 @@
 class WiFiClientStream : public WiFiStream
 {
 protected:
-  uint32_t _time_connect = 0;
+    uint32_t _time_connect = 0;
 
-  /**
-   * check if TCP client is connected
-   * @return true if connected
-   */
-  virtual inline bool connect_client()
-  {
-    if ( _connected )
+    /**
+     * check if TCP client is connected
+     * @return true if connected
+     */
+    virtual inline bool connect_client()
     {
-      if ( _client && _client.connected() ) return true;
-      stop();
-    }
-
-    // active TCP connect
-    if ( WiFi.status() == WL_CONNECTED )
-    {
-      // if the client is disconnected, try to reconnect every 5 seconds
-      if ( millis() - _time_connect >= MILLIS_RECONNECT )
-      {
-        _connected = _client.connect( _remote_ip, _port );
-        if ( !_connected )
+        if ( _connected )
         {
-          _time_connect = millis();
+            if ( _client && _client.connected() ) return true;
+            stop();
         }
-        else if ( _currentHostConnectionCallback )
-        {
-          (*_currentHostConnectionCallback)(HOST_CONNECTION_CONNECTED);
-        }
-      }
-    }
 
-    return _connected;
-  }
+        // active TCP connect
+        if ( WiFi.status() == WL_CONNECTED )
+        {
+            // if the client is disconnected, try to reconnect every 5 seconds
+            if ( millis() - _time_connect >= MILLIS_RECONNECT )
+            {
+                _connected = _client.connect( _remote_ip, _port );
+                if ( !_connected )
+                {
+                    _time_connect = millis();
+                }
+                else if ( _currentHostConnectionCallback )
+                {
+                    (*_currentHostConnectionCallback)(HOST_CONNECTION_CONNECTED);
+                }
+            }
+        }
+
+        return _connected;
+    }
 
 public:
-  /**
-   * create a WiFi stream with a TCP client
-   */
-  WiFiClientStream(IPAddress server_ip, uint16_t server_port) : WiFiStream(server_ip, server_port) {}
+    /**
+     * create a WiFi stream with a TCP client
+     */
+    WiFiClientStream(IPAddress server_ip, uint16_t server_port) : WiFiStream(server_ip, server_port) {}
 
-  /**
-   * maintain WiFi and TCP connection
-   * @return true if WiFi and TCP connection are established
-   */
-  virtual inline bool maintain()
-  {
-    return connect_client();
-  }
-
-  /**
-   * stop client connection
-   */
-  virtual inline void stop()
-  {
-    if ( _client)
+    /**
+     * maintain WiFi and TCP connection
+     * @return true if WiFi and TCP connection are established
+     */
+    virtual inline bool maintain()
     {
-      _client.stop();
-      if ( _currentHostConnectionCallback )
-      {
-        (*_currentHostConnectionCallback)(HOST_CONNECTION_DISCONNECTED);
-      }
+        return connect_client();
     }
-    _connected = false;
-    _time_connect = millis();
-  }
+
+    /**
+     * stop client connection
+     */
+    virtual inline void stop()
+    {
+        if ( _client)
+        {
+            _client.stop();
+            if ( _currentHostConnectionCallback )
+            {
+                (*_currentHostConnectionCallback)(HOST_CONNECTION_DISCONNECTED);
+            }
+        }
+        _connected = false;
+        _time_connect = millis();
+    }
 
 };
 

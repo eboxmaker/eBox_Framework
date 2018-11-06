@@ -72,34 +72,35 @@
 #define IPCP_VJMODE_OLD 1	/* "old" mode (option # = 0x0037) */
 #define IPCP_VJMODE_RFC1172 2	/* "old-rfc"mode (option # = 0x002d) */
 #define IPCP_VJMODE_RFC1332 3	/* "new-rfc"mode (option # = 0x002d, */
-                                /*  maxslot and slot number compression) */
+/*  maxslot and slot number compression) */
 
 #define IPCP_VJ_COMP 0x002d	/* current value for VJ compression option*/
 #define IPCP_VJ_COMP_OLD 0x0037	/* "old" (i.e, broken) value for VJ */
-				/* compression option*/ 
+/* compression option*/
 #endif /* VJ_SUPPORT */
 
-typedef struct ipcp_options {
-    unsigned int neg_addr               :1; /* Negotiate IP Address? */
-    unsigned int old_addrs              :1; /* Use old (IP-Addresses) option? */
-    unsigned int req_addr               :1; /* Ask peer to send IP address? */
+typedef struct ipcp_options
+{
+    unsigned int neg_addr               : 1; /* Negotiate IP Address? */
+    unsigned int old_addrs              : 1; /* Use old (IP-Addresses) option? */
+    unsigned int req_addr               : 1; /* Ask peer to send IP address? */
 #if 0 /* UNUSED */
-    unsigned int default_route          :1; /* Assign default route through interface? */
-    unsigned int replace_default_route  :1; /* Replace default route through interface? */
+    unsigned int default_route          : 1; /* Assign default route through interface? */
+    unsigned int replace_default_route  : 1; /* Replace default route through interface? */
 #endif /* UNUSED */
 #if 0 /* UNUSED - PROXY ARP */
-    unsigned int proxy_arp              :1; /* Make proxy ARP entry for peer? */
+    unsigned int proxy_arp              : 1; /* Make proxy ARP entry for peer? */
 #endif /* UNUSED - PROXY ARP */
 #if VJ_SUPPORT
-    unsigned int neg_vj                 :1; /* Van Jacobson Compression? */
-    unsigned int old_vj                 :1; /* use old (short) form of VJ option? */
-    unsigned int cflag                  :1;
+    unsigned int neg_vj                 : 1; /* Van Jacobson Compression? */
+    unsigned int old_vj                 : 1; /* use old (short) form of VJ option? */
+    unsigned int cflag                  : 1;
 #endif /* VJ_SUPPORT */
-    unsigned int accept_local           :1; /* accept peer's value for ouraddr */
-    unsigned int accept_remote          :1; /* accept peer's value for hisaddr */
+    unsigned int accept_local           : 1; /* accept peer's value for ouraddr */
+    unsigned int accept_remote          : 1; /* accept peer's value for hisaddr */
 #if LWIP_DNS
-    unsigned int req_dns1               :1; /* Ask peer to send primary DNS address? */
-    unsigned int req_dns2               :1; /* Ask peer to send secondary DNS address? */
+    unsigned int req_dns1               : 1; /* Ask peer to send primary DNS address? */
+    unsigned int req_dns2               : 1; /* Ask peer to send secondary DNS address? */
 #endif /* LWIP_DNS */
 
     u32_t ouraddr, hisaddr;	/* Addresses in NETWORK BYTE ORDER */

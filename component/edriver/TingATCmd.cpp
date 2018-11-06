@@ -4,18 +4,18 @@
   * @author  shentq
   * @version V0.3
   * @date    2017/06/25
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
   ******************************************************************************
   */
-  
+
 
 /* Includes ------------------------------------------------------------------*/
 #include "tingatcmd.h"
@@ -30,79 +30,79 @@ DATA_STATE_T Ting::data_process(char c)
 
     switch((uint8_t)data_state)
     {
-  
-        case NEED_DOT1:
-            if(c == ',')
-            {
-                data_count = 0;//初始化计数器
-                data_state = NEED_SADDR_DATA;
-            }
-            else
-                data_state = STATE_ERROR;
-            break;            
-        case NEED_SADDR_DATA:
-            source_addr_buf[data_count] = c;
-            data_count++;
-            if(data_count ==4)
-            {
-                source_addr_buf[4] = '\0';
-                source_addr = atoi(source_addr_buf,16);
 
-                data_state = NEED_DOT2;
-            }
-            else
-                data_state = NEED_SADDR_DATA;
-            break;            
-        case NEED_DOT2:
-            if(c == ',')
-            {
-                data_count = 0;//初始化计数器
-                data_state = NEED_LEN_DATA;
-            }
-            else
-                data_state = STATE_ERROR;
-            break;            
-        case NEED_LEN_DATA:
-            len_buf[data_count] = c;
-            data_count++;
-            if(data_count == 2)
-            {
-                len_buf[2] = '\0';
-                data_len = atoi(len_buf,16);
-                data_state = NEED_DOT3;
-
-            }
-            else
-            {
-                data_state = NEED_LEN_DATA;
-
-            }
-            break;            
-        case NEED_DOT3:
-            if(c == ',')
-            {
-                data_count = 0;//初始化计数器
-                data_state = NEED_DATA;
-            }
-            else
-                data_state = STATE_ERROR;
-            break;            
-            
-        case NEED_DATA:
-            data_count++;
-            if(data_count <= data_len )
-            {
-                pDataBuf.write(c);
-            }
-            if(data_count >= (data_len + 2))//接收模组多发送的\r\n的结束符号
-            {
-                data_state = NEED_DOT1;
-            }
-            break;  
-        default:
-            uart1.write('x');
+    case NEED_DOT1:
+        if(c == ',')
+        {
+            data_count = 0;//初始化计数器
+            data_state = NEED_SADDR_DATA;
+        }
+        else
             data_state = STATE_ERROR;
-            break;
+        break;
+    case NEED_SADDR_DATA:
+        source_addr_buf[data_count] = c;
+        data_count++;
+        if(data_count == 4)
+        {
+            source_addr_buf[4] = '\0';
+            source_addr = atoi(source_addr_buf, 16);
+
+            data_state = NEED_DOT2;
+        }
+        else
+            data_state = NEED_SADDR_DATA;
+        break;
+    case NEED_DOT2:
+        if(c == ',')
+        {
+            data_count = 0;//初始化计数器
+            data_state = NEED_LEN_DATA;
+        }
+        else
+            data_state = STATE_ERROR;
+        break;
+    case NEED_LEN_DATA:
+        len_buf[data_count] = c;
+        data_count++;
+        if(data_count == 2)
+        {
+            len_buf[2] = '\0';
+            data_len = atoi(len_buf, 16);
+            data_state = NEED_DOT3;
+
+        }
+        else
+        {
+            data_state = NEED_LEN_DATA;
+
+        }
+        break;
+    case NEED_DOT3:
+        if(c == ',')
+        {
+            data_count = 0;//初始化计数器
+            data_state = NEED_DATA;
+        }
+        else
+            data_state = STATE_ERROR;
+        break;
+
+    case NEED_DATA:
+        data_count++;
+        if(data_count <= data_len )
+        {
+            pDataBuf.write(c);
+        }
+        if(data_count >= (data_len + 2))//接收模组多发送的\r\n的结束符号
+        {
+            data_state = NEED_DOT1;
+        }
+        break;
+    default:
+        uart1.write('x');
+        data_state = STATE_ERROR;
+        break;
     }
     return data_state;
 }
@@ -114,7 +114,7 @@ void Ting::rx_evend()
     uint8_t temp;
     c = uart->read();
     last_rx_event_time = millis();
-    
+
     switch((uint8_t)cmd_mode)
     {
     case MODE_IDLE:
@@ -161,7 +161,7 @@ void Ting::rx_evend()
     }
 
 }
-bool Ting::begin(Gpio *rst,Gpio *wakeup, Uart *uart, uint32_t baud)
+bool Ting::begin(Gpio *rst, Gpio *wakeup, Uart *uart, uint32_t baud)
 {
 
     this->uart = uart;
@@ -174,10 +174,10 @@ bool Ting::begin(Gpio *rst,Gpio *wakeup, Uart *uart, uint32_t baud)
     pDataBuf.begin(data_buf, DATA_BUFFER_SIZE); //初始化环形缓冲区
 
     this->uart->begin(baud);
-    this->uart->nvic(ENABLE,0,0);
-    this->uart->attach(this,&Ting::rx_evend,RxIrq);
-    this->uart->interrupt(RxIrq,ENABLE);
-    
+    this->uart->nvic(ENABLE, 0, 0);
+    this->uart->attach(this, &Ting::rx_evend, RxIrq);
+    this->uart->interrupt(RxIrq, ENABLE);
+
     hard_reset();
     clear_rx_cdm_buffer();
     return true;
@@ -217,20 +217,20 @@ CMD_ERR_T Ting::test()
 CMD_ERR_T Ting::config(sLoRaSettings *settings)
 {
     uart->printf("AT+CFG=%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n",
-    settings->RFFrequency,
-    settings->Power,
-    settings->SignalBw,
-    settings->SpreadingFactor,
-    settings->ErrorCoding,
-    settings->CrcOn,
-    settings->ImplicitHeaderOn,
-    settings->RxSingleOn,
-    settings->FreqHopOn,
-    settings->HopPeriod,
-    settings->RxPacketTimeout,
-    settings->PayloadLength,
-    settings->PreambleLength
-    );
+                 settings->RFFrequency,
+                 settings->Power,
+                 settings->SignalBw,
+                 settings->SpreadingFactor,
+                 settings->ErrorCoding,
+                 settings->CrcOn,
+                 settings->ImplicitHeaderOn,
+                 settings->RxSingleOn,
+                 settings->FreqHopOn,
+                 settings->HopPeriod,
+                 settings->RxPacketTimeout,
+                 settings->PayloadLength,
+                 settings->PreambleLength
+                );
     rx_signal_on = settings->RxSingleOn;
 
     if(_wait_ack(1000) == MODE_AT_END)
@@ -245,12 +245,12 @@ CMD_ERR_T Ting::config(sLoRaSettings *settings)
 
 
 
-CMD_ERR_T Ting::get_version(char *msg,uint8_t *len)
+CMD_ERR_T Ting::get_version(char *msg, uint8_t *len)
 {
     uart->printf("AT+VER?\r\n");
     if(_wait_ack(1000) == MODE_AT_END)
     {
-        *len = get_str(rx_cmd_buf, ",", 1, ",OK\r\n", 1, msg);    
+        *len = get_str(rx_cmd_buf, ",", 1, ",OK\r\n", 1, msg);
         update_cmd_err();
         debug_cmd_err("VER");
     }
@@ -316,24 +316,24 @@ void Ting::timeout_process()
     debug_cmd_err("TimeOutxx\r\n");
 }
 
-CMD_ERR_T Ting::rssi(char *msg,uint8_t *len)
+CMD_ERR_T Ting::rssi(char *msg, uint8_t *len)
 {
     uart->printf("AT+RSSI?\r\n");
     if(_wait_ack(1000) == MODE_AT_END)
     {
-        *len = get_str(rx_cmd_buf, ",", 1, ",OK\r\n", 1, msg);    
+        *len = get_str(rx_cmd_buf, ",", 1, ",OK\r\n", 1, msg);
         update_cmd_err();
         debug_cmd_err("RSSI");
     }
     cmd_mode = MODE_IDLE;
     clear_rx_cdm_buffer();
     return cmd_err;
-   
+
 }
 
 CMD_ERR_T Ting::set_addr(uint16_t addr)
 {
-    uart->printf("AT+ADDR=%x\r\n",addr);
+    uart->printf("AT+ADDR=%x\r\n", addr);
     if(_wait_ack(1000) == MODE_AT_END)
     {
         update_cmd_err();
@@ -350,18 +350,18 @@ CMD_ERR_T Ting::get_addr(uint16_t *addr)
     uart->printf("AT+ADDR?\r\n");
     if(_wait_ack(1000) == MODE_AT_END)
     {
-        get_str(rx_cmd_buf, ",", 1, ",OK\r\n", 1, buf);    
-        *addr = atoi(buf,16);
+        get_str(rx_cmd_buf, ",", 1, ",OK\r\n", 1, buf);
+        *addr = atoi(buf, 16);
         update_cmd_err();
         debug_cmd_err("get addr");
     }
     cmd_mode = MODE_IDLE;
     clear_rx_cdm_buffer();
-    return cmd_err;    
+    return cmd_err;
 }
 CMD_ERR_T Ting::set_dest(uint16_t addr)
 {
-    uart->printf("AT+DEST=%x\r\n",addr);
+    uart->printf("AT+DEST=%x\r\n", addr);
     if(_wait_ack(1000) == MODE_AT_END)
     {
         update_cmd_err();
@@ -378,14 +378,14 @@ CMD_ERR_T Ting::get_dest(uint16_t *addr)
     uart->printf("AT+DEST?\r\n");
     if(_wait_ack(1000) == MODE_AT_END)
     {
-        get_str(rx_cmd_buf, ",", 1, ",OK\r\n", 1, buf);    
-        *addr = atoi(buf,16);
+        get_str(rx_cmd_buf, ",", 1, ",OK\r\n", 1, buf);
+        *addr = atoi(buf, 16);
         update_cmd_err();
         debug_cmd_err("get dest");
     }
     cmd_mode = MODE_IDLE;
     clear_rx_cdm_buffer();
-    return cmd_err; 
+    return cmd_err;
 }
 CMD_ERR_T Ting::save()
 {
@@ -400,16 +400,16 @@ CMD_ERR_T Ting::save()
     return cmd_err;
 }
 
-CMD_ERR_T Ting::send(uint8_t *ptr,uint8_t len)
+CMD_ERR_T Ting::send(uint8_t *ptr, uint8_t len)
 {
-    uart->printf("AT+SEND=%d\r\n",len);
+    uart->printf("AT+SEND=%d\r\n", len);
     if(_wait_ack(2000) == MODE_AT_END)
     {
         update_cmd_err();
         debug_cmd_err("send");
         cmd_mode = MODE_IDLE;
         clear_rx_cdm_buffer();
-        uart->write(ptr,len);
+        uart->write(ptr, len);
         if(_wait_ack(1000) == MODE_AT_END)
         {
             update_cmd_err();
@@ -510,9 +510,9 @@ CMD_ERR_T  Ting::read_pd0()
     return cmd_err;
 }
 
-CMD_ERR_T Ting::pwm1(uint8_t prescaler,uint16_t period,uint16_t pulse)
+CMD_ERR_T Ting::pwm1(uint8_t prescaler, uint16_t period, uint16_t pulse)
 {
-    uart->printf("AT+PWM1=%d,%d,%d\r\n",prescaler,period,pulse);
+    uart->printf("AT+PWM1=%d,%d,%d\r\n", prescaler, period, pulse);
     if(_wait_ack(1000) == MODE_AT_END)
     {
         update_cmd_err();
@@ -522,9 +522,9 @@ CMD_ERR_T Ting::pwm1(uint8_t prescaler,uint16_t period,uint16_t pulse)
     clear_rx_cdm_buffer();
     return cmd_err;
 }
-CMD_ERR_T Ting::pwm2(uint8_t prescaler,uint16_t period,uint16_t pulse)
+CMD_ERR_T Ting::pwm2(uint8_t prescaler, uint16_t period, uint16_t pulse)
 {
-    uart->printf("AT+PWM2=%d,%d,%d\r\n",prescaler,period,pulse);
+    uart->printf("AT+PWM2=%d,%d,%d\r\n", prescaler, period, pulse);
     if(_wait_ack(1000) == MODE_AT_END)
     {
         update_cmd_err();
@@ -539,7 +539,7 @@ uint8_t Ting::available()
     return pDataBuf.available();
 }
 
-uint8_t Ting::read(uint8_t *buf,uint8_t len)
+uint8_t Ting::read(uint8_t *buf, uint8_t len)
 {
     if( len > pDataBuf.available())
     {
@@ -630,7 +630,7 @@ CMD_ERR_T Ting::update_cmd_err()
         while(millis() - last_rx_event_time < 2);//等待所有字节接收完成
         cmd_err = ERR_TIMEOUT;
     }
-    else 
+    else
     {
         cmd_err = ERR_OTHER;
     }
@@ -638,30 +638,30 @@ CMD_ERR_T Ting::update_cmd_err()
 }
 void Ting::debug_cmd_err(const char *str)
 {
-    
+
     switch(cmd_err)
     {
     case ERR_OK:
-        TING_DEBUG("%s:OK\r\n",str);
-       break;
+        TING_DEBUG("%s:OK\r\n", str);
+        break;
     case ERR_CMD:
-        TING_DEBUG("%s:ERR:CMD\r\n",str);
-       break;
+        TING_DEBUG("%s:ERR:CMD\r\n", str);
+        break;
     case ERR_CPU_BUSY:
-        TING_DEBUG("%s:ERR:CPU_BUSY\r\n",str);
-       break;
+        TING_DEBUG("%s:ERR:CPU_BUSY\r\n", str);
+        break;
     case ERR_RF_BUSY:
-        TING_DEBUG("%s:ERR:RF_BUSY\r\n",str);
-       break;
+        TING_DEBUG("%s:ERR:RF_BUSY\r\n", str);
+        break;
     case ERR_SYMBLE:
-        TING_DEBUG("%s:ERR:SYMBLE\r\n",str);
-       break;
+        TING_DEBUG("%s:ERR:SYMBLE\r\n", str);
+        break;
     case ERR_PARA:
-        TING_DEBUG("%s:ERR:PARA\r\n",str);
-       break;
+        TING_DEBUG("%s:ERR:PARA\r\n", str);
+        break;
     default :
         TING_DEBUG("%s:default\r\n");
-       break;
+        break;
     }
 }
 

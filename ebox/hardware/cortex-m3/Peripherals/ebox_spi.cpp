@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -34,7 +34,7 @@
 mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 {
     _busy = 0;
-	_spi = SPIx;
+    _spi = SPIx;
     _sck = sck;
     _miso = miso;
     _mosi = mosi;
@@ -47,7 +47,7 @@ void mcuSpi::begin(SpiConfig_t *spi_config)
     _miso->mode(AF_PP);
     _mosi->mode(AF_PP);
 
-    rcc_clock_cmd((uint32_t)_spi,ENABLE);
+    rcc_clock_cmd((uint32_t)_spi, ENABLE);
     config(spi_config);
 }
 void mcuSpi::config(SpiConfig_t *spi_config)
@@ -88,35 +88,47 @@ void mcuSpi::config(SpiConfig_t *spi_config)
     }
     switch(spi_config->prescaler)
     {
-        case SPI_CLOCK_DIV2:
-            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;break;
-        case SPI_CLOCK_DIV4:
-            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;break;
-        case SPI_CLOCK_DIV8:
-            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8;break;
-        case SPI_CLOCK_DIV16:
-            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;break;
-        case SPI_CLOCK_DIV32:
-            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_32;break;
-        case SPI_CLOCK_DIV64:
-            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;break;
-        case SPI_CLOCK_DIV128:
-            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128;break;
-        case SPI_CLOCK_DIV256:
-            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;break;
-        default :
-            SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;break;
+    case SPI_CLOCK_DIV2:
+        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;
+        break;
+    case SPI_CLOCK_DIV4:
+        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;
+        break;
+    case SPI_CLOCK_DIV8:
+        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8;
+        break;
+    case SPI_CLOCK_DIV16:
+        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;
+        break;
+    case SPI_CLOCK_DIV32:
+        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_32;
+        break;
+    case SPI_CLOCK_DIV64:
+        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;
+        break;
+    case SPI_CLOCK_DIV128:
+        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128;
+        break;
+    case SPI_CLOCK_DIV256:
+        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;
+        break;
+    default :
+        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;
+        break;
 
     }
-    
+
     switch(spi_config->bit_order)
     {
-        case MSB_FIRST:
-            SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;break;
-        case LSB_FIRST:
-            SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_LSB;break;
-        default :
-            SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;break;
+    case MSB_FIRST:
+        SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+        break;
+    case LSB_FIRST:
+        SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_LSB;
+        break;
+    default :
+        SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+        break;
 
     }
     SPI_Init(_spi, &SPI_InitStructure);

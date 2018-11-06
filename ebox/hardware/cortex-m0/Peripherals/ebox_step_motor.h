@@ -17,21 +17,22 @@
  *  Data is written to it by move(), when stepper motor is moving (timer
  *  interrupt running) data is read/updated when calculating a new step_delay
  */
-typedef struct {
-  //! What part of the speed ramp we are in.
-  unsigned char run_state ;
-  //! Direction stepper motor should move.
-  unsigned char dir ;
-  //! Peroid of next timer delay. At start this value set the accelration rate.
-  uint32_t step_delay;
-  //! What step_pos to start decelaration
-  uint32_t decel_start;
-  //! Sets deceleration rate.
-   int32_t decel_val;
-  //! Minimum time delay (max speed)
-   int32_t min_delay;
-  //! Counter used when accelerateing/decelerateing to calculate step_delay.
-   int32_t accel_count;
+typedef struct
+{
+    //! What part of the speed ramp we are in.
+    unsigned char run_state ;
+    //! Direction stepper motor should move.
+    unsigned char dir ;
+    //! Peroid of next timer delay. At start this value set the accelration rate.
+    uint32_t step_delay;
+    //! What step_pos to start decelaration
+    uint32_t decel_start;
+    //! Sets deceleration rate.
+    int32_t decel_val;
+    //! Minimum time delay (max speed)
+    int32_t min_delay;
+    //! Counter used when accelerateing/decelerateing to calculate step_delay.
+    int32_t accel_count;
 } speedRampData;
 /*! \Brief Frequency of timer1 in [Hz].
  *
@@ -45,17 +46,17 @@ typedef struct {
 #define FSPR 1600
 
 #ifdef HALFSTEPS
-  #define SPR (FSPR*2)
-  #pragma message("[speed_cntr.c] *** Using Halfsteps ***")
+#define SPR (FSPR*2)
+#pragma message("[speed_cntr.c] *** Using Halfsteps ***")
 #endif
 #ifdef FULLSTEPS
-  #define SPR FSPR
-  //#pragma message("[speed_cntr.c] *** Using Fullsteps ***")
+#define SPR FSPR
+//#pragma message("[speed_cntr.c] *** Using Fullsteps ***")
 #endif
 #ifndef HALFSTEPS
-  #ifndef FULLSTEPS
-    #error FULLSTEPS/HALFSTEPS not defined!
-  #endif
+#ifndef FULLSTEPS
+#error FULLSTEPS/HALFSTEPS not defined!
+#endif
 #endif
 
 // Maths constants. To simplify maths when calculating in speed_cntr_Move().
@@ -77,65 +78,66 @@ typedef struct {
 
 class StepMotor
 {
-    public:
-        StepMotor(TIM_TypeDef *Timer,Gpio *pin)
-        {
-            TIMx        = Timer;
-            this->pin   = pin;
-            status = false;
-        };
-        void begin();
-        void base_init(uint16_t period, uint16_t prescaler);
-
-        
-        
-        
-        
-        void set_frq(uint32_t frq);
-        void init_info(Gpio *pin);
-        uint32_t get_timer_source_clock();
-        void mode_init_oc_toggle(void);
-        void mode_init_oc_timing(void);
-        void set_ccr(uint16_t ccr);
-
-        void nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
-        void interrupt(FunctionalState enable);
-
-        void move(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
-        
-        
-        
-        void callback();
-        
-        
-        static void _irq_handler( uint32_t id);
-        void attach(void (*fptr)(void));
-        template<typename T>
-        void attach(T* tptr, void (T::*mptr)(void)) {
-            _irq.attach(tptr, mptr);
-        }
-        
-        
-    public:
-        bool status;
-        speedRampData srd;
-    
-    private:
-        uint32_t sqrt(u32 x);//开方
+public:
+    StepMotor(TIM_TypeDef *Timer, Gpio *pin)
+    {
+        TIMx        = Timer;
+        this->pin   = pin;
+        status = false;
+    };
+    void begin();
+    void base_init(uint16_t period, uint16_t prescaler);
 
 
-    private:
 
-        TIM_TypeDef *TIMx;
-        Gpio        *pin;    
-        uint8_t     ch;
-        uint16_t    period;//保存溢出值，用于计算占空比
-        uint16_t    prescale;//保存占空比值
-        uint32_t    ccr;//保存占空比值
-    
-    
-    protected:
-        FunctionPointer _irq;
+
+
+    void set_frq(uint32_t frq);
+    void init_info(Gpio *pin);
+    uint32_t get_timer_source_clock();
+    void mode_init_oc_toggle(void);
+    void mode_init_oc_timing(void);
+    void set_ccr(uint16_t ccr);
+
+    void nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
+    void interrupt(FunctionalState enable);
+
+    void move(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
+
+
+
+    void callback();
+
+
+    static void _irq_handler( uint32_t id);
+    void attach(void (*fptr)(void));
+    template<typename T>
+    void attach(T *tptr, void (T::*mptr)(void))
+    {
+        _irq.attach(tptr, mptr);
+    }
+
+
+public:
+    bool status;
+    speedRampData srd;
+
+private:
+    uint32_t sqrt(u32 x);//开方
+
+
+private:
+
+    TIM_TypeDef *TIMx;
+    Gpio        *pin;
+    uint8_t     ch;
+    uint16_t    period;//保存溢出值，用于计算占空比
+    uint16_t    prescale;//保存占空比值
+    uint32_t    ccr;//保存占空比值
+
+
+protected:
+    FunctionPointer _irq;
 
 };
 

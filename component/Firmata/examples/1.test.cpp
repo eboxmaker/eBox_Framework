@@ -7,11 +7,11 @@
 
   * @brief   ebox application example .
   *
-  * Copyright 2016 shentq. All Rights Reserved.         
+  * Copyright 2016 shentq. All Rights Reserved.
   ******************************************************************************
  */
- 
- 
+
+
 #include "ebox.h"
 #include "bsp_ebox.h"
 #include "ebox_mem.h"
@@ -31,63 +31,71 @@ byte previousPORT[TOTAL_PORTS];
 
 void outputPort(byte portNumber, byte portValue)
 {
-  // only send the data when it changes, otherwise you get too many messages!
-  if (previousPIN[portNumber] != portValue) {
-    Firmata.sendDigitalPort(portNumber, portValue);
-    previousPIN[portNumber] = portValue;
-  }
+    // only send the data when it changes, otherwise you get too many messages!
+    if (previousPIN[portNumber] != portValue)
+    {
+        Firmata.sendDigitalPort(portNumber, portValue);
+        previousPIN[portNumber] = portValue;
+    }
 }
 
-void setPinModeCallback(byte pin, int mode) {
-  if (IS_PIN_DIGITAL(pin)) {
-    pinMode(PIN_TO_DIGITAL(pin), mode);
-  }
+void setPinModeCallback(byte pin, int mode)
+{
+    if (IS_PIN_DIGITAL(pin))
+    {
+        pinMode(PIN_TO_DIGITAL(pin), mode);
+    }
 }
 
 void digitalWriteCallback(byte port, int value)
 {
-  byte i;
-  byte currentPinValue, previousPinValue;
+    byte i;
+    byte currentPinValue, previousPinValue;
 
-  if (port < TOTAL_PORTS && value != previousPORT[port]) {
-    for (i = 0; i < 8; i++) {
-      currentPinValue = (byte) value & (1 << i);
-      previousPinValue = previousPORT[port] & (1 << i);
-      if (currentPinValue != previousPinValue) {
-        digitalWrite(i + (port * 8), currentPinValue);
-      }
+    if (port < TOTAL_PORTS && value != previousPORT[port])
+    {
+        for (i = 0; i < 8; i++)
+        {
+            currentPinValue = (byte) value & (1 << i);
+            previousPinValue = previousPORT[port] & (1 << i);
+            if (currentPinValue != previousPinValue)
+            {
+                digitalWrite(i + (port * 8), currentPinValue);
+            }
+        }
+        previousPORT[port] = value;
     }
-    previousPORT[port] = value;
-  }
 }
 
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
     firmata_io_init();
-    
-  Firmata.setFirmwareVersion(FIRMATA_FIRMWARE_MAJOR_VERSION, FIRMATA_FIRMWARE_MINOR_VERSION);
-  Firmata.attach(DIGITAL_MESSAGE, digitalWriteCallback);
-//  Firmata.attach(SET_PIN_MODE, setPinModeCallback);
-  Firmata.begin(57600);
+
+    Firmata.setFirmwareVersion(FIRMATA_FIRMWARE_MAJOR_VERSION, FIRMATA_FIRMWARE_MINOR_VERSION);
+    Firmata.attach(DIGITAL_MESSAGE, digitalWriteCallback);
+    //  Firmata.attach(SET_PIN_MODE, setPinModeCallback);
+    Firmata.begin(57600);
 
 }
 int main(void)
 {
     setup();
-	uint16_t value = 0;
+    uint16_t value = 0;
     while(1)
     {
         byte i;
 
-        for (i = 0; i < TOTAL_PORTS; i++) {
+        for (i = 0; i < TOTAL_PORTS; i++)
+        {
             outputPort(i, readPort(i, 0xff));
         }
 
-        while (Firmata.available()) {
-        Firmata.processInput();
+        while (Firmata.available())
+        {
+            Firmata.processInput();
         }
 
     }

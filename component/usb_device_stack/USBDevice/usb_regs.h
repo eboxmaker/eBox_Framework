@@ -18,7 +18,7 @@
 #define __USB_REGS_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 #include "usb_type.h"
@@ -26,18 +26,18 @@
 /* Exported types ------------------------------------------------------------*/
 typedef enum _EP_DBUF_DIR
 {
-  /* double buffered endpoint direction */
-  EP_DBUF_ERR,
-  EP_DBUF_OUT,
-  EP_DBUF_IN
-}EP_DBUF_DIR;
+    /* double buffered endpoint direction */
+    EP_DBUF_ERR,
+    EP_DBUF_OUT,
+    EP_DBUF_IN
+} EP_DBUF_DIR;
 
 /* endpoint buffer number */
 enum EP_BUF_NUM
 {
-  EP_NOBUF,
-  EP_BUF0,
-  EP_BUF1
+    EP_NOBUF,
+    EP_BUF0,
+    EP_BUF1
 };
 
 /* Exported constants --------------------------------------------------------*/
@@ -214,7 +214,7 @@ enum EP_BUF_NUM
 /*******************************************************************************
 * Macro Name     : SetEPType
 * Description    : sets the type in the endpoint register(bits EP_TYPE[1:0])
-* Input          : bEpNum: Endpoint Number. 
+* Input          : bEpNum: Endpoint Number.
 *                  wType
 * Output         : None.
 * Return         : None.
@@ -224,8 +224,8 @@ enum EP_BUF_NUM
 
 /*******************************************************************************
 * Macro Name     : GetEPType
-* Description    : gets the type in the endpoint register(bits EP_TYPE[1:0]) 
-* Input          : bEpNum: Endpoint Number. 
+* Description    : gets the type in the endpoint register(bits EP_TYPE[1:0])
+* Input          : bEpNum: Endpoint Number.
 * Output         : None.
 * Return         : Endpoint Type
 *******************************************************************************/
@@ -234,7 +234,7 @@ enum EP_BUF_NUM
 /*******************************************************************************
 * Macro Name     : SetEPTxStatus
 * Description    : sets the status for tx transfer (bits STAT_TX[1:0]).
-* Input          : bEpNum: Endpoint Number. 
+* Input          : bEpNum: Endpoint Number.
 *                  wState: new state
 * Output         : None.
 * Return         : None.
@@ -254,7 +254,7 @@ enum EP_BUF_NUM
 /*******************************************************************************
 * Macro Name     : SetEPRxStatus
 * Description    : sets the status for rx transfer (bits STAT_TX[1:0])
-* Input          : bEpNum: Endpoint Number. 
+* Input          : bEpNum: Endpoint Number.
 *                  wState: new state.
 * Output         : None.
 * Return         : None.
@@ -272,10 +272,10 @@ enum EP_BUF_NUM
     _SetENDPOINT(bEpNum, _wRegVal); \
   } /* _SetEPRxStatus */
 /*******************************************************************************
-* Macro Name     : GetEPTxStatus / GetEPRxStatus 
+* Macro Name     : GetEPTxStatus / GetEPRxStatus
 * Description    : gets the status for tx/rx transfer (bits STAT_TX[1:0]
 *                  /STAT_RX[1:0])
-* Input          : bEpNum: Endpoint Number. 
+* Input          : bEpNum: Endpoint Number.
 * Output         : None.
 * Return         : status .
 *******************************************************************************/
@@ -284,9 +284,9 @@ enum EP_BUF_NUM
 #define _GetEPRxStatus(bEpNum) ((u16)_GetENDPOINT(bEpNum) & EPRX_STAT)
 
 /*******************************************************************************
-* Macro Name     : SetEPTxValid / SetEPRxValid 
+* Macro Name     : SetEPTxValid / SetEPRxValid
 * Description    : sets directly the VALID tx/rx-status into the enpoint register
-* Input          : bEpNum: Endpoint Number. 
+* Input          : bEpNum: Endpoint Number.
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
@@ -297,7 +297,7 @@ enum EP_BUF_NUM
 /*******************************************************************************
 * Macro Name     : GetTxStallStatus / GetRxStallStatus.
 * Description    : checks stall condition in an endpoint.
-* Input          : bEpNum: Endpoint Number. 
+* Input          : bEpNum: Endpoint Number.
 * Output         : None.
 * Return         : TRUE = endpoint in stall condition.
 *******************************************************************************/
@@ -309,7 +309,7 @@ enum EP_BUF_NUM
 /*******************************************************************************
 * Macro Name     : SetEP_KIND / ClearEP_KIND.
 * Description    : set & clear EP_KIND bit.
-* Input          : bEpNum: Endpoint Number. 
+* Input          : bEpNum: Endpoint Number.
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
@@ -321,7 +321,7 @@ enum EP_BUF_NUM
 /*******************************************************************************
 * Macro Name     : Set_Status_Out / Clear_Status_Out.
 * Description    : Sets/clears directly STATUS_OUT bit in the endpoint register.
-* Input          : bEpNum: Endpoint Number. 
+* Input          : bEpNum: Endpoint Number.
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
@@ -331,7 +331,7 @@ enum EP_BUF_NUM
 /*******************************************************************************
 * Macro Name     : SetEPDoubleBuff / ClearEPDoubleBuff.
 * Description    : Sets/clears directly EP_KIND bit in the endpoint register.
-* Input          : bEpNum: Endpoint Number. 
+* Input          : bEpNum: Endpoint Number.
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
@@ -341,7 +341,7 @@ enum EP_BUF_NUM
 /*******************************************************************************
 * Macro Name     : ClearEP_CTR_RX / ClearEP_CTR_TX.
 * Description    : Clears bit CTR_RX / CTR_TX in the endpoint register.
-* Input          : bEpNum: Endpoint Number. 
+* Input          : bEpNum: Endpoint Number.
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
@@ -353,7 +353,7 @@ enum EP_BUF_NUM
 /*******************************************************************************
 * Macro Name     : ToggleDTOG_RX / ToggleDTOG_TX .
 * Description    : Toggles DTOG_RX / DTOG_TX bit in the endpoint register.
-* Input          : bEpNum: Endpoint Number. 
+* Input          : bEpNum: Endpoint Number.
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
@@ -365,7 +365,7 @@ enum EP_BUF_NUM
 /*******************************************************************************
 * Macro Name     : ClearDTOG_RX / ClearDTOG_TX.
 * Description    : Clears DTOG_RX / DTOG_TX bit in the endpoint register.
-* Input          : bEpNum: Endpoint Number. 
+* Input          : bEpNum: Endpoint Number.
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
@@ -377,7 +377,7 @@ enum EP_BUF_NUM
 * Macro Name     : SetEPAddress.
 * Description    : Sets address in an endpoint register.
 * Input          : bEpNum: Endpoint Number.
-*                  bAddr: Address. 
+*                  bAddr: Address.
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
@@ -515,9 +515,9 @@ enum EP_BUF_NUM
 * Macro Name     : SetEPDblBuffCount / SetEPDblBuf0Count / SetEPDblBuf1Count.
 * Description    : Gets buffer 0/1 address of a double buffer endpoint.
 * Input          : bEpNum: endpoint number.
-*                : bDir: endpoint dir  EP_DBUF_OUT = OUT 
-*                                      EP_DBUF_IN  = IN 
-*                : wCount: Counter value    
+*                : bDir: endpoint dir  EP_DBUF_OUT = OUT
+*                                      EP_DBUF_IN  = IN
+*                : wCount: Counter value
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
@@ -622,9 +622,9 @@ u16 ByteSwap(u16);
 
 
 #ifdef __cplusplus
- }
+}
 #endif
- 
+
 #endif /* __USB_REGS_H */
 
 /******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/

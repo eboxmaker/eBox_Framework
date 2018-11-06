@@ -7,13 +7,13 @@
 
 void Steper::begin()
 {
-    
+
     uint8_t index;
-    
+
     cycleRing.begin(64);
     bitsRing.begin(64);
-//    init_info(pin);
-    
+    //    init_info(pin);
+
 
     switch((uint32_t)TIMx)
     {
@@ -31,38 +31,38 @@ void Steper::begin()
         break;
 
     }
-    
-    tim_irq_init(index,(&Steper::_irq_handler),(uint32_t)this);
-    
+
+    tim_irq_init(index, (&Steper::_irq_handler), (uint32_t)this);
+
 
     Xpwm->mode(AF_PP);
     Ypwm->mode(AF_PP);
-//    Zpwm->mode(AF_PP);
-    
-    prescale = get_timer_source_clock()*TIME_UNIT;// 
+    //    Zpwm->mode(AF_PP);
+
+    prescale = get_timer_source_clock() * TIME_UNIT; //
     period = 65535;
     ccr = 0;
-    base_init(period,prescale);
+    base_init(period, prescale);
     mode_init_oc_pwm();
     set_ccr(10);
-    nvic(ENABLE,0,0);
-    attach(this,&Steper::callback);
+    nvic(ENABLE, 0, 0);
+    attach(this, &Steper::callback);
     interrupt(ENABLE);
 
 }
 
 void Steper::timer_start()
 {
-    TIM_Cmd(TIMx,ENABLE);
+    TIM_Cmd(TIMx, ENABLE);
     TIMx->CNT = 0;
 
 }
 void Steper::timer_stop()
 {
-    
+
     TIMx->CCER &= 0xefff;
     TIMx->CCER &= 0xfeff;
-    TIM_Cmd(TIMx,ENABLE);
+    TIM_Cmd(TIMx, ENABLE);
     TIMx->CNT = 0;
     ctr_bits = 0;
 }
@@ -78,10 +78,10 @@ void Steper::base_init(uint16_t period, uint16_t prescaler)
 
     if(TIMx == TIM1 ||  TIMx == TIM8 )
     {
-        TIM_CtrlPWMOutputs(TIMx,ENABLE); 
+        TIM_CtrlPWMOutputs(TIMx, ENABLE);
     }
-        
-    rcc_clock_cmd((uint32_t)TIMx,ENABLE);
+
+    rcc_clock_cmd((uint32_t)TIMx, ENABLE);
     TIM_TimeBaseStructure.TIM_Period = this->period - 1; //ARR
     TIM_TimeBaseStructure.TIM_Prescaler = prescaler - 1;
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; //
@@ -113,21 +113,21 @@ void Steper::mode_init_oc_pwm()
 
 void Steper::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
 {
-    nvic_dev_set_priority((uint32_t)TIMx,0,0,0);
+    nvic_dev_set_priority((uint32_t)TIMx, 0, 0, 0);
     if(enable != DISABLE)
-        nvic_dev_enable((uint32_t)TIMx,0);
+        nvic_dev_enable((uint32_t)TIMx, 0);
     else
-        nvic_dev_disable((uint32_t)TIMx,0);
+        nvic_dev_disable((uint32_t)TIMx, 0);
 }
 void Steper::interrupt(FunctionalState enable)
 {
-    TIM_ClearITPendingBit(TIMx , TIM_FLAG_Update);//必须加，否则开启中断会立即产生一次中断
+    TIM_ClearITPendingBit(TIMx, TIM_FLAG_Update); //必须加，否则开启中断会立即产生一次中断
     TIM_ITConfig(TIMx, TIM_IT_Update, enable);
 }
 //duty:0-1000对应0%-100.0%
 void Steper::set_ccr(uint16_t pulse)
 {
-    
+
     TIMx->CCR1 = pulse;
     TIMx->CCR2 = pulse;
     TIMx->CCR3 = pulse;
@@ -139,7 +139,7 @@ uint32_t Steper::get_timer_source_clock()
 {
     uint32_t temp = 0;
     uint32_t timer_clock = 0x00;
-    
+
     if ((uint32_t)this->TIMx == TIM1_BASE)
     {
         timer_clock = cpu.clock.pclk2;
@@ -155,7 +155,7 @@ uint32_t Steper::get_timer_source_clock()
     return timer_clock;
 }
 
-bool Steper::write_buffer(uint16_t counter,uint8_t ctr)
+bool Steper::write_buffer(uint16_t counter, uint8_t ctr)
 {
     if(!cycleRing.isfull())
     {
@@ -186,62 +186,70 @@ void Steper::callback()
         else
             TIMx->CCER &= 0xefff;
         cnc.update_position(ctr_bits);
-//    uart1.printf("%X\r\n", ctr_bits);
+        //    uart1.printf("%X\r\n", ctr_bits);
     }
-//    else
-//    {
-//        ctr_bits = 0;
-//        TIMx->CCER &= 0xefff;
-//        TIMx->CCER &= 0xfeff;
-//        TIM_Cmd(TIMx, DISABLE); //
-//        uart1.printf("stop\r\n");
-//    }
+    //    else
+    //    {
+    //        ctr_bits = 0;
+    //        TIMx->CCER &= 0xefff;
+    //        TIMx->CCER &= 0xfeff;
+    //        TIM_Cmd(TIMx, DISABLE); //
+    //        uart1.printf("stop\r\n");
+    //    }
     interrupts();
-    
+
 }
 
 
 
-void Steper::_irq_handler( uint32_t id){ 
-		Steper *handler = (Steper*)id;
-		handler->_irq.call();
+void Steper::_irq_handler( uint32_t id)
+{
+    Steper *handler = (Steper *)id;
+    handler->_irq.call();
 }
 
-void Steper::attach(void (*fptr)(void)) {
-    if (fptr) {
+void Steper::attach(void (*fptr)(void))
+{
+    if (fptr)
+    {
         _irq.attach(fptr);
-		}
+    }
 }
 
 
 uint32_t Steper::sqrt(u32 x)//开方
 {
-  register u32 xr;  // result register
-  register u32 q2;  // scan-bit register
-  register u8 f;   // flag (one bit)
+    register u32 xr;  // result register
+    register u32 q2;  // scan-bit register
+    register u8 f;   // flag (one bit)
 
-  xr = 0;                     // clear result
-  q2 = 0x40000000L;           // higest possible result bit
-  do
-  {
-    if((xr + q2) <= x)
+    xr = 0;                     // clear result
+    q2 = 0x40000000L;           // higest possible result bit
+    do
     {
-      x -= xr + q2;
-      f = 1;                  // set flag
+        if((xr + q2) <= x)
+        {
+            x -= xr + q2;
+            f = 1;                  // set flag
+        }
+        else
+        {
+            f = 0;                  // clear flag
+        }
+        xr >>= 1;
+        if(f)
+        {
+            xr += q2;               // test flag
+        }
     }
-    else{
-      f = 0;                  // clear flag
+    while(q2 >>= 2);            // shift twice
+    if(xr < x)
+    {
+        return xr + 1;            // add for rounding
     }
-    xr >>= 1;
-    if(f){
-      xr += q2;               // test flag
+    else
+    {
+        return xr;
     }
-  } while(q2 >>= 2);          // shift twice
-  if(xr < x){
-    return xr +1;             // add for rounding
-  }
-  else{
-    return xr;
-	  }
 }
 Steper steper(TIM4);

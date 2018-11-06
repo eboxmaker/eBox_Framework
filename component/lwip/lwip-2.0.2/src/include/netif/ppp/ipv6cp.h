@@ -45,7 +45,7 @@
     Jean-Luc.Richier@imag.fr, IMAG-LSR.
 
     Ce travail a été fait au sein du GIE DYADE (Groupement d'Intérêt
-    Économique ayant pour membres BULL S.A. et l'INRIA).
+    économique ayant pour membres BULL S.A. et l'INRIA).
 
     Ce logiciel informatique est disponible aux conditions
     usuelles dans la recherche, c'est-à-dire qu'il peut
@@ -73,7 +73,7 @@
     between BULL S.A. and INRIA).
 
     This software is available with usual "research" terms
-    with the aim of retain credits of the software. 
+    with the aim of retain credits of the software.
     Permission to use, copy, modify and distribute this software for any
     purpose and without fee is hereby granted, provided that the above
     copyright notice and this permission notice appear in all copies,
@@ -157,18 +157,19 @@
 /* No compression types yet defined.
  *#define IPV6CP_COMP	0x004f
  */
-typedef struct ipv6cp_options {
-    unsigned int neg_ifaceid    :1;  /* Negotiate interface identifier? */
-    unsigned int req_ifaceid    :1;  /* Ask peer to send interface identifier? */
-    unsigned int accept_local   :1;  /* accept peer's value for iface id? */
-    unsigned int opt_local      :1;  /* ourtoken set by option */
-    unsigned int opt_remote     :1;  /* histoken set by option */
-    unsigned int use_ip         :1;  /* use IP as interface identifier */
+typedef struct ipv6cp_options
+{
+    unsigned int neg_ifaceid    : 1; /* Negotiate interface identifier? */
+    unsigned int req_ifaceid    : 1; /* Ask peer to send interface identifier? */
+    unsigned int accept_local   : 1; /* accept peer's value for iface id? */
+    unsigned int opt_local      : 1; /* ourtoken set by option */
+    unsigned int opt_remote     : 1; /* histoken set by option */
+    unsigned int use_ip         : 1; /* use IP as interface identifier */
 #if 0
-    unsigned int use_persistent :1;  /* use uniquely persistent value for address */
+    unsigned int use_persistent : 1; /* use uniquely persistent value for address */
 #endif
 #ifdef IPV6CP_COMP
-    unsigned int neg_vj         :1;  /* Van Jacobson Compression? */
+    unsigned int neg_vj         : 1; /* Van Jacobson Compression? */
 #endif /* IPV6CP_COMP */
 
 #ifdef IPV6CP_COMP

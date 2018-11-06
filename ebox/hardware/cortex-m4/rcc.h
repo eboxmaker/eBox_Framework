@@ -4,11 +4,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
+
 #include "stm32f4xx.h"
 
 void rcc_clock_cmd(uint32_t dev, FunctionalState state);
-    
+
 #ifdef __cplusplus
 }
 #endif

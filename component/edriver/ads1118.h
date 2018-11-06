@@ -11,22 +11,23 @@
 #define PGA_BITMASK = 0x0E00;
 typedef union
 {
-    struct {
-        uint16_t mode:1;
-        uint16_t pga:3;
-        uint16_t mux:3;
-        uint16_t ss:1; 
-        
-        uint16_t reserv:1;
-        uint16_t nop:2;
-        uint16_t pu_en:1;
-        uint16_t ts_mode:1;
-        uint16_t dr:3;
-    }bit;
+    struct
+    {
+        uint16_t mode: 1;
+        uint16_t pga: 3;
+        uint16_t mux: 3;
+        uint16_t ss: 1;
+
+        uint16_t reserv: 1;
+        uint16_t nop: 2;
+        uint16_t pu_en: 1;
+        uint16_t ts_mode: 1;
+        uint16_t dr: 3;
+    } bit;
     uint8_t byte[2];
     uint16_t value;
-}AdsConfig_t;
-    
+} AdsConfig_t;
+
 
 #define ADC_AIN0 4
 #define ADC_AIN1 5
@@ -66,32 +67,32 @@ typedef union
 
 class Ads1118
 {
-    public:
-         AdsConfig_t cfg;
-    public:
-        Ads1118(Gpio *cs,Spi *spi);
-        void        begin(uint8_t dev_num);
-        bool        self_test();
-        AdsConfig_t update_cfg(AdsConfig_t *cfg);
-        void        read_temperature();
-    
-        uint16_t    read(uint8_t ch);
-        double      read_voltage(uint8_t ch);
-    
-        float      read_average(uint8_t ch);
-        double      read_vol_average(uint8_t ch);
-    
-        double      adc_to_voltage(double hex);
+public:
+    AdsConfig_t cfg;
+public:
+    Ads1118(Gpio *cs, Spi *spi);
+    void        begin(uint8_t dev_num);
+    bool        self_test();
+    AdsConfig_t update_cfg(AdsConfig_t *cfg);
+    void        read_temperature();
 
-        void        set_gain();
-    
-    private:
-        Gpio    *cs;
-        Gpio    *miso;
-        Spi     *spi;
-        SpiConfig_t config;
-    
-        
+    uint16_t    read(uint8_t ch);
+    double      read_voltage(uint8_t ch);
+
+    float      read_average(uint8_t ch);
+    double      read_vol_average(uint8_t ch);
+
+    double      adc_to_voltage(double hex);
+
+    void        set_gain();
+
+private:
+    Gpio    *cs;
+    Gpio    *miso;
+    Spi     *spi;
+    SpiConfig_t config;
+
+
 };
 
 #endif

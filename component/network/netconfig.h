@@ -4,14 +4,14 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
   * Copyright 2015 shentq. All Rights Reserved.
   *
   * Copyright Notice
-  * No part of this software may be used for any commercial activities by any form 
+  * No part of this software may be used for any commercial activities by any form
   * or means, without the prior written consent of shentq.
   *
   * @Disclaimer
@@ -28,12 +28,12 @@
 
 class IPCONFIG
 {
-    public:
-        uint8_t mac[6];
-        uint8_t ip[4];
-        uint8_t subnet[4];
-        uint8_t gw[4];
-        uint8_t dns[4];    
+public:
+    uint8_t mac[6];
+    uint8_t ip[4];
+    uint8_t subnet[4];
+    uint8_t gw[4];
+    uint8_t dns[4];
 };
 
 #endif

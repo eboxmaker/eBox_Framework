@@ -44,7 +44,8 @@
 * }
 * @endcode
 */
-class USBSerial: public USBCDC {
+class USBSerial: public USBCDC
+{
 public:
 
     /**
@@ -56,7 +57,8 @@ public:
     * @param connect_blocking define if the connection must be blocked if USB not plugged in
     *
     */
-    USBSerial(uint16_t vendor_id = 0x1f00, uint16_t product_id = 0x2012, uint16_t product_release = 0x0001, bool connect_blocking = true): USBCDC(vendor_id, product_id, product_release, connect_blocking){
+    USBSerial(uint16_t vendor_id = 0x1f00, uint16_t product_id = 0x2012, uint16_t product_release = 0x0001, bool connect_blocking = true): USBCDC(vendor_id, product_id, product_release, connect_blocking)
+    {
         settingsChangedCallback = 0;
     };
 
@@ -89,7 +91,10 @@ public:
      *    1 if there is a character available to read,
      *    0 otherwise
      */
-    int readable() { return available() ? 1 : 0; }
+    int readable()
+    {
+        return available() ? 1 : 0;
+    }
 
     /** Determine if there is space available to write a character
      *
@@ -97,7 +102,10 @@ public:
      *    1 if there is space to write a character,
      *    0 otherwise
      */
-    int writeable() { return 1; } // always return 1, for write operation is blocking
+    int writeable()
+    {
+        return 1;    // always return 1, for write operation is blocking
+    }
 
     /**
     * Write a block of data.
@@ -109,11 +117,11 @@ public:
     *
     * @returns true if successfull
     */
-    bool writeBlock(uint8_t * buf, uint16_t size);
-		
-		
-		
-		void printf(const char *fmt, ...);
+    bool writeBlock(uint8_t *buf, uint16_t size);
+
+
+
+    void printf(const char *fmt, ...);
 
     /**
      *  Attach a member function to call when a packet is received.
@@ -122,8 +130,10 @@ public:
      *  @param mptr pointer to the member function to be called
      */
     template<typename T>
-    void attach(T* tptr, void (T::*mptr)(void)) {
-        if((mptr != NULL) && (tptr != NULL)) {
+    void attach(T *tptr, void (T::*mptr)(void))
+    {
+        if((mptr != NULL) && (tptr != NULL))
+        {
             rx.attach(tptr, mptr);
         }
     }
@@ -133,8 +143,10 @@ public:
      *
      * @param fptr function pointer
      */
-    void attach(void (*fptr)(void)) {
-        if(fptr != NULL) {
+    void attach(void (*fptr)(void))
+    {
+        if(fptr != NULL)
+        {
             rx.attach(fptr);
         }
     }
@@ -144,21 +156,24 @@ public:
      *
      * @param fptr function pointer
      */
-    void attach(void (*fptr)(int baud, int bits, int parity, int stop)) {
+    void attach(void (*fptr)(int baud, int bits, int parity, int stop))
+    {
         settingsChangedCallback = fptr;
     }
 
 protected:
     virtual bool EPBULK_OUT_callback();
-    virtual void lineCodingChanged(int baud, int bits, int parity, int stop){
-        if (settingsChangedCallback) {
+    virtual void lineCodingChanged(int baud, int bits, int parity, int stop)
+    {
+        if (settingsChangedCallback)
+        {
             settingsChangedCallback(baud, bits, parity, stop);
         }
     }
 
 private:
     FunctionPointer rx;
-    CircBuffer<uint8_t,128> buf;
+    CircBuffer<uint8_t, 128> buf;
     void (*settingsChangedCallback)(int baud, int bits, int parity, int stop);
 };
 

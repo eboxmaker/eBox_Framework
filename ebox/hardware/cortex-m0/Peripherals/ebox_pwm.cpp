@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -39,17 +39,18 @@ extern Uart uart1;
  *@param    NONE
  *@retval   NONE
 */
-void Pwm::_setMode(void){
-	LL_TIM_EnableARRPreload(_timx);
-	/*********************************/
-	/* Output waveform configuration */
-	/*********************************/
-	/* Set output mode */
-	/* Reset value is LL_TIM_OCMODE_FROZEN */
-	LL_TIM_OC_SetMode(_timx, _channel, LL_TIM_OCMODE_PWM1);
-	LL_TIM_OC_EnablePreload(_timx, _channel);
-	/* Enable output channel 1 */
-	LL_TIM_CC_EnableChannel(_timx, _channel);
+void Pwm::_setMode(void)
+{
+    LL_TIM_EnableARRPreload(_timx);
+    /*********************************/
+    /* Output waveform configuration */
+    /*********************************/
+    /* Set output mode */
+    /* Reset value is LL_TIM_OCMODE_FROZEN */
+    LL_TIM_OC_SetMode(_timx, _channel, LL_TIM_OCMODE_PWM1);
+    LL_TIM_OC_EnablePreload(_timx, _channel);
+    /* Enable output channel 1 */
+    LL_TIM_CC_EnableChannel(_timx, _channel);
 }
 
 /**
@@ -58,16 +59,17 @@ void Pwm::_setMode(void){
  *		   duty 占空比 0-1000
  *@retval   NONE
 */
-void Pwm::begin(uint32_t frq,uint16_t duty){
-	_enableClock();
-	_setMode();
-	SetFrequency(frq);
-	SetDutyCycle(duty);	
-	if (IS_TIM_BREAK_INSTANCE(_timx))
-	{
-		LL_TIM_EnableAllOutputs(_timx);
-	}
-	_start();
+void Pwm::begin(uint32_t frq, uint16_t duty)
+{
+    _enableClock();
+    _setMode();
+    SetFrequency(frq);
+    SetDutyCycle(duty);
+    if (IS_TIM_BREAK_INSTANCE(_timx))
+    {
+        LL_TIM_EnableAllOutputs(_timx);
+    }
+    _start();
 }
 
 /**
@@ -77,14 +79,14 @@ void Pwm::begin(uint32_t frq,uint16_t duty){
 */
 void Pwm::SetFrequency(uint32_t frq)
 {
-	if (frq >= GetMaxFrequency())//控制频率，保证其有1%精度
-		frq = GetMaxFrequency();
+    if (frq >= GetMaxFrequency())//控制频率，保证其有1%精度
+        frq = GetMaxFrequency();
 
-	_calculate(frq);
+    _calculate(frq);
 
-	_accuracy = ((_period >= 100) && (_period < 1000))?1:0;
-	_setPerPsc();
-	SetDutyCycle(_duty);
+    _accuracy = ((_period >= 100) && (_period < 1000)) ? 1 : 0;
+    _setPerPsc();
+    SetDutyCycle(_duty);
 }
 
 /**
@@ -95,22 +97,23 @@ void Pwm::SetFrequency(uint32_t frq)
 */
 void Pwm::SetDutyCycle(uint16_t duty)
 {
-	uint16_t pulse = 0;
-	float percent;		// 百分比
-	
-	_duty = duty>1000?1000:duty;
-	// 百分之一精度
-	if(_accuracy){
-		_duty = (_duty<10 && _duty!=0)?10:duty;
-		
-	}
+    uint16_t pulse = 0;
+    float percent;		// 百分比
 
-	percent = (_duty/1000.0);
-	pulse = (uint16_t) (( percent  * _period ));
-	PWM_DEBUG("DutyCycle is : %.1f%% , pulse is : %d \r\n",percent*100,pulse);
-	_OCsetCompare(_timx, pulse);
-		/* Force update generation 强制更新 */
-	LL_TIM_GenerateEvent_UPDATE(_timx);
+    _duty = duty > 1000 ? 1000 : duty;
+    // 百分之一精度
+    if(_accuracy)
+    {
+        _duty = (_duty < 10 && _duty != 0) ? 10 : duty;
+
+    }
+
+    percent = (_duty / 1000.0);
+    pulse = (uint16_t) (( percent  * _period ));
+    PWM_DEBUG("DutyCycle is : %.1f%% , pulse is : %d \r\n", percent * 100, pulse);
+    _OCsetCompare(_timx, pulse);
+    /* Force update generation 强制更新 */
+    LL_TIM_GenerateEvent_UPDATE(_timx);
 }
 
 /**
@@ -120,9 +123,9 @@ void Pwm::SetDutyCycle(uint16_t duty)
 */
 void Pwm::SetPorlicy(uint8_t porlicy)
 {
-	LL_TIM_OC_SetPolarity(_timx,_channel,(porlicy == 1)?(LL_TIM_OCPOLARITY_HIGH):(LL_TIM_OCPOLARITY_LOW));
-	/* Force update generation 强制更新 */
-	LL_TIM_GenerateEvent_UPDATE(_timx);
+    LL_TIM_OC_SetPolarity(_timx, _channel, (porlicy == 1) ? (LL_TIM_OCPOLARITY_HIGH) : (LL_TIM_OCPOLARITY_LOW));
+    /* Force update generation 强制更新 */
+    LL_TIM_GenerateEvent_UPDATE(_timx);
 }
 
 /**
@@ -132,20 +135,21 @@ void Pwm::SetPorlicy(uint8_t porlicy)
 */
 uint32_t Pwm::GetMaxFrequency(void)
 {
-	return GetClock();
+    return GetClock();
 }
 
-float Pwm::get_accuracy(){
+float Pwm::get_accuracy()
+{
     switch(_accuracy)
     {
-        case 0:
-            return 0;
-        case 1:
-            return 0.001;
-        case 2:
-            return 0.01;
-        case 3:
-            return 0.02;
+    case 0:
+        return 0;
+    case 1:
+        return 0.001;
+    case 2:
+        return 0.01;
+    case 3:
+        return 0.02;
 
     }
     return 0.001;
@@ -179,9 +183,9 @@ float Pwm::get_accuracy(){
 
 //    if(TIMx == TIM1 ||  TIMx == TIM8 )
 //    {
-//        TIM_CtrlPWMOutputs(TIMx,ENABLE); 
+//        TIM_CtrlPWMOutputs(TIMx,ENABLE);
 //    }
-//        
+//
 //    rcc_clock_cmd((uint32_t)TIMx,ENABLE);
 //    TIM_TimeBaseStructure.TIM_Period = this->period - 1; //ARR
 //    TIM_TimeBaseStructure.TIM_Prescaler = prescaler - 1;
@@ -214,7 +218,7 @@ float Pwm::get_accuracy(){
 //        TIMx = TIM2;
 //        ch = TIMxCH4;//irq = TIM2_IRQn;
 //        break;
-//    
+//
 //    //TIM3
 //    case PA6_ID:
 //        TIMx = TIM3;
@@ -224,7 +228,7 @@ float Pwm::get_accuracy(){
 //        TIMx = TIM3;
 //        ch = TIMxCH2;//irq = TIM3_IRQn;
 //        break;
-//    
+//
 //    //TIM1
 //    case PA8_ID:
 //        TIMx = TIM1;
@@ -260,7 +264,7 @@ float Pwm::get_accuracy(){
 //        TIMx = TIM4;
 //        ch = TIMxCH4;//irq = TIM4_IRQn;
 //        break;
-//    
+//
 //    //TIM3
 //    case PB0_ID:
 //        TIMx = TIM3;
@@ -287,11 +291,11 @@ float Pwm::get_accuracy(){
 //{
 //    uint32_t period  = 0;
 //    uint32_t prescaler = 1;
-//    
+//
 //    if(frq >= get_max_frq())//控制频率，保证其有1%精度
 //        frq = get_max_frq();
 
-//    
+//
 //    //千分之一精度分配方案
 //    for(; prescaler <= 0xffff; prescaler++)
 //    {
@@ -305,7 +309,7 @@ float Pwm::get_accuracy(){
 //            }
 //        }
 //    }
-//    
+//
 //    if(prescaler == 65536)//上述算法分配失败
 //    {
 //        //百分之一分配方案
@@ -318,10 +322,10 @@ float Pwm::get_accuracy(){
 //                {
 //                    accuracy = 2;
 //                    break;
-//                }         
+//                }
 //            }
 //        }
-//    } 
+//    }
 //    if(prescaler == 65536)//上述算法分配失败
 //    {
 //        //百分之二分配方案
@@ -334,10 +338,10 @@ float Pwm::get_accuracy(){
 //                {
 //                    accuracy = 3;
 //                    break;
-//                }   
-//            }            
+//                }
+//            }
 //        }
-//    }     
+//    }
 //    base_init(period, prescaler);
 //    _set_duty(duty);
 
@@ -420,7 +424,7 @@ float Pwm::get_accuracy(){
 //{
 //    uint32_t temp = 0;
 //    uint32_t timer_clock = 0x00;
-//    
+//
 //    if ((uint32_t)this->TIMx == TIM1_BASE)
 //    {
 //        timer_clock = cpu.clock.pclk2;
@@ -442,7 +446,7 @@ float Pwm::get_accuracy(){
 //}
 //float Pwm::get_accuracy()
 //{
-//    
+//
 //    switch(accuracy)
 //    {
 //        case 0:

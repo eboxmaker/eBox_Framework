@@ -9,26 +9,26 @@
 #include "list.h"
 class EventManager
 {
-    public:
-        void add(EventIo *handler)
-        {   
-            list.insert_tail(handler);
-        }
-        
-        void process()
-        {
-            int i=0;
-            while(i < list.size())
-            {
-                te = (EventIo *)list.data(i);
-                te->process();                
-                i++;
-            }
-        }
+public:
+    void add(EventIo *handler)
+    {
+        list.insert_tail(handler);
+    }
 
-    private:
-       List list;
-       EventIo *te;
+    void process()
+    {
+        int i = 0;
+        while(i < list.size())
+        {
+            te = (EventIo *)list.data(i);
+            te->process();
+            i++;
+        }
+    }
+
+private:
+    List list;
+    EventIo *te;
 
 };
 

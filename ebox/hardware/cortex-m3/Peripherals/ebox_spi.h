@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -33,9 +33,10 @@
 		如果不释放总线会导致别的SPI设备一直处于等待的状态
 */
 //默认配置 空，只依靠结构体SPICONFIG来初始化
-class mcuSpi: public Spi{
+class mcuSpi: public Spi
+{
 public:
-	mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
+    mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
 
     virtual void    begin (SpiConfig_t *spi_config);
     virtual void    config(SpiConfig_t *spi_config);
@@ -54,7 +55,7 @@ public:
     virtual int8_t  release(void);
 
 private:
-	SPI_TypeDef *_spi;
+    SPI_TypeDef *_spi;
     Gpio        *_sck;
     Gpio        *_miso;
     Gpio        *_mosi;

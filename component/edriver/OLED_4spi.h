@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -102,10 +102,10 @@ public:
     void display_on(void);
     void display_off(void);
 
-    void draw_point(uint8_t x,uint8_t y);
+    void draw_point(uint8_t x, uint8_t y);
 
-    void show_char(uint8_t x, uint8_t y, uint8_t chr,uint8_t Char_Size);
-    void show_string(uint8_t x, uint8_t y, char *p,uint8_t Char_Size);
+    void show_char(uint8_t x, uint8_t y, uint8_t chr, uint8_t Char_Size);
+    void show_string(uint8_t x, uint8_t y, char *p, uint8_t Char_Size);
     void show_num(uint8_t x, uint8_t y, uint32_t num, uint8_t len, uint8_t size);
     void show_chinese(uint8_t x, uint8_t y, uint8_t no);
 

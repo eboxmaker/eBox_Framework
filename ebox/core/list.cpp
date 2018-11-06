@@ -9,8 +9,8 @@
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -31,11 +31,11 @@ int List::insert_head(void *data)
     Node *node_new;
     if((node_new = (Node *)ebox_malloc(sizeof(Node))) == NULL )
         return -1;
-    
+
     node_new->data = data;
     node_new->next = _head;
     _head = node_new;
-    
+
     if(_size == 0)
     {
         _tail = node_new;
@@ -49,13 +49,13 @@ int List::insert_tail(void *data)
     Node *node_new;
     if((node_new = (Node *)ebox_malloc(sizeof(Node))) == NULL )
         return -1;
-    
+
     node_new->data = (Node *)data;
     node_new->next = NULL;
-    
+
     if(_size == 0)
     {
-        _head = _tail = node_new;    
+        _head = _tail = node_new;
     }
     else
     {
@@ -66,16 +66,16 @@ int List::insert_tail(void *data)
     return 0;
 }
 
-int List::insert(int at,void *data)
+int List::insert(int at, void *data)
 {
-    Node *node_prev,*node_at,*node_new;
+    Node *node_prev, *node_at, *node_new;
     int pos_at;
     int found = 0;
     if(is_empty() || at < 0 ) return -1;
     //1、申请内存，填充数据
     if((node_new = (Node *)ebox_malloc(sizeof(Node))) == NULL )
         return -1;
-    
+
     node_new->data = data;
     node_new->next = NULL;
 
@@ -83,27 +83,28 @@ int List::insert(int at,void *data)
     if(at == 0)//如果是0位置，表示在头插入
     {
         //3、插入数据
-        insert_head(data);   return 0; 
+        insert_head(data);
+        return 0;
     }
     else //其他位置
     {
         node_prev = _head;
         node_at = node_prev->next;
         pos_at = 0;
-        
+
         while(NULL != node_at)
         {
             if(pos_at == at - 1)
             {
                 found = 1;
-                break;        
+                break;
             }
             node_prev = node_at;
             node_at = node_at->next;
-            pos_at++;    
+            pos_at++;
         }
         //3、插入数据
-        
+
         if(found)//中间位置
         {
             node_new->next = node_at;
@@ -121,15 +122,15 @@ int List::insert(int at,void *data)
 
 int  List::remove(int at)
 {
-    Node *node_prev,*node_at;
+    Node *node_prev, *node_at;
     int pos_at;
     int found = 0;
     if(is_empty() || at < 0 ) return -1;
-    
+
     node_prev = _head;
     node_at = node_prev->next;
     pos_at = 0;
-    
+
     if(at == 0)//删除链表头部
     {
         node_prev = node_prev->next;
@@ -151,17 +152,17 @@ int  List::remove(int at)
             if(pos_at == at - 1)
             {
                 found = 1;
-                break;        
+                break;
             }
             node_prev = node_at;
             node_at = node_at->next;
-            pos_at++;    
+            pos_at++;
         }
-        
+
         if(found)
         {
             node_prev->next = node_at->next;
-            ebox_free(node_at);        
+            ebox_free(node_at);
         }
         else
         {
@@ -170,41 +171,41 @@ int  List::remove(int at)
 
     }
     _size--;
-    
+
     return 0;
 }
 
-void* List::data(int at)
+void *List::data(int at)
 {
     if(is_empty())return NULL;
     if(at > _size - 1) return NULL;//判断读取位置是否超出list的长度
     Node *p = _head;
     for(int i = 0; i < at; i++)
-        p=p->next;
+        p = p->next;
     return p->data;
 }
 
-Node* List::head()
+Node *List::head()
 {
     if(is_empty())return NULL;
     return _head;
 }
 
-Node* List::tail()
+Node *List::tail()
 {
-//    if(is_empty())return NULL;
-//    Node *node_tail = _head;
-//    while(NULL != node_tail->next)
-//    {
-//        node_tail = node_tail->next;
-//    }
+    //    if(is_empty())return NULL;
+    //    Node *node_tail = _head;
+    //    while(NULL != node_tail->next)
+    //    {
+    //        node_tail = node_tail->next;
+    //    }
     return _tail;
 }
 
 int List::is_empty()
 {
     return !_size;
-}    
+}
 int  List::clear()
 {
     Node *p = _head;
@@ -217,7 +218,7 @@ int  List::clear()
     }
     return 0;
 }
-int  List::modify_node(int at,void *data)
+int  List::modify_node(int at, void *data)
 {
     Node *p = _head;
     for(int i = 0; i < at; i++)
@@ -227,14 +228,14 @@ int  List::modify_node(int at,void *data)
     p->data = data;
     return 0;
 }
-int  List::swap(int x,int y)
+int  List::swap(int x, int y)
 {
-    void *px,*py;
+    void *px, *py;
     if(is_empty())return NULL;
     px = data(y);
     py = data(x);
-    modify_node(x,px);
-    modify_node(y,py);
+    modify_node(x, px);
+    modify_node(y, py);
     return 0;
 }
 

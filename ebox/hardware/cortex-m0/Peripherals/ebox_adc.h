@@ -5,33 +5,33 @@
 #include "dma.h"
 class Adc
 {
-    public:
-        Adc(ADC_TypeDef *ADCx)
-        {
-            this->ADCx = ADCx;
-        }
-        
-        void add_temp_senser();
-        void add_ch(Gpio *io);
-        void begin();
-        
-        
-        uint16_t read(Gpio *io);
-        uint16_t read(int index);
-        
-        float read_voltage(Gpio *io);
-        float read_voltage(int index);
-        
-        float read_temp_senser();
-        
-    private:
-        void  enableDMA(void);
-        
-        ADC_TypeDef     *ADCx;
-        Dma             *dma;
-        uint8_t         ch_num;//添加通道的数量自增变量
-        uint32_t         ch_table[2][16];//[0]:保存IO索引，[1]：保存IO对应adc通道索引
-        uint16_t        adc_buf[18];//DMA不断的按照添加顺序将adc各个通道值。传输至此数组
+public:
+    Adc(ADC_TypeDef *ADCx)
+    {
+        this->ADCx = ADCx;
+    }
+
+    void add_temp_senser();
+    void add_ch(Gpio *io);
+    void begin();
+
+
+    uint16_t read(Gpio *io);
+    uint16_t read(int index);
+
+    float read_voltage(Gpio *io);
+    float read_voltage(int index);
+
+    float read_temp_senser();
+
+private:
+    void  enableDMA(void);
+
+    ADC_TypeDef     *ADCx;
+    Dma             *dma;
+    uint8_t         ch_num;//添加通道的数量自增变量
+    uint32_t         ch_table[2][16];//[0]:保存IO索引，[1]：保存IO对应adc通道索引
+    uint16_t        adc_buf[18];//DMA不断的按照添加顺序将adc各个通道值。传输至此数组
 
 };
 #endif

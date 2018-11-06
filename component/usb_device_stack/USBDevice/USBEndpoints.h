@@ -29,7 +29,8 @@
 #define RATE_FEEDBACK_MODE  (1U << 2) /* Interrupt endpoints only */
 
 /* Endpoint transfer status, for endpoints > 0 */
-typedef enum {
+typedef enum
+{
     EP_COMPLETED,   /* Transfer completed */
     EP_PENDING,     /* Transfer in progress */
     EP_INVALID,     /* Invalid parameter */

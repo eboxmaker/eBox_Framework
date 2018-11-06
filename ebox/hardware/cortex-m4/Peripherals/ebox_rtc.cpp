@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -32,7 +32,7 @@ int Rtc::begin(uint8_t clock_source)
     /* Allow access to BKP Domain */
     PWR_BackupAccessCmd(ENABLE);
     /* Reset Backup Domain */
-//    BKP_DeInit();
+    //    BKP_DeInit();
 
 
     if(is_config(RTC_CFG_FLAG) == 0)
@@ -42,44 +42,44 @@ int Rtc::begin(uint8_t clock_source)
             config(0);
             ret = EPARA;
         }
-    
+
         set_config_flag(RTC_CFG_FLAG);
     }
-	else
-	{
-		/* Check if the Power On Reset flag is set */
-		if (RCC_GetFlagStatus(RCC_FLAG_PORRST) != RESET)
-		{
-//			uart1.printf("\r\n\n Power On Reset occurred....");
-		}
-		/* Check if the Pin Reset flag is set */
-		else if (RCC_GetFlagStatus(RCC_FLAG_PINRST) != RESET)
-		{
-//			uart1.printf("\r\n\n External Reset occurred....");
-		}
-		
-//		uart1.printf("\r\n No need to configure RTC....");
-//		uart1.printf("\r\n step 0....");
-		/* Wait for RTC registers synchronization */
-		RTC_WaitForSynchro();
-//		uart1.printf("\r\n step 1....");
-		
-		/* Enable the RTC Second */
-		RTC_ITConfig(RTC_IT_SEC, ENABLE);
-//		uart1.printf("\r\n step 2....");
-		
-		/* Wait until last write operation on RTC registers has finished */
-		RTC_WaitForLastTask();
-        
-//		uart1.printf("\r\n step 3....");
-	}
+    else
+    {
+        /* Check if the Power On Reset flag is set */
+        if (RCC_GetFlagStatus(RCC_FLAG_PORRST) != RESET)
+        {
+            //			uart1.printf("\r\n\n Power On Reset occurred....");
+        }
+        /* Check if the Pin Reset flag is set */
+        else if (RCC_GetFlagStatus(RCC_FLAG_PINRST) != RESET)
+        {
+            //			uart1.printf("\r\n\n External Reset occurred....");
+        }
+
+        //		uart1.printf("\r\n No need to configure RTC....");
+        //		uart1.printf("\r\n step 0....");
+        /* Wait for RTC registers synchronization */
+        RTC_WaitForSynchro();
+        //		uart1.printf("\r\n step 1....");
+
+        /* Enable the RTC Second */
+        RTC_ITConfig(RTC_IT_SEC, ENABLE);
+        //		uart1.printf("\r\n step 2....");
+
+        /* Wait until last write operation on RTC registers has finished */
+        RTC_WaitForLastTask();
+
+        //		uart1.printf("\r\n step 3....");
+    }
     return ret;
 }
 int Rtc::config(uint8_t flag)
 {
 
     int ret;
-    uint32_t i=0;
+    uint32_t i = 0;
     /* Enable PWR and BKP clocks */
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
 
@@ -88,7 +88,7 @@ int Rtc::config(uint8_t flag)
 
     /* Reset Backup Domain */
     BKP_DeInit();
-    
+
     if(flag == 1)
     {
         /* Enable LSE */
@@ -102,7 +102,7 @@ int Rtc::config(uint8_t flag)
                 ret = ETIMEOUT;
                 return ret;
             }
-        }            
+        }
         /* Select LSE as RTC Clock Source */
         RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE);
     }
@@ -143,8 +143,8 @@ int Rtc::config(uint8_t flag)
 
     /* Wait until last write operation on RTC registers has finished */
     RTC_WaitForLastTask();
-       
-    
+
+
     nvic(ENABLE);
 
     return EOK;
@@ -215,9 +215,9 @@ void Rtc::sec_interrupt(FunctionalState state)
     /* Wait until last write operation on RTC registers has finished */
     RTC_WaitForLastTask();
     if(state == ENABLE)
-        RTC->CRH |= (1<<0);
+        RTC->CRH |= (1 << 0);
     else
-         RTC->CRH &= ~(1<<0);
+        RTC->CRH &= ~(1 << 0);
 }
 
 void Rtc::alarm_interrupt(FunctionalState state)
@@ -227,22 +227,22 @@ void Rtc::alarm_interrupt(FunctionalState state)
     /* Wait until last write operation on RTC registers has finished */
     RTC_WaitForLastTask();
     if(state == ENABLE)
-        RTC->CRH |= (1<<1);
+        RTC->CRH |= (1 << 1);
     else
-         RTC->CRH &= ~(1<<1);
+        RTC->CRH &= ~(1 << 1);
 }
 
 void Rtc::overflow_interrupt(FunctionalState state)
 {
-     
+
     /* Wait for RTC registers synchronization */
     RTC_WaitForSynchro();
     /* Wait until last write operation on RTC registers has finished */
     RTC_WaitForLastTask();
     if(state == ENABLE)
-        RTC->CRH |= (1<<2);
+        RTC->CRH |= (1 << 2);
     else
-         RTC->CRH &= ~(1<<2);
+        RTC->CRH &= ~(1 << 2);
 }
 
 uint32_t Rtc::get_counter()

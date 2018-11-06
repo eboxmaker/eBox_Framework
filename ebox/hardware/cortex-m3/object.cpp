@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -28,7 +28,7 @@ Uart uart3(USART3, &PB10, &PB11);
 #if (MCU_PINS >= 100)
 Uart uart4(UART4, &PC10, &PC11);
 Uart uart5(UART5, &PC12, &PD2);
-#endif 
+#endif
 
 //spi
 mcuSpi  spi1(SPI1, &PA5, &PA6, &PA7);

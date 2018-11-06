@@ -10,8 +10,8 @@
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -27,11 +27,11 @@ void LTCX::begin()
 {
 
     if(initialized == 0)
-    {      
+    {
         spi_dev_LTC1446.dev_num = cs->id ;      // 用cs pinid作为设备id
         spi_dev_LTC1446.mode = SPI_MODE3;
         spi_dev_LTC1446.prescaler = SPI_CLOCK_DIV256;
-        spi_dev_LTC1446.bit_order = MSB_FIRST; 
+        spi_dev_LTC1446.bit_order = MSB_FIRST;
     }
 
     spi->begin(&spi_dev_LTC1446);

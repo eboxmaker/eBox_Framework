@@ -166,7 +166,8 @@ public:
      */
     retT operator        ()(argT arg) const
     {
-        if( 0 != c_callback ) {
+        if( 0 != c_callback )
+        {
             return obj_callback ? (obj_callback->*method_callback)(arg) :        (*c_callback)(arg);
         }
         return (retT)0;
@@ -193,13 +194,14 @@ private:
     // empty type used for casting
     class FPtrDummy;
 
-    FPtrDummy *      obj_callback;
+    FPtrDummy       *obj_callback;
 
     /**
      *  @union Funciton
      *  @brief Member or global callback function
      */
-    union {
+    union
+    {
         retT (*c_callback)(argT);                   /*!< Footprint for a global function */
         retT (FPtrDummy::*method_callback)(argT);   /*!< Footprint for a member function */
     };

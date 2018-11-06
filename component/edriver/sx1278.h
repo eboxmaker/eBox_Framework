@@ -195,53 +195,54 @@
 #define SX1278_FIFO_RX_BASE_ADDR_MAX                  B00000000  //  7     0     allocate the entire FIFO buffer for RX only
 
 
-typedef enum {
+typedef enum
+{
     DEFAULT,
     TXING,
     TXREADY
-}LoraState;
-class Lora 
+} LoraState;
+class Lora
 {
-    public:
-        LoraState state;
-        Lora(Gpio *cs, Gpio *rst, Spi *spi)
-        {
-            this->cs      = cs;
-            this->rst_pin = rst;
-            this->spi     = spi;
-            state = DEFAULT;
-        }
-        void begin(uint8_t dev_num,uint8_t bw, uint8_t cr, uint8_t sf);
-        void config(uint8_t bw, uint8_t cr, uint8_t sf);
-        
-        void enttry_tx();
-        void write(uint8_t* pBuffer,uint8_t len);
+public:
+    LoraState state;
+    Lora(Gpio *cs, Gpio *rst, Spi *spi)
+    {
+        this->cs      = cs;
+        this->rst_pin = rst;
+        this->spi     = spi;
+        state = DEFAULT;
+    }
+    void begin(uint8_t dev_num, uint8_t bw, uint8_t cr, uint8_t sf);
+    void config(uint8_t bw, uint8_t cr, uint8_t sf);
 
-        void enttry_rx();
-        void read(uint8_t* p,uint8_t *len);
+    void enttry_tx();
+    void write(uint8_t *pBuffer, uint8_t len);
 
-        void evnet_tc();
-        void evnet_timeout();
+    void enttry_rx();
+    void read(uint8_t *p, uint8_t *len);
 
-        void setMode(uint8_t mode);
-        void clearIRQFlags(void);
-        
-                
-        uint8_t setRegValue(uint8_t reg, uint8_t value, uint8_t msb = 7, uint8_t lsb = 0); //TODO: add msb/lsb value check
-        uint8_t getRegValue(uint8_t reg, uint8_t msb = 7, uint8_t lsb = 0);
-        
-        void readRegisterBurst(uint8_t reg, uint8_t* data, uint8_t numBytes);
-        void writeRegisterBurst(uint8_t reg, uint8_t* data, uint8_t numBytes);
-         
-        uint8_t readRegister(uint8_t reg);
-        void writeRegister(uint8_t reg, uint8_t data);
-        void setRFFrequency(uint32_t freq);
-        uint32_t getRFFrequency( void );
+    void evnet_tc();
+    void evnet_timeout();
 
-    private:
-        Gpio *cs;
-        Gpio *rst_pin;
-        SpiConfig_t spi_config;
-        Spi *spi;
+    void setMode(uint8_t mode);
+    void clearIRQFlags(void);
+
+
+    uint8_t setRegValue(uint8_t reg, uint8_t value, uint8_t msb = 7, uint8_t lsb = 0); //TODO: add msb/lsb value check
+    uint8_t getRegValue(uint8_t reg, uint8_t msb = 7, uint8_t lsb = 0);
+
+    void readRegisterBurst(uint8_t reg, uint8_t *data, uint8_t numBytes);
+    void writeRegisterBurst(uint8_t reg, uint8_t *data, uint8_t numBytes);
+
+    uint8_t readRegister(uint8_t reg);
+    void writeRegister(uint8_t reg, uint8_t data);
+    void setRFFrequency(uint32_t freq);
+    uint32_t getRFFrequency( void );
+
+private:
+    Gpio *cs;
+    Gpio *rst_pin;
+    SpiConfig_t spi_config;
+    Spi *spi;
 };
 #endif

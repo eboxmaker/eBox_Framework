@@ -21,22 +21,26 @@ void WS2812::begin()
 {
     init_info(pin);
     pin->mode(AF_PP);
-    
-    
+
+
     switch(ch)
     {
-        case TIMxCH1:
-            dam_cc = TIM_DMA_CC1;
-            dma_target = (uint32_t)&TIMx->CCR1;break;
-        case TIMxCH2:
-            dam_cc = TIM_DMA_CC2;
-            dma_target = (uint32_t)&TIMx->CCR2;break;
-        case TIMxCH3:
-            dam_cc = TIM_DMA_CC3;
-            dma_target = (uint32_t)&TIMx->CCR3;break;
-        case TIMxCH4:
-            dam_cc = TIM_DMA_CC4;
-            dma_target = (uint32_t)&TIMx->CCR4;break;
+    case TIMxCH1:
+        dam_cc = TIM_DMA_CC1;
+        dma_target = (uint32_t)&TIMx->CCR1;
+        break;
+    case TIMxCH2:
+        dam_cc = TIM_DMA_CC2;
+        dma_target = (uint32_t)&TIMx->CCR2;
+        break;
+    case TIMxCH3:
+        dam_cc = TIM_DMA_CC3;
+        dma_target = (uint32_t)&TIMx->CCR3;
+        break;
+    case TIMxCH4:
+        dam_cc = TIM_DMA_CC4;
+        dma_target = (uint32_t)&TIMx->CCR4;
+        break;
     }
 
     TIM_Config();
@@ -49,20 +53,20 @@ void WS2812::reset()
     delay_us(500);
 }
 //œ‘ æª∫≥Â«¯
-void WS2812::display(uint8_t *ptr,uint16_t height,uint16_t width)
+void WS2812::display(uint8_t *ptr, uint16_t height, uint16_t width)
 {
 
     uint8_t i, j = 0;
-    uint16_t buffersize = (24 * height*width), memaddr = 0;
+    uint16_t buffersize = (24 * height * width), memaddr = 0;
 
 
     uint8_t temp;
 
-    for(int index =0; index < height*width; index++)
+    for(int index = 0; index < height * width; index++)
     {
         for (i = 0; i < 3; i++)  						// Set RGB LED color R -> i=0, G -> i=1, B -> i=2
         {
-            temp = ptr[index*3+i];
+            temp = ptr[index * 3 + i];
             for (j = 0; j < 8; j++)  					// Set 8 bits of color
             {
                 if ((temp) & 0x80)  					// Data sent MSB first, j = 0 is MSB j = 7 is LSB
@@ -337,17 +341,17 @@ void WS2812::TIM_Config(void)
 
     TIM_TimeBaseInitTypeDef  TIM_TimeBaseStruct;
     TIM_OCInitTypeDef  TIM_OCInitStruct;
-    
-    rcc_clock_cmd((uint32_t)TIMx,ENABLE);
-    
-    
+
+    rcc_clock_cmd((uint32_t)TIMx, ENABLE);
+
+
     if(TIMx == TIM1 ||  TIMx == TIM8 )
     {
-        TIM_CtrlPWMOutputs(TIMx,ENABLE); 
+        TIM_CtrlPWMOutputs(TIMx, ENABLE);
     }
 
-    uint16_t PrescalerValue = (uint16_t)0;			
-    
+    uint16_t PrescalerValue = (uint16_t)0;
+
     /* Time base configuration */
     TIM_TimeBaseStruct.TIM_Period = TIM_PERIOD; // ≥¨∆µµΩ1Mhz 				// Species the period value
     TIM_TimeBaseStruct.TIM_Prescaler = PrescalerValue;				// Specifies the prescaler value used to divide the TIM clock.
@@ -388,14 +392,14 @@ void WS2812::TIM_Config(void)
 
 void WS2812::DMA_Config(void)
 {
-    
+
 
     dma->rcc_enable();
-    dma->nvic(DISABLE,0,0);
-    dma->interrupt(DmaItTc,DISABLE);
-    dma->interrupt(DmaItTe,DISABLE);
-    dma->interrupt(DmaItHt,DISABLE); 
-    
+    dma->nvic(DISABLE, 0, 0);
+    dma->interrupt(DmaItTc, DISABLE);
+    dma->interrupt(DmaItTe, DISABLE);
+    dma->interrupt(DmaItHt, DISABLE);
+
     DMA_InitTypeDef DMA_InitStruct;
 
     dma->deInit();
@@ -445,9 +449,9 @@ void WS2812::init_info(Gpio *pwm_pin)
         ch = TIMxCH4;//irq = TIM2_IRQn;
         dma = &Dma1Ch7;
         break;
-    
 
-    
+
+
     //TIM1
     case PA8_ID:
         TIMx = TIM1;
@@ -483,7 +487,7 @@ void WS2812::init_info(Gpio *pwm_pin)
         dma = &Dma1Ch5;
         break;
 
-    
+
     //TIM3
     case PA6_ID:
         TIMx = TIM3;

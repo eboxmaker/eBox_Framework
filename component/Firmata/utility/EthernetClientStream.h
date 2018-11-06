@@ -30,8 +30,8 @@
 
 class EthernetClientStream : public Stream
 {
-  public:
-    EthernetClientStream(Client &client, IPAddress localip, IPAddress ip, const char* host, uint16_t port);
+public:
+    EthernetClientStream(Client &client, IPAddress localip, IPAddress ip, const char *host, uint16_t port);
     int available();
     int read();
     int peek();
@@ -39,11 +39,11 @@ class EthernetClientStream : public Stream
     size_t write(uint8_t);
     void maintain(IPAddress localip);
 
-  private:
+private:
     Client &client;
     IPAddress localip;
     IPAddress ip;
-    const char* host;
+    const char *host;
     uint16_t port;
     bool connected;
     uint32_t time_connect;
@@ -57,85 +57,91 @@ class EthernetClientStream : public Stream
  * Copied here as a hack to linker issues with 3rd party board packages that don't properly
  * implement the Arduino network APIs.
  */
-EthernetClientStream::EthernetClientStream(Client &client, IPAddress localip, IPAddress ip, const char* host, uint16_t port)
-  : client(client),
-    localip(localip),
-    ip(ip),
-    host(host),
-    port(port),
-    connected(false)
+EthernetClientStream::EthernetClientStream(Client &client, IPAddress localip, IPAddress ip, const char *host, uint16_t port)
+    : client(client),
+      localip(localip),
+      ip(ip),
+      host(host),
+      port(port),
+      connected(false)
 {
 }
 
 int
 EthernetClientStream::available()
 {
-  return maintain() ? client.available() : 0;
+    return maintain() ? client.available() : 0;
 }
 
 int
 EthernetClientStream::read()
 {
-  return maintain() ? client.read() : -1;
+    return maintain() ? client.read() : -1;
 }
 
 int
 EthernetClientStream::peek()
 {
-  return maintain() ? client.peek() : -1;
+    return maintain() ? client.peek() : -1;
 }
 
 void EthernetClientStream::flush()
 {
-  if (maintain())
-    client.flush();
+    if (maintain())
+        client.flush();
 }
 
 size_t
 EthernetClientStream::write(uint8_t c)
 {
-  return maintain() ? client.write(c) : 0;
+    return maintain() ? client.write(c) : 0;
 }
 
 void
 EthernetClientStream::maintain(IPAddress localip)
 {
-  // ensure the local IP is updated in the case that it is changed by the DHCP server
-  if (this->localip != localip) {
-    this->localip = localip;
-    if (connected)
-      stop();
-  }
+    // ensure the local IP is updated in the case that it is changed by the DHCP server
+    if (this->localip != localip)
+    {
+        this->localip = localip;
+        if (connected)
+            stop();
+    }
 }
 
 void
 EthernetClientStream::stop()
 {
-  client.stop();
-  connected = false;
-  time_connect = millis();
+    client.stop();
+    connected = false;
+    time_connect = millis();
 }
 
 bool
 EthernetClientStream::maintain()
 {
-  if (client && client.connected())
-    return true;
+    if (client && client.connected())
+        return true;
 
-  if (connected) {
-    stop();
-  }
-  // if the client is disconnected, attempt to reconnect every 5 seconds
-  else if (millis() - time_connect >= MILLIS_RECONNECT) {
-    connected = host ? client.connect(host, port) : client.connect(ip, port);
-    if (!connected) {
-      time_connect = millis();
-      DEBUG_PRINTLN("connection failed. attempting to reconnect...");
-    } else {
-      DEBUG_PRINTLN("connected");
+    if (connected)
+    {
+        stop();
     }
-  }
-  return connected;
+    // if the client is disconnected, attempt to reconnect every 5 seconds
+    else if (millis() - time_connect >= MILLIS_RECONNECT)
+    {
+        connected = host ? client.connect(host, port) : client.connect(ip, port);
+        if (!connected)
+        {
+            time_connect = millis();
+            DEBUG_PRINTLN("connection failed. attempting to reconnect...");
+        }
+        else
+        {
+            DEBUG_PRINTLN("connected");
+        }
+    }
+    return connected;
 }
 
 #endif /* ETHERNETCLIENTSTREAM_H */

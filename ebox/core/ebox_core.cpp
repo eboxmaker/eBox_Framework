@@ -12,8 +12,14 @@ extern "C" {
 
     Cpu_t cpu;
 }
-uint16_t makeWord(unsigned int w) { return w; }
-uint16_t makeWord(unsigned char h, unsigned char l) { return (h << 8) | l; }
+uint16_t makeWord(unsigned int w)
+{
+    return w;
+}
+uint16_t makeWord(unsigned char h, unsigned char l)
+{
+    return (h << 8) | l;
+}
 
 char char2digital(
     char c	/**< is a character('0'-'F') to convert to HEX */
@@ -81,12 +87,12 @@ void shift_out(Gpio *data_pin, Gpio *clock_pin, uint8_t bit_order, uint8_t val)
 }
 
 /**
- * @brief   
- * 
- * @param   
- *          
- *          
- *          
+ * @brief
+ *
+ * @param
+ *
+ *
+ *
  * @retval  NONE
  */
 void random_seed(unsigned int seed)
@@ -114,13 +120,13 @@ unsigned int random(unsigned int max)
 }
 
 /**
- * @name    
- * @brief   
- * 
- * @param   
- *          
- *          
- *          
+ * @name
+ * @brief
+ *
+ * @param
+ *
+ *
+ *
  * @retval  NONE
  */
 unsigned int random(unsigned int min, unsigned int max)
@@ -130,5 +136,5 @@ unsigned int random(unsigned int min, unsigned int max)
 
 long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }

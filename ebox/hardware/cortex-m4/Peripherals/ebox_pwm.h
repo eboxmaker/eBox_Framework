@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -49,7 +49,7 @@
 class Pwm
 {
 public:
-    Pwm(Gpio *pwm_pin,TIM_TypeDef *timer,uint8_t ch);
+    Pwm(Gpio *pwm_pin, TIM_TypeDef *timer, uint8_t ch);
     void begin(uint32_t frq, uint16_t duty);
     void set_frq(uint32_t frq);
     void set_duty(uint16_t duty);
@@ -71,7 +71,7 @@ private:
 
     void init_info(Gpio *pwm_pin);
     void base_init(uint32_t _period, uint32_t _prescaler);
-//-------------------------------------------------------------
+    //-------------------------------------------------------------
 
     uint8_t             af_timer_x;
 

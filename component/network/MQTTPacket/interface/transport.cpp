@@ -17,8 +17,8 @@
 
 
 #if !defined(SOCKET_ERROR)
-	/** error in socket operation */
-	#define SOCKET_ERROR -1
+/** error in socket operation */
+#define SOCKET_ERROR -1
 #endif
 
 #if defined(WIN32)
@@ -57,28 +57,28 @@ to know the caller or other indicator (the socket id): int (*getfn)(unsigned cha
 #include "tcp.h"
 
 TCPCLIENT mqtt_tcp;
-int transport_init(int local_sock,int local_port)
+int transport_init(int local_sock, int local_port)
 {
-    mqtt_tcp.begin(local_sock,local_port);
+    mqtt_tcp.begin(local_sock, local_port);
     return 1;
 }
 /*
 @return  sended data size for success else 0.
 */
-int transport_sendPacketBuffer(unsigned char* buf, int buflen)
+int transport_sendPacketBuffer(unsigned char *buf, int buflen)
 {
-	int rc = 0;
-    rc = mqtt_tcp.send(buf,buflen);
-	return rc;
+    int rc = 0;
+    rc = mqtt_tcp.send(buf, buflen);
+    return rc;
 }
 
 /*
 @return  received data size for success else 0.
 非阻塞式接收，需在应用层做循环判断
 */
-int transport_getdata(unsigned char* buf, int count)
+int transport_getdata(unsigned char *buf, int count)
 {
-	return mqtt_tcp.recv(buf,count);
+    return mqtt_tcp.recv(buf, count);
 }
 ///*
 //@return  received data size for success else 0.
@@ -89,9 +89,9 @@ int transport_getdata(unsigned char* buf, int count)
 ////阻塞式接收
 //    int rc = 0;
 //    uint32_t last_time = millis();
-//    
+//
 //    while(rc == 0 ){
-//        rc = mqtt_tcp.recv(buf,count);	
+//        rc = mqtt_tcp.recv(buf,count);
 //        if(millis() - last_time > 1500)
 //            return 0;
 //	}
@@ -101,14 +101,14 @@ int transport_getdata(unsigned char* buf, int count)
 /*
 @return  received data size for success else 0.
 */
-int transport_getdatanb(void *sck, unsigned char* buf, int count)
+int transport_getdatanb(void *sck, unsigned char *buf, int count)
 {
     int rc;
     while(rc == 0)
     {
-        rc = mqtt_tcp.recv(buf,count);
+        rc = mqtt_tcp.recv(buf, count);
     }
-	return rc;
+    return rc;
 }
 
 /**
@@ -117,9 +117,9 @@ return >=0 for a socket descriptor, <0 for an error code
 removing indirections
 @return  1 for success else 0:time out.
 */
-int transport_open(char* addr, int port)
-{    
-	return mqtt_tcp.connect((unsigned char *)addr,port);   
+int transport_open(char *addr, int port)
+{
+    return mqtt_tcp.connect((unsigned char *)addr, port);
 }
 /*
 @return  1 for success else 0:time out.
@@ -128,7 +128,7 @@ int transport_open(char* addr, int port)
 int transport_close(int sock)
 {
     mqtt_tcp.stop();
-	return 1;
+    return 1;
 }
 int transport_connnected()
 {
