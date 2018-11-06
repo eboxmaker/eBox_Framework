@@ -97,7 +97,7 @@ void SoftSpi::config(SpiConfig_t *spi_config)
         break;
     }
 }
-uint8_t SoftSpi::readConfig(void)
+uint8_t SoftSpi::read_config(void)
 {
     return current_dev_num;
 }
@@ -282,7 +282,7 @@ int8_t  SoftSpi::write(uint8_t data)
     transfer(data);
     return 0;
 }
-int8_t  SoftSpi::writeBuf(uint8_t *data, uint16_t len)
+int8_t  SoftSpi::write_buf(uint8_t *data, uint16_t len)
 {
     if(len == 0)
         return -1;
@@ -303,7 +303,7 @@ int8_t  SoftSpi::read(uint8_t *data)
     return 0;
 
 }
-int8_t  SoftSpi::readBuf(uint8_t *rcvdata, uint16_t len)
+int8_t  SoftSpi::read_buf(uint8_t *rcvdata, uint16_t len)
 {
     if(len == 0)
         return -1;
@@ -314,11 +314,11 @@ int8_t  SoftSpi::readBuf(uint8_t *rcvdata, uint16_t len)
     return 0;
 }
 
-int8_t SoftSpi::takeRight(SpiConfig_t *spi_config)
+int8_t SoftSpi::take(SpiConfig_t *spi_config)
 {
-    while((busy == 1) && (spi_config->dev_num != readConfig()))
+    while((busy == 1) && (spi_config->dev_num != read_config()))
         delay_ms(1);
-    if(spi_config->dev_num == readConfig())
+    if(spi_config->dev_num == read_config())
     {
         busy = 1;
         return 0;
@@ -327,7 +327,7 @@ int8_t SoftSpi::takeRight(SpiConfig_t *spi_config)
     busy = 1;
     return 0;
 }
-int8_t SoftSpi::releaseRight(void)
+int8_t SoftSpi::release(void)
 {
     busy = 0;
     return 0;

@@ -126,7 +126,7 @@ void mcuSpi::config(SpiConfig_t *spi_config)
   *@param    void
   *@retval   返回当前设备id
   */
-uint8_t mcuSpi::readConfig(void)
+uint8_t mcuSpi::read_config(void)
 {
     return current_dev_num;
 }
@@ -158,7 +158,7 @@ int8_t mcuSpi::write(uint8_t data)
   *@param    data 要写入的数据，data_length 长度
   *@retval   none
   */
-int8_t mcuSpi::writeBuf(uint8_t *data, uint16_t data_length)
+int8_t mcuSpi::write_buf(uint8_t *data, uint16_t data_length)
 {
 	__IO uint8_t dummyByte;
 	if (data_length == 0)
@@ -187,7 +187,7 @@ int8_t mcuSpi::read(uint8_t *recv_data)
   *@param    recv_data 读取到的数据，data_length 要读取的数据长度
   *@retval   返回当前设备id
   */
-int8_t mcuSpi::readBuf(uint8_t *recv_data, uint16_t data_length)
+int8_t mcuSpi::read_buf(uint8_t *recv_data, uint16_t data_length)
 {
 	if (data_length == 0)
 		return -1;
@@ -203,11 +203,11 @@ int8_t mcuSpi::readBuf(uint8_t *recv_data, uint16_t data_length)
   *@param    none
   *@retval   none
   */
-int8_t mcuSpi::takeRight(SpiConfig_t *spi_config)
+int8_t mcuSpi::take(SpiConfig_t *spi_config)
 {
-    while((_busy == 1) && (spi_config->dev_num != readConfig()))
+    while((_busy == 1) && (spi_config->dev_num != read_config()))
         delay_ms(1);
-    if(spi_config->dev_num == readConfig())
+    if(spi_config->dev_num == read_config())
     {
         _busy = 1;
         return 0;
@@ -222,7 +222,7 @@ int8_t mcuSpi::takeRight(SpiConfig_t *spi_config)
   *@param    none
   *@retval   none
   */
-int8_t mcuSpi::releaseRight(void)
+int8_t mcuSpi::release(void)
 {
     _busy = 0;
     return 0;
