@@ -1,6 +1,6 @@
 
 /*
-file   : spi.cpp
+file   : _spi.cpp
 author : shentq
 version: V1.1
 date   : 2015/7/5
@@ -18,40 +18,40 @@ This specification is preliminary and is subject to change at any time without n
 
 mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 {
-    busy = 0;
-    spi = SPIx;	
-    this->sck = sck;
-    this->miso = miso;
-    this->mosi = mosi;
+    _busy = 0;
+	_spi = SPIx;
+    _sck = sck;
+    _miso = miso;
+    _mosi = mosi;
 	
 }  
 
 void mcuSpi::begin(SpiConfig_t *spi_config)
 {
 
-    if(spi == SPI1)
+    if(_spi == SPI1)
     {
-        sck->mode(AF_PP_PU,GPIO_AF_SPI1);
-        miso->mode(AF_PP_PU,GPIO_AF_SPI1);
-        mosi->mode(AF_PP_PU,GPIO_AF_SPI1);
+        _sck->mode(AF_PP_PU,GPIO_AF_SPI1);
+        _miso->mode(AF_PP_PU,GPIO_AF_SPI1);
+        _mosi->mode(AF_PP_PU,GPIO_AF_SPI1);
 
     }
-    if(spi == SPI2)
+    if(_spi == SPI2)
     {
-        sck->mode(AF_PP_PU,GPIO_AF_SPI2);
-        miso->mode(AF_PP_PU,GPIO_AF_SPI2);
-        mosi->mode(AF_PP_PU,GPIO_AF_SPI2);
+        _sck->mode(AF_PP_PU,GPIO_AF_SPI2);
+        _miso->mode(AF_PP_PU,GPIO_AF_SPI2);
+        _mosi->mode(AF_PP_PU,GPIO_AF_SPI2);
 
     }
-    if(spi == SPI3)
+    if(_spi == SPI3)
     {
-        sck->mode(AF_PP_PU,GPIO_AF_SPI3);
-        miso->mode(AF_PP_PU,GPIO_AF_SPI3);
-        mosi->mode(AF_PP_PU,GPIO_AF_SPI3);
+        _sck->mode(AF_PP_PU,GPIO_AF_SPI3);
+        _miso->mode(AF_PP_PU,GPIO_AF_SPI3);
+        _mosi->mode(AF_PP_PU,GPIO_AF_SPI3);
 
     }
 
-    
+    rcc_clock_cmd((uint32_t)_spi,ENABLE);
     config(spi_config);
 }
 void mcuSpi::config(SpiConfig_t *spi_config)
@@ -60,10 +60,9 @@ void mcuSpi::config(SpiConfig_t *spi_config)
 
     current_dev_num = spi_config->dev_num;
 
-    rcc_clock_cmd((uint32_t)spi,ENABLE);
-    SPI_Cmd(spi, DISABLE);
+    SPI_Cmd(_spi, DISABLE);
 
-    SPI_I2S_DeInit(spi);
+    SPI_I2S_DeInit(_spi);
     SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex; //全双工
     SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b; //8位数据模式
     SPI_InitStructure.SPI_NSS = SPI_NSS_Soft; //NSS软件管理
@@ -123,8 +122,8 @@ void mcuSpi::config(SpiConfig_t *spi_config)
             SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;break;
 
     }
-    SPI_Init(spi, &SPI_InitStructure);
-    SPI_Cmd(spi, ENABLE);
+    SPI_Init(_spi, &SPI_InitStructure);
+    SPI_Cmd(_spi, ENABLE);
 }
 
 uint8_t mcuSpi::read_config(void)
@@ -133,99 +132,128 @@ uint8_t mcuSpi::read_config(void)
 }
 
 
+/**
+  *@brief    transfer
+  *@param    data 要发送的数据
+  *@retval   uint8_t 接受到的数据
+  */
 uint8_t mcuSpi::transfer(uint8_t data)
 {
-    while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+    while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
         ;
-    spi->DR = data;
-    while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+    _spi->DR = data;
+    while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
         ;
-    return spi->DR;
+    return _spi->DR;
 }
 
-
+/**
+  *@brief    写数据
+  *@param    data 要写入的数据
+  *@retval   none
+  */
 int8_t mcuSpi::write(uint8_t data)
 {
     __IO uint8_t dummyByte;
-    while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+    while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
         ;
-    spi->DR = data;
-    while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+    _spi->DR = data;
+    while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
         ;
-    dummyByte = spi->DR;
+    dummyByte = _spi->DR;
 
     return 0;
 }
-int8_t mcuSpi::write(uint8_t *data, uint16_t data_length)
+/**
+  *@brief    连续写数据
+  *@param    data 要写入的数据，data_length 长度
+  *@retval   none
+  */
+int8_t mcuSpi::write_buf(uint8_t *data, uint16_t len)
 {
     __IO uint8_t dummyByte;
-    if(data_length == 0)
+    if(len == 0)
         return -1;
-    while(data_length--)
+    while(len--)
     {
-        while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+        while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
             ;
-        spi->DR = *data++;
-        while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+        _spi->DR = *data++;
+        while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
             ;
-        dummyByte = spi->DR;
+        dummyByte = _spi->DR;
     }
     return 0;
 }
 uint8_t mcuSpi::read()
 {
-    while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+    while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
         ;
-    spi->DR = 0xff;
-    while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+    _spi->DR = 0xff;
+    while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
         ;
-    return(spi->DR);
+    return(_spi->DR);
 
 }
 int8_t mcuSpi::read(uint8_t *recv_data)
 {
-    while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+    while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
         ;
-    spi->DR = 0xff;
-    while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+    _spi->DR = 0xff;
+    while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
         ;
-    *recv_data = spi->DR;
+    *recv_data = _spi->DR;
 
     return 0;
 }
 
-int8_t mcuSpi::read(uint8_t *recv_data, uint16_t data_length)
+/**
+  *@brief    连续读取数据
+  *@param    recv_data 读取到的数据，data_length 要读取的数据长度
+  *@retval   返回当前设备id
+  */
+int8_t mcuSpi::read_buf(uint8_t *recv_data, uint16_t len)
 {
-    if(data_length == 0)
+    if(len == 0)
         return -1;
-    while(data_length--)
+    while(len--)
     {
-        while ((spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+        while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
             ;
-        spi->DR = 0xff;
-        while ((spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+        _spi->DR = 0xff;
+        while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
             ;
-        *recv_data++ = spi->DR;
+        *recv_data++ = _spi->DR;
     }
     return 0;
 }
 
-int8_t mcuSpi::take_spi_right(SpiConfig_t *spi_config)
+/**
+  *@brief    获取控制权
+  *@param    none
+  *@retval   none
+  */
+int8_t mcuSpi::take(SpiConfig_t *spi_config)
 {
-    while((busy == 1) && (spi_config->dev_num != read_config()))
+    while((_busy == 1) && (spi_config->dev_num != read_config()))
         delay_ms(1);
     if(spi_config->dev_num == read_config())
     {
-        busy = 1;
+        _busy = 1;
         return 0;
     }
     config(spi_config);
-    busy = 1;
+    _busy = 1;
     return 0;
 }
-int8_t mcuSpi::release_spi_right(void)
+/**
+  *@brief    释放控制权
+  *@param    none
+  *@retval   none
+  */
+int8_t mcuSpi::release(void)
 {
-    busy = 0;
+    _busy = 0;
     return 0;
 }
 

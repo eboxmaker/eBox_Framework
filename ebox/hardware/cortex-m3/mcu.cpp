@@ -63,7 +63,7 @@ extern "C" {
     //将pb4默认设置为IO口，禁用jtag
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
-//    NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
+    NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
 
     attachSystickCallBack(nullFun);
     update_chip_info();
@@ -81,18 +81,9 @@ extern "C" {
     */
   uint64_t mcu_micros(void)
   {
-    uint64_t micro;
-    uint32_t temp = __get_PRIMASK();//保存之前中断设置
-    no_interrupts();
-    if (SysTick->CTRL & (1 << 16))//发生了溢出
-    {
-      if ( __get_IPSR() ||  (temp) ) //如果此时屏蔽了所有中断或者被别的中断打断无法执行，systick中断函数，则需要对millis_secend进行补偿
-        millis_seconds++;
-    }
-    micro = (millis_seconds * 1000 + (1000 - (SysTick->VAL)/(micro_para)));
-    __set_PRIMASK(temp);//恢复之前中断设置
-
-    return  micro;
+        uint64_t micro;
+        micro = (millis_seconds * 1000 + (1000 - (SysTick->VAL)/(micro_para)));
+        return  micro;
   }
 
   /**

@@ -35,7 +35,7 @@ class Spi
 
         virtual void    begin (SpiConfig_t *spi_config)  = 0;
         virtual void    config(SpiConfig_t *spi_config)  = 0;
-        virtual uint8_t readConfig(void)  = 0;
+        virtual uint8_t read_config(void)  = 0;
 
         virtual uint8_t transfer(uint8_t data)  = 0;
         // µ¥×Ö½Ú¶ÁÐ´
@@ -43,11 +43,11 @@ class Spi
         virtual uint8_t read()  = 0;
         virtual int8_t  read(uint8_t  *recv_data)  = 0;
         // buf¶ÁÐ´
-        virtual int8_t  writeBuf(uint8_t *data, uint16_t data_length)  = 0;
-        virtual int8_t  readBuf(uint8_t *recv_data, uint16_t data_length)  = 0;
+        virtual int8_t  write_buf(uint8_t *data, uint16_t data_length)  = 0;
+        virtual int8_t  read_buf(uint8_t *recv_data, uint16_t data_length)  = 0;
 
-        virtual int8_t  takeRight(SpiConfig_t *spi_config)  = 0;
-        virtual int8_t  releaseRight(void)  = 0;
+        virtual int8_t  take(SpiConfig_t *spi_config)  = 0;
+        virtual int8_t  release(void)  = 0;
 };
 
 #endif
