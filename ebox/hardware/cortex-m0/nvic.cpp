@@ -2,11 +2,6 @@
 #include "ebox_core.h"
 #include "nvic.h"
 
-typedef struct
-{
-    uint32_t dev;
-    uint8_t irqn[2];
-} DevToIRQn_t;
 
 //设备->中断号查询表
 const DevToIRQn_t dev_to_IRQn_table[] =
@@ -55,26 +50,6 @@ const DevToIRQn_t dev_to_IRQn_table[] =
     {LL_EXTI_LINE_13, EXTI4_15_IRQn},
     {LL_EXTI_LINE_14, EXTI4_15_IRQn},
     {LL_EXTI_LINE_15, EXTI4_15_IRQn},
-
-#ifdef STM32F10X_HD
-
-    {TIM5_BASE, TIM5_IRQn},
-    {TIM6_BASE, TIM6_IRQn},
-    {TIM7_BASE, TIM7_IRQn},
-    {TIM8_BASE, TIM8_BRK_IRQn, TIM8_UP_IRQn, TIM8_TRG_COM_IRQn, TIM8_CC_IRQn},
-
-    {DMA2_Channel1_BASE, DMA2_Channel1_IRQn},
-    {DMA2_Channel2_BASE, DMA2_Channel2_IRQn},
-    {DMA2_Channel3_BASE, DMA2_Channel3_IRQn},
-    {DMA2_Channel4_BASE, DMA2_Channel4_IRQn},
-    {DMA2_Channel5_BASE, DMA2_Channel5_IRQn},
-
-    {SPI3_BASE, SPI3_IRQn},
-
-    {UART4_BASE, UART4_IRQn},
-    {UART5_BASE, UART5_IRQn},
-
-#endif
 
 };
 /**
@@ -156,12 +131,6 @@ void nvic_dev_disable(uint32_t dev, uint8_t index)
 }
 
 
-
-
-
-
-
-
 //直接输入中断号设置其中断优先级
 /**
  *@name     void nvic_irq_set_priority(IRQn_Type irq_num, uint8_t PreemptionPriority,uint8_t SubPriority)
@@ -175,7 +144,25 @@ void nvic_irq_set_priority(IRQn_Type irq_num, uint8_t PreemptionPriority, uint8_
 {
     NVIC_SetPriority(irq_num, PreemptionPriority);
 }
+void nvic_irq_get_priority(uint8_t irq_num, uint8_t *PreemptionPriority, uint8_t *SubPriority)
+{
 
+//    irq_num  = (irq_num -  16);
+//    uint32_t tmppriority = 0x00, tmppre = 0x00, tmpsub = 0x0F;
+
+//    tmppriority = (0x700 - ((SCB->AIRCR) & (uint32_t)0x700)) >> 0x08;
+//    tmppre = (0x4 - tmppriority);
+//    tmpsub = tmpsub >> tmppriority;
+
+    //    tmppriority = (uint32_t)PreemptionPriority<< tmppre;
+    //    tmppriority |=  SubPriority & tmpsub;
+    //    tmppriority = tmppriority << 0x04;
+    //
+    //    NVIC->IP[irq_num] = tmppriority;
+
+    *PreemptionPriority = 		NVIC_GetPriority((IRQn_Type)irq_num);
+    *SubPriority = 0;	// f0无效
+}
 /**
  *@name     void nvic_dev_enable(uint32_t dev,uint8_t index)
  *@brief    开启中断号的中断

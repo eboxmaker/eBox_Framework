@@ -5,7 +5,6 @@
   * @version V2.1
   * @date    2016/08/14
   * @brief
-  *         2018/8/6  将Tx pin 设置放在串口初始化之后，防止发送0x00
   ******************************************************************************
   * @attention
   *
@@ -20,33 +19,36 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_uart.h"
-
-#if USE_UART_DMA
 #include "ebox_mem.h"
-#endif
-
-uint8_t busy[UART_NUM];
-
 static uint32_t serial_irq_ids[UART_NUM] = {0};
 
 static uart_irq_handler irq_handler;
 
 
 
+uint16_t _tx_buffer_size[UART_NUM];   // 发送环形缓冲区size
+uint16_t _tx_buffer_head[UART_NUM];   // 缓冲区头,每写入（写入缓冲区）一个字符，向后移动1
+uint16_t _tx_buffer_tail[UART_NUM];   // 缓冲区尾,每写出（写入串口TX）一个字符，向后移动1
+uint16_t *_tx_ptr[UART_NUM];          // 缓冲区指针
 
+uint16_t _rx_buffer_size[UART_NUM];
+uint16_t _rx_buffer_head[UART_NUM];
+uint16_t _rx_buffer_tail[UART_NUM];
+uint16_t *_rx_ptr[UART_NUM];
 /**
- *@name     Uart::Uart(USART_TypeDef *USARTx,Gpio *tx_pin,Gpio *rx_pin)
  *@brief    串口的构造函数
  *@param    USARTx:  USART1,2,3和UART4,5
  *          tx_pin:  外设所对应的tx引脚
  *          rx_pin:  外设所对应的rx引脚
  *@retval   None
 */
-Uart::Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin)
+Uart::Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin, uint16_t tx_buffer_size, uint16_t rx_buffer_size)
 {
     _USARTx = USARTx;
     _tx_pin = tx_pin;
     _rx_pin = rx_pin;
+    this->rx_buffer_size = rx_buffer_size;
+    this->tx_buffer_size = tx_buffer_size;
 }
 /**
  *@name     void Uart::begin(uint32_t baud_rate,uint8_t _use_dma)
@@ -55,9 +57,9 @@ Uart::Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin)
  *@param    _use_dma:   是否使用DMA，默认值1：使用DMA，0：不适用DMA;
  *@retval   None
 */
-void    Uart::begin(uint32_t baud_rate, uint8_t use_dma)
+void    Uart::begin(uint32_t baud_rate, RxMode_t mode)
 {
-    Uart::begin(baud_rate, 8, 0, 1, use_dma);
+    Uart::begin(baud_rate, 8, 0, 1, mode);
 }
 
 
@@ -71,7 +73,7 @@ void    Uart::begin(uint32_t baud_rate, uint8_t use_dma)
  *          _use_dma:   是否使用DMA，默认值1：使用DMA，0：不适用DMA;
  *@retval   None
 */
-void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit, uint8_t use_dma)
+void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit, RxMode_t mode)
 {
     uint8_t             index;
     uint32_t _DataWidth;
@@ -223,10 +225,23 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 #endif
 
     interrupt(RxIrq, DISABLE);
-    interrupt(TcIrq, DISABLE);
+    interrupt(TxIrq, DISABLE);
+}
+/**
+ *@brief    复位串口，并清空RX缓冲区
+ *@param    none
+ *@retval   None
+*/
+void Uart::end()
+{
+		LL_USART_DeInit(_USARTx);
+    // clear any received data
+    _rx_buffer_head[index] = _rx_buffer_tail[index];
 }
 void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
+    this->preemption_priority = preemption_priority;
+    this->sub_priority = sub_priority;
     nvic_dev_set_priority((uint32_t)_USARTx, 0, 0, 0);
     if(enable != DISABLE)
         nvic_dev_enable((uint32_t)_USARTx, 0);
@@ -236,7 +251,6 @@ void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub
 ///////////////////////////////////////////////////////////////
 
 /**
- *@name     void Uart::interrupt(FunctionalState enable)
  *@brief    串口中断控制函数
  *@param    enable:  ENABLE使能串口的发送完成和接收中断；DISABLE：关闭这两个中断
  *@retval   None
@@ -246,76 +260,133 @@ void Uart::interrupt(IrqType type, FunctionalState enable)
 
     if(type == RxIrq)
         LL_USART_EnableIT_RXNE(_USARTx);
-    if(type == TcIrq)
+    if(type == TxIrq)
     {
-        LL_USART_EnableIT_TC(_USARTx);
+			(enable == ENABLE) ? (LL_USART_EnableIT_TC(_USARTx)): ( LL_USART_DisableIT_TC(_USARTx)) ;
     }
 }
 /**
- *@name     size_t Uart::write(uint8_t c)
- *@brief    串口方式发送一个字节
- *@param    ch：    要发送的字符
- *@retval   已发送的数据
+ *@brief    相当与read，但读取后不从缓冲区清除数据
+ *@param    NONE
+ *@retval   返回tail指向的数据
+*/
+int Uart::peek(void)
+{
+    if ((_rx_buffer_size[index] - LL_DMA_GetDataLength(DMA1,dma_rx->DMAy_Channelx)) == _rx_buffer_tail[index])
+    {
+        return -1;
+    }
+    else
+    {
+        return _rx_ptr[index][_rx_buffer_tail[index]];
+    }
+}
+/**
+ *@brief    判断接收缓冲区是否有数据
+ *@param    NONE
+ *@retval   0 无数据，非0，当前缓冲区数据长度
+*/
+int Uart::available()
+{
+    if(mode == RxDMA)
+        return ((unsigned int)(_rx_buffer_size[index] + (_rx_buffer_size[index] - LL_DMA_GetDataLength(DMA1,dma_rx->DMAy_Channelx)) - _rx_buffer_tail[index])) % _rx_buffer_size[index];
+    else
+        return ((unsigned int)(_rx_buffer_size[index] + _rx_buffer_head[index] - _rx_buffer_tail[index])) % _rx_buffer_size[index];
+}
+
+/**
+ *@brief    读取一个字节，并清除当前数据
+ *@param    NONE
+ *@retval   -1  无数据，其他，当前数据
+*/
+int Uart::read()
+{
+    if(mode == RxDMA)
+    {
+        if (_rx_buffer_tail[index] == (_rx_buffer_size[index] - LL_DMA_GetDataLength(DMA1,dma_rx->DMAy_Channelx)))
+        {
+            return -1;					
+        }
+    }
+    else
+    {
+        if (_rx_buffer_tail[index] == _rx_buffer_head[index])
+        {
+            return -1;
+        }
+    }
+    {
+        int c = _rx_ptr[index][_rx_buffer_tail[index]];
+        _rx_buffer_tail[index] = (_rx_buffer_tail[index] + 1) % _rx_buffer_size[index];
+        return c;
+    }
+}
+
+/**
+ *@brief    是否可以写入
+ *@param    NONE
+ *@retval   可以写入的数量
+*/
+int Uart::availableForWrite()
+{
+    uint16_t head = _tx_buffer_head[index];
+    uint16_t tail = _tx_buffer_tail[index];
+
+    if (head >= tail)
+        return _tx_buffer_size[index] - 1 - head + tail;
+
+    return tail - head - 1;
+}
+
+/**
+ *@brief    手动将tx缓冲区内容全部写出
+ *@param    NONE
+ *@retval   NONE
+*/
+void Uart::flush()
+{
+    uint8_t major, minor;
+    while(_tx_buffer_head[index] != _tx_buffer_tail[index] )
+    {
+        //如果全局中断被关闭,发送使能中断被关闭、在其他中断函数中,则手动发送
+        //        if(__get_PRIMASK() || ((_USARTx->CR1 & USART_FLAG_TXE) == 0))
+        if(__get_PRIMASK() || ((_USARTx->CR1 & USART_ISR_TXE) == 0) || (__get_IPSR() != 0))
+        {
+            nvic_irq_get_priority((IRQn_Type)__get_IPSR(), &major, &minor);
+            if(major <= preemption_priority )//串口优先级低于或等于所在中断服务函数
+            {
+                //                interrupt(TxIrq,DISABLE);//期间必须关闭串口中断
+                while(LL_USART_IsActiveFlag_TXE(_USARTx) == RESET);//单字节等待，等待寄存器空
+                tx_bufferx_one(_USARTx, index);
+            }
+        }
+        //或者等待串口中断发送完成所有数据的传输
+    }
+}
+
+
+/**
+ *@brief    发送一个字节
+ *@param    c：要发送的字符
+ *@retval   1
 */
 size_t Uart::write(uint8_t c)
 {
-    //    while(USART_GetFlagStatus(_USARTx, USART_FLAG_TXE) == RESET);//单字节等待，等待寄存器空
-    //    USART_SendData(_USARTx, c);
-    //    return 1;
-    write(&c, 1);
-    return 1;
-}
-
-/**
- *@name     size_t Uart::write(const uint8_t *buffer, size_t size)
- *@brief    串口方式发送一个缓冲区
- *@param    buffer:   缓冲区指针
-            size：    缓冲区大小
- *@retval   已发送的数据
-*/
-size_t Uart::write(const uint8_t *buffer, size_t size)
-{
-    if(size <= 0 ) return 0;
-    wait_busy();
-#if USE_UART_DMA
-
-    if((_USARTx == USART1 || _USARTx == USART2 || _USARTx == USART3 ) && (_use_dma == 1))
+    uint16_t i = (_tx_buffer_head[index] + 1) % _tx_buffer_size[index];//计算头的位置
+    // head = tail, 缓冲区过满，先发送
+    while (i == _tx_buffer_tail[index]) 
     {
-        //        wait_busy();
-        if(data_ptr != NULL)
-            ebox_free(data_ptr);
-        set_busy();
-        data_ptr = (char *)ebox_malloc(size);
-        if(data_ptr == NULL)
-        {
-            return 0;
-        }
-        for(int i = 0; i < size; i++)
-            data_ptr[i] = *buffer++;
-        dma_write(data_ptr, size);
+        interrupt(TxIrq,DISABLE);//期间必须关闭串口中断				
+        while(LL_USART_IsActiveFlag_TXE(_USARTx) == RESET);//单字节等待，等待寄存器空
+        tx_bufferx_one(_USARTx,index);
+        interrupt(TxIrq,ENABLE);//开启发送
     }
-    else
-#endif
-    {
-        while(size--)
-        {
-            while (LL_USART_IsActiveFlag_TXE(_USARTx) == RESET);
-            LL_USART_TransmitData8(_USARTx, *buffer++);
-        }
-    }
-    return size;
-}
+    // 加入新数据，移动head
+    _tx_ptr[index][_tx_buffer_head[index]] = c;
+    _tx_buffer_head[index] = i;
 
-
-/**
- *@name     uint16_t Uart::read()
- *@brief    串口接收数据，此函数只能在用户接收中断中调用
- *@param    NONE
- *@retval   串口所接收到的数据
-*/
-uint16_t Uart::read()
-{
-    return (uint16_t)(_USARTx->RDR & (uint16_t)0x01FF);
+    interrupt(TxIrq,ENABLE);//开启发送  
+  	return 1;
 }
 
 /**
@@ -349,139 +420,6 @@ uint16_t Uart::dma_write(const char *str, uint16_t length)
 }
 #endif
 
-
-/**
- *@name     int Uart::put_char(uint16_t ch)
- *@brief    串口方式发送一个字节
- *@param    str：       要发送的字符串，数据缓冲区
-            length：    缓冲区的长度
- *@retval   已发送的数据
-*/
-void Uart::wait_busy()
-{
-    switch((uint32_t)_USARTx)
-    {
-#if USE_UART1
-    case (uint32_t)USART1_BASE:
-        while(busy[0] == 1 )
-        {
-            if(USART1->ISR & bitShift(6))
-            {
-                busy[0] = 0;
-                LL_USART_ClearFlag_TC(USART1);
-                break;
-            }
-        }
-        break;
-#endif
-
-#if USE_UART2
-    case (uint32_t)USART2_BASE:
-        while(busy[1] == 1 )
-        {
-            if(USART2->ISR & 0X40)
-            {
-                busy[1] = 0;
-                LL_USART_ClearFlag_TC(USART2);
-                break;
-            }
-        }
-        break;
-#endif
-
-#if USE_UART3
-    case (uint32_t)USART3_BASE:
-        while(busy[2] == 1 )
-        {
-            if(USART3->SR & 0X40)
-            {
-                busy[2] = 0;
-                USART_ClearITPendingBit(USART3, USART_IT_TC);
-                break;
-            }
-        }
-        break;
-#endif
-
-#if USE_UART4
-    case (uint32_t)UART4_BASE:
-        while(busy[3] == 1 )
-        {
-            if(UART4->SR & 0X40)
-            {
-                busy[3] = 0;
-                USART_ClearITPendingBit(UART4, USART_IT_TC);
-                break;
-            }
-        }
-        break;
-#endif
-
-#if USE_UART5
-    case (uint32_t)UART5_BASE:
-        while(busy[4] == 1 )
-        {
-            if(UART5->SR & 0X40)
-            {
-                busy[4] = 0;
-                irq_handler(serial_irq_ids[NUM_UART5], TcIrq);
-                USART_ClearITPendingBit(UART5, USART_IT_TC);
-                break;
-            }
-        }
-        break;
-#endif
-    }
-}
-
-/**
- *@name     int Uart::put_char(uint16_t ch)
- *@brief    串口方式发送一个字节
- *@param    str：       要发送的字符串，数据缓冲区
-            length：    缓冲区的长度
- *@retval   已发送的数据
-*/
-void Uart::set_busy()
-{
-    switch((uint32_t)_USARTx)
-    {
-#if USE_UART1
-    case (uint32_t)USART1_BASE:
-        busy[0] = 1;
-        break;
-#endif
-
-#if USE_UART2
-    case (uint32_t)USART2_BASE:
-        busy[1] = 1;
-        break;
-#endif
-
-
-#if USE_UART3
-    case (uint32_t)USART3_BASE:
-        busy[2] = 1;
-        break;
-#endif
-
-
-#if USE_UART4
-    case (uint32_t)UART4_BASE:
-        busy[3] = 1;
-        break;
-#endif
-
-
-#if USE_UART5
-    case (uint32_t)UART5_BASE:
-        busy[4] = 1;
-        break;
-#endif
-
-
-    }
-}
-
 void Uart::attach(void (*fptr)(void), IrqType type)
 {
     if (fptr)
@@ -498,19 +436,54 @@ void Uart::_irq_handler(uint32_t id, IrqType irq_type)
 
 
 extern "C" {
+    /**
+      *@brief    从缓冲区写出一个字符
+      *@param    uart：串口； index 串口 IT 索引
+      *@retval   1
+      */
+    void tx_bufferx_one(USART_TypeDef* uart,uint8_t index)
+    {
+        if (_tx_buffer_head[index] == _tx_buffer_tail[index])//如果空则直接返回
+            return;
+        unsigned char c = _tx_ptr[index][_tx_buffer_tail[index]];   // 取出字符
+        _tx_buffer_tail[index] = (_tx_buffer_tail[index] + 1) % _tx_buffer_size[index];
+        uart->TDR = (c & (uint16_t)0x01FF);
+        if (_tx_buffer_head[index] == _tx_buffer_tail[index])//如果发送完所有数据
+        {
+            // Buffer empty, so disable interrupts
+            //USART_ITConfig(uart, USART_IT_TXE, DISABLE);
+						LL_USART_DisableIT_TXE(uart);
+        }
+    }
+    /**
+      *@brief    读入一个字符放入缓冲区
+      *@param    uart：串口； index 串口 IT 索引
+      *@retval   1
+      */
+    void rx_buffer_one(USART_TypeDef* uart,uint8_t index)
+    {
+        uint16_t i = (_rx_buffer_head[index] + 1) % _rx_buffer_size[index];//计算头的位置
+        if(i == _rx_buffer_tail[index]) //如果环形缓冲区满了就修改一次tail，将会舍弃最老的一个数据
+        {
+            _rx_buffer_tail[index] = (_rx_buffer_tail[index] + 1) % _rx_buffer_size[index];
+        }
+        _rx_ptr[index][_rx_buffer_head[index]] = uart->RDR;
+        _rx_buffer_head[index] = i;
+    }	
 
 #if USE_UART1
     void USART1_IRQHandler(void)
     {
         if(LL_USART_IsActiveFlag_RXNE(USART1) == SET)
         {
+            rx_buffer_one(USART1, NUM_UART1);
             irq_handler(serial_irq_ids[NUM_UART1], RxIrq);
             CLEAR_BIT(USART1->ISR, B10000); //强制清除
         }
         if(LL_USART_IsActiveFlag_TC(USART1) == SET)
         {
-            busy[0] = 0;
-            irq_handler(serial_irq_ids[NUM_UART1], TcIrq);
+            tx_bufferx_one(USART1, NUM_UART1);
+            irq_handler(serial_irq_ids[NUM_UART1], TxIrq);
             LL_USART_ClearFlag_TC(USART1);
         }
     }
@@ -522,17 +495,15 @@ extern "C" {
     {
         if(LL_USART_IsActiveFlag_RXNE(USART2) == SET)
         {
+            rx_buffer_one(USART2, NUM_UART2);
             irq_handler(serial_irq_ids[NUM_UART2], RxIrq);
             // 如果回调函数中没有读取数据，则将当前数据抛弃，准备下一次接收
-            if (LL_USART_IsActiveFlag_RXNE(USART2) == SET )
-            {
-                LL_USART_RequestRxDataFlush(USART2);
-            }
+            LL_USART_RequestRxDataFlush(USART2);
         }
         if(LL_USART_IsActiveFlag_TC(USART2) == SET)
         {
-            busy[1] = 0;
-            irq_handler(serial_irq_ids[NUM_UART2], TcIrq);
+						tx_bufferx_one(USART2, NUM_UART2);
+            irq_handler(serial_irq_ids[NUM_UART2], TxIrq);
             // 清除发送结束中断标志
             LL_USART_ClearFlag_TC(USART2);
         }
@@ -541,57 +512,20 @@ extern "C" {
 
 
 #if USE_UART3
-    void USART3_IRQHandler(void)
-    {
-        if(USART_GetITStatus(USART3, USART_IT_RXNE) == SET)
-        {
-            irq_handler(serial_irq_ids[NUM_UART3], RxIrq);
-            USART_ClearITPendingBit(USART3, USART_IT_RXNE);
-        }
-        if(USART_GetITStatus(USART3, USART_IT_TC) == SET)
-        {
-            busy[2] = 0;
-            irq_handler(serial_irq_ids[NUM_UART3], TcIrq);
-            USART_ClearITPendingBit(USART3, USART_IT_TC);
-        }
-    }
-#endif
-
-#if defined (STM32F10X_HD)
-#if USE_UART4
-    void UART4_IRQHandler(void)
-    {
-        if(USART_GetITStatus(UART4, USART_IT_RXNE) == SET)
-        {
-            irq_handler(serial_irq_ids[NUM_UART4], RxIrq);
-            USART_ClearITPendingBit(UART4, USART_IT_RXNE);
-        }
-        if(USART_GetITStatus(UART4, USART_IT_TC) == SET)
-        {
-            busy[3] = 0;
-            irq_handler(serial_irq_ids[NUM_UART4], TcIrq);
-            USART_ClearITPendingBit(UART4, USART_IT_TC);
-        }
-    }
-#endif
-
-#if USE_UART5
-    void UART5_IRQHandler(void)
-    {
-        if(USART_GetITStatus(UART5, USART_IT_RXNE) == SET)
-        {
-            irq_handler(serial_irq_ids[NUM_UART5], RxIrq);
-            USART_ClearITPendingBit(UART5, USART_IT_RXNE);
-        }
-        if(USART_GetITStatus(UART5, USART_IT_TC) == SET)
-        {
-            busy[4] = 0;
-            irq_handler(serial_irq_ids[NUM_UART5], TcIrq);
-            USART_ClearITPendingBit(UART5, USART_IT_TC);
-        }
-    }
-#endif
-
+//    void USART3_IRQHandler(void)
+//    {
+//        if(USART_GetITStatus(USART3, USART_IT_RXNE) == SET)
+//        {
+//            irq_handler(serial_irq_ids[NUM_UART3], RxIrq);
+//            USART_ClearITPendingBit(USART3, USART_IT_RXNE);
+//        }
+//        if(USART_GetITStatus(USART3, USART_IT_TC) == SET)
+//        {
+//            busy[2] = 0;
+//            irq_handler(serial_irq_ids[NUM_UART3], TcIrq);
+//            USART_ClearITPendingBit(USART3, USART_IT_TC);
+//        }
+//    }
 #endif
 
     void serial_irq_handler(uint8_t index, uart_irq_handler handler, uint32_t id)
