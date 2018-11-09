@@ -27,10 +27,10 @@ static uart_irq_handler irq_handler;
 
 
 
-uint16_t _tx_buffer_size[UART_NUM];
-uint16_t _tx_buffer_head[UART_NUM];
-uint16_t _tx_buffer_tail[UART_NUM];
-uint16_t *_tx_ptr[UART_NUM];
+uint16_t _tx_buffer_size[UART_NUM];   // 发送环形缓冲区size
+uint16_t _tx_buffer_head[UART_NUM];   // 缓冲区头,每写入（写入缓冲区）一个字符，向后移动1
+uint16_t _tx_buffer_tail[UART_NUM];   // 缓冲区尾,每写出（写入串口TX）一个字符，向后移动1
+uint16_t *_tx_ptr[UART_NUM];          // 缓冲区指针
 
 uint16_t _rx_buffer_size[UART_NUM];
 uint16_t _rx_buffer_head[UART_NUM];
@@ -216,6 +216,12 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     interrupt(TxIrq, DISABLE);
 
 }
+
+/**
+ *@brief    复位串口，并清空RX缓冲区
+ *@param    none
+ *@retval   None
+*/
 void Uart::end()
 {
     USART_DeInit(_USARTx);
@@ -235,7 +241,6 @@ void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub
 ///////////////////////////////////////////////////////////////
 
 /**
- *@name     void Uart::interrupt(FunctionalState enable)
  *@brief    串口中断控制函数
  *@param    enable:  ENABLE使能串口的发送完成和接收中断；DISABLE：关闭这两个中断
  *@retval   None
@@ -248,6 +253,12 @@ void Uart::interrupt(IrqType type, FunctionalState enable)
     if(type == TxIrq)
         USART_ITConfig(_USARTx, USART_IT_TXE, enable);
 }
+
+/**
+ *@brief    相当与read，但读取后不从缓冲区清除数据
+ *@param    NONE
+ *@retval   返回tail指向的数据
+*/
 int Uart::peek(void)
 {
     if ((_rx_buffer_size[index] - dma_rx->DMAy_Channelx->CNDTR) == _rx_buffer_tail[index])
@@ -260,10 +271,9 @@ int Uart::peek(void)
     }
 }
 /**
- *@name     uint16_t Uart::read()
- *@brief    串口接收数据，此函数只能在用户接收中断中调用
+ *@brief    判断接收缓冲区是否有数据
  *@param    NONE
- *@retval   串口所接收到的数据
+ *@retval   0 无数据，非0，当前缓冲区数据长度
 */
 int Uart::available()
 {
@@ -273,6 +283,11 @@ int Uart::available()
         return ((unsigned int)(_rx_buffer_size[index] + _rx_buffer_head[index] - _rx_buffer_tail[index])) % _rx_buffer_size[index];
 }
 
+/**
+ *@brief    读取一个字节，并清除当前数据
+ *@param    NONE
+ *@retval   -1  无数据，其他，当前数据
+*/
 int Uart::read()
 {
     if(mode == RxDMA)
@@ -296,10 +311,13 @@ int Uart::read()
     }
 }
 
-
+/**
+ *@brief    是否可以写入
+ *@param    NONE
+ *@retval   可以写入的数量
+*/
 int Uart::availableForWrite()
 {
-
     uint16_t head = _tx_buffer_head[index];
     uint16_t tail = _tx_buffer_tail[index];
 
@@ -309,7 +327,11 @@ int Uart::availableForWrite()
     return tail - head - 1;
 }
 
-
+/**
+ *@brief    手动将tx缓冲区内容全部写出
+ *@param    NONE
+ *@retval   NONE
+*/
 void Uart::flush()
 {
     uint8_t major, minor;
@@ -333,52 +355,28 @@ void Uart::flush()
 
 
 /**
- *@name     size_t Uart::write(uint8_t c)
- *@brief    串口方式发送一个字节
- *@param    ch：    要发送的字符
- *@retval   已发送的数据
+ *@brief    发送一个字节
+ *@param    c：要发送的字符
+ *@retval   1
 */
 size_t Uart::write(uint8_t c)
 {
-
     uint16_t i = (_tx_buffer_head[index] + 1) % _tx_buffer_size[index];//计算头的位置
-
-    while (i == _tx_buffer_tail[index]) //如果环形缓冲区满了就调用一次发送
+    // head = tail, 缓冲区过满，先发送
+    while (i == _tx_buffer_tail[index]) 
     {
-        interrupt(TxIrq, DISABLE); //期间必须关闭串口中断
+        interrupt(TxIrq,DISABLE);//期间必须关闭串口中断
         while(USART_GetFlagStatus(_USARTx, USART_FLAG_TXE) == RESET);//单字节等待，等待寄存器空
-        tx_bufferx_one(_USARTx, index);
-        interrupt(TxIrq, ENABLE); //开启发送
+        tx_bufferx_one(_USARTx,index);
+        interrupt(TxIrq,ENABLE);//开启发送
     }
-
+    // 加入新数据，移动head
     _tx_ptr[index][_tx_buffer_head[index]] = c;
     _tx_buffer_head[index] = i;
 
-    interrupt(TxIrq, ENABLE); //开启发送
-
-    return 1;
+    interrupt(TxIrq,ENABLE);//开启发送  
+  	return 1;
 }
-
-
-///**
-// *@name     size_t Uart::write(const uint8_t *buffer, size_t size)
-// *@brief    串口方式发送一个缓冲区
-// *@param    buffer:   缓冲区指针
-//            size：    缓冲区大小
-// *@retval   已发送的数据
-//*/
-//size_t Uart::write(const uint8_t *buffer, size_t size)
-//{
-//    if(size <= 0 ) return 0;
-
-//    while(size--)
-//    {
-//        write(*buffer++);
-//    }
-
-//	return size;
-//}
-
 
 
 void Uart::attach(void (*fptr)(void), IrqType type)
@@ -397,11 +395,16 @@ void Uart::_irq_handler(uint32_t id, IrqType irq_type)
 
 
 extern "C" {
-    void tx_bufferx_one(USART_TypeDef *uart, uint8_t index)
+    /**
+      *@brief    从缓冲区写出一个字符
+      *@param    uart：串口； index 串口 IT 索引
+      *@retval   1
+      */
+    void tx_bufferx_one(USART_TypeDef* uart,uint8_t index)
     {
         if (_tx_buffer_head[index] == _tx_buffer_tail[index])//如果空则直接返回
             return;
-        unsigned char c = _tx_ptr[index][_tx_buffer_tail[index]];
+        unsigned char c = _tx_ptr[index][_tx_buffer_tail[index]];   // 取出字符
         _tx_buffer_tail[index] = (_tx_buffer_tail[index] + 1) % _tx_buffer_size[index];
         uart->DR = (c & (uint16_t)0x01FF);
         if (_tx_buffer_head[index] == _tx_buffer_tail[index])//如果发送完所有数据
@@ -410,17 +413,20 @@ extern "C" {
             USART_ITConfig(uart, USART_IT_TXE, DISABLE);
         }
     }
-    void rx_buffer_one(USART_TypeDef *uart, uint8_t index)
+    /**
+      *@brief    读入一个字符放入缓冲区
+      *@param    uart：串口； index 串口 IT 索引
+      *@retval   1
+      */
+    void rx_buffer_one(USART_TypeDef* uart,uint8_t index)
     {
         uint16_t i = (_rx_buffer_head[index] + 1) % _rx_buffer_size[index];//计算头的位置
         if(i == _rx_buffer_tail[index]) //如果环形缓冲区满了就修改一次tail，将会舍弃最老的一个数据
         {
             _rx_buffer_tail[index] = (_rx_buffer_tail[index] + 1) % _rx_buffer_size[index];
-
         }
         _rx_ptr[index][_rx_buffer_head[index]] = uart->DR;
         _rx_buffer_head[index] = i;
-
     }
 
 #if USE_UART1

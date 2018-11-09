@@ -5,7 +5,6 @@
 #include "mcu.h"
 #include "FunctionPointer.h"
 
-#if USE_DMA
 
 //”√ªß≈‰÷√//////////////
 #define DMA_NUM (7)
@@ -30,6 +29,9 @@ enum DmaItIndex
 typedef void (*DmaIrqHandler_t)(uint32_t id, DmaIrqType type);
 class Dma
 {
+
+public:
+    uint32_t DMAy_Channelx;
 public:
     Dma(uint32_t DMAy_Channelx);
 
@@ -44,10 +46,10 @@ public:
     void init(LL_DMA_InitTypeDef *DMA_InitStruct);
     void enable();
     void disable();
-
+    void set_current_len(uint16_t len);
+    bool get_flag_status();
+    void clear_flag();
     uint32_t get_dma_ch();
-
-
 
     /** Attach a function to call whenever a serial interrupt is generated
     *
@@ -76,13 +78,6 @@ public:
 
     static void _irq_handler(uint32_t id, DmaIrqType irq_type);
 
-
-
-
-
-
-private:
-    uint32_t DMAy_Channelx;
 protected:
     FunctionPointer _irq[3];
 
@@ -105,5 +100,5 @@ extern Dma Dma1Ch5;
 extern Dma Dma1Ch6;
 extern Dma Dma1Ch7;
 #endif
-#endif
+
 

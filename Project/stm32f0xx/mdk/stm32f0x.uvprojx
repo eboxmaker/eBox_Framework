@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>STM32F072RB</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F0xx_DFP.1.2.0</PackID>
+          <PackID>Keil.STM32F0xx_DFP.2.0.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x08000000,0x20000) IRAM(0x20000000,0x4000) CPUTYPE("Cortex-M0") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -580,11 +580,6 @@
               <FileName>ebox_uart.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_uart.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_uart_stream.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_uart_stream.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_exti.cpp</FileName>
