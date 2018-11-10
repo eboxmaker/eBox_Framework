@@ -144,35 +144,46 @@ extern "C" {
 
 
     //    }
-    //    void TIM3_IRQHandler(void)
-    //    {
-    //        if(TIM_GetITStatus(TIM3 , TIM_IT_Update) == SET)
-    //        {
-    //            t3_overflow_times++;
-    //            tim_irq_callback(TIM3_IT_Update);
-    //            TIM_ClearITPendingBit(TIM3 , TIM_FLAG_Update);
-    //        }
-    //        if(TIM_GetITStatus(TIM3 , TIM_IT_CC1) == SET)
-    //        {
-    //            tim_irq_callback(TIM3_IT_CC1);
-    //            TIM_ClearITPendingBit(TIM2 , TIM_FLAG_CC1);
-    //        }
-    //        if(TIM_GetITStatus(TIM3 , TIM_IT_CC2) == SET)
-    //        {
-    //            tim_irq_callback(TIM3_IT_CC2);
-    //            TIM_ClearITPendingBit(TIM3 , TIM_FLAG_CC2);
-    //        }
-    //        if(TIM_GetITStatus(TIM3 , TIM_IT_CC3) == SET)
-    //        {
-    //            tim_irq_callback(TIM3_IT_CC3);
-    //            TIM_ClearITPendingBit(TIM3 , TIM_FLAG_CC3);
-    //        }
-    //        if(TIM_GetITStatus(TIM3 , TIM_IT_CC4) == SET)
-    //        {
-    //            tim_irq_callback(TIM3_IT_CC4);
-    //            TIM_ClearITPendingBit(TIM3 , TIM_FLAG_CC4);
-    //        }
-    //    }
+#ifdef TIM3
+    void TIM3_IRQHandler(void)
+    {
+			  /* Check whether update interrupt is pending */
+        if (LL_TIM_IsActiveFlag_UPDATE(TIM3) == 1)
+        {
+            t3_overflow_times++;
+            /* Clear the update interrupt flag*/
+            LL_TIM_ClearFlag_UPDATE(TIM3);
+            irq_handler(tim_irq_ids[TIM3_IT_Update]);
+        }
+//        if(TIM_GetITStatus(TIM3 , TIM_IT_Update) == SET)
+//        {
+//            t3_overflow_times++;
+//            tim_irq_callback(TIM3_IT_Update);
+//            TIM_ClearITPendingBit(TIM3 , TIM_FLAG_Update);
+//        }
+//        if(TIM_GetITStatus(TIM3 , TIM_IT_CC1) == SET)
+//        {
+//            tim_irq_callback(TIM3_IT_CC1);
+//            TIM_ClearITPendingBit(TIM2 , TIM_FLAG_CC1);
+//        }
+//        if(TIM_GetITStatus(TIM3 , TIM_IT_CC2) == SET)
+//        {
+//            tim_irq_callback(TIM3_IT_CC2);
+//            TIM_ClearITPendingBit(TIM3 , TIM_FLAG_CC2);
+//        }
+//        if(TIM_GetITStatus(TIM3 , TIM_IT_CC3) == SET)
+//        {
+//            tim_irq_callback(TIM3_IT_CC3);
+//            TIM_ClearITPendingBit(TIM3 , TIM_FLAG_CC3);
+//        }
+//        if(TIM_GetITStatus(TIM3 , TIM_IT_CC4) == SET)
+//        {
+//            tim_irq_callback(TIM3_IT_CC4);
+//            TIM_ClearITPendingBit(TIM3 , TIM_FLAG_CC4);
+//        }
+    }
+#endif
+
     //    void TIM4_IRQHandler(void)
     //    {
     //        if(TIM_GetITStatus(TIM4 , TIM_IT_Update) == SET)
