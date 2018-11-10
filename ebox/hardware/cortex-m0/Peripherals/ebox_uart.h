@@ -74,8 +74,6 @@
 #define USE_UART5 0
 #define UART_NUM (USE_UART1 + USE_UART2 + USE_UART3 + USE_UART4 + USE_UART5)
 
-#define UART_BUFFER_SIZE 256
-
 enum IrqType
 {
     RxIrq = 0,
@@ -107,7 +105,7 @@ public:
     void    begin(uint32_t baud_rate, RxMode_t mode = RxIt);
     void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit, RxMode_t mode = RxIt);
     void    end();
-    void    nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
+    void    nvic(FunctionalState enable, uint8_t preemption_priority = 3, uint8_t sub_priority = 3);
 
     virtual int     available();
     virtual int     peek(void);
@@ -143,8 +141,6 @@ public:
     //attach user event
     void attach(void (*fptr)(void), IrqType type);
     void interrupt(IrqType type, FunctionalState enable);
-
-    //    void printf(const char *fmt, ...);
 
     /** Attach a member function to call whenever a serial interrupt is generated
      *
