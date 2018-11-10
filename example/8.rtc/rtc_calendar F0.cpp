@@ -96,10 +96,10 @@ int main(void)
   while (1)
   {
     // 每30s读取一次时间
-    rtc.getTime(&time);
-    rtc.getDate(&date);
-    UART.printf("\n\r %2d:%02d:%02d秒",time.Hours ,time.Minutes ,time.Seconds);
-    UART.printf("\n\r 20%2d年%02d月%2d日 星期%02d",date.Year,date.Month,date.Day,date.WeekDay);
+		rtc.getTime(&time);
+		rtc.getDate(&date);
+		UART.printf("\n\r %2d:%02d:%02d秒",time.Hours ,time.Minutes ,time.Seconds);
+		UART.printf("\n\r 20%2d年%02d月%2d日 星期%02d",date.Year,date.Month,date.Day,date.WeekDay);
     delay_ms(30000);
   }
 }
