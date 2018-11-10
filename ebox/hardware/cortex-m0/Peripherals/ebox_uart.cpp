@@ -75,11 +75,12 @@ void    Uart::begin(uint32_t baud_rate, RxMode_t mode)
 */
 void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit, RxMode_t mode)
 {
-    uint8_t             index;
+//    uint8_t  index;
     uint32_t _DataWidth;
     uint32_t _Parity;
     uint32_t _StopBits = 0;
     rcc_clock_cmd((uint32_t)_USARTx, ENABLE);
+		_mode = mode;
 
 #if USE_UART_DMA
     _use_dma = use_dma;
@@ -127,39 +128,31 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 
 #if USE_UART1
     case (uint32_t)USART1_BASE:
-        index = NUM_UART1;
+        _index = NUM_UART1;
         break;
 #endif
 
 #if USE_UART2
     case (uint32_t)USART2_BASE:
-        index = NUM_UART2;
+        _index = NUM_UART2;
         break;
 #endif
 
 #if USE_UART3
     case (uint32_t)USART3_BASE:
-        index = NUM_UART3;
+        _index = NUM_UART3;
         break;
 #endif
 
-#if defined (STM32F10X_HD)
-#if USE_UART4
-    case (uint32_t)UART4_BASE:
-        index = NUM_UART4;
-        break;
-#endif
-
-#if USE_UART5
-    case (uint32_t)UART5_BASE:
-        index = NUM_UART5;
-        break;
-#endif
-#endif
     }
 #endif
 
-    serial_irq_handler(index, Uart::_irq_handler, (uint32_t)this);
+		_tx_buffer_size[_index] = tx_buffer_size;
+    _rx_buffer_size[_index] = rx_buffer_size;
+
+    _tx_ptr[_index] = (uint16_t *)ebox_malloc(_tx_buffer_size[_index]);
+    _rx_ptr[_index] = (uint16_t *)ebox_malloc(_rx_buffer_size[_index]);
+    serial_irq_handler(_index, Uart::_irq_handler, (uint32_t)this);
 
     switch(data_bit)
     {
@@ -224,7 +217,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     }
 #endif
 
-    interrupt(RxIrq, DISABLE);
+    interrupt(RxIrq, ENABLE);
     interrupt(TxIrq, DISABLE);
 }
 /**
@@ -236,7 +229,7 @@ void Uart::end()
 {
 		LL_USART_DeInit(_USARTx);
     // clear any received data
-    _rx_buffer_head[index] = _rx_buffer_tail[index];
+    _rx_buffer_head[_index] = _rx_buffer_tail[_index];
 }
 void Uart::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
@@ -262,7 +255,7 @@ void Uart::interrupt(IrqType type, FunctionalState enable)
         LL_USART_EnableIT_RXNE(_USARTx);
     if(type == TxIrq)
     {
-			(enable == ENABLE) ? (LL_USART_EnableIT_TC(_USARTx)): ( LL_USART_DisableIT_TC(_USARTx)) ;
+			(enable == ENABLE) ? (LL_USART_EnableIT_TXE(_USARTx)): ( LL_USART_DisableIT_TXE(_USARTx)) ;
     }
 }
 /**
@@ -272,13 +265,13 @@ void Uart::interrupt(IrqType type, FunctionalState enable)
 */
 int Uart::peek(void)
 {
-    if ((_rx_buffer_size[index] - LL_DMA_GetDataLength(DMA1,dma_rx->DMAy_Channelx)) == _rx_buffer_tail[index])
+    if ((_rx_buffer_size[_index] - LL_DMA_GetDataLength(DMA1,dma_rx->DMAy_Channelx)) == _rx_buffer_tail[_index])
     {
         return -1;
     }
     else
     {
-        return _rx_ptr[index][_rx_buffer_tail[index]];
+        return _rx_ptr[_index][_rx_buffer_tail[_index]];
     }
 }
 /**
@@ -288,10 +281,10 @@ int Uart::peek(void)
 */
 int Uart::available()
 {
-    if(mode == RxDMA)
-        return ((unsigned int)(_rx_buffer_size[index] + (_rx_buffer_size[index] - LL_DMA_GetDataLength(DMA1,dma_rx->DMAy_Channelx)) - _rx_buffer_tail[index])) % _rx_buffer_size[index];
+    if(_mode == RxDMA)
+        return ((unsigned int)(_rx_buffer_size[_index] + (_rx_buffer_size[_index] - LL_DMA_GetDataLength(DMA1,dma_rx->DMAy_Channelx)) - _rx_buffer_tail[_index])) % _rx_buffer_size[_index];
     else
-        return ((unsigned int)(_rx_buffer_size[index] + _rx_buffer_head[index] - _rx_buffer_tail[index])) % _rx_buffer_size[index];
+        return ((unsigned int)(_rx_buffer_size[_index] + _rx_buffer_head[_index] - _rx_buffer_tail[_index])) % _rx_buffer_size[_index];
 }
 
 /**
@@ -301,23 +294,23 @@ int Uart::available()
 */
 int Uart::read()
 {
-    if(mode == RxDMA)
+    if(_mode == RxDMA)
     {
-        if (_rx_buffer_tail[index] == (_rx_buffer_size[index] - LL_DMA_GetDataLength(DMA1,dma_rx->DMAy_Channelx)))
+        if (_rx_buffer_tail[_index] == (_rx_buffer_size[_index] - LL_DMA_GetDataLength(DMA1,dma_rx->DMAy_Channelx)))
         {
             return -1;					
         }
     }
     else
     {
-        if (_rx_buffer_tail[index] == _rx_buffer_head[index])
+        if (_rx_buffer_tail[_index] == _rx_buffer_head[_index])
         {
             return -1;
         }
     }
     {
-        int c = _rx_ptr[index][_rx_buffer_tail[index]];
-        _rx_buffer_tail[index] = (_rx_buffer_tail[index] + 1) % _rx_buffer_size[index];
+        int c = _rx_ptr[_index][_rx_buffer_tail[_index]];
+        _rx_buffer_tail[_index] = (_rx_buffer_tail[_index] + 1) % _rx_buffer_size[_index];
         return c;
     }
 }
@@ -329,11 +322,11 @@ int Uart::read()
 */
 int Uart::availableForWrite()
 {
-    uint16_t head = _tx_buffer_head[index];
-    uint16_t tail = _tx_buffer_tail[index];
+    uint16_t head = _tx_buffer_head[_index];
+    uint16_t tail = _tx_buffer_tail[_index];
 
     if (head >= tail)
-        return _tx_buffer_size[index] - 1 - head + tail;
+        return _tx_buffer_size[_index] - 1 - head + tail;
 
     return tail - head - 1;
 }
@@ -346,7 +339,7 @@ int Uart::availableForWrite()
 void Uart::flush()
 {
     uint8_t major, minor;
-    while(_tx_buffer_head[index] != _tx_buffer_tail[index] )
+    while(_tx_buffer_head[_index] != _tx_buffer_tail[_index] )
     {
         //如果全局中断被关闭,发送使能中断被关闭、在其他中断函数中,则手动发送
         //        if(__get_PRIMASK() || ((_USARTx->CR1 & USART_FLAG_TXE) == 0))
@@ -357,7 +350,7 @@ void Uart::flush()
             {
                 //                interrupt(TxIrq,DISABLE);//期间必须关闭串口中断
                 while(LL_USART_IsActiveFlag_TXE(_USARTx) == RESET);//单字节等待，等待寄存器空
-                tx_bufferx_one(_USARTx, index);
+                tx_bufferx_one(_USARTx, _index);
             }
         }
         //或者等待串口中断发送完成所有数据的传输
@@ -372,18 +365,18 @@ void Uart::flush()
 */
 size_t Uart::write(uint8_t c)
 {
-    uint16_t i = (_tx_buffer_head[index] + 1) % _tx_buffer_size[index];//计算头的位置
+    uint16_t i = (_tx_buffer_head[_index] + 1) % _tx_buffer_size[_index];//计算头的位置
     // head = tail, 缓冲区过满，先发送
-    while (i == _tx_buffer_tail[index]) 
+    while (i == _tx_buffer_tail[_index]) 
     {
         interrupt(TxIrq,DISABLE);//期间必须关闭串口中断				
         while(LL_USART_IsActiveFlag_TXE(_USARTx) == RESET);//单字节等待，等待寄存器空
-        tx_bufferx_one(_USARTx,index);
+        tx_bufferx_one(_USARTx,_index);
         interrupt(TxIrq,ENABLE);//开启发送
     }
     // 加入新数据，移动head
-    _tx_ptr[index][_tx_buffer_head[index]] = c;
-    _tx_buffer_head[index] = i;
+    _tx_ptr[_index][_tx_buffer_head[_index]] = c;
+    _tx_buffer_head[_index] = i;
 
     interrupt(TxIrq,ENABLE);//开启发送  
   	return 1;
@@ -444,10 +437,14 @@ extern "C" {
     void tx_bufferx_one(USART_TypeDef* uart,uint8_t index)
     {
         if (_tx_buffer_head[index] == _tx_buffer_tail[index])//如果空则直接返回
-            return;
+        {   
+						LL_USART_DisableIT_TXE(uart);					
+						return;
+				}
         unsigned char c = _tx_ptr[index][_tx_buffer_tail[index]];   // 取出字符
         _tx_buffer_tail[index] = (_tx_buffer_tail[index] + 1) % _tx_buffer_size[index];
         uart->TDR = (c & (uint16_t)0x01FF);
+				//LL_USART_TransmitData8(uart,c);
         if (_tx_buffer_head[index] == _tx_buffer_tail[index])//如果发送完所有数据
         {
             // Buffer empty, so disable interrupts
@@ -480,11 +477,11 @@ extern "C" {
             irq_handler(serial_irq_ids[NUM_UART1], RxIrq);
             CLEAR_BIT(USART1->ISR, B10000); //强制清除
         }
-        if(LL_USART_IsActiveFlag_TC(USART1) == SET)
+        if(LL_USART_IsActiveFlag_TXE(USART1) == SET)
         {
             tx_bufferx_one(USART1, NUM_UART1);
             irq_handler(serial_irq_ids[NUM_UART1], TxIrq);
-            LL_USART_ClearFlag_TC(USART1);
+            LL_USART_IsActiveFlag_TXE(USART1);
         }
     }
 #endif
@@ -500,12 +497,13 @@ extern "C" {
             // 如果回调函数中没有读取数据，则将当前数据抛弃，准备下一次接收
             LL_USART_RequestRxDataFlush(USART2);
         }
-        if(LL_USART_IsActiveFlag_TC(USART2) == SET)
+			
+        if(LL_USART_IsActiveFlag_TXE(USART2) == SET)
         {
 						tx_bufferx_one(USART2, NUM_UART2);
             irq_handler(serial_irq_ids[NUM_UART2], TxIrq);
             // 清除发送结束中断标志
-            LL_USART_ClearFlag_TC(USART2);
+            LL_USART_IsActiveFlag_TXE(USART2);
         }
     }
 #endif

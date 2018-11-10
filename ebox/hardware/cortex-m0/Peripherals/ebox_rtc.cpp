@@ -32,7 +32,6 @@
 #define  DEBUG(...) DBG("[RTC]  "),DBG(__VA_ARGS__)
 #else
 #define  DEBUG(...)
-#define	 DBG(...)
 #endif
 
 #define RTC_TIMEOUT	10000	// 5s
