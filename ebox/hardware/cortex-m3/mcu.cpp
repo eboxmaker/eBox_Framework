@@ -146,7 +146,7 @@ extern "C" {
         if (callBackFun == NULL || callBackFun == nullFun)
         {
             callBackFun = fun;
-            _multiple = multiple == 0 ? 1 : multiple;
+            _multiple = ( multiple == 0 ) ? 1 : multiple;
             return EOK;
         }
         else
@@ -202,6 +202,7 @@ extern "C" {
         cpu.chip_id[0] = *(__IO uint32_t *)(0X1FFFF7F0); //高字节
 
         cpu.flash_size = *(uint16_t *)(0x1FFFF7E0);   //芯片flash容量
+#if	EBOX_DEBUG
         millis_seconds = 0;
         SysTick->VAL = 0;
         //统计cpu计算能力//////////////////
@@ -212,6 +213,7 @@ extern "C" {
         while (millis_seconds < 1);
         cpu.ability = cpu.ability  * 1000 * 2;
         ////////////////////////////////
+#endif
     }
 
 }

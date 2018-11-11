@@ -99,10 +99,10 @@ typedef void (*uart_irq_handler)(uint32_t id, IrqType type);
 class Uart: public Stream
 {
 public:
-    Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin, uint16_t tx_buffer_size = 128, uint16_t rx_buffer_size = 256);
+    Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin, uint16_t tx_buffer_size = 64, uint16_t rx_buffer_size = 256);
 
     //initial uart
-    void    begin(uint32_t baud_rate, RxMode_t mode = RxIt);
+    void    begin(uint32_t baud_rate, RxMode_t mode = RxDMA);
     void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit, RxMode_t mode = RxIt);
     void    end();
     void    nvic(FunctionalState enable, uint8_t preemption_priority = 3, uint8_t sub_priority = 3);

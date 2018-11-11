@@ -47,7 +47,7 @@ extern "C" {
 
 
 
-#define EBOX_DEBUG 1
+//#define EBOX_DEBUG 1
 #define USE_PRINTF 3
 
 

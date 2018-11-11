@@ -21,7 +21,9 @@
 #ifndef __EBOX_I2C_H_
 #define __EBOX_I2C_H_
 
-#include "ebox_config.h"
+#include "ebox_core.h"
+#include "ebox_gpio.h"
+#include "ebox_port_i2c.h"
 
 #define WRITE   0
 #define READ    1
