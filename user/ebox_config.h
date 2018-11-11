@@ -26,7 +26,7 @@
 
 #if USE_PRINTF1
   //是否使用DEBUG, 1 使用  0 不使用
-  #define EBOX_DEBUG  1
+  #define EBOX_DEBUG  0
 #endif
 
 #if EBOX_DEBUG

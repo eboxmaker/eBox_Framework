@@ -22,6 +22,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "ebox_core.h"
+#include "ebox_config.h"
 #include "mcu.h"
 
 #define systick_no_interrupt()  SysTick->CTRL &=0xfffffffd
@@ -87,15 +88,15 @@ extern "C" {
     uint64_t mcu_micros(void)
     {
         uint64_t micro;
-        uint32_t temp = __get_PRIMASK();//保存之前中断设置
-        no_interrupts();
-        if (SysTick->CTRL & (1 << 16))//发生了溢出
-        {
-            if ( __get_IPSR() ||  (temp) ) //如果此时屏蔽了所有中断或者被别的中断打断无法执行，systick中断函数，则需要对millis_secend进行补偿
-                millis_seconds++;
-        }
+//        uint32_t temp = __get_PRIMASK();//保存之前中断设置
+//        no_interrupts();
+//        if (SysTick->CTRL & (1 << 16))//发生了溢出
+//        {
+//            if ( __get_IPSR() ||  (temp) ) //如果此时屏蔽了所有中断或者被别的中断打断无法执行，systick中断函数，则需要对millis_secend进行补偿
+//                millis_seconds++;
+//        }
         micro = (millis_seconds * 1000 + (1000 - (SysTick->VAL) / (micro_para)));
-        __set_PRIMASK(temp);//恢复之前中断设置
+//        __set_PRIMASK(temp);//恢复之前中断设置
 
         return  micro;
     }
@@ -160,7 +161,7 @@ extern "C" {
         if (callBackFun == NULL || callBackFun == nullFun)
         {
             callBackFun = fun;
-            _multiple = multiple == 0 ? 1 : multiple;
+            _multiple = ( multiple == 0 ) ? 1 : multiple;
             return EOK;
         }
         else
@@ -216,9 +217,7 @@ extern "C" {
         cpu.chip_id[0] = (uint32_t)(READ_REG(*((uint32_t *)(UID_BASE_ADDRESS + 8U))));  //高字节
 
         cpu.flash_size = (uint16_t)(READ_REG(*((uint32_t *)FLASHSIZE_BASE_ADDRESS)));   //芯片flash容量
-
-
-
+#if	EBOX_DEBUG
         millis_seconds = 0;
         SysTick->VAL = 0;
         //统计cpu计算能力//////////////////
@@ -229,6 +228,7 @@ extern "C" {
         while (millis_seconds < 1);
         cpu.ability = cpu.ability  * 1000 * 2;
         ////////////////////////////////
+#endif
     }
 
 }

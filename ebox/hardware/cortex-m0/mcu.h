@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
-  * @file    core.h
+  * @file    mcu.h
   * @author  shentq
-  * @version V1.2
-  * @date    2016/08/14
+  * @version V2.0
+  * @date    2018/11/6
   * @brief   此文件为ebox核心文件,提供了诸多非常重要的接口,可以被标准的c文件调用。
   ******************************************************************************
   * @attention
@@ -49,7 +49,7 @@ extern __IO uint64_t millis_seconds;     //提供一个mills()等效的全局变量。降低cp
 // 初始化
 extern void mcu_init(void);              //ebox系统初始化
 extern void SystemClock_Config(void);    //外部实现该函数，可以修改时钟源以及时钟频率。默认工作在48Mhz
-void mcu_reset(void);
+extern void mcu_reset(void);
 //  uint32_t get_cpu_calculate_per_sec(void);//获取cpu在不跑操作系统的情况下的计算能力。用于统计cpu绝对使用率
 // 时间相关接口
 extern uint64_t mcu_micros(void);               //获取系统当前运行了多长时间。单位：us

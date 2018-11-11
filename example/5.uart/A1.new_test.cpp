@@ -1,5 +1,6 @@
 #include "ebox.h"
 #include "bsp_ebox.h"
+#include "ebox_mem.h"
 
 
 /**
@@ -59,7 +60,7 @@ void setup()
 		
     timer1.attach(t2it);
     timer1.interrupt(ENABLE);
-    timer1.start();
+//    timer1.start();
 //    UART.printf("\r\ntimer clock       = %dMhz", timer1.get_timer_source_clock()/1000000);
 //    UART.printf("\r\nmax interrupt frq = %dKhz", timer1.get_max_frq()/1000);
    
@@ -78,6 +79,11 @@ int main(void)
         {
             UART.write(UART.read());
         }
+				if(len)
+				{
+					UART.printf("free mem %f.02 \r\n",ebox_mem_used()/100);
+				}
+				
 //        uart1.write('3');
 //        uart1.write('4');
 //        uart1.write('5');
