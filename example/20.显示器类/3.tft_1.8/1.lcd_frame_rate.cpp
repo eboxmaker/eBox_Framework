@@ -16,6 +16,8 @@
 uint32_t time_last;
 u8 times;
 
+//Lcd lcd(&PB13,&PB15,&PA13,&PA15,&PA14,&PA12);
+
 void setup()
 {
     ebox_init();
