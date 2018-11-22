@@ -67,7 +67,7 @@ void Lcd::begin()
     {
         config.mode = SPI_MODE2;
         config.bit_order = MSB_FIRST;
-        config.dev_num = spi->get_new_dev_num();
+        config.dev_num = cs->id;
         config.prescaler = SPI_CLOCK_DIV2;
     }
     spi->begin(&config);
@@ -519,33 +519,33 @@ void Lcd::draw_bitmap(const unsigned char *p) //显示40*40 QQ图片
 void Lcd::write_index(uint8_t Index)
 {
     //SPI 写命令时序开始
-    spi->take_spi_right(&config);
+    spi->take(&config);
     cs->reset();
     rs->reset();
     spi->write(Index);
     cs->set();
-    spi->release_spi_right();
+    spi->release();
 }
 //向液晶屏写一个8位数据
 void Lcd::write_data_8bit(uint8_t Data)
 {
-    spi->take_spi_right(&config);
+    spi->take(&config);
     cs->reset();
     rs->set();
     spi->write(Data);
     cs->set();
-    spi->release_spi_right();
+    spi->release();
 }
 //向液晶屏写一个16位数据
 void Lcd::write_data_16bit(uint16_t Data)
 {
-    spi->take_spi_right(&config);
+    spi->take(&config);
     cs->reset();
     rs->set();
     spi->write(Data >> 8); 	//写入高8位数据
     spi->write(Data); 			//写入低8位数据
     cs->set();
-    spi->release_spi_right();
+    spi->release();
 }
 
 void Lcd::write_reg(uint8_t Index, uint8_t Data)
