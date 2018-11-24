@@ -1841,9 +1841,9 @@
               </FileOption>
             </File>
             <File>
-              <FileName>4.ugui_test.cpp</FileName>
+              <FileName>4.uGUI_BaseTest.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\example\16.gui\4.ugui_test.cpp</FilePath>
+              <FilePath>..\..\..\example\16.gui\4.uGUI_BaseTest.cpp</FilePath>
             </File>
           </Files>
         </Group>

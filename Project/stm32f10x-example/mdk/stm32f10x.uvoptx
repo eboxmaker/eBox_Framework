@@ -991,7 +991,7 @@
       <GroupNumber>4</GroupNumber>
       <FileNumber>55</FileNumber>
       <FileType>8</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_exti.cpp</PathWithFileName>
@@ -1470,8 +1470,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\example\16.gui\4.ugui_test.cpp</PathWithFileName>
-      <FilenameWithoutPath>4.ugui_test.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\example\16.gui\4.uGUI_BaseTest.cpp</PathWithFileName>
+      <FilenameWithoutPath>4.uGUI_BaseTest.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
