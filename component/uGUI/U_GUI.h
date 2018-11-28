@@ -71,7 +71,23 @@ public:
 	void ConsoleSetArea( UG_S16 xs, UG_S16 ys, UG_S16 xe, UG_S16 ye ){UG_ConsoleSetArea(xs,ys,xe,ye);};
 	void ConsoleSetForecolor( UG_COLOR c ){UG_ConsoleSetForecolor(c);};
 	void ConsoleSetBackcolor( UG_COLOR c ){UG_ConsoleSetBackcolor(c);};
+	
+	// ´°¿Ú
+	int8_t WindowCreate(UG_WINDOW* wnd, UG_OBJECT* objlst, UG_U8 objcnt, void (*cb)( UG_MESSAGE* ) ){
+		if(UG_WindowCreate(wnd, objlst, objcnt, cb)==UG_RESULT_OK)
+		{
+				_wnd = wnd;
+				return UG_RESULT_OK;
+		}
+		return UG_RESULT_FAIL;
+	};
+	void 	 WindowSelect(UG_WINDOW* wnd){_wnd = wnd;};
+	int8_t WindowDelete(){ return UG_WindowDelete( _wnd );};
+	int8_t WindowShow(){return UG_WindowShow(_wnd );};
+	int8_t WindowHide(){return UG_WindowHide(_wnd );};
+	int8_t WindowSetTitleHeight(UG_U8 height ){ return UG_WindowSetTitleHeight(_wnd, height);};
 private:
   UG_GUI _gui;
+	UG_WINDOW* _wnd;
 };
 #endif
