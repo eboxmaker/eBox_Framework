@@ -56,8 +56,8 @@ typedef signed long int       UG_S32;
 
 
 /* Feature enablers */
-#define USE_PRERENDER_EVENT
-#define USE_POSTRENDER_EVENT
+//#define USE_PRERENDER_EVENT			// 预提交
+//#define USE_POSTRENDER_EVENT		// 提交
 
 
 #endif

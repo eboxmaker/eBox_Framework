@@ -5284,7 +5284,7 @@ void _UG_PutChar( char chr, UG_S16 x, UG_S16 y, UG_COLOR fc, UG_COLOR bc, const 
    if ( font->char_width % 8 ) bn++;
    actual_char_width = (font->widths ? font->widths[bt - font->start_char] : font->char_width);
 
-   /* Is hardware acceleration available? */
+   /* Is hardware acceleration available?  硬件加速*/
    if ( gui->driver[DRIVER_FILL_AREA].state & DRIVER_ENABLED )
    {
 	   //(void(*)(UG_COLOR))
@@ -5456,6 +5456,94 @@ void _UG_PutText(UG_TEXT* txt)
          _UG_PutChar(chr,xp,yp,txt->fc,txt->bc,txt->font);
          xp += (txt->font->widths ? txt->font->widths[chr - txt->font->start_char] : char_width) + char_h_space;
       }
+			
+//			while( (*str != '\n') )
+//      {
+//         if ( *str == 0 ) return;
+//         if (*str > 0x80)
+//         {
+//            if ((char_height != 12)&&(char_height != 16)&&(char_height != 24))
+//            {
+//               return;                                                         // 不支持的汉字
+//            }
+//            Get_HzMat(str,dzk,char_height);
+//            yo = yp;
+//            bn = char_height;
+//            bn >>= 3;
+//            if ( char_height % 8 ) bn++;
+//            p = dzk;
+//            for ( j=0; j<char_height; j++ )
+//            {
+//                xo = xp;
+//                cw = char_height;
+//                for (i=0; i<bn; i++)
+//                {
+//                    b = *p++;
+//                    for ( k=0; (k<8) && cw; k++)
+//                    {
+//                        if (b & 0x80)
+//                        {
+//                            gui->pset(xo,yo,txt->fc);
+//                        }
+//                        else
+//                        {
+//                            gui->pset(xo,yo,txt->bc);
+//                        }
+//                        b <<= 1;
+//                        xo++;
+//                        cw--;
+//                    }
+//                }
+//                yo++;
+//            }
+//            xp += char_height + char_h_space;
+//            str += 2;
+//         }
+//         else
+//         {
+//            /*----------------------------------*/
+//            /* Draw one char                    */
+//            /*----------------------------------*/
+//            bt = (UG_U8)*str - 32;                                             // tulip modify
+//            yo = yp;
+//            bn = char_width;
+//            bn >>= 3;
+//            if ( char_width % 8 ) bn++;
+//            p = txt->font->p;
+//            p+= bt * char_height * bn;
+//            for( j=0;j<char_height;j++ )
+//            {
+//               xo = xp;
+//               cw=char_width;
+//               for( i=0;i<bn;i++ )
+//               {
+//                  b = *p++;
+//                  for( k=0;(k<8) && cw;k++ )
+//                  {
+//                     if( b & 0x01 )
+//                     {
+//                        gui->pset(xo,yo,txt->fc);
+//                     }
+//                     else
+//                     {
+//                        gui->pset(xo,yo,txt->bc);
+//                     }
+//                     b >>= 1;
+//                     xo++;
+//                     cw--;
+//                  }
+//               }
+//               yo++;
+//            }
+//            /*----------------------------------*/
+//            xp += char_width + char_h_space;
+//            str++;
+//         }
+//      }
+//      str++;
+//      yp += char_height + char_v_space;
+//   }
+			
       str++;
       yp += char_height + char_v_space;
    }
@@ -8232,6 +8320,23 @@ void _UG_ImageUpdate(UG_WINDOW* wnd, UG_OBJECT* obj)
       }
       obj->state &= ~OBJ_STATE_UPDATE;
    }
+}
+
+UG_RESULT UG_Button_CLICK( UG_WINDOW* wnd, UG_U8 id)
+{
+	UG_OBJECT* obj=NULL;
+	UG_BUTTON* btn=NULL;
+
+	obj = _UG_SearchObject( wnd, OBJ_TYPE_BUTTON, id );
+	if ( obj == NULL ) return UG_RESULT_FAIL;
+
+		btn = (UG_BUTTON*)(obj->data);
+		if ( obj->state & OBJ_STATE_VISIBLE )
+		{
+//				obj->touch_state = OBJ_TOUCH_STATE_CHANGED|OBJ_TOUCH_STATE_PRESSED_ON_OBJECT;
+				obj->touch_state = OBJ_TOUCH_STATE_CHANGED|OBJ_TOUCH_STATE_CLICK_ON_OBJECT;
+		}
+	return UG_RESULT_OK;
 }
 
 
