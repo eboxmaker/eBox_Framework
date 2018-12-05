@@ -22,11 +22,11 @@ const char *buf = "1234567890\r\n";
 size_t len;
 void t2it()
 {
-        x = uart1.availableForWrite();
-        uart1.write("12345678\r\n");
-        y = uart1.availableForWrite();;
-        uart1.println(x);
-        uart1.println(y);
+        x = uart5.availableForWrite();
+        uart5.write("12345678\r\n");
+        y = uart5.availableForWrite();;
+        uart5.println(x);
+        uart5.println(y);
 //        uart1.flush();
 }
 void rx()
@@ -43,14 +43,14 @@ void tx()
 void setup()
 {
 	ebox_init();
-    uart1.begin(115200);
+    uart5.begin(115200,RxIt);
 //    no_interrupts();
 //    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
 //    LED1.mode(OUTPUT_PP);
-    uart1.attach(rx,RxIrq);
-    uart1.attach(tx,TxIrq);
-    uart1.interrupt(RxIrq,ENABLE);
-    uart1.nvic(ENABLE,1,0);
+    uart5.attach(rx,RxIrq);
+    uart5.attach(tx,TxIrq);
+    uart5.interrupt(RxIrq,ENABLE);
+    uart5.nvic(ENABLE,1,0);
 
     PB8.mode(OUTPUT_PP);
     PB9.mode(OUTPUT_PP);
@@ -72,10 +72,10 @@ int main(void)
 //    interrupts();
 	while (1)
 	{
-        len = uart1.available();
+        len = uart5.available();
         for(int i = 0; i < len; i++ )
         {
-            uart1.write(uart1.read());
+            uart5.write(uart5.read());
         }
 //        uart1.write('3');
 //        uart1.write('4');
@@ -93,7 +93,6 @@ int main(void)
 //        delay_ms(1000);
 
 
-        ebox_printf("123xxxxx\r\n");
         delay_ms(1000);
 	}
 }
