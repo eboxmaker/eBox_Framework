@@ -17,7 +17,10 @@ Dma::Dma(DMA_Channel_TypeDef *DMAy_Channelx)
     int index;
     this->DMAy_Channelx = DMAy_Channelx;
     if(((uint32_t)DMAy_Channelx - DMA1_Channel1_BASE) <= 0x80 )
-        index = ((uint32_t)DMAy_Channelx - DMA1_Channel1_BASE) / 20;
+        index = ((uint32_t)DMAy_Channelx - DMA1_Channel1_BASE) / 20;//0-6
+		else
+				index = 7 + ((uint32_t)DMAy_Channelx - DMA2_Channel1_BASE) / 20 ;//7-11
+
     dma_irq_handler(index, Dma::_irq_handler, (uint32_t)this);
 
 }
@@ -186,6 +189,20 @@ bool Dma::get_flag_status()
         return DMA_GetFlagStatus(DMA1_FLAG_TC6);
     case (uint32_t)DMA1_Channel7:
         return DMA_GetFlagStatus(DMA1_FLAG_TC7);
+		
+		#if defined (STM32F10X_HD)
+    case (uint32_t)DMA2_Channel1:
+        return DMA_GetFlagStatus(DMA2_FLAG_TC1);
+    case (uint32_t)DMA2_Channel2:
+        return DMA_GetFlagStatus(DMA2_FLAG_TC2);
+    case (uint32_t)DMA2_Channel3:
+        return DMA_GetFlagStatus(DMA2_FLAG_TC3);
+    case (uint32_t)DMA2_Channel4:
+        return DMA_GetFlagStatus(DMA2_FLAG_TC4);
+    case (uint32_t)DMA2_Channel5:
+        return DMA_GetFlagStatus(DMA2_FLAG_TC5);
+		#endif
+		
     default:
         break;
     }
@@ -195,26 +212,33 @@ void Dma::clear_flag()
     switch((uint32_t)DMAy_Channelx)
     {
     case (uint32_t)DMA1_Channel1:
-        DMA_ClearFlag(DMA1_FLAG_TC1);
-        break;
+        DMA_ClearFlag(DMA1_FLAG_TC1);break;
     case (uint32_t)DMA1_Channel2:
-        DMA_ClearFlag(DMA1_FLAG_TC2);
-        break;
+        DMA_ClearFlag(DMA1_FLAG_TC2);break;
     case (uint32_t)DMA1_Channel3:
-        DMA_ClearFlag(DMA1_FLAG_TC3);
-        break;
+        DMA_ClearFlag(DMA1_FLAG_TC3);break;
     case (uint32_t)DMA1_Channel4:
-        DMA_ClearFlag(DMA1_FLAG_TC4);
-        break;
+        DMA_ClearFlag(DMA1_FLAG_TC4);break;
     case (uint32_t)DMA1_Channel5:
-        DMA_ClearFlag(DMA1_FLAG_TC5);
-        break;
+        DMA_ClearFlag(DMA1_FLAG_TC5);break;
     case (uint32_t)DMA1_Channel6:
-        DMA_ClearFlag(DMA1_FLAG_TC6);
-        break;
+        DMA_ClearFlag(DMA1_FLAG_TC6);break;
     case (uint32_t)DMA1_Channel7:
-        DMA_ClearFlag(DMA1_FLAG_TC7);
-        break;
+        DMA_ClearFlag(DMA1_FLAG_TC7);break;
+		
+		#if defined (STM32F10X_HD)
+    case (uint32_t)DMA2_Channel1:
+        DMA_ClearFlag(DMA2_FLAG_TC1);break;
+    case (uint32_t)DMA2_Channel2:
+        DMA_ClearFlag(DMA2_FLAG_TC2);break;
+    case (uint32_t)DMA2_Channel3:
+        DMA_ClearFlag(DMA2_FLAG_TC3);break;
+    case (uint32_t)DMA2_Channel4:
+        DMA_ClearFlag(DMA2_FLAG_TC4);break;
+    case (uint32_t)DMA2_Channel5:
+        DMA_ClearFlag(DMA2_FLAG_TC5);break;
+		#endif
+		
     default:
         break;
     }
@@ -344,4 +368,12 @@ Dma Dma1Ch4(DMA1_Channel4);
 Dma Dma1Ch5(DMA1_Channel5);
 Dma Dma1Ch6(DMA1_Channel6);
 Dma Dma1Ch7(DMA1_Channel7);
+
+#if defined (STM32F10X_HD)
+Dma Dma2Ch1(DMA2_Channel1);
+Dma Dma2Ch2(DMA2_Channel2);
+Dma Dma2Ch3(DMA2_Channel3);
+Dma Dma2Ch4(DMA2_Channel4);
+Dma Dma2Ch5(DMA2_Channel5);
+#endif
 #endif

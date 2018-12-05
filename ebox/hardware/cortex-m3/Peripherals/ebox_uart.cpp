@@ -112,18 +112,19 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 #endif
 
 #if defined (STM32F10X_HD)
+#if USE_UART4
     case (uint32_t)UART4_BASE:
-        dma_rx = &Dma2Ch3;
         index = NUM_UART4;
-        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART4;
-        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART4;
+        this->mode = RxIt;
         break;
+#endif
 
+#if USE_UART5
     case (uint32_t)UART5_BASE:
         index = NUM_UART5;
-        _tx_buffer_size[index] = TX_BUFFER_SIZE_UART5;
-        _rx_buffer_size[index] = RX_BUFFER_SIZE_UART5;
+        this->mode = RxIt;
         break;
+#endif
 #endif
     }
 
@@ -487,26 +488,28 @@ extern "C" {
     {
         if(USART_GetITStatus(UART4, USART_IT_RXNE) == SET)
         {
+            rx_buffer_one(UART4, NUM_UART4);
             irq_handler(serial_irq_ids[NUM_UART4], RxIrq);
             USART_ClearITPendingBit(UART4, USART_IT_RXNE);
         }
         if(USART_GetITStatus(UART4, USART_IT_TXE) == SET)
         {
+            tx_bufferx_one(UART4, NUM_UART4);
             irq_handler(serial_irq_ids[NUM_UART4], TxIrq);
-            USART_ClearITPendingBit(UART4, USART_IT_TXE);
         }
     }
     void UART5_IRQHandler(void)
     {
         if(USART_GetITStatus(UART5, USART_IT_RXNE) == SET)
         {
+            rx_buffer_one(UART5, NUM_UART5);
             irq_handler(serial_irq_ids[NUM_UART5], RxIrq);
             USART_ClearITPendingBit(UART5, USART_IT_RXNE);
         }
         if(USART_GetITStatus(UART5, USART_IT_TXE) == SET)
         {
+            tx_bufferx_one(UART5, NUM_UART5);
             irq_handler(serial_irq_ids[NUM_UART5], TxIrq);
-            USART_ClearITPendingBit(UART5, USART_IT_TXE);
         }
     }
 #endif

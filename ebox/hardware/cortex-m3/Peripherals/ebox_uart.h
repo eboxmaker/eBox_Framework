@@ -71,8 +71,8 @@
 #define USE_UART1 1
 #define USE_UART2 1
 #define USE_UART3 1
-#define USE_UART4 0
-#define USE_UART5 0
+#define USE_UART4 1
+#define USE_UART5 1
 #define UART_NUM (USE_UART1 + USE_UART2 + USE_UART3 + USE_UART4 + USE_UART5)
 
 #define UART_BUFFER_SIZE 256
