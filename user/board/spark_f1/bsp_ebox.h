@@ -63,7 +63,7 @@
 extern Lcd      lcd;
 extern W5500Class w5500;
 
-extern void print_log(const char *name,const char *date);
+extern void print_log(const char *name = "",const char *date = "");
 
 
 
