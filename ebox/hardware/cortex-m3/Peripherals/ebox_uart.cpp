@@ -213,7 +213,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
         DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
         #else
         DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
-        DMA_InitStructure.DMA_MemoryDataSize = DMA_PeripheralDataSize_Byte;
+        DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
         #endif
         DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
         DMA_InitStructure.DMA_Priority = DMA_Priority_High;
