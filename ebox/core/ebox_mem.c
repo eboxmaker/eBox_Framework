@@ -150,7 +150,8 @@ void ebox_free( void *pv )
     uint8_t *puc = ( uint8_t * ) pv;
     eboxBlockLink_t *pxLink;
 
-
+    uint32_t temp = __get_PRIMASK();//保存之前中断设置
+    __disable_irq();
     if( pv != NULL )
     {
         /* The memory being freed will have an BlockLink_t structure immediately
@@ -184,6 +185,7 @@ void ebox_free( void *pv )
         {
         }
     }
+        __set_PRIMASK(temp);
 
 }
 
