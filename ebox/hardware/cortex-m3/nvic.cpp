@@ -58,8 +58,8 @@ const DevToIRQn_t dev_to_IRQn_table[] =
     {DMA2_Channel1_BASE, DMA2_Channel1_IRQn},
     {DMA2_Channel2_BASE, DMA2_Channel2_IRQn},
     {DMA2_Channel3_BASE, DMA2_Channel3_IRQn},
-    {DMA2_Channel4_BASE, DMA2_Channel4_IRQn},
-    {DMA2_Channel5_BASE, DMA2_Channel5_IRQn},
+    {DMA2_Channel4_BASE, DMA2_Channel4_5_IRQn},
+    {DMA2_Channel5_BASE, DMA2_Channel4_5_IRQn},
 
     {SPI3_BASE, SPI3_IRQn},
 

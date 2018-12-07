@@ -30,8 +30,8 @@
 /* -------------------------------------------------------------------------------- */
 typedef enum
 {
-	FONT_TYPE_1BPP,			// 单色文字
-	FONT_TYPE_8BPP			// 彩色文字
+	FONT_TYPE_1BPP,
+	FONT_TYPE_8BPP
 } FONT_TYPE;
 
 typedef struct
@@ -214,10 +214,10 @@ typedef struct
 /* Message structure */
 typedef struct
 {
-   UG_U8 type;				// 消息类型，参考Message type
-   UG_U8 id;					// 消息ID
-   UG_U8 sub_id;			// sub_id
-   UG_U8 event;				// 事件，参考  Standard object events
+   UG_U8 type;
+   UG_U8 id;
+   UG_U8 sub_id;
+   UG_U8 event;
    void* src;
 } UG_MESSAGE;
 
@@ -916,7 +916,6 @@ void UG_WaitForUpdate( void );
 void UG_Update( void );
 void UG_DrawBMP( UG_S16 xp, UG_S16 yp, UG_BMP* bmp );
 void UG_TouchUpdate( UG_S16 xp, UG_S16 yp, UG_U8 state );
-UG_RESULT UG_Button_CLICK( UG_WINDOW* wnd, UG_U8 id);
 
 /* Driver functions */
 void UG_DriverRegister( UG_U8 type, void* driver );

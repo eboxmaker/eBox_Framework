@@ -23,6 +23,11 @@ enum DmaItIndex
     DMA1_CH5  = 4,
     DMA1_CH6  = 5,
     DMA1_CH7  = 6,
+    DMA2_CH1  ,
+    DMA2_CH2  ,
+    DMA2_CH3  ,
+    DMA2_CH4  ,
+    DMA2_CH5  ,
 } ;
 
 typedef void (*DmaIrqHandler_t)(uint32_t id, DmaIrqType type);
@@ -104,6 +109,16 @@ extern Dma Dma1Ch4;
 extern Dma Dma1Ch5;
 extern Dma Dma1Ch6;
 extern Dma Dma1Ch7;
+#if defined (STM32F10X_HD)
+
+extern Dma Dma2Ch1;
+extern Dma Dma2Ch2;
+extern Dma Dma2Ch3;
+extern Dma Dma2Ch4;
+extern Dma Dma2Ch5;
+
+
+#endif
 
 #endif
 
