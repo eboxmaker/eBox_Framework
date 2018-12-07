@@ -16,22 +16,22 @@ int len;
 void setup()
 {
 	ebox_init();
-    uart1.begin(115200);
+    UART.begin(115200);
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
 }
 int main(void)
 {
+	uint32_t j = 0;
 	setup();
 
 	while (1)
 	{
-        len = uart1.available();
+        len = UART.available();
         for(int i = 0; i < len; i++ )
         {
-            char c = uart1.read();
-            uart1.printf("%c",c);
+            char c = UART.read();
+            UART.printf("%c count %d \r\n",c,j++);
         }
-
 	}
 }
 

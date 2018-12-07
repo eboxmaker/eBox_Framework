@@ -30,12 +30,18 @@ static uart_irq_handler irq_handler;
 uint16_t _tx_buffer_size[UART_NUM];   // 发送环形缓冲区size
 uint16_t _tx_buffer_head[UART_NUM];   // 缓冲区头,每写入（写入缓冲区）一个字符，向后移动1
 uint16_t _tx_buffer_tail[UART_NUM];   // 缓冲区尾,每写出（写入串口TX）一个字符，向后移动1
-uint16_t *_tx_ptr[UART_NUM];//[64];          // 缓冲区指针
 
 uint16_t _rx_buffer_size[UART_NUM];
 uint16_t _rx_buffer_head[UART_NUM];
 uint16_t _rx_buffer_tail[UART_NUM];
-uint16_t *_rx_ptr[UART_NUM];//[256];
+
+#ifdef UART_9_BIT
+    uint16_t *_tx_ptr[UART_NUM];          // 缓冲区指针
+    uint16_t *_rx_ptr[UART_NUM];
+#else
+    uint8_t *_tx_ptr[UART_NUM];          // 缓冲区指针
+    uint8_t *_rx_ptr[UART_NUM];
+#endif
 /**
  *@brief    串口的构造函数
  *@param    USARTx:  USART1,2,3和UART4,5
@@ -111,10 +117,13 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 		_tx_buffer_size[_index] = tx_buffer_size;
     _rx_buffer_size[_index] = rx_buffer_size;
 
-//    _tx_ptr[_index] = (uint16_t *)ebox_malloc(_tx_buffer_size[_index]);
-//    _rx_ptr[_index] = (uint16_t *)ebox_malloc(_rx_buffer_size[_index]);
-		_rx_ptr[_index] = (uint16_t *)malloc(_rx_buffer_size[_index]);
-		_tx_ptr[_index] = (uint16_t *)malloc(_tx_buffer_size[_index]);
+#ifdef UART_9_BIT
+    _tx_ptr[_index] = (uint16_t *)ebox_malloc(_tx_buffer_size[_index]*sizeof(uint16_t));
+    _rx_ptr[_index] = (uint16_t *)ebox_malloc(_rx_buffer_size[_index]*sizeof(uint16_t));
+#else
+    _tx_ptr[_index] = (uint8_t *)ebox_malloc(_tx_buffer_size[_index]*sizeof(uint8_t));
+    _rx_ptr[_index] = (uint8_t *)ebox_malloc(_rx_buffer_size[_index]*sizeof(uint8_t));
+#endif
     serial_irq_handler(_index, Uart::_irq_handler, (uint32_t)this);
 
 		_DataWidth = data_bit == 9 ? LL_USART_DATAWIDTH_9B : LL_USART_DATAWIDTH_8B;
@@ -145,7 +154,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 
     nvic(ENABLE, 0, 0);
 		// 初始化IO
-		index = getIndex(_rx_pin->id, UART_MAP);
+	  index = getIndex(_rx_pin->id, UART_MAP);
     _rx_pin->mode(UART_MAP[index]._pinMode, UART_MAP[index]._pinAf);
     index = getIndex(_tx_pin->id, UART_MAP);
     _tx_pin->mode(UART_MAP[index]._pinMode, UART_MAP[index]._pinAf);
@@ -177,12 +186,17 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     DMA_InitStructure.PeriphOrM2MSrcAddress  = (uint32_t)&_USARTx->RDR;             //外设地址
     DMA_InitStructure.MemoryOrM2MDstAddress  = (uint32_t) _rx_ptr[_index];           //mem地址
     DMA_InitStructure.Direction              = LL_DMA_DIRECTION_PERIPH_TO_MEMORY;   //传输方向，外设到内存
-    DMA_InitStructure.Mode                   = LL_DMA_MODE_CIRCULAR;                //传输模式,连续循环
+    DMA_InitStructure.NbData                 = _rx_buffer_size[_index];              //传输长度
     DMA_InitStructure.PeriphOrM2MSrcIncMode  = LL_DMA_PERIPH_NOINCREMENT;           //外设地址增量模式(不增)
     DMA_InitStructure.MemoryOrM2MDstIncMode  = LL_DMA_MEMORY_INCREMENT;             //存储器地址增量模式
-    DMA_InitStructure.PeriphOrM2MSrcDataSize = LL_DMA_PDATAALIGN_HALFWORD;              //外设数据宽度8bit
-    DMA_InitStructure.MemoryOrM2MDstDataSize = LL_DMA_MDATAALIGN_HALFWORD;              //存储器数据宽度8bit
-    DMA_InitStructure.NbData                 = _rx_buffer_size[_index];              //传输长度
+#ifdef UART_9_BIT
+		DMA_InitStructure.PeriphOrM2MSrcDataSize = LL_DMA_PDATAALIGN_HALFWORD;
+		DMA_InitStructure.MemoryOrM2MDstDataSize = LL_DMA_MDATAALIGN_HALFWORD;
+#else
+		DMA_InitStructure.PeriphOrM2MSrcDataSize = LL_DMA_PDATAALIGN_BYTE;
+		DMA_InitStructure.MemoryOrM2MDstDataSize = LL_DMA_MDATAALIGN_BYTE;
+#endif
+		DMA_InitStructure.Mode                   = LL_DMA_MODE_CIRCULAR;                //传输模式,连续循环
     DMA_InitStructure.Priority               = LL_DMA_PRIORITY_HIGH;                //通道优先级高
 
     dma_rx->init(&DMA_InitStructure);
