@@ -79,6 +79,12 @@
 #define UART_NUM (USE_UART1 + USE_UART2 + USE_UART3 + USE_UART4 + USE_UART5 + USE_UART6 + USE_UART7 + USE_UART8)
 
 
+#define UART_MAX_BITS   8
+
+#if (UART_MAX_BITS > 8)
+    #define UART_9_BIT
+#endif
+
 enum IrqType
 {
     RxIrq = 0,
