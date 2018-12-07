@@ -29,13 +29,14 @@
 
 /**
  * Modification History:
- * -shentq                  -version 2.1(2018/9/23)
+ * -shentq                  -version 2.1(2018/12/7)
  *  新架构的串口特性
  *  1、接收方式：
  *     A、DMA+环形缓冲区(默认模式)，在关闭所有中断的情况下依然可以正常使用，但是此种模式每一个串口
  *        将独占一个DMA通道，用户需要注意任何时候不要使用串口使用的DMA通道，除非你使用完成之后完整
- *        的恢复DMA的所有设置和CNTR值。
- *     B、中断+环形缓冲区，用户不能关闭全局中断和接收中断否则将无法接收数据
+ *        的恢复DMA的所有设置和CNTR值。在此模式下，如果发生一次溢出，将会丢失缓冲区所有数据。
+ *     B、中断+环形缓冲区，用户不能关闭全局中断和接收中断否则将无法接收数据，如果此模式下发生一次
+          溢出，则会丢失一个最老的数据。
  *  2、发送方式：中断+环形缓冲区，用户写入实际是向缓冲区中写入数据，然后开启
  *      TX中断，单片机将自动将缓冲区内容传输出去直到完成，并关闭TX中断。
  *      A、关闭全局中断：调用flush函数依然可以正确的将缓冲区传输完成，并关闭TX中断。
@@ -74,6 +75,11 @@
 #define USE_UART5 0
 #define UART_NUM (USE_UART1 + USE_UART2 + USE_UART3 + USE_UART4 + USE_UART5)
 
+#define UART_MAX_BITS   8
+
+#if (UART_MAX_BITS > 8)
+    #define UART_9_BIT
+#endif
 enum IrqType
 {
     RxIrq = 0,
@@ -99,11 +105,11 @@ typedef void (*uart_irq_handler)(uint32_t id, IrqType type);
 class Uart: public Stream
 {
 public:
-    Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin, uint16_t tx_buffer_size = 64, uint16_t rx_buffer_size = 256);
+    Uart(USART_TypeDef *USARTx, Gpio *tx_pin, Gpio *rx_pin, uint16_t tx_buffer_size = 64, uint16_t rx_buffer_size = 64);
 
     //initial uart
     void    begin(uint32_t baud_rate, RxMode_t mode = RxDMA);
-    void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit, RxMode_t mode = RxIt);
+    void    begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit, RxMode_t mode = RxDMA);
     void    end();
     void    nvic(FunctionalState enable, uint8_t preemption_priority = 3, uint8_t sub_priority = 3);
 
