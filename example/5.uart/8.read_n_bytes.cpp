@@ -24,17 +24,17 @@ void setup()
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
     
 
-    uart1.setTimeout(1000);//定义超时时间
+    UART.setTimeout(1000);//定义超时时间
 }
 int main(void)
 {
 	setup();
 	while (1)
 	{
-        len = uart1.readBytes(buffer,10);
+        len = UART.readBytes(buffer,10);
         if(len > 0)
         {
-            uart1.write(buffer,len);
+            UART.write(buffer,len);
         }
 
 	}

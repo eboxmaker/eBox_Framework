@@ -25,21 +25,21 @@ void setup()
     print_log(EXAMPLE_NAME,EXAMPLE_DATE);
     
 
-    uart1.setTimeout(1000);//定义超时时间
+    UART.setTimeout(1000);//定义超时时间
 }
 int main(void)
 {
 	setup();
 	while (1)
 	{
-        String x = uart1.readStringUntil(';');//
+        String x = UART.readStringUntil(';');//
         
         if(x != NULL)
         {
-            uart1.print(x);
-            uart1.print('\t');
-            uart1.print(ebox_get_free()/1024.0);
-            uart1.println("KB");
+            UART.print(x);
+            UART.print('\t');
+            UART.print(ebox_get_free()/1024.0);
+            UART.println("KB");
         }
 	}
 }

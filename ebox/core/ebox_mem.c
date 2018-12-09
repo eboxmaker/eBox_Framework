@@ -107,13 +107,13 @@ void *ebox_malloc( size_t xWantedSize )
             }
             if( (size_t)(pxBlock) != heap_addr_end )//如果所指向的内存区域不超过内存结尾，则有效
             {
-                pvReturn = ( void * ) ( ( ( uint8_t * ) pxPreviousBlock->nextFreeBlock ) + SIZEOF_STRUCT_MEM );//返回地址需要增加一个结构体空间
+                pvReturn = ( eboxBlockLink_t  *) ( ( ( uint8_t * ) pxPreviousBlock->nextFreeBlock ) + SIZEOF_STRUCT_MEM );//返回地址需要增加一个结构体空间
                 pxPreviousBlock->nextFreeBlock = pxBlock->nextFreeBlock;//将其前一个空闲块的下一块指向其下一块空闲区域，跳过了当前被申请走的区块
 
             }
             if( ( pxBlock->blockSize - xWantedSize ) > _MINIMUM_BLOCK_SIZE )//如果当前区块还有剩余内存，则需要在剩余空间上创建新的空闲区块
             {
-                pxNewBlockLink = ( void * ) ( ( ( uint8_t * ) pxBlock ) + xWantedSize );//设置新空闲区的结构体存储的地址
+                pxNewBlockLink = ( eboxBlockLink_t * ) ( ( ( uint8_t * ) pxBlock ) + xWantedSize );//设置新空闲区的结构体存储的地址
                 /* Calculate the sizes of two blocks split from the
                 single block. */
                 pxNewBlockLink->blockSize = pxBlock->blockSize - xWantedSize;//设置空闲区的大小
@@ -139,7 +139,7 @@ void *ebox_malloc( size_t xWantedSize )
     if(pvReturn == NULL)
     {
 
-    }
+	}
 
     return pvReturn;
 }
@@ -159,7 +159,7 @@ void ebox_free( void *pv )
         puc -= SIZEOF_STRUCT_MEM;
 
         /* This casting is to keep the compiler from issuing warnings. */
-        pxLink = ( void * ) puc;
+        pxLink = ( eboxBlockLink_t * ) puc;
 
         /* Check the block is actually allocated. */
 
@@ -382,7 +382,7 @@ int ebox_memcmp(const void *cs, const void *ct, size_t count)
     const unsigned char *su1, *su2;
     int res = 0;
 
-    for( su1 = cs, su2 = ct; 0 < count; ++su1, ++su2, count--)
+    for( su1 = (unsigned char*)cs, su2 = (unsigned char*)ct; 0 < count; ++su1, ++su2, count--)
         if ((res = *su1 - *su2) != 0)
             break;
     return res;

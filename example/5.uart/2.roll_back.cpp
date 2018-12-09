@@ -30,7 +30,9 @@ int main(void)
         for(int i = 0; i < len; i++ )
         {
             char c = UART.read();
-            UART.printf("%c count %d \r\n",c,j++);
+
+            UART.printf("%c",c);
+
         }
 	}
 }
