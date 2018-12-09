@@ -12,13 +12,13 @@ struct __FILE
 
 FILE __stdout;          
 
-_sys_exit(int x) 
+int _sys_exit(int x) 
 { 
     x = x; 
 }
 
 
-_ttywrch(int ch) 
+int _ttywrch(int ch) 
 { 
     ch = ch; 
 } 
