@@ -120,7 +120,6 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name>鴃?`E騰鴃?`E騰鴃?</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -157,18 +156,66 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>58</LineNumber>
+          <LineNumber>305</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134225006</Address>
+          <Address>134229192</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\..\user\PubSubClient.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\ebox\../../../user/PubSubClient.cpp\305</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>351</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134229568</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\..\user\PubSubClient.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\\../../../user/PubSubClient.cpp\351</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>347</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134229540</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\..\user\PubSubClient.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\\../../../user/PubSubClient.cpp\347</Expression>
+        </Bp>
+        <Bp>
+          <Number>3</Number>
+          <Type>0</Type>
+          <LineNumber>89</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>..\..\..\user\main.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../user/main.cpp\58</Expression>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -203,6 +250,13 @@
           <ItemText>data</ItemText>
         </Ww>
       </WatchWindow1>
+      <WatchWindow2>
+        <Ww>
+          <count>0</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>buffer</ItemText>
+        </Ww>
+      </WatchWindow2>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
@@ -1433,6 +1487,26 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\user\board\spark_f1\bsp_ebox.cpp</PathWithFileName>
       <FilenameWithoutPath>bsp_ebox.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>mqtt</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>10</GroupNumber>
+      <FileNumber>93</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\user\PubSubClient.cpp</PathWithFileName>
+      <FilenameWithoutPath>PubSubClient.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

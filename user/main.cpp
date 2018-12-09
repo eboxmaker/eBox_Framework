@@ -16,6 +16,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "../Ethernet3/utility/w5500.h"
 #include "../Ethernet3/Ethernet3.h"
 #include "../Ethernet3/EthernetUdp3.h"         // UDP library from: bjoern@cs.stanford.edu 12/30/2008
+#include <PubSubClient.h>
 
 /**
 	*	1	此例程需要调用eDrive目录下的w5500模块
@@ -28,90 +29,78 @@ Copyright 2015 shentq. All Rights Reserved.
 #define EXAMPLE_NAME	"w5500 io test example"
 #define EXAMPLE_DATE	"2018-08-11"
 
-//W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
 
-// Enter a MAC address for your controller below.
-// Newer Ethernet shields have a MAC address printed on a sticker on the shield
-uint8_t mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-// if you don't want to use DNS (and reduce your sketch size)
-// use the numeric IP instead of the name for the server:
-//IPAddress server(192.,168,1,4);  // numeric IP for Google (no DNS)
-char server[] = "www.baidu.com";    // name address for Google (using DNS)
+byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
+byte ip[] = {192, 168, 1, 177};  // <- change to match your network
 
-// Set the static IP address to use if the DHCP fails to assign
-IPAddress ip(192, 168, 1, 177);
+//mosquitto.org
+IPAddress server(85,119,83,194);
 
-// Initialize the Ethernet client library
-// with the IP address and port of the server
-// that you want to connect to (port 80 is default for HTTP):
-EthernetClient client;
+
+EthernetClient ethClient;
+PubSubClient client(ethClient);
+
+void reconnect() {
+  // Loop until we're reconnected
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT connection...");
+    // Attempt to connect
+    if (client.connect("arduinoClient")) {
+      Serial.println("connected");
+      // Once connected, publish an announcement...
+      client.publish("outTopic","hello world");
+      // ... and resubscribe
+      client.subscribe("inTopic");
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay_ms(5000);
+    }
+  }
+}
+
+
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print("Message arrived [");
+  Serial.print(topic);
+  Serial.print("] ");
+  Serial.print(" [");
+  for (int i=0;i<length;i++) {
+    Serial.print((char)payload[i]);
+  }
+  Serial.print("] ");
+  Serial.println();
+}
 
 
 void setup()
 {
+
     ebox_init();
-    UART.begin(115200);
-    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
+    uart1.begin(115200);
+  Ethernet.begin(mac);
 
+  client.setServer(server, 1883);
+  client.setCallback(callback);
 
-    // start the Ethernet connection:
-    if (Ethernet.begin(mac) == 0)
-    {
-        Serial.println("Failed to configure Ethernet using DHCP");
-        // no point in carrying on, so do nothing forevermore:
-        // try to congifure using IP address instead of DHCP:
-        Ethernet.begin(mac, ip);
-    }
-    // give the Ethernet shield a second to initialize:
-    delay_ms(1000);
-    Serial.println("connecting...");
-
-    // if you get a connection, report back via serial:
-    if (client.connect(server, 80))
-    {
-        Serial.println("connected");
-        // Make a HTTP request:
-        client.println("GET /search?q=arduino HTTP/1.1");
-        client.println("Host: www.baidu.com");
-        client.println("Connection: close");
-        client.println();
-    }
-    else
-    {
-        // kf you didn't get a connection to the server:
-        Serial.println("connection failed");
-    }
-
+  // Allow the hardware to sort itself out
+  delay_ms(1500);
 }
-int main(void)
+
+int main()
 {
     setup();
-
     while(1)
     {
-        // if there are incoming bytes available
-        // from the server, read them and print them:
-        if (client.available())
-        {
-            char c = client.read();
-            Serial.print(c);
-        }
+    
+      if (!client.connected()) {
+    reconnect();
+  }
+  client.loop();
 
-        // if the server's disconnected, stop the client:
-        if (!client.connected())
-        {
-            Serial.println();
-            Serial.println("disconnecting.");
-            client.stop();
-
-            // do nothing forevermore:
-            while (true);
-        }
     }
 
-
 }
-
-
-
-

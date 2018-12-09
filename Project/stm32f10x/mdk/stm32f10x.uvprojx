@@ -274,7 +274,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0x20000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>__CC_ARM,ARM_MATH_CM3</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\cnc;..\..\..\component\network;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\DSP_Lib;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266;..\..\..\ebox\core\port;..\..\..\component\MPU6050</IncludePath>
+              <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\cnc;..\..\..\component\network;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\DSP_Lib;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266;..\..\..\ebox\core\port;..\..\..\component\MPU6050;..\..\..\component\mqtt\src;..\..\..\component\mqtt\src\lwmqtt</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -956,6 +956,16 @@
               <FileName>bsp_ebox.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\board\spark_f1\bsp_ebox.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mqtt</GroupName>
+          <Files>
+            <File>
+              <FileName>PubSubClient.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\PubSubClient.cpp</FilePath>
             </File>
           </Files>
         </Group>
