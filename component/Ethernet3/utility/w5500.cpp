@@ -29,7 +29,7 @@ void W5500Class::init(uint8_t socketNumbers)
 
     if(initialized == 0)
     {
-        config.dev_num = spi->get_new_dev_num();
+        config.dev_num = cs->id;
         config.mode = SPI_MODE0;
         config.prescaler = SPI_CLOCK_DIV2;
         config.bit_order = MSB_FIRST;
@@ -182,14 +182,14 @@ uint8_t W5500Class::write(uint16_t _addr, uint8_t _cb, uint8_t _data)
     //    resetSS();
     //    SPI.endTransaction();
 
-    spi->take_spi_right(&config);
+    spi->take(&config);
     cs->reset();                               // CS=0, SPI start
     spi->transfer(_addr >> 8);
     spi->transfer(_addr & 0xFF);
     spi->transfer(_cb);
     spi->transfer(_data);
     cs->set();                                 // CS=1, SPI end
-    spi->release_spi_right();
+    spi->release();
 
 
     return 1;
@@ -207,7 +207,7 @@ uint16_t W5500Class::write(uint16_t _addr, uint8_t _cb, const uint8_t *_buf, uin
     //    }
     //    resetSS();
     //    SPI.endTransaction();
-    spi->take_spi_right(&config);
+    spi->take(&config);
     cs->reset();                               // CS=0, SPI start
     spi->transfer(_addr >> 8);
     spi->transfer(_addr & 0xFF);
@@ -218,7 +218,7 @@ uint16_t W5500Class::write(uint16_t _addr, uint8_t _cb, const uint8_t *_buf, uin
     }
 
     cs->set();                                 // CS=1, SPI end
-    spi->release_spi_right();
+    spi->release();
 
     return _len;
 }
@@ -234,14 +234,14 @@ uint8_t W5500Class::read(uint16_t _addr, uint8_t _cb)
     //    resetSS();
     //    SPI.endTransaction();
     ;
-    spi->take_spi_right(&config);
+    spi->take(&config);
     cs->reset();                               // CS=0, SPI start
     spi->transfer(_addr >> 8);
     spi->transfer(_addr & 0xFF);
     spi->transfer(_cb);
     uint8_t _data = spi->transfer(0);
     cs->set();                                 // CS=1, SPI end
-    spi->release_spi_right();
+    spi->release();
     return _data;
 }
 
@@ -257,7 +257,7 @@ uint16_t W5500Class::read(uint16_t _addr, uint8_t _cb, uint8_t *_buf, uint16_t _
     //    }
     //    resetSS();
     //    SPI.endTransaction();
-    spi->take_spi_right(&config);
+    spi->take(&config);
     cs->reset();                               // CS=0, SPI start
     spi->transfer(_addr >> 8);
     spi->transfer(_addr & 0xFF);
@@ -268,7 +268,7 @@ uint16_t W5500Class::read(uint16_t _addr, uint8_t _cb, uint8_t *_buf, uint16_t _
     }
 
     cs->set();                                 // CS=1, SPI end
-    spi->release_spi_right();
+    spi->release();
 
     return _len;
 }
@@ -295,11 +295,11 @@ uint8_t W5500Class::readVersion(void)
     //    SPI.endTransaction();
 
     uint8_t _data;
-    spi->take_spi_right(&config);
+    spi->take(&config);
     cs->reset();                               // CS=0, SPI start
 
     cs->set();                                 // CS=1, SPI end
-    spi->release_spi_right();
+    spi->release();
     return _data;
 }
 

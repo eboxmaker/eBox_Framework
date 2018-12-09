@@ -44,18 +44,18 @@ void L3G4200D::test()
 void L3G4200D::write_reg(uint8_t reg, uint8_t value)
 {
 
-    i2c->take_i2c_right(speed);
-    i2c->write_byte(GYR_ADDRESS, reg, value);
-    i2c->release_i2c_right();
+    i2c->take(speed);
+    i2c->write(GYR_ADDRESS, reg, value);
+    i2c->release();
 }
 
 // Reads a gyro register
 uint8_t L3G4200D::read_reg(uint8_t reg)
 {
     uint8_t value;
-    i2c->take_i2c_right(speed);
-    i2c->read_byte(GYR_ADDRESS, reg, &value);
-    i2c->release_i2c_right();
+    i2c->take(speed);
+    value = i2c->read(GYR_ADDRESS, reg);
+    i2c->release();
 
     return value;
 }

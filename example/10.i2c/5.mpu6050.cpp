@@ -24,7 +24,7 @@ Copyright 2015 shentq. All Rights Reserved.
 
 
 
-Mpu6050 mpu(&i2c1);
+MPU6050 mpu(&i2c1);
 
 void setup()
 {

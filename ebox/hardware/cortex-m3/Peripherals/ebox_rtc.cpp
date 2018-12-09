@@ -19,7 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_rtc.h"
-#include "ebox_config.h"
 
 #if USE_PRINTF
 // 是否打印调试信息, 1打印,0不打印

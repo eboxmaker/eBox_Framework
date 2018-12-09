@@ -18,7 +18,6 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "ebox_config.h"
 #include "ebox_iflash.h"
 #if USE_EBOX_MEM
 #include "ebox_mem.h"

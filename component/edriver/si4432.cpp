@@ -42,7 +42,7 @@ void Si4432::begin()
 {
     if(initialized == 0)
     {
-        spi_dev_si4432.dev_num = spi->get_new_dev_num();;
+        spi_dev_si4432.dev_num = cs->id;
         spi_dev_si4432.mode = SPI_MODE0;
         spi_dev_si4432.prescaler = SPI_CLOCK_DIV4;
         spi_dev_si4432.bit_order = MSB_FIRST;
@@ -66,12 +66,12 @@ void Si4432::begin()
   +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 uint8_t Si4432::SpiWriteRegister (uint8_t reg, uint8_t value)
 {
-    spi->take_spi_right(&spi_dev_si4432);
+    spi->take(&spi_dev_si4432);
     cs->reset();
     spi->write(reg | 0x80);
     spi->write(value);
     cs->set();
-    spi->release_spi_right();
+    spi->release();
     return 1;
 }
 
@@ -84,12 +84,12 @@ uint8_t Si4432::SpiWriteRegister (uint8_t reg, uint8_t value)
 uint8_t Si4432::SpiReadRegister (uint8_t reg)
 {
     uint8_t ret;
-    spi->take_spi_right(&spi_dev_si4432);
+    spi->take(&spi_dev_si4432);
     cs->reset();
     spi->write(reg);
     ret = spi->read();
     cs->set();
-    spi->release_spi_right();
+    spi->release();
     return ret;
 }
 

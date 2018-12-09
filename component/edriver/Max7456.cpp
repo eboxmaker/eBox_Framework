@@ -28,7 +28,7 @@ void OSD::begin()
 
     if(initialized == 0)
     {
-        spi_dev_max7456.dev_num = spi->get_new_dev_num();
+        spi_dev_max7456.dev_num = cs->id;
         spi_dev_max7456.mode = SPI_MODE0;
         spi_dev_max7456.prescaler = SPI_CLOCK_DIV128;
         spi_dev_max7456.bit_order = MSB_FIRST;
@@ -48,7 +48,7 @@ void OSD::init()
 
     detect_mode();
 
-    spi->take_spi_right(&spi_dev_max7456);
+    spi->take(&spi_dev_max7456);
 
     cs->reset(); //select chip
     //read black level register
@@ -75,7 +75,7 @@ void OSD::init()
     // making sure the Max7456 is enabled
     control(1);
 
-    spi->release_spi_right();
+    spi->release();
 }
 
 //------------------ Detect Mode (PAL/NTSC) ---------------------------------
@@ -162,14 +162,14 @@ void OSD::plug()
 
 void OSD::clear()
 {
-    spi->take_spi_right(&spi_dev_max7456);
+    spi->take(&spi_dev_max7456);
     // clear the screen
     cs->reset(); //select chip
     spi->write(MAX7456_DMM_reg);
     spi->write(MAX7456_CLEAR_display);
     cs->set(); //undo select chip
 
-    spi->release_spi_right();
+    spi->release();
 }
 
 //------------------ set panel -----------------------------------------------
@@ -200,7 +200,7 @@ OSD::open_panel(void)
 
     //Auto increment turn writing fast (less SPI commands).
     //No need to set next char address. Just send them
-    spi->take_spi_right(&spi_dev_max7456);
+    spi->take(&spi_dev_max7456);
 
     settings = MAX7456_INCREMENT_auto; //To Enable DMM Auto Increment
 
@@ -215,7 +215,7 @@ OSD::open_panel(void)
     spi->write(char_address_lo);
     //Serial.printf("setPos -> %d %d\n", col, row);
 
-    spi->release_spi_right();
+    spi->release();
 }
 
 //------------------ close panel ---------------------------------------------
@@ -223,13 +223,13 @@ OSD::open_panel(void)
 void
 OSD::close_panel(void)
 {
-    spi->take_spi_right(&spi_dev_max7456);
+    spi->take(&spi_dev_max7456);
 
     spi->write(MAX7456_DMDI_reg);
     spi->write(MAX7456_END_string); //This is needed "trick" to finish auto increment
     cs->set(); //undo select chip
 
-    spi->release_spi_right();
+    spi->release();
     //Serial.println("close");
     row++; //only after finish the auto increment the new row will really act as desired
 }
@@ -249,7 +249,7 @@ OSD::open_single(uint8_t x, uint8_t y)
     char_address_hi = linepos >> 8;
     char_address_lo = linepos;
 
-    spi->take_spi_right(&spi_dev_max7456);
+    spi->take(&spi_dev_max7456);
 
     //digitalWrite(MAX7456_SELECT,LOW);
     cs->reset(); //select chip
@@ -261,7 +261,7 @@ OSD::open_single(uint8_t x, uint8_t y)
     spi->write(char_address_lo);
     //Serial.printf("setPos -> %d %d\n", col, row);
 
-    spi->release_spi_right();
+    spi->release();
 }
 
 //------------------ write ---------------------------------------------------
@@ -276,12 +276,12 @@ OSD::write(uint8_t c)
     }
     else
     {
-        spi->take_spi_right(&spi_dev_max7456);
+        spi->take(&spi_dev_max7456);
 
         spi->write(MAX7456_DMDI_reg);
         spi->write(c);
 
-        spi->release_spi_right();
+        spi->release();
     }
     return 1;
 }
@@ -308,7 +308,7 @@ void
 OSD::control(uint8_t ctrl)
 {
 
-    spi->take_spi_right(&spi_dev_max7456);
+    spi->take(&spi_dev_max7456);
 
     cs->reset(); //select chip
     spi->write(MAX7456_VM0_reg);
@@ -326,7 +326,7 @@ OSD::control(uint8_t ctrl)
 
     cs->set(); //undo select chip
 
-    spi->release_spi_right();
+    spi->release();
 }
 
 void
@@ -342,7 +342,7 @@ OSD::write_NVM(int font_count, uint8_t *character_bitmap)
     //Serial.println("write_new_screen");
 
     // disable display
-    spi->take_spi_right(&spi_dev_max7456);
+    spi->take(&spi_dev_max7456);
 
     cs->reset(); //select chip
     spi->write(MAX7456_VM0_reg);
@@ -381,6 +381,6 @@ OSD::write_NVM(int font_count, uint8_t *character_bitmap)
     spi->write(MAX7456_ENABLE_display_vert);
     cs->set(); //undo select chip
 
-    spi->release_spi_right();
+    spi->release();
 }
 
