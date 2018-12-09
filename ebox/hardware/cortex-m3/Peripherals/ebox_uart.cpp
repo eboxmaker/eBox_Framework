@@ -319,11 +319,9 @@ int Uart::read()
             return -1;
         }
     }
-    {
-        int c = _rx_ptr[index][_rx_buffer_tail[index]];
-        _rx_buffer_tail[index] = (_rx_buffer_tail[index] + 1) % _rx_buffer_size[index];
-        return c;
-    }
+    int c = _rx_ptr[index][_rx_buffer_tail[index]];
+    _rx_buffer_tail[index] = (_rx_buffer_tail[index] + 1) % _rx_buffer_size[index];
+    return c;
 }
 
 /**
@@ -418,15 +416,13 @@ extern "C" {
     void tx_bufferx_one(USART_TypeDef* uart,uint8_t index)
     {
         if (_tx_buffer_head[index] == _tx_buffer_tail[index])//如果空则直接返回
+        {
+            USART_ITConfig(uart, USART_IT_TXE, DISABLE);// Buffer empty, so disable interrupts
             return;
+        }
         unsigned char c = _tx_ptr[index][_tx_buffer_tail[index]];   // 取出字符
         _tx_buffer_tail[index] = (_tx_buffer_tail[index] + 1) % _tx_buffer_size[index];
         uart->DR = (c & (uint16_t)0x01FF);
-        if (_tx_buffer_head[index] == _tx_buffer_tail[index])//如果发送完所有数据
-        {
-            // Buffer empty, so disable interrupts
-            USART_ITConfig(uart, USART_IT_TXE, DISABLE);
-        }
     }
     /**
       *@brief    读入一个字符放入缓冲区

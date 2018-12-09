@@ -48,11 +48,11 @@ u8 random_no_repeat()
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
+    UART.begin(115200);
     random_init();
     for(int i = 0; i < N; i++)
     {
-        uart1.printf("%d:random=%d\r\n", i, random_no_repeat());
+        UART.printf("%d:random=%d\r\n", i, random_no_repeat());
         delay_ms(100);
     }
 

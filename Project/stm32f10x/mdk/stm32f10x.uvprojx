@@ -613,6 +613,11 @@
               <FilePath>..\..\..\ebox\core\ebox_init.cpp</FilePath>
             </File>
             <File>
+              <FileName>retarge.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\retarge.c</FilePath>
+            </File>
+            <File>
               <FileName>big_little.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\ebox\core\big_little.c</FilePath>
