@@ -16,7 +16,7 @@ struct ebox_fifo *ebox_fifo_init(unsigned char *buffer, unsigned int size)
 {
     struct ebox_fifo *fifo;
 
-    fifo = ebox_malloc(sizeof(struct ebox_fifo));
+    fifo = (struct ebox_fifo *)ebox_malloc(sizeof(struct ebox_fifo));
     if (fifo == NULL)
         return NULL;
 
@@ -44,7 +44,7 @@ struct ebox_fifo *ebox_fifo_alloc(unsigned int size)
     * wrap' tachnique works only in this case.
     */
 
-    buffer = ebox_malloc(size);
+    buffer = (unsigned char *)ebox_malloc(size);
     if (buffer == NULL)
         return NULL;
 

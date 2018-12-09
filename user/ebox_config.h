@@ -21,30 +21,50 @@
 #ifndef __EBOX_CONFIG_H
 #define __EBOX_CONFIG_H
 
-//是否使用printf功能,该功能占用存储空间较多，目前确认的使用该功能的包括uart和1602
-#define USE_PRINTF1	1
 
-#if USE_PRINTF1
+//是否使用printf功能,该功能占用存储空间较多，目前确认的使用该功能的包括uart和1602
+
+#define USE_PRINTF 1
+
+
+#if  USE_PRINTF == 1
+#include <stdio.h>
+#include <stdarg.h>
+#define ebox_vsnprintf(...)    vsnprintf(__VA_ARGS__)
+#define ebox_snprintf(...)     snprintf(__VA_ARGS__)
+#define ebox_vsprintf(...)     vsprintf(__VA_ARGS__)
+#define ebox_sprintf(...)      sprintf(__VA_ARGS__)
+
+#elif USE_PRINTF == 2
+#include "snprintf.h"
+#define ebox_vsnprintf(...)    rpl_vsnprintf(__VA_ARGS__)
+#define ebox_snprintf(...)     rpl_snprintf(__VA_ARGS__)
+#define ebox_vsprintf(...)     rpl_vsprintf(__VA_ARGS__)
+#define ebox_sprintf(...)      rpl_sprintf(__VA_ARGS__)
+
+
+#elif  USE_PRINTF == 3
+#include "Myprintf.h"
+#define ebox_vsnprintf(...)    _ebox_vsnprintf(__VA_ARGS__)
+#define ebox_snprintf(...)     _ebox_snprintf(__VA_ARGS__)
+
+#define ebox_vsprintf(...)     _ebox_vsprintf(__VA_ARGS__)
+#define ebox_sprintf(...)      _ebox_sprintf(__VA_ARGS__)
+
+#endif
+
+
+#if USE_PRINTF
   //是否使用DEBUG, 1 使用  0 不使用
-  #define EBOX_DEBUG  0
+  #define EBOX_DEBUG  1
 #endif
 
 #if EBOX_DEBUG
-  // 定义输出设备.该设备需要支持printf
-  #include "ebox_uart.h"
-  extern Uart uart1;
-  #define OUT   uart1
-  #define DBG(...) OUT.printf(__VA_ARGS__)
+    #define DBG_UART   uart1
+    #define DBG(...)    ebox_printf(__VA_ARGS__)
 #else
   #define DBG(...)
 #endif
-
-#define USE_TIMEOUT   1
-
-/*选择内存管理文件, 1 使用ebxo_mem内存管理。 0 不使用
- * ebox_mem将所有未使用内存作为内存分配区域,更灵活，但占用flash比microlib大约500byte
- */
-#define USE_EBOX_MEM  1
 
 
 /* flash写入新数据时，是否擦除覆盖当前区块的其它数据; 

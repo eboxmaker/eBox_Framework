@@ -23,7 +23,7 @@
 
 #include "ebox_type.h"
 #include "binary.h"
-
+#include "ebox_config.h"
 
 #define EBOX_VERSION "2.2"
 
@@ -32,51 +32,19 @@
 extern "C" {
 #endif
 
+extern Cpu_t cpu;
 
+extern void        (*interrupts)(void);
+extern int         (*no_interrupts)(void);
+extern void        (*ebox_reset)();
+extern uint64_t    (*micros)();
+extern uint64_t    (*millis)();
+extern void        (*delay_ms)(uint32_t ms);
+extern void        (*delay_us)(uint32_t us);
+extern size_t       ebox_printf(const char *fmt, ...);
+extern int          ebox_uart_putc(int ch);
+extern size_t       ebox_uart_write(const char *buffer, size_t size);
 
-    extern Cpu_t cpu;
-
-    extern void        (*interrupts)(void);
-    extern int         (*no_interrupts)(void);
-    extern void        (*ebox_reset)();
-    extern uint64_t    (*micros)();
-    extern uint64_t    (*millis)();
-    extern void        (*delay_ms)(uint32_t ms);
-    extern void        (*delay_us)(uint32_t us);
-    extern size_t       ebox_printf(const char *fmt, ...);
-
-
-
-//#define EBOX_DEBUG 1
-#define USE_PRINTF 3
-
-
-
-
-
-
-#if  USE_PRINTF == 1
-#include "Myprintf.h"
-#define ebox_vsnprintf(...)    _ebox_vsnprintf(__VA_ARGS__)
-#define ebox_snprintf(...)     _ebox_snprintf(__VA_ARGS__)
-
-#define ebox_vsprintf(...)     _ebox_vsprintf(__VA_ARGS__)
-#define ebox_sprintf(...)      _ebox_sprintf(__VA_ARGS__)
-#elif USE_PRINTF == 2
-#include "snprintf.h"
-#define ebox_vsnprintf(...)    rpl_vsnprintf(__VA_ARGS__)
-#define ebox_snprintf(...)     rpl_snprintf(__VA_ARGS__)
-#define ebox_vsprintf(...)     rpl_vsprintf(__VA_ARGS__)
-#define ebox_sprintf(...)      rpl_sprintf(__VA_ARGS__)
-#elif  USE_PRINTF == 3
-#include <stdio.h>
-#include <stdarg.h>
-#define ebox_vsnprintf(...)    vsnprintf(__VA_ARGS__)
-#define ebox_snprintf(...)     snprintf(__VA_ARGS__)
-#define ebox_vsprintf(...)     vsprintf(__VA_ARGS__)
-#define ebox_sprintf(...)      sprintf(__VA_ARGS__)
-
-#endif
 
 
     // 取最大值，最小值

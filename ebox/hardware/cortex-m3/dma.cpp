@@ -359,8 +359,8 @@ void DMA1_Channel7_IRQHandler(void)
 
 #ifdef __cplusplus
 }
+
 #endif
-#if USE_DMA
 Dma Dma1Ch1(DMA1_Channel1);
 Dma Dma1Ch2(DMA1_Channel2);
 Dma Dma1Ch3(DMA1_Channel3);
@@ -376,4 +376,4 @@ Dma Dma2Ch3(DMA2_Channel3);
 Dma Dma2Ch4(DMA2_Channel4);
 Dma Dma2Ch5(DMA2_Channel5);
 #endif
-#endif
+
