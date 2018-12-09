@@ -18,7 +18,6 @@ void ebox_init(void)
 
 
 }
-#if USE_PRINTF
 extern "C" {
     /**
      *@brief    定义一个ebox_printf的输出函数，其中的输出设备必须是可用的
@@ -27,6 +26,7 @@ extern "C" {
     */
     size_t ebox_printf(const char *fmt, ...)
     {
+#if USE_PRINTF
         int     size1 = 0;
         size_t  size2 = 64;
         char    *p;
@@ -52,11 +52,31 @@ extern "C" {
         }
         while(size1 == -1);
         va_end(va_params);
-        uart1.write(p, size1);
+        DBG_UART.write(p, size1);
         ebox_free(p);
         return size1;
-    }
-
-
-}
 #endif
+    }
+    
+    
+    int ebox_uart_putc(int ch)
+    {
+#if USE_PRINTF
+        DBG_UART.write(ch);
+        return ch;
+#endif
+    }
+    
+    size_t ebox_uart_write(const char *buffer, size_t size)
+    {
+#if USE_PRINTF
+        DBG_UART.write(buffer,size);
+        return size;
+#endif
+    }    
+    
+    
+    
+}
+    
+
