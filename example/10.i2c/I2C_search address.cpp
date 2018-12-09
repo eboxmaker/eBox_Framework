@@ -53,7 +53,7 @@ int main(void)
 		for (;add<=255;add++)
 		{
 			UART.printf("test address is 0x%2x  ",add);
-			if (I2C.checkBusy(add)==0)
+			if (I2C.check_busy(add)==0)
 			{
 				UART.printf("success! \r\n");
 				I2C.write(add,0x08);

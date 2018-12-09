@@ -27,7 +27,7 @@
 //Led     led2(&LED2,0);
 //Led     led3(&LED3,0);
 //Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
-//W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
+W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
 
 // 如果不使用object.cpp, 使用下列方式创建IO对象
 //mcuGpio 		LED1(GPIOB,GPIO_Pin_8);

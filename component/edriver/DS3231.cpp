@@ -46,9 +46,9 @@ uint8_t DS3231::dec_to_bcd(uint8_t dec)
 void	DS3231::get_date_time(DateTime_t *t)
 {
     uint8_t buf[8];
-    i2c->take_i2c_right(speed);
-    i2c->read_byte(DS3231_ADDRESS, DS3231_SECOND, buf, 7);
-    i2c->release_i2c_right();
+    i2c->take(speed);
+    i2c->read_buf(DS3231_ADDRESS, DS3231_SECOND, buf, 7);
+    i2c->release();
 
     //	timer.w_year,timer.w_month,timer.w_date,timer.hour,timer.min,timer.sec
     /******将读取的十六进制数据转换为十进制数据******/
@@ -63,10 +63,10 @@ void	DS3231::get_date_time(DateTime_t *t)
 void DS3231::get_date(char *buf)
 {
     uint8_t tmpbuf[3];
-    i2c->take_i2c_right(speed);
+    i2c->take(speed);
 
-    i2c->read_byte(DS3231_ADDRESS, DS3231_DAY, tmpbuf, 3);				//日期
-    i2c->release_i2c_right();
+    i2c->read_buf(DS3231_ADDRESS, DS3231_DAY, tmpbuf,3);				//日期
+    i2c->release();
 
     buf[0] = uint8_t( (tmpbuf[0] >> 4) + 0x30);
     buf[1] = uint8_t( (tmpbuf[0] & 0x0f) + 0x30);
@@ -80,9 +80,9 @@ void DS3231::get_time(char *buf)
 {
     uint8_t tmpbuf[3];
 
-    i2c->take_i2c_right(speed);
-    i2c->read_byte(DS3231_ADDRESS, DS3231_SECOND, tmpbuf, 3);
-    i2c->release_i2c_right();
+    i2c->take(speed);
+    i2c->read_buf(DS3231_ADDRESS, DS3231_SECOND, tmpbuf, 3);
+    i2c->release();
 
     buf[0] = uint8_t( (tmpbuf[2] >> 4) + 0x30);
     buf[1] = uint8_t( (tmpbuf[2] & 0x0f) + 0x30);
@@ -108,14 +108,14 @@ void	DS3231::set_time(void *dt)
     tBCD.sec = dec_to_bcd(t->sec);
 
 
-    i2c->take_i2c_right(speed);
-    i2c->write_byte(DS3231_ADDRESS, DS3231_WEEK, tBCD.week); //修改周
-    i2c->write_byte(DS3231_ADDRESS, DS3231_YEAR, tBCD.year); //修改年
-    i2c->write_byte(DS3231_ADDRESS, DS3231_MONTH, tBCD.month); //修改月
-    i2c->write_byte(DS3231_ADDRESS, DS3231_DAY, tBCD.date);  //修改日
-    i2c->write_byte(DS3231_ADDRESS, DS3231_HOUR, tBCD.hour); //修改时
-    i2c->write_byte(DS3231_ADDRESS, DS3231_MINUTE, tBCD.min); //修改分
-    i2c->write_byte(DS3231_ADDRESS, DS3231_SECOND, tBCD.sec ); //修改秒
-    i2c->release_i2c_right();
+    i2c->take(speed);
+    i2c->write(DS3231_ADDRESS, DS3231_WEEK, tBCD.week); //修改周
+    i2c->write(DS3231_ADDRESS, DS3231_YEAR, tBCD.year); //修改年
+    i2c->write(DS3231_ADDRESS, DS3231_MONTH, tBCD.month); //修改月
+    i2c->write(DS3231_ADDRESS, DS3231_DAY, tBCD.date);  //修改日
+    i2c->write(DS3231_ADDRESS, DS3231_HOUR, tBCD.hour); //修改时
+    i2c->write(DS3231_ADDRESS, DS3231_MINUTE, tBCD.min); //修改分
+    i2c->write(DS3231_ADDRESS, DS3231_SECOND, tBCD.sec ); //修改秒
+    i2c->release();
 }
 

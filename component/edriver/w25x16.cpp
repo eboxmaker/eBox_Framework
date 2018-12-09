@@ -26,7 +26,7 @@ void W25x16::begin()
 
     if(initialized == 0)
     {
-        spi_dev_w25x16.dev_num = spi->get_new_dev_num();
+        spi_dev_w25x16.dev_num = cs->id;
         spi_dev_w25x16.mode = SPI_MODE0;
         spi_dev_w25x16.bit_order = MSB_FIRST;
         spi_dev_w25x16.prescaler = SPI_CLOCK_DIV4;
@@ -38,7 +38,7 @@ void W25x16::begin()
 }
 void W25x16::read_id(uint16_t *id)
 {
-    spi->take_spi_right(&spi_dev_w25x16);
+    spi->take(&spi_dev_w25x16);
 
     cs->reset();
     spi->write(0x90);
@@ -48,7 +48,7 @@ void W25x16::read_id(uint16_t *id)
     *id |= spi->read() << 8;
     *id |= spi->read();
     cs->set();
-    spi->release_spi_right();
+    spi->release();
 
 
 }
@@ -64,15 +64,15 @@ void W25x16::read_id(uint16_t *id)
 ***************************************************************/
 void W25x16::read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read)
 {
-    spi->take_spi_right(&spi_dev_w25x16);
+    spi->take(&spi_dev_w25x16);
     cs->reset();
     spi->write(W25X_ReadData);         //发送读取命令
     spi->write((uint8_t)((read_addr) >> 16)); //发送24bit地址
     spi->write((uint8_t)((read_addr) >> 8));
     spi->write((uint8_t)read_addr);
-    spi->read(buf, num_to_read);
+    spi->read_buf(buf, num_to_read);
     cs->set();
-    spi->release_spi_right();
+    spi->release();
 
 }
 /***************************************************************
@@ -87,16 +87,16 @@ void W25x16::read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read)
 ***************************************************************/
 void W25x16::fast_read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read)
 {
-    spi->take_spi_right(&spi_dev_w25x16);
+    spi->take(&spi_dev_w25x16);
     cs->reset();
     spi->write(W25X_FastReadData);         //发送读取命令
     spi->write((uint8_t)((read_addr) >> 16)); //发送24bit地址
     spi->write((uint8_t)((read_addr) >> 8));
     spi->write((uint8_t)read_addr);
     spi->write(0xff);   //空字节
-    spi->read(buf, num_to_read);
+    spi->read_buf(buf, num_to_read);
     cs->set();
-    spi->release_spi_right();
+    spi->release();
 
 }
 /***************************************************************
@@ -116,7 +116,7 @@ void W25x16::write(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write)
     uint16_t secoff;
     uint16_t secremain;
     uint16_t i;
-    spi->take_spi_right(&spi_dev_w25x16);
+    spi->take(&spi_dev_w25x16);
 
     secpos = write_addr / 4096; //扇区地址 0~511 for w25x16
     secoff = write_addr % 4096; //在扇区内的偏移
@@ -154,7 +154,7 @@ void W25x16::write(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write)
             else secremain = num_to_write;			//下一个扇区可以写完了
         }
     }
-    spi->release_spi_right();
+    spi->release();
 
 }
 
@@ -177,7 +177,7 @@ void W25x16::write_page(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write
     spi->write((uint8_t)((write_addr) >> 16)); //发送24bit地址
     spi->write((uint8_t)((write_addr) >> 8));
     spi->write((uint8_t)write_addr);
-    spi->write(buf, num_to_write);
+    spi->write_buf(buf, num_to_write);
     cs->set();
     _waitBusy();					   //等待写入结束
 }

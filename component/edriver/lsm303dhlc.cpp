@@ -34,16 +34,16 @@ void LSM303DLHC::begin(uint32_t speed)
 }
 void LSM303DLHC::write_reg(uint8_t slave_addr, uint8_t reg, uint8_t value)
 {
-    i2c->take_i2c_right(speed);
-    i2c->write_byte(slave_addr, reg, value);
-    i2c->release_i2c_right();
+    i2c->take(speed);
+    i2c->write(slave_addr, reg, value);
+    i2c->release();
 }
 uint8_t LSM303DLHC::read_reg(uint8_t slave_addr, uint8_t reg)
 {
     uint8_t value;
-    i2c->take_i2c_right(speed);
-    i2c->read_byte(slave_addr, reg, &value);
-    i2c->release_i2c_right();
+    i2c->take(speed);
+    value = i2c->read(slave_addr, reg);
+    i2c->release();
 
     return value;
 }
@@ -63,7 +63,7 @@ void LSM303DLHC::read_acc(void)
 void LSM303DLHC::read_mag(void)
 {
     uint8_t buf[6];
-    i2c->read_byte(LSM303_MAG_ADDR, LSM303M_MULTIPLE, buf, 6);
+    i2c->read_buf(LSM303_MAG_ADDR, LSM303M_MULTIPLE, buf, 6);
     mag_x = (buf[0] << 8) + buf[1];
     mag_y = (buf[2] << 8) + buf[3];
     mag_z = (buf[4] << 8) + buf[5];

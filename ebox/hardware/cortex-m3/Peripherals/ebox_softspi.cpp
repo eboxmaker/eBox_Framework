@@ -20,7 +20,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_spi.h"
 
-#include "ebox_config.h"
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印

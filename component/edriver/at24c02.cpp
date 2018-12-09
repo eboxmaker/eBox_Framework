@@ -23,14 +23,14 @@
 void At24c02::begin(uint32_t speed)
 {
     i2c->begin(speed);
-    _timing = i2c->readConfig();
+    _timing = i2c->read_config();
 
 }
 int8_t At24c02::write_byte(uint16_t byte_addr, uint8_t byte)
 {
     //    i2c->take_i2c_right(speed);
     //    i2c->takeRight(_timing,300);
-    i2c->write(SLAVE_ADDR, byte_addr, byte, 200);
+    i2c->write(SLAVE_ADDR, byte_addr, byte);
     //    i2c->releaseRight();
     return 0;
 }
@@ -45,7 +45,7 @@ int8_t At24c02::write_byte(uint16_t byte_addr, uint8_t *buf, uint16_t num_to_wri
     //        ret = i2c->checkBusy(SLAVE_ADDR,200);//如果有错误再加此句
 
     //    }
-    i2c->writeBuf(SLAVE_ADDR, byte_addr, buf, num_to_write, 300);
+    i2c->write_buf(SLAVE_ADDR, byte_addr, buf, num_to_write);
 
     //	i2c->writeByte(SLAVE_ADDR,byteAddr,buf,numToWrite);//部分器件个别的位置相应比较慢
     return ret;
@@ -55,7 +55,7 @@ uint8_t At24c02::read_byte(uint16_t byte_addr)
 {
     uint8_t byte;
     //    i2c->takeRight(_timing,300);
-    byte = i2c->read(SLAVE_ADDR, byte_addr, 300);
+    byte = i2c->read(SLAVE_ADDR, byte_addr);
     //    i2c->releaseRight();
 
     return byte;
@@ -70,8 +70,8 @@ int8_t	At24c02::read_byte(uint16_t byte_addr, uint8_t *buf, uint16_t num_to_read
     //	{
     //			buf[i] = byteRead(byteAddr++);
     //	}
-    ret = i2c->checkBusy(SLAVE_ADDR, 200); //如果有错误再加此句
-    ret = i2c->readBuf(SLAVE_ADDR, byte_addr, buf, num_to_read, 300);
+    ret = i2c->check_busy(SLAVE_ADDR); //如果有错误再加此句
+    ret = i2c->read_buf(SLAVE_ADDR, byte_addr, buf, num_to_read);
     //    i2c->releaseRight();
     return ret;
 }
