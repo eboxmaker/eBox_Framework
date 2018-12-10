@@ -14,16 +14,16 @@
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
-          <Device>STM32F407VETx</Device>
+          <Device>STM32F103ZE</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F4xx_DFP.2.9.0</PackID>
-          <PackURL>http://www.keil.com/pack</PackURL>
-          <Cpu>IRAM(0x20000000,0x20000) IRAM2(0x10000000,0x10000) IROM(0x08000000,0x80000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
+          <PackID>Keil.STM32F1xx_DFP.2.1.0</PackID>
+          <PackURL>http://www.keil.com/pack/</PackURL>
+          <Cpu>IRAM(0x20000000,0x10000) IROM(0x08000000,0x80000) CPUTYPE("Cortex-M3") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F4xx_512 -FS08000000 -FL080000 -FP0($$Device:STM32F407VETx$CMSIS\Flash\STM32F4xx_512.FLM))</FlashDriverDll>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F10x_512 -FS08000000 -FL080000 -FP0($$Device:STM32F103ZE$Flash\STM32F10x_512.FLM))</FlashDriverDll>
           <DeviceId>0</DeviceId>
-          <RegisterFile>$$Device:STM32F407VETx$Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h</RegisterFile>
+          <RegisterFile>$$Device:STM32F103ZE$Device\Include\stm32f10x.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -33,7 +33,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:STM32F407VETx$CMSIS\SVD\STM32F40x.svd</SFDFile>
+          <SFDFile>$$Device:STM32F103ZE$SVD\STM32F103xx.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -49,7 +49,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>STM32F4</OutputName>
+          <OutputName>ebox</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -82,8 +82,8 @@
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
-            <UserProg1Name></UserProg1Name>
-            <UserProg2Name></UserProg2Name>
+            <UserProg1Name>$KARM\BIN\ELFDWT.EXE #L BASEADDRESS(0x08000000)</UserProg1Name>
+            <UserProg2Name>fromelf --bin ".\Objects\@L.axf" --output ".\Objects\@L.bin"</UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
             <nStopA1X>0</nStopA1X>
@@ -110,13 +110,13 @@
         </CommonProperty>
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
-          <SimDllArguments> -REMAP -MPU</SimDllArguments>
+          <SimDllArguments> -REMAP</SimDllArguments>
           <SimDlgDll>DCM.DLL</SimDlgDll>
-          <SimDlgDllArguments>-pCM4</SimDlgDllArguments>
+          <SimDlgDllArguments>-pCM3</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
-          <TargetDllArguments> -MPU</TargetDllArguments>
+          <TargetDllArguments></TargetDllArguments>
           <TargetDlgDll>TCM.DLL</TargetDlgDll>
-          <TargetDlgDllArguments>-pCM4</TargetDlgDllArguments>
+          <TargetDlgDllArguments>-pCM3</TargetDlgDllArguments>
         </DllOption>
         <DebugOption>
           <OPTHX>
@@ -138,7 +138,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3>"" ()</Flash3>
+          <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -174,7 +174,7 @@
             <AdsLsxf>1</AdsLsxf>
             <RvctClst>0</RvctClst>
             <GenPPlst>0</GenPPlst>
-            <AdsCpuType>"Cortex-M4"</AdsCpuType>
+            <AdsCpuType>"Cortex-M3"</AdsCpuType>
             <RvctDeviceName></RvctDeviceName>
             <mOS>0</mOS>
             <uocRom>0</uocRom>
@@ -183,8 +183,8 @@
             <hadIRAM>1</hadIRAM>
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
-            <RvdsVP>2</RvdsVP>
-            <hadIRAM2>1</hadIRAM2>
+            <RvdsVP>0</RvdsVP>
+            <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
             <useUlib>0</useUlib>
@@ -192,7 +192,7 @@
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
             <RoSelD>3</RoSelD>
-            <RwSelD>4</RwSelD>
+            <RwSelD>3</RwSelD>
             <CodeSel>0</CodeSel>
             <OptFeed>0</OptFeed>
             <NoZi1>0</NoZi1>
@@ -244,7 +244,7 @@
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x20000</Size>
+                <Size>0x10000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
@@ -299,12 +299,12 @@
               <OCR_RVCT9>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x20000</Size>
+                <Size>0x10000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
-                <StartAddress>0x10000000</StartAddress>
-                <Size>0x10000</Size>
+                <StartAddress>0x0</StartAddress>
+                <Size>0x0</Size>
               </OCR_RVCT10>
             </OnChipMemories>
             <RvctStartVector></RvctStartVector>
@@ -326,8 +326,8 @@
             <uC99>0</uC99>
             <uGnu>0</uGnu>
             <useXO>0</useXO>
-            <v6Lang>1</v6Lang>
-            <v6LangP>1</v6LangP>
+            <v6Lang>0</v6Lang>
+            <v6LangP>0</v6LangP>
             <vShortEn>1</vShortEn>
             <vShortWch>1</vShortWch>
             <v6Lto>0</v6Lto>
@@ -335,9 +335,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>ARM_MATH_CM4</Define>
+              <Define>__CC_ARM,ARM_MATH_CM3</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcuLib\stm32f4xx\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\..\ebox\core;..\..\..\user;..\..\..\ebox\hardware\cortex-m4;..\..\..\ebox\hardware\cortex-m4\Peripherals;..\..\..\component\ddc;..\..\..\user\board\spark_f4;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\component\gui;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial</IncludePath>
+              <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\user;..\..\..\user\board\stm32f10x_hd;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266;..\..\..\ebox\core\port;..\..\..\component\MPU6050;..\..\..\component\mqtt\src;..\..\..\os\ebox_os</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -382,14 +382,9 @@
           <GroupName>CMSIS</GroupName>
           <Files>
             <File>
-              <FileName>startup_stm32f40_41xxx.s</FileName>
+              <FileName>startup_stm32f10x_ld.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f40_41xxx.s</FilePath>
-            </File>
-            <File>
-              <FileName>startup_stm32f427_437xx.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f427_437xx.s</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\startup\arm\startup_stm32f10x_ld.s</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -430,9 +425,9 @@
               </FileOption>
             </File>
             <File>
-              <FileName>startup_stm32f429_439xx.s</FileName>
+              <FileName>startup_stm32f10x_md.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f429_439xx.s</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\startup\arm\startup_stm32f10x_md.s</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -473,219 +468,134 @@
               </FileOption>
             </File>
             <File>
-              <FileName>system_stm32f4xx.c</FileName>
+              <FileName>startup_stm32f10x_hd.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\startup\arm\startup_stm32f10x_hd.s</FilePath>
+            </File>
+            <File>
+              <FileName>system_stm32f10x.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\system_stm32f10x.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Libraries</GroupName>
+          <GroupName>libraries</GroupName>
           <Files>
             <File>
               <FileName>misc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\misc.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\misc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_adc.c</FileName>
+              <FileName>stm32f10x_adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_adc.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_adc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_can.c</FileName>
+              <FileName>stm32f10x_bkp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_can.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_bkp.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_cec.c</FileName>
+              <FileName>stm32f10x_can.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cec.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_can.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_crc.c</FileName>
+              <FileName>stm32f10x_cec.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_crc.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_cec.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_cryp.c</FileName>
+              <FileName>stm32f10x_crc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_crc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_cryp_aes.c</FileName>
+              <FileName>stm32f10x_dac.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_aes.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_dac.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_cryp_des.c</FileName>
+              <FileName>stm32f10x_dbgmcu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_des.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_dbgmcu.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_cryp_tdes.c</FileName>
+              <FileName>stm32f10x_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_cryp_tdes.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_dma.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_dac.c</FileName>
+              <FileName>stm32f10x_exti.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dac.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_exti.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_dbgmcu.c</FileName>
+              <FileName>stm32f10x_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dbgmcu.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_flash.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_dcmi.c</FileName>
+              <FileName>stm32f10x_fsmc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dcmi.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_fsmc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_dma.c</FileName>
+              <FileName>stm32f10x_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_gpio.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_dma2d.c</FileName>
+              <FileName>stm32f10x_i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma2d.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_i2c.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_dsi.c</FileName>
+              <FileName>stm32f10x_iwdg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dsi.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_iwdg.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_exti.c</FileName>
+              <FileName>stm32f10x_pwr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_exti.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_pwr.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_flash.c</FileName>
+              <FileName>stm32f10x_rcc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_rcc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_flash_ramfunc.c</FileName>
+              <FileName>stm32f10x_rtc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash_ramfunc.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_rtc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_fmpi2c.c</FileName>
+              <FileName>stm32f10x_sdio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_fmpi2c.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_sdio.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_fsmc.c</FileName>
+              <FileName>stm32f10x_spi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_fsmc.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_spi.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_gpio.c</FileName>
+              <FileName>stm32f10x_tim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_tim.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_hash.c</FileName>
+              <FileName>stm32f10x_usart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_usart.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_hash_md5.c</FileName>
+              <FileName>stm32f10x_wwdg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_md5.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hash_sha1.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_hash_sha1.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_iwdg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_iwdg.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_lptim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_lptim.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_ltdc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_ltdc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_pwr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_pwr.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_qspi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_qspi.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_rcc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_rng.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rng.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rtc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_sai.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_sai.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_sdio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_sdio.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_spdifrx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spdifrx.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_syscfg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_tim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_usart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_wwdg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_wwdg.c</FilePath>
+              <FilePath>..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_wwdg.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -701,6 +611,11 @@
               <FileName>ebox_init.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\ebox_init.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>retarge.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\retarge.c</FilePath>
             </File>
             <File>
               <FileName>big_little.c</FileName>
@@ -728,16 +643,6 @@
               <FilePath>..\..\..\ebox\core\itoa.c</FilePath>
             </File>
             <File>
-              <FileName>myprintf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\myprintf.c</FilePath>
-            </File>
-            <File>
-              <FileName>Dstring.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\Dstring.cpp</FilePath>
-            </File>
-            <File>
               <FileName>IPAddress.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\IPAddress.cpp</FilePath>
@@ -763,11 +668,6 @@
               <FilePath>..\..\..\ebox\core\ringbuf.cpp</FilePath>
             </File>
             <File>
-              <FileName>snprintf.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\snprintf.cpp</FilePath>
-            </File>
-            <File>
               <FileName>sort.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\sort.cpp</FilePath>
@@ -783,6 +683,16 @@
               <FilePath>..\..\..\ebox\core\WString.cpp</FilePath>
             </File>
             <File>
+              <FileName>myprintf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\myprintf.c</FilePath>
+            </File>
+            <File>
+              <FileName>snprintf.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\snprintf.cpp</FilePath>
+            </File>
+            <File>
               <FileName>ebox_virtual_hmi.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\port\ebox_virtual_hmi.cpp</FilePath>
@@ -795,118 +705,178 @@
             <File>
               <FileName>mcu.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\mcu.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\mcu.cpp</FilePath>
             </File>
             <File>
               <FileName>rcc.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\rcc.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\rcc.cpp</FilePath>
             </File>
             <File>
               <FileName>nvic.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\nvic.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\nvic.cpp</FilePath>
             </File>
             <File>
               <FileName>dma.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\dma.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\dma.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_gpio.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_gpio.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_exti.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_exti.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_adc.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_adc.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_timer.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_timer.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_pwm.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_pwm.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_gpio.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_uart.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_uart.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_uart.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_i2c.cpp</FileName>
+              <FileName>ebox_adc.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_i2c.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_adc.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_soft_i2c.cpp</FileName>
+              <FileName>ebox_can.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_soft_i2c.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_spi.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_spi.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_soft_spi.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_soft_spi.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_wdg.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_wdg.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_iflash.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_iflash.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_object.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\ebox_object.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_can.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_dac.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_dac.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_dac.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_encoder.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_encoder.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_exti.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_exti.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_i2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_i2c.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_iflash.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_iflash.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_in_capture.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_in_capture.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_pwm.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_pwm.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_rtc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_rtc.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_softi2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_softi2c.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_softspi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_softspi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_spi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_spi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_step_motor.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_step_motor.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_timer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_timer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_wdg.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_wdg.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_it.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m4\ebox_it.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\ebox_it.cpp</FilePath>
             </File>
             <File>
-              <FileName>mcu_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\user\board\spark_f4\mcu_config.h</FilePath>
+              <FileName>object.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\object.cpp</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>apps</GroupName>
+          <GroupName>edriver</GroupName>
           <Files>
             <File>
-              <FileName>calendar.cpp</FileName>
+              <FileName>DS3231.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\component\apps\calendar.cpp</FilePath>
+              <FilePath>..\..\..\component\edriver\DS3231.cpp</FilePath>
             </File>
             <File>
-              <FileName>color_convert.cpp</FileName>
+              <FileName>L3G4200D.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\component\apps\color_convert.cpp</FilePath>
+              <FilePath>..\..\..\component\edriver\L3G4200D.cpp</FilePath>
             </File>
+            <File>
+              <FileName>lsm303dhlc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\lsm303dhlc.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>MPU6050.CPP</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\MPU6050\MPU6050.CPP</FilePath>
+            </File>
+            <File>
+              <FileName>at24c02.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\at24c02.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>w25x16.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\w25x16.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Max7456.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\Max7456.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>LTC1446.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\LTC1446.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>si4432.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\si4432.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>app</GroupName>
+          <Files>
             <File>
               <FileName>EventGpio.cpp</FileName>
               <FileType>8</FileType>
@@ -916,6 +886,61 @@
               <FileName>EventIo.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\apps\EventIo.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>network</GroupName>
+          <Files>
+            <File>
+              <FileName>socket.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\utility\socket.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>w5500.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\utility\w5500.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Dhcp.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\Dhcp.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Dns.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\Dns.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Ethernet3.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\Ethernet3.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EthernetClient.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\EthernetClient.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EthernetServer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\EthernetServer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EthernetUdp3.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\Ethernet3\EthernetUdp3.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>esp8266</GroupName>
+          <Files>
+            <File>
+              <FileName>ESP8266.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\WeeESP8266\ESP8266.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -930,27 +955,37 @@
             <File>
               <FileName>bsp_ebox.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\user\board\spark_f4\bsp_ebox.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FSMCIO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\user\board\spark_f4\FSMCIO.c</FilePath>
+              <FilePath>..\..\..\user\board\spark_f1\bsp_ebox.cpp</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>modbus</GroupName>
+          <GroupName>mqtt</GroupName>
           <Files>
             <File>
-              <FileName>Modbus.cpp</FileName>
+              <FileName>PubSubClient.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\component\modbus\libraries\Modbus\Modbus.cpp</FilePath>
+              <FilePath>..\..\..\component\mqtt\src\PubSubClient.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>os</GroupName>
+          <Files>
+            <File>
+              <FileName>cpu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\os\ebox_os\cpu.c</FilePath>
             </File>
             <File>
-              <FileName>ModbusSerial.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\modbus\libraries\ModbusSerial\ModbusSerial.cpp</FilePath>
+              <FileName>os.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\os\ebox_os\os.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_cpu_a.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\os\ebox_os\os_cpu_a.asm</FilePath>
             </File>
           </Files>
         </Group>
@@ -965,12 +1000,6 @@
     <apis/>
     <components>
       <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.1.1" condition="ARMv6_7_8-M Device">
-        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.3.0"/>
-        <targetInfos>
-          <targetInfo name="Target 1"/>
-        </targetInfos>
-      </component>
-      <component Cclass="CMSIS" Cgroup="DSP" Cvendor="ARM" Cversion="1.5.2" condition="CMSIS DSP">
         <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.3.0"/>
         <targetInfos>
           <targetInfo name="Target 1"/>

@@ -5,7 +5,8 @@
 extern "C" {
 #endif
 
-#include "mcu_config.h"
+#include "stm32f4xx.h"
+
 typedef struct
 {
     uint32_t dev;

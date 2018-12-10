@@ -564,7 +564,7 @@
             <File>
               <FileName>mcu_config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m0\mcu_config.h</FilePath>
+              <FilePath>..\..\..\user\board\Nucleo_f0\mcu_config.h</FilePath>
             </File>
             <File>
               <FileName>object.cpp</FileName>

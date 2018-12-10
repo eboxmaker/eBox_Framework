@@ -73,7 +73,7 @@ void Timer::begin(uint32_t frq)
     rcc_clock_cmd((uint32_t)_TIMx, ENABLE);
 
     base_init(_period, _prescaler);
-    nvic(DISABLE, 0, 0);
+    nvic(ENABLE, 0, 0);
     interrupt(DISABLE);
 }
 void Timer::reset_frq(uint32_t frq)
