@@ -34,27 +34,31 @@
 #define EXAMPLE_DATE	"2018-10-01"
 
 // 任务1
-void led2On(){
-  UART.printf("led2On,周期 %dms,相邻任务间隔%dms\r\n",N*M,N);
-  LED2.set();
+void led2On()
+{
+    UART.printf("led2On,周期 %dms,相邻任务间隔%dms\r\n", N * M, N);
+    LED2.set();
 }
 // 任务2
-void led2Off(){
-  UART.printf("led2off,周期 %dms,相邻任务间隔%dms\r\n",N*M,N);
-  LED2.reset();
+void led2Off()
+{
+    UART.printf("led2off,周期 %dms,相邻任务间隔%dms\r\n", N * M, N);
+    LED2.reset();
 }
 // 任务3
-void led100(){
-  UART.printf("长周期任务LED2反转,周期：%d ms \r\n",N*M1);
-  LED1.toggle();
+void led100()
+{
+    UART.printf("长周期任务LED2反转,周期：%d ms \r\n", N * M1);
+    LED1.toggle();
 }
 
 // 任务列表
 // 可以在systick里调用多个函数。需要调用的函数保存在数组里，每次只调用一个或2个
 // 函数指针数组，保存需要调用的函数指针
-fun_noPara_t funTable[M] = {
-  led2Off,led2On,nullFun,nullFun,nullFun,
-  nullFun,nullFun,nullFun,nullFun,nullFun
+fun_noPara_t funTable[M] =
+{
+    led2Off, led2On, nullFun, nullFun, nullFun,
+    nullFun, nullFun, nullFun, nullFun, nullFun
 };
 
 
@@ -64,42 +68,44 @@ fun_noPara_t funTable[M] = {
 *@param    NONE
 *@retval   NONE
 */
-void SystickCallBackN(void){
-  static uint8_t i;
-  // i取值0-199。0和100对应100倍周期。0,1,2,3,4
-  i = (i>=199)?0:i+1;
-  // 每10倍周期调用一个函数（预先保存在数组里）如果SystickCallBack1每1ms被调用一次，
-  // 则下面的函数每10ms被调用一次，修改10可以修改倍数。好处在于每10ms间隔的时候只
-  // 调用一个函数，减少每次中断中执行的代码数量
+void SystickCallBackN(void)
+{
+    static uint8_t i;
+    // i取值0-199。0和100对应100倍周期。0,1,2,3,4
+    i = (i >= 199) ? 0 : i + 1;
+    // 每10倍周期调用一个函数（预先保存在数组里）如果SystickCallBack1每1ms被调用一次，
+    // 则下面的函数每10ms被调用一次，修改10可以修改倍数。好处在于每10ms间隔的时候只
+    // 调用一个函数，减少每次中断中执行的代码数量
 
-  funTable[i%M]();		// 10为数组长度,如果只有5个任务可以将10改为5则每5个调用周期执行一次
+    funTable[i % M]();		// 10为数组长度,如果只有5个任务可以将10改为5则每5个调用周期执行一次
 
-  // 类似于上面，每100个周期调用一次
-  if (i%M1 == 0)
-  {
-    led100();
-  }
+    // 类似于上面，每100个周期调用一次
+    if (i % M1 == 0)
+    {
+        led100();
+    }
 
 }
 
 void setup()
 {
-  ebox_init();
-  UART.begin(115200);
-  print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-  LED1.mode(OUTPUT_PP);
-  LED2.mode(OUTPUT_PP);
+    ebox_init();
+    UART.begin(115200);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
+    LED1.mode(OUTPUT_PP);
+    LED2.mode(OUTPUT_PP);
 
-  // 默认周期回调。1ms
-  //SystickCallBackRegister(SystickCallBack1);
-  // 指定回调周期，回调周期是系统默认周期的N倍
-  UART.printf("多任务处理,每10ms调用一次多任务处理程序,任务实际调用间隔为10N,N为10 or 100");
-  attachSystickCallBack(SystickCallBackN,N);
+    // 默认周期回调。1ms
+    //SystickCallBackRegister(SystickCallBack1);
+    // 指定回调周期，回调周期是系统默认周期的N倍
+    UART.printf("多任务处理,每10ms调用一次多任务处理程序,任务实际调用间隔为10N,N为10 or 100");
+    attachSystickCallBack(SystickCallBackN, N);
 }
 
-int main(void){
-  setup();
-  while (1)
-  {
-  }
+int main(void)
+{
+    setup();
+    while (1)
+    {
+    }
 }

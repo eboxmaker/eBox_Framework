@@ -34,7 +34,7 @@ void fileOpt()
     u32 bw = 0;
     u32 br = 0;
 
-   for(int i = 0; i < 100; i++)
+    for(int i = 0; i < 100; i++)
         buf[i] = '1';
     res = f_open(&fsrc, "0:12345.txt", FA_WRITE | FA_READ | FA_CREATE_ALWAYS); //没有这个文件则创建该文件
     uart1.printf("\r\n");
@@ -113,8 +113,8 @@ void setup()
     if(ret == 0)
         uart1.printf("sdcard init ok!\r\n");
     else
-        uart1.printf("sdcard init failed;err = %d\r\n",ret);
-        
+        uart1.printf("sdcard init failed;err = %d\r\n", ret);
+
     attach_sd_to_fat(&sd);
 
     res = f_mount(&fs, "0", 1);

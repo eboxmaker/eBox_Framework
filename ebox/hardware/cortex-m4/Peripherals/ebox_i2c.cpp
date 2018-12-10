@@ -17,10 +17,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_i2c.h"
-#include "ebox_core.h"
-#include "ebox_gpio.h"
 
-#include "ebox_config.h"
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
@@ -114,9 +111,9 @@ uint8_t mcuI2c::write(uint8_t slaveAddr, uint8_t data)
 {
     uint8_t err = EOK;
     I2C_DEBUG("I2C state sr2 = %d, sr1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
-    err += _start(200);
-    err += _send7bitsAddress(slaveAddr, WRITE, 200);
-    err += _sendByte(data, 200);
+    err += _start();
+    err += _send7bitsAddress(slaveAddr, WRITE);
+    err += _sendByte(data);
     _stop();
     return err;
 }
@@ -128,14 +125,14 @@ uint8_t mcuI2c::write(uint8_t slaveAddr, uint8_t data)
   *          uint16_t tOut: 超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t mcuI2c::write(uint8_t slaveAddr, uint16_t regAddr, uint8_t data, uint16_t tOut)
+uint8_t mcuI2c::write(uint8_t slaveAddr, uint16_t regAddr, uint8_t data)
 {
     uint8_t err = EOK;
     I2C_DEBUG("I2C state sr2 = %d, sr1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
-    err += _start(tOut);
-    err += _send7bitsAddress(slaveAddr, WRITE, tOut);
-    err += _sendByte(regAddr, tOut);
-    err += _sendByte(data, tOut);
+    err += _start();
+    err += _send7bitsAddress(slaveAddr, WRITE);
+    err += _sendByte(regAddr);
+    err += _sendByte(data);
     _stop();
     return err;
 }
@@ -148,14 +145,14 @@ uint8_t mcuI2c::write(uint8_t slaveAddr, uint16_t regAddr, uint8_t data, uint16_
   *          uint16_t tOut:  超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t mcuI2c::write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite, uint16_t tOut)
+uint8_t mcuI2c::write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite)
 {
     uint8_t err = 0;
-    err += _start(tOut);
-    err += _send7bitsAddress(slaveAddr, WRITE, tOut);
+    err += _start();
+    err += _send7bitsAddress(slaveAddr, WRITE);
     while (nWrite--)
     {
-        err += _sendByte(*data, tOut);
+        err += _sendByte(*data);
         data++;
     }
     _stop();
@@ -171,15 +168,15 @@ uint8_t mcuI2c::write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite, uin
   *          uint16_t tOut:  超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t mcuI2c::write_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nWrite, uint16_t tOut)
+uint8_t mcuI2c::write_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nWrite)
 {
     uint8_t err = 0;
-    err += _start(tOut);
-    err += _send7bitsAddress(slaveAddr, WRITE, tOut);
-    err += _sendByte(regAddr, tOut);
+    err += _start();
+    err += _send7bitsAddress(slaveAddr, WRITE);
+    err += _sendByte(regAddr);
     while (nWrite--)
     {
-        err += _sendByte(*data, tOut);
+        err += _sendByte(*data);
         data++;
     }
     _stop();
@@ -195,11 +192,11 @@ uint8_t mcuI2c::write_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, ui
 uint8_t mcuI2c::read(uint8_t slaveAddr)
 {
     uint8_t data ;
-    _start(200);
-    _send7bitsAddress(slaveAddr, READ, 200);
+    _start();
+    _send7bitsAddress(slaveAddr, READ);
     _sendNack();
     _stop();
-    _receiveByte(&data, 200);
+    _receiveByte(&data);
     _sendAck();
     return data;
 }
@@ -211,17 +208,17 @@ uint8_t mcuI2c::read(uint8_t slaveAddr)
   *          uint16_t tOut: 超时
   *@retval   读取到的数据
   */
-uint8_t mcuI2c::read(uint8_t slaveAddr, uint16_t regAddr, uint16_t tOut)
+uint8_t mcuI2c::read(uint8_t slaveAddr, uint16_t regAddr)
 {
     uint8_t data ;
-    _start(tOut);
-    _send7bitsAddress(slaveAddr, WRITE, tOut);
-    _sendByte(regAddr, tOut);
-    _start(tOut);
-    _send7bitsAddress(slaveAddr, READ, tOut);
+    _start();
+    _send7bitsAddress(slaveAddr, WRITE);
+    _sendByte(regAddr);
+    _start();
+    _send7bitsAddress(slaveAddr, READ);
     _sendNack();
     _stop();
-    _receiveByte(&data, tOut);
+    _receiveByte(&data);
     _sendAck();
     return data;
 }
@@ -234,11 +231,11 @@ uint8_t mcuI2c::read(uint8_t slaveAddr, uint16_t regAddr, uint16_t tOut)
   *          uint16_t tOut: 超时
   *@retval   EOK，EWAIT
   */
-uint8_t mcuI2c::read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nRead, uint16_t tOut)
+uint8_t mcuI2c::read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nRead)
 {
     uint8_t err = 0;
-    err += _start(tOut);
-    err += _send7bitsAddress(slaveAddr, READ, tOut);
+    err += _start();
+    err += _send7bitsAddress(slaveAddr, READ);
     while (nRead--)
     {
         if (nRead == 0)
@@ -246,7 +243,7 @@ uint8_t mcuI2c::read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nRead, uint1
             _sendNack();
             _stop();
         }
-        err += _receiveByte(data, tOut);
+        err += _receiveByte(data);
         data++;
     }
     _sendAck();
@@ -262,14 +259,14 @@ uint8_t mcuI2c::read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nRead, uint1
   *          uint16_t tOut: 超时
   *@retval   EOK，EWAIT
   */
-uint8_t mcuI2c::read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nRead, uint16_t tOut)
+uint8_t mcuI2c::read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nRead)
 {
     uint8_t err = 0;
-    err += _start(tOut);
-    err += _send7bitsAddress(slaveAddr, WRITE, tOut);
-    err += _sendByte(regAddr, tOut);
-    err += _start(tOut);
-    err += _send7bitsAddress(slaveAddr, READ, tOut);
+    err += _start();
+    err += _send7bitsAddress(slaveAddr, WRITE);
+    err += _sendByte(regAddr);
+    err += _start();
+    err += _send7bitsAddress(slaveAddr, READ);
     while (nRead--)
     {
         if (nRead == 0)
@@ -277,7 +274,7 @@ uint8_t mcuI2c::read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uin
             _sendNack();
             _stop();
         }
-        err += _receiveByte(data, tOut);
+        err += _receiveByte(data);
         data++;
     }
     _sendAck();
@@ -289,9 +286,9 @@ uint8_t mcuI2c::read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uin
   *@param    slaveAddr:  设备地址
   *@retval   uint8_t: EOK,EWAIT
   */
-uint8_t mcuI2c:: check_busy(uint8_t slaveAddr, uint16_t tOut)
+uint8_t mcuI2c:: check_busy(uint8_t slaveAddr)
 {
-    uint32_t end = GetEndTime(tOut);
+    uint32_t end = GetEndTime(timeout);
 
     do
     {
@@ -299,7 +296,7 @@ uint8_t mcuI2c:: check_busy(uint8_t slaveAddr, uint16_t tOut)
         I2C_GenerateSTART(_i2cx, ENABLE);
 
         I2C_Send7bitAddress(_i2cx, slaveAddr, I2C_Direction_Transmitter);
-        if (IsTimeOut(end, tOut))
+        if (IsTimeOut(end, timeout))
         {
             I2C_ClearFlag(_i2cx, I2C_FLAG_AF | I2C_FLAG_ADDR | I2C_FLAG_SB);
             //      I2C_SendData(_i2cx, slaveAddr);
@@ -321,17 +318,14 @@ uint8_t mcuI2c:: check_busy(uint8_t slaveAddr, uint16_t tOut)
   *@param    timing:  时钟时序，通过readConfig获取
   *@retval   uint8_t: EOK,E_BUSY
   */
-uint8_t mcuI2c::take(uint32_t timing, uint16_t tOut)
+uint8_t mcuI2c::take(uint32_t timing)
 {
-#if	(USE_TIMEOUT != 0)
-    uint32_t end = GetEndTime(tOut);
-#endif
+    uint32_t end = GetEndTime(timeout);
+
     while (_busy == 1)
     {
         delay_ms(1);
-#if	(USE_TIMEOUT != 0)
-        if (IsTimeOut(end, tOut)) return EWAIT;
-#endif
+        if (IsTimeOut(end, timeout)) return EWAIT;
     }
     if (_timing != timing) config(timing);
     _busy = 1;
@@ -347,23 +341,20 @@ void mcuI2c::release(void)
     _busy = 0;
 }
 
-int8_t mcuI2c::_start(uint16_t tOut)
+int8_t mcuI2c::_start()
 {
-#if	(USE_TIMEOUT != 0)
-    uint32_t end = GetEndTime(tOut);
-#endif
+    uint32_t end = GetEndTime(timeout);
     /* Send STRAT condition */
     I2C_GenerateSTART(_i2cx, ENABLE);
     /* Test on EV5 and clear it */
     while (!I2C_CheckEvent(_i2cx, I2C_EVENT_MASTER_MODE_SELECT))
     {
-#if	(USE_TIMEOUT != 0)
-        if (IsTimeOut(end, tOut))
+        if (IsTimeOut(end, timeout))
         {
             I2C_DEBUG("start fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
             return EWAIT;
         }
-#endif
+
     }
     return EOK;
 }
@@ -386,31 +377,29 @@ int8_t mcuI2c::_sendAck()
 }
 
 
-int8_t mcuI2c::_sendByte(uint8_t data, uint16_t tOut)
+int8_t mcuI2c::_sendByte(uint8_t data)
 {
-#if	(USE_TIMEOUT != 0)
-    uint32_t end = GetEndTime(tOut);
-#endif
+    uint32_t end = GetEndTime(timeout);
+
     /* Send the byte to be written */
     I2C_SendData(_i2cx, data);
     /* Test on EV8 and clear it */
     while (!I2C_CheckEvent(_i2cx, I2C_EVENT_MASTER_BYTE_TRANSMITTED))
     {
-#if	(USE_TIMEOUT != 0)
-        if (IsTimeOut(end, tOut))
+
+        if (IsTimeOut(end, timeout))
         {
             I2C_DEBUG("send data fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
             return EWAIT;
         }
-#endif
+
     }
     return EOK;
 }
-int8_t mcuI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR, uint16_t tOut)
+int8_t mcuI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
 {
-#if	(USE_TIMEOUT != 0)
-    uint32_t end = GetEndTime(tOut);
-#endif
+    uint32_t end = GetEndTime(timeout);
+
     if (WR) /* Send address for read */
     {
         //    I2C_DEBUG("send read address is %d \r\n",slaveAddr);
@@ -418,13 +407,12 @@ int8_t mcuI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR, uint16_t tOut)
         /* Test on EV6 and clear it */
         while (!I2C_CheckEvent(_i2cx, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
         {
-#if	(USE_TIMEOUT != 0)
-            if (IsTimeOut(end, tOut))
+            if (IsTimeOut(end, timeout))
             {
                 I2C_DEBUG("send read address fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
                 return EWAIT;
             }
-#endif
+
         }
     }
     else   /* Send address for write */
@@ -434,31 +422,27 @@ int8_t mcuI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR, uint16_t tOut)
         /* Test on EV6 and clear it */
         while (!I2C_CheckEvent(_i2cx, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
         {
-#if	(USE_TIMEOUT != 0)
-            if (IsTimeOut(end, tOut))
+            if (IsTimeOut(end, timeout))
             {
                 I2C_DEBUG("send write address fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
                 return EWAIT;
             }
-#endif
+
         }
     }
     return EOK;
 }
-int8_t mcuI2c::_receiveByte(uint8_t *data, uint16_t tOut)
+int8_t mcuI2c::_receiveByte(uint8_t *data)
 {
-#if	(USE_TIMEOUT != 0)
-    uint32_t end = GetEndTime(tOut);
-#endif
+    uint32_t end = GetEndTime(timeout);
+
     while (!I2C_CheckEvent(_i2cx, I2C_EVENT_MASTER_BYTE_RECEIVED))
     {
-#if	(USE_TIMEOUT != 0)
-        if (IsTimeOut(end, tOut))
+        if (IsTimeOut(end, timeout))
         {
             I2C_DEBUG("read data fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
             return EWAIT;
         }
-#endif
     }
     *data = I2C_ReceiveData(_i2cx);//读出寄存器数据
     return EOK;

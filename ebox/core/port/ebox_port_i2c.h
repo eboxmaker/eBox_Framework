@@ -6,7 +6,7 @@
 class I2c
 {
 public:
-    I2c():timeout(200) {};
+    I2c(): timeout(200) {};
     //    virtual void 		begin(uint32_t speed) = 0;
     //    virtual void 		config(uint32_t speed) = 0;
     //    virtual uint32_t	read_config() = 0;

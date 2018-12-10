@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V1.4.0
   * @date    27-May-2016
-  * @brief   This file contains all the functions prototypes for the TSC firmware 
+  * @brief   This file contains all the functions prototypes for the TSC firmware
   *          library.
   ******************************************************************************
   * @attention
@@ -41,7 +41,7 @@
 #define __STM32F0xx_TSC_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 #if defined(STM32F051x8) || defined(STM32F071xB) || defined(STM32F091xC) || \
@@ -57,73 +57,73 @@
 
 /** @addtogroup TSC
   * @{
-  */ 
+  */
 
 /* Exported types ------------------------------------------------------------*/
-   
+
 /** @defgroup TSC_Exported_Types TSC Exported Types
   * @{
   */
-/** 
-  * @brief TSC state structure definition  
-  */ 
+/**
+  * @brief TSC state structure definition
+  */
 typedef enum
 {
-  HAL_TSC_STATE_RESET  = 0x00, /*!< TSC registers have their reset value */
-  HAL_TSC_STATE_READY  = 0x01, /*!< TSC registers are initialized or acquisition is completed with success */
-  HAL_TSC_STATE_BUSY   = 0x02, /*!< TSC initialization or acquisition is on-going */
-  HAL_TSC_STATE_ERROR  = 0x03  /*!< Acquisition is completed with max count error */
+    HAL_TSC_STATE_RESET  = 0x00, /*!< TSC registers have their reset value */
+    HAL_TSC_STATE_READY  = 0x01, /*!< TSC registers are initialized or acquisition is completed with success */
+    HAL_TSC_STATE_BUSY   = 0x02, /*!< TSC initialization or acquisition is on-going */
+    HAL_TSC_STATE_ERROR  = 0x03  /*!< Acquisition is completed with max count error */
 } HAL_TSC_StateTypeDef;
 
-/** 
-  * @brief TSC group status structure definition  
-  */ 
+/**
+  * @brief TSC group status structure definition
+  */
 typedef enum
 {
-  TSC_GROUP_ONGOING   = 0x00, /*!< Acquisition on group is on-going or not started */
-  TSC_GROUP_COMPLETED = 0x01  /*!< Acquisition on group is completed with success (no max count error) */
+    TSC_GROUP_ONGOING   = 0x00, /*!< Acquisition on group is on-going or not started */
+    TSC_GROUP_COMPLETED = 0x01  /*!< Acquisition on group is completed with success (no max count error) */
 } TSC_GroupStatusTypeDef;
 
-/** 
-  * @brief TSC init structure definition  
-  */ 
+/**
+  * @brief TSC init structure definition
+  */
 typedef struct
 {
-  uint32_t CTPulseHighLength;       /*!< Charge-transfer high pulse length */
-  uint32_t CTPulseLowLength;        /*!< Charge-transfer low pulse length */
-  uint32_t SpreadSpectrum;          /*!< Spread spectrum activation */
-  uint32_t SpreadSpectrumDeviation; /*!< Spread spectrum deviation */
-  uint32_t SpreadSpectrumPrescaler; /*!< Spread spectrum prescaler */
-  uint32_t PulseGeneratorPrescaler; /*!< Pulse generator prescaler */
-  uint32_t MaxCountValue;           /*!< Max count value */
-  uint32_t IODefaultMode;           /*!< IO default mode */
-  uint32_t SynchroPinPolarity;      /*!< Synchro pin polarity */
-  uint32_t AcquisitionMode;         /*!< Acquisition mode */
-  uint32_t MaxCountInterrupt;       /*!< Max count interrupt activation */
-  uint32_t ChannelIOs;              /*!< Channel IOs mask */
-  uint32_t ShieldIOs;               /*!< Shield IOs mask */
-  uint32_t SamplingIOs;             /*!< Sampling IOs mask */
+    uint32_t CTPulseHighLength;       /*!< Charge-transfer high pulse length */
+    uint32_t CTPulseLowLength;        /*!< Charge-transfer low pulse length */
+    uint32_t SpreadSpectrum;          /*!< Spread spectrum activation */
+    uint32_t SpreadSpectrumDeviation; /*!< Spread spectrum deviation */
+    uint32_t SpreadSpectrumPrescaler; /*!< Spread spectrum prescaler */
+    uint32_t PulseGeneratorPrescaler; /*!< Pulse generator prescaler */
+    uint32_t MaxCountValue;           /*!< Max count value */
+    uint32_t IODefaultMode;           /*!< IO default mode */
+    uint32_t SynchroPinPolarity;      /*!< Synchro pin polarity */
+    uint32_t AcquisitionMode;         /*!< Acquisition mode */
+    uint32_t MaxCountInterrupt;       /*!< Max count interrupt activation */
+    uint32_t ChannelIOs;              /*!< Channel IOs mask */
+    uint32_t ShieldIOs;               /*!< Shield IOs mask */
+    uint32_t SamplingIOs;             /*!< Sampling IOs mask */
 } TSC_InitTypeDef;
 
-/** 
-  * @brief TSC IOs configuration structure definition  
-  */ 
+/**
+  * @brief TSC IOs configuration structure definition
+  */
 typedef struct
 {
-  uint32_t ChannelIOs;  /*!< Channel IOs mask */
-  uint32_t ShieldIOs;   /*!< Shield IOs mask */
-  uint32_t SamplingIOs; /*!< Sampling IOs mask */
+    uint32_t ChannelIOs;  /*!< Channel IOs mask */
+    uint32_t ShieldIOs;   /*!< Shield IOs mask */
+    uint32_t SamplingIOs; /*!< Sampling IOs mask */
 } TSC_IOConfigTypeDef;
 
-/** 
-  * @brief  TSC handle Structure definition  
-  */ 
+/**
+  * @brief  TSC handle Structure definition
+  */
 typedef struct
 {
-  TSC_TypeDef               *Instance; /*!< Register base address */
-  TSC_InitTypeDef           Init;      /*!< Initialization parameters */
-  __IO HAL_TSC_StateTypeDef State;     /*!< Peripheral state */
-  HAL_LockTypeDef           Lock;      /*!< Lock feature */
+    TSC_TypeDef               *Instance; /*!< Register base address */
+    TSC_InitTypeDef           Init;      /*!< Initialization parameters */
+    __IO HAL_TSC_StateTypeDef State;     /*!< Peripheral state */
+    HAL_LockTypeDef           Lock;      /*!< Lock feature */
 } TSC_HandleTypeDef;
 
 /**
@@ -134,11 +134,11 @@ typedef struct
 
 /** @defgroup TSC_Exported_Constants TSC Exported Constants
   * @{
-  */ 
+  */
 
 /** @defgroup TSC_CTPH_Cycles TSC Charge Transfer Pulse High
   * @{
-  */ 
+  */
 #define TSC_CTPH_1CYCLE   ((uint32_t)((uint32_t) 0 << 28))
 #define TSC_CTPH_2CYCLES  ((uint32_t)((uint32_t) 1 << 28))
 #define TSC_CTPH_3CYCLES  ((uint32_t)((uint32_t) 2 << 28))
@@ -177,7 +177,7 @@ typedef struct
 
 /** @defgroup TSC_CTPL_Cycles TSC Charge Transfer Pulse Low
   * @{
-  */  
+  */
 #define TSC_CTPL_1CYCLE   ((uint32_t)((uint32_t) 0 << 24))
 #define TSC_CTPL_2CYCLES  ((uint32_t)((uint32_t) 1 << 24))
 #define TSC_CTPL_3CYCLES  ((uint32_t)((uint32_t) 2 << 24))
@@ -213,18 +213,18 @@ typedef struct
 /**
   * @}
   */
-  
+
 /** @defgroup TSC_SS_Prescaler_definition TSC Spread spectrum prescaler definition
   * @{
   */
-#define TSC_SS_PRESC_DIV1 ((uint32_t)0)  
-#define TSC_SS_PRESC_DIV2  (TSC_CR_SSPSC) 
+#define TSC_SS_PRESC_DIV1 ((uint32_t)0)
+#define TSC_SS_PRESC_DIV2  (TSC_CR_SSPSC)
 #define IS_TSC_SS_PRESC(VAL) (((VAL) == TSC_SS_PRESC_DIV1) || ((VAL) == TSC_SS_PRESC_DIV2))
 
 /**
   * @}
   */
-  
+
 /** @defgroup TSC_PG_Prescaler_definition TSC Pulse Generator prescaler definition
   * @{
   */
@@ -250,7 +250,7 @@ typedef struct
 
 /** @defgroup TSC_MCV_definition TSC Max Count Value definition
   * @{
-  */  
+  */
 #define TSC_MCV_255   ((uint32_t)(0 << 5))
 #define TSC_MCV_511   ((uint32_t)(1 << 5))
 #define TSC_MCV_1023  ((uint32_t)(2 << 5))
@@ -271,7 +271,7 @@ typedef struct
 
 /** @defgroup TSC_IO_default_mode_definition TSC I/O default mode definition
   * @{
-  */  
+  */
 #define TSC_IODEF_OUT_PP_LOW ((uint32_t)0)
 #define TSC_IODEF_IN_FLOAT   (TSC_CR_IODEF)
 #define IS_TSC_IODEF(VAL) (((VAL) == TSC_IODEF_OUT_PP_LOW) || ((VAL) == TSC_IODEF_IN_FLOAT))
@@ -281,24 +281,24 @@ typedef struct
 
 /** @defgroup TSC_Synchronization_pin_polarity TSC Synchronization pin polarity
   * @{
-  */    
+  */
 #define TSC_SYNC_POLARITY_FALLING      ((uint32_t)0)
 #define TSC_SYNC_POLARITY_RISING (TSC_CR_SYNCPOL)
 #define IS_TSC_SYNC_POL(VAL) (((VAL) == TSC_SYNC_POLARITY_FALLING) || ((VAL) == TSC_SYNC_POLARITY_RISING))
 /**
   * @}
   */
-  
+
 /** @defgroup TSC_Acquisition_mode TSC Acquisition mode
   * @{
-  */   
+  */
 #define TSC_ACQ_MODE_NORMAL  ((uint32_t)0)
 #define TSC_ACQ_MODE_SYNCHRO (TSC_CR_AM)
 #define IS_TSC_ACQ_MODE(VAL) (((VAL) == TSC_ACQ_MODE_NORMAL) || ((VAL) == TSC_ACQ_MODE_SYNCHRO))
 /**
   * @}
   */
-  
+
 /** @defgroup TSC_IO_mode_definition TSC I/O mode definition
   * @{
   */
@@ -317,16 +317,16 @@ typedef struct
 /** @defgroup TSC_interrupts_definition TSC interrupts definition
   * @{
   */
-#define TSC_IT_EOA ((uint32_t)TSC_IER_EOAIE)  
-#define TSC_IT_MCE ((uint32_t)TSC_IER_MCEIE) 
+#define TSC_IT_EOA ((uint32_t)TSC_IER_EOAIE)
+#define TSC_IT_MCE ((uint32_t)TSC_IER_MCEIE)
 #define IS_TSC_MCE_IT(VAL) (((VAL) == DISABLE) || ((VAL) == ENABLE))
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup TSC_flags_definition TSC Flags Definition
   * @{
-  */ 
+  */
 #define TSC_FLAG_EOA ((uint32_t)TSC_ISR_EOAF)
 #define TSC_FLAG_MCE ((uint32_t)TSC_ISR_MCEF)
 /**
@@ -335,7 +335,7 @@ typedef struct
 
 /** @defgroup TSC_groups_definition TSC groups definition
   * @{
-  */ 
+  */
 #define TSC_NB_OF_GROUPS (8)
 
 #define TSC_GROUP1 ((uint32_t)0x00000001)
@@ -410,10 +410,10 @@ typedef struct
 /**
   * @}
   */
-  
+
 /**
   * @}
-  */ 
+  */
 
 /* Private macros -----------------------------------------------------------*/
 /** @defgroup TSC_Private_Macros TSC Private Macros
@@ -421,7 +421,7 @@ typedef struct
  */
 /** @defgroup TSC_Spread_Spectrum  TSC Spread Spectrum
   * @{
-  */  
+  */
 #define IS_TSC_SS(VAL) (((VAL) == DISABLE) || ((VAL) == ENABLE))
 
 #define IS_TSC_SSD(VAL) (((VAL) == 0) || (((VAL) > 0) && ((VAL) < 128)))
@@ -431,7 +431,7 @@ typedef struct
 
 /**
   * @}
-  */  
+  */
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup TSC_Exported_Macros TSC Exported Macros
@@ -630,21 +630,21 @@ typedef struct
 /**
   * @}
   */
-  
-/* Exported functions --------------------------------------------------------*/  
+
+/* Exported functions --------------------------------------------------------*/
 /** @addtogroup TSC_Exported_Functions TSC Exported Functions
   * @{
   */
 
-/** @addtogroup TSC_Exported_Functions_Group1 Initialization/de-initialization functions 
- *  @brief    Initialization and Configuration functions 
+/** @addtogroup TSC_Exported_Functions_Group1 Initialization/de-initialization functions
+ *  @brief    Initialization and Configuration functions
  *  @{
  */
 /* Initialization and de-initialization functions *****************************/
-HAL_StatusTypeDef HAL_TSC_Init(TSC_HandleTypeDef* htsc);
+HAL_StatusTypeDef HAL_TSC_Init(TSC_HandleTypeDef *htsc);
 HAL_StatusTypeDef HAL_TSC_DeInit(TSC_HandleTypeDef *htsc);
-void HAL_TSC_MspInit(TSC_HandleTypeDef* htsc);
-void HAL_TSC_MspDeInit(TSC_HandleTypeDef* htsc);
+void HAL_TSC_MspInit(TSC_HandleTypeDef *htsc);
+void HAL_TSC_MspDeInit(TSC_HandleTypeDef *htsc);
 /**
   * @}
   */
@@ -653,65 +653,65 @@ void HAL_TSC_MspDeInit(TSC_HandleTypeDef* htsc);
  *  @brief    IO operation functions  *  @{
  */
 /* IO operation functions *****************************************************/
-HAL_StatusTypeDef HAL_TSC_Start(TSC_HandleTypeDef* htsc);
-HAL_StatusTypeDef HAL_TSC_Start_IT(TSC_HandleTypeDef* htsc);
-HAL_StatusTypeDef HAL_TSC_Stop(TSC_HandleTypeDef* htsc);
-HAL_StatusTypeDef HAL_TSC_Stop_IT(TSC_HandleTypeDef* htsc);
-TSC_GroupStatusTypeDef HAL_TSC_GroupGetStatus(TSC_HandleTypeDef* htsc, uint32_t gx_index);
-uint32_t HAL_TSC_GroupGetValue(TSC_HandleTypeDef* htsc, uint32_t gx_index);
+HAL_StatusTypeDef HAL_TSC_Start(TSC_HandleTypeDef *htsc);
+HAL_StatusTypeDef HAL_TSC_Start_IT(TSC_HandleTypeDef *htsc);
+HAL_StatusTypeDef HAL_TSC_Stop(TSC_HandleTypeDef *htsc);
+HAL_StatusTypeDef HAL_TSC_Stop_IT(TSC_HandleTypeDef *htsc);
+TSC_GroupStatusTypeDef HAL_TSC_GroupGetStatus(TSC_HandleTypeDef *htsc, uint32_t gx_index);
+uint32_t HAL_TSC_GroupGetValue(TSC_HandleTypeDef *htsc, uint32_t gx_index);
 /**
   * @}
   */
 
 /** @addtogroup TSC_Exported_Functions_Group3 Peripheral Control functions
- *  @brief    Peripheral Control functions 
+ *  @brief    Peripheral Control functions
  *  @{
  */
 /* Peripheral Control functions ***********************************************/
-HAL_StatusTypeDef HAL_TSC_IOConfig(TSC_HandleTypeDef* htsc, TSC_IOConfigTypeDef* config);
-HAL_StatusTypeDef HAL_TSC_IODischarge(TSC_HandleTypeDef* htsc, uint32_t choice);
+HAL_StatusTypeDef HAL_TSC_IOConfig(TSC_HandleTypeDef *htsc, TSC_IOConfigTypeDef *config);
+HAL_StatusTypeDef HAL_TSC_IODischarge(TSC_HandleTypeDef *htsc, uint32_t choice);
 /**
   * @}
   */
 
 /** @addtogroup TSC_Exported_Functions_Group4 State functions
- *  @brief   State functions 
+ *  @brief   State functions
  *  @{
  */
 /* Peripheral State and Error functions ***************************************/
-HAL_TSC_StateTypeDef HAL_TSC_GetState(TSC_HandleTypeDef* htsc);
-HAL_StatusTypeDef HAL_TSC_PollForAcquisition(TSC_HandleTypeDef* htsc);
-void HAL_TSC_IRQHandler(TSC_HandleTypeDef* htsc);
+HAL_TSC_StateTypeDef HAL_TSC_GetState(TSC_HandleTypeDef *htsc);
+HAL_StatusTypeDef HAL_TSC_PollForAcquisition(TSC_HandleTypeDef *htsc);
+void HAL_TSC_IRQHandler(TSC_HandleTypeDef *htsc);
 /**
   * @}
   */
-  
+
 /** @addtogroup TSC_Exported_Functions_Group5 Callback functions
- *  @brief   Callback functions 
+ *  @brief   Callback functions
  *  @{
  */
 /* Callback functions *********************************************************/
-void HAL_TSC_ConvCpltCallback(TSC_HandleTypeDef* htsc);
-void HAL_TSC_ErrorCallback(TSC_HandleTypeDef* htsc);
+void HAL_TSC_ConvCpltCallback(TSC_HandleTypeDef *htsc);
+void HAL_TSC_ErrorCallback(TSC_HandleTypeDef *htsc);
 /**
   * @}
   */
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
   */
 
 #endif /* defined(STM32F051x8) || defined(STM32F071xB) || defined(STM32F091xC) || */
-       /* defined(STM32F042x6) || defined(STM32F048xx) || defined(STM32F072xB) || */
-       /* defined(STM32F058xx) || defined(STM32F078xx) || defined(STM32F098xx)    */
+/* defined(STM32F042x6) || defined(STM32F048xx) || defined(STM32F072xB) || */
+/* defined(STM32F058xx) || defined(STM32F078xx) || defined(STM32F098xx)    */
 
 
 #ifdef __cplusplus

@@ -30,7 +30,7 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
     mpu.begin(400000);
 

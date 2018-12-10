@@ -17,8 +17,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -31,7 +31,7 @@
 #define __STM32F4XX_LPTIM_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -52,18 +52,18 @@
   */
 typedef struct
 {
-  uint32_t LPTIM_ClockSource;          /*!< Selects the clock source.
+    uint32_t LPTIM_ClockSource;          /*!< Selects the clock source.
                                        This parameter can be a value of @ref LPTIM_Clock_Source */
 
-  uint32_t LPTIM_Prescaler;            /*!< Specifies the timer clock Prescaler.
+    uint32_t LPTIM_Prescaler;            /*!< Specifies the timer clock Prescaler.
                                        This parameter can be a value of @ref LPTIM_Clock_Prescaler */
 
-  uint32_t LPTIM_Waveform;             /*!< Selects the output shape.
+    uint32_t LPTIM_Waveform;             /*!< Selects the output shape.
                                        This parameter can be a value of @ref LPTIM_Waveform_Shape */
 
-  uint32_t LPTIM_OutputPolarity;       /*!< Specifies the LPTIM Output pin polarity.
+    uint32_t LPTIM_OutputPolarity;       /*!< Specifies the LPTIM Output pin polarity.
                                        This parameter can be a value of @ref LPTIM_Output_Polarity */
-}LPTIM_InitTypeDef;
+} LPTIM_InitTypeDef;
 
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup LPTIM_Exported_Constants
@@ -102,7 +102,7 @@ typedef struct
                                              ((PRESCALER) == LPTIM_Prescaler_DIV16) || \
                                              ((PRESCALER) == LPTIM_Prescaler_DIV32) || \
                                              ((PRESCALER) == LPTIM_Prescaler_DIV64) || \
-                                             ((PRESCALER) == LPTIM_Prescaler_DIV128))  
+                                             ((PRESCALER) == LPTIM_Prescaler_DIV128))
 /**
   * @}
   */
@@ -336,37 +336,37 @@ typedef struct
 /* Exported functions ------------------------------------------------------- */
 
 /* Initialization functions ***************************************************/
-void LPTIM_DeInit(LPTIM_TypeDef* LPTIMx);
-void LPTIM_Init(LPTIM_TypeDef* LPTIMx, LPTIM_InitTypeDef* LPTIM_InitStruct);
-void LPTIM_StructInit(LPTIM_InitTypeDef* LPTIM_InitStruct);
+void LPTIM_DeInit(LPTIM_TypeDef *LPTIMx);
+void LPTIM_Init(LPTIM_TypeDef *LPTIMx, LPTIM_InitTypeDef *LPTIM_InitStruct);
+void LPTIM_StructInit(LPTIM_InitTypeDef *LPTIM_InitStruct);
 
 /* Configuration functions ****************************************************/
-void LPTIM_Cmd(LPTIM_TypeDef* LPTIMx, FunctionalState NewState);
-void LPTIM_SelectClockSource(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_ClockSource);
-void LPTIM_SelectULPTIMClockPolarity(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_ClockPolarity);
-void LPTIM_ConfigPrescaler(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Prescaler);
-void LPTIM_ConfigExternalTrigger(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_ExtTRGSource, uint32_t LPTIM_ExtTRGPolarity);
-void LPTIM_SelectSoftwareStart(LPTIM_TypeDef* LPTIMx);
-void LPTIM_ConfigTriggerGlitchFilter(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_TrigSampleTime);
-void LPTIM_ConfigClockGlitchFilter(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_ClockSampleTime);
-void LPTIM_SelectOperatingMode(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Mode);
-void LPTIM_TimoutCmd(LPTIM_TypeDef* LPTIMx, FunctionalState NewState);
-void LPTIM_ConfigWaveform(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Waveform);
-void LPTIM_ConfigUpdate(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Update);
-void LPTIM_SetAutoreloadValue(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Autoreload);
-void LPTIM_SetCompareValue(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Compare);
-void LPTIM_SelectCounterMode(LPTIM_TypeDef* LPTIMx, FunctionalState NewState);
-void LPTIM_SelectEncoderMode(LPTIM_TypeDef* LPTIMx, FunctionalState NewState);
-void LPTIM_RemapConfig(LPTIM_TypeDef* LPTIMx,uint32_t LPTIM_OPTR);
-uint32_t LPTIM_GetCounterValue(LPTIM_TypeDef* LPTIMx);
-uint32_t LPTIM_GetAutoreloadValue(LPTIM_TypeDef* LPTIMx); 
-uint32_t LPTIM_GetCompareValue(LPTIM_TypeDef* LPTIMx);
+void LPTIM_Cmd(LPTIM_TypeDef *LPTIMx, FunctionalState NewState);
+void LPTIM_SelectClockSource(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_ClockSource);
+void LPTIM_SelectULPTIMClockPolarity(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_ClockPolarity);
+void LPTIM_ConfigPrescaler(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_Prescaler);
+void LPTIM_ConfigExternalTrigger(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_ExtTRGSource, uint32_t LPTIM_ExtTRGPolarity);
+void LPTIM_SelectSoftwareStart(LPTIM_TypeDef *LPTIMx);
+void LPTIM_ConfigTriggerGlitchFilter(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_TrigSampleTime);
+void LPTIM_ConfigClockGlitchFilter(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_ClockSampleTime);
+void LPTIM_SelectOperatingMode(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_Mode);
+void LPTIM_TimoutCmd(LPTIM_TypeDef *LPTIMx, FunctionalState NewState);
+void LPTIM_ConfigWaveform(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_Waveform);
+void LPTIM_ConfigUpdate(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_Update);
+void LPTIM_SetAutoreloadValue(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_Autoreload);
+void LPTIM_SetCompareValue(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_Compare);
+void LPTIM_SelectCounterMode(LPTIM_TypeDef *LPTIMx, FunctionalState NewState);
+void LPTIM_SelectEncoderMode(LPTIM_TypeDef *LPTIMx, FunctionalState NewState);
+void LPTIM_RemapConfig(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_OPTR);
+uint32_t LPTIM_GetCounterValue(LPTIM_TypeDef *LPTIMx);
+uint32_t LPTIM_GetAutoreloadValue(LPTIM_TypeDef *LPTIMx);
+uint32_t LPTIM_GetCompareValue(LPTIM_TypeDef *LPTIMx);
 
 /* Interrupts and flags management functions **********************************/
-void LPTIM_ITConfig(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_IT, FunctionalState NewState);
-FlagStatus LPTIM_GetFlagStatus(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_FLAG);
-void LPTIM_ClearFlag(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_CLEARF);
-ITStatus LPTIM_GetITStatus(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_IT);
+void LPTIM_ITConfig(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_IT, FunctionalState NewState);
+FlagStatus LPTIM_GetFlagStatus(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_FLAG);
+void LPTIM_ClearFlag(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_CLEARF);
+ITStatus LPTIM_GetITStatus(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_IT);
 
 #endif /* STM32F410xx */
 /**

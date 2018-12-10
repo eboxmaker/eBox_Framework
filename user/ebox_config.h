@@ -55,19 +55,19 @@
 
 
 #if USE_PRINTF
-  //是否使用DEBUG, 1 使用  0 不使用
-  #define EBOX_DEBUG  1
+//是否使用DEBUG, 1 使用  0 不使用
+#define EBOX_DEBUG  1
 #endif
 
 #if EBOX_DEBUG
-    #define DBG_UART   uart1
-    #define DBG(...)    ebox_printf(__VA_ARGS__)
+#define DBG_UART   uart1
+#define DBG(...)    ebox_printf(__VA_ARGS__)
 #else
-  #define DBG(...)
+#define DBG(...)
 #endif
 
 
-/* flash写入新数据时，是否擦除覆盖当前区块的其它数据; 
+/* flash写入新数据时，是否擦除覆盖当前区块的其它数据;
  * 0 写入新数据，并保留当前区块其他位置旧数据。 需要占用FLASH_PAGE_SIZE大小的内存作为缓冲区
  * 1 只保留新写入的数据。 节省内存
  */

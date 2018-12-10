@@ -22,9 +22,9 @@ int main(void)
     setup();
     while(1)
     {
-			key_mouse.move(20, 0); 
-			key_mouse.printf("Hello World\r\n");
-			delay_ms(1000);
+        key_mouse.move(20, 0);
+        key_mouse.printf("Hello World\r\n");
+        delay_ms(1000);
     }
 
 }

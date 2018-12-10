@@ -97,19 +97,19 @@
   */
 HAL_StatusTypeDef HAL_SPIEx_FlushRxFifo(SPI_HandleTypeDef *hspi)
 {
-  __IO uint32_t tmpreg;
-  uint8_t  count = 0;
-  while((hspi->Instance->SR & SPI_FLAG_FRLVL) !=  SPI_FRLVL_EMPTY)
-  {
-    count++;
-    tmpreg = hspi->Instance->DR;
-    UNUSED(tmpreg); /* To avoid GCC warning */
-    if(count == SPI_FIFO_SIZE)
+    __IO uint32_t tmpreg;
+    uint8_t  count = 0;
+    while((hspi->Instance->SR & SPI_FLAG_FRLVL) !=  SPI_FRLVL_EMPTY)
     {
-      return HAL_TIMEOUT;
+        count++;
+        tmpreg = hspi->Instance->DR;
+        UNUSED(tmpreg); /* To avoid GCC warning */
+        if(count == SPI_FIFO_SIZE)
+        {
+            return HAL_TIMEOUT;
+        }
     }
-  }
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**

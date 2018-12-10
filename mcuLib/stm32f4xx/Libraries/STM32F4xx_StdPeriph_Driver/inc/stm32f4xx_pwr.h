@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V1.6.1
   * @date    21-October-2015
-  * @brief   This file contains all the functions prototypes for the PWR firmware 
+  * @brief   This file contains all the functions prototypes for the PWR firmware
   *          library.
   ******************************************************************************
   * @attention
@@ -17,21 +17,21 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F4xx_PWR_H
 #define __STM32F4xx_PWR_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -43,18 +43,18 @@
 
 /** @addtogroup PWR
   * @{
-  */ 
+  */
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup PWR_Exported_Constants
   * @{
-  */ 
+  */
 
-/** @defgroup PWR_PVD_detection_level 
+/** @defgroup PWR_PVD_detection_level
   * @{
-  */ 
+  */
 #define PWR_PVDLevel_0                  PWR_CR_PLS_LEV0
 #define PWR_PVDLevel_1                  PWR_CR_PLS_LEV1
 #define PWR_PVDLevel_2                  PWR_CR_PLS_LEV2
@@ -72,8 +72,8 @@
   * @}
   */
 
-  
-/** @defgroup PWR_Regulator_state_in_STOP_mode 
+
+/** @defgroup PWR_Regulator_state_in_STOP_mode
   * @{
   */
 #define PWR_MainRegulator_ON                        ((uint32_t)0x00000000)
@@ -90,7 +90,7 @@
   * @}
   */
 
-/** @defgroup PWR_Regulator_state_in_UnderDrive_mode 
+/** @defgroup PWR_Regulator_state_in_UnderDrive_mode
   * @{
   */
 #define PWR_MainRegulator_UnderDrive_ON               PWR_CR_MRUDS
@@ -117,14 +117,14 @@
                                 ((PIN) == PWR_WakeUp_Pin2))
 #else /* STM32F410xx */
 #define IS_PWR_WAKEUP_PIN(PIN) (((PIN) == PWR_WAKEUP_PIN1) || ((PIN) == PWR_WAKEUP_PIN2) || \
-                                ((PIN) == PWR_WAKEUP_PIN3)) 
+                                ((PIN) == PWR_WAKEUP_PIN3))
 #endif /* STM32F446xx */
 /**
   * @}
-  */    
+  */
 #endif /* STM32F410xx || STM32F446xx */
 
-/** @defgroup PWR_STOP_mode_entry 
+/** @defgroup PWR_STOP_mode_entry
   * @{
   */
 #define PWR_STOPEntry_WFI               ((uint8_t)0x01)
@@ -134,7 +134,7 @@
   * @}
   */
 
-/** @defgroup PWR_Regulator_Voltage_Scale 
+/** @defgroup PWR_Regulator_Voltage_Scale
   * @{
   */
 #define PWR_Regulator_Voltage_Scale1    ((uint32_t)0x0000C000)
@@ -147,7 +147,7 @@
   * @}
   */
 
-/** @defgroup PWR_Flag 
+/** @defgroup PWR_Flag
   * @{
   */
 #define PWR_FLAG_WU                     PWR_CSR_WUF
@@ -160,7 +160,7 @@
 #define PWR_FLAG_UDRDY                  PWR_CSR_UDSWRDY
 
 /* --- FLAG Legacy ---*/
-#define PWR_FLAG_REGRDY                  PWR_FLAG_VOSRDY               
+#define PWR_FLAG_REGRDY                  PWR_FLAG_VOSRDY
 
 #define IS_PWR_GET_FLAG(FLAG) (((FLAG) == PWR_FLAG_WU) || ((FLAG) == PWR_FLAG_SB) || \
                                ((FLAG) == PWR_FLAG_PVDO) || ((FLAG) == PWR_FLAG_BRR) || \
@@ -180,15 +180,15 @@
   */
 
 /* Exported macro ------------------------------------------------------------*/
-/* Exported functions --------------------------------------------------------*/ 
+/* Exported functions --------------------------------------------------------*/
 
-/* Function used to set the PWR configuration to the default reset state ******/ 
+/* Function used to set the PWR configuration to the default reset state ******/
 void PWR_DeInit(void);
 
-/* Backup Domain Access function **********************************************/ 
+/* Backup Domain Access function **********************************************/
 void PWR_BackupAccessCmd(FunctionalState NewState);
 
-/* PVD configuration functions ************************************************/ 
+/* PVD configuration functions ************************************************/
 void PWR_PVDLevelConfig(uint32_t PWR_PVDLevel);
 void PWR_PVDCmd(FunctionalState NewState);
 
@@ -199,7 +199,7 @@ void PWR_WakeUpPinCmd(FunctionalState NewState);
 #if defined(STM32F410xx) || defined(STM32F446xx)
 void PWR_WakeUpPinCmd(uint32_t PWR_WakeUpPinx, FunctionalState NewState);
 #endif /* STM32F410xx || STM32F446xx */
-/* Main and Backup Regulators configuration functions *************************/ 
+/* Main and Backup Regulators configuration functions *************************/
 void PWR_BackupRegulatorCmd(FunctionalState NewState);
 void PWR_MainRegulatorModeConfig(uint32_t PWR_Regulator_Voltage);
 void PWR_OverDriveCmd(FunctionalState NewState);
@@ -216,15 +216,15 @@ void PWR_MainRegulatorLowVoltageCmd(FunctionalState NewState);
 void PWR_LowRegulatorLowVoltageCmd(FunctionalState NewState);
 #endif /* STM32F401xx || STM32F410xx || STM32F411xE */
 
-/* FLASH Power Down configuration functions ***********************************/ 
+/* FLASH Power Down configuration functions ***********************************/
 void PWR_FlashPowerDownCmd(FunctionalState NewState);
 
-/* Low Power modes configuration functions ************************************/ 
+/* Low Power modes configuration functions ************************************/
 void PWR_EnterSTOPMode(uint32_t PWR_Regulator, uint8_t PWR_STOPEntry);
 void PWR_EnterUnderDriveSTOPMode(uint32_t PWR_Regulator, uint8_t PWR_STOPEntry);
 void PWR_EnterSTANDBYMode(void);
 
-/* Flags management functions *************************************************/ 
+/* Flags management functions *************************************************/
 FlagStatus PWR_GetFlagStatus(uint32_t PWR_FLAG);
 void PWR_ClearFlag(uint32_t PWR_FLAG);
 

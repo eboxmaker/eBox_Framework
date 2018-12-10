@@ -22,10 +22,10 @@ void setup()
     uart1.begin(115200);
     uart1.printf("\r\nuart1 115200 ok!");
     PA2.mode(OUTPUT_PP);
-//    Dma1Ch3.attach(tc,DmaTcIrq);
-//    Dma1Ch2.attach(test,DmaTcIrq);
+    //    Dma1Ch3.attach(tc,DmaTcIrq);
+    //    Dma1Ch2.attach(test,DmaTcIrq);
     begin();
-//    
+    //
 
 }
 int main(void)
@@ -36,7 +36,7 @@ int main(void)
     {
         loop();
 
-//        delay_ms(1000);
+        //        delay_ms(1000);
     }
 
 

@@ -17,8 +17,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -31,7 +31,7 @@
 #define __STM32F4xx_FMPI2C_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -53,28 +53,28 @@
 
 typedef struct
 {
-  uint32_t FMPI2C_Timing;              /*!< Specifies the FMPI2C_TIMINGR_register value.
-                                         This parameter calculated by referring to FMPI2C initialization 
+    uint32_t FMPI2C_Timing;              /*!< Specifies the FMPI2C_TIMINGR_register value.
+                                         This parameter calculated by referring to FMPI2C initialization
                                          section in Reference manual*/
 
-  uint32_t FMPI2C_AnalogFilter;        /*!< Enables or disables analog noise filter.
+    uint32_t FMPI2C_AnalogFilter;        /*!< Enables or disables analog noise filter.
                                          This parameter can be a value of @ref FMPI2C_Analog_Filter */
 
-  uint32_t FMPI2C_DigitalFilter;       /*!< Configures the digital noise filter.
+    uint32_t FMPI2C_DigitalFilter;       /*!< Configures the digital noise filter.
                                          This parameter can be a number between 0x00 and 0x0F */
 
-  uint32_t FMPI2C_Mode;                /*!< Specifies the FMPI2C mode.
+    uint32_t FMPI2C_Mode;                /*!< Specifies the FMPI2C mode.
                                          This parameter can be a value of @ref FMPI2C_mode */
 
-  uint32_t FMPI2C_OwnAddress1;         /*!< Specifies the device own address 1.
+    uint32_t FMPI2C_OwnAddress1;         /*!< Specifies the device own address 1.
                                          This parameter can be a 7-bit or 10-bit address */
 
-  uint32_t FMPI2C_Ack;                 /*!< Enables or disables the acknowledgement.
+    uint32_t FMPI2C_Ack;                 /*!< Enables or disables the acknowledgement.
                                          This parameter can be a value of @ref FMPI2C_acknowledgement */
 
-  uint32_t FMPI2C_AcknowledgedAddress; /*!< Specifies if 7-bit or 10-bit address is acknowledged.
+    uint32_t FMPI2C_AcknowledgedAddress; /*!< Specifies if 7-bit or 10-bit address is acknowledged.
                                          This parameter can be a value of @ref FMPI2C_acknowledged_address */
-}FMPI2C_InitTypeDef;
+} FMPI2C_InitTypeDef;
 
 /* Exported constants --------------------------------------------------------*/
 
@@ -83,9 +83,9 @@ typedef struct
   * @{
   */
 
-#define IS_FMPI2C_ALL_PERIPH(PERIPH)       ((PERIPH) == FMPI2C1) 
+#define IS_FMPI2C_ALL_PERIPH(PERIPH)       ((PERIPH) == FMPI2C1)
 
-/** @defgroup FMPI2C_Analog_Filter 
+/** @defgroup FMPI2C_Analog_Filter
   * @{
   */
 
@@ -97,7 +97,7 @@ typedef struct
 /**
   * @}
   */
-     
+
 /** @defgroup FMPI2C_Digital_Filter
   * @{
   */
@@ -107,7 +107,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup FMPI2C_mode 
+/** @defgroup FMPI2C_mode
   * @{
   */
 
@@ -146,7 +146,7 @@ typedef struct
                                              ((ADDRESS) == FMPI2C_AcknowledgedAddress_10bit))
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup FMPI2C_own_address1
   * @{
@@ -157,7 +157,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup FMPI2C_transfer_direction 
+/** @defgroup FMPI2C_transfer_direction
   * @{
   */
 
@@ -170,7 +170,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup FMPI2C_DMA_transfer_requests 
+/** @defgroup FMPI2C_DMA_transfer_requests
   * @{
   */
 
@@ -222,7 +222,7 @@ typedef struct
                                          ((MASK) == FMPI2C_OA2_Mask04) || \
                                          ((MASK) == FMPI2C_OA2_Mask05) || \
                                          ((MASK) == FMPI2C_OA2_Mask06) || \
-                                         ((MASK) == FMPI2C_OA2_Mask07))  
+                                         ((MASK) == FMPI2C_OA2_Mask07))
 
 /**
   * @}
@@ -238,7 +238,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup FMPI2C_registers 
+/** @defgroup FMPI2C_registers
   * @{
   */
 
@@ -269,7 +269,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup FMPI2C_interrupts_definition 
+/** @defgroup FMPI2C_interrupts_definition
   * @{
   */
 
@@ -287,7 +287,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup FMPI2C_flags_definition 
+/** @defgroup FMPI2C_flags_definition
   * @{
   */
 
@@ -323,7 +323,7 @@ typedef struct
   */
 
 
-/** @defgroup FMPI2C_interrupts_definition 
+/** @defgroup FMPI2C_interrupts_definition
   * @{
   */
 
@@ -342,7 +342,7 @@ typedef struct
 #define  FMPI2C_IT_ALERT                   FMPI2C_ISR_ALERT
 
 #define IS_FMPI2C_CLEAR_IT(IT)             ((((IT) & (uint32_t)0xFFFFC001) == 0x00) && ((IT) != 0x00))
-                               
+
 #define IS_FMPI2C_GET_IT(IT)               (((IT) == FMPI2C_IT_TXIS) || ((IT) == FMPI2C_IT_RXNE) || \
                                          ((IT) == FMPI2C_IT_ADDR) || ((IT) == FMPI2C_IT_NACKF) || \
                                          ((IT) == FMPI2C_IT_STOPF) || ((IT) == FMPI2C_IT_TC) || \
@@ -350,13 +350,13 @@ typedef struct
                                          ((IT) == FMPI2C_IT_ARLO) || ((IT) == FMPI2C_IT_OVR) || \
                                          ((IT) == FMPI2C_IT_PECERR) || ((IT) == FMPI2C_IT_TIMEOUT) || \
                                          ((IT) == FMPI2C_IT_ALERT))
-                               
+
 
 /**
   * @}
   */
 
-/** @defgroup FMPI2C_ReloadEndMode_definition 
+/** @defgroup FMPI2C_ReloadEndMode_definition
   * @{
   */
 
@@ -364,17 +364,17 @@ typedef struct
 #define  FMPI2C_AutoEnd_Mode               FMPI2C_CR2_AUTOEND
 #define  FMPI2C_SoftEnd_Mode               ((uint32_t)0x00000000)
 
-                              
+
 #define IS_RELOAD_END_MODE(MODE)        (((MODE) == FMPI2C_Reload_Mode) || \
                                          ((MODE) == FMPI2C_AutoEnd_Mode) || \
                                          ((MODE) == FMPI2C_SoftEnd_Mode))
-                               
+
 
 /**
   * @}
   */
 
-/** @defgroup FMPI2C_StartStopMode_definition 
+/** @defgroup FMPI2C_StartStopMode_definition
   * @{
   */
 
@@ -383,12 +383,12 @@ typedef struct
 #define  FMPI2C_Generate_Start_Read          (uint32_t)(FMPI2C_CR2_START | FMPI2C_CR2_RD_WRN)
 #define  FMPI2C_Generate_Start_Write         FMPI2C_CR2_START
 
-                              
+
 #define IS_START_STOP_MODE(MODE)        (((MODE) == FMPI2C_Generate_Stop) || \
                                          ((MODE) == FMPI2C_Generate_Start_Read) || \
                                          ((MODE) == FMPI2C_Generate_Start_Write) || \
                                          ((MODE) == FMPI2C_No_StartStop))
-                               
+
 
 /**
   * @}
@@ -403,60 +403,60 @@ typedef struct
 
 
 /* Initialization and Configuration functions *********************************/
-void FMPI2C_DeInit(FMPI2C_TypeDef* FMPI2Cx);
-void FMPI2C_Init(FMPI2C_TypeDef* FMPI2Cx, FMPI2C_InitTypeDef* FMPI2C_InitStruct);
-void FMPI2C_StructInit(FMPI2C_InitTypeDef* FMPI2C_InitStruct);
-void FMPI2C_Cmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_SoftwareResetCmd(FMPI2C_TypeDef* FMPI2Cx);
-void FMPI2C_ITConfig(FMPI2C_TypeDef* FMPI2Cx, uint32_t FMPI2C_IT, FunctionalState NewState);
-void FMPI2C_StretchClockCmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_StopModeCmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_DualAddressCmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_OwnAddress2Config(FMPI2C_TypeDef* FMPI2Cx, uint16_t Address, uint8_t Mask);
-void FMPI2C_GeneralCallCmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_SlaveByteControlCmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_SlaveAddressConfig(FMPI2C_TypeDef* FMPI2Cx, uint16_t Address);
-void FMPI2C_10BitAddressingModeCmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
+void FMPI2C_DeInit(FMPI2C_TypeDef *FMPI2Cx);
+void FMPI2C_Init(FMPI2C_TypeDef *FMPI2Cx, FMPI2C_InitTypeDef *FMPI2C_InitStruct);
+void FMPI2C_StructInit(FMPI2C_InitTypeDef *FMPI2C_InitStruct);
+void FMPI2C_Cmd(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_SoftwareResetCmd(FMPI2C_TypeDef *FMPI2Cx);
+void FMPI2C_ITConfig(FMPI2C_TypeDef *FMPI2Cx, uint32_t FMPI2C_IT, FunctionalState NewState);
+void FMPI2C_StretchClockCmd(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_StopModeCmd(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_DualAddressCmd(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_OwnAddress2Config(FMPI2C_TypeDef *FMPI2Cx, uint16_t Address, uint8_t Mask);
+void FMPI2C_GeneralCallCmd(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_SlaveByteControlCmd(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_SlaveAddressConfig(FMPI2C_TypeDef *FMPI2Cx, uint16_t Address);
+void FMPI2C_10BitAddressingModeCmd(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
 
 /* Communications handling functions ******************************************/
-void FMPI2C_AutoEndCmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_ReloadCmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_NumberOfBytesConfig(FMPI2C_TypeDef* FMPI2Cx, uint8_t Number_Bytes);
-void FMPI2C_MasterRequestConfig(FMPI2C_TypeDef* FMPI2Cx, uint16_t FMPI2C_Direction);
-void FMPI2C_GenerateSTART(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_GenerateSTOP(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_10BitAddressHeaderCmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_AcknowledgeConfig(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-uint8_t FMPI2C_GetAddressMatched(FMPI2C_TypeDef* FMPI2Cx);
-uint16_t FMPI2C_GetTransferDirection(FMPI2C_TypeDef* FMPI2Cx);
-void FMPI2C_TransferHandling(FMPI2C_TypeDef* FMPI2Cx, uint16_t Address, uint8_t Number_Bytes, uint32_t ReloadEndMode, uint32_t StartStopMode);
+void FMPI2C_AutoEndCmd(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_ReloadCmd(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_NumberOfBytesConfig(FMPI2C_TypeDef *FMPI2Cx, uint8_t Number_Bytes);
+void FMPI2C_MasterRequestConfig(FMPI2C_TypeDef *FMPI2Cx, uint16_t FMPI2C_Direction);
+void FMPI2C_GenerateSTART(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_GenerateSTOP(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_10BitAddressHeaderCmd(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_AcknowledgeConfig(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+uint8_t FMPI2C_GetAddressMatched(FMPI2C_TypeDef *FMPI2Cx);
+uint16_t FMPI2C_GetTransferDirection(FMPI2C_TypeDef *FMPI2Cx);
+void FMPI2C_TransferHandling(FMPI2C_TypeDef *FMPI2Cx, uint16_t Address, uint8_t Number_Bytes, uint32_t ReloadEndMode, uint32_t StartStopMode);
 
 /*  SMBUS management functions ************************************************/
-void FMPI2C_SMBusAlertCmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_ClockTimeoutCmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_ExtendedClockTimeoutCmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_IdleClockTimeoutCmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_TimeoutAConfig(FMPI2C_TypeDef* FMPI2Cx, uint16_t Timeout);
-void FMPI2C_TimeoutBConfig(FMPI2C_TypeDef* FMPI2Cx, uint16_t Timeout);
-void FMPI2C_CalculatePEC(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-void FMPI2C_PECRequestCmd(FMPI2C_TypeDef* FMPI2Cx, FunctionalState NewState);
-uint8_t FMPI2C_GetPEC(FMPI2C_TypeDef* FMPI2Cx);
+void FMPI2C_SMBusAlertCmd(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_ClockTimeoutCmd(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_ExtendedClockTimeoutCmd(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_IdleClockTimeoutCmd(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_TimeoutAConfig(FMPI2C_TypeDef *FMPI2Cx, uint16_t Timeout);
+void FMPI2C_TimeoutBConfig(FMPI2C_TypeDef *FMPI2Cx, uint16_t Timeout);
+void FMPI2C_CalculatePEC(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+void FMPI2C_PECRequestCmd(FMPI2C_TypeDef *FMPI2Cx, FunctionalState NewState);
+uint8_t FMPI2C_GetPEC(FMPI2C_TypeDef *FMPI2Cx);
 
 /* FMPI2C registers management functions *****************************************/
-uint32_t FMPI2C_ReadRegister(FMPI2C_TypeDef* FMPI2Cx, uint8_t FMPI2C_Register);
+uint32_t FMPI2C_ReadRegister(FMPI2C_TypeDef *FMPI2Cx, uint8_t FMPI2C_Register);
 
 /* Data transfers management functions ****************************************/
-void FMPI2C_SendData(FMPI2C_TypeDef* FMPI2Cx, uint8_t Data);
-uint8_t FMPI2C_ReceiveData(FMPI2C_TypeDef* FMPI2Cx);
+void FMPI2C_SendData(FMPI2C_TypeDef *FMPI2Cx, uint8_t Data);
+uint8_t FMPI2C_ReceiveData(FMPI2C_TypeDef *FMPI2Cx);
 
 /* DMA transfers management functions *****************************************/
-void FMPI2C_DMACmd(FMPI2C_TypeDef* FMPI2Cx, uint32_t FMPI2C_DMAReq, FunctionalState NewState);
+void FMPI2C_DMACmd(FMPI2C_TypeDef *FMPI2Cx, uint32_t FMPI2C_DMAReq, FunctionalState NewState);
 
 /* Interrupts and flags management functions **********************************/
-FlagStatus FMPI2C_GetFlagStatus(FMPI2C_TypeDef* FMPI2Cx, uint32_t FMPI2C_FLAG);
-void FMPI2C_ClearFlag(FMPI2C_TypeDef* FMPI2Cx, uint32_t FMPI2C_FLAG);
-ITStatus FMPI2C_GetITStatus(FMPI2C_TypeDef* FMPI2Cx, uint32_t FMPI2C_IT);
-void FMPI2C_ClearITPendingBit(FMPI2C_TypeDef* FMPI2Cx, uint32_t FMPI2C_IT);
+FlagStatus FMPI2C_GetFlagStatus(FMPI2C_TypeDef *FMPI2Cx, uint32_t FMPI2C_FLAG);
+void FMPI2C_ClearFlag(FMPI2C_TypeDef *FMPI2Cx, uint32_t FMPI2C_FLAG);
+ITStatus FMPI2C_GetITStatus(FMPI2C_TypeDef *FMPI2Cx, uint32_t FMPI2C_IT);
+void FMPI2C_ClearITPendingBit(FMPI2C_TypeDef *FMPI2Cx, uint32_t FMPI2C_IT);
 
 #endif /* STM32F410xx || STM32F446xx */
 /**

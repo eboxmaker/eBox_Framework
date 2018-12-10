@@ -11,7 +11,7 @@ Copyright 2016 link. All Rights Reserved.
 #include "ebox.h"
 #include "usb_msd_sd.h"
 
-USBMSD_SD usbmsd_sd(&PB12,&spi2);
+USBMSD_SD usbmsd_sd(&PB12, &spi2);
 
 void setup()
 {
@@ -22,7 +22,7 @@ int main(void)
     setup();
     while(1)
     {
-			delay_ms(1000);
+        delay_ms(1000);
     }
 
 }

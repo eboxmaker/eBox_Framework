@@ -6,8 +6,8 @@
   * @date   : 2016/08/14
 
   * @brief   ebox application example .
-  *					 2018-8-5	通过引入bsp，定义硬件端口，方便例程可以在不同平台上运行 
-	* Copyright 2016 shentq. All Rights Reserved.         
+  *					 2018-8-5	通过引入bsp，定义硬件端口，方便例程可以在不同平台上运行
+	* Copyright 2016 shentq. All Rights Reserved.
   ******************************************************************************
  */
 
@@ -23,7 +23,7 @@
 	*	3	实际运行时LED渐变
 	*   4	可用资源请参考ebox_pwm.h说明
 	*/
-	
+
 
 /* 定义例程名和例程发布日期 */
 #define EXAMPLE_NAME	"Analog_Write example"
@@ -35,7 +35,7 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 }
 
 float x;

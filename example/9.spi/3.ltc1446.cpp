@@ -37,9 +37,9 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
     ltc1.begin();
-    
+
 
     adc.add_ch(&ADCA);
     adc.add_ch(&ADCB);
@@ -58,9 +58,11 @@ int main(void)
             ltc1.write(4096 - i, i);
             UART.printf("通道A电压 = %.01f mv; 通道B电压 = %.01f mv \r\n", adc.read_voltage(&ADCA), adc.read_voltage(&ADCB));
             delay_ms(2000);
-        }else{
-        i = 2048;
-        }        
+        }
+        else
+        {
+            i = 2048;
+        }
     }
 }
 

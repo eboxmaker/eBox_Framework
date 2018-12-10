@@ -57,9 +57,9 @@
  */
 
 #ifdef   CPU_CORE_MODULE
- #define  CPU_CORE_EXT
+#define  CPU_CORE_EXT
 #else
- #define  CPU_CORE_EXT  extern
+#define  CPU_CORE_EXT  extern
 #endif
 
 
@@ -106,8 +106,8 @@
 #include  <cpu_cfg.h>
 
 #if (CPU_CFG_NAME_EN == DEF_ENABLED)
- #include  <lib_mem.h>
- #include  <lib_str.h>
+#include  <lib_mem.h>
+#include  <lib_str.h>
 #endif
 
 
@@ -129,22 +129,22 @@
  */
 
 #ifdef   CPU_CFG_TS_EN
- #undef   CPU_CFG_TS_EN
+#undef   CPU_CFG_TS_EN
 #endif
 
 
 #if    ((CPU_CFG_TS_32_EN == DEF_ENABLED) || \
     (CPU_CFG_TS_64_EN == DEF_ENABLED))
- #define  CPU_CFG_TS_EN                          DEF_ENABLED
+#define  CPU_CFG_TS_EN                          DEF_ENABLED
 #else
- #define  CPU_CFG_TS_EN                          DEF_DISABLED
+#define  CPU_CFG_TS_EN                          DEF_DISABLED
 #endif
 
 #if    ((CPU_CFG_TS_EN == DEF_ENABLED) || \
     (defined(CPU_CFG_INT_DIS_MEAS_EN)))
- #define  CPU_CFG_TS_TMR_EN                      DEF_ENABLED
+#define  CPU_CFG_TS_TMR_EN                      DEF_ENABLED
 #else
- #define  CPU_CFG_TS_TMR_EN                      DEF_DISABLED
+#define  CPU_CFG_TS_TMR_EN                      DEF_DISABLED
 #endif
 
 
@@ -172,7 +172,8 @@
  *********************************************************************************************************
  */
 
-typedef enum cpu_err {
+typedef enum cpu_err
+{
 
     CPU_ERR_NONE                            =         0u,
     CPU_ERR_NULL_PTR                        =        10u,
@@ -200,15 +201,15 @@ typedef  CPU_TS32 CPU_TS;                                       /* Req'd for bac
 
 
 #if     (CPU_CFG_TS_TMR_EN   == DEF_ENABLED)                    /* CPU ts tmr defined to cfg'd word size (see Note #1). */
- #if     (CPU_CFG_TS_TMR_SIZE == CPU_WORD_SIZE_08)
+#if     (CPU_CFG_TS_TMR_SIZE == CPU_WORD_SIZE_08)
 typedef  CPU_INT08U CPU_TS_TMR;
- #elif   (CPU_CFG_TS_TMR_SIZE == CPU_WORD_SIZE_16)
+#elif   (CPU_CFG_TS_TMR_SIZE == CPU_WORD_SIZE_16)
 typedef  CPU_INT16U CPU_TS_TMR;
- #elif   (CPU_CFG_TS_TMR_SIZE == CPU_WORD_SIZE_64)
+#elif   (CPU_CFG_TS_TMR_SIZE == CPU_WORD_SIZE_64)
 typedef  CPU_INT64U CPU_TS_TMR;
- #else                                                          /* CPU ts tmr dflt size = 32-bits.                      */
+#else                                                          /* CPU ts tmr dflt size = 32-bits.                      */
 typedef  CPU_INT32U CPU_TS_TMR;
- #endif
+#endif
 #endif
 
 
@@ -252,7 +253,7 @@ CPU_CORE_EXT CPU_TS_TMR_FREQ        CPU_TS_TmrFreq_Hz;          /* CPU ts tmr fr
 #ifdef  CPU_CFG_INT_DIS_MEAS_EN
 CPU_CORE_EXT CPU_INT16U         CPU_IntDisMeasCtr;              /* Nbr tot    ints dis'd ctr.                           */
 CPU_CORE_EXT CPU_INT16U         CPU_IntDisNestCtr;              /* Nbr nested ints dis'd ctr.                           */
-                                                                /* Ints dis'd time (in ts tmr cnts) : ...               */
+/* Ints dis'd time (in ts tmr cnts) : ...               */
 CPU_CORE_EXT CPU_TS_TMR         CPU_IntDisMeasStart_cnts;       /* ...  start time.                                     */
 CPU_CORE_EXT CPU_TS_TMR         CPU_IntDisMeasStop_cnts;        /* ...  stop  time.                                     */
 CPU_CORE_EXT CPU_TS_TMR         CPU_IntDisMeasOvrhd_cnts;       /* ...        time meas ovrhd.                          */
@@ -379,7 +380,7 @@ CPU_CORE_EXT CPU_TS_TMR         CPU_IntDisMeasMax_cnts;         /* ... non-reset
  */
 
 #ifndef  CPU_SW_EXCEPTION                                                       /* See Note #2.                         */
- #define  CPU_SW_EXCEPTION(err_rtn_val)              do {                    \
+#define  CPU_SW_EXCEPTION(err_rtn_val)              do {                    \
         CPU_SW_Exception(); \
 } while (0)
 #endif
@@ -451,33 +452,33 @@ CPU_CORE_EXT CPU_TS_TMR         CPU_IntDisMeasMax_cnts;         /* ... non-reset
  */
 
 #if     (CPU_CFG_ENDIAN_TYPE == CPU_ENDIAN_TYPE_BIG)
- #define  CPU_TYPE_CREATE(char_1, char_2, char_3, char_4)        (((CPU_INT32U)((CPU_INT08U)(char_1)) << (3u * DEF_OCTET_NBR_BITS)) | \
+#define  CPU_TYPE_CREATE(char_1, char_2, char_3, char_4)        (((CPU_INT32U)((CPU_INT08U)(char_1)) << (3u * DEF_OCTET_NBR_BITS)) | \
                                                                   ((CPU_INT32U)((CPU_INT08U)(char_2)) << (2u * DEF_OCTET_NBR_BITS)) | \
                                                                   ((CPU_INT32U)((CPU_INT08U)(char_3)) << (1u * DEF_OCTET_NBR_BITS)) | \
                                                                   ((CPU_INT32U)((CPU_INT08U)(char_4)) << (0u * DEF_OCTET_NBR_BITS)))
 
 #else
 
- #if    ((CPU_CFG_DATA_SIZE   == CPU_WORD_SIZE_64) || \
+#if    ((CPU_CFG_DATA_SIZE   == CPU_WORD_SIZE_64) || \
     (CPU_CFG_DATA_SIZE   == CPU_WORD_SIZE_32))
-  #define  CPU_TYPE_CREATE(char_1, char_2, char_3, char_4)        (((CPU_INT32U)((CPU_INT08U)(char_1)) << (0u * DEF_OCTET_NBR_BITS)) | \
+#define  CPU_TYPE_CREATE(char_1, char_2, char_3, char_4)        (((CPU_INT32U)((CPU_INT08U)(char_1)) << (0u * DEF_OCTET_NBR_BITS)) | \
                                                                    ((CPU_INT32U)((CPU_INT08U)(char_2)) << (1u * DEF_OCTET_NBR_BITS)) | \
                                                                    ((CPU_INT32U)((CPU_INT08U)(char_3)) << (2u * DEF_OCTET_NBR_BITS)) | \
                                                                    ((CPU_INT32U)((CPU_INT08U)(char_4)) << (3u * DEF_OCTET_NBR_BITS)))
 
 
- #elif   (CPU_CFG_DATA_SIZE   == CPU_WORD_SIZE_16)
-  #define  CPU_TYPE_CREATE(char_1, char_2, char_3, char_4)        (((CPU_INT32U)((CPU_INT08U)(char_1)) << (2u * DEF_OCTET_NBR_BITS)) | \
+#elif   (CPU_CFG_DATA_SIZE   == CPU_WORD_SIZE_16)
+#define  CPU_TYPE_CREATE(char_1, char_2, char_3, char_4)        (((CPU_INT32U)((CPU_INT08U)(char_1)) << (2u * DEF_OCTET_NBR_BITS)) | \
                                                                    ((CPU_INT32U)((CPU_INT08U)(char_2)) << (3u * DEF_OCTET_NBR_BITS)) | \
                                                                    ((CPU_INT32U)((CPU_INT08U)(char_3)) << (0u * DEF_OCTET_NBR_BITS)) | \
                                                                    ((CPU_INT32U)((CPU_INT08U)(char_4)) << (1u * DEF_OCTET_NBR_BITS)))
 
- #else                                                          /* Dflt CPU_WORD_SIZE_08.                               */
-  #define  CPU_TYPE_CREATE(char_1, char_2, char_3, char_4)        (((CPU_INT32U)((CPU_INT08U)(char_1)) << (3u * DEF_OCTET_NBR_BITS)) | \
+#else                                                          /* Dflt CPU_WORD_SIZE_08.                               */
+#define  CPU_TYPE_CREATE(char_1, char_2, char_3, char_4)        (((CPU_INT32U)((CPU_INT08U)(char_1)) << (3u * DEF_OCTET_NBR_BITS)) | \
                                                                    ((CPU_INT32U)((CPU_INT08U)(char_2)) << (2u * DEF_OCTET_NBR_BITS)) | \
                                                                    ((CPU_INT32U)((CPU_INT08U)(char_3)) << (1u * DEF_OCTET_NBR_BITS)) | \
                                                                    ((CPU_INT32U)((CPU_INT08U)(char_4)) << (0u * DEF_OCTET_NBR_BITS)))
- #endif
+#endif
 #endif
 
 
@@ -516,11 +517,11 @@ void        CPU_SW_Exception         (void);
 #if (CPU_CFG_NAME_EN == DEF_ENABLED)                                    /* -------------- CPU NAME FNCTS -------------- */
 void        CPU_NameClr              (void);
 
-void        CPU_NameGet              (       CPU_CHAR * p_name,
-                                             CPU_ERR *  p_err);
+void        CPU_NameGet              (       CPU_CHAR *p_name,
+        CPU_ERR   *p_err);
 
-void        CPU_NameSet              (const CPU_CHAR *  p_name,
-                                      CPU_ERR *         p_err);
+void        CPU_NameSet              (const CPU_CHAR   *p_name,
+                                      CPU_ERR          *p_err);
 #endif
 
 
@@ -548,7 +549,7 @@ void                    CPU_TS_TmrFreqSet        (CPU_TS_TMR_FREQ freq_hz);
 
 
 #ifdef  CPU_CFG_INT_DIS_MEAS_EN                                         /* -------- CPU INT DIS TIME MEAS FNCTS ------- */
-                                                                        /* See Note #1.                                 */
+/* See Note #1.                                 */
 CPU_TS_TMR          CPU_IntDisMeasMaxCurReset(void);
 
 CPU_TS_TMR          CPU_IntDisMeasMaxCurGet  (void);
@@ -823,31 +824,31 @@ CPU_INT64U        CPU_TS64_to_uSec(CPU_TS64 ts_cnts);
  */
 
 #ifndef  CPU_CFG_NAME_EN
- #error  "CPU_CFG_NAME_EN                       not #define'd in 'cpu_cfg.h'"
- #error  "                                [MUST be  DEF_ENABLED ]           "
- #error  "                                [     ||  DEF_DISABLED]           "
+#error  "CPU_CFG_NAME_EN                       not #define'd in 'cpu_cfg.h'"
+#error  "                                [MUST be  DEF_ENABLED ]           "
+#error  "                                [     ||  DEF_DISABLED]           "
 
 #elif  ((CPU_CFG_NAME_EN != DEF_ENABLED ) && \
     (CPU_CFG_NAME_EN != DEF_DISABLED))
- #error  "CPU_CFG_NAME_EN                 illegally #define'd in 'cpu_cfg.h'"
- #error  "                                [MUST be  DEF_ENABLED ]           "
- #error  "                                [     ||  DEF_DISABLED]           "
+#error  "CPU_CFG_NAME_EN                 illegally #define'd in 'cpu_cfg.h'"
+#error  "                                [MUST be  DEF_ENABLED ]           "
+#error  "                                [     ||  DEF_DISABLED]           "
 
 
 #elif   (CPU_CFG_NAME_EN == DEF_ENABLED)
 
- #ifndef  CPU_CFG_NAME_SIZE
-  #error  "CPU_CFG_NAME_SIZE                     not #define'd in 'cpu_cfg.h'"
-  #error  "                                [MUST be  >=   1]                 "
-  #error  "                                [     &&  <= 255]                 "
+#ifndef  CPU_CFG_NAME_SIZE
+#error  "CPU_CFG_NAME_SIZE                     not #define'd in 'cpu_cfg.h'"
+#error  "                                [MUST be  >=   1]                 "
+#error  "                                [     &&  <= 255]                 "
 
- #elif   (DEF_CHK_VAL(CPU_CFG_NAME_SIZE,            \
+#elif   (DEF_CHK_VAL(CPU_CFG_NAME_SIZE,            \
                       1,                            \
                       DEF_INT_08U_MAX_VAL) != DEF_OK)
-  #error  "CPU_CFG_NAME_SIZE               illegally #define'd in 'cpu_cfg.h'"
-  #error  "                                [MUST be  >=   1]                 "
-  #error  "                                [     &&  <= 255]                 "
- #endif
+#error  "CPU_CFG_NAME_SIZE               illegally #define'd in 'cpu_cfg.h'"
+#error  "                                [MUST be  >=   1]                 "
+#error  "                                [     &&  <= 255]                 "
+#endif
 
 #endif
 
@@ -855,43 +856,43 @@ CPU_INT64U        CPU_TS64_to_uSec(CPU_TS64 ts_cnts);
 
 
 #ifndef  CPU_CFG_TS_32_EN
- #error  "CPU_CFG_TS_32_EN                      not #define'd in 'cpu_cfg.h'"
- #error  "                                [MUST be  DEF_DISABLED]           "
- #error  "                                [     ||  DEF_ENABLED ]           "
+#error  "CPU_CFG_TS_32_EN                      not #define'd in 'cpu_cfg.h'"
+#error  "                                [MUST be  DEF_DISABLED]           "
+#error  "                                [     ||  DEF_ENABLED ]           "
 
 #elif  ((CPU_CFG_TS_32_EN != DEF_DISABLED) && \
     (CPU_CFG_TS_32_EN != DEF_ENABLED ))
- #error  "CPU_CFG_TS_32_EN                illegally #define'd in 'cpu_cfg.h'"
- #error  "                                [MUST be  DEF_DISABLED]           "
- #error  "                                [     ||  DEF_ENABLED ]           "
+#error  "CPU_CFG_TS_32_EN                illegally #define'd in 'cpu_cfg.h'"
+#error  "                                [MUST be  DEF_DISABLED]           "
+#error  "                                [     ||  DEF_ENABLED ]           "
 
 #endif
 
 
 #ifndef  CPU_CFG_TS_64_EN
- #error  "CPU_CFG_TS_64_EN                      not #define'd in 'cpu_cfg.h'"
- #error  "                                [MUST be  DEF_DISABLED]           "
- #error  "                                [     ||  DEF_ENABLED ]           "
+#error  "CPU_CFG_TS_64_EN                      not #define'd in 'cpu_cfg.h'"
+#error  "                                [MUST be  DEF_DISABLED]           "
+#error  "                                [     ||  DEF_ENABLED ]           "
 
 #elif  ((CPU_CFG_TS_64_EN != DEF_DISABLED) && \
     (CPU_CFG_TS_64_EN != DEF_ENABLED ))
- #error  "CPU_CFG_TS_64_EN                illegally #define'd in 'cpu_cfg.h'"
- #error  "                                [MUST be  DEF_DISABLED]           "
- #error  "                                [     ||  DEF_ENABLED ]           "
+#error  "CPU_CFG_TS_64_EN                illegally #define'd in 'cpu_cfg.h'"
+#error  "                                [MUST be  DEF_DISABLED]           "
+#error  "                                [     ||  DEF_ENABLED ]           "
 
 #endif
 
 /* Correctly configured in 'cpu_core.h'; DO NOT MODIFY. */
 #ifndef  CPU_CFG_TS_EN
- #error  "CPU_CFG_TS_EN                         not #define'd in 'cpu_core.h'"
- #error  "                                [MUST be  DEF_DISABLED]            "
- #error  "                                [     ||  DEF_ENABLED ]            "
+#error  "CPU_CFG_TS_EN                         not #define'd in 'cpu_core.h'"
+#error  "                                [MUST be  DEF_DISABLED]            "
+#error  "                                [     ||  DEF_ENABLED ]            "
 
 #elif  ((CPU_CFG_TS_EN != DEF_DISABLED) && \
     (CPU_CFG_TS_EN != DEF_ENABLED ))
- #error  "CPU_CFG_TS_EN                   illegally #define'd in 'cpu_core.h'"
- #error  "                                [MUST be  DEF_DISABLED]            "
- #error  "                                [     ||  DEF_ENABLED ]            "
+#error  "CPU_CFG_TS_EN                   illegally #define'd in 'cpu_core.h'"
+#error  "                                [MUST be  DEF_DISABLED]            "
+#error  "                                [     ||  DEF_ENABLED ]            "
 
 #endif
 
@@ -899,61 +900,61 @@ CPU_INT64U        CPU_TS64_to_uSec(CPU_TS64 ts_cnts);
 /*$PAGE*/
 /* Correctly configured in 'cpu_core.h'; DO NOT MODIFY. */
 #ifndef  CPU_CFG_TS_TMR_EN
- #error  "CPU_CFG_TS_TMR_EN                     not #define'd in 'cpu_core.h'"
- #error  "                                [MUST be  DEF_DISABLED]            "
- #error  "                                [     ||  DEF_ENABLED ]            "
+#error  "CPU_CFG_TS_TMR_EN                     not #define'd in 'cpu_core.h'"
+#error  "                                [MUST be  DEF_DISABLED]            "
+#error  "                                [     ||  DEF_ENABLED ]            "
 
 #elif  ((CPU_CFG_TS_TMR_EN != DEF_DISABLED) && \
     (CPU_CFG_TS_TMR_EN != DEF_ENABLED ))
- #error  "CPU_CFG_TS_TMR_EN               illegally #define'd in 'cpu_core.h'"
- #error  "                                [MUST be  DEF_DISABLED]            "
- #error  "                                [     ||  DEF_ENABLED ]            "
+#error  "CPU_CFG_TS_TMR_EN               illegally #define'd in 'cpu_core.h'"
+#error  "                                [MUST be  DEF_DISABLED]            "
+#error  "                                [     ||  DEF_ENABLED ]            "
 
 
 #elif   (CPU_CFG_TS_TMR_EN == DEF_ENABLED)
 
- #ifndef  CPU_CFG_TS_TMR_SIZE
-  #error  "CPU_CFG_TS_TMR_SIZE                   not #define'd in 'cpu_cfg.h'       "
-  #error  "                                [MUST be  CPU_WORD_SIZE_08   8-bit timer]"
-  #error  "                                [     ||  CPU_WORD_SIZE_16  16-bit timer]"
-  #error  "                                [     ||  CPU_WORD_SIZE_32  32-bit timer]"
-  #error  "                                [     ||  CPU_WORD_SIZE_64  64-bit timer]"
+#ifndef  CPU_CFG_TS_TMR_SIZE
+#error  "CPU_CFG_TS_TMR_SIZE                   not #define'd in 'cpu_cfg.h'       "
+#error  "                                [MUST be  CPU_WORD_SIZE_08   8-bit timer]"
+#error  "                                [     ||  CPU_WORD_SIZE_16  16-bit timer]"
+#error  "                                [     ||  CPU_WORD_SIZE_32  32-bit timer]"
+#error  "                                [     ||  CPU_WORD_SIZE_64  64-bit timer]"
 
- #elif  ((CPU_CFG_TS_TMR_SIZE != CPU_WORD_SIZE_08) && \
+#elif  ((CPU_CFG_TS_TMR_SIZE != CPU_WORD_SIZE_08) && \
     (CPU_CFG_TS_TMR_SIZE != CPU_WORD_SIZE_16) && \
     (CPU_CFG_TS_TMR_SIZE != CPU_WORD_SIZE_32) && \
     (CPU_CFG_TS_TMR_SIZE != CPU_WORD_SIZE_64))
-  #error  "CPU_CFG_TS_TMR_SIZE             illegally #define'd in 'cpu_cfg.h'       "
-  #error  "                                [MUST be  CPU_WORD_SIZE_08   8-bit timer]"
-  #error  "                                [     ||  CPU_WORD_SIZE_16  16-bit timer]"
-  #error  "                                [     ||  CPU_WORD_SIZE_32  32-bit timer]"
-  #error  "                                [     ||  CPU_WORD_SIZE_64  64-bit timer]"
- #endif
+#error  "CPU_CFG_TS_TMR_SIZE             illegally #define'd in 'cpu_cfg.h'       "
+#error  "                                [MUST be  CPU_WORD_SIZE_08   8-bit timer]"
+#error  "                                [     ||  CPU_WORD_SIZE_16  16-bit timer]"
+#error  "                                [     ||  CPU_WORD_SIZE_32  32-bit timer]"
+#error  "                                [     ||  CPU_WORD_SIZE_64  64-bit timer]"
+#endif
 
 #endif
 
 
 
 #ifndef  CPU_CFG_INT_DIS_MEAS_EN
- #if 0                                                          /* Optionally configured in 'cpu_cfg.h'; DO NOT MODIFY. */
-  #error  "CPU_CFG_INT_DIS_MEAS_EN               not #define'd in 'cpu_cfg.h'"
- #endif
+#if 0                                                          /* Optionally configured in 'cpu_cfg.h'; DO NOT MODIFY. */
+#error  "CPU_CFG_INT_DIS_MEAS_EN               not #define'd in 'cpu_cfg.h'"
+#endif
 
 #else
 
- #ifndef  CPU_CFG_INT_DIS_MEAS_OVRHD_NBR
-  #error  "CPU_CFG_INT_DIS_MEAS_OVRHD_NBR        not #define'd in 'cpu_cfg.h' "
-  #error  "                                [MUST be  >= CPU_TIME_MEAS_NBR_MIN]"
-  #error  "                                [     ||  <= CPU_TIME_MEAS_NBR_MAX]"
+#ifndef  CPU_CFG_INT_DIS_MEAS_OVRHD_NBR
+#error  "CPU_CFG_INT_DIS_MEAS_OVRHD_NBR        not #define'd in 'cpu_cfg.h' "
+#error  "                                [MUST be  >= CPU_TIME_MEAS_NBR_MIN]"
+#error  "                                [     ||  <= CPU_TIME_MEAS_NBR_MAX]"
 
- #elif   (DEF_CHK_VAL(CPU_CFG_INT_DIS_MEAS_OVRHD_NBR, \
+#elif   (DEF_CHK_VAL(CPU_CFG_INT_DIS_MEAS_OVRHD_NBR, \
                       CPU_TIME_MEAS_NBR_MIN,          \
                       CPU_TIME_MEAS_NBR_MAX) != DEF_OK)
-  #error  "CPU_CFG_INT_DIS_MEAS_OVRHD_NBR  illegally #define'd in 'cpu_cfg.h' "
-  #error  "                                [MUST be  >= CPU_TIME_MEAS_NBR_MIN]"
-  #error  "                                [     ||  <= CPU_TIME_MEAS_NBR_MAX]"
+#error  "CPU_CFG_INT_DIS_MEAS_OVRHD_NBR  illegally #define'd in 'cpu_cfg.h' "
+#error  "                                [MUST be  >= CPU_TIME_MEAS_NBR_MIN]"
+#error  "                                [     ||  <= CPU_TIME_MEAS_NBR_MAX]"
 
- #endif
+#endif
 
 #endif
 
@@ -961,16 +962,16 @@ CPU_INT64U        CPU_TS64_to_uSec(CPU_TS64 ts_cnts);
 
 
 #ifndef  CPU_CFG_LEAD_ZEROS_ASM_PRESENT
- #if 0                                                          /* Optionally configured in 'cpu_cfg.h'; DO NOT MODIFY. */
-  #error  "CPU_CFG_LEAD_ZEROS_ASM_PRESENT        not #define'd in 'cpu.h'/'cpu_cfg.h'"
- #endif
+#if 0                                                          /* Optionally configured in 'cpu_cfg.h'; DO NOT MODIFY. */
+#error  "CPU_CFG_LEAD_ZEROS_ASM_PRESENT        not #define'd in 'cpu.h'/'cpu_cfg.h'"
+#endif
 #endif
 
 
 #ifndef  CPU_CFG_TRAIL_ZEROS_ASM_PRESENT
- #if 0                                                          /* Optionally configured in 'cpu_cfg.h'; DO NOT MODIFY. */
-  #error  "CPU_CFG_TRAIL_ZEROS_ASM_PRESENT       not #define'd in 'cpu.h'/'cpu_cfg.h'"
- #endif
+#if 0                                                          /* Optionally configured in 'cpu_cfg.h'; DO NOT MODIFY. */
+#error  "CPU_CFG_TRAIL_ZEROS_ASM_PRESENT       not #define'd in 'cpu.h'/'cpu_cfg.h'"
+#endif
 #endif
 
 
@@ -982,15 +983,15 @@ CPU_INT64U        CPU_TS64_to_uSec(CPU_TS64 ts_cnts);
  */
 
 #ifndef  CPU_CFG_ADDR_SIZE
- #error  "CPU_CFG_ADDR_SIZE      not #define'd in 'cpu.h'"
+#error  "CPU_CFG_ADDR_SIZE      not #define'd in 'cpu.h'"
 #endif
 
 #ifndef  CPU_CFG_DATA_SIZE
- #error  "CPU_CFG_DATA_SIZE      not #define'd in 'cpu.h'"
+#error  "CPU_CFG_DATA_SIZE      not #define'd in 'cpu.h'"
 #endif
 
 #ifndef  CPU_CFG_DATA_SIZE_MAX
- #error  "CPU_CFG_DATA_SIZE_MAX  not #define'd in 'cpu.h'"
+#error  "CPU_CFG_DATA_SIZE_MAX  not #define'd in 'cpu.h'"
 #endif
 
 
@@ -1002,7 +1003,7 @@ CPU_INT64U        CPU_TS64_to_uSec(CPU_TS64 ts_cnts);
 
 /* See 'cpu_core.h  Note #1a'.                          */
 #if     (LIB_VERSION < 13500u)
- #error  "LIB_VERSION  [SHOULD be >= V1.35.00]"
+#error  "LIB_VERSION  [SHOULD be >= V1.35.00]"
 #endif
 
 

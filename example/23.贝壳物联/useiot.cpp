@@ -43,11 +43,11 @@ uint8_t     recv_buf[1024] = {0};
 uint16_t    len = 0;
 uint32_t    count = 0;
 
-typedef  enum 
+typedef  enum
 {
-	Alert_Tem = 1,
-	Alert_Hum = 2
-}Alert_num;
+    Alert_Tem = 1,
+    Alert_Hum = 2
+} Alert_num;
 
 char *make_data();
 int is_alert();
@@ -62,123 +62,140 @@ void setup()
     wifi.begin(&PA4, &uart2, 115200);
     wifi.join_ap("Thindrome", "YgNel5mX");
     bigiot.begin();
-	oled.begin();
+    oled.begin();
 }
 int main(void)
 {
     int ret;
 
-    uint32_t last_time= 0;
+    uint32_t last_time = 0;
     uint32_t last_rt_time = 0;
     uint32_t last_get_time = 0;
     uint32_t last_login_time = 0;
-	uint32_t last_alert_time = 0;
+    uint32_t last_alert_time = 0;
     setup();
 
 
     while(1)
     {
-        if(!bigiot.connected()){
-            if(!bigiot.connect(HOST, remote_port, local_port)){
+        if(!bigiot.connected())
+        {
+            if(!bigiot.connect(HOST, remote_port, local_port))
+            {
                 uart1.printf("\nTCP connect failed!");
-            }else{
+            }
+            else
+            {
                 uart1.printf("\nTCP connecte success!");
             }
         }
-        
-        if(millis() - last_login_time > postingInterval || last_login_time==0) {
+
+        if(millis() - last_login_time > postingInterval || last_login_time == 0)
+        {
             last_login_time = millis();
-            bigiot.send_login(DEVICEID,APIKEY);            
-        }   
+            bigiot.send_login(DEVICEID, APIKEY);
+        }
         if(bigiot.available())
             bigiot.process_message(recv_buf);
-        
-        if(bigiot.is_online()){
 
-            if(millis() - last_rt_time > 4000 || last_rt_time == 0){
+        if(bigiot.is_online())
+        {
+
+            if(millis() - last_rt_time > 4000 || last_rt_time == 0)
+            {
                 last_rt_time = millis();
-                ret = bigiot.send_say(BIGIOT_USER,USERID,"say something");
+                ret = bigiot.send_say(BIGIOT_USER, USERID, "say something");
                 out = make_data();
-							
-                ret = bigiot.send_realtime_data(DEVICEID,(char *)out);
-							uart1.printf("1321%s", out);
+
+                ret = bigiot.send_realtime_data(DEVICEID, (char *)out);
+                uart1.printf("1321%s", out);
                 ebox_free(out);
             }
-            if(millis() - last_get_time > 11000 || last_get_time == 0){
+            if(millis() - last_get_time > 11000 || last_get_time == 0)
+            {
                 last_get_time = millis();
-                ret =  bigiot.send_query_server_time(); 
+                ret =  bigiot.send_query_server_time();
                 ret =  bigiot.send_query_status();
-            }     
-			if(millis() - last_alert_time > 600000 || last_alert_time == 0) {
-				if(is_alert()) {
-					last_alert_time = millis();
-				}
-				
-			}
-						
-        
+            }
+            if(millis() - last_alert_time > 600000 || last_alert_time == 0)
+            {
+                if(is_alert())
+                {
+                    last_alert_time = millis();
+                }
+
+            }
+
+
         }
         if(millis() - last_time > 1000)
         {
             last_time = millis();
-            uart1.printf("\nfree:%d",ebox_get_free());
-        
+            uart1.printf("\nfree:%d", ebox_get_free());
+
         }
 
 
-        
+
     }
 
 }
 
 char *make_data()
 {
-    cJSON * pJsonRoot = NULL;
+    cJSON *pJsonRoot = NULL;
     pJsonRoot = cJSON_CreateObject();
-    if(NULL == pJsonRoot){
+    if(NULL == pJsonRoot)
+    {
         return NULL;
     }
-		sensor.read();
-	uart1.printf("Temperature:%d  Humidity:%d\n", sensor.getTemperature(), sensor.getHumidity());
- //   cJSON_AddNumberToObject(pJsonRoot, "865", random(100));
+    sensor.read();
+    uart1.printf("Temperature:%d  Humidity:%d\n", sensor.getTemperature(), sensor.getHumidity());
+    //   cJSON_AddNumberToObject(pJsonRoot, "865", random(100));
     cJSON_AddNumberToObject(pJsonRoot, TEMPERATURE_ID, sensor.getTemperature());
     cJSON_AddNumberToObject(pJsonRoot, HUMIDITY_ID, sensor.getHumidity());
 
     char *p;
     p = cJSON_PrintUnformatted(pJsonRoot);
-    if(NULL == p){
+    if(NULL == p)
+    {
         cJSON_Delete(pJsonRoot);
         return NULL;
     }
-        cJSON_Delete(pJsonRoot);
+    cJSON_Delete(pJsonRoot);
     return p;
 }
 
 int is_alert()
-{	
-	int flag1 = 0, flag2 = 0;
-	if(sensor.getTemperature() > 30) {
-		flag1++;
-		
-	}
-	if(sensor.getHumidity() > 20) {
-		flag2++;
-	}
-	if(flag1 == 1 && flag2 == 1) {
-		bigiot.send_active_alert("temputer and humidity are too high", BIGIOT_QQ);
-		return 1;
-	}
-	else if (flag1 == 1) {
-		bigiot.send_active_alert("temputer is too high",BIGIOT_QQ);
-		return 1;
-	}
-	else if (flag2 == 1) {
-		bigiot.send_active_alert("humidity is too high",BIGIOT_QQ);
-		return 1;
-	}
-	else
-		return 0;
-	
+{
+    int flag1 = 0, flag2 = 0;
+    if(sensor.getTemperature() > 30)
+    {
+        flag1++;
+
+    }
+    if(sensor.getHumidity() > 20)
+    {
+        flag2++;
+    }
+    if(flag1 == 1 && flag2 == 1)
+    {
+        bigiot.send_active_alert("temputer and humidity are too high", BIGIOT_QQ);
+        return 1;
+    }
+    else if (flag1 == 1)
+    {
+        bigiot.send_active_alert("temputer is too high", BIGIOT_QQ);
+        return 1;
+    }
+    else if (flag2 == 1)
+    {
+        bigiot.send_active_alert("humidity is too high", BIGIOT_QQ);
+        return 1;
+    }
+    else
+        return 0;
+
 }
 
 

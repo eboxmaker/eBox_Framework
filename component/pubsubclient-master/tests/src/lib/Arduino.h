@@ -8,7 +8,7 @@
 #include "Print.h"
 
 
-extern "C"{
+extern "C" {
     typedef uint8_t byte ;
     typedef uint8_t boolean ;
 

@@ -21,7 +21,8 @@
 #ifndef __EBOX_I2C_H_
 #define __EBOX_I2C_H_
 
-#include "ebox_config.h"
+#include "ebox_core.h"
+#include "mcu.h"
 
 #define WRITE   0
 #define READ    1
@@ -42,32 +43,32 @@ public:
     virtual uint32_t    read_config();
     // 单字节读写
     virtual uint8_t	write(uint8_t slaveAddr, uint8_t data);
-    virtual uint8_t write(uint8_t slaveAddr, uint16_t regAddr, uint8_t data, uint16_t tOut = 300);
+    virtual uint8_t write(uint8_t slaveAddr, uint16_t regAddr, uint8_t data);
     virtual uint8_t read(uint8_t slaveAddr);
-    virtual uint8_t read(uint8_t slaveAddr, uint16_t regAddr, uint16_t tOut = 300);
+    virtual uint8_t read(uint8_t slaveAddr, uint16_t regAddr);
     // 读写n字节
-    virtual uint8_t write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite, uint16_t tOut = 300);
-    virtual uint8_t	write_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nWrite, uint16_t tOut = 300);
+    virtual uint8_t write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite);
+    virtual uint8_t	write_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nWrite);
 
-    virtual uint8_t	read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nRead, uint16_t tOut = 300);
-    virtual uint8_t	read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nRead, uint16_t tOut = 300);
+    virtual uint8_t	read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nRead);
+    virtual uint8_t	read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nRead);
     // 等待设备响应
-    virtual uint8_t check_busy(uint8_t slaveAddr, uint16_t tOut = 200);
+    virtual uint8_t check_busy(uint8_t slaveAddr);
 
     // 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
-    virtual uint8_t take(uint32_t timing, uint16_t tOut = 300);
+    virtual uint8_t take(uint32_t timing);
     // 释放I2C控制权
     virtual void    release(void);
 
 private:
-    int8_t _start(uint16_t tOut);
+    int8_t _start();
     void _stop();
     int8_t _sendAck();
     int8_t _sendNack();
 
-    int8_t _sendByte(uint8_t regData, uint16_t tOut);
-    int8_t _send7bitsAddress(uint8_t slaveAddr, uint8_t WR, uint16_t tOut);
-    int8_t _receiveByte(uint8_t *data, uint16_t tOut);
+    int8_t _sendByte(uint8_t regData);
+    int8_t _send7bitsAddress(uint8_t slaveAddr, uint8_t WR);
+    int8_t _receiveByte(uint8_t *data);
     //    virtual int8_t wait_ack(){return 0;};//由硬件来完成。已经集成在各个函数内部。
 
     I2C_TypeDef 	*_i2cx;		// i2c外设
@@ -95,33 +96,33 @@ public:
     virtual uint32_t  read_config();
     // 单字节读写
     virtual uint8_t   write(uint8_t slaveAddr, uint8_t data);
-    virtual uint8_t   write(uint8_t slaveAddr, uint16_t regAddr, uint8_t data, uint16_t tOut = 300);
+    virtual uint8_t   write(uint8_t slaveAddr, uint16_t regAddr, uint8_t data);
     virtual uint8_t   read(uint8_t slaveAddr);
-    virtual uint8_t   read(uint8_t slaveAddr, uint16_t regAddr, uint16_t tOut = 300);
+    virtual uint8_t   read(uint8_t slaveAddr, uint16_t regAddr);
     // 读写n字节
-    virtual uint8_t   write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite, uint16_t tOut = 300);
-    virtual uint8_t	write_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nWrite, uint16_t tOut = 300);
+    virtual uint8_t   write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite);
+    virtual uint8_t	write_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nWrite);
 
-    virtual uint8_t	read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nRead, uint16_t tOut = 300);
-    virtual uint8_t	read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nRead, uint16_t tOut = 300);
+    virtual uint8_t	read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nRead);
+    virtual uint8_t	read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nRead);
     // 等待设备响应
-    virtual uint8_t   check_busy(uint8_t slaveAddr, uint16_t tOut = 200);
+    virtual uint8_t   check_busy(uint8_t slaveAddr);
 
     // 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
-    virtual uint8_t   take(uint32_t timing, uint16_t tOut = 300);
+    virtual uint8_t   take(uint32_t timing);
     // 释放I2C控制权
     virtual void    release(void);
 
 private:
 
-    int8_t _start(uint16_t tOut);
+    int8_t _start();
     void   _stop();
     int8_t _sendAck();
     int8_t _sendNack();
 
-    int8_t _sendByte(uint8_t byte, uint16_t tOut);
-    int8_t _send7bitsAddress(uint8_t slaveAddr, uint8_t WR, uint16_t tOut);
-    int8_t _receiveByte(uint8_t *data, uint16_t tOut);
+    int8_t _sendByte(uint8_t byte );
+    int8_t _send7bitsAddress(uint8_t slaveAddr, uint8_t WR );
+    int8_t _receiveByte(uint8_t *data );
 
     int8_t _waitAck();
 

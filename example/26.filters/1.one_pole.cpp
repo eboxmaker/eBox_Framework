@@ -20,7 +20,7 @@ float highFrequency = 80;                     // test signal frequency (Hz)
 float testAmplitude = 100;                   // test signal amplitude
 float testOffset = 100;
 
-float windowLength = 20.0/lowFrequency;     // how long to average the signal, for statistist
+float windowLength = 20.0 / lowFrequency;   // how long to average the signal, for statistist
 
 float testSignalSigma = testAmplitude / sqrt(2.0);         // the RMS amplitude of the test signal
 float testSignal3dbSigma = testSignalSigma / sqrt(2.0);    // the RMS amplitude of the test signal, down -3db
@@ -29,60 +29,63 @@ float printPeriod = 5.0;
 
 
 // return the current time
-float time() {
-  return float( micros() ) * 1e-6;
+float time()
+{
+    return float( micros() ) * 1e-6;
 }
-void testOnePoleFilters() {
-  // filters are test with a sine wave input, keep track of those values here for a sanity check
-  RunningStatistics inputStats;                 // create statistics to look at the raw test signal
-  inputStats.setWindowSecs( windowLength );
-  
-  FilterOnePole filterOneLowpass( LOWPASS, 5 );   // create a one pole (RC) lowpass filter
-  RunningStatistics filterOneLowpassStats;                    // create running statistics to smooth these values
-  filterOneLowpassStats.setWindowSecs( windowLength );
-  
-  FilterOnePole filterOneHighpass( HIGHPASS, 30 );  // create a one pole (RC) highpass filter
-  RunningStatistics filterOneHighpassStats;                    // create running statistics to smooth these values
-  filterOneHighpassStats.setWindowSecs( windowLength );
-  
-  float startTime = time();
-  float nextPrintTime = time();
-  while( true ) {
-    // update all real time classes
-    float inputValue = testAmplitude + testAmplitude*sin( 2*PI * 10 * time() ) + testAmplitude*sin( 2*PI * 100 * time() );
+void testOnePoleFilters()
+{
+    // filters are test with a sine wave input, keep track of those values here for a sanity check
+    RunningStatistics inputStats;                 // create statistics to look at the raw test signal
+    inputStats.setWindowSecs( windowLength );
 
-    // update the test value statistics
-    inputStats.input( inputValue);
-    
-    // update the one pole lowpass filter, and statistics
-    filterOneLowpass.input( inputValue );
-    filterOneLowpassStats.input( filterOneLowpass.output() );
-    
-    // update the one pole highpass filter, and statistics
-    filterOneHighpass.input( inputValue );
-    filterOneHighpassStats.input( filterOneHighpass.output() );
-    uart1.printf("%0.2f\t%0.2f\t%0.2f\r\n",inputValue,filterOneLowpass.output(),filterOneHighpass.output());
+    FilterOnePole filterOneLowpass( LOWPASS, 5 );   // create a one pole (RC) lowpass filter
+    RunningStatistics filterOneLowpassStats;                    // create running statistics to smooth these values
+    filterOneLowpassStats.setWindowSecs( windowLength );
 
-//    if( time() > nextPrintTime ) {
-//      // display current values to the screen
-//      nextPrintTime += printPeriod;   // update the next print time
-//      
-//      uart1.print( "\n" );
-//      uart1.print( "time: " ); uart1.print( time() );
-//      
-//      // output values associated with the inputValue itsel
-//      uart1.print( "\tin: " ); uart1.print( inputStats.mean() ); uart1.print( " +/- " ); uart1.print( inputStats.sigma() );
-//      uart1.print( " (" ); uart1.print( testOffset ); uart1.print( " +/- " ); uart1.print( testSignalSigma ); uart1.print( ")" );
-//      
-//      // output values associated with the lowpassed value
-//      uart1.print( "\tLP1: " ); uart1.print( filterOneLowpassStats.mean() ); uart1.print( " +/- " ); uart1.print( filterOneLowpassStats.sigma() );
-//      uart1.print( " (" ); uart1.print( testOffset ); uart1.print( " +/- " ); uart1.print( testSignal3dbSigma ); uart1.print( ")" );
+    FilterOnePole filterOneHighpass( HIGHPASS, 30 );  // create a one pole (RC) highpass filter
+    RunningStatistics filterOneHighpassStats;                    // create running statistics to smooth these values
+    filterOneHighpassStats.setWindowSecs( windowLength );
 
-//      // output values associated with the highpass value
-//      uart1.print( "\tHP1: " ); uart1.print( filterOneHighpassStats.mean() ); uart1.print( " +/- " ); uart1.print( filterOneHighpassStats.sigma() );
-//      uart1.print( " (" ); uart1.print( "0.0" ); uart1.print( " +/- " ); uart1.print( testSignal3dbSigma ); uart1.print( ")" );
-//    }
-  }
+    float startTime = time();
+    float nextPrintTime = time();
+    while( true )
+    {
+        // update all real time classes
+        float inputValue = testAmplitude + testAmplitude * sin( 2 * PI * 10 * time() ) + testAmplitude * sin( 2 * PI * 100 * time() );
+
+        // update the test value statistics
+        inputStats.input( inputValue);
+
+        // update the one pole lowpass filter, and statistics
+        filterOneLowpass.input( inputValue );
+        filterOneLowpassStats.input( filterOneLowpass.output() );
+
+        // update the one pole highpass filter, and statistics
+        filterOneHighpass.input( inputValue );
+        filterOneHighpassStats.input( filterOneHighpass.output() );
+        uart1.printf("%0.2f\t%0.2f\t%0.2f\r\n", inputValue, filterOneLowpass.output(), filterOneHighpass.output());
+
+        //    if( time() > nextPrintTime ) {
+        //      // display current values to the screen
+        //      nextPrintTime += printPeriod;   // update the next print time
+        //
+        //      uart1.print( "\n" );
+        //      uart1.print( "time: " ); uart1.print( time() );
+        //
+        //      // output values associated with the inputValue itsel
+        //      uart1.print( "\tin: " ); uart1.print( inputStats.mean() ); uart1.print( " +/- " ); uart1.print( inputStats.sigma() );
+        //      uart1.print( " (" ); uart1.print( testOffset ); uart1.print( " +/- " ); uart1.print( testSignalSigma ); uart1.print( ")" );
+        //
+        //      // output values associated with the lowpassed value
+        //      uart1.print( "\tLP1: " ); uart1.print( filterOneLowpassStats.mean() ); uart1.print( " +/- " ); uart1.print( filterOneLowpassStats.sigma() );
+        //      uart1.print( " (" ); uart1.print( testOffset ); uart1.print( " +/- " ); uart1.print( testSignal3dbSigma ); uart1.print( ")" );
+
+        //      // output values associated with the highpass value
+        //      uart1.print( "\tHP1: " ); uart1.print( filterOneHighpassStats.mean() ); uart1.print( " +/- " ); uart1.print( filterOneHighpassStats.sigma() );
+        //      uart1.print( " (" ); uart1.print( "0.0" ); uart1.print( " +/- " ); uart1.print( testSignal3dbSigma ); uart1.print( ")" );
+        //    }
+    }
 }
 void setup()
 {
@@ -111,7 +114,7 @@ int main(void)
         if(millis() - last_time1 > 20)
         {
             last_time1 = millis();
-        }                    
+        }
 
         //delay_ms(100);
     }

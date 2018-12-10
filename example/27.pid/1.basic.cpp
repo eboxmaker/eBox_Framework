@@ -17,8 +17,8 @@ Copyright 2015 shentq. All Rights Reserved.
 double Setpoint, Input, Output;
 
 //Specify the links and initial tuning parameters
-double Kp=0.01, Ki= 1000, Kd=0.01;
-PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd,P_ON_E, DIRECT);
+double Kp = 0.01, Ki = 1000, Kd = 0.01;
+PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, P_ON_E, DIRECT);
 
 
 Pwm pwm(&PA2);
@@ -31,14 +31,14 @@ void setup()
     uart1.begin(115200);
     uart1.printf("\r\nuart1 115200 ok!\r\n");
     PB1.mode(AIN);
-    pwm.begin(1000,500);
+    pwm.begin(1000, 500);
     pwm.set_oc_polarity(0);//set output polarity after compare
-  //initialize the variables we're linked to
-  Input = analog_read(&PB1);
-  Setpoint = 350;
+    //initialize the variables we're linked to
+    Input = analog_read(&PB1);
+    Setpoint = 350;
 
-  //turn the PID on
-  myPID.SetMode(AUTOMATIC);
+    //turn the PID on
+    myPID.SetMode(AUTOMATIC);
 }
 
 
@@ -53,15 +53,15 @@ int main(void)
         if(millis() - last_time > 1)
         {
             last_time = millis();
-            Input =(analog_read(&PB1)>>3);
+            Input = (analog_read(&PB1) >> 3);
             myPID.Compute();
             pwm.set_duty(Output);
         }
         if(millis() - last_time1 > 20)
         {
             last_time1 = millis();
-            uart1.printf("in = %0.2f,\t out = %0.2f\r\n",Input,Output);
-        }                    
+            uart1.printf("in = %0.2f,\t out = %0.2f\r\n", Input, Output);
+        }
 
         //delay_ms(100);
     }

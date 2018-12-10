@@ -22,8 +22,8 @@ int main(void)
     setup();
     while(1)
     {
-			 key.printf("Hello World\r\n");
-			delay_ms(1000);
+        key.printf("Hello World\r\n");
+        delay_ms(1000);
     }
 
 }

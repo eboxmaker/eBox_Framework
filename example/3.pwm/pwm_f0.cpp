@@ -6,7 +6,7 @@
 	*	3	实际运行时LED渐变
 	*   4	可用资源请参考ebox_pwm.h说明
 	*/
-	
+
 
 /* 定义例程名和例程发布日期 */
 #define EXAMPLE_NAME	"PWM example"
@@ -14,17 +14,17 @@
 
 float x;
 uint16_t y;
-Pwm pwm1(TIM3,&PA6);
+Pwm pwm1(TIM3, &PA6);
 void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
     pwm1.begin(1000, 500);
     pwm1.set_oc_polarity(1);//set output polarity after compare
-    UART.printf("max frq = %dKhz\r\n",pwm1.get_max_frq()/1000);
-    UART.printf("max frq = %f\r\n",pwm1.get_accuracy());
+    UART.printf("max frq = %dKhz\r\n", pwm1.get_max_frq() / 1000);
+    UART.printf("max frq = %f\r\n", pwm1.get_accuracy());
 }
 int main(void)
 {

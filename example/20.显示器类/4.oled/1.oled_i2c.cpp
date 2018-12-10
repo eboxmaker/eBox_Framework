@@ -8,8 +8,8 @@
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -48,13 +48,13 @@ int main(void)
         last_time = millis();
         oled.clear();
         last_time1 = millis();
-        uart1.printf("%d\r\n",last_time1 - last_time);
+        uart1.printf("%d\r\n", last_time1 - last_time);
 
-        oled.draw_bmp(0,0,128,8,(u8*)BMP1);
+        oled.draw_bmp(0, 0, 128, 8, (u8 *)BMP1);
         delay_ms(1000);
-		oled.show_num(103,6,25,3,16);//显示ASCII字符的码值 
+        oled.show_num(103, 6, 25, 3, 16); //显示ASCII字符的码值
         delay_ms(1000);
-		oled.show_chinese(0,4,0);//中
+        oled.show_chinese(0, 4, 0); //中
         delay_ms(1000);
     }
 }

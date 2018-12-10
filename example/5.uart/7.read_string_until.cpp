@@ -11,7 +11,7 @@
     *       如果用户连续发送数据间隔不超过设定时间，则会将多次发送
     *       的数据拼接到一起。
 	*/
-	
+
 
 /* 定义例程名和例程发布日期 */
 #define EXAMPLE_NAME	"UartStream example"
@@ -20,26 +20,26 @@
 
 void setup()
 {
-	ebox_init();
+    ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-    
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
+
 
     UART.setTimeout(1000);//定义超时时间
 }
 int main(void)
 {
-	setup();
-	while (1)
-	{
+    setup();
+    while (1)
+    {
         String x = UART.readStringUntil(';');//
-        
+
         if(x != NULL)
         {
             UART.print(x);
             UART.print('\t');
-            UART.print(ebox_get_free()/1024.0);
+            UART.print(ebox_get_free() / 1024.0);
             UART.println("KB");
         }
-	}
+    }
 }

@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V1.6.1
   * @date    21-October-2015
-  * @brief   This file contains all the functions prototypes for the DMA2D firmware 
+  * @brief   This file contains all the functions prototypes for the DMA2D firmware
   *          library.
   ******************************************************************************
   * @attention
@@ -17,8 +17,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -31,7 +31,7 @@
 #define __STM32F4xx_DMA2D_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -43,23 +43,23 @@
 
 /** @addtogroup DMA2D
   * @{
-  */ 
+  */
 
 /* Exported types ------------------------------------------------------------*/
- 
-/** 
-  * @brief  DMA2D Init structure definition  
+
+/**
+  * @brief  DMA2D Init structure definition
   */
 
 typedef struct
 {
-  uint32_t DMA2D_Mode;                           /*!< configures the DMA2D transfer mode.
+    uint32_t DMA2D_Mode;                           /*!< configures the DMA2D transfer mode.
                                                  This parameter can be one value of @ref DMA2D_MODE */
-  
-  uint32_t DMA2D_CMode;                          /*!< configures the color format of the output image.
+
+    uint32_t DMA2D_CMode;                          /*!< configures the color format of the output image.
                                                  This parameter can be one value of @ref DMA2D_CMODE */
 
-  uint32_t DMA2D_OutputBlue;                     /*!< configures the blue value of the output image. 
+    uint32_t DMA2D_OutputBlue;                     /*!< configures the blue value of the output image.
                                                  This parameter must range:
                                                  - from 0x00 to 0xFF if ARGB8888 color mode is slected
                                                  - from 0x00 to 0xFF if RGB888 color mode is slected
@@ -67,38 +67,38 @@ typedef struct
                                                  - from 0x00 to 0x1F if ARGB1555 color mode is slected
                                                  - from 0x00 to 0x0F if ARGB4444 color mode is slected  */
 
-  uint32_t DMA2D_OutputGreen;                    /*!< configures the green value of the output image. 
+    uint32_t DMA2D_OutputGreen;                    /*!< configures the green value of the output image.
                                                  This parameter must range:
                                                  - from 0x00 to 0xFF if ARGB8888 color mode is selected
                                                  - from 0x00 to 0xFF if RGB888 color mode is selected
                                                  - from 0x00 to 0x2F if RGB565 color mode is selected
                                                  - from 0x00 to 0x1F if ARGB1555 color mode is selected
                                                  - from 0x00 to 0x0F if ARGB4444 color mode is selected  */
-            
-  uint32_t DMA2D_OutputRed;                      /*!< configures the red value of the output image. 
+
+    uint32_t DMA2D_OutputRed;                      /*!< configures the red value of the output image.
                                                  This parameter must range:
                                                  - from 0x00 to 0xFF if ARGB8888 color mode is slected
                                                  - from 0x00 to 0xFF if RGB888 color mode is slected
                                                  - from 0x00 to 0x1F if RGB565 color mode is slected
                                                  - from 0x00 to 0x1F if ARGB1555 color mode is slected
                                                  - from 0x00 to 0x0F if ARGB4444 color mode is slected  */
-  
-  uint32_t DMA2D_OutputAlpha;                    /*!< configures the alpha channel of the output color. 
+
+    uint32_t DMA2D_OutputAlpha;                    /*!< configures the alpha channel of the output color.
                                                  This parameter must range:
                                                  - from 0x00 to 0xFF if ARGB8888 color mode is selected
                                                  - from 0x00 to 0x01 if ARGB1555 color mode is selected
                                                  - from 0x00 to 0x0F if ARGB4444 color mode is selected  */
 
-  uint32_t DMA2D_OutputMemoryAdd;                /*!< Specifies the memory address. This parameter 
+    uint32_t DMA2D_OutputMemoryAdd;                /*!< Specifies the memory address. This parameter
                                                  must be range from 0x00000000 to 0xFFFFFFFF. */
 
-  uint32_t DMA2D_OutputOffset;                   /*!< Specifies the Offset value. This parameter must be range from
+    uint32_t DMA2D_OutputOffset;                   /*!< Specifies the Offset value. This parameter must be range from
                                                  0x0000 to 0x3FFF. */
 
-  uint32_t DMA2D_NumberOfLine;                   /*!< Configures the number of line of the area to be transfered.
+    uint32_t DMA2D_NumberOfLine;                   /*!< Configures the number of line of the area to be transfered.
                                                  This parameter must range from 0x0000 to 0xFFFF */
-            
-  uint32_t DMA2D_PixelPerLine;                   /*!< Configures the number pixel per line of the area to be transferred.
+
+    uint32_t DMA2D_PixelPerLine;                   /*!< Configures the number pixel per line of the area to be transferred.
                                                  This parameter must range from 0x0000 to 0x3FFF */
 } DMA2D_InitTypeDef;
 
@@ -106,74 +106,74 @@ typedef struct
 
 typedef struct
 {
-  uint32_t DMA2D_FGMA;                           /*!< configures the DMA2D foreground memory address.
+    uint32_t DMA2D_FGMA;                           /*!< configures the DMA2D foreground memory address.
                                                  This parameter must be range from 0x00000000 to 0xFFFFFFFF. */
-  
-  uint32_t DMA2D_FGO;                            /*!< configures the DMA2D foreground offset.
+
+    uint32_t DMA2D_FGO;                            /*!< configures the DMA2D foreground offset.
                                                  This parameter must be range from 0x0000 to 0x3FFF. */
 
-  uint32_t DMA2D_FGCM;                           /*!< configures the DMA2D foreground color mode . 
+    uint32_t DMA2D_FGCM;                           /*!< configures the DMA2D foreground color mode .
                                                  This parameter can be one value of @ref DMA2D_FGCM */
 
-  uint32_t DMA2D_FG_CLUT_CM;                     /*!< configures the DMA2D foreground CLUT color mode. 
+    uint32_t DMA2D_FG_CLUT_CM;                     /*!< configures the DMA2D foreground CLUT color mode.
                                                  This parameter can be one value of @ref DMA2D_FG_CLUT_CM */
-            
-  uint32_t DMA2D_FG_CLUT_SIZE;                   /*!< configures the DMA2D foreground CLUT size. 
+
+    uint32_t DMA2D_FG_CLUT_SIZE;                   /*!< configures the DMA2D foreground CLUT size.
                                                  This parameter must range from 0x00 to 0xFF. */
-  
-  uint32_t DMA2D_FGPFC_ALPHA_MODE;               /*!< configures the DMA2D foreground alpha mode. 
+
+    uint32_t DMA2D_FGPFC_ALPHA_MODE;               /*!< configures the DMA2D foreground alpha mode.
                                                  This parameter can be one value of @ref DMA2D_FGPFC_ALPHA_MODE */
 
-  uint32_t DMA2D_FGPFC_ALPHA_VALUE;              /*!< Specifies the DMA2D foreground alpha value 
+    uint32_t DMA2D_FGPFC_ALPHA_VALUE;              /*!< Specifies the DMA2D foreground alpha value
                                                  must be range from 0x00 to 0xFF. */
 
-  uint32_t DMA2D_FGC_BLUE;                       /*!< Specifies the DMA2D foreground blue value 
+    uint32_t DMA2D_FGC_BLUE;                       /*!< Specifies the DMA2D foreground blue value
                                                  must be range from 0x00 to 0xFF. */
 
-  uint32_t DMA2D_FGC_GREEN;                      /*!< Specifies the DMA2D foreground green value 
+    uint32_t DMA2D_FGC_GREEN;                      /*!< Specifies the DMA2D foreground green value
                                                  must be range from 0x00 to 0xFF. */
 
-  uint32_t DMA2D_FGC_RED;                        /*!< Specifies the DMA2D foreground red value 
+    uint32_t DMA2D_FGC_RED;                        /*!< Specifies the DMA2D foreground red value
                                                  must be range from 0x00 to 0xFF. */
-            
-  uint32_t DMA2D_FGCMAR;                         /*!< Configures the DMA2D foreground CLUT memory address.
+
+    uint32_t DMA2D_FGCMAR;                         /*!< Configures the DMA2D foreground CLUT memory address.
                                                  This parameter must range from 0x00000000 to 0xFFFFFFFF. */
 } DMA2D_FG_InitTypeDef;
 
 
 typedef struct
 {
-  uint32_t DMA2D_BGMA;                           /*!< configures the DMA2D background memory address.
+    uint32_t DMA2D_BGMA;                           /*!< configures the DMA2D background memory address.
                                                  This parameter must be range from 0x00000000 to 0xFFFFFFFF. */
-  
-  uint32_t DMA2D_BGO;                            /*!< configures the DMA2D background offset.
+
+    uint32_t DMA2D_BGO;                            /*!< configures the DMA2D background offset.
                                                  This parameter must be range from 0x0000 to 0x3FFF. */
 
-  uint32_t DMA2D_BGCM;                           /*!< configures the DMA2D background color mode . 
+    uint32_t DMA2D_BGCM;                           /*!< configures the DMA2D background color mode .
                                                  This parameter can be one value of @ref DMA2D_FGCM */
 
-  uint32_t DMA2D_BG_CLUT_CM;                     /*!< configures the DMA2D background CLUT color mode. 
+    uint32_t DMA2D_BG_CLUT_CM;                     /*!< configures the DMA2D background CLUT color mode.
                                                  This parameter can be one value of @ref DMA2D_FG_CLUT_CM */
-            
-  uint32_t DMA2D_BG_CLUT_SIZE;                   /*!< configures the DMA2D background CLUT size. 
+
+    uint32_t DMA2D_BG_CLUT_SIZE;                   /*!< configures the DMA2D background CLUT size.
                                                  This parameter must range from 0x00 to 0xFF. */
-  
-  uint32_t DMA2D_BGPFC_ALPHA_MODE;               /*!< configures the DMA2D background alpha mode. 
+
+    uint32_t DMA2D_BGPFC_ALPHA_MODE;               /*!< configures the DMA2D background alpha mode.
                                                  This parameter can be one value of @ref DMA2D_FGPFC_ALPHA_MODE */
 
-  uint32_t DMA2D_BGPFC_ALPHA_VALUE;              /*!< Specifies the DMA2D background alpha value 
+    uint32_t DMA2D_BGPFC_ALPHA_VALUE;              /*!< Specifies the DMA2D background alpha value
                                                  must be range from 0x00 to 0xFF. */
 
-  uint32_t DMA2D_BGC_BLUE;                       /*!< Specifies the DMA2D background blue value 
+    uint32_t DMA2D_BGC_BLUE;                       /*!< Specifies the DMA2D background blue value
                                                  must be range from 0x00 to 0xFF. */
 
-  uint32_t DMA2D_BGC_GREEN;                      /*!< Specifies the DMA2D background green value 
+    uint32_t DMA2D_BGC_GREEN;                      /*!< Specifies the DMA2D background green value
                                                  must be range from 0x00 to 0xFF. */
 
-  uint32_t DMA2D_BGC_RED;                        /*!< Specifies the DMA2D background red value 
+    uint32_t DMA2D_BGC_RED;                        /*!< Specifies the DMA2D background red value
                                                  must be range from 0x00 to 0xFF. */
-            
-  uint32_t DMA2D_BGCMAR;                         /*!< Configures the DMA2D background CLUT memory address.
+
+    uint32_t DMA2D_BGCMAR;                         /*!< Configures the DMA2D background CLUT memory address.
                                                  This parameter must range from 0x00000000 to 0xFFFFFFFF. */
 } DMA2D_BG_InitTypeDef;
 
@@ -183,9 +183,9 @@ typedef struct
 
 /** @defgroup DMA2D_Exported_Constants
   * @{
-  */  
+  */
 
-/** @defgroup DMA2D_MODE 
+/** @defgroup DMA2D_MODE
   * @{
   */
 
@@ -201,9 +201,9 @@ typedef struct
 
 /**
   * @}
-  */  
+  */
 
-/** @defgroup DMA2D_CMODE 
+/** @defgroup DMA2D_CMODE
   * @{
   */
 #define DMA2D_ARGB8888                       ((uint32_t)0x00000000)
@@ -219,9 +219,9 @@ typedef struct
 
 /**
   * @}
-  */  
+  */
 
-/** @defgroup DMA2D_OUTPUT_COLOR 
+/** @defgroup DMA2D_OUTPUT_COLOR
   * @{
   */
 #define DMA2D_Output_Color                 ((uint32_t)0x000000FF)
@@ -233,9 +233,9 @@ typedef struct
 
 /**
   * @}
-  */  
+  */
 
-/** @defgroup DMA2D_OUTPUT_OFFSET 
+/** @defgroup DMA2D_OUTPUT_OFFSET
   * @{
   */
 #define DMA2D_OUTPUT_OFFSET      ((uint32_t)0x00003FFF)
@@ -245,9 +245,9 @@ typedef struct
 
 /**
   * @}
-  */  
+  */
 
-/** @defgroup DMA2D_SIZE 
+/** @defgroup DMA2D_SIZE
   * @{
   */
 
@@ -260,7 +260,7 @@ typedef struct
 
 /**
   * @}
-  */  
+  */
 
 /** @defgroup DMA2D_OFFSET
   * @{
@@ -269,11 +269,11 @@ typedef struct
 
 #define IS_DMA2D_FGO(FGO)  ((FGO) <= OFFSET)
 
-#define IS_DMA2D_BGO(BGO)  ((BGO) <= OFFSET) 
+#define IS_DMA2D_BGO(BGO)  ((BGO) <= OFFSET)
 
 /**
   * @}
-  */  
+  */
 
 
 /** @defgroup DMA2D_FGCM
@@ -369,7 +369,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup DMA2D_Interrupts 
+/** @defgroup DMA2D_Interrupts
   * @{
   */
 
@@ -387,8 +387,8 @@ typedef struct
 /**
   * @}
   */
-      
-/** @defgroup DMA2D_Flag 
+
+/** @defgroup DMA2D_Flag
   * @{
   */
 
@@ -402,19 +402,19 @@ typedef struct
 
 #define IS_DMA2D_GET_FLAG(FLAG) (((FLAG) == DMA2D_FLAG_CTC) || ((FLAG) == DMA2D_FLAG_CAE) || \
                                 ((FLAG) == DMA2D_FLAG_TW) || ((FLAG) == DMA2D_FLAG_TC) || \
-                                ((FLAG) == DMA2D_FLAG_TE) || ((FLAG) == DMA2D_FLAG_CE)) 
+                                ((FLAG) == DMA2D_FLAG_TE) || ((FLAG) == DMA2D_FLAG_CE))
 
 
 /**
   * @}
   */
-      
-/** @defgroup DMA2D_DeadTime 
+
+/** @defgroup DMA2D_DeadTime
   * @{
   */
 
 #define DEADTIME                  ((uint32_t)0x000000FF)
-  
+
 #define IS_DMA2D_DEAD_TIME(DEAD_TIME) ((DEAD_TIME) <= DEADTIME)
 
 
@@ -425,7 +425,7 @@ typedef struct
 /**
   * @}
   */
-  
+
 /**
   * @}
   */
@@ -437,15 +437,15 @@ typedef struct
 void DMA2D_DeInit(void);
 
 /* Initialization and Configuration functions *********************************/
-void DMA2D_Init(DMA2D_InitTypeDef* DMA2D_InitStruct);
-void DMA2D_StructInit(DMA2D_InitTypeDef* DMA2D_InitStruct);
+void DMA2D_Init(DMA2D_InitTypeDef *DMA2D_InitStruct);
+void DMA2D_StructInit(DMA2D_InitTypeDef *DMA2D_InitStruct);
 void DMA2D_StartTransfer(void);
 void DMA2D_AbortTransfer(void);
 void DMA2D_Suspend(FunctionalState NewState);
-void DMA2D_FGConfig(DMA2D_FG_InitTypeDef* DMA2D_FG_InitStruct);
-void DMA2D_FG_StructInit(DMA2D_FG_InitTypeDef* DMA2D_FG_InitStruct);
-void DMA2D_BGConfig(DMA2D_BG_InitTypeDef* DMA2D_BG_InitStruct);
-void DMA2D_BG_StructInit(DMA2D_BG_InitTypeDef* DMA2D_BG_InitStruct);
+void DMA2D_FGConfig(DMA2D_FG_InitTypeDef *DMA2D_FG_InitStruct);
+void DMA2D_FG_StructInit(DMA2D_FG_InitTypeDef *DMA2D_FG_InitStruct);
+void DMA2D_BGConfig(DMA2D_BG_InitTypeDef *DMA2D_BG_InitStruct);
+void DMA2D_BG_StructInit(DMA2D_BG_InitTypeDef *DMA2D_BG_InitStruct);
 void DMA2D_FGStart(FunctionalState NewState);
 void DMA2D_BGStart(FunctionalState NewState);
 void DMA2D_DeadTimeConfig(uint32_t DMA2D_DeadTime, FunctionalState NewState);

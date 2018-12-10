@@ -19,7 +19,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #define OFF 0
 
 Timer timer2(TIM2);
-TM1637 tm(&PA4,&PA3);
+TM1637 tm(&PA4, &PA3);
 
 
 int8_t TimeDisp[4];
@@ -36,19 +36,19 @@ void t2_event()
         dt.sec ++;
         if(dt.sec == 60)
         {
-          dt.min ++;
-          if(dt.min == 60)
-          {
-            dt.hour ++;
-            if(dt.hour == 24)dt.hour = 0;
-            dt.min = 0;
-          }
-          dt.sec = 0;
-        }    
+            dt.min ++;
+            if(dt.min == 60)
+            {
+                dt.hour ++;
+                if(dt.hour == 24)dt.hour = 0;
+                dt.min = 0;
+            }
+            dt.sec = 0;
+        }
         halfsecond = 0;
     }
-  clock_point = (~clock_point) & 0x01;
-  Update = ON;
+    clock_point = (~clock_point) & 0x01;
+    Update = ON;
 
 }
 void setup()
@@ -58,7 +58,7 @@ void setup()
     uart1.printf("\r\nuart1 115200 ok!\r\n");
     tm.begin();
     tm.set(BRIGHT_TYPICAL);//BRIGHT_TYPICAL = 2,BRIGHT_DARKEST = 0,BRIGHTEST = 7;
-    
+
     timer2.begin(2);
     timer2.attach(t2_event);
     timer2.interrupt(ENABLE);
@@ -68,18 +68,18 @@ void setup()
 
 void TimeUpdate(void)
 {
-  if(clock_point)tm.point(POINT_ON);
-  else tm.point(POINT_OFF); 
-  TimeDisp[0] = dt.hour / 10;
-  TimeDisp[1] = dt.hour % 10;
-  TimeDisp[2] = dt.min / 10;
-  TimeDisp[3] = dt.min % 10;
-  Update = OFF;
+    if(clock_point)tm.point(POINT_ON);
+    else tm.point(POINT_OFF);
+    TimeDisp[0] = dt.hour / 10;
+    TimeDisp[1] = dt.hour % 10;
+    TimeDisp[2] = dt.min / 10;
+    TimeDisp[3] = dt.min % 10;
+    Update = OFF;
 }
 
 int main(void)
 {
-    uint64_t start,end;
+    uint64_t start, end;
 
     setup();
 

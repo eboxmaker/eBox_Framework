@@ -71,13 +71,13 @@ void setup()
     if(!ret)
         uart1.printf("\r\nsdcard init ok!");
     ee.begin(100000);
-    
+
     lcd.clear(BLACK);
 
     attach_sd_to_fat(&sd);
     res = f_mount(&fs, "0:", 1);
     uart1.printf("\r\nres = %d", res);
-    
+
 
 }
 u32 count;

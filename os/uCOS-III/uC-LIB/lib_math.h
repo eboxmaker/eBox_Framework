@@ -117,9 +117,9 @@
  */
 
 #ifdef   LIB_MATH_MODULE
- #define  LIB_MATH_EXT
+#define  LIB_MATH_EXT
 #else
- #define  LIB_MATH_EXT  extern
+#define  LIB_MATH_EXT  extern
 #endif
 
 

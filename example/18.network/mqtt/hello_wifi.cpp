@@ -11,12 +11,12 @@ MQTT::Client<WifiIPStack, Countdown> client = MQTT::Client<WifiIPStack, Countdow
 
 int arrivedcount = 0;
 
-void messageArrived(MQTT::MessageData& md);
+void messageArrived(MQTT::MessageData &md);
 void connect(void);
 
-const char* topic = "eBox-sample";
+const char *topic = "eBox-sample";
 //u8 rip[4] = {198,41,30,241};
-u8 rip[4] = {192,168,1,197};
+u8 rip[4] = {192, 168, 1, 197};
 
 void setup()
 {
@@ -41,12 +41,12 @@ int main()
         arrivedcount = 0;
 
         // Send and receive QoS 0 message
-        char* buf = (char*)"Hello, eBox\n";
+        char *buf = (char *)"Hello, eBox\n";
         uart1.printf("Hello World! QoS 0 message\n");
         message.qos = MQTT::QOS0;
         message.retained = false;
         message.dup = false;
-        message.payload = (void*)buf;
+        message.payload = (void *)buf;
         message.payloadlen = strlen(buf) + 1;
         int rc = client.publish(topic, message);
         if (rc != 0 )
@@ -101,7 +101,7 @@ void connect()
     uart1.printf("MQTT connecting\n");
     MQTTPacket_connectData data = MQTTPacket_connectData_initializer;
     data.MQTTVersion = 3;
-    data.clientID.cstring = (char*)"eBox-sample";
+    data.clientID.cstring = (char *)"eBox-sample";
     rc = client.connect(data);
     if (rc != 0)
     {
@@ -118,11 +118,11 @@ void connect()
 }
 
 
-void messageArrived(MQTT::MessageData& md)
+void messageArrived(MQTT::MessageData &md)
 {
     MQTT::Message &message = md.message;
     uart1.printf("Message %d arrived: qos %d, retained %d, dup %d, packetid %d\n",
                  ++arrivedcount, message.qos, message.retained, message.dup, message.id);
-    uart1.printf("Payload %s\n", (char*)message.payload);
+    uart1.printf("Payload %s\n", (char *)message.payload);
 }
 

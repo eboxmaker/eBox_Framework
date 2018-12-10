@@ -45,7 +45,7 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
     w5500.begin(2, mac, ip, sub, gw, dns);
 
     attach_eth_to_socket(&w5500);

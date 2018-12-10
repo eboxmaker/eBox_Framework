@@ -28,7 +28,7 @@ void getSDCardInfo()
     u8 ret;
     uint64_t rl;
     u8 buf[1024];
-    
+
     ret = sd.get_CID(buf);
     uart1.printf("\r\n========================");
     uart1.printf("\r\nget CID Info,ret = %d", ret);
@@ -38,7 +38,7 @@ void getSDCardInfo()
     rl = sd.get_capacity();
     uart1.printf("\r\n========================");
     uart1.printf("\r\ncapacity = %dMB", rl / 1024 / 1024);
-    uart1.printf("\r\ncapacity = %0.1fGB", rl / 1024 / 1024/1024.0);
+    uart1.printf("\r\ncapacity = %0.1fGB", rl / 1024 / 1024 / 1024.0);
 
     uart1.printf("\r\nWaiting...");
     res = f_getfree("/", &free_clust, &fss);
@@ -64,8 +64,8 @@ void setup()
     if(ret == 0)
         uart1.printf("sdcard init ok!\r\n");
     else
-        uart1.printf("sdcard init failed;err = %d\r\n",ret);
-        
+        uart1.printf("sdcard init failed;err = %d\r\n", ret);
+
     attach_sd_to_fat(&sd);
 
     res = f_mount(&fs, "0", 1);

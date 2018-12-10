@@ -30,7 +30,7 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
     wifi.begin(&PA4, &uart2, 115200);
 

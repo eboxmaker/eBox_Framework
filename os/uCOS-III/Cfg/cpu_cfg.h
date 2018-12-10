@@ -133,7 +133,7 @@
  */
 
 #if 1                                                           /* Configure CPU interrupts disabled time ...           */
- #define  CPU_CFG_INT_DIS_MEAS_EN                               /* ... measurements feature (see Note #1a).             */
+#define  CPU_CFG_INT_DIS_MEAS_EN                               /* ... measurements feature (see Note #1a).             */
 #endif
 
 /* Configure number of interrupts disabled overhead ... */
@@ -160,7 +160,7 @@
  */
 
 #if 1                                                           /* Configure CPU count leading zeros bits ...           */
- #define  CPU_CFG_LEAD_ZEROS_ASM_PRESENT                        /* ... assembly-version (see Note #1).                  */
+#define  CPU_CFG_LEAD_ZEROS_ASM_PRESENT                        /* ... assembly-version (see Note #1).                  */
 #endif
 
 

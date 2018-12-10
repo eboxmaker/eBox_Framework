@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V1.6.1
   * @date    21-October-2015
-  * @brief   This file contains all the functions prototypes for the CEC firmware 
+  * @brief   This file contains all the functions prototypes for the CEC firmware
   *          library, applicable only for STM32F466xx devices.
   ******************************************************************************
   * @attention
@@ -17,8 +17,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -31,7 +31,7 @@
 #define __STM32F4XX_CEC_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -46,28 +46,28 @@
   */
 #if defined(STM32F446xx)
 /* Exported types ------------------------------------------------------------*/
-  
-/** 
-  * @brief CEC Init structure definition 
+
+/**
+  * @brief CEC Init structure definition
   */
 typedef struct
 {
-  uint32_t CEC_SignalFreeTime;     /*!< Specifies the CEC Signal Free Time configuration.
+    uint32_t CEC_SignalFreeTime;     /*!< Specifies the CEC Signal Free Time configuration.
                                    This parameter can be a value of @ref CEC_Signal_Free_Time */
-  uint32_t CEC_RxTolerance;        /*!< Specifies the CEC Reception Tolerance.
+    uint32_t CEC_RxTolerance;        /*!< Specifies the CEC Reception Tolerance.
                                    This parameter can be a value of @ref CEC_RxTolerance */
-  uint32_t CEC_StopReception;      /*!< Specifies the CEC Stop Reception.
+    uint32_t CEC_StopReception;      /*!< Specifies the CEC Stop Reception.
                                    This parameter can be a value of @ref CEC_Stop_Reception */
-  uint32_t CEC_BitRisingError;     /*!< Specifies the CEC Bit Rising Error generation.
+    uint32_t CEC_BitRisingError;     /*!< Specifies the CEC Bit Rising Error generation.
                                    This parameter can be a value of @ref CEC_Bit_Rising_Error_Generation */
-  uint32_t CEC_LongBitPeriodError; /*!< Specifies the CEC Long Bit Error generation.
+    uint32_t CEC_LongBitPeriodError; /*!< Specifies the CEC Long Bit Error generation.
                                    This parameter can be a value of @ref CEC_Long_Bit_Error_Generation */
-  uint32_t CEC_BRDNoGen;           /*!< Specifies the CEC Broadcast Error generation.
+    uint32_t CEC_BRDNoGen;           /*!< Specifies the CEC Broadcast Error generation.
                                    This parameter can be a value of @ref CEC_BDR_No_Gen */
-  uint32_t CEC_SFTOption;          /*!< Specifies the CEC Signal Free Time option.
+    uint32_t CEC_SFTOption;          /*!< Specifies the CEC Signal Free Time option.
                                    This parameter can be a value of @ref CEC_SFT_Option */
 
-}CEC_InitTypeDef;
+} CEC_InitTypeDef;
 
 /* Exported constants --------------------------------------------------------*/
 
@@ -264,8 +264,8 @@ typedef struct
 void CEC_DeInit(void);
 
 /* CEC_Initialization and Configuration functions *****************************/
-void CEC_Init(CEC_InitTypeDef* CEC_InitStruct);
-void CEC_StructInit(CEC_InitTypeDef* CEC_InitStruct);
+void CEC_Init(CEC_InitTypeDef *CEC_InitStruct);
+void CEC_StructInit(CEC_InitTypeDef *CEC_InitStruct);
 void CEC_Cmd(FunctionalState NewState);
 void CEC_ListenModeCmd(FunctionalState NewState);
 void CEC_OwnAddressConfig(uint8_t CEC_OwnAddress);

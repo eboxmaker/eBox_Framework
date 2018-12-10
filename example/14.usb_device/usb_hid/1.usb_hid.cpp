@@ -18,37 +18,37 @@ HID_REPORT recv;
 
 void set_led(uint8_t data)
 {
-		if(data & 0x01)
-		{
-			led1.on();
-		}
-		else
-		{
-			led1.off();
-		}
-		if(data & 0x02)
-		{
-			led2.on();
-		}
-		else
-		{
-			led2.off();
-		}
+    if(data & 0x01)
+    {
+        led1.on();
+    }
+    else
+    {
+        led1.off();
+    }
+    if(data & 0x02)
+    {
+        led2.on();
+    }
+    else
+    {
+        led2.off();
+    }
 }
 
 void setup()
 {
     ebox_init();
-		led1.begin();
-		led2.begin();
+    led1.begin();
+    led2.begin();
 }
 int main(void)
 {
     setup();
     while(1)
     {
-			hid.read(&recv);
-			set_led(recv.data[0]);
+        hid.read(&recv);
+        set_led(recv.data[0]);
     }
 }
 

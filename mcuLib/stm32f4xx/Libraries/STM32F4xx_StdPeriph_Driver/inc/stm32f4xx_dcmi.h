@@ -16,8 +16,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -30,7 +30,7 @@
 #define __STM32F4xx_DCMI_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -42,64 +42,64 @@
 
 /** @addtogroup DCMI
   * @{
-  */ 
+  */
 
 /* Exported types ------------------------------------------------------------*/
-/** 
-  * @brief   DCMI Init structure definition  
-  */ 
+/**
+  * @brief   DCMI Init structure definition
+  */
 typedef struct
 {
-  uint16_t DCMI_CaptureMode;      /*!< Specifies the Capture Mode: Continuous or Snapshot.
+    uint16_t DCMI_CaptureMode;      /*!< Specifies the Capture Mode: Continuous or Snapshot.
                                        This parameter can be a value of @ref DCMI_Capture_Mode */
 
-  uint16_t DCMI_SynchroMode;      /*!< Specifies the Synchronization Mode: Hardware or Embedded.
+    uint16_t DCMI_SynchroMode;      /*!< Specifies the Synchronization Mode: Hardware or Embedded.
                                        This parameter can be a value of @ref DCMI_Synchronization_Mode */
 
-  uint16_t DCMI_PCKPolarity;      /*!< Specifies the Pixel clock polarity: Falling or Rising.
+    uint16_t DCMI_PCKPolarity;      /*!< Specifies the Pixel clock polarity: Falling or Rising.
                                        This parameter can be a value of @ref DCMI_PIXCK_Polarity */
 
-  uint16_t DCMI_VSPolarity;       /*!< Specifies the Vertical synchronization polarity: High or Low.
+    uint16_t DCMI_VSPolarity;       /*!< Specifies the Vertical synchronization polarity: High or Low.
                                        This parameter can be a value of @ref DCMI_VSYNC_Polarity */
 
-  uint16_t DCMI_HSPolarity;       /*!< Specifies the Horizontal synchronization polarity: High or Low.
+    uint16_t DCMI_HSPolarity;       /*!< Specifies the Horizontal synchronization polarity: High or Low.
                                        This parameter can be a value of @ref DCMI_HSYNC_Polarity */
 
-  uint16_t DCMI_CaptureRate;      /*!< Specifies the frequency of frame capture: All, 1/2 or 1/4.
+    uint16_t DCMI_CaptureRate;      /*!< Specifies the frequency of frame capture: All, 1/2 or 1/4.
                                        This parameter can be a value of @ref DCMI_Capture_Rate */
 
-  uint16_t DCMI_ExtendedDataMode; /*!< Specifies the data width: 8-bit, 10-bit, 12-bit or 14-bit.
+    uint16_t DCMI_ExtendedDataMode; /*!< Specifies the data width: 8-bit, 10-bit, 12-bit or 14-bit.
                                        This parameter can be a value of @ref DCMI_Extended_Data_Mode */
 } DCMI_InitTypeDef;
 
-/** 
-  * @brief   DCMI CROP Init structure definition  
-  */ 
+/**
+  * @brief   DCMI CROP Init structure definition
+  */
 typedef struct
 {
-  uint16_t DCMI_VerticalStartLine;      /*!< Specifies the Vertical start line count from which the image capture
+    uint16_t DCMI_VerticalStartLine;      /*!< Specifies the Vertical start line count from which the image capture
                                              will start. This parameter can be a value between 0x00 and 0x1FFF */
 
-  uint16_t DCMI_HorizontalOffsetCount;  /*!< Specifies the number of pixel clocks to count before starting a capture.
+    uint16_t DCMI_HorizontalOffsetCount;  /*!< Specifies the number of pixel clocks to count before starting a capture.
                                              This parameter can be a value between 0x00 and 0x3FFF */
 
-  uint16_t DCMI_VerticalLineCount;      /*!< Specifies the number of lines to be captured from the starting point.
+    uint16_t DCMI_VerticalLineCount;      /*!< Specifies the number of lines to be captured from the starting point.
                                              This parameter can be a value between 0x00 and 0x3FFF */
 
-  uint16_t DCMI_CaptureCount;           /*!< Specifies the number of pixel clocks to be captured from the starting
+    uint16_t DCMI_CaptureCount;           /*!< Specifies the number of pixel clocks to be captured from the starting
                                              point on the same line.
                                              This parameter can be a value between 0x00 and 0x3FFF */
 } DCMI_CROPInitTypeDef;
 
-/** 
-  * @brief   DCMI Embedded Synchronisation CODE Init structure definition  
-  */ 
+/**
+  * @brief   DCMI Embedded Synchronisation CODE Init structure definition
+  */
 typedef struct
 {
-  uint8_t DCMI_FrameStartCode; /*!< Specifies the code of the frame start delimiter. */
-  uint8_t DCMI_LineStartCode;  /*!< Specifies the code of the line start delimiter. */
-  uint8_t DCMI_LineEndCode;    /*!< Specifies the code of the line end delimiter. */
-  uint8_t DCMI_FrameEndCode;   /*!< Specifies the code of the frame end delimiter. */
+    uint8_t DCMI_FrameStartCode; /*!< Specifies the code of the frame start delimiter. */
+    uint8_t DCMI_LineStartCode;  /*!< Specifies the code of the line start delimiter. */
+    uint8_t DCMI_LineEndCode;    /*!< Specifies the code of the line end delimiter. */
+    uint8_t DCMI_FrameEndCode;   /*!< Specifies the code of the frame end delimiter. */
 } DCMI_CodesInitTypeDef;
 
 /* Exported constants --------------------------------------------------------*/
@@ -108,9 +108,9 @@ typedef struct
   * @{
   */
 
-/** @defgroup DCMI_Capture_Mode 
+/** @defgroup DCMI_Capture_Mode
   * @{
-  */ 
+  */
 #define DCMI_CaptureMode_Continuous    ((uint16_t)0x0000) /*!< The received data are transferred continuously 
                                                                into the destination memory through the DMA */
 #define DCMI_CaptureMode_SnapShot      ((uint16_t)0x0002) /*!< Once activated, the interface waits for the start of 
@@ -119,12 +119,12 @@ typedef struct
                                    ((MODE) == DCMI_CaptureMode_SnapShot))
 /**
   * @}
-  */ 
+  */
 
 
 /** @defgroup DCMI_Synchronization_Mode
   * @{
-  */ 
+  */
 #define DCMI_SynchroMode_Hardware    ((uint16_t)0x0000) /*!< Hardware synchronization data capture (frame/line start/stop)
                                                              is synchronized with the HSYNC/VSYNC signals */
 #define DCMI_SynchroMode_Embedded    ((uint16_t)0x0010) /*!< Embedded synchronization data capture is synchronized with 
@@ -133,48 +133,48 @@ typedef struct
                               ((MODE) == DCMI_SynchroMode_Embedded))
 /**
   * @}
-  */ 
+  */
 
 
-/** @defgroup DCMI_PIXCK_Polarity 
+/** @defgroup DCMI_PIXCK_Polarity
   * @{
-  */ 
+  */
 #define DCMI_PCKPolarity_Falling    ((uint16_t)0x0000) /*!< Pixel clock active on Falling edge */
 #define DCMI_PCKPolarity_Rising     ((uint16_t)0x0020) /*!< Pixel clock active on Rising edge */
 #define IS_DCMI_PCKPOLARITY(POLARITY)(((POLARITY) == DCMI_PCKPolarity_Falling) || \
                                       ((POLARITY) == DCMI_PCKPolarity_Rising))
 /**
   * @}
-  */ 
+  */
 
 
-/** @defgroup DCMI_VSYNC_Polarity 
+/** @defgroup DCMI_VSYNC_Polarity
   * @{
-  */ 
+  */
 #define DCMI_VSPolarity_Low     ((uint16_t)0x0000) /*!< Vertical synchronization active Low */
 #define DCMI_VSPolarity_High    ((uint16_t)0x0080) /*!< Vertical synchronization active High */
 #define IS_DCMI_VSPOLARITY(POLARITY)(((POLARITY) == DCMI_VSPolarity_Low) || \
                                      ((POLARITY) == DCMI_VSPolarity_High))
 /**
   * @}
-  */ 
+  */
 
 
-/** @defgroup DCMI_HSYNC_Polarity 
+/** @defgroup DCMI_HSYNC_Polarity
   * @{
-  */ 
+  */
 #define DCMI_HSPolarity_Low     ((uint16_t)0x0000) /*!< Horizontal synchronization active Low */
 #define DCMI_HSPolarity_High    ((uint16_t)0x0040) /*!< Horizontal synchronization active High */
 #define IS_DCMI_HSPOLARITY(POLARITY)(((POLARITY) == DCMI_HSPolarity_Low) || \
                                      ((POLARITY) == DCMI_HSPolarity_High))
 /**
   * @}
-  */ 
+  */
 
 
-/** @defgroup DCMI_Capture_Rate 
+/** @defgroup DCMI_Capture_Rate
   * @{
-  */ 
+  */
 #define DCMI_CaptureRate_All_Frame     ((uint16_t)0x0000) /*!< All frames are captured */
 #define DCMI_CaptureRate_1of2_Frame    ((uint16_t)0x0100) /*!< Every alternate frame captured */
 #define DCMI_CaptureRate_1of4_Frame    ((uint16_t)0x0200) /*!< One frame in 4 frames captured */
@@ -183,12 +183,12 @@ typedef struct
                                     ((RATE) == DCMI_CaptureRate_1of4_Frame))
 /**
   * @}
-  */ 
+  */
 
 
-/** @defgroup DCMI_Extended_Data_Mode 
+/** @defgroup DCMI_Extended_Data_Mode
   * @{
-  */ 
+  */
 #define DCMI_ExtendedDataMode_8b     ((uint16_t)0x0000) /*!< Interface captures 8-bit data on every pixel clock */
 #define DCMI_ExtendedDataMode_10b    ((uint16_t)0x0400) /*!< Interface captures 10-bit data on every pixel clock */
 #define DCMI_ExtendedDataMode_12b    ((uint16_t)0x0800) /*!< Interface captures 12-bit data on every pixel clock */
@@ -199,12 +199,12 @@ typedef struct
                                     ((DATA) == DCMI_ExtendedDataMode_14b))
 /**
   * @}
-  */ 
+  */
 
 
-/** @defgroup DCMI_interrupt_sources 
+/** @defgroup DCMI_interrupt_sources
   * @{
-  */ 
+  */
 #define DCMI_IT_FRAME    ((uint16_t)0x0001)
 #define DCMI_IT_OVF      ((uint16_t)0x0002)
 #define DCMI_IT_ERR      ((uint16_t)0x0004)
@@ -218,29 +218,29 @@ typedef struct
                             ((IT) == DCMI_IT_LINE))
 /**
   * @}
-  */ 
+  */
 
 
-/** @defgroup DCMI_Flags 
+/** @defgroup DCMI_Flags
   * @{
-  */ 
-/** 
-  * @brief   DCMI SR register  
-  */ 
+  */
+/**
+  * @brief   DCMI SR register
+  */
 #define DCMI_FLAG_HSYNC     ((uint16_t)0x2001)
 #define DCMI_FLAG_VSYNC     ((uint16_t)0x2002)
 #define DCMI_FLAG_FNE       ((uint16_t)0x2004)
-/** 
-  * @brief   DCMI RISR register  
-  */ 
+/**
+  * @brief   DCMI RISR register
+  */
 #define DCMI_FLAG_FRAMERI    ((uint16_t)0x0001)
 #define DCMI_FLAG_OVFRI      ((uint16_t)0x0002)
 #define DCMI_FLAG_ERRRI      ((uint16_t)0x0004)
 #define DCMI_FLAG_VSYNCRI    ((uint16_t)0x0008)
 #define DCMI_FLAG_LINERI     ((uint16_t)0x0010)
-/** 
-  * @brief   DCMI MISR register  
-  */ 
+/**
+  * @brief   DCMI MISR register
+  */
 #define DCMI_FLAG_FRAMEMI    ((uint16_t)0x1001)
 #define DCMI_FLAG_OVFMI      ((uint16_t)0x1002)
 #define DCMI_FLAG_ERRMI      ((uint16_t)0x1004)
@@ -259,28 +259,28 @@ typedef struct
                                 ((FLAG) == DCMI_FLAG_ERRMI) || \
                                 ((FLAG) == DCMI_FLAG_VSYNCMI) || \
                                 ((FLAG) == DCMI_FLAG_LINEMI))
-                                
+
 #define IS_DCMI_CLEAR_FLAG(FLAG) ((((FLAG) & (uint16_t)0xFFE0) == 0x0000) && ((FLAG) != 0x0000))
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /* Exported macro ------------------------------------------------------------*/
-/* Exported functions --------------------------------------------------------*/ 
+/* Exported functions --------------------------------------------------------*/
 
-/*  Function used to set the DCMI configuration to the default reset state ****/ 
+/*  Function used to set the DCMI configuration to the default reset state ****/
 void DCMI_DeInit(void);
 
 /* Initialization and Configuration functions *********************************/
-void DCMI_Init(DCMI_InitTypeDef* DCMI_InitStruct);
-void DCMI_StructInit(DCMI_InitTypeDef* DCMI_InitStruct);
-void DCMI_CROPConfig(DCMI_CROPInitTypeDef* DCMI_CROPInitStruct);
+void DCMI_Init(DCMI_InitTypeDef *DCMI_InitStruct);
+void DCMI_StructInit(DCMI_InitTypeDef *DCMI_InitStruct);
+void DCMI_CROPConfig(DCMI_CROPInitTypeDef *DCMI_CROPInitStruct);
 void DCMI_CROPCmd(FunctionalState NewState);
-void DCMI_SetEmbeddedSynchroCodes(DCMI_CodesInitTypeDef* DCMI_CodesInitStruct);
+void DCMI_SetEmbeddedSynchroCodes(DCMI_CodesInitTypeDef *DCMI_CodesInitStruct);
 void DCMI_JPEGCmd(FunctionalState NewState);
 
 /* Image capture functions ****************************************************/
@@ -303,10 +303,10 @@ void DCMI_ClearITPendingBit(uint16_t DCMI_IT);
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

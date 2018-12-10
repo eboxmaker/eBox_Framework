@@ -8,10 +8,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,14 +29,18 @@
 
 // A class to make it easier to handle and pass around IP addresses
 
-class IPAddress {
+class IPAddress
+{
 private:
     uint8_t _address[4];  // IPv4 address
     // Access the raw byte array containing the address.  Because this returns a pointer
     // to the internal structure rather than a copy of the address this function should only
     // be used when you know that the usage of the returned uint8_t* will be transient and not
     // stored.
-    uint8_t* raw_address() { return _address; };
+    uint8_t *raw_address()
+    {
+        return _address;
+    };
 
 public:
     // Constructors
@@ -47,17 +51,29 @@ public:
 
     // Overloaded cast operator to allow IPAddress objects to be used where a pointer
     // to a four-byte uint8_t array is expected
-    operator uint32_t() { return *((uint32_t*)_address); };
-    bool operator==(const IPAddress& addr) { return (*((uint32_t*)_address)) == (*((uint32_t*)addr._address)); };
-    bool operator==(const uint8_t* addr);
+    operator uint32_t()
+    {
+        return *((uint32_t *)_address);
+    };
+    bool operator==(const IPAddress &addr)
+    {
+        return (*((uint32_t *)_address)) == (*((uint32_t *)addr._address));
+    };
+    bool operator==(const uint8_t *addr);
 
     // Overloaded index operator to allow getting and setting individual octets of the address
-    uint8_t operator[](int index) const { return _address[index]; };
-    uint8_t& operator[](int index) { return _address[index]; };
+    uint8_t operator[](int index) const
+    {
+        return _address[index];
+    };
+    uint8_t &operator[](int index)
+    {
+        return _address[index];
+    };
 
     // Overloaded copy operators to allow initialisation of IPAddress objects from other types
-    IPAddress& operator=(const uint8_t *address);
-    IPAddress& operator=(uint32_t address);
+    IPAddress &operator=(const uint8_t *address);
+    IPAddress &operator=(uint32_t address);
 
 
     friend class EthernetClass;

@@ -54,7 +54,7 @@ int main(void)
 {
     int ret;
 
-    uint32_t last_time= 0;
+    uint32_t last_time = 0;
     uint32_t last_rt_time = 0;
     uint32_t last_get_time = 0;
     uint32_t last_login_time = 0;
@@ -63,55 +63,64 @@ int main(void)
 
     while(1)
     {
-        if(!bigiot.connected()){
-            if(!bigiot.connect(HOST, remote_port, local_port)){
+        if(!bigiot.connected())
+        {
+            if(!bigiot.connect(HOST, remote_port, local_port))
+            {
                 uart1.printf("\nTCP connect failed!");
-            }else{
+            }
+            else
+            {
                 uart1.printf("\nTCP connecte success!");
             }
         }
-        
-        if(millis() - last_login_time > postingInterval || last_login_time==0) {
+
+        if(millis() - last_login_time > postingInterval || last_login_time == 0)
+        {
             last_login_time = millis();
-            bigiot.send_login(DEVICEID,APIKEY);            
-        }   
+            bigiot.send_login(DEVICEID, APIKEY);
+        }
         if(bigiot.available())
             bigiot.process_message(recv_buf);
-        
-        if(bigiot.is_online()){
 
-            if(millis() - last_rt_time > 4000 || last_rt_time == 0){
+        if(bigiot.is_online())
+        {
+
+            if(millis() - last_rt_time > 4000 || last_rt_time == 0)
+            {
                 last_rt_time = millis();
-                ret = bigiot.send_say(BIGIOT_USER,USERID,"say something");
+                ret = bigiot.send_say(BIGIOT_USER, USERID, "say something");
                 out = make_data();
-                ret = bigiot.send_realtime_data(DEVICEID,(char *)out);
+                ret = bigiot.send_realtime_data(DEVICEID, (char *)out);
                 ebox_free(out);
             }
-            if(millis() - last_get_time > 11000 || last_get_time == 0){
+            if(millis() - last_get_time > 11000 || last_get_time == 0)
+            {
                 last_get_time = millis();
-                ret =  bigiot.send_query_server_time(); 
+                ret =  bigiot.send_query_server_time();
                 ret =  bigiot.send_query_status();
-            }        
-        
+            }
+
         }
         if(millis() - last_time > 1000)
         {
             last_time = millis();
-            uart1.printf("\nfree:%d",ebox_get_free());
-        
+            uart1.printf("\nfree:%d", ebox_get_free());
+
         }
 
 
-        
+
     }
 
 }
 
 char *make_data()
 {
-    cJSON * pJsonRoot = NULL;
+    cJSON *pJsonRoot = NULL;
     pJsonRoot = cJSON_CreateObject();
-    if(NULL == pJsonRoot){
+    if(NULL == pJsonRoot)
+    {
         return NULL;
     }
     cJSON_AddNumberToObject(pJsonRoot, "865", random(100));
@@ -120,11 +129,12 @@ char *make_data()
 
     char *p;
     p = cJSON_PrintUnformatted(pJsonRoot);
-    if(NULL == p){
+    if(NULL == p)
+    {
         cJSON_Delete(pJsonRoot);
         return NULL;
     }
-        cJSON_Delete(pJsonRoot);
+    cJSON_Delete(pJsonRoot);
     return p;
 }
 

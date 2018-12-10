@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V1.6.1
   * @date    21-October-2015
-  * @brief   This file contains all the functions prototypes for the FLASH 
+  * @brief   This file contains all the functions prototypes for the FLASH
   *          firmware library.
   ******************************************************************************
   * @attention
@@ -17,8 +17,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -31,7 +31,7 @@
 #define __STM32F4xx_FLASH_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -43,34 +43,34 @@
 
 /** @addtogroup FLASH
   * @{
-  */ 
+  */
 
 /* Exported types ------------------------------------------------------------*/
-/** 
-  * @brief FLASH Status  
-  */ 
+/**
+  * @brief FLASH Status
+  */
 typedef enum
-{ 
-  FLASH_BUSY = 1,
-  FLASH_ERROR_RD,
-  FLASH_ERROR_PGS,
-  FLASH_ERROR_PGP,
-  FLASH_ERROR_PGA,
-  FLASH_ERROR_WRP,
-  FLASH_ERROR_PROGRAM,
-  FLASH_ERROR_OPERATION,
-  FLASH_COMPLETE
-}FLASH_Status;
+{
+    FLASH_BUSY = 1,
+    FLASH_ERROR_RD,
+    FLASH_ERROR_PGS,
+    FLASH_ERROR_PGP,
+    FLASH_ERROR_PGA,
+    FLASH_ERROR_WRP,
+    FLASH_ERROR_PROGRAM,
+    FLASH_ERROR_OPERATION,
+    FLASH_COMPLETE
+} FLASH_Status;
 
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup FLASH_Exported_Constants
   * @{
-  */  
+  */
 
-/** @defgroup Flash_Latency 
+/** @defgroup Flash_Latency
   * @{
-  */ 
+  */
 #define FLASH_Latency_0                ((uint8_t)0x0000)  /*!< FLASH Zero Latency cycle      */
 #define FLASH_Latency_1                ((uint8_t)0x0001)  /*!< FLASH One Latency cycle       */
 #define FLASH_Latency_2                ((uint8_t)0x0002)  /*!< FLASH Two Latency cycles      */
@@ -107,11 +107,11 @@ typedef enum
                                    ((LATENCY) == FLASH_Latency_15))
 /**
   * @}
-  */ 
+  */
 
-/** @defgroup FLASH_Voltage_Range 
+/** @defgroup FLASH_Voltage_Range
   * @{
-  */ 
+  */
 #define VoltageRange_1        ((uint8_t)0x00)  /*!< Device operating range: 1.8V to 2.1V */
 #define VoltageRange_2        ((uint8_t)0x01)  /*!<Device operating range: 2.1V to 2.7V */
 #define VoltageRange_3        ((uint8_t)0x02)  /*!<Device operating range: 2.7V to 3.6V */
@@ -123,7 +123,7 @@ typedef enum
                                ((RANGE) == VoltageRange_4))
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup FLASH_Sectors
   * @{
@@ -168,12 +168,12 @@ typedef enum
 
 #if defined (STM32F427_437xx) || defined (STM32F429_439xx) || defined (STM32F469_479xx)
 #define IS_FLASH_ADDRESS(ADDRESS) ((((ADDRESS) >= 0x08000000) && ((ADDRESS) <= 0x081FFFFF)) ||\
-                                   (((ADDRESS) >= 0x1FFF7800) && ((ADDRESS) <= 0x1FFF7A0F)))  
+                                   (((ADDRESS) >= 0x1FFF7800) && ((ADDRESS) <= 0x1FFF7A0F)))
 #endif /* STM32F427_437xx || STM32F429_439xx || STM32F469_479xx */
 
 #if defined (STM32F40_41xxx)
 #define IS_FLASH_ADDRESS(ADDRESS) ((((ADDRESS) >= 0x08000000) && ((ADDRESS) <= 0x080FFFFF)) ||\
-                                   (((ADDRESS) >= 0x1FFF7800) && ((ADDRESS) <= 0x1FFF7A0F))) 
+                                   (((ADDRESS) >= 0x1FFF7800) && ((ADDRESS) <= 0x1FFF7A0F)))
 #endif /* STM32F40_41xxx */
 
 #if defined (STM32F401xx)
@@ -193,11 +193,11 @@ typedef enum
 
 /**
   * @}
-  */ 
+  */
 
-/** @defgroup Option_Bytes_Write_Protection 
+/** @defgroup Option_Bytes_Write_Protection
   * @{
-  */ 
+  */
 #define OB_WRP_Sector_0       ((uint32_t)0x00000001) /*!< Write protection of Sector0     */
 #define OB_WRP_Sector_1       ((uint32_t)0x00000002) /*!< Write protection of Sector1     */
 #define OB_WRP_Sector_2       ((uint32_t)0x00000004) /*!< Write protection of Sector2     */
@@ -239,9 +239,9 @@ typedef enum
   * @}
   */
 
-/** @defgroup Option_Bytes_PC_ReadWrite_Protection 
+/** @defgroup Option_Bytes_PC_ReadWrite_Protection
   * @{
-  */ 
+  */
 #define OB_PCROP_Sector_0        ((uint32_t)0x00000001) /*!< PC Read/Write protection of Sector0      */
 #define OB_PCROP_Sector_1        ((uint32_t)0x00000002) /*!< PC Read/Write protection of Sector1      */
 #define OB_PCROP_Sector_2        ((uint32_t)0x00000004) /*!< PC Read/Write protection of Sector2      */
@@ -273,54 +273,54 @@ typedef enum
   * @}
   */
 
-/** @defgroup FLASH_Option_Bytes_Read_Protection 
+/** @defgroup FLASH_Option_Bytes_Read_Protection
   * @{
   */
 #define OB_RDP_Level_0   ((uint8_t)0xAA)
 #define OB_RDP_Level_1   ((uint8_t)0x55)
-/*#define OB_RDP_Level_2   ((uint8_t)0xCC)*/ /*!< Warning: When enabling read protection level 2 
+/*#define OB_RDP_Level_2   ((uint8_t)0xCC)*/ /*!< Warning: When enabling read protection level 2
                                                   it's no more possible to go back to level 1 or 0 */
 #define IS_OB_RDP(LEVEL) (((LEVEL) == OB_RDP_Level_0)||\
                           ((LEVEL) == OB_RDP_Level_1))/*||\
                           ((LEVEL) == OB_RDP_Level_2))*/
 /**
   * @}
-  */ 
+  */
 
-/** @defgroup FLASH_Option_Bytes_IWatchdog 
+/** @defgroup FLASH_Option_Bytes_IWatchdog
   * @{
-  */ 
+  */
 #define OB_IWDG_SW                     ((uint8_t)0x20)  /*!< Software IWDG selected */
 #define OB_IWDG_HW                     ((uint8_t)0x00)  /*!< Hardware IWDG selected */
 #define IS_OB_IWDG_SOURCE(SOURCE) (((SOURCE) == OB_IWDG_SW) || ((SOURCE) == OB_IWDG_HW))
 /**
   * @}
-  */ 
+  */
 
-/** @defgroup FLASH_Option_Bytes_nRST_STOP 
+/** @defgroup FLASH_Option_Bytes_nRST_STOP
   * @{
-  */ 
+  */
 #define OB_STOP_NoRST                  ((uint8_t)0x40) /*!< No reset generated when entering in STOP */
 #define OB_STOP_RST                    ((uint8_t)0x00) /*!< Reset generated when entering in STOP */
 #define IS_OB_STOP_SOURCE(SOURCE) (((SOURCE) == OB_STOP_NoRST) || ((SOURCE) == OB_STOP_RST))
 /**
   * @}
-  */ 
+  */
 
 
-/** @defgroup FLASH_Option_Bytes_nRST_STDBY 
+/** @defgroup FLASH_Option_Bytes_nRST_STDBY
   * @{
-  */ 
+  */
 #define OB_STDBY_NoRST                 ((uint8_t)0x80) /*!< No reset generated when entering in STANDBY */
 #define OB_STDBY_RST                   ((uint8_t)0x00) /*!< Reset generated when entering in STANDBY */
 #define IS_OB_STDBY_SOURCE(SOURCE) (((SOURCE) == OB_STDBY_NoRST) || ((SOURCE) == OB_STDBY_RST))
 /**
   * @}
   */
-  
-/** @defgroup FLASH_BOR_Reset_Level 
+
+/** @defgroup FLASH_BOR_Reset_Level
   * @{
-  */  
+  */
 #define OB_BOR_LEVEL3          ((uint8_t)0x00)  /*!< Supply voltage ranges from 2.70 to 3.60 V */
 #define OB_BOR_LEVEL2          ((uint8_t)0x04)  /*!< Supply voltage ranges from 2.40 to 2.70 V */
 #define OB_BOR_LEVEL1          ((uint8_t)0x08)  /*!< Supply voltage ranges from 2.10 to 2.40 V */
@@ -330,7 +330,7 @@ typedef enum
 /**
   * @}
   */
-  
+
 /** @defgroup FLASH_Dual_Boot
   * @{
   */
@@ -341,19 +341,19 @@ typedef enum
   * @}
   */
 
-/** @defgroup FLASH_Interrupts 
+/** @defgroup FLASH_Interrupts
   * @{
-  */ 
+  */
 #define FLASH_IT_EOP                   ((uint32_t)0x01000000)  /*!< End of FLASH Operation Interrupt source */
 #define FLASH_IT_ERR                   ((uint32_t)0x02000000)  /*!< Error Interrupt source */
 #define IS_FLASH_IT(IT) ((((IT) & (uint32_t)0xFCFFFFFF) == 0x00000000) && ((IT) != 0x00000000))
 /**
   * @}
-  */ 
+  */
 
-/** @defgroup FLASH_Flags 
+/** @defgroup FLASH_Flags
   * @{
-  */ 
+  */
 #define FLASH_FLAG_EOP                 ((uint32_t)0x00000001)  /*!< FLASH End of Operation flag               */
 #define FLASH_FLAG_OPERR               ((uint32_t)0x00000002)  /*!< FLASH operation Error flag                */
 #define FLASH_FLAG_WRPERR              ((uint32_t)0x00000010)  /*!< FLASH Write protected error flag          */
@@ -361,7 +361,7 @@ typedef enum
 #define FLASH_FLAG_PGPERR              ((uint32_t)0x00000040)  /*!< FLASH Programming Parallelism error flag  */
 #define FLASH_FLAG_PGSERR              ((uint32_t)0x00000080)  /*!< FLASH Programming Sequence error flag     */
 #define FLASH_FLAG_RDERR               ((uint32_t)0x00000100)  /*!< Read Protection error flag (PCROP)        */
-#define FLASH_FLAG_BSY                 ((uint32_t)0x00010000)  /*!< FLASH Busy flag                           */ 
+#define FLASH_FLAG_BSY                 ((uint32_t)0x00010000)  /*!< FLASH Busy flag                           */
 #define IS_FLASH_CLEAR_FLAG(FLAG) ((((FLAG) & (uint32_t)0xFFFFFE0C) == 0x00000000) && ((FLAG) != 0x00000000))
 #define IS_FLASH_GET_FLAG(FLAG)  (((FLAG) == FLASH_FLAG_EOP)    || ((FLAG) == FLASH_FLAG_OPERR)  || \
                                   ((FLAG) == FLASH_FLAG_WRPERR) || ((FLAG) == FLASH_FLAG_PGAERR) || \
@@ -371,7 +371,7 @@ typedef enum
   * @}
   */
 
-/** @defgroup FLASH_Program_Parallelism   
+/** @defgroup FLASH_Program_Parallelism
   * @{
   */
 #define FLASH_PSIZE_BYTE           ((uint32_t)0x00000000)
@@ -381,11 +381,11 @@ typedef enum
 #define CR_PSIZE_MASK              ((uint32_t)0xFFFFFCFF)
 /**
   * @}
-  */ 
+  */
 
-/** @defgroup FLASH_Keys 
+/** @defgroup FLASH_Keys
   * @{
-  */ 
+  */
 #define RDP_KEY                  ((uint16_t)0x00A5)
 #define FLASH_KEY1               ((uint32_t)0x45670123)
 #define FLASH_KEY2               ((uint32_t)0xCDEF89AB)
@@ -393,41 +393,41 @@ typedef enum
 #define FLASH_OPT_KEY2           ((uint32_t)0x4C5D6E7F)
 /**
   * @}
-  */ 
+  */
 
-/** 
-  * @brief   ACR register byte 0 (Bits[7:0]) base address  
-  */ 
-#define ACR_BYTE0_ADDRESS           ((uint32_t)0x40023C00) 
-/** 
-  * @brief   OPTCR register byte 0 (Bits[7:0]) base address  
-  */ 
+/**
+  * @brief   ACR register byte 0 (Bits[7:0]) base address
+  */
+#define ACR_BYTE0_ADDRESS           ((uint32_t)0x40023C00)
+/**
+  * @brief   OPTCR register byte 0 (Bits[7:0]) base address
+  */
 #define OPTCR_BYTE0_ADDRESS         ((uint32_t)0x40023C14)
-/** 
-  * @brief   OPTCR register byte 1 (Bits[15:8]) base address  
-  */ 
+/**
+  * @brief   OPTCR register byte 1 (Bits[15:8]) base address
+  */
 #define OPTCR_BYTE1_ADDRESS         ((uint32_t)0x40023C15)
-/** 
-  * @brief   OPTCR register byte 2 (Bits[23:16]) base address  
-  */ 
+/**
+  * @brief   OPTCR register byte 2 (Bits[23:16]) base address
+  */
 #define OPTCR_BYTE2_ADDRESS         ((uint32_t)0x40023C16)
-/** 
-  * @brief   OPTCR register byte 3 (Bits[31:24]) base address  
-  */ 
+/**
+  * @brief   OPTCR register byte 3 (Bits[31:24]) base address
+  */
 #define OPTCR_BYTE3_ADDRESS         ((uint32_t)0x40023C17)
 
-/** 
-  * @brief   OPTCR1 register byte 0 (Bits[7:0]) base address  
-  */ 
+/**
+  * @brief   OPTCR1 register byte 0 (Bits[7:0]) base address
+  */
 #define OPTCR1_BYTE2_ADDRESS         ((uint32_t)0x40023C1A)
 
 /**
   * @}
-  */ 
+  */
 
 /* Exported macro ------------------------------------------------------------*/
-/* Exported functions --------------------------------------------------------*/ 
- 
+/* Exported functions --------------------------------------------------------*/
+
 /* FLASH Interface configuration functions ************************************/
 void FLASH_SetLatency(uint32_t FLASH_Latency);
 void FLASH_PrefetchBufferCmd(FunctionalState NewState);
@@ -436,7 +436,7 @@ void FLASH_DataCacheCmd(FunctionalState NewState);
 void FLASH_InstructionCacheReset(void);
 void FLASH_DataCacheReset(void);
 
-/* FLASH Memory Programming functions *****************************************/   
+/* FLASH Memory Programming functions *****************************************/
 void         FLASH_Unlock(void);
 void         FLASH_Lock(void);
 FLASH_Status FLASH_EraseSector(uint32_t FLASH_Sector, uint8_t VoltageRange);
@@ -448,7 +448,7 @@ FLASH_Status FLASH_ProgramWord(uint32_t Address, uint32_t Data);
 FLASH_Status FLASH_ProgramHalfWord(uint32_t Address, uint16_t Data);
 FLASH_Status FLASH_ProgramByte(uint32_t Address, uint8_t Data);
 
-/* Option Bytes Programming functions *****************************************/ 
+/* Option Bytes Programming functions *****************************************/
 void         FLASH_OB_Unlock(void);
 void         FLASH_OB_Lock(void);
 void         FLASH_OB_WRPConfig(uint32_t OB_WRP, FunctionalState NewState);
@@ -484,10 +484,10 @@ FLASH_Status FLASH_WaitForLastOperation(void);
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

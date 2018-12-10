@@ -29,31 +29,31 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 }
 int main(void)
 {
     setup();
     random_seed(10);
-    UART.printf("flash size %d kb \r\n",flash.getSize());
+    UART.printf("flash size %d kb \r\n", flash.getSize());
     while(1)
     {
-        for(int i = 0; i <10; i++)//使用random函数给写缓冲区赋值
+        for(int i = 0; i < 10; i++) //使用random函数给写缓冲区赋值
         {
             wbuf[i] = random(100);
-        }   
-        flash.write(0,wbuf,10);//将写缓冲区的内容写入内部flash
+        }
+        flash.write(0, wbuf, 10); //将写缓冲区的内容写入内部flash
         UART.printf("write data\r\n");
-        for(int i = 0; i <10; i++)
+        for(int i = 0; i < 10; i++)
         {
-            UART.printf("%02d ",wbuf[i]);
+            UART.printf("%02d ", wbuf[i]);
         }
         UART.printf("\r\n");
         UART.printf("read data\r\n");
-        flash.read(0,rbuf,10);//将内部flash中的内容读取到读缓冲区
-        for(int i = 0; i <10; i++)
+        flash.read(0, rbuf, 10); //将内部flash中的内容读取到读缓冲区
+        for(int i = 0; i < 10; i++)
         {
-            UART.printf("%02d ",rbuf[i]);
+            UART.printf("%02d ", rbuf[i]);
         }
         UART.printf("\r\n============================\r\n");
         delay_ms(1000);

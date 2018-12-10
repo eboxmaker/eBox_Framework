@@ -72,7 +72,7 @@
 #define TIMERS_H
 
 #ifndef INC_FREERTOS_H
-	#error "include FreeRTOS.h must appear in source files before include timers.h"
+#error "include FreeRTOS.h must appear in source files before include timers.h"
 #endif
 
 /*lint -e537 This headers are only multiply included if the application code
@@ -115,7 +115,7 @@ or interrupt version of the queue send function should be used. */
  * reference the subject timer in calls to other software timer API functions
  * (for example, xTimerStart(), xTimerReset(), etc.).
  */
-typedef void * TimerHandle_t;
+typedef void *TimerHandle_t;
 
 /*
  * Defines the prototype to which timer callback functions must conform.
@@ -257,7 +257,7 @@ typedef void (*PendedFunction_t)( void *, uint32_t );
  * }
  * @endverbatim
  */
-TimerHandle_t xTimerCreate( const char * const pcTimerName, const TickType_t xTimerPeriodInTicks, const UBaseType_t uxAutoReload, void * const pvTimerID, TimerCallbackFunction_t pxCallbackFunction ) PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+TimerHandle_t xTimerCreate( const char *const pcTimerName, const TickType_t xTimerPeriodInTicks, const UBaseType_t uxAutoReload, void *const pvTimerID, TimerCallbackFunction_t pxCallbackFunction ) PRIVILEGED_FUNCTION;   /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 
 /**
  * void *pvTimerGetTimerID( TimerHandle_t xTimer );
@@ -522,7 +522,7 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void ) PRIVILEGED_FUNCTION;
  * }
  * @endverbatim
  */
- #define xTimerChangePeriod( xTimer, xNewPeriod, xTicksToWait ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_CHANGE_PERIOD, ( xNewPeriod ), NULL, ( xTicksToWait ) )
+#define xTimerChangePeriod( xTimer, xNewPeriod, xTicksToWait ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_CHANGE_PERIOD, ( xNewPeriod ), NULL, ( xTicksToWait ) )
 
 /**
  * BaseType_t xTimerDelete( TimerHandle_t xTimer, TickType_t xTicksToWait );
@@ -1085,38 +1085,38 @@ TaskHandle_t xTimerGetTimerDaemonTaskHandle( void ) PRIVILEGED_FUNCTION;
  */
 BaseType_t xTimerPendFunctionCallFromISR( PendedFunction_t xFunctionToPend, void *pvParameter1, uint32_t ulParameter2, BaseType_t *pxHigherPriorityTaskWoken ) PRIVILEGED_FUNCTION;
 
- /**
-  * BaseType_t xTimerPendFunctionCall( PendedFunction_t xFunctionToPend,
-  *                                    void *pvParameter1,
-  *                                    uint32_t ulParameter2,
-  *                                    TickType_t xTicksToWait );
-  *
-  *
-  * Used to defer the execution of a function to the RTOS daemon task (the timer
-  * service task, hence this function is implemented in timers.c and is prefixed
-  * with 'Timer').
-  *
-  * @param xFunctionToPend The function to execute from the timer service/
-  * daemon task.  The function must conform to the PendedFunction_t
-  * prototype.
-  *
-  * @param pvParameter1 The value of the callback function's first parameter.
-  * The parameter has a void * type to allow it to be used to pass any type.
-  * For example, unsigned longs can be cast to a void *, or the void * can be
-  * used to point to a structure.
-  *
-  * @param ulParameter2 The value of the callback function's second parameter.
-  *
-  * @param xTicksToWait Calling this function will result in a message being
-  * sent to the timer daemon task on a queue.  xTicksToWait is the amount of
-  * time the calling task should remain in the Blocked state (so not using any
-  * processing time) for space to become available on the timer queue if the
-  * queue is found to be full.
-  *
-  * @return pdPASS is returned if the message was successfully sent to the
-  * timer daemon task, otherwise pdFALSE is returned.
-  *
-  */
+/**
+ * BaseType_t xTimerPendFunctionCall( PendedFunction_t xFunctionToPend,
+ *                                    void *pvParameter1,
+ *                                    uint32_t ulParameter2,
+ *                                    TickType_t xTicksToWait );
+ *
+ *
+ * Used to defer the execution of a function to the RTOS daemon task (the timer
+ * service task, hence this function is implemented in timers.c and is prefixed
+ * with 'Timer').
+ *
+ * @param xFunctionToPend The function to execute from the timer service/
+ * daemon task.  The function must conform to the PendedFunction_t
+ * prototype.
+ *
+ * @param pvParameter1 The value of the callback function's first parameter.
+ * The parameter has a void * type to allow it to be used to pass any type.
+ * For example, unsigned longs can be cast to a void *, or the void * can be
+ * used to point to a structure.
+ *
+ * @param ulParameter2 The value of the callback function's second parameter.
+ *
+ * @param xTicksToWait Calling this function will result in a message being
+ * sent to the timer daemon task on a queue.  xTicksToWait is the amount of
+ * time the calling task should remain in the Blocked state (so not using any
+ * processing time) for space to become available on the timer queue if the
+ * queue is found to be full.
+ *
+ * @return pdPASS is returned if the message was successfully sent to the
+ * timer daemon task, otherwise pdFALSE is returned.
+ *
+ */
 BaseType_t xTimerPendFunctionCall( PendedFunction_t xFunctionToPend, void *pvParameter1, uint32_t ulParameter2, TickType_t xTicksToWait ) PRIVILEGED_FUNCTION;
 
 /**
@@ -1128,14 +1128,14 @@ BaseType_t xTimerPendFunctionCall( PendedFunction_t xFunctionToPend, void *pvPar
  *
  * @return The name assigned to the timer specified by the xTimer parameter.
  */
-const char * pcTimerGetTimerName( TimerHandle_t xTimer ) PRIVILEGED_FUNCTION; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+const char *pcTimerGetTimerName( TimerHandle_t xTimer ) PRIVILEGED_FUNCTION;  /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 
 /*
  * Functions beyond this part are not part of the public API and are intended
  * for use by the kernel only.
  */
 BaseType_t xTimerCreateTimerTask( void ) PRIVILEGED_FUNCTION;
-BaseType_t xTimerGenericCommand( TimerHandle_t xTimer, const BaseType_t xCommandID, const TickType_t xOptionalValue, BaseType_t * const pxHigherPriorityTaskWoken, const TickType_t xTicksToWait ) PRIVILEGED_FUNCTION;
+BaseType_t xTimerGenericCommand( TimerHandle_t xTimer, const BaseType_t xCommandID, const TickType_t xOptionalValue, BaseType_t *const pxHigherPriorityTaskWoken, const TickType_t xTicksToWait ) PRIVILEGED_FUNCTION;
 
 #ifdef __cplusplus
 }

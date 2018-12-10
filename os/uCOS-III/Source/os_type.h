@@ -32,7 +32,7 @@
 #define   OS_TYPE_H
 
 #ifdef    VSC_INCLUDE_H_FILE_NAMES
-const CPU_CHAR *      os_type__h = "$Id: $";
+const CPU_CHAR       *os_type__h = "$Id: $";
 #endif
 
 /*

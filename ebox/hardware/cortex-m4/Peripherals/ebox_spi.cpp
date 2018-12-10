@@ -14,7 +14,6 @@ Disclaimer
 This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
 */
 #include "ebox_spi.h"
-#include "ebox_gpio.h"
 
 mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 {

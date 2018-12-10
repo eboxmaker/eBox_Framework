@@ -40,7 +40,7 @@
 #define __STM32F0xx_HAL_USART_EX_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -50,9 +50,9 @@
   * @{
   */
 
-/** @defgroup USARTEx USARTEx 
+/** @defgroup USARTEx USARTEx
   * @{
-  */ 
+  */
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
@@ -66,12 +66,12 @@
 #if defined (STM32F042x6) || defined (STM32F048xx) || defined (STM32F070x6) || \
     defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || defined (STM32F070xB) || \
     defined (STM32F091xC) || defined (STM32F098xx) || defined (STM32F030xC)
-#define USART_WORDLENGTH_7B                  ((uint32_t)USART_CR1_M1)   /*!< 7-bit long USART frame */ 
-#define USART_WORDLENGTH_8B                  ((uint32_t)0x00000000)     /*!< 8-bit long USART frame */ 
-#define USART_WORDLENGTH_9B                  ((uint32_t)USART_CR1_M0)   /*!< 9-bit long USART frame */ 
+#define USART_WORDLENGTH_7B                  ((uint32_t)USART_CR1_M1)   /*!< 7-bit long USART frame */
+#define USART_WORDLENGTH_8B                  ((uint32_t)0x00000000)     /*!< 8-bit long USART frame */
+#define USART_WORDLENGTH_9B                  ((uint32_t)USART_CR1_M0)   /*!< 9-bit long USART frame */
 #else
-#define USART_WORDLENGTH_8B                  ((uint32_t)0x00000000)     /*!< 8-bit long USART frame */ 
-#define USART_WORDLENGTH_9B                  ((uint32_t)USART_CR1_M)    /*!< 9-bit long USART frame */ 
+#define USART_WORDLENGTH_8B                  ((uint32_t)0x00000000)     /*!< 8-bit long USART frame */
+#define USART_WORDLENGTH_9B                  ((uint32_t)USART_CR1_M)    /*!< 9-bit long USART frame */
 #endif /* defined (STM32F042x6) || defined (STM32F048xx) || defined (STM32F070x6) || defined (STM32F070xB) || \
           defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || \
           defined (STM32F091xC) || defined (STM32F098xx) || defined (STM32F030xC) */
@@ -82,11 +82,11 @@
 /** @defgroup USART_Request_Parameters USARTEx Request Parameters
   * @{
   */
-#define USART_RXDATA_FLUSH_REQUEST        ((uint32_t)USART_RQR_RXFRQ)        /*!< Receive Data flush Request */ 
+#define USART_RXDATA_FLUSH_REQUEST        ((uint32_t)USART_RQR_RXFRQ)        /*!< Receive Data flush Request */
 #if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6)  && !defined(STM32F070xB)  && !defined(STM32F030xC)
 #define USART_TXDATA_FLUSH_REQUEST        ((uint32_t)USART_RQR_TXFRQ)        /*!< Transmit data flush Request */
 #else
-#endif /* !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6)  && !defined(STM32F070xB)  && !defined(STM32F030xC) */ 
+#endif /* !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6)  && !defined(STM32F070xB)  && !defined(STM32F030xC) */
 /**
   * @}
   */
@@ -97,20 +97,20 @@
   * @{
   */
 #if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6)  && !defined(STM32F070xB)  && !defined(STM32F030xC)
-#define USART_FLAG_REACK                     ((uint32_t)0x00400000)    /*!< USART receive enable acknowledge flag  */  
-#endif /* !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6)  && !defined(STM32F070xB)  && !defined(STM32F030xC) */ 
-#define USART_FLAG_TEACK                     ((uint32_t)0x00200000)    /*!< USART transmit enable acknowledge flag */  
-#define USART_FLAG_BUSY                      ((uint32_t)0x00010000)    /*!< USART busy flag                        */  
-#define USART_FLAG_CTS                       ((uint32_t)0x00000400)    /*!< USART clear to send flag               */  
-#define USART_FLAG_CTSIF                     ((uint32_t)0x00000200)    /*!< USART clear to send interrupt flag     */  
-#define USART_FLAG_TXE                       ((uint32_t)0x00000080)    /*!< USART transmit data register empty     */  
-#define USART_FLAG_TC                        ((uint32_t)0x00000040)    /*!< USART transmission complete            */  
-#define USART_FLAG_RXNE                      ((uint32_t)0x00000020)    /*!< USART read data register not empty     */  
-#define USART_FLAG_IDLE                      ((uint32_t)0x00000010)    /*!< USART idle flag                        */  
-#define USART_FLAG_ORE                       ((uint32_t)0x00000008)    /*!< USART overrun error                    */  
-#define USART_FLAG_NE                        ((uint32_t)0x00000004)    /*!< USART noise error                      */  
-#define USART_FLAG_FE                        ((uint32_t)0x00000002)    /*!< USART frame error                      */  
-#define USART_FLAG_PE                        ((uint32_t)0x00000001)    /*!< USART parity error                     */  
+#define USART_FLAG_REACK                     ((uint32_t)0x00400000)    /*!< USART receive enable acknowledge flag  */
+#endif /* !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6)  && !defined(STM32F070xB)  && !defined(STM32F030xC) */
+#define USART_FLAG_TEACK                     ((uint32_t)0x00200000)    /*!< USART transmit enable acknowledge flag */
+#define USART_FLAG_BUSY                      ((uint32_t)0x00010000)    /*!< USART busy flag                        */
+#define USART_FLAG_CTS                       ((uint32_t)0x00000400)    /*!< USART clear to send flag               */
+#define USART_FLAG_CTSIF                     ((uint32_t)0x00000200)    /*!< USART clear to send interrupt flag     */
+#define USART_FLAG_TXE                       ((uint32_t)0x00000080)    /*!< USART transmit data register empty     */
+#define USART_FLAG_TC                        ((uint32_t)0x00000040)    /*!< USART transmission complete            */
+#define USART_FLAG_RXNE                      ((uint32_t)0x00000020)    /*!< USART read data register not empty     */
+#define USART_FLAG_IDLE                      ((uint32_t)0x00000010)    /*!< USART idle flag                        */
+#define USART_FLAG_ORE                       ((uint32_t)0x00000008)    /*!< USART overrun error                    */
+#define USART_FLAG_NE                        ((uint32_t)0x00000004)    /*!< USART noise error                      */
+#define USART_FLAG_FE                        ((uint32_t)0x00000002)    /*!< USART frame error                      */
+#define USART_FLAG_PE                        ((uint32_t)0x00000001)    /*!< USART parity error                     */
 /**
   * @}
   */
@@ -126,7 +126,7 @@
 
 /** @brief  Flush the USART Data registers.
   * @param  __HANDLE__: specifies the USART Handle.
-  * @retval None  
+  * @retval None
   */
 #if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6)  && !defined(STM32F070xB)  && !defined(STM32F030xC)
 #define __HAL_USART_FLUSH_DRREGISTER(__HANDLE__)  \
@@ -139,7 +139,7 @@
   do{                \
       SET_BIT((__HANDLE__)->Instance->RQR, USART_RXDATA_FLUSH_REQUEST); \
     }  while(0)
-#endif /* !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6)  && !defined(STM32F070xB)  && !defined(STM32F030xC) */ 
+#endif /* !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6)  && !defined(STM32F070xB)  && !defined(STM32F030xC) */
 
 /**
   * @}
@@ -152,7 +152,7 @@
 
 /** @brief  Reports the USART clock source.
   * @param  __HANDLE__: specifies the USART Handle
-  * @param  __CLOCKSOURCE__ : output variable   
+  * @param  __CLOCKSOURCE__ : output variable
   * @retval the USART clocking source, written in __CLOCKSOURCE__.
   */
 #if defined(STM32F030x6) || defined(STM32F031x6) || defined(STM32F038xx)
@@ -535,7 +535,7 @@
 
 /**
   * @brief Ensure that USART frame length is valid.
-  * @param __LENGTH__: USART frame length. 
+  * @param __LENGTH__: USART frame length.
   * @retval SET (__LENGTH__ is valid) or RESET (__LENGTH__ is invalid)
   */
 #if defined (STM32F042x6) || defined (STM32F048xx) || defined (STM32F070x6) || \
@@ -553,7 +553,7 @@
 
 /**
   * @brief Ensure that USART request parameter is valid.
-  * @param __PARAM__: USART request parameter. 
+  * @param __PARAM__: USART request parameter.
   * @retval SET (__PARAM__ is valid) or RESET (__PARAM__ is invalid)
   */
 #if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6)  && !defined(STM32F070xB)  && !defined(STM32F030xC)
@@ -561,7 +561,7 @@
                                                ((__PARAM__) == USART_TXDATA_FLUSH_REQUEST))
 #else
 #define IS_USART_REQUEST_PARAMETER(__PARAM__) ((__PARAM__) == USART_RXDATA_FLUSH_REQUEST)
-#endif /* !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6)  && !defined(STM32F070xB)  && !defined(STM32F030xC) */ 
+#endif /* !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6)  && !defined(STM32F070xB)  && !defined(STM32F030xC) */
 
 /**
   * @}

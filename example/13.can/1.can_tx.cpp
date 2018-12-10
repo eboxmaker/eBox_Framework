@@ -7,11 +7,11 @@
 
   * @brief   ebox application example .
   *
-  * Copyright 2016 shentq. All Rights Reserved.         
+  * Copyright 2016 shentq. All Rights Reserved.
   ******************************************************************************
  */
- 
- 
+
+
 #include "ebox.h"
 #include "color_convert.h"
 #include "bsp.h"
@@ -28,7 +28,7 @@ u16 _color[3600];
 void setup()
 {
     ebox_init();
-//    PB8.mode(OUTPUT_PP);
+    //    PB8.mode(OUTPUT_PP);
     can1.begin(BSP_CAN_500KBPS);
     /* Transmit */
     TxMessage.StdId = 0x321;

@@ -35,9 +35,9 @@
 #define  OS_CPU_H
 
 #ifdef   OS_CPU_GLOBALS
- #define  OS_CPU_EXT
+#define  OS_CPU_EXT
 #else
- #define  OS_CPU_EXT  extern
+#define  OS_CPU_EXT  extern
 #endif
 
 /*
@@ -47,11 +47,11 @@
  */
 
 #ifndef  NVIC_INT_CTRL
- #define  NVIC_INT_CTRL                      *((CPU_REG32 *)0xE000ED04)
+#define  NVIC_INT_CTRL                      *((CPU_REG32 *)0xE000ED04)
 #endif
 
 #ifndef  NVIC_PENDSVSET
- #define  NVIC_PENDSVSET                                    0x10000000
+#define  NVIC_PENDSVSET                                    0x10000000
 #endif
 
 #define  OS_TASK_SW()               NVIC_INT_CTRL = NVIC_PENDSVSET
@@ -77,15 +77,15 @@
  */
 
 #if      OS_CFG_TS_EN == 1u
- #define  OS_TS_GET()               (CPU_TS)CPU_TS_TmrRd()  /* See Note #2a.                                          */
+#define  OS_TS_GET()               (CPU_TS)CPU_TS_TmrRd()  /* See Note #2a.                                          */
 #else
- #define  OS_TS_GET()               (CPU_TS)0u
+#define  OS_TS_GET()               (CPU_TS)0u
 #endif
 
 #if (CPU_CFG_TS_32_EN    == DEF_ENABLED) && \
     (CPU_CFG_TS_TMR_SIZE  < CPU_WORD_SIZE_32)
 /* CPU_CFG_TS_TMR_SIZE MUST be >= 32-bit (see Note #2b).  */
- #error  "cpu_cfg.h, CPU_CFG_TS_TMR_SIZE MUST be >= CPU_WORD_SIZE_32"
+#error  "cpu_cfg.h, CPU_CFG_TS_TMR_SIZE MUST be >= CPU_WORD_SIZE_32"
 #endif
 
 
@@ -120,7 +120,7 @@
  *********************************************************************************************************
  */
 
-OS_CPU_EXT CPU_STK *      OS_CPU_ExceptStkBase;
+OS_CPU_EXT CPU_STK       *OS_CPU_ExceptStkBase;
 
 /*
  *********************************************************************************************************

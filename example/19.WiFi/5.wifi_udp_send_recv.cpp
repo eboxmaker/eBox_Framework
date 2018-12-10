@@ -43,17 +43,17 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
     wifi.begin(&PA4, &uart2, 115200);
     wifi.get_ap_list((char *)recv_buf);
     uart1.printf((char *)recv_buf);
     ret = wifi.join_ap();
     if(ret)
-		uart1.printf("esp8266 join wifi OK\r\n");
+        uart1.printf("esp8266 join wifi OK\r\n");
     ret = udp.begin();
     if(ret)
-		uart1.printf("esp8266 upd OK\r\n");
+        uart1.printf("esp8266 upd OK\r\n");
 
 }
 
@@ -62,7 +62,7 @@ int main(void)
     bool ret;
     setup();
 
-	uart1.printf("esp8266 get ipconfig ...\r\n");
+    uart1.printf("esp8266 get ipconfig ...\r\n");
     ret = wifi.query_sta_ip(recv_buf);
     if(ret)
     {
@@ -79,7 +79,7 @@ int main(void)
         uart1.printf("%s\r\n", recv_buf);
     }
 
-    //upd connect to another 
+    //upd connect to another
     ret = udp.connect(remote_ip, remote_port, local_port);
     if(ret)
     {

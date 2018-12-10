@@ -4,12 +4,12 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -36,12 +36,12 @@ Timer timer1(TIM1);
 
 void t2it()
 {
-    LED1.toggle();  
+    LED1.toggle();
 }
-class Test 
+class Test
 {
-    public:
-    void event() 
+public:
+    void event()
     {
         LED1.toggle();
     }
@@ -52,17 +52,17 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-    
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
+
     LED1.mode(OUTPUT_PP);
 
     timer1.begin(1);
-//    timer1.attach(t2it);
-    timer1.attach(&test,&Test::event);
+    //    timer1.attach(t2it);
+    timer1.attach(&test, &Test::event);
     timer1.interrupt(ENABLE);
     timer1.start();
-    UART.printf("\r\ntimer clock       = %dMhz", timer1.get_timer_source_clock()/1000000);
-    UART.printf("\r\nmax interrupt frq = %dKhz", timer1.get_max_frq()/1000);
+    UART.printf("\r\ntimer clock       = %dMhz", timer1.get_timer_source_clock() / 1000000);
+    UART.printf("\r\nmax interrupt frq = %dKhz", timer1.get_max_frq() / 1000);
 }
 
 

@@ -20,7 +20,7 @@ Copyright 2015 shentq. All Rights Reserved.
 
 Timer timer2(TIM2);
 Button  btn(&PA8, 1);
-TM1637 tm(&PA4,&PA3);
+TM1637 tm(&PA4, &PA3);
 
 
 int8_t TimeDisp[4];
@@ -39,7 +39,7 @@ void t2_event()
             second = 0;
         millis_10 = 0;
     }
-  Update = ON;
+    Update = ON;
 
 }
 void setup()
@@ -59,16 +59,16 @@ void setup()
 
 void TimeUpdate(void)
 {
-  TimeDisp[2] = millis_10 / 10;
-  TimeDisp[3] = millis_10 % 10;
-  TimeDisp[0] = second / 10;
-  TimeDisp[1] = second % 10;
-  Update = OFF;
+    TimeDisp[2] = millis_10 / 10;
+    TimeDisp[3] = millis_10 % 10;
+    TimeDisp[0] = second / 10;
+    TimeDisp[1] = second % 10;
+    Update = OFF;
 }
 
 int main(void)
 {
-    uint64_t start,end;
+    uint64_t start, end;
 
     setup();
 
@@ -87,11 +87,11 @@ int main(void)
                 timer2.start();
                 time_flag = ON;
             }
-                
+
         }
-        if(btn.pressed_for(1000,1))
+        if(btn.pressed_for(1000, 1))
         {
-            second = 0; 
+            second = 0;
             millis_10 = 0;
             time_flag = OFF;
             timer2.stop();

@@ -57,8 +57,8 @@ extern "C" {
         return size1;
 #endif
     }
-    
-    
+
+
     int ebox_uart_putc(int ch)
     {
 #if USE_PRINTF
@@ -66,17 +66,17 @@ extern "C" {
         return ch;
 #endif
     }
-    
+
     size_t ebox_uart_write(const char *buffer, size_t size)
     {
 #if USE_PRINTF
-        DBG_UART.write(buffer,size);
+        DBG_UART.write(buffer, size);
         return size;
 #endif
-    }    
-    
-    
-    
+    }
+
+
+
 }
-    
+
 

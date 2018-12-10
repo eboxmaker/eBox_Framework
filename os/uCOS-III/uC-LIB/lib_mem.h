@@ -117,9 +117,9 @@
  */
 
 #ifdef   LIB_MEM_MODULE
- #define  LIB_MEM_EXT
+#define  LIB_MEM_EXT
 #else
- #define  LIB_MEM_EXT  extern
+#define  LIB_MEM_EXT  extern
 #endif
 
 
@@ -147,7 +147,7 @@
 
 /* Configure external argument check feature (see Note #1) :    */
 #ifndef  LIB_MEM_CFG_ARG_CHK_EXT_EN
- #define  LIB_MEM_CFG_ARG_CHK_EXT_EN     DEF_DISABLED
+#define  LIB_MEM_CFG_ARG_CHK_EXT_EN     DEF_DISABLED
 /*   DEF_DISABLED     Argument check DISABLED                   */
 /*   DEF_ENABLED      Argument check ENABLED                    */
 #endif
@@ -163,7 +163,7 @@
 
 /* Configure assembly-optimized function(s) [see Note #1] :     */
 #ifndef  LIB_MEM_CFG_OPTIMIZE_ASM_EN
- #define  LIB_MEM_CFG_OPTIMIZE_ASM_EN    DEF_DISABLED
+#define  LIB_MEM_CFG_OPTIMIZE_ASM_EN    DEF_DISABLED
 /*   DEF_DISABLED     Assembly-optimized function(s) DISABLED   */
 /*   DEF_ENABLED      Assembly-optimized function(s) ENABLED    */
 #endif
@@ -179,7 +179,7 @@
 
 /* Configure memory allocation feature (see Note #1) :          */
 #ifndef  LIB_MEM_CFG_ALLOC_EN
- #define  LIB_MEM_CFG_ALLOC_EN           DEF_DISABLED
+#define  LIB_MEM_CFG_ALLOC_EN           DEF_DISABLED
 /*   DEF_DISABLED     Memory allocation DISABLED                */
 /*   DEF_ENABLED      Memory allocation ENABLED                 */
 #endif
@@ -293,7 +293,8 @@ typedef  MEM_POOL_BLK_QTY MEM_POOL_IX;
 typedef  struct  mem_pool MEM_POOL;
 
 /* --------------------- MEM POOL --------------------- */
-struct  mem_pool {
+struct  mem_pool
+{
     LIB_MEM_TYPE Type;                                          /* Pool type : LIB_TYPE_POOL or LIB_TYPE_HEAP.          */
 
     MEM_POOL *SegHeadPtr;                                       /* Ptr to head mem seg.                                 */
@@ -412,28 +413,28 @@ struct  mem_pool {
 #if    ((CPU_CFG_DATA_SIZE == CPU_WORD_SIZE_64) || \
     (CPU_CFG_DATA_SIZE == CPU_WORD_SIZE_32))
 
- #define  MEM_VAL_BIG_TO_LITTLE_16(val)        ((CPU_INT16U)(((CPU_INT16U)((((CPU_INT16U)(val)) & (CPU_INT16U)    0xFF00u) >> (1u * DEF_OCTET_NBR_BITS))) | \
+#define  MEM_VAL_BIG_TO_LITTLE_16(val)        ((CPU_INT16U)(((CPU_INT16U)((((CPU_INT16U)(val)) & (CPU_INT16U)    0xFF00u) >> (1u * DEF_OCTET_NBR_BITS))) | \
                                                              ((CPU_INT16U)((((CPU_INT16U)(val)) & (CPU_INT16U)    0x00FFu) << (1u * DEF_OCTET_NBR_BITS)))))
 
- #define  MEM_VAL_BIG_TO_LITTLE_32(val)        ((CPU_INT32U)(((CPU_INT32U)((((CPU_INT32U)(val)) & (CPU_INT32U)0xFF000000u) >> (3u * DEF_OCTET_NBR_BITS))) | \
+#define  MEM_VAL_BIG_TO_LITTLE_32(val)        ((CPU_INT32U)(((CPU_INT32U)((((CPU_INT32U)(val)) & (CPU_INT32U)0xFF000000u) >> (3u * DEF_OCTET_NBR_BITS))) | \
                                                              ((CPU_INT32U)((((CPU_INT32U)(val)) & (CPU_INT32U)0x00FF0000u) >> (1u * DEF_OCTET_NBR_BITS))) | \
                                                              ((CPU_INT32U)((((CPU_INT32U)(val)) & (CPU_INT32U)0x0000FF00u) << (1u * DEF_OCTET_NBR_BITS))) | \
                                                              ((CPU_INT32U)((((CPU_INT32U)(val)) & (CPU_INT32U)0x000000FFu) << (3u * DEF_OCTET_NBR_BITS)))))
 
 #elif   (CPU_CFG_DATA_SIZE == CPU_WORD_SIZE_16)
 
- #define  MEM_VAL_BIG_TO_LITTLE_16(val)        ((CPU_INT16U)(((CPU_INT16U)((((CPU_INT16U)(val)) & (CPU_INT16U)    0xFF00u) >> (1u * DEF_OCTET_NBR_BITS))) | \
+#define  MEM_VAL_BIG_TO_LITTLE_16(val)        ((CPU_INT16U)(((CPU_INT16U)((((CPU_INT16U)(val)) & (CPU_INT16U)    0xFF00u) >> (1u * DEF_OCTET_NBR_BITS))) | \
                                                              ((CPU_INT16U)((((CPU_INT16U)(val)) & (CPU_INT16U)    0x00FFu) << (1u * DEF_OCTET_NBR_BITS)))))
 
- #define  MEM_VAL_BIG_TO_LITTLE_32(val)        ((CPU_INT32U)(((CPU_INT32U)((((CPU_INT32U)(val)) & (CPU_INT32U)0xFF000000u) >> (1u * DEF_OCTET_NBR_BITS))) | \
+#define  MEM_VAL_BIG_TO_LITTLE_32(val)        ((CPU_INT32U)(((CPU_INT32U)((((CPU_INT32U)(val)) & (CPU_INT32U)0xFF000000u) >> (1u * DEF_OCTET_NBR_BITS))) | \
                                                              ((CPU_INT32U)((((CPU_INT32U)(val)) & (CPU_INT32U)0x00FF0000u) << (1u * DEF_OCTET_NBR_BITS))) | \
                                                              ((CPU_INT32U)((((CPU_INT32U)(val)) & (CPU_INT32U)0x0000FF00u) >> (1u * DEF_OCTET_NBR_BITS))) | \
                                                              ((CPU_INT32U)((((CPU_INT32U)(val)) & (CPU_INT32U)0x000000FFu) << (1u * DEF_OCTET_NBR_BITS)))))
 
 #else
 
- #define  MEM_VAL_BIG_TO_LITTLE_16(val)                                                  (val)
- #define  MEM_VAL_BIG_TO_LITTLE_32(val)                                                  (val)
+#define  MEM_VAL_BIG_TO_LITTLE_16(val)                                                  (val)
+#define  MEM_VAL_BIG_TO_LITTLE_32(val)                                                  (val)
 
 #endif
 
@@ -445,22 +446,22 @@ struct  mem_pool {
 
 #if     (CPU_CFG_ENDIAN_TYPE == CPU_ENDIAN_TYPE_BIG)
 
- #define  MEM_VAL_BIG_TO_HOST_16(val)                                                    (val)
- #define  MEM_VAL_BIG_TO_HOST_32(val)                                                    (val)
- #define  MEM_VAL_LITTLE_TO_HOST_16(val)                         MEM_VAL_LITTLE_TO_BIG_16(val)
- #define  MEM_VAL_LITTLE_TO_HOST_32(val)                         MEM_VAL_LITTLE_TO_BIG_32(val)
+#define  MEM_VAL_BIG_TO_HOST_16(val)                                                    (val)
+#define  MEM_VAL_BIG_TO_HOST_32(val)                                                    (val)
+#define  MEM_VAL_LITTLE_TO_HOST_16(val)                         MEM_VAL_LITTLE_TO_BIG_16(val)
+#define  MEM_VAL_LITTLE_TO_HOST_32(val)                         MEM_VAL_LITTLE_TO_BIG_32(val)
 
 #elif   (CPU_CFG_ENDIAN_TYPE == CPU_ENDIAN_TYPE_LITTLE)
 
- #define  MEM_VAL_BIG_TO_HOST_16(val)                            MEM_VAL_BIG_TO_LITTLE_16(val)
- #define  MEM_VAL_BIG_TO_HOST_32(val)                            MEM_VAL_BIG_TO_LITTLE_32(val)
- #define  MEM_VAL_LITTLE_TO_HOST_16(val)                                                 (val)
- #define  MEM_VAL_LITTLE_TO_HOST_32(val)                                                 (val)
+#define  MEM_VAL_BIG_TO_HOST_16(val)                            MEM_VAL_BIG_TO_LITTLE_16(val)
+#define  MEM_VAL_BIG_TO_HOST_32(val)                            MEM_VAL_BIG_TO_LITTLE_32(val)
+#define  MEM_VAL_LITTLE_TO_HOST_16(val)                                                 (val)
+#define  MEM_VAL_LITTLE_TO_HOST_32(val)                                                 (val)
 
 #else                                                               /* See Note #5.                                     */
 
- #error  "CPU_CFG_ENDIAN_TYPE  illegally #defined in 'cpu.h'      "
- #error  "                     [See 'cpu.h  CONFIGURATION ERRORS']"
+#error  "CPU_CFG_ENDIAN_TYPE  illegally #defined in 'cpu.h'      "
+#error  "                     [See 'cpu.h  CONFIGURATION ERRORS']"
 
 #endif
 
@@ -550,20 +551,20 @@ struct  mem_pool {
 
 #if     (CPU_CFG_ENDIAN_TYPE == CPU_ENDIAN_TYPE_BIG)
 
- #define  MEM_VAL_GET_INT08U(addr)                               MEM_VAL_GET_INT08U_BIG(addr)
- #define  MEM_VAL_GET_INT16U(addr)                               MEM_VAL_GET_INT16U_BIG(addr)
- #define  MEM_VAL_GET_INT32U(addr)                               MEM_VAL_GET_INT32U_BIG(addr)
+#define  MEM_VAL_GET_INT08U(addr)                               MEM_VAL_GET_INT08U_BIG(addr)
+#define  MEM_VAL_GET_INT16U(addr)                               MEM_VAL_GET_INT16U_BIG(addr)
+#define  MEM_VAL_GET_INT32U(addr)                               MEM_VAL_GET_INT32U_BIG(addr)
 
 #elif   (CPU_CFG_ENDIAN_TYPE == CPU_ENDIAN_TYPE_LITTLE)
 
- #define  MEM_VAL_GET_INT08U(addr)                               MEM_VAL_GET_INT08U_LITTLE(addr)
- #define  MEM_VAL_GET_INT16U(addr)                               MEM_VAL_GET_INT16U_LITTLE(addr)
- #define  MEM_VAL_GET_INT32U(addr)                               MEM_VAL_GET_INT32U_LITTLE(addr)
+#define  MEM_VAL_GET_INT08U(addr)                               MEM_VAL_GET_INT08U_LITTLE(addr)
+#define  MEM_VAL_GET_INT16U(addr)                               MEM_VAL_GET_INT16U_LITTLE(addr)
+#define  MEM_VAL_GET_INT32U(addr)                               MEM_VAL_GET_INT32U_LITTLE(addr)
 
 #else                                                               /* See Note #6.                                     */
 
- #error  "CPU_CFG_ENDIAN_TYPE  illegally #defined in 'cpu.h'      "
- #error  "                     [See 'cpu.h  CONFIGURATION ERRORS']"
+#error  "CPU_CFG_ENDIAN_TYPE  illegally #defined in 'cpu.h'      "
+#error  "                     [See 'cpu.h  CONFIGURATION ERRORS']"
 
 #endif
 
@@ -648,20 +649,20 @@ struct  mem_pool {
 
 #if     (CPU_CFG_ENDIAN_TYPE == CPU_ENDIAN_TYPE_BIG)
 
- #define  MEM_VAL_SET_INT08U(addr, val)                          MEM_VAL_SET_INT08U_BIG(addr, val)
- #define  MEM_VAL_SET_INT16U(addr, val)                          MEM_VAL_SET_INT16U_BIG(addr, val)
- #define  MEM_VAL_SET_INT32U(addr, val)                          MEM_VAL_SET_INT32U_BIG(addr, val)
+#define  MEM_VAL_SET_INT08U(addr, val)                          MEM_VAL_SET_INT08U_BIG(addr, val)
+#define  MEM_VAL_SET_INT16U(addr, val)                          MEM_VAL_SET_INT16U_BIG(addr, val)
+#define  MEM_VAL_SET_INT32U(addr, val)                          MEM_VAL_SET_INT32U_BIG(addr, val)
 
 #elif   (CPU_CFG_ENDIAN_TYPE == CPU_ENDIAN_TYPE_LITTLE)
 
- #define  MEM_VAL_SET_INT08U(addr, val)                          MEM_VAL_SET_INT08U_LITTLE(addr, val)
- #define  MEM_VAL_SET_INT16U(addr, val)                          MEM_VAL_SET_INT16U_LITTLE(addr, val)
- #define  MEM_VAL_SET_INT32U(addr, val)                          MEM_VAL_SET_INT32U_LITTLE(addr, val)
+#define  MEM_VAL_SET_INT08U(addr, val)                          MEM_VAL_SET_INT08U_LITTLE(addr, val)
+#define  MEM_VAL_SET_INT16U(addr, val)                          MEM_VAL_SET_INT16U_LITTLE(addr, val)
+#define  MEM_VAL_SET_INT32U(addr, val)                          MEM_VAL_SET_INT32U_LITTLE(addr, val)
 
 #else                                                               /* See Note #6.                                     */
 
- #error  "CPU_CFG_ENDIAN_TYPE  illegally #defined in 'cpu.h'      "
- #error  "                     [See 'cpu.h  CONFIGURATION ERRORS']"
+#error  "CPU_CFG_ENDIAN_TYPE  illegally #defined in 'cpu.h'      "
+#error  "                     [See 'cpu.h  CONFIGURATION ERRORS']"
 
 #endif
 
@@ -733,33 +734,33 @@ struct  mem_pool {
 #if     (CPU_CFG_ENDIAN_TYPE == CPU_ENDIAN_TYPE_BIG)
 
 
- #define  MEM_VAL_COPY_GET_INT08U_BIG(addr_dest, addr_src)      do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); } while (0)
+#define  MEM_VAL_COPY_GET_INT08U_BIG(addr_dest, addr_src)      do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); } while (0)
 
- #define  MEM_VAL_COPY_GET_INT16U_BIG(addr_dest, addr_src)      do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); \
+#define  MEM_VAL_COPY_GET_INT16U_BIG(addr_dest, addr_src)      do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 1)) = (*(((CPU_INT08U *)(addr_src)) + 1)); } while (0)
 
- #define  MEM_VAL_COPY_GET_INT32U_BIG(addr_dest, addr_src)      do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); \
+#define  MEM_VAL_COPY_GET_INT32U_BIG(addr_dest, addr_src)      do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 1)) = (*(((CPU_INT08U *)(addr_src)) + 1)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 2)) = (*(((CPU_INT08U *)(addr_src)) + 2)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 3)) = (*(((CPU_INT08U *)(addr_src)) + 3)); } while (0)
 
 
 
- #define  MEM_VAL_COPY_GET_INT08U_LITTLE(addr_dest, addr_src)   do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); } while (0)
+#define  MEM_VAL_COPY_GET_INT08U_LITTLE(addr_dest, addr_src)   do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); } while (0)
 
- #define  MEM_VAL_COPY_GET_INT16U_LITTLE(addr_dest, addr_src)   do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 1)); \
+#define  MEM_VAL_COPY_GET_INT16U_LITTLE(addr_dest, addr_src)   do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 1)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 1)) = (*(((CPU_INT08U *)(addr_src)) + 0)); } while (0)
 
- #define  MEM_VAL_COPY_GET_INT32U_LITTLE(addr_dest, addr_src)   do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 3)); \
+#define  MEM_VAL_COPY_GET_INT32U_LITTLE(addr_dest, addr_src)   do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 3)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 1)) = (*(((CPU_INT08U *)(addr_src)) + 2)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 2)) = (*(((CPU_INT08U *)(addr_src)) + 1)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 3)) = (*(((CPU_INT08U *)(addr_src)) + 0)); } while (0)
 
 
 
- #define  MEM_VAL_COPY_GET_INT08U(addr_dest, addr_src)               MEM_VAL_COPY_GET_INT08U_BIG(addr_dest, addr_src)
- #define  MEM_VAL_COPY_GET_INT16U(addr_dest, addr_src)               MEM_VAL_COPY_GET_INT16U_BIG(addr_dest, addr_src)
- #define  MEM_VAL_COPY_GET_INT32U(addr_dest, addr_src)               MEM_VAL_COPY_GET_INT32U_BIG(addr_dest, addr_src)
+#define  MEM_VAL_COPY_GET_INT08U(addr_dest, addr_src)               MEM_VAL_COPY_GET_INT08U_BIG(addr_dest, addr_src)
+#define  MEM_VAL_COPY_GET_INT16U(addr_dest, addr_src)               MEM_VAL_COPY_GET_INT16U_BIG(addr_dest, addr_src)
+#define  MEM_VAL_COPY_GET_INT32U(addr_dest, addr_src)               MEM_VAL_COPY_GET_INT32U_BIG(addr_dest, addr_src)
 
 
 
@@ -767,41 +768,41 @@ struct  mem_pool {
 #elif   (CPU_CFG_ENDIAN_TYPE == CPU_ENDIAN_TYPE_LITTLE)
 
 
- #define  MEM_VAL_COPY_GET_INT08U_BIG(addr_dest, addr_src)      do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); } while (0)
+#define  MEM_VAL_COPY_GET_INT08U_BIG(addr_dest, addr_src)      do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); } while (0)
 
- #define  MEM_VAL_COPY_GET_INT16U_BIG(addr_dest, addr_src)      do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 1)); \
+#define  MEM_VAL_COPY_GET_INT16U_BIG(addr_dest, addr_src)      do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 1)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 1)) = (*(((CPU_INT08U *)(addr_src)) + 0)); } while (0)
 
- #define  MEM_VAL_COPY_GET_INT32U_BIG(addr_dest, addr_src)      do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 3)); \
+#define  MEM_VAL_COPY_GET_INT32U_BIG(addr_dest, addr_src)      do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 3)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 1)) = (*(((CPU_INT08U *)(addr_src)) + 2)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 2)) = (*(((CPU_INT08U *)(addr_src)) + 1)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 3)) = (*(((CPU_INT08U *)(addr_src)) + 0)); } while (0)
 
 
 
- #define  MEM_VAL_COPY_GET_INT08U_LITTLE(addr_dest, addr_src)   do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); } while (0)
+#define  MEM_VAL_COPY_GET_INT08U_LITTLE(addr_dest, addr_src)   do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); } while (0)
 
- #define  MEM_VAL_COPY_GET_INT16U_LITTLE(addr_dest, addr_src)   do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); \
+#define  MEM_VAL_COPY_GET_INT16U_LITTLE(addr_dest, addr_src)   do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 1)) = (*(((CPU_INT08U *)(addr_src)) + 1)); } while (0)
 
- #define  MEM_VAL_COPY_GET_INT32U_LITTLE(addr_dest, addr_src)   do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); \
+#define  MEM_VAL_COPY_GET_INT32U_LITTLE(addr_dest, addr_src)   do { (*(((CPU_INT08U *)(addr_dest)) + 0)) = (*(((CPU_INT08U *)(addr_src)) + 0)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 1)) = (*(((CPU_INT08U *)(addr_src)) + 1)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 2)) = (*(((CPU_INT08U *)(addr_src)) + 2)); \
                                                                      (*(((CPU_INT08U *)(addr_dest)) + 3)) = (*(((CPU_INT08U *)(addr_src)) + 3)); } while (0)
 
 
 
- #define  MEM_VAL_COPY_GET_INT08U(addr_dest, addr_src)               MEM_VAL_COPY_GET_INT08U_LITTLE(addr_dest, addr_src)
- #define  MEM_VAL_COPY_GET_INT16U(addr_dest, addr_src)               MEM_VAL_COPY_GET_INT16U_LITTLE(addr_dest, addr_src)
- #define  MEM_VAL_COPY_GET_INT32U(addr_dest, addr_src)               MEM_VAL_COPY_GET_INT32U_LITTLE(addr_dest, addr_src)
+#define  MEM_VAL_COPY_GET_INT08U(addr_dest, addr_src)               MEM_VAL_COPY_GET_INT08U_LITTLE(addr_dest, addr_src)
+#define  MEM_VAL_COPY_GET_INT16U(addr_dest, addr_src)               MEM_VAL_COPY_GET_INT16U_LITTLE(addr_dest, addr_src)
+#define  MEM_VAL_COPY_GET_INT32U(addr_dest, addr_src)               MEM_VAL_COPY_GET_INT32U_LITTLE(addr_dest, addr_src)
 
 
 
 
 #else                                                               /* See Note #7.                                     */
 
- #error  "CPU_CFG_ENDIAN_TYPE  illegally #defined in 'cpu.h'      "
- #error  "                     [See 'cpu.h  CONFIGURATION ERRORS']"
+#error  "CPU_CFG_ENDIAN_TYPE  illegally #defined in 'cpu.h'      "
+#error  "                     [See 'cpu.h  CONFIGURATION ERRORS']"
 
 #endif
 
@@ -883,7 +884,7 @@ struct  mem_pool {
 #if     (CPU_CFG_ENDIAN_TYPE == CPU_ENDIAN_TYPE_BIG)
 
 
- #define  MEM_VAL_COPY_GET_INTU_BIG(addr_dest, addr_src, val_size)       do {                                                                                  \
+#define  MEM_VAL_COPY_GET_INTU_BIG(addr_dest, addr_src, val_size)       do {                                                                                  \
         CPU_SIZE_T        _i;                                                                   \
                                                                                                                                                               \
         for (_i = 0; _i < (val_size); _i++) {                                             \
@@ -892,7 +893,7 @@ struct  mem_pool {
 } while (0)
 
 
- #define  MEM_VAL_COPY_GET_INTU_LITTLE(addr_dest, addr_src, val_size)    do {                                                                                  \
+#define  MEM_VAL_COPY_GET_INTU_LITTLE(addr_dest, addr_src, val_size)    do {                                                                                  \
         CPU_SIZE_T          _i;                                                                   \
         CPU_SIZE_T          _j;                                                                   \
                                                                                                                                                               \
@@ -906,7 +907,7 @@ struct  mem_pool {
 } while (0)
 
 
- #define  MEM_VAL_COPY_GET_INTU(addr_dest, addr_src, val_size)           MEM_VAL_COPY_GET_INTU_BIG(addr_dest, addr_src, val_size)
+#define  MEM_VAL_COPY_GET_INTU(addr_dest, addr_src, val_size)           MEM_VAL_COPY_GET_INTU_BIG(addr_dest, addr_src, val_size)
 
 
 
@@ -914,7 +915,7 @@ struct  mem_pool {
 #elif   (CPU_CFG_ENDIAN_TYPE == CPU_ENDIAN_TYPE_LITTLE)
 
 
- #define  MEM_VAL_COPY_GET_INTU_BIG(addr_dest, addr_src, val_size)       do {                                                                                  \
+#define  MEM_VAL_COPY_GET_INTU_BIG(addr_dest, addr_src, val_size)       do {                                                                                  \
         CPU_SIZE_T          _i;                                                                   \
         CPU_SIZE_T          _j;                                                                   \
                                                                                                                                                               \
@@ -928,7 +929,7 @@ struct  mem_pool {
 } while (0)
 
 
- #define  MEM_VAL_COPY_GET_INTU_LITTLE(addr_dest, addr_src, val_size)    do {                                                                                  \
+#define  MEM_VAL_COPY_GET_INTU_LITTLE(addr_dest, addr_src, val_size)    do {                                                                                  \
         CPU_SIZE_T        _i;                                                                   \
                                                                                                                                                               \
         for (_i = 0; _i < (val_size); _i++) {                                             \
@@ -937,15 +938,15 @@ struct  mem_pool {
 } while (0)
 
 
- #define  MEM_VAL_COPY_GET_INTU(addr_dest, addr_src, val_size)           MEM_VAL_COPY_GET_INTU_LITTLE(addr_dest, addr_src, val_size)
+#define  MEM_VAL_COPY_GET_INTU(addr_dest, addr_src, val_size)           MEM_VAL_COPY_GET_INTU_LITTLE(addr_dest, addr_src, val_size)
 
 
 
 
 #else                                                                   /* See Note #8.                                 */
 
- #error  "CPU_CFG_ENDIAN_TYPE  illegally #defined in 'cpu.h'      "
- #error  "                     [See 'cpu.h  CONFIGURATION ERRORS']"
+#error  "CPU_CFG_ENDIAN_TYPE  illegally #defined in 'cpu.h'      "
+#error  "                     [See 'cpu.h  CONFIGURATION ERRORS']"
 
 #endif
 
@@ -1167,74 +1168,74 @@ struct  mem_pool {
 void        Mem_Init              (       void);
 
 /* ---------------- MEM API  FNCTS ---------------- */
-void        Mem_Clr               (       void *        pmem,
-                                          CPU_SIZE_T    size);
+void        Mem_Clr               (       void         *pmem,
+        CPU_SIZE_T    size);
 
-void        Mem_Set               (       void *        pmem,
-                                          CPU_INT08U    data_val,
-                                          CPU_SIZE_T    size);
+void        Mem_Set               (       void         *pmem,
+        CPU_INT08U    data_val,
+        CPU_SIZE_T    size);
 
-void        Mem_Copy              (       void *        pdest,
-                                          const void *  psrc,
-                                          CPU_SIZE_T    size);
+void        Mem_Copy              (       void         *pdest,
+        const void   *psrc,
+        CPU_SIZE_T    size);
 
-void        Mem_Move              (       void *        pdest,
-                                          const void *  psrc,
-                                          CPU_SIZE_T    size);
+void        Mem_Move              (       void         *pdest,
+        const void   *psrc,
+        CPU_SIZE_T    size);
 
-CPU_BOOLEAN        Mem_Cmp               (const void *  p1_mem,
-                                          const void *  p2_mem,
-                                          CPU_SIZE_T    size);
+CPU_BOOLEAN        Mem_Cmp               (const void   *p1_mem,
+        const void   *p2_mem,
+        CPU_SIZE_T    size);
 
 
 
 #if (LIB_MEM_CFG_ALLOC_EN == DEF_ENABLED)                           /* ---------------- MEM POOL FNCTS ---------------- */
 
-void *      Mem_HeapAlloc         (       CPU_SIZE_T    size,
-                                          CPU_SIZE_T    align,
-                                          CPU_SIZE_T *  poctets_reqd,
-                                          LIB_ERR *     perr);
+void       *Mem_HeapAlloc         (       CPU_SIZE_T    size,
+        CPU_SIZE_T    align,
+        CPU_SIZE_T   *poctets_reqd,
+        LIB_ERR      *perr);
 
 CPU_SIZE_T        Mem_HeapGetSizeRem    (       CPU_SIZE_T  align,
-                                                LIB_ERR *   perr);
+        LIB_ERR    *perr);
 
 
-CPU_SIZE_T        Mem_SegGetSizeRem     (       MEM_POOL *  pmem_pool,
-                                                CPU_SIZE_T  align,
-                                                LIB_ERR *   perr);
+CPU_SIZE_T        Mem_SegGetSizeRem     (       MEM_POOL   *pmem_pool,
+        CPU_SIZE_T  align,
+        LIB_ERR    *perr);
 
 
 void        Mem_PoolClr           (       MEM_POOL *pmem_pool,
-                                          LIB_ERR * perr);
+        LIB_ERR *perr);
 
-void        Mem_PoolCreate        (       MEM_POOL *        pmem_pool,
-                                          void *            pmem_base_addr,
-                                          CPU_SIZE_T        mem_size,
-                                          MEM_POOL_BLK_QTY  blk_nbr,
-                                          CPU_SIZE_T        blk_size,
-                                          CPU_SIZE_T        blk_align,
-                                          CPU_SIZE_T *      poctets_reqd,
-                                          LIB_ERR *         perr);
+void        Mem_PoolCreate        (       MEM_POOL         *pmem_pool,
+        void             *pmem_base_addr,
+        CPU_SIZE_T        mem_size,
+        MEM_POOL_BLK_QTY  blk_nbr,
+        CPU_SIZE_T        blk_size,
+        CPU_SIZE_T        blk_align,
+        CPU_SIZE_T       *poctets_reqd,
+        LIB_ERR          *perr);
 
 
 MEM_POOL_BLK_QTY        Mem_PoolBlkGetNbrAvail(       MEM_POOL *pmem_pool,
-                                                      LIB_ERR * perr);
+        LIB_ERR *perr);
 
-void *      Mem_PoolBlkGet        (       MEM_POOL *    pmem_pool,
-                                          CPU_SIZE_T    size,
-                                          LIB_ERR *     perr);
+void       *Mem_PoolBlkGet        (       MEM_POOL     *pmem_pool,
+        CPU_SIZE_T    size,
+        LIB_ERR      *perr);
 
-void *      Mem_PoolBlkGetUsedAtIx(       MEM_POOL *    pmem_pool,
-                                          MEM_POOL_IX   used_ix,
-                                          LIB_ERR *     perr);
+void       *Mem_PoolBlkGetUsedAtIx(       MEM_POOL     *pmem_pool,
+        MEM_POOL_IX   used_ix,
+        LIB_ERR      *perr);
 
 void        Mem_PoolBlkFree       (       MEM_POOL *pmem_pool,
-                                          void *    pmem_blk,
-                                          LIB_ERR * perr);
+        void     *pmem_blk,
+        LIB_ERR *perr);
 
-MEM_POOL_IX        Mem_PoolBlkIxGet      (       MEM_POOL * pmem_pool,
-                                                 void *     pmem_blk,
-                                                 LIB_ERR *  perr);
+MEM_POOL_IX        Mem_PoolBlkIxGet      (       MEM_POOL *pmem_pool,
+        void      *pmem_blk,
+        LIB_ERR   *perr);
 
 #endif
 
@@ -1247,65 +1248,65 @@ MEM_POOL_IX        Mem_PoolBlkIxGet      (       MEM_POOL * pmem_pool,
  */
 
 #ifndef  LIB_MEM_CFG_ARG_CHK_EXT_EN
- #error  "LIB_MEM_CFG_ARG_CHK_EXT_EN         not #define'd in 'lib_cfg.h'"
- #error  "                             [MUST be  DEF_DISABLED]           "
- #error  "                             [     ||  DEF_ENABLED ]           "
+#error  "LIB_MEM_CFG_ARG_CHK_EXT_EN         not #define'd in 'lib_cfg.h'"
+#error  "                             [MUST be  DEF_DISABLED]           "
+#error  "                             [     ||  DEF_ENABLED ]           "
 
 #elif  ((LIB_MEM_CFG_ARG_CHK_EXT_EN != DEF_DISABLED) && \
     (LIB_MEM_CFG_ARG_CHK_EXT_EN != DEF_ENABLED ))
- #error  "LIB_MEM_CFG_ARG_CHK_EXT_EN   illegally #define'd in 'lib_cfg.h'"
- #error  "                             [MUST be  DEF_DISABLED]           "
- #error  "                             [     ||  DEF_ENABLED ]           "
+#error  "LIB_MEM_CFG_ARG_CHK_EXT_EN   illegally #define'd in 'lib_cfg.h'"
+#error  "                             [MUST be  DEF_DISABLED]           "
+#error  "                             [     ||  DEF_ENABLED ]           "
 #endif
 
 
 
 #ifndef  LIB_MEM_CFG_OPTIMIZE_ASM_EN
- #error  "LIB_MEM_CFG_OPTIMIZE_ASM_EN        not #define'd in 'lib_cfg.h'"
- #error  "                             [MUST be  DEF_DISABLED]           "
- #error  "                             [     ||  DEF_ENABLED ]           "
+#error  "LIB_MEM_CFG_OPTIMIZE_ASM_EN        not #define'd in 'lib_cfg.h'"
+#error  "                             [MUST be  DEF_DISABLED]           "
+#error  "                             [     ||  DEF_ENABLED ]           "
 
 #elif  ((LIB_MEM_CFG_OPTIMIZE_ASM_EN != DEF_DISABLED) && \
     (LIB_MEM_CFG_OPTIMIZE_ASM_EN != DEF_ENABLED ))
- #error  "LIB_MEM_CFG_OPTIMIZE_ASM_EN  illegally #define'd in 'lib_cfg.h'"
- #error  "                             [MUST be  DEF_DISABLED]           "
- #error  "                             [     ||  DEF_ENABLED ]           "
+#error  "LIB_MEM_CFG_OPTIMIZE_ASM_EN  illegally #define'd in 'lib_cfg.h'"
+#error  "                             [MUST be  DEF_DISABLED]           "
+#error  "                             [     ||  DEF_ENABLED ]           "
 #endif
 
 
 
 
 #ifndef  LIB_MEM_CFG_ALLOC_EN
- #error  "LIB_MEM_CFG_ALLOC_EN               not #define'd in 'lib_cfg.h'"
- #error  "                             [MUST be  DEF_DISABLED]           "
- #error  "                             [     ||  DEF_ENABLED ]           "
+#error  "LIB_MEM_CFG_ALLOC_EN               not #define'd in 'lib_cfg.h'"
+#error  "                             [MUST be  DEF_DISABLED]           "
+#error  "                             [     ||  DEF_ENABLED ]           "
 
 #elif  ((LIB_MEM_CFG_ALLOC_EN != DEF_DISABLED) && \
     (LIB_MEM_CFG_ALLOC_EN != DEF_ENABLED ))
- #error  "LIB_MEM_CFG_ALLOC_EN         illegally #define'd in 'lib_cfg.h'"
- #error  "                             [MUST be  DEF_DISABLED]           "
- #error  "                             [     ||  DEF_ENABLED ]           "
+#error  "LIB_MEM_CFG_ALLOC_EN         illegally #define'd in 'lib_cfg.h'"
+#error  "                             [MUST be  DEF_DISABLED]           "
+#error  "                             [     ||  DEF_ENABLED ]           "
 
 
 #elif   (LIB_MEM_CFG_ALLOC_EN == DEF_ENABLED)
 
 
- #ifndef  LIB_MEM_CFG_HEAP_SIZE
-  #error  "LIB_MEM_CFG_HEAP_SIZE              not #define'd in 'lib_cfg.h'"
-  #error  "                             [MUST be  > 0]                    "
+#ifndef  LIB_MEM_CFG_HEAP_SIZE
+#error  "LIB_MEM_CFG_HEAP_SIZE              not #define'd in 'lib_cfg.h'"
+#error  "                             [MUST be  > 0]                    "
 
- #elif   (DEF_CHK_VAL_MIN(LIB_MEM_CFG_HEAP_SIZE, 1) != DEF_OK)
-  #error  "LIB_MEM_CFG_HEAP_SIZE        illegally #define'd in 'lib_cfg.h'"
-  #error  "                             [MUST be  > 0]                    "
- #endif
+#elif   (DEF_CHK_VAL_MIN(LIB_MEM_CFG_HEAP_SIZE, 1) != DEF_OK)
+#error  "LIB_MEM_CFG_HEAP_SIZE        illegally #define'd in 'lib_cfg.h'"
+#error  "                             [MUST be  > 0]                    "
+#endif
 
 
- #ifdef   LIB_MEM_CFG_HEAP_BASE_ADDR
-  #if     (LIB_MEM_CFG_HEAP_BASE_ADDR == 0x0)
-   #error  "LIB_MEM_CFG_HEAP_BASE_ADDR   illegally #define'd in 'lib_cfg.h'"
-   #error  "                             [MUST be  > 0x0]                  "
-  #endif
- #endif
+#ifdef   LIB_MEM_CFG_HEAP_BASE_ADDR
+#if     (LIB_MEM_CFG_HEAP_BASE_ADDR == 0x0)
+#error  "LIB_MEM_CFG_HEAP_BASE_ADDR   illegally #define'd in 'lib_cfg.h'"
+#error  "                             [MUST be  > 0x0]                  "
+#endif
+#endif
 
 
 #endif
@@ -1319,7 +1320,7 @@ MEM_POOL_IX        Mem_PoolBlkIxGet      (       MEM_POOL * pmem_pool,
 
 /* See 'lib_mem.h  Note #2a'.                           */
 #if     (CPU_CORE_VERSION < 127u)
- #error  "CPU_CORE_VERSION  [SHOULD be >= V1.27]"
+#error  "CPU_CORE_VERSION  [SHOULD be >= V1.27]"
 #endif
 
 

@@ -23,11 +23,11 @@ enum DmaItIndex
     DMA1_CH5  = 4,
     DMA1_CH6  = 5,
     DMA1_CH7  = 6,
-    DMA2_CH1  ,
-    DMA2_CH2  ,
-    DMA2_CH3  ,
-    DMA2_CH4  ,
-    DMA2_CH5  ,
+    DMA2_CH1,
+    DMA2_CH2,
+    DMA2_CH3,
+    DMA2_CH4,
+    DMA2_CH5,
 } ;
 
 typedef void (*DmaIrqHandler_t)(uint32_t id, DmaIrqType type);

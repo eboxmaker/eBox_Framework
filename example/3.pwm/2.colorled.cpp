@@ -7,7 +7,7 @@
 
   * @brief   ebox application example .
   *
-  * Copyright 2016 shentq. All Rights Reserved.         
+  * Copyright 2016 shentq. All Rights Reserved.
   ******************************************************************************
  */
 
@@ -40,7 +40,7 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
     led.begin();
     hsl.h = 1;
     hsl.s = 1;
@@ -60,27 +60,27 @@ int main(void)
 
     while(1)
     {
-//方法1：        
-//    led.color_rgb(0,0,255);
-//    delay_ms(100);
-//    led.color_rgb(0,255,0);
-//    delay_ms(100);
-//    led.color_rgb(255,0,0);
-//    delay_ms(100);
-        
-//方法2：
-//        hsv.h++;
-//        if(hsv.h>360)hsv.h = 0;
-//        led.color_hsv(hsv);
-//        delay_ms(10);
+        //方法1：
+        //    led.color_rgb(0,0,255);
+        //    delay_ms(100);
+        //    led.color_rgb(0,255,0);
+        //    delay_ms(100);
+        //    led.color_rgb(255,0,0);
+        //    delay_ms(100);
 
-//方法3：
+        //方法2：
+        //        hsv.h++;
+        //        if(hsv.h>360)hsv.h = 0;
+        //        led.color_hsv(hsv);
+        //        delay_ms(10);
+
+        //方法3：
         hsl.h++;
         if(hsl.h > 360)hsl.h = 0;
         led.color_hsl(hsl);
         delay_ms(50);
-        
-        
+
+
 
 
     }

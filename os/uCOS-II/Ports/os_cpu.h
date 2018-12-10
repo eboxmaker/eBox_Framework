@@ -106,10 +106,10 @@ void       OSStartHighRdy(void);
 
 void       PendSV_Handler(void);
 
-                                                  /* See OS_CPU_C.C                                    */
+/* See OS_CPU_C.C                                    */
 //void       OS_CPU_SysTickHandler(void);
 //void       OS_CPU_SysTickInit(void);
 
-                                                  /* See BSP.C                                         */
+/* See BSP.C                                         */
 //INT32U     OS_CPU_SysTickClkFreq(void);
 #endif

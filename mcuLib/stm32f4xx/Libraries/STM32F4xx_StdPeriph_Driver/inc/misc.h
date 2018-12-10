@@ -17,8 +17,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -31,7 +31,7 @@
 #define __MISC_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -47,39 +47,39 @@
 
 /* Exported types ------------------------------------------------------------*/
 
-/** 
-  * @brief  NVIC Init Structure definition  
+/**
+  * @brief  NVIC Init Structure definition
   */
 
 typedef struct
 {
-  uint8_t NVIC_IRQChannel;                    /*!< Specifies the IRQ channel to be enabled or disabled.
-                                                   This parameter can be an enumerator of @ref IRQn_Type 
+    uint8_t NVIC_IRQChannel;                    /*!< Specifies the IRQ channel to be enabled or disabled.
+                                                   This parameter can be an enumerator of @ref IRQn_Type
                                                    enumeration (For the complete STM32 Devices IRQ Channels
                                                    list, please refer to stm32f4xx.h file) */
 
-  uint8_t NVIC_IRQChannelPreemptionPriority;  /*!< Specifies the pre-emption priority for the IRQ channel
+    uint8_t NVIC_IRQChannelPreemptionPriority;  /*!< Specifies the pre-emption priority for the IRQ channel
                                                    specified in NVIC_IRQChannel. This parameter can be a value
                                                    between 0 and 15 as described in the table @ref MISC_NVIC_Priority_Table
                                                    A lower priority value indicates a higher priority */
 
-  uint8_t NVIC_IRQChannelSubPriority;         /*!< Specifies the subpriority level for the IRQ channel specified
+    uint8_t NVIC_IRQChannelSubPriority;         /*!< Specifies the subpriority level for the IRQ channel specified
                                                    in NVIC_IRQChannel. This parameter can be a value
                                                    between 0 and 15 as described in the table @ref MISC_NVIC_Priority_Table
                                                    A lower priority value indicates a higher priority */
 
-  FunctionalState NVIC_IRQChannelCmd;         /*!< Specifies whether the IRQ channel defined in NVIC_IRQChannel
-                                                   will be enabled or disabled. 
-                                                   This parameter can be set either to ENABLE or DISABLE */   
+    FunctionalState NVIC_IRQChannelCmd;         /*!< Specifies whether the IRQ channel defined in NVIC_IRQChannel
+                                                   will be enabled or disabled.
+                                                   This parameter can be set either to ENABLE or DISABLE */
 } NVIC_InitTypeDef;
- 
+
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup MISC_Exported_Constants
   * @{
   */
 
-/** @defgroup MISC_Vector_Table_Base 
+/** @defgroup MISC_Vector_Table_Base
   * @{
   */
 
@@ -91,7 +91,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup MISC_System_Low_Power 
+/** @defgroup MISC_System_Low_Power
   * @{
   */
 
@@ -105,7 +105,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup MISC_Preemption_Priority_Group 
+/** @defgroup MISC_Preemption_Priority_Group
   * @{
   */
 
@@ -136,7 +136,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup MISC_SysTick_clock_source 
+/** @defgroup MISC_SysTick_clock_source
   * @{
   */
 
@@ -156,7 +156,7 @@ typedef struct
 /* Exported functions --------------------------------------------------------*/
 
 void NVIC_PriorityGroupConfig(uint32_t NVIC_PriorityGroup);
-void NVIC_Init(NVIC_InitTypeDef* NVIC_InitStruct);
+void NVIC_Init(NVIC_InitTypeDef *NVIC_InitStruct);
 void NVIC_SetVectorTable(uint32_t NVIC_VectTab, uint32_t Offset);
 void NVIC_SystemLPConfig(uint8_t LowPowerMode, FunctionalState NewState);
 void SysTick_CLKSourceConfig(uint32_t SysTick_CLKSource);

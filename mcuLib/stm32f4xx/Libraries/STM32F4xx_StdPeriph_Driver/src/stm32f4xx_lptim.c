@@ -83,8 +83,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -142,17 +142,17 @@
   * @retval None
   *
   */
-void LPTIM_DeInit(LPTIM_TypeDef* LPTIMx)
+void LPTIM_DeInit(LPTIM_TypeDef *LPTIMx)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  
-  /* Deinitializes the LPTIM1 peripheral */
-  if(LPTIMx == LPTIM1)
-  {
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_LPTIM1, ENABLE);
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_LPTIM1, DISABLE);
-  }
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+
+    /* Deinitializes the LPTIM1 peripheral */
+    if(LPTIMx == LPTIM1)
+    {
+        RCC_APB1PeriphResetCmd(RCC_APB1Periph_LPTIM1, ENABLE);
+        RCC_APB1PeriphResetCmd(RCC_APB1Periph_LPTIM1, DISABLE);
+    }
 }
 
 /**
@@ -165,32 +165,32 @@ void LPTIM_DeInit(LPTIM_TypeDef* LPTIMx)
   *
   * @note   It is mandatory to disable the peripheral to use this function.
   */
-void LPTIM_Init(LPTIM_TypeDef* LPTIMx, LPTIM_InitTypeDef* LPTIM_InitStruct)
+void LPTIM_Init(LPTIM_TypeDef *LPTIMx, LPTIM_InitTypeDef *LPTIM_InitStruct)
 {
-  uint32_t tmpreg1 = 0;
-  
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_CLOCK_SOURCE(LPTIM_InitStruct->LPTIM_ClockSource));
-  assert_param(IS_LPTIM_CLOCK_PRESCALER(LPTIM_InitStruct->LPTIM_Prescaler));
-  assert_param(IS_LPTIM_WAVEFORM(LPTIM_InitStruct->LPTIM_Waveform));
-  assert_param(IS_LPTIM_OUTPUT_POLARITY(LPTIM_InitStruct->LPTIM_OutputPolarity));
-  
-  /* Get the LPTIMx CFGR value */
-  tmpreg1 = LPTIMx->CFGR;
-  
-  /* Clear CKSEL, PRESC, WAVE and WAVEPOL bits */
-  tmpreg1 &= CFGR_INIT_CLEAR_MASK;
-  
-  /* Set or Reset CKSEL bit according to LPTIM_ClockSource value */
-  /* Set or Reset PRESC bits according to LPTIM_Prescaler value */
-  /* Set or Reset WAVE bit according to LPTIM_Waveform value */
-  /* Set or Reset WAVEPOL bit according to LPTIM_OutputPolarity value */
-  tmpreg1 |= (LPTIM_InitStruct->LPTIM_ClockSource | LPTIM_InitStruct->LPTIM_Prescaler
-              |LPTIM_InitStruct->LPTIM_Waveform | LPTIM_InitStruct->LPTIM_OutputPolarity);
-  
-  /* Write to LPTIMx CFGR */
-  LPTIMx->CFGR = tmpreg1;
+    uint32_t tmpreg1 = 0;
+
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_CLOCK_SOURCE(LPTIM_InitStruct->LPTIM_ClockSource));
+    assert_param(IS_LPTIM_CLOCK_PRESCALER(LPTIM_InitStruct->LPTIM_Prescaler));
+    assert_param(IS_LPTIM_WAVEFORM(LPTIM_InitStruct->LPTIM_Waveform));
+    assert_param(IS_LPTIM_OUTPUT_POLARITY(LPTIM_InitStruct->LPTIM_OutputPolarity));
+
+    /* Get the LPTIMx CFGR value */
+    tmpreg1 = LPTIMx->CFGR;
+
+    /* Clear CKSEL, PRESC, WAVE and WAVEPOL bits */
+    tmpreg1 &= CFGR_INIT_CLEAR_MASK;
+
+    /* Set or Reset CKSEL bit according to LPTIM_ClockSource value */
+    /* Set or Reset PRESC bits according to LPTIM_Prescaler value */
+    /* Set or Reset WAVE bit according to LPTIM_Waveform value */
+    /* Set or Reset WAVEPOL bit according to LPTIM_OutputPolarity value */
+    tmpreg1 |= (LPTIM_InitStruct->LPTIM_ClockSource | LPTIM_InitStruct->LPTIM_Prescaler
+                | LPTIM_InitStruct->LPTIM_Waveform | LPTIM_InitStruct->LPTIM_OutputPolarity);
+
+    /* Write to LPTIMx CFGR */
+    LPTIMx->CFGR = tmpreg1;
 }
 
 /**
@@ -198,19 +198,19 @@ void LPTIM_Init(LPTIM_TypeDef* LPTIMx, LPTIM_InitTypeDef* LPTIM_InitStruct)
   * @param  LPTIM_InitStruct : pointer to a LPTIM_InitTypeDef structure which will be initialized.
   * @retval None
   */
-void LPTIM_StructInit(LPTIM_InitTypeDef* LPTIM_InitStruct)
+void LPTIM_StructInit(LPTIM_InitTypeDef *LPTIM_InitStruct)
 {
-  /* APB Clock/Low Power oscillators is selected as default Clock source*/
-  LPTIM_InitStruct->LPTIM_ClockSource = LPTIM_ClockSource_APBClock_LPosc;
-  
-  /* High Polarity is selected as default polarity */
-  LPTIM_InitStruct->LPTIM_OutputPolarity = LPTIM_OutputPolarity_High;
-  
-  /* DIV=1 is selected as default prescaler */
-  LPTIM_InitStruct->LPTIM_Prescaler = LPTIM_Prescaler_DIV1;
-  
-  /* PWM/One pulse mode is selected as default Waveform shape */
-  LPTIM_InitStruct->LPTIM_Waveform = LPTIM_Waveform_PWM_OnePulse;
+    /* APB Clock/Low Power oscillators is selected as default Clock source*/
+    LPTIM_InitStruct->LPTIM_ClockSource = LPTIM_ClockSource_APBClock_LPosc;
+
+    /* High Polarity is selected as default polarity */
+    LPTIM_InitStruct->LPTIM_OutputPolarity = LPTIM_OutputPolarity_High;
+
+    /* DIV=1 is selected as default prescaler */
+    LPTIM_InitStruct->LPTIM_Prescaler = LPTIM_Prescaler_DIV1;
+
+    /* PWM/One pulse mode is selected as default Waveform shape */
+    LPTIM_InitStruct->LPTIM_Waveform = LPTIM_Waveform_PWM_OnePulse;
 }
 
 /**
@@ -248,22 +248,22 @@ void LPTIM_StructInit(LPTIM_InitTypeDef* LPTIM_InitStruct)
   *         This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
-void LPTIM_Cmd(LPTIM_TypeDef* LPTIMx, FunctionalState NewState)
+void LPTIM_Cmd(LPTIM_TypeDef *LPTIMx, FunctionalState NewState)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_FUNCTIONAL_STATE(NewState));
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if(NewState != DISABLE)
-  {
-    /* Set the ENABLE bit */
-    LPTIMx->CR |= LPTIM_CR_ENABLE;
-  }
-  else
-  {
-    /* Reset the ENABLE bit */
-    LPTIMx->CR &= ~(LPTIM_CR_ENABLE);
-  }
+    if(NewState != DISABLE)
+    {
+        /* Set the ENABLE bit */
+        LPTIMx->CR |= LPTIM_CR_ENABLE;
+    }
+    else
+    {
+        /* Reset the ENABLE bit */
+        LPTIMx->CR &= ~(LPTIM_CR_ENABLE);
+    }
 }
 
 /**
@@ -277,17 +277,17 @@ void LPTIM_Cmd(LPTIM_TypeDef* LPTIMx, FunctionalState NewState)
   *
   * @note   It is mandatory to disable the peripheral to use this function.
   */
-void LPTIM_SelectClockSource(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_ClockSource)
+void LPTIM_SelectClockSource(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_ClockSource)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_CLOCK_SOURCE(LPTIM_ClockSource));
-  
-  /* Clear the CKSEL bit */
-  LPTIMx->CFGR &= ~(LPTIM_CFGR_CKSEL);
-  
-  /* Set or Reset the CKSEL bit */
-  LPTIMx->CFGR |= LPTIM_ClockSource;
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_CLOCK_SOURCE(LPTIM_ClockSource));
+
+    /* Clear the CKSEL bit */
+    LPTIMx->CFGR &= ~(LPTIM_CFGR_CKSEL);
+
+    /* Set or Reset the CKSEL bit */
+    LPTIMx->CFGR |= LPTIM_ClockSource;
 }
 
 /**
@@ -303,25 +303,25 @@ void LPTIM_SelectClockSource(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_ClockSource)
   *
   * @note   It is mandatory to disable the peripheral to use this function.
   */
-void LPTIM_SelectULPTIMClockPolarity(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_ClockPolarity)
+void LPTIM_SelectULPTIMClockPolarity(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_ClockPolarity)
 {
-  uint32_t tmpreg1 = 0;
-  
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_CLOCK_POLARITY(LPTIM_ClockPolarity));
-  
-  /* Get the LPTIMx CFGR value */
-  tmpreg1 = LPTIMx->CFGR;
-  
-  /* Clear the CKPOL bits */
-  tmpreg1 &= ~(LPTIM_CFGR_CKPOL);
-  
-  /* Set or Reset the PRESC bits */
-  tmpreg1 |= LPTIM_ClockPolarity;
-  
-  /* Write to LPTIMx CFGR */
-  LPTIMx->CFGR = tmpreg1;
+    uint32_t tmpreg1 = 0;
+
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_CLOCK_POLARITY(LPTIM_ClockPolarity));
+
+    /* Get the LPTIMx CFGR value */
+    tmpreg1 = LPTIMx->CFGR;
+
+    /* Clear the CKPOL bits */
+    tmpreg1 &= ~(LPTIM_CFGR_CKPOL);
+
+    /* Set or Reset the PRESC bits */
+    tmpreg1 |= LPTIM_ClockPolarity;
+
+    /* Write to LPTIMx CFGR */
+    LPTIMx->CFGR = tmpreg1;
 }
 
 /**
@@ -341,25 +341,25 @@ void LPTIM_SelectULPTIMClockPolarity(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Clock
   *
   * @note   It is mandatory to disable the peripheral to use this function.
   */
-void LPTIM_ConfigPrescaler(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Prescaler)
+void LPTIM_ConfigPrescaler(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_Prescaler)
 {
-  uint32_t tmpreg1 = 0;
-  
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_CLOCK_PRESCALER(LPTIM_Prescaler));
-  
-  /* Get the LPTIMx CFGR value */
-  tmpreg1 = LPTIMx->CFGR;
-  
-  /* Clear the PRESC bits */
-  tmpreg1 &= ~(LPTIM_CFGR_PRESC);
-  
-  /* Set or Reset the PRESC bits */
-  tmpreg1 |= LPTIM_Prescaler;
-  
-  /* Write to LPTIMx CFGR */
-  LPTIMx->CFGR = tmpreg1;
+    uint32_t tmpreg1 = 0;
+
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_CLOCK_PRESCALER(LPTIM_Prescaler));
+
+    /* Get the LPTIMx CFGR value */
+    tmpreg1 = LPTIMx->CFGR;
+
+    /* Clear the PRESC bits */
+    tmpreg1 &= ~(LPTIM_CFGR_PRESC);
+
+    /* Set or Reset the PRESC bits */
+    tmpreg1 |= LPTIM_Prescaler;
+
+    /* Write to LPTIMx CFGR */
+    LPTIMx->CFGR = tmpreg1;
 }
 
 /**
@@ -384,26 +384,26 @@ void LPTIM_ConfigPrescaler(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Prescaler)
   *
   * @note   It is mandatory to disable the peripheral to use this function.
   */
-void LPTIM_ConfigExternalTrigger(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_ExtTRGSource, uint32_t LPTIM_ExtTRGPolarity)
+void LPTIM_ConfigExternalTrigger(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_ExtTRGSource, uint32_t LPTIM_ExtTRGPolarity)
 {
-  uint32_t tmpreg1 = 0;
-  
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_EXT_TRG_SOURCE(LPTIM_ExtTRGSource));
-  assert_param(IS_LPTIM_EXT_TRG_POLARITY(LPTIM_ExtTRGPolarity));
-  
-  /* Get the LPTIMx CFGR value */
-  tmpreg1 = LPTIMx->CFGR;
-  
-  /* Clear the TRIGEN and TRIGSEL bits */
-  tmpreg1 &= CFGR_TRIG_AND_POL_CLEAR_MASK;
-  
-  /* Set or Reset the TRIGEN and TRIGSEL bits */
-  tmpreg1 |= (LPTIM_ExtTRGSource | LPTIM_ExtTRGPolarity);
-  
-  /* Write to LPTIMx CFGR */
-  LPTIMx->CFGR = tmpreg1;
+    uint32_t tmpreg1 = 0;
+
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_EXT_TRG_SOURCE(LPTIM_ExtTRGSource));
+    assert_param(IS_LPTIM_EXT_TRG_POLARITY(LPTIM_ExtTRGPolarity));
+
+    /* Get the LPTIMx CFGR value */
+    tmpreg1 = LPTIMx->CFGR;
+
+    /* Clear the TRIGEN and TRIGSEL bits */
+    tmpreg1 &= CFGR_TRIG_AND_POL_CLEAR_MASK;
+
+    /* Set or Reset the TRIGEN and TRIGSEL bits */
+    tmpreg1 |= (LPTIM_ExtTRGSource | LPTIM_ExtTRGPolarity);
+
+    /* Write to LPTIMx CFGR */
+    LPTIMx->CFGR = tmpreg1;
 }
 
 /**
@@ -413,13 +413,13 @@ void LPTIM_ConfigExternalTrigger(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_ExtTRGSou
   *
   * @note   It is mandatory to disable the peripheral to use this function.
   */
-void LPTIM_SelectSoftwareStart(LPTIM_TypeDef* LPTIMx)
+void LPTIM_SelectSoftwareStart(LPTIM_TypeDef *LPTIMx)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  
-  /* Reset the TRIGEN bits to allow a software start */
-  LPTIMx->CFGR &= ~(LPTIM_CFGR_TRIGEN);
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+
+    /* Reset the TRIGEN bits to allow a software start */
+    LPTIMx->CFGR &= ~(LPTIM_CFGR_TRIGEN);
 }
 
 /**
@@ -437,25 +437,25 @@ void LPTIM_SelectSoftwareStart(LPTIM_TypeDef* LPTIMx)
   * @note   It is mandatory to disable the peripheral to use this function.
   * @note   An auxiliary clock must be present to use this feature.
   */
-void LPTIM_ConfigTriggerGlitchFilter(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_TrigSampleTime)
+void LPTIM_ConfigTriggerGlitchFilter(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_TrigSampleTime)
 {
-  uint32_t tmpreg1 = 0;
-  
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_TRIG_SAMPLE_TIME(LPTIM_TrigSampleTime));
-  
-  /* Get the LPTIMx CFGR value */
-  tmpreg1 = LPTIMx->CFGR;
-  
-  /* Clear the TRGFLT bits */
-  tmpreg1 &= ~(LPTIM_CFGR_TRGFLT);
-  
-  /* Set or Reset the TRGFLT bits according to LPTIM_TrigSampleTime */
-  tmpreg1 |= (LPTIM_TrigSampleTime);
-  
-  /* Write to LPTIMx CFGR */
-  LPTIMx->CFGR = tmpreg1;
+    uint32_t tmpreg1 = 0;
+
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_TRIG_SAMPLE_TIME(LPTIM_TrigSampleTime));
+
+    /* Get the LPTIMx CFGR value */
+    tmpreg1 = LPTIMx->CFGR;
+
+    /* Clear the TRGFLT bits */
+    tmpreg1 &= ~(LPTIM_CFGR_TRGFLT);
+
+    /* Set or Reset the TRGFLT bits according to LPTIM_TrigSampleTime */
+    tmpreg1 |= (LPTIM_TrigSampleTime);
+
+    /* Write to LPTIMx CFGR */
+    LPTIMx->CFGR = tmpreg1;
 }
 
 /**
@@ -473,25 +473,25 @@ void LPTIM_ConfigTriggerGlitchFilter(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_TrigS
   * @note   It is mandatory to disable the peripheral to use this function.
   * @note   An auxiliary clock must be present to use this feature.
   */
-void LPTIM_ConfigClockGlitchFilter(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_ClockSampleTime)
+void LPTIM_ConfigClockGlitchFilter(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_ClockSampleTime)
 {
-  uint32_t tmpreg1 = 0;
-  
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_CLOCK_SAMPLE_TIME(LPTIM_ClockSampleTime));
-  
-  /* Get the LPTIMx CFGR value */
-  tmpreg1 = LPTIMx->CFGR;
-  
-  /* Clear the CKFLT bits */
-  tmpreg1 &= ~(LPTIM_CFGR_CKFLT);
-  
-  /* Set or Reset the CKFLT bits according to LPTIM_ClockSampleTime */
-  tmpreg1 |= LPTIM_ClockSampleTime;
-  
-  /* Write to LPTIMx CFGR */
-  LPTIMx->CFGR = tmpreg1;
+    uint32_t tmpreg1 = 0;
+
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_CLOCK_SAMPLE_TIME(LPTIM_ClockSampleTime));
+
+    /* Get the LPTIMx CFGR value */
+    tmpreg1 = LPTIMx->CFGR;
+
+    /* Clear the CKFLT bits */
+    tmpreg1 &= ~(LPTIM_CFGR_CKFLT);
+
+    /* Set or Reset the CKFLT bits according to LPTIM_ClockSampleTime */
+    tmpreg1 |= LPTIM_ClockSampleTime;
+
+    /* Write to LPTIMx CFGR */
+    LPTIMx->CFGR = tmpreg1;
 }
 
 /**
@@ -503,23 +503,23 @@ void LPTIM_ConfigClockGlitchFilter(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_ClockSa
   *     @arg LPTIM_Mode_Single : Timer will starts in Single mode
   * @retval None
   */
-void LPTIM_SelectOperatingMode(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Mode)
+void LPTIM_SelectOperatingMode(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_Mode)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_MODE(LPTIM_Mode));
-  
-  
-  if(LPTIM_Mode == LPTIM_Mode_Continuous)
-  {
-    /* Set the CNTSTRT to select the continuous start*/
-    LPTIMx->CR |= LPTIM_Mode_Continuous;
-  }
-  else if(LPTIM_Mode == LPTIM_Mode_Single)
-  {
-    /* Set the SNGSTRT to select the continuous start*/
-    LPTIMx->CR |= LPTIM_Mode_Single;
-  }
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_MODE(LPTIM_Mode));
+
+
+    if(LPTIM_Mode == LPTIM_Mode_Continuous)
+    {
+        /* Set the CNTSTRT to select the continuous start*/
+        LPTIMx->CR |= LPTIM_Mode_Continuous;
+    }
+    else if(LPTIM_Mode == LPTIM_Mode_Single)
+    {
+        /* Set the SNGSTRT to select the continuous start*/
+        LPTIMx->CR |= LPTIM_Mode_Single;
+    }
 }
 
 /**
@@ -531,22 +531,22 @@ void LPTIM_SelectOperatingMode(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Mode)
   *
   * @note   It is mandatory to disable the peripheral to use this function.
   */
-void LPTIM_TimoutCmd(LPTIM_TypeDef* LPTIMx, FunctionalState NewState)
+void LPTIM_TimoutCmd(LPTIM_TypeDef *LPTIMx, FunctionalState NewState)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_FUNCTIONAL_STATE(NewState));
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if(NewState != DISABLE)
-  {
-    /* Set the TIMOUT bit */
-    LPTIMx->CFGR |= LPTIM_CFGR_TIMOUT;
-  }
-  else
-  {
-    /* Reset the TIMOUT bit */
-    LPTIMx->CFGR &= ~(LPTIM_CFGR_TIMOUT);
-  }
+    if(NewState != DISABLE)
+    {
+        /* Set the TIMOUT bit */
+        LPTIMx->CFGR |= LPTIM_CFGR_TIMOUT;
+    }
+    else
+    {
+        /* Reset the TIMOUT bit */
+        LPTIMx->CFGR &= ~(LPTIM_CFGR_TIMOUT);
+    }
 }
 
 /**
@@ -560,17 +560,17 @@ void LPTIM_TimoutCmd(LPTIM_TypeDef* LPTIMx, FunctionalState NewState)
   *
   * @note   It is mandatory to disable the peripheral to use this function.
   */
-void LPTIM_ConfigWaveform(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Waveform)
+void LPTIM_ConfigWaveform(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_Waveform)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_WAVEFORM(LPTIM_Waveform));
-  
-  /* Clear the WAVE bit */
-  LPTIMx->CFGR &= ~(LPTIM_CFGR_CKFLT);
-  
-  /* Set or Reset the WAVE bit according to LPTIM_Waveform */
-  LPTIMx->CFGR |= (LPTIM_Waveform);
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_WAVEFORM(LPTIM_Waveform));
+
+    /* Clear the WAVE bit */
+    LPTIMx->CFGR &= ~(LPTIM_CFGR_CKFLT);
+
+    /* Set or Reset the WAVE bit according to LPTIM_Waveform */
+    LPTIMx->CFGR |= (LPTIM_Waveform);
 }
 
 /**
@@ -584,17 +584,17 @@ void LPTIM_ConfigWaveform(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Waveform)
   *
   * @note   It is mandatory to disable the peripheral to use this function.
   */
-void LPTIM_ConfigUpdate(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Update)
+void LPTIM_ConfigUpdate(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_Update)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_UPDATE(LPTIM_Update));
-  
-  /* Clear the PRELOAD bit */
-  LPTIMx->CFGR &= ~(LPTIM_CFGR_PRELOAD);
-  
-  /* Set or Reset the PRELOAD bit according to LPTIM_Update */
-  LPTIMx->CFGR |= (LPTIM_Update);
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_UPDATE(LPTIM_Update));
+
+    /* Clear the PRELOAD bit */
+    LPTIMx->CFGR &= ~(LPTIM_CFGR_PRELOAD);
+
+    /* Set or Reset the PRELOAD bit according to LPTIM_Update */
+    LPTIMx->CFGR |= (LPTIM_Update);
 }
 
 /**
@@ -604,14 +604,14 @@ void LPTIM_ConfigUpdate(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Update)
   *         This parameter must be a value between 0x0000 and 0xFFFF
   * @retval None
   */
-void LPTIM_SetAutoreloadValue(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Autoreload)
+void LPTIM_SetAutoreloadValue(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_Autoreload)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_AUTORELOAD(LPTIM_Autoreload));
-  
-  /* Write LPTIM_Autoreload in Autoreload register */
-  LPTIMx->ARR = LPTIM_Autoreload;
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_AUTORELOAD(LPTIM_Autoreload));
+
+    /* Write LPTIM_Autoreload in Autoreload register */
+    LPTIMx->ARR = LPTIM_Autoreload;
 }
 
 /**
@@ -621,14 +621,14 @@ void LPTIM_SetAutoreloadValue(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Autoreload)
   *         This parameter must be a value between 0x0000 and 0xFFFF
   * @retval None
   */
-void LPTIM_SetCompareValue(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Compare)
+void LPTIM_SetCompareValue(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_Compare)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_COMPARE(LPTIM_Compare));
-  
-  /* Write LPTIM_Compare in Compare register */
-  LPTIMx->CMP = LPTIM_Compare;
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_COMPARE(LPTIM_Compare));
+
+    /* Write LPTIM_Compare in Compare register */
+    LPTIMx->CMP = LPTIM_Compare;
 }
 
 /**
@@ -641,22 +641,22 @@ void LPTIM_SetCompareValue(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_Compare)
   *
   * @note   It is mandatory to disable the peripheral to use this function.
   */
-void LPTIM_SelectCounterMode(LPTIM_TypeDef* LPTIMx, FunctionalState NewState)
+void LPTIM_SelectCounterMode(LPTIM_TypeDef *LPTIMx, FunctionalState NewState)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_FUNCTIONAL_STATE(NewState));
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if(NewState != DISABLE)
-  {
-    /* Set the COUNTMODE bit */
-    LPTIMx->CFGR |= LPTIM_CFGR_COUNTMODE;
-  }
-  else
-  {
-    /* Reset the COUNTMODE bit */
-    LPTIMx->CFGR &= ~(LPTIM_CFGR_COUNTMODE);
-  }
+    if(NewState != DISABLE)
+    {
+        /* Set the COUNTMODE bit */
+        LPTIMx->CFGR |= LPTIM_CFGR_COUNTMODE;
+    }
+    else
+    {
+        /* Reset the COUNTMODE bit */
+        LPTIMx->CFGR &= ~(LPTIM_CFGR_COUNTMODE);
+    }
 }
 
 /**
@@ -668,22 +668,22 @@ void LPTIM_SelectCounterMode(LPTIM_TypeDef* LPTIMx, FunctionalState NewState)
   *
   * @note   It is mandatory to disable the peripheral to use this function.
   */
-void LPTIM_SelectEncoderMode(LPTIM_TypeDef* LPTIMx, FunctionalState NewState)
+void LPTIM_SelectEncoderMode(LPTIM_TypeDef *LPTIMx, FunctionalState NewState)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_FUNCTIONAL_STATE(NewState));
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if(NewState != DISABLE)
-  {
-    /* Set the ENC bit */
-    LPTIMx->CFGR |= LPTIM_CFGR_ENC;
-  }
-  else
-  {
-    /* Reset the ENC bit */
-    LPTIMx->CFGR &= ~(LPTIM_CFGR_ENC);
-  }
+    if(NewState != DISABLE)
+    {
+        /* Set the ENC bit */
+        LPTIMx->CFGR |= LPTIM_CFGR_ENC;
+    }
+    else
+    {
+        /* Reset the ENC bit */
+        LPTIMx->CFGR &= ~(LPTIM_CFGR_ENC);
+    }
 }
 
 /**
@@ -691,13 +691,13 @@ void LPTIM_SelectEncoderMode(LPTIM_TypeDef* LPTIMx, FunctionalState NewState)
   * @param  LPTIMx: where x can be 1.
   * @retval Counter Register value
   */
-uint32_t LPTIM_GetCounterValue(LPTIM_TypeDef* LPTIMx)
+uint32_t LPTIM_GetCounterValue(LPTIM_TypeDef *LPTIMx)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  
-  /* Get the Counter Register value */
-  return LPTIMx->CNT;
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+
+    /* Get the Counter Register value */
+    return LPTIMx->CNT;
 }
 
 /**
@@ -705,13 +705,13 @@ uint32_t LPTIM_GetCounterValue(LPTIM_TypeDef* LPTIMx)
   * @param  LPTIMx: where x can be 1.
   * @retval Counter Register value
   */
-uint32_t LPTIM_GetAutoreloadValue(LPTIM_TypeDef* LPTIMx)
+uint32_t LPTIM_GetAutoreloadValue(LPTIM_TypeDef *LPTIMx)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  
-  /* Get the Counter Register value */
-  return LPTIMx->ARR;
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+
+    /* Get the Counter Register value */
+    return LPTIMx->ARR;
 }
 
 /**
@@ -719,13 +719,13 @@ uint32_t LPTIM_GetAutoreloadValue(LPTIM_TypeDef* LPTIMx)
   * @param  LPTIMx: where x can be 1.
   * @retval Counter Register value
   */
-uint32_t LPTIM_GetCompareValue(LPTIM_TypeDef* LPTIMx)
+uint32_t LPTIM_GetCompareValue(LPTIM_TypeDef *LPTIMx)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  
-  /* Get the Counter Register value */
-  return LPTIMx->CMP;
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+
+    /* Get the Counter Register value */
+    return LPTIMx->CMP;
 }
 
 /**
@@ -739,13 +739,13 @@ uint32_t LPTIM_GetCompareValue(LPTIM_TypeDef* LPTIMx)
   *    @arg LPTIM_OP_TIM_DAC : Input coming from timer 6 output (for encoder mode)
   * @retval Counter Register value
   */
-void LPTIM_RemapConfig(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_OPTR)
+void LPTIM_RemapConfig(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_OPTR)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  
-  /* Get the Counter Register value */
-  LPTIMx->OR = LPTIM_OPTR;
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+
+    /* Get the Counter Register value */
+    LPTIMx->OR = LPTIM_OPTR;
 }
 
 /**
@@ -809,23 +809,23 @@ void LPTIM_RemapConfig(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_OPTR)
   *
   * @note   It is mandatory to disable the peripheral to use this function.
   */
-void LPTIM_ITConfig(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_IT, FunctionalState NewState)
- {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_IT(LPTIM_IT));
-  assert_param(IS_FUNCTIONAL_STATE(NewState));
+void LPTIM_ITConfig(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_IT, FunctionalState NewState)
+{
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_IT(LPTIM_IT));
+    assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if(NewState != DISABLE)
-  {
-    /* Enable the Interrupt sources */
-    LPTIMx->IER |= LPTIM_IT;
-  }
-  else
-  {
-    /* Disable the Interrupt sources */
-    LPTIMx->IER &= ~(LPTIM_IT);
-  }
+    if(NewState != DISABLE)
+    {
+        /* Enable the Interrupt sources */
+        LPTIMx->IER |= LPTIM_IT;
+    }
+    else
+    {
+        /* Disable the Interrupt sources */
+        LPTIMx->IER &= ~(LPTIM_IT);
+    }
 }
 
 /**
@@ -846,23 +846,23 @@ void LPTIM_ITConfig(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_IT, FunctionalState Ne
   *         This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
-FlagStatus LPTIM_GetFlagStatus(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_FLAG)
+FlagStatus LPTIM_GetFlagStatus(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_FLAG)
 {
-  ITStatus bitstatus = RESET;
+    ITStatus bitstatus = RESET;
 
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_GET_FLAG(LPTIM_FLAG));
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_GET_FLAG(LPTIM_FLAG));
 
-  if((LPTIMx->ISR & LPTIM_FLAG) != (RESET))
-  {
-    bitstatus = SET;
-  }
-  else
-  {
-    bitstatus = RESET;
-  }
-  return bitstatus;
+    if((LPTIMx->ISR & LPTIM_FLAG) != (RESET))
+    {
+        bitstatus = SET;
+    }
+    else
+    {
+        bitstatus = RESET;
+    }
+    return bitstatus;
 }
 
 /**
@@ -881,14 +881,14 @@ FlagStatus LPTIM_GetFlagStatus(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_FLAG)
   * @note   LPTIM_Flag_UP is generated only for LPTIM1.
   * @retval None
   */
-void LPTIM_ClearFlag(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_CLEARF)
+void LPTIM_ClearFlag(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_CLEARF)
 {
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_CLEAR_FLAG(LPTIM_CLEARF));
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_CLEAR_FLAG(LPTIM_CLEARF));
 
-  /* Clear the IT pending Bit */
-  LPTIMx->ICR |= LPTIM_CLEARF;
+    /* Clear the IT pending Bit */
+    LPTIMx->ICR |= LPTIM_CLEARF;
 }
 
 /**
@@ -904,30 +904,30 @@ void LPTIM_ClearFlag(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_CLEARF)
   *            @arg LPTIM_IT_CMPM: Compare match Interrupt source
   * @retval The new state of LPTIM_IT (SET or RESET).
   */
-ITStatus LPTIM_GetITStatus(LPTIM_TypeDef* LPTIMx, uint32_t LPTIM_IT)
+ITStatus LPTIM_GetITStatus(LPTIM_TypeDef *LPTIMx, uint32_t LPTIM_IT)
 {
-  ITStatus bitstatus = RESET;
-  uint32_t itstatus = 0x0, itenable = 0x0;
+    ITStatus bitstatus = RESET;
+    uint32_t itstatus = 0x0, itenable = 0x0;
 
-  /* Check the parameters */
-  assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
-  assert_param(IS_LPTIM_IT(LPTIM_IT));
+    /* Check the parameters */
+    assert_param(IS_LPTIM_ALL_PERIPH(LPTIMx));
+    assert_param(IS_LPTIM_IT(LPTIM_IT));
 
-  /* Get the Interrupt Status bit value */
-  itstatus = LPTIMx->ISR & LPTIM_IT;
+    /* Get the Interrupt Status bit value */
+    itstatus = LPTIMx->ISR & LPTIM_IT;
 
-  /* Check if the Interrupt is enabled */
-  itenable = LPTIMx->IER & LPTIM_IT;
+    /* Check if the Interrupt is enabled */
+    itenable = LPTIMx->IER & LPTIM_IT;
 
-  if((itstatus != RESET) && (itenable != RESET))
-  {
-    bitstatus = SET;
-  }
-  else
-  {
-    bitstatus = RESET;
-  }
-  return bitstatus;
+    if((itstatus != RESET) && (itenable != RESET))
+    {
+        bitstatus = SET;
+    }
+    else
+    {
+        bitstatus = RESET;
+    }
+    return bitstatus;
 }
 
 /**

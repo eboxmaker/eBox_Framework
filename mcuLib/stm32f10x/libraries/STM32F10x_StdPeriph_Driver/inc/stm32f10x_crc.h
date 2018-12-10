@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V3.5.0
   * @date    11-March-2011
-  * @brief   This file contains all the functions prototypes for the CRC firmware 
+  * @brief   This file contains all the functions prototypes for the CRC firmware
   *          library.
   ******************************************************************************
   * @attention
@@ -25,7 +25,7 @@
 #define __STM32F10x_CRC_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/

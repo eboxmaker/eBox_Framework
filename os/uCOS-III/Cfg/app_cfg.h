@@ -79,9 +79,9 @@
  *********************************************************************************************************
  */
 #if 0
- #define  TRACE_LEVEL_OFF                            0
- #define  TRACE_LEVEL_INFO                           1
- #define  TRACE_LEVEL_DEBUG                          2
+#define  TRACE_LEVEL_OFF                            0
+#define  TRACE_LEVEL_INFO                           1
+#define  TRACE_LEVEL_DEBUG                          2
 #endif
 
 #define  APP_TRACE_LEVEL                            TRACE_LEVEL_INFO

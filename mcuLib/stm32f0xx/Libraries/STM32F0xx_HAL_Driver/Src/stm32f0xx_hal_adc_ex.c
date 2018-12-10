@@ -4,16 +4,16 @@
   * @author  MCD Application Team
   * @version V1.4.0
   * @date    27-May-2016
-  * @brief   This file provides firmware functions to manage the following 
+  * @brief   This file provides firmware functions to manage the following
   *          functionalities of the Analog to Digital Convertor (ADC)
   *          peripheral:
   *           + Operation functions
   *             ++ Calibration (ADC automatic self-calibration)
-  *          Other functions (generic functions) are available in file 
+  *          Other functions (generic functions) are available in file
   *          "stm32l1xx_hal_adc.c".
   *
   @verbatim
-  [..] 
+  [..]
   (@) Sections "ADC peripheral features" and "How to use this driver" are
       available in file of generic functions "stm32l1xx_hal_adc.c".
   [..]
@@ -45,7 +45,7 @@
   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
-  ******************************************************************************  
+  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -66,17 +66,17 @@
 /* Private define ------------------------------------------------------------*/
 /** @defgroup ADCEx_Private_Constants ADCEx Private Constants
   * @{
-  */ 
- 
+  */
+
 /* Fixed timeout values for ADC calibration, enable settling time, disable  */
-  /* settling time.                                                           */
-  /* Values defined to be higher than worst cases: low clock frequency,       */
-  /* maximum prescaler.                                                       */
-  /* Ex of profile low frequency : Clock source at 0.1 MHz, ADC clock         */
-  /* prescaler 4.                                                             */
-  /* Unit: ms                                                                 */
-  #define ADC_DISABLE_TIMEOUT           2
-  #define ADC_CALIBRATION_TIMEOUT       2      
+/* settling time.                                                           */
+/* Values defined to be higher than worst cases: low clock frequency,       */
+/* maximum prescaler.                                                       */
+/* Ex of profile low frequency : Clock source at 0.1 MHz, ADC clock         */
+/* prescaler 4.                                                             */
+/* Unit: ms                                                                 */
+#define ADC_DISABLE_TIMEOUT           2
+#define ADC_CALIBRATION_TIMEOUT       2
 /**
   * @}
   */
@@ -90,7 +90,7 @@
   * @{
   */
 
-/** @defgroup ADCEx_Exported_Functions_Group1 Extended Initialization/de-initialization functions 
+/** @defgroup ADCEx_Exported_Functions_Group1 Extended Initialization/de-initialization functions
  *  @brief    Extended Initialization and Configuration functions
  *
 @verbatim
@@ -98,7 +98,7 @@
                       ##### IO operation functions #####
  ===============================================================================
     [..]  This section provides functions allowing to:
-      (+) Perform the ADC calibration. 
+      (+) Perform the ADC calibration.
 @endverbatim
   * @{
   */
@@ -112,70 +112,70 @@
   * @param  hadc: ADC handle
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_ADCEx_Calibration_Start(ADC_HandleTypeDef* hadc)
+HAL_StatusTypeDef HAL_ADCEx_Calibration_Start(ADC_HandleTypeDef *hadc)
 {
-  HAL_StatusTypeDef tmp_hal_status = HAL_OK;
-  uint32_t tickstart=0;
-  
-  /* Check the parameters */
-  assert_param(IS_ADC_ALL_INSTANCE(hadc->Instance));
+    HAL_StatusTypeDef tmp_hal_status = HAL_OK;
+    uint32_t tickstart = 0;
 
-  /* Process locked */
-  __HAL_LOCK(hadc);
-  
-  /* Calibration prerequisite: ADC must be disabled. */
-  if (ADC_IS_ENABLE(hadc) == RESET)
-  {
-    /* Set ADC state */
-    ADC_STATE_CLR_SET(hadc->State, 
-                      HAL_ADC_STATE_REG_BUSY,
-                      HAL_ADC_STATE_BUSY_INTERNAL);
-    
-    /* Start ADC calibration */
-    hadc->Instance->CR |= ADC_CR_ADCAL;
+    /* Check the parameters */
+    assert_param(IS_ADC_ALL_INSTANCE(hadc->Instance));
 
-    tickstart = HAL_GetTick();  
+    /* Process locked */
+    __HAL_LOCK(hadc);
 
-    /* Wait for calibration completion */
-    while(HAL_IS_BIT_SET(hadc->Instance->CR, ADC_CR_ADCAL))
+    /* Calibration prerequisite: ADC must be disabled. */
+    if (ADC_IS_ENABLE(hadc) == RESET)
     {
-      if((HAL_GetTick() - tickstart) > ADC_CALIBRATION_TIMEOUT)
-      {
-        /* Update ADC state machine to error */
+        /* Set ADC state */
+        ADC_STATE_CLR_SET(hadc->State,
+                          HAL_ADC_STATE_REG_BUSY,
+                          HAL_ADC_STATE_BUSY_INTERNAL);
+
+        /* Start ADC calibration */
+        hadc->Instance->CR |= ADC_CR_ADCAL;
+
+        tickstart = HAL_GetTick();
+
+        /* Wait for calibration completion */
+        while(HAL_IS_BIT_SET(hadc->Instance->CR, ADC_CR_ADCAL))
+        {
+            if((HAL_GetTick() - tickstart) > ADC_CALIBRATION_TIMEOUT)
+            {
+                /* Update ADC state machine to error */
+                ADC_STATE_CLR_SET(hadc->State,
+                                  HAL_ADC_STATE_BUSY_INTERNAL,
+                                  HAL_ADC_STATE_ERROR_INTERNAL);
+
+                /* Process unlocked */
+                __HAL_UNLOCK(hadc);
+
+                return HAL_ERROR;
+            }
+        }
+
+        /* Set ADC state */
         ADC_STATE_CLR_SET(hadc->State,
                           HAL_ADC_STATE_BUSY_INTERNAL,
-                          HAL_ADC_STATE_ERROR_INTERNAL);
-        
-        /* Process unlocked */
-        __HAL_UNLOCK(hadc);
-        
-        return HAL_ERROR;
-      }
+                          HAL_ADC_STATE_READY);
     }
-    
-    /* Set ADC state */
-    ADC_STATE_CLR_SET(hadc->State,
-                      HAL_ADC_STATE_BUSY_INTERNAL,
-                      HAL_ADC_STATE_READY);
-  }
-  else
-  {
-    /* Update ADC state machine to error */
-    SET_BIT(hadc->State, HAL_ADC_STATE_ERROR_CONFIG);
-    
-    tmp_hal_status = HAL_ERROR;
-  }
-  
-  /* Process unlocked */
-  __HAL_UNLOCK(hadc);
-  
-  /* Return function status */
-  return tmp_hal_status;
+    else
+    {
+        /* Update ADC state machine to error */
+        SET_BIT(hadc->State, HAL_ADC_STATE_ERROR_CONFIG);
+
+        tmp_hal_status = HAL_ERROR;
+    }
+
+    /* Process unlocked */
+    __HAL_UNLOCK(hadc);
+
+    /* Return function status */
+    return tmp_hal_status;
 }
 
 /**
   * @}
-  */  
+  */
 
 /**
   * @}

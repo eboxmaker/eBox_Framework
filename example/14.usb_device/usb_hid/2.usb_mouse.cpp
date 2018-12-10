@@ -22,8 +22,8 @@ int main(void)
     setup();
     while(1)
     {
-			mouse.move(20, 0);
-			delay_ms(500);
+        mouse.move(20, 0);
+        delay_ms(500);
     }
 
 }

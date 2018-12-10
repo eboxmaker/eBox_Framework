@@ -86,25 +86,25 @@ OS_TMR_SPOKE OSCfg_TmrWheel      [OS_CFG_TMR_WHEEL_SIZE];
  ************************************************************************************************************************
  */
 
-CPU_STK      * const OSCfg_IdleTaskStkBasePtr   = (CPU_STK    *)&OSCfg_IdleTaskStk[0];
+CPU_STK       *const OSCfg_IdleTaskStkBasePtr   = (CPU_STK *) &OSCfg_IdleTaskStk[0];
 CPU_STK_SIZE const OSCfg_IdleTaskStkLimit     = (CPU_STK_SIZE)OS_CFG_IDLE_TASK_STK_LIMIT;
 CPU_STK_SIZE const OSCfg_IdleTaskStkSize      = (CPU_STK_SIZE)OS_CFG_IDLE_TASK_STK_SIZE;
 CPU_INT32U const OSCfg_IdleTaskStkSizeRAM   = (CPU_INT32U  )sizeof(OSCfg_IdleTaskStk);
 
 
 #if (OS_CFG_ISR_POST_DEFERRED_EN > 0u)
-OS_INT_Q     * const OSCfg_IntQBasePtr          = (OS_INT_Q   *)&OSCfg_IntQ[0];
+OS_INT_Q      *const OSCfg_IntQBasePtr          = (OS_INT_Q *) &OSCfg_IntQ[0];
 OS_OBJ_QTY const OSCfg_IntQSize             = (OS_OBJ_QTY  )OS_CFG_INT_Q_SIZE;
 CPU_INT32U const OSCfg_IntQSizeRAM          = (CPU_INT32U  )sizeof(OSCfg_IntQ);
-CPU_STK      * const OSCfg_IntQTaskStkBasePtr   = (CPU_STK    *)&OSCfg_IntQTaskStk[0];
+CPU_STK       *const OSCfg_IntQTaskStkBasePtr   = (CPU_STK *) &OSCfg_IntQTaskStk[0];
 CPU_STK_SIZE const OSCfg_IntQTaskStkLimit     = (CPU_STK_SIZE)OS_CFG_INT_Q_TASK_STK_LIMIT;
 CPU_STK_SIZE const OSCfg_IntQTaskStkSize      = (CPU_STK_SIZE)OS_CFG_INT_Q_TASK_STK_SIZE;
 CPU_INT32U const OSCfg_IntQTaskStkSizeRAM   = (CPU_INT32U  )sizeof(OSCfg_IntQTaskStk);
 #else
-OS_INT_Q     * const OSCfg_IntQBasePtr          = (OS_INT_Q   *)0;
+OS_INT_Q      *const OSCfg_IntQBasePtr          = (OS_INT_Q *)0;
 OS_OBJ_QTY const OSCfg_IntQSize             = (OS_OBJ_QTY  )0;
 CPU_INT32U const OSCfg_IntQSizeRAM          = (CPU_INT32U  )0;
-CPU_STK      * const OSCfg_IntQTaskStkBasePtr   = (CPU_STK    *)0;
+CPU_STK       *const OSCfg_IntQTaskStkBasePtr   = (CPU_STK *)0;
 CPU_STK_SIZE const OSCfg_IntQTaskStkLimit     = (CPU_STK_SIZE)0;
 CPU_STK_SIZE const OSCfg_IntQTaskStkSize      = (CPU_STK_SIZE)0;
 CPU_INT32U const OSCfg_IntQTaskStkSizeRAM   = (CPU_INT32U  )0;
@@ -112,11 +112,11 @@ CPU_INT32U const OSCfg_IntQTaskStkSizeRAM   = (CPU_INT32U  )0;
 
 
 #if (OS_CFG_ISR_STK_SIZE > 0u)
-CPU_STK      * const OSCfg_ISRStkBasePtr        = (CPU_STK    *)&OSCfg_ISRStk[0];
+CPU_STK       *const OSCfg_ISRStkBasePtr        = (CPU_STK *) &OSCfg_ISRStk[0];
 CPU_STK_SIZE const OSCfg_ISRStkSize           = (CPU_STK_SIZE)OS_CFG_ISR_STK_SIZE;
 CPU_INT32U const OSCfg_ISRStkSizeRAM        = (CPU_INT32U  )sizeof(OSCfg_ISRStk);
 #else
-CPU_STK      * const OSCfg_ISRStkBasePtr        = (CPU_STK    *)0;
+CPU_STK       *const OSCfg_ISRStkBasePtr        = (CPU_STK *)0;
 CPU_STK_SIZE const OSCfg_ISRStkSize           = (CPU_STK_SIZE)0;
 CPU_INT32U const OSCfg_ISRStkSizeRAM        = (CPU_INT32U  )0;
 #endif
@@ -125,25 +125,25 @@ CPU_INT32U const OSCfg_ISRStkSizeRAM        = (CPU_INT32U  )0;
 #if (OS_MSG_EN > 0u)
 OS_MSG_SIZE const OSCfg_MsgPoolSize          = (OS_MSG_SIZE)OS_CFG_MSG_POOL_SIZE;
 CPU_INT32U const OSCfg_MsgPoolSizeRAM       = (CPU_INT32U )sizeof(OSCfg_MsgPool);
-OS_MSG       * const OSCfg_MsgPoolBasePtr       = (OS_MSG    *)&OSCfg_MsgPool[0];
+OS_MSG        *const OSCfg_MsgPoolBasePtr       = (OS_MSG *) &OSCfg_MsgPool[0];
 #else
 OS_MSG_SIZE const OSCfg_MsgPoolSize          = (OS_MSG_SIZE)0;
 CPU_INT32U const OSCfg_MsgPoolSizeRAM       = (CPU_INT32U )0;
-OS_MSG       * const OSCfg_MsgPoolBasePtr       = (OS_MSG    *)0;
+OS_MSG        *const OSCfg_MsgPoolBasePtr       = (OS_MSG *)0;
 #endif
 
 
 #if (OS_CFG_STAT_TASK_EN > 0u)
 OS_PRIO const OSCfg_StatTaskPrio         = (OS_PRIO     )OS_CFG_STAT_TASK_PRIO;
 OS_RATE_HZ const OSCfg_StatTaskRate_Hz      = (OS_RATE_HZ  )OS_CFG_STAT_TASK_RATE_HZ;
-CPU_STK      * const OSCfg_StatTaskStkBasePtr   = (CPU_STK    *)&OSCfg_StatTaskStk[0];
+CPU_STK       *const OSCfg_StatTaskStkBasePtr   = (CPU_STK *) &OSCfg_StatTaskStk[0];
 CPU_STK_SIZE const OSCfg_StatTaskStkLimit     = (CPU_STK_SIZE)OS_CFG_STAT_TASK_STK_LIMIT;
 CPU_STK_SIZE const OSCfg_StatTaskStkSize      = (CPU_STK_SIZE)OS_CFG_STAT_TASK_STK_SIZE;
 CPU_INT32U const OSCfg_StatTaskStkSizeRAM   = (CPU_INT32U  )sizeof(OSCfg_StatTaskStk);
 #else
 OS_PRIO const OSCfg_StatTaskPrio         = (OS_PRIO     )0;
 OS_RATE_HZ const OSCfg_StatTaskRate_Hz      = (OS_RATE_HZ  )0;
-CPU_STK      * const OSCfg_StatTaskStkBasePtr   = (CPU_STK    *)0;
+CPU_STK       *const OSCfg_StatTaskStkBasePtr   = (CPU_STK *)0;
 CPU_STK_SIZE const OSCfg_StatTaskStkLimit     = (CPU_STK_SIZE)0;
 CPU_STK_SIZE const OSCfg_StatTaskStkSize      = (CPU_STK_SIZE)0;
 CPU_INT32U const OSCfg_StatTaskStkSizeRAM   = (CPU_INT32U  )0;
@@ -155,7 +155,7 @@ CPU_STK_SIZE const OSCfg_StkSizeMin           = (CPU_STK_SIZE)OS_CFG_STK_SIZE_MI
 
 OS_RATE_HZ const OSCfg_TickRate_Hz          = (OS_RATE_HZ  )OS_CFG_TICK_RATE_HZ;
 OS_PRIO const OSCfg_TickTaskPrio         = (OS_PRIO     )OS_CFG_TICK_TASK_PRIO;
-CPU_STK      * const OSCfg_TickTaskStkBasePtr   = (CPU_STK    *)&OSCfg_TickTaskStk[0];
+CPU_STK       *const OSCfg_TickTaskStkBasePtr   = (CPU_STK *) &OSCfg_TickTaskStk[0];
 CPU_STK_SIZE const OSCfg_TickTaskStkLimit     = (CPU_STK_SIZE)OS_CFG_TICK_TASK_STK_LIMIT;
 CPU_STK_SIZE const OSCfg_TickTaskStkSize      = (CPU_STK_SIZE)OS_CFG_TICK_TASK_STK_SIZE;
 CPU_INT32U const OSCfg_TickTaskStkSizeRAM   = (CPU_INT32U  )sizeof(OSCfg_TickTaskStk);
@@ -166,7 +166,7 @@ CPU_INT32U const OSCfg_TickWheelSizeRAM     = (CPU_INT32U  )sizeof(OSCfg_TickWhe
 #if (OS_CFG_TMR_EN > 0u)
 OS_PRIO const OSCfg_TmrTaskPrio          = (OS_PRIO     )OS_CFG_TMR_TASK_PRIO;
 OS_RATE_HZ const OSCfg_TmrTaskRate_Hz       = (OS_RATE_HZ  )OS_CFG_TMR_TASK_RATE_HZ;
-CPU_STK      * const OSCfg_TmrTaskStkBasePtr    = (CPU_STK    *)&OSCfg_TmrTaskStk[0];
+CPU_STK       *const OSCfg_TmrTaskStkBasePtr    = (CPU_STK *) &OSCfg_TmrTaskStk[0];
 CPU_STK_SIZE const OSCfg_TmrTaskStkLimit      = (CPU_STK_SIZE)OS_CFG_TMR_TASK_STK_LIMIT;
 CPU_STK_SIZE const OSCfg_TmrTaskStkSize       = (CPU_STK_SIZE)OS_CFG_TMR_TASK_STK_SIZE;
 CPU_INT32U const OSCfg_TmrTaskStkSizeRAM    = (CPU_INT32U  )sizeof(OSCfg_TmrTaskStk);
@@ -175,7 +175,7 @@ CPU_INT32U const OSCfg_TmrWheelSizeRAM      = (CPU_INT32U  )sizeof(OSCfg_TmrWhee
 #else
 OS_PRIO const OSCfg_TmrTaskPrio          = (OS_PRIO     )0;
 OS_RATE_HZ const OSCfg_TmrTaskRate_Hz       = (OS_RATE_HZ  )0;
-CPU_STK      * const OSCfg_TmrTaskStkBasePtr    = (CPU_STK    *)0;
+CPU_STK       *const OSCfg_TmrTaskStkBasePtr    = (CPU_STK *)0;
 CPU_STK_SIZE const OSCfg_TmrTaskStkLimit      = (CPU_STK_SIZE)0;
 CPU_STK_SIZE const OSCfg_TmrTaskStkSize       = (CPU_STK_SIZE)0;
 CPU_INT32U const OSCfg_TmrTaskStkSizeRAM    = (CPU_INT32U  )0;
@@ -194,28 +194,28 @@ CPU_INT32U const OSCfg_TmrWheelSizeRAM      = (CPU_INT32U  )0;
 CPU_INT32U const OSCfg_DataSizeRAM          = sizeof(OSCfg_IdleTaskStk)
 
 #if (OS_CFG_ISR_POST_DEFERRED_EN > 0u)
-                                              + sizeof(OSCfg_IntQ)
-                                              + sizeof(OSCfg_IntQTaskStk)
+        + sizeof(OSCfg_IntQ)
+        + sizeof(OSCfg_IntQTaskStk)
 #endif
 
 #if (OS_MSG_EN > 0u)
-                                              + sizeof(OSCfg_MsgPool)
+        + sizeof(OSCfg_MsgPool)
 #endif
 
 #if (OS_CFG_STAT_TASK_EN > 0u)
-                                              + sizeof(OSCfg_StatTaskStk)
+        + sizeof(OSCfg_StatTaskStk)
 #endif
 
 #if (OS_CFG_TMR_EN > 0u)
-                                              + sizeof(OSCfg_TmrTaskStk)
-                                              + sizeof(OSCfg_TmrWheel)
+        + sizeof(OSCfg_TmrTaskStk)
+        + sizeof(OSCfg_TmrWheel)
 #endif
 
 #if (OS_CFG_ISR_STK_SIZE > 0u)
-                                              + sizeof(OSCfg_ISRStk)
+        + sizeof(OSCfg_ISRStk)
 #endif
-                                              + sizeof(OSCfg_TickTaskStk)
-                                              + sizeof(OSCfg_TickWheel);
+        + sizeof(OSCfg_TickTaskStk)
+        + sizeof(OSCfg_TickWheel);
 
 /*$PAGE*/
 /*
