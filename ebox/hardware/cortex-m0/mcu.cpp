@@ -22,7 +22,6 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "ebox_core.h"
-#include "ebox_config.h"
 #include "mcu.h"
 
 #define systick_no_interrupt()  SysTick->CTRL &=0xfffffffd

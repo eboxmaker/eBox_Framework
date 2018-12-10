@@ -17,7 +17,6 @@
   */
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_spi.h"
-#include "ebox_config.h"
 #include "stm32f072_define.h"
 
 #if EBOX_DEBUG

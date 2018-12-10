@@ -18,7 +18,6 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "ebox_config.h"
 #include "ebox_iflash.h"
 #include "stm32f0xx_hal_flash_ex.h"
 
