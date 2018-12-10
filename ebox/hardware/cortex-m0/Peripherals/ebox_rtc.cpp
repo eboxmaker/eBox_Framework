@@ -21,7 +21,6 @@
 #include "stm32f0xx_ll_rtc.h"
 #include "stm32f0xx_ll_rcc.h"
 #include "stm32f0xx_ll_pwr.h"
-#include "ebox_config.h"
 
 #if USE_PRINTF
 // 是否打印调试信息, 1打印,0不打印
