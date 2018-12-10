@@ -19,13 +19,16 @@ void task_1();
 void task_2();
 void task_3();
 
+uint32_t task1_counter = 0;
+uint32_t task2_counter = 0;
+uint32_t task3_counter;
 void setup()
 {
     ebox_init();
     os_init();
 
     uart1.begin(115200);
-    uart1.printf("\r\nuart1 9600 ok!");
+    uart1.printf("\r\nuart1 115200 ok!");
 
     uart1.printf("\r\nos≥ı ºªØ!");
     PB8.mode(OUTPUT_PP);
@@ -43,27 +46,37 @@ void task_1()
 {
     while(1)
     {
-        uart1.printf("Task 1 Running!!!\r\n");
+        task1_counter++;
+        uart1.printf("Task 1 Running!!! cpu usage:%0.2f[%05d]\r\n",os_get_cpu_usage(),task1_counter);
         PB8 = !PB8;
-        os_time_delay(500);
+        os_time_delay(1000);
     }
 }
 void task_2()
 {
     while(1)
     {
+        task2_counter++;
         PB9 = !PB9;
-        uart1.printf("Task 2 Running!!!\r\n", task2count);
-        os_time_delay(750);
+        uart1.printf("Task 2 Running!!![%05d]\r\n",task2_counter);
+        os_time_delay(1000);
     }
 }
 void task_3()
 {
     while(1)
     {
-        PB10 = !PB10;
-        uart1.printf("Task 3 Running!!!\r\n");
-        os_time_delay(1000);
+        //PB10 = !PB10;
+        //uart1.printf("Task 3 Running!!!\r\n");
+        int len = uart1.available();
+        for(int i = 0; i < len; i++ )
+        {
+            char c = uart1.read();
+
+            uart1.printf("%c", c);
+
+        }
+        os_time_delay(1);
     }
 }
 
@@ -71,7 +84,8 @@ int main(void)
 {
     setup();
     while(1)
-    {    }
+    {  
+    }
 }
 
 

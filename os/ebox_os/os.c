@@ -15,7 +15,8 @@ This specification is preliminary and is subject to change at any time without n
 
 
 #include "os.h"
-#include "mcu_core.h"
+#include "mcu.h"
+#include "ebox_core.h"
 
 
 /******************空闲任务信息*******************/
@@ -241,8 +242,7 @@ void os_init(void)
 {
     OSRdyTbl = 0;
     OSPrioCur = OSPrioHighRdy = OS_TASKS;
-    set_systick_user_event_per_sec(1000);
-    attach_systick_user_event(os_time_tick);//移植到非ebox环境的时候需要处理。将os_time_tick放入systick中断，并将此行删除
+    attachSystickCallBack(os_time_tick,1);//移植到非ebox环境的时候需要处理。将os_time_tick放入systick中断，并将此行删除
     OS_NO_TIME_SW();
 
 }
@@ -328,10 +328,10 @@ void os_idle_hook_1(void)
         count++;
 
     }
-    if(count < get_cpu_calculate_per_sec())
+    if(count < cpu.ability)
     {
-        count = get_cpu_calculate_per_sec() - count;
-        cpu_usage = (float)(count * 100.0 / (float)get_cpu_calculate_per_sec());
+        count = cpu.ability - count;
+        cpu_usage = (float)(count * 100.0 / (float)cpu.ability);
     }
 
 }

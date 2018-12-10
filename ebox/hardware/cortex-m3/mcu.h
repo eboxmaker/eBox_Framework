@@ -47,7 +47,7 @@ typedef  void   (*fun_onePara_t)(unsigned int);  //单参数函数指针
 
 
 ///////全局变量、函数///////////////////////////////////////////////
-extern __IO uint64_t millis_seconds;     //提供一个mills()等效的全局变量。降低cpu调用开销
+extern __IO uint64_t milli_seconds;     //提供一个mills()等效的全局变量。降低cpu调用开销
 // 初始化
 extern void     mcu_init(void);              //ebox系统初始化
 extern void     SystemClock_Config(void);    //外部实现该函数，可以修改时钟源以及时钟频率。默认工作在72Mhz
@@ -59,10 +59,10 @@ extern uint64_t mcu_millis(void);               //获取系统当前运行了多长时间。单
 extern void     mcu_delay_ms(uint32_t ms);//延时n毫秒。可在任意情况下使用，包括禁止所有中断的情况。精度正负1us。
 extern void     mcu_delay_us(uint32_t us);//延时n微秒。可在任意情况下使用，包括禁止所有中断的情况。精度正负1us。
 // systick中断回调函数
-extern uint16_t attachSystickCallBack(fun_noPara_t fun, uint16_t multiple = 1); // 绑定中断回调函数，允许则定义周期 = multiple * 1ms; 最大65535
+extern uint16_t attachSystickCallBack(fun_noPara_t fun, uint16_t multiple); // 绑定中断回调函数，允许则定义周期 = multiple * 1ms; 最大65535
 
 
-#define GetEndTime(timeOut)         (millis_seconds + timeOut)
+#define GetEndTime(timeOut)         (milli_seconds + timeOut)
 // 超时,返回1 否则返回0   这里采用millis()获取millis_seconds,可以防止因为关闭中断导致程序死在延时函数里
 #define IsTimeOut(endTime,delay)    ((uint32_t)(endTime - millis())>delay)
 
