@@ -57,6 +57,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#include "mcu_config.h"
+    
 /** @addtogroup Library_configuration_section
   * @{
   */

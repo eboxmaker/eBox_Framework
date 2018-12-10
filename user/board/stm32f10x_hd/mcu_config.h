@@ -3,21 +3,18 @@
 
 
 #include "stdint.h"
-#include "stm32f10x.h"
+#include "ebox_type.h"
 
 //用户配置区域
 //请查阅ebox_cpu_type.h寻找特定信号CPU的详细配置
-#define STM32_TYPE    STM32F103C8
-#define STM32_PINS    64
-#define STM32_FLASH   128
-#define STM32_RAM1    20
+
+#define STM32_TYPE    STM32F103ZE
+#define STM32_PINS    144
+#define STM32_FLASH   512
+#define STM32_RAM1    64
 #define STM32_COMPANY "ST\0"
 
-//#define STM32_TYPE    STM32F103ZE
-//#define STM32_PINS    144
-//#define STM32_FLASH   512
-//#define STM32_RAM1    64
-//#define STM32_COMPANY "ST\0"
+#define HSE_VALUE    ((uint32_t)8000000) /*!< Value of the External oscillator in Hz */
 
 
 //由于KEIL自身有编译的宏定义会导致此选项无效，所以要更改keil的device选项，选择正确的MCU
@@ -34,16 +31,6 @@
 
 
 //外设配置
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -101,6 +88,7 @@ extern int SHT$$INIT_ARRAY$$Limit;
 
 
 
+#include "stm32f10x.h"
 
 
 
