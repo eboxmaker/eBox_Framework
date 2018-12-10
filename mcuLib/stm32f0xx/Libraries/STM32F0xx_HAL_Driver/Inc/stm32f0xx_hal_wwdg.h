@@ -33,14 +33,14 @@
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F0xx_HAL_WWDG_H
 #define __STM32F0xx_HAL_WWDG_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -52,54 +52,54 @@
 
 /** @addtogroup WWDG
   * @{
-  */ 
+  */
 
-/* Exported types ------------------------------------------------------------*/ 
+/* Exported types ------------------------------------------------------------*/
 
 /** @defgroup WWDG_Exported_Types WWDG Exported Types
   * @{
   */
-   
-/** 
-  * @brief  WWDG HAL State Structure definition  
-  */ 
+
+/**
+  * @brief  WWDG HAL State Structure definition
+  */
 typedef enum
 {
-  HAL_WWDG_STATE_RESET     = 0x00,  /*!< WWDG not yet initialized or disabled */
-  HAL_WWDG_STATE_READY     = 0x01,  /*!< WWDG initialized and ready for use   */
-  HAL_WWDG_STATE_BUSY      = 0x02,  /*!< WWDG internal process is ongoing     */ 
-  HAL_WWDG_STATE_TIMEOUT   = 0x03,  /*!< WWDG timeout state                   */
-  HAL_WWDG_STATE_ERROR     = 0x04   /*!< WWDG error state                     */
-}HAL_WWDG_StateTypeDef;
+    HAL_WWDG_STATE_RESET     = 0x00,  /*!< WWDG not yet initialized or disabled */
+    HAL_WWDG_STATE_READY     = 0x01,  /*!< WWDG initialized and ready for use   */
+    HAL_WWDG_STATE_BUSY      = 0x02,  /*!< WWDG internal process is ongoing     */
+    HAL_WWDG_STATE_TIMEOUT   = 0x03,  /*!< WWDG timeout state                   */
+    HAL_WWDG_STATE_ERROR     = 0x04   /*!< WWDG error state                     */
+} HAL_WWDG_StateTypeDef;
 
-/** 
-  * @brief   WWDG Init structure definition  
+/**
+  * @brief   WWDG Init structure definition
   */
 typedef struct
 {
-  uint32_t Prescaler;      /*!< Specifies the prescaler value of the WWDG.  
+    uint32_t Prescaler;      /*!< Specifies the prescaler value of the WWDG.
                                 This parameter can be a value of @ref WWDG_Prescaler */
 
-  uint32_t Window;         /*!< Specifies the WWDG window value to be compared to the downcounter.
+    uint32_t Window;         /*!< Specifies the WWDG window value to be compared to the downcounter.
                                 This parameter must be a number lower than Max_Data = 0x80 */
-                               
-  uint32_t Counter;        /*!< Specifies the WWDG free-running downcounter  value.
+
+    uint32_t Counter;        /*!< Specifies the WWDG free-running downcounter  value.
                                 This parameter must be a number between Min_Data = 0x40 and Max_Data = 0x7F */
 
 } WWDG_InitTypeDef;
 
-/** 
-  * @brief  WWDG handle Structure definition  
-  */ 
+/**
+  * @brief  WWDG handle Structure definition
+  */
 typedef struct
 {
-  WWDG_TypeDef                   *Instance;  /*!< Register base address    */ 
-  
-  WWDG_InitTypeDef               Init;       /*!< WWDG required parameters */
-  
-  HAL_LockTypeDef                Lock;       /*!< WWDG locking object      */
-  
-  __IO HAL_WWDG_StateTypeDef     State;      /*!< WWDG communication state */
+    WWDG_TypeDef                   *Instance;  /*!< Register base address    */
+
+    WWDG_InitTypeDef               Init;       /*!< WWDG required parameters */
+
+    HAL_LockTypeDef                Lock;       /*!< WWDG locking object      */
+
+    __IO HAL_WWDG_StateTypeDef     State;      /*!< WWDG communication state */
 
 } WWDG_HandleTypeDef;
 /**
@@ -114,7 +114,7 @@ typedef struct
 
 /** @defgroup WWDG_Interrupt_definition WWDG Interrupt definition
   * @{
-  */ 
+  */
 #define WWDG_IT_EWI                       WWDG_CFR_EWI  /*!< Early wakeup interrupt */
 /**
   * @}
@@ -123,7 +123,7 @@ typedef struct
 /** @defgroup WWDG_Flag_definition WWDG Flag definition
   * @brief WWDG Flag definition
   * @{
-  */ 
+  */
 #define WWDG_FLAG_EWIF                    WWDG_SR_EWIF  /*!< Early wakeup interrupt flag */
 /**
   * @}
@@ -131,7 +131,7 @@ typedef struct
 
 /** @defgroup WWDG_Prescaler WWDG Prescaler
   * @{
-  */ 
+  */
 #define WWDG_PRESCALER_1                  ((uint32_t)0x00000000)  /*!< WWDG counter clock = (PCLK1/4096)/1 */
 #define WWDG_PRESCALER_2                  WWDG_CFR_WDGTB_0  /*!< WWDG counter clock = (PCLK1/4096)/2 */
 #define WWDG_PRESCALER_4                  WWDG_CFR_WDGTB_1  /*!< WWDG counter clock = (PCLK1/4096)/4 */
@@ -147,7 +147,7 @@ typedef struct
 /* Private macros ------------------------------------------------------------*/
 /** @defgroup WWDG_Private_Macros WWDG Private Macros
   * @{
-  */ 
+  */
 #define IS_WWDG_PRESCALER(__PRESCALER__)  (((__PRESCALER__) == WWDG_PRESCALER_1) || \
                                            ((__PRESCALER__) == WWDG_PRESCALER_2) || \
                                            ((__PRESCALER__) == WWDG_PRESCALER_4) || \
@@ -158,9 +158,9 @@ typedef struct
 #define IS_WWDG_COUNTER(__COUNTER__)      (((__COUNTER__) >= 0x40) && ((__COUNTER__) <= 0x7F))
 /**
   * @}
-  */ 
+  */
 
-  
+
 /* Exported macros ------------------------------------------------------------*/
 
 /** @defgroup WWDG_Exported_Macros WWDG Exported Macros
@@ -206,7 +206,7 @@ typedef struct
   * @param  __INTERRUPT__: specifies the interrupt to disable.
   *         This parameter can be one of the following values:
   *            @arg WWDG_IT_EWI: Early wakeup interrupt
-  * @note   WARNING: This is a dummy macro for HAL code alignment. 
+  * @note   WARNING: This is a dummy macro for HAL code alignment.
   *         Once enabled this interrupt cannot be disabled except by a system reset.
   * @retval None
   */
@@ -290,7 +290,7 @@ HAL_StatusTypeDef     HAL_WWDG_Start(WWDG_HandleTypeDef *hwwdg);
 HAL_StatusTypeDef     HAL_WWDG_Start_IT(WWDG_HandleTypeDef *hwwdg);
 HAL_StatusTypeDef     HAL_WWDG_Refresh(WWDG_HandleTypeDef *hwwdg, uint32_t Counter);
 void                  HAL_WWDG_IRQHandler(WWDG_HandleTypeDef *hwwdg);
-void                  HAL_WWDG_WakeupCallback(WWDG_HandleTypeDef* hwwdg);
+void                  HAL_WWDG_WakeupCallback(WWDG_HandleTypeDef *hwwdg);
 /**
   * @}
   */
@@ -302,20 +302,20 @@ void                  HAL_WWDG_WakeupCallback(WWDG_HandleTypeDef* hwwdg);
 HAL_WWDG_StateTypeDef HAL_WWDG_GetState(WWDG_HandleTypeDef *hwwdg);
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
-  
+  */
+
 #ifdef __cplusplus
 }
 #endif

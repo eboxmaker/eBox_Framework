@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V1.6.1
   * @date    21-October-2015
-  * @brief   This file contains all the functions prototypes for the QSPI 
+  * @brief   This file contains all the functions prototypes for the QSPI
   *          firmware library.
   ******************************************************************************
   * @attention
@@ -17,8 +17,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -31,7 +31,7 @@
 #define __STM32F4XX_QUADSPI_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -47,79 +47,79 @@
 #if defined(STM32F446xx) || defined(STM32F469_479xx)
 /* Exported types ------------------------------------------------------------*/
 
-/** 
-  * @brief  QSPI Communication Configuration Init structure definition  
+/**
+  * @brief  QSPI Communication Configuration Init structure definition
   */
 
 typedef struct
 {
-  
-  uint32_t QSPI_ComConfig_FMode;            /* Specifies the Functional Mode
-                                          This parameter can be a value of @ref QSPI_ComConfig_Functional_Mode*/  
-	
-  uint32_t QSPI_ComConfig_DDRMode;          /* Specifies the Double Data Rate Mode
+
+    uint32_t QSPI_ComConfig_FMode;            /* Specifies the Functional Mode
+                                          This parameter can be a value of @ref QSPI_ComConfig_Functional_Mode*/
+
+    uint32_t QSPI_ComConfig_DDRMode;          /* Specifies the Double Data Rate Mode
                                           This parameter can be a value of @ref QSPI_ComConfig_DoubleDataRateMode*/
-	
-  uint32_t QSPI_ComConfig_DHHC;            /* Specifies the Delay Half Hclk Cycle
+
+    uint32_t QSPI_ComConfig_DHHC;            /* Specifies the Delay Half Hclk Cycle
                                           This parameter can be a value of @ref QSPI_ComConfig_DelayHalfHclkCycle*/
-  
-  uint32_t QSPI_ComConfig_SIOOMode;         /* Specifies the Send Instruction Only Once Mode
+
+    uint32_t QSPI_ComConfig_SIOOMode;         /* Specifies the Send Instruction Only Once Mode
                                           This parameter can be a value of @ref QSPI_ComConfig_SendInstructionOnlyOnceMode*/
-  
-  uint32_t QSPI_ComConfig_DMode;            /* Specifies the Data Mode
+
+    uint32_t QSPI_ComConfig_DMode;            /* Specifies the Data Mode
                                           This parameter can be a value of @ref QSPI_ComConfig_DataMode*/
-  
-  uint32_t QSPI_ComConfig_DummyCycles;      /* Specifies the Number of Dummy Cycles.
-                                           This parameter can be a number between 0x00 and 0x1F */             
 
-  uint32_t QSPI_ComConfig_ABSize;           /* Specifies the Alternate Bytes Size
-                                          This parameter can be a value of @ref QSPI_ComConfig_AlternateBytesSize*/ 
+    uint32_t QSPI_ComConfig_DummyCycles;      /* Specifies the Number of Dummy Cycles.
+                                           This parameter can be a number between 0x00 and 0x1F */
 
-  uint32_t QSPI_ComConfig_ABMode;           /* Specifies the Alternate Bytes Mode
-                                          This parameter can be a value of @ref QSPI_ComConfig_AlternateBytesMode*/     
- 
-  uint32_t QSPI_ComConfig_ADSize;           /* Specifies the Address Size
+    uint32_t QSPI_ComConfig_ABSize;           /* Specifies the Alternate Bytes Size
+                                          This parameter can be a value of @ref QSPI_ComConfig_AlternateBytesSize*/
+
+    uint32_t QSPI_ComConfig_ABMode;           /* Specifies the Alternate Bytes Mode
+                                          This parameter can be a value of @ref QSPI_ComConfig_AlternateBytesMode*/
+
+    uint32_t QSPI_ComConfig_ADSize;           /* Specifies the Address Size
                                           This parameter can be a value of @ref QSPI_ComConfig_AddressSize*/
 
-  uint32_t QSPI_ComConfig_ADMode;           /* Specifies the Address Mode
+    uint32_t QSPI_ComConfig_ADMode;           /* Specifies the Address Mode
                                           This parameter can be a value of @ref QSPI_ComConfig_AddressMode*/
-  
-  uint32_t QSPI_ComConfig_IMode;            /* Specifies the Instruction Mode
+
+    uint32_t QSPI_ComConfig_IMode;            /* Specifies the Instruction Mode
                                           This parameter can be a value of @ref QSPI_ComConfig_InstructionMode*/
 
-  uint32_t QSPI_ComConfig_Ins;      /* Specifies the Instruction Mode
+    uint32_t QSPI_ComConfig_Ins;      /* Specifies the Instruction Mode
                                           This parameter can be a value of @ref QSPI_ComConfig_Instruction*/
-  
-}QSPI_ComConfig_InitTypeDef;
 
-/** 
-  * @brief  QSPI Init structure definition  
+} QSPI_ComConfig_InitTypeDef;
+
+/**
+  * @brief  QSPI Init structure definition
   */
 
 typedef struct
 {
-  uint32_t QSPI_SShift;    /* Specifies the Sample Shift
+    uint32_t QSPI_SShift;    /* Specifies the Sample Shift
                               This parameter can be a value of @ref QSPI_Sample_Shift*/
 
-  uint32_t QSPI_Prescaler; /* Specifies the prescaler value used to divide the QSPI clock.
-                              This parameter can be a number between 0x00 and 0xFF */ 
+    uint32_t QSPI_Prescaler; /* Specifies the prescaler value used to divide the QSPI clock.
+                              This parameter can be a number between 0x00 and 0xFF */
 
-  uint32_t QSPI_CKMode;    /* Specifies the Clock Mode
+    uint32_t QSPI_CKMode;    /* Specifies the Clock Mode
                               This parameter can be a value of @ref QSPI_Clock_Mode*/
 
-  uint32_t QSPI_CSHTime;   /* Specifies the Chip Select High Time
-                              This parameter can be a value of @ref QSPI_ChipSelectHighTime*/   
- 
-  uint32_t QSPI_FSize;     /* Specifies the Flash Size.
+    uint32_t QSPI_CSHTime;   /* Specifies the Chip Select High Time
+                              This parameter can be a value of @ref QSPI_ChipSelectHighTime*/
+
+    uint32_t QSPI_FSize;     /* Specifies the Flash Size.
                                QSPI_FSize+1 is effectively the number of address bits required to address the flash memory.
                                The flash capacity can be up to 4GB (addressed using 32 bits) in indirect mode, but the
                                addressable space in memory-mapped mode is limited to 512MB
                                This parameter can be a number between 0x00 and 0x1F */
-  uint32_t QSPI_FSelect;   /* Specifies the Flash which will be used,
+    uint32_t QSPI_FSelect;   /* Specifies the Flash which will be used,
                                  This parameter can be a value of @ref QSPI_Fash_Select*/
-  uint32_t QSPI_DFlash;    /* Specifies the Dual Flash Mode State
+    uint32_t QSPI_DFlash;    /* Specifies the Dual Flash Mode State
                                  This parameter can be a value of @ref QSPI_Dual_Flash*/
-}QSPI_InitTypeDef;
+} QSPI_InitTypeDef;
 
 /* Exported constants --------------------------------------------------------*/
 
@@ -127,7 +127,7 @@ typedef struct
   * @{
   */
 
-/** @defgroup QSPI_Sample_Shift 
+/** @defgroup QSPI_Sample_Shift
   * @{
   */
 #define QSPI_SShift_NoShift                        ((uint32_t)0x00000000)
@@ -139,8 +139,8 @@ typedef struct
 /**
   * @}
   */
-  
-/** @defgroup QSPI_Prescaler 
+
+/** @defgroup QSPI_Prescaler
   * @{
   */
 #define IS_QSPI_PRESCALER(PRESCALER) (((PRESCALER) <= 0xFF))
@@ -148,7 +148,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup QSPI_Clock_Mode 
+/** @defgroup QSPI_Clock_Mode
   * @{
   */
 #define QSPI_CKMode_Mode0           ((uint32_t)0x00000000)
@@ -157,8 +157,8 @@ typedef struct
 /**
   * @}
   */
-  
-/** @defgroup QSPI_ChipSelectHighTime 
+
+/** @defgroup QSPI_ChipSelectHighTime
   * @{
   */
 #define QSPI_CSHTime_1Cycle           ((uint32_t)0x00000000)
@@ -180,16 +180,16 @@ typedef struct
 /**
   * @}
   */
-  
-/** @defgroup QSPI_Flash_Size 
+
+/** @defgroup QSPI_Flash_Size
   * @{
   */
 #define IS_QSPI_FSIZE(FSIZE)         (((FSIZE) <= 0x1F))
 /**
   * @}
   */
-	
-/** @defgroup QSPI_Fash_Select 
+
+/** @defgroup QSPI_Fash_Select
   * @{
   */
 #define QSPI_FSelect_1           ((uint32_t)0x00000000)
@@ -198,8 +198,8 @@ typedef struct
 /**
   * @}
   */
-	
-/** @defgroup QSPI_Dual_Flash 
+
+/** @defgroup QSPI_Dual_Flash
   * @{
   */
 #define QSPI_DFlash_Disable           ((uint32_t)0x00000000)
@@ -209,9 +209,9 @@ typedef struct
   * @}
   */
 
-/** @defgroup QSPI_ComConfig_Functional_Mode 
+/** @defgroup QSPI_ComConfig_Functional_Mode
   * @{
-  */  
+  */
 #define QSPI_ComConfig_FMode_Indirect_Write     ((uint32_t)0x00000000)
 #define QSPI_ComConfig_FMode_Indirect_Read      ((uint32_t)QUADSPI_CCR_FMODE_0)
 #define QSPI_ComConfig_FMode_Auto_Polling       ((uint32_t)QUADSPI_CCR_FMODE_1)
@@ -223,8 +223,8 @@ typedef struct
 /**
   * @}
   */
-	
-/** @defgroup QSPI_ComConfig_DoubleDataRateMode 
+
+/** @defgroup QSPI_ComConfig_DoubleDataRateMode
   * @{
   */
 #define QSPI_ComConfig_DDRMode_Disable           ((uint32_t)0x00000000)
@@ -234,8 +234,8 @@ typedef struct
 /**
   * @}
   */
-	
-/** @defgroup QSPI_ComConfig_DelayHalfHclkCycle 
+
+/** @defgroup QSPI_ComConfig_DelayHalfHclkCycle
   * @{
   */
 #define QSPI_ComConfig_DHHC_Disable           ((uint32_t)0x00000000)
@@ -245,8 +245,8 @@ typedef struct
 /**
   * @}
   */
-  
-/** @defgroup QSPI_ComConfig_SendInstructionOnlyOnceMode 
+
+/** @defgroup QSPI_ComConfig_SendInstructionOnlyOnceMode
   * @{
   */
 #define QSPI_ComConfig_SIOOMode_Disable           ((uint32_t)0x00000000)
@@ -255,9 +255,9 @@ typedef struct
                                        ((SIOOMODE) == QSPI_ComConfig_SIOOMode_Enable))
 /**
   * @}
-  */  
+  */
 
-/** @defgroup QSPI_ComConfig_DataMode 
+/** @defgroup QSPI_ComConfig_DataMode
   * @{
   */
 #define QSPI_ComConfig_DMode_NoData          ((uint32_t)0x00000000)
@@ -271,8 +271,8 @@ typedef struct
 /**
   * @}
   */
-  
-/** @defgroup QSPI_ComConfig_AlternateBytesSize 
+
+/** @defgroup QSPI_ComConfig_AlternateBytesSize
   * @{
   */
 #define QSPI_ComConfig_ABSize_8bit            ((uint32_t)0x00000000)
@@ -286,8 +286,8 @@ typedef struct
 /**
   * @}
   */
-  
-/** @defgroup QSPI_ComConfig_AlternateBytesMode 
+
+/** @defgroup QSPI_ComConfig_AlternateBytesMode
   * @{
   */
 #define QSPI_ComConfig_ABMode_NoAlternateByte          ((uint32_t)0x00000000)
@@ -301,8 +301,8 @@ typedef struct
 /**
   * @}
   */
-  
-/** @defgroup QSPI_ComConfig_AddressSize 
+
+/** @defgroup QSPI_ComConfig_AddressSize
   * @{
   */
 #define QSPI_ComConfig_ADSize_8bit            ((uint32_t)0x00000000)
@@ -316,8 +316,8 @@ typedef struct
 /**
   * @}
   */
-  
-/** @defgroup QSPI_ComConfig_AddressMode 
+
+/** @defgroup QSPI_ComConfig_AddressMode
   * @{
   */
 #define QSPI_ComConfig_ADMode_NoAddress          ((uint32_t)0x00000000)
@@ -330,9 +330,9 @@ typedef struct
                                        ((ADMODE) == QSPI_ComConfig_ADMode_4Line))
 /**
   * @}
-  */  
-  
-/** @defgroup QSPI_ComConfig_InstructionMode 
+  */
+
+/** @defgroup QSPI_ComConfig_InstructionMode
   * @{
   */
 #define QSPI_ComConfig_IMode_NoInstruction          ((uint32_t)0x00000000)
@@ -347,15 +347,15 @@ typedef struct
   * @}
   */
 
-/** @defgroup QSPI_ComConfig_Instruction 
+/** @defgroup QSPI_ComConfig_Instruction
   * @{
   */
-#define IS_QSPI_INSTRUCTION(INSTRUCTION)           ((INSTRUCTION) <= 0xFF) 
+#define IS_QSPI_INSTRUCTION(INSTRUCTION)           ((INSTRUCTION) <= 0xFF)
 /**
   * @}
-  */ 
+  */
 
-/** @defgroup QSPI_InterruptsDefinition 
+/** @defgroup QSPI_InterruptsDefinition
   * @{
   */
 #define QSPI_IT_TO                (uint32_t)(QUADSPI_CR_TOIE | QUADSPI_SR_TOF)
@@ -364,12 +364,12 @@ typedef struct
 #define QSPI_IT_TC                (uint32_t)(QUADSPI_CR_TCIE | QUADSPI_SR_TCF)
 #define QSPI_IT_TE                (uint32_t)(QUADSPI_CR_TEIE | QUADSPI_SR_TEF)
 #define IS_QSPI_IT(IT)   ((((IT) & 0xFFE0FFE0) == 0) && ((IT) != 0))
-#define IS_QSPI_CLEAR_IT(IT)   ((((IT) & 0xFFE4FFE4) == 0) && ((IT) != 0))  
+#define IS_QSPI_CLEAR_IT(IT)   ((((IT) & 0xFFE4FFE4) == 0) && ((IT) != 0))
 /**
   * @}
   */
-  
-/** @defgroup QSPI_FlagsDefinition 
+
+/** @defgroup QSPI_FlagsDefinition
   * @{
   */
 #define QSPI_FLAG_TO                  QUADSPI_SR_TOF
@@ -387,48 +387,48 @@ typedef struct
 /**
   * @}
   */
-  
-/** @defgroup QSPI_Polling_Match_Mode 
+
+/** @defgroup QSPI_Polling_Match_Mode
   * @{
   */
 #define QSPI_PMM_AND                 ((uint32_t)0x00000000)
 #define QSPI_PMM_OR                  ((uint32_t)QUADSPI_CR_PMM)
-#define IS_QSPI_PMM(PMM)      (((PMM) == QSPI_PMM_AND) || ((PMM) == QSPI_PMM_OR)) 
+#define IS_QSPI_PMM(PMM)      (((PMM) == QSPI_PMM_AND) || ((PMM) == QSPI_PMM_OR))
 /**
   * @}
   */
-  
-/** @defgroup QSPI_Polling_Interval 
+
+/** @defgroup QSPI_Polling_Interval
   * @{
   */
-#define IS_QSPI_PIR(PIR)                 ((PIR) <= QUADSPI_PIR_INTERVAL) 
+#define IS_QSPI_PIR(PIR)                 ((PIR) <= QUADSPI_PIR_INTERVAL)
 /**
   * @}
   */
-  
-/** @defgroup QSPI_Timeout 
+
+/** @defgroup QSPI_Timeout
   * @{
   */
-#define IS_QSPI_TIMEOUT(TIMEOUT)         ((TIMEOUT) <= QUADSPI_LPTR_TIMEOUT) 
+#define IS_QSPI_TIMEOUT(TIMEOUT)         ((TIMEOUT) <= QUADSPI_LPTR_TIMEOUT)
 /**
   * @}
   */
-  
-/** @defgroup QSPI_DummyCycle 
+
+/** @defgroup QSPI_DummyCycle
   * @{
   */
-#define IS_QSPI_DCY(DCY)                 ((DCY) <= 0x1F) 
+#define IS_QSPI_DCY(DCY)                 ((DCY) <= 0x1F)
 /**
   * @}
   */
-  
-/** @defgroup QSPI_FIFOThreshold 
+
+/** @defgroup QSPI_FIFOThreshold
   * @{
   */
-#define IS_QSPI_FIFOTHRESHOLD(FIFOTHRESHOLD)        ((FIFOTHRESHOLD) <= 0x0F) 
+#define IS_QSPI_FIFOTHRESHOLD(FIFOTHRESHOLD)        ((FIFOTHRESHOLD) <= 0x0F)
 /**
   * @}
-  */  
+  */
 
 /**
   * @}
@@ -439,12 +439,12 @@ typedef struct
 
 /* Initialization and Configuration functions *********************************/
 void QSPI_DeInit(void);
-void QSPI_Init(QSPI_InitTypeDef* QSPI_InitStruct);
-void QSPI_StructInit(QSPI_InitTypeDef* QSPI_InitStruct);
-void QSPI_ComConfig_Init(QSPI_ComConfig_InitTypeDef* QSPI_ComConfig_InitStruct);
-void QSPI_ComConfig_StructInit(QSPI_ComConfig_InitTypeDef* QSPI_ComConfig_InitStruct);
+void QSPI_Init(QSPI_InitTypeDef *QSPI_InitStruct);
+void QSPI_StructInit(QSPI_InitTypeDef *QSPI_InitStruct);
+void QSPI_ComConfig_Init(QSPI_ComConfig_InitTypeDef *QSPI_ComConfig_InitStruct);
+void QSPI_ComConfig_StructInit(QSPI_ComConfig_InitTypeDef *QSPI_ComConfig_InitStruct);
 void QSPI_Cmd(FunctionalState NewState);
-void QSPI_AutoPollingMode_Config(uint32_t QSPI_Match, uint32_t QSPI_Mask , uint32_t QSPI_Match_Mode);
+void QSPI_AutoPollingMode_Config(uint32_t QSPI_Match, uint32_t QSPI_Mask, uint32_t QSPI_Match_Mode);
 void QSPI_AutoPollingMode_SetInterval(uint32_t QSPI_Interval);
 void QSPI_MemoryMappedMode_SetTimeout(uint32_t QSPI_Timeout);
 void QSPI_SetAddress(uint32_t QSPI_Address);

@@ -5,7 +5,7 @@
 /**
 	*	1	此例程演示了串口中断操作
 	*/
-	
+
 
 /* 定义例程名和例程发布日期 */
 #define EXAMPLE_NAME	"UartStream example"
@@ -24,21 +24,21 @@ void rx()
 }
 void setup()
 {
-	ebox_init();
-    UART.begin(115200,RxIt);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-    UART.attach(rx,RxIrq);
-    UART.interrupt(RxIrq,ENABLE);
+    ebox_init();
+    UART.begin(115200, RxIt);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
+    UART.attach(rx, RxIrq);
+    UART.interrupt(RxIrq, ENABLE);
 
     PB8.mode(OUTPUT_PP);
     PB9.mode(OUTPUT_PP);
 }
 int main(void)
 {
-	setup();
+    setup();
 
-	while (1)
-	{
+    while (1)
+    {
 
-	}
+    }
 }

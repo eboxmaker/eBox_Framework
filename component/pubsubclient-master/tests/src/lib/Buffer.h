@@ -3,21 +3,22 @@
 
 #include "Arduino.h"
 
-class Buffer {
+class Buffer
+{
 private:
     uint8_t buffer[1024];
     uint16_t pos;
     uint16_t length;
-    
+
 public:
     Buffer();
-    Buffer(uint8_t* buf, size_t size);
-    
+    Buffer(uint8_t *buf, size_t size);
+
     virtual bool available();
     virtual uint8_t next();
     virtual void reset();
-    
-    virtual void add(uint8_t* buf, size_t size);
+
+    virtual void add(uint8_t *buf, size_t size);
 };
 
 #endif

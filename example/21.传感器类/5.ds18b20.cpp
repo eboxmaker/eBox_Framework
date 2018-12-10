@@ -7,7 +7,7 @@
 
   * @brief   ebox application example .
   *
-  * Copyright 2016 shentq. All Rights Reserved.         
+  * Copyright 2016 shentq. All Rights Reserved.
   ******************************************************************************
  */
 
@@ -22,8 +22,8 @@ void setup()
     uart1.begin(115200);
     PB8.mode(OUTPUT_PP);
     ret = ds.begin();
-    uart1.printf("%d\n",ret);
-    
+    uart1.printf("%d\n", ret);
+
 }
 int main(void)
 {
@@ -32,7 +32,7 @@ int main(void)
     while(1)
     {
         temper = ds.get_temp();
-        uart1.printf("%f\n",temper);
+        uart1.printf("%f\n", temper);
         delay_ms(1000);
 
     }

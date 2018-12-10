@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V1.6.1
   * @date    21-October-2015
-  * @brief   This file contains all the functions prototypes for the DAC firmware 
+  * @brief   This file contains all the functions prototypes for the DAC firmware
   *          library.
   ******************************************************************************
   * @attention
@@ -17,8 +17,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -31,7 +31,7 @@
 #define __STM32F4xx_DAC_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -47,26 +47,26 @@
 
 /* Exported types ------------------------------------------------------------*/
 
-/** 
+/**
   * @brief  DAC Init structure definition
   */
 
 typedef struct
 {
-  uint32_t DAC_Trigger;                      /*!< Specifies the external trigger for the selected DAC channel.
+    uint32_t DAC_Trigger;                      /*!< Specifies the external trigger for the selected DAC channel.
                                                   This parameter can be a value of @ref DAC_trigger_selection */
 
-  uint32_t DAC_WaveGeneration;               /*!< Specifies whether DAC channel noise waves or triangle waves
+    uint32_t DAC_WaveGeneration;               /*!< Specifies whether DAC channel noise waves or triangle waves
                                                   are generated, or whether no wave is generated.
                                                   This parameter can be a value of @ref DAC_wave_generation */
 
-  uint32_t DAC_LFSRUnmask_TriangleAmplitude; /*!< Specifies the LFSR mask for noise wave generation or
-                                                  the maximum amplitude triangle generation for the DAC channel. 
+    uint32_t DAC_LFSRUnmask_TriangleAmplitude; /*!< Specifies the LFSR mask for noise wave generation or
+                                                  the maximum amplitude triangle generation for the DAC channel.
                                                   This parameter can be a value of @ref DAC_lfsrunmask_triangleamplitude */
 
-  uint32_t DAC_OutputBuffer;                 /*!< Specifies whether the DAC channel output buffer is enabled or disabled.
+    uint32_t DAC_OutputBuffer;                 /*!< Specifies whether the DAC channel output buffer is enabled or disabled.
                                                   This parameter can be a value of @ref DAC_output_buffer */
-}DAC_InitTypeDef;
+} DAC_InitTypeDef;
 
 /* Exported constants --------------------------------------------------------*/
 
@@ -74,7 +74,7 @@ typedef struct
   * @{
   */
 
-/** @defgroup DAC_trigger_selection 
+/** @defgroup DAC_trigger_selection
   * @{
   */
 
@@ -85,7 +85,7 @@ typedef struct
 #define DAC_Trigger_T5_TRGO                ((uint32_t)0x0000001C) /*!< TIM5 TRGO selected as external conversion trigger for DAC channel */
 #define DAC_Trigger_T6_TRGO                ((uint32_t)0x00000004) /*!< TIM6 TRGO selected as external conversion trigger for DAC channel */
 #define DAC_Trigger_T7_TRGO                ((uint32_t)0x00000014) /*!< TIM7 TRGO selected as external conversion trigger for DAC channel */
-#define DAC_Trigger_T8_TRGO                ((uint32_t)0x0000000C) /*!< TIM8 TRGO selected as external conversion trigger for DAC channel */                                                                       
+#define DAC_Trigger_T8_TRGO                ((uint32_t)0x0000000C) /*!< TIM8 TRGO selected as external conversion trigger for DAC channel */
 
 #define DAC_Trigger_Ext_IT9                ((uint32_t)0x00000034) /*!< EXTI Line9 event selected as external conversion trigger for DAC channel */
 #define DAC_Trigger_Software               ((uint32_t)0x0000003C) /*!< Conversion started by software trigger for DAC channel */
@@ -104,7 +104,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup DAC_wave_generation 
+/** @defgroup DAC_wave_generation
   * @{
   */
 
@@ -175,7 +175,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup DAC_output_buffer 
+/** @defgroup DAC_output_buffer
   * @{
   */
 
@@ -187,7 +187,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup DAC_Channel_selection 
+/** @defgroup DAC_Channel_selection
   * @{
   */
 
@@ -199,7 +199,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup DAC_data_alignement 
+/** @defgroup DAC_data_alignement
   * @{
   */
 
@@ -213,7 +213,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup DAC_wave_generation 
+/** @defgroup DAC_wave_generation
   * @{
   */
 
@@ -225,31 +225,31 @@ typedef struct
   * @}
   */
 
-/** @defgroup DAC_data 
+/** @defgroup DAC_data
   * @{
   */
 
-#define IS_DAC_DATA(DATA) ((DATA) <= 0xFFF0) 
+#define IS_DAC_DATA(DATA) ((DATA) <= 0xFFF0)
 /**
   * @}
   */
-  
-/** @defgroup DAC_interrupts_definition 
+
+/** @defgroup DAC_interrupts_definition
   * @{
-  */   
-#define DAC_IT_DMAUDR                      ((uint32_t)0x00002000)  
-#define IS_DAC_IT(IT) (((IT) == DAC_IT_DMAUDR)) 
+  */
+#define DAC_IT_DMAUDR                      ((uint32_t)0x00002000)
+#define IS_DAC_IT(IT) (((IT) == DAC_IT_DMAUDR))
 
 /**
   * @}
-  */ 
+  */
 
-/** @defgroup DAC_flags_definition 
+/** @defgroup DAC_flags_definition
   * @{
-  */ 
-  
-#define DAC_FLAG_DMAUDR                    ((uint32_t)0x00002000)  
-#define IS_DAC_FLAG(FLAG) (((FLAG) == DAC_FLAG_DMAUDR))  
+  */
+
+#define DAC_FLAG_DMAUDR                    ((uint32_t)0x00002000)
+#define IS_DAC_FLAG(FLAG) (((FLAG) == DAC_FLAG_DMAUDR))
 
 /**
   * @}
@@ -260,14 +260,14 @@ typedef struct
   */
 
 /* Exported macro ------------------------------------------------------------*/
-/* Exported functions --------------------------------------------------------*/  
+/* Exported functions --------------------------------------------------------*/
 
-/*  Function used to set the DAC configuration to the default reset state *****/  
+/*  Function used to set the DAC configuration to the default reset state *****/
 void DAC_DeInit(void);
 
 /*  DAC channels configuration: trigger, output buffer, data format functions */
-void DAC_Init(uint32_t DAC_Channel, DAC_InitTypeDef* DAC_InitStruct);
-void DAC_StructInit(DAC_InitTypeDef* DAC_InitStruct);
+void DAC_Init(uint32_t DAC_Channel, DAC_InitTypeDef *DAC_InitStruct);
+void DAC_StructInit(DAC_InitTypeDef *DAC_InitStruct);
 void DAC_Cmd(uint32_t DAC_Channel, FunctionalState NewState);
 void DAC_SoftwareTriggerCmd(uint32_t DAC_Channel, FunctionalState NewState);
 void DAC_DualSoftwareTriggerCmd(FunctionalState NewState);

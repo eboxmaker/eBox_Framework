@@ -35,7 +35,7 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
     flash.begin();
 
 
@@ -50,8 +50,8 @@ int main(void)
     while(1)
     {
         for(int i = 0; i < 100; i++)
-            wbuf[i] = random()%256;
-        
+            wbuf[i] = random() % 256;
+
         flash.read_id(&id);
         uart1.printf("\r\n==readid=======\r\n");
         uart1.printf("id = %x", id);

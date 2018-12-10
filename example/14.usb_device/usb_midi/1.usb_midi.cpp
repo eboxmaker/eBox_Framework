@@ -22,12 +22,13 @@ int main(void)
     setup();
     while(1)
     {
-        for(int i=48; i<83; i++) {     // send some messages!
+        for(int i = 48; i < 83; i++)   // send some messages!
+        {
             midi.write(MIDIMessage::NoteOn(i));
             delay_ms(250);
             midi.write(MIDIMessage::NoteOff(i));
             delay_ms(500);
-       }
+        }
     }
 
 }

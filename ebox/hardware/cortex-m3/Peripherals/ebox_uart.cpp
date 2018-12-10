@@ -34,11 +34,11 @@ uint16_t _rx_buffer_head[UART_NUM];
 uint16_t _rx_buffer_tail[UART_NUM];
 
 #ifdef UART_9_BIT
-    uint16_t *_tx_ptr[UART_NUM];          // 缓冲区指针
-    uint16_t *_rx_ptr[UART_NUM];
+uint16_t *_tx_ptr[UART_NUM];          // 缓冲区指针
+uint16_t *_rx_ptr[UART_NUM];
 #else
-    uint8_t *_tx_ptr[UART_NUM];          // 缓冲区指针
-    uint8_t *_rx_ptr[UART_NUM];
+uint8_t *_tx_ptr[UART_NUM];          // 缓冲区指针
+uint8_t *_rx_ptr[UART_NUM];
 #endif
 
 /**
@@ -135,11 +135,11 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     _rx_buffer_size[index] = rx_buffer_size;
 
 #ifdef UART_9_BIT
-    _tx_ptr[index] = (uint16_t *)ebox_malloc(_tx_buffer_size[index]*sizeof(uint16_t));
-    _rx_ptr[index] = (uint16_t *)ebox_malloc(_rx_buffer_size[index]*sizeof(uint16_t));
+    _tx_ptr[index] = (uint16_t *)ebox_malloc(_tx_buffer_size[index] * sizeof(uint16_t));
+    _rx_ptr[index] = (uint16_t *)ebox_malloc(_rx_buffer_size[index] * sizeof(uint16_t));
 #else
-    _tx_ptr[index] = (uint8_t *)ebox_malloc(_tx_buffer_size[index]*sizeof(uint8_t));
-    _rx_ptr[index] = (uint8_t *)ebox_malloc(_rx_buffer_size[index]*sizeof(uint8_t));
+    _tx_ptr[index] = (uint8_t *)ebox_malloc(_tx_buffer_size[index] * sizeof(uint8_t));
+    _rx_ptr[index] = (uint8_t *)ebox_malloc(_rx_buffer_size[index] * sizeof(uint8_t));
 #endif
 
 
@@ -376,19 +376,19 @@ size_t Uart::write(uint8_t c)
 {
     uint16_t i = (_tx_buffer_head[index] + 1) % _tx_buffer_size[index];//计算头的位置
     // head = tail, 缓冲区过满，先发送
-    while (i == _tx_buffer_tail[index]) 
+    while (i == _tx_buffer_tail[index])
     {
-        interrupt(TxIrq,DISABLE);//期间必须关闭串口中断
+        interrupt(TxIrq, DISABLE); //期间必须关闭串口中断
         while(USART_GetFlagStatus(_USARTx, USART_FLAG_TXE) == RESET);//单字节等待，等待寄存器空
-        tx_bufferx_one(_USARTx,index);
-        interrupt(TxIrq,ENABLE);//开启发送
+        tx_bufferx_one(_USARTx, index);
+        interrupt(TxIrq, ENABLE); //开启发送
     }
     // 加入新数据，移动head
     _tx_ptr[index][_tx_buffer_head[index]] = c;
     _tx_buffer_head[index] = i;
 
-    interrupt(TxIrq,ENABLE);//开启发送  
-  	return 1;
+    interrupt(TxIrq, ENABLE); //开启发送
+    return 1;
 }
 
 
@@ -413,7 +413,7 @@ extern "C" {
       *@param    uart：串口； index 串口 IT 索引
       *@retval   1
       */
-    void tx_bufferx_one(USART_TypeDef* uart,uint8_t index)
+    void tx_bufferx_one(USART_TypeDef *uart, uint8_t index)
     {
         if (_tx_buffer_head[index] == _tx_buffer_tail[index])//如果空则直接返回
         {
@@ -429,7 +429,7 @@ extern "C" {
       *@param    uart：串口； index 串口 IT 索引
       *@retval   1
       */
-    void rx_buffer_one(USART_TypeDef* uart,uint8_t index)
+    void rx_buffer_one(USART_TypeDef *uart, uint8_t index)
     {
         uint16_t i = (_rx_buffer_head[index] + 1) % _rx_buffer_size[index];//计算头的位置
         if(i == _rx_buffer_tail[index]) //如果环形缓冲区满了就修改一次tail，将会舍弃最老的一个数据

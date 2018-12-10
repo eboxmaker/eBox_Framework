@@ -1,15 +1,15 @@
 /**
   ******************************************************************************
   * @file    bsp_ebox.h
-  * @author  cat_li	
+  * @author  cat_li
   * @version V1.0
   * @date    2018/07/31
   * @brief   硬件相关信息声明
   ******************************************************************************
   * @attention
   *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
   * preliminary and is subject to change at any time without notice. shentq assumes
   * no responsibility for any errors contained herein.
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
@@ -63,7 +63,7 @@
 extern Lcd      lcd;
 extern W5500Class w5500;
 
-extern void print_log(const char *name = "",const char *date = "");
+extern void print_log(const char *name = "", const char *date = "");
 
 
 

@@ -31,7 +31,7 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
     ee.begin(1);
 }
 int16_t x, i;
@@ -42,7 +42,7 @@ int ret = 0;
 int main(void)
 {
     setup();
-    
+
     while(1)
     {
         ret = 0;
@@ -54,8 +54,8 @@ int main(void)
         }
         for(uint16_t i = 0; i < MAX_LEN; i++)
         {
-                uart1.printf(" %02x ", wbuf[i ]);
-                //ee.byteWrite(i*16+j,buf[i*16+j]);
+            uart1.printf(" %02x ", wbuf[i ]);
+            //ee.byteWrite(i*16+j,buf[i*16+j]);
         }
         uart1.printf("\r\n ");
         ee.write_byte(256, wbuf, MAX_LEN);
@@ -65,7 +65,7 @@ int main(void)
         data = ee.read_byte(256, rbuf, MAX_LEN);
         for(uint16_t i = 0; i < MAX_LEN; i++)
         {
-                uart1.printf(" %02x ", rbuf[i]);
+            uart1.printf(" %02x ", rbuf[i]);
         }
         uart1.printf("\r\n ");
         for(int i = 0; i < MAX_LEN; i++)
@@ -83,7 +83,7 @@ int main(void)
         }
         else
             uart1.printf("eeprom check ......[OK]");
-            
+
         uart1.printf("\r\n================================\r\n");
         delay_ms(1000);
     }

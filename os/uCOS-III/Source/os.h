@@ -72,21 +72,21 @@ extern "C" {
 
 
 #if      OS_CFG_SCHED_LOCK_TIME_MEAS_EN > 0u && defined(CPU_CFG_INT_DIS_MEAS_EN)
- #define  OS_SCHED_LOCK_TIME_MEAS_START()    OS_SchedLockTimeMeasStart()
+#define  OS_SCHED_LOCK_TIME_MEAS_START()    OS_SchedLockTimeMeasStart()
 #else
- #define  OS_SCHED_LOCK_TIME_MEAS_START()
+#define  OS_SCHED_LOCK_TIME_MEAS_START()
 #endif
 
 
 #if      OS_CFG_SCHED_LOCK_TIME_MEAS_EN > 0u && defined(CPU_CFG_INT_DIS_MEAS_EN)
- #define  OS_SCHED_LOCK_TIME_MEAS_STOP()     OS_SchedLockTimeMeasStop()
+#define  OS_SCHED_LOCK_TIME_MEAS_STOP()     OS_SchedLockTimeMeasStop()
 #else
- #define  OS_SCHED_LOCK_TIME_MEAS_STOP()
+#define  OS_SCHED_LOCK_TIME_MEAS_STOP()
 #endif
 
 #if OS_CFG_ISR_POST_DEFERRED_EN > 0u                             /* Deferred ISR Posts ------------------------------ */
-                                                                 /* Lock the scheduler                                */
- #define  OS_CRITICAL_ENTER()                                       \
+/* Lock the scheduler                                */
+#define  OS_CRITICAL_ENTER()                                       \
     do {                                                      \
         CPU_CRITICAL_ENTER();                                 \
         OSSchedLockNestingCtr++;                              \
@@ -96,7 +96,7 @@ extern "C" {
         CPU_CRITICAL_EXIT();                                  \
     } while (0)
 /* Lock the scheduler but re-enable interrupts       */
- #define  OS_CRITICAL_ENTER_CPU_EXIT()                              \
+#define  OS_CRITICAL_ENTER_CPU_EXIT()                              \
     do {                                                      \
         OSSchedLockNestingCtr++;                              \
                                                                    \
@@ -107,7 +107,7 @@ extern "C" {
     } while (0)
 
 /* Scheduling occurs only if an interrupt occurs     */
- #define  OS_CRITICAL_EXIT()                                        \
+#define  OS_CRITICAL_EXIT()                                        \
     do {                                                      \
         CPU_CRITICAL_ENTER();                                 \
         OSSchedLockNestingCtr--;                              \
@@ -124,7 +124,7 @@ extern "C" {
         }                                                     \
     } while (0)
 
- #define  OS_CRITICAL_EXIT_NO_SCHED()                               \
+#define  OS_CRITICAL_EXIT_NO_SCHED()                               \
     do {                                                      \
         CPU_CRITICAL_ENTER();                                 \
         OSSchedLockNestingCtr--;                              \
@@ -138,13 +138,13 @@ extern "C" {
 #else                                                            /* Direct ISR Posts -------------------------------- */
 
 
- #define  OS_CRITICAL_ENTER()                    CPU_CRITICAL_ENTER()
+#define  OS_CRITICAL_ENTER()                    CPU_CRITICAL_ENTER()
 
- #define  OS_CRITICAL_ENTER_CPU_EXIT()
+#define  OS_CRITICAL_ENTER_CPU_EXIT()
 
- #define  OS_CRITICAL_EXIT()                     CPU_CRITICAL_EXIT()
+#define  OS_CRITICAL_EXIT()                     CPU_CRITICAL_EXIT()
 
- #define  OS_CRITICAL_EXIT_NO_SCHED()            CPU_CRITICAL_EXIT()
+#define  OS_CRITICAL_EXIT_NO_SCHED()            CPU_CRITICAL_EXIT()
 
 #endif
 
@@ -155,9 +155,9 @@ extern "C" {
  */
 
 #ifdef   OS_GLOBALS
- #define  OS_EXT
+#define  OS_EXT
 #else
- #define  OS_EXT  extern
+#define  OS_EXT  extern
 #endif
 
 
@@ -189,12 +189,12 @@ extern "C" {
 
 /* ------------------- TASK STATES ------------------ */
 #define  OS_TASK_STATE_BIT_DLY               (OS_STATE)(0x01u)  /*   /-------- SUSPENDED bit                          */
-                                                                /*   |                                                */
+/*   |                                                */
 #define  OS_TASK_STATE_BIT_PEND              (OS_STATE)(0x02u)  /*   | /-----  PEND      bit                          */
-                                                                /*   | |                                              */
+/*   | |                                              */
 #define  OS_TASK_STATE_BIT_SUSPENDED         (OS_STATE)(0x04u)  /*   | | /---  Delayed/Timeout bit                    */
-                                                                /*   | | |                                            */
-                                                                /*   V V V                                            */
+/*   | | |                                            */
+/*   V V V                                            */
 
 #define  OS_TASK_STATE_RDY                    (OS_STATE)(  0u)  /*   0 0 0     Ready                                  */
 #define  OS_TASK_STATE_DLY                    (OS_STATE)(  1u)  /*   0 0 1     Delayed or Timeout                     */
@@ -418,7 +418,8 @@ extern "C" {
  *  ------------------------------------------------------------------------------------------------------------------------
  */
 
-typedef  enum  os_err {
+typedef  enum  os_err
+{
     OS_ERR_NONE                      =     0u,
 
     OS_ERR_A                         = 10000u,
@@ -660,7 +661,7 @@ typedef  void                       *OS_TLS;
 
 typedef  CPU_DATA OS_TLS_ID;
 
-typedef  void (*OS_TLS_DESTRUCT_PTR)(OS_TCB *   p_tcb,
+typedef  void (*OS_TLS_DESTRUCT_PTR)(OS_TCB    *p_tcb,
                                      OS_TLS_ID  id,
                                      OS_TLS     value);
 #endif
@@ -699,7 +700,8 @@ typedef  void (*OS_APP_HOOK_TCB)(OS_TCB *p_tcb);
  */
 
 #if OS_CFG_ISR_POST_DEFERRED_EN > 0u
-struct  os_int_q {
+struct  os_int_q
+{
     OS_OBJ_TYPE Type;                                       /* Type of object placed in the circular list             */
     OS_INT_Q *NextPtr;                                      /* Pointer to next OS_INT_Q in  circular list             */
     void *ObjPtr;                                           /* Pointer to object placed in the queue                  */
@@ -717,7 +719,8 @@ struct  os_int_q {
  *  ------------------------------------------------------------------------------------------------------------------------
  */
 
-struct  os_rdy_list {
+struct  os_rdy_list
+{
     OS_TCB *HeadPtr;                                        /* Pointer to task that will run at selected priority     */
     OS_TCB *TailPtr;                                        /* Pointer to last task          at selected priority     */
     OS_OBJ_QTY NbrEntries;                                  /* Number of entries             at selected priority     */
@@ -730,7 +733,8 @@ struct  os_rdy_list {
  *  ------------------------------------------------------------------------------------------------------------------------
  */
 
-struct  os_pend_data {
+struct  os_pend_data
+{
     OS_PEND_DATA *PrevPtr;
     OS_PEND_DATA *NextPtr;
     OS_TCB *TCBPtr;
@@ -742,7 +746,8 @@ struct  os_pend_data {
 };
 
 
-struct  os_pend_list {
+struct  os_pend_list
+{
     OS_PEND_DATA *HeadPtr;
     OS_PEND_DATA *TailPtr;
     OS_OBJ_QTY NbrEntries;
@@ -764,7 +769,8 @@ struct  os_pend_list {
  *  ------------------------------------------------------------------------------------------------------------------------
  */
 
-struct  os_pend_obj {
+struct  os_pend_obj
+{
     OS_OBJ_TYPE Type;
     CPU_CHAR *NamePtr;
     OS_PEND_LIST PendList;                                  /* List of tasks pending on object                        */
@@ -785,8 +791,9 @@ struct  os_pend_obj {
  */
 
 
-struct  os_flag_grp {                                       /* Event Flag Group                                       */
-                                                            /* ------------------ GENERIC  MEMBERS ------------------ */
+struct  os_flag_grp                                         /* Event Flag Group                                       */
+{
+    /* ------------------ GENERIC  MEMBERS ------------------ */
     OS_OBJ_TYPE Type;                                       /* Should be set to OS_OBJ_TYPE_FLAG                      */
     CPU_CHAR *NamePtr;                                      /* Pointer to Event Flag Name (NUL terminated ASCII)      */
     OS_PEND_LIST PendList;                                  /* List of tasks waiting on event flag group              */
@@ -808,7 +815,8 @@ struct  os_flag_grp {                                       /* Event Flag Group 
  */
 
 
-struct os_mem {                                             /* MEMORY CONTROL BLOCK                                   */
+struct os_mem                                               /* MEMORY CONTROL BLOCK                                   */
+{
     OS_OBJ_TYPE Type;                                       /* Should be set to OS_OBJ_TYPE_MEM                       */
     void *AddrPtr;                                          /* Pointer to beginning of memory partition               */
     CPU_CHAR *NamePtr;
@@ -829,7 +837,8 @@ struct os_mem {                                             /* MEMORY CONTROL BL
  *  ------------------------------------------------------------------------------------------------------------------------
  */
 
-struct  os_msg {                                            /* MESSAGE CONTROL BLOCK                                  */
+struct  os_msg                                              /* MESSAGE CONTROL BLOCK                                  */
+{
     OS_MSG *NextPtr;                                        /* Pointer to next message                                */
     void *MsgPtr;                                           /* Actual message                                         */
     OS_MSG_SIZE MsgSize;                                    /* Size of the message (in # bytes)                       */
@@ -839,7 +848,8 @@ struct  os_msg {                                            /* MESSAGE CONTROL B
 
 
 
-struct  os_msg_pool {                                       /* OS_MSG POOL                                            */
+struct  os_msg_pool                                         /* OS_MSG POOL                                            */
+{
     OS_MSG *NextPtr;                                        /* Pointer to next message                                */
     OS_MSG_QTY NbrFree;                                     /* Number of messages available from this pool            */
     OS_MSG_QTY NbrUsed;                                     /* Current number of messages used                        */
@@ -848,7 +858,8 @@ struct  os_msg_pool {                                       /* OS_MSG POOL      
 
 
 
-struct  os_msg_q {                                          /* OS_MSG_Q                                               */
+struct  os_msg_q                                            /* OS_MSG_Q                                               */
+{
     OS_MSG *InPtr;                                          /* Pointer to next OS_MSG to be inserted  in   the queue  */
     OS_MSG *OutPtr;                                         /* Pointer to next OS_MSG to be extracted from the queue  */
     OS_MSG_QTY NbrEntriesSize;                              /* Maximum allowable number of entries in the queue       */
@@ -865,8 +876,9 @@ struct  os_msg_q {                                          /* OS_MSG_Q         
  *  ------------------------------------------------------------------------------------------------------------------------
  */
 
-struct  os_mutex {                                          /* Mutual Exclusion Semaphore                             */
-                                                            /* ------------------ GENERIC  MEMBERS ------------------ */
+struct  os_mutex                                            /* Mutual Exclusion Semaphore                             */
+{
+    /* ------------------ GENERIC  MEMBERS ------------------ */
     OS_OBJ_TYPE Type;                                       /* Should be set to OS_OBJ_TYPE_MUTEX                     */
     CPU_CHAR *NamePtr;                                      /* Pointer to Mutex Name (NUL terminated ASCII)           */
     OS_PEND_LIST PendList;                                  /* List of tasks waiting on mutex                         */
@@ -891,8 +903,9 @@ struct  os_mutex {                                          /* Mutual Exclusion 
  *  ------------------------------------------------------------------------------------------------------------------------
  */
 
-struct  os_q {                                              /* Message Queue                                          */
-                                                            /* ------------------ GENERIC  MEMBERS ------------------ */
+struct  os_q                                                /* Message Queue                                          */
+{
+    /* ------------------ GENERIC  MEMBERS ------------------ */
     OS_OBJ_TYPE Type;                                       /* Should be set to OS_OBJ_TYPE_Q                         */
     CPU_CHAR *NamePtr;                                      /* Pointer to Message Queue Name (NUL terminated ASCII)   */
     OS_PEND_LIST PendList;                                  /* List of tasks waiting on message queue                 */
@@ -914,8 +927,9 @@ struct  os_q {                                              /* Message Queue    
  *  ------------------------------------------------------------------------------------------------------------------------
  */
 
-struct  os_sem {                                            /* Semaphore                                              */
-                                                            /* ------------------ GENERIC  MEMBERS ------------------ */
+struct  os_sem                                              /* Semaphore                                              */
+{
+    /* ------------------ GENERIC  MEMBERS ------------------ */
     OS_OBJ_TYPE Type;                                       /* Should be set to OS_OBJ_TYPE_SEM                       */
     CPU_CHAR *NamePtr;                                      /* Pointer to Semaphore Name (NUL terminated ASCII)       */
     OS_PEND_LIST PendList;                                  /* List of tasks waiting on semaphore                     */
@@ -936,7 +950,8 @@ struct  os_sem {                                            /* Semaphore        
  *  ------------------------------------------------------------------------------------------------------------------------
  */
 
-struct os_tcb {
+struct os_tcb
+{
     CPU_STK *StkPtr;                                        /* Pointer to current top of stack                        */
 
     void *ExtPtr;                                           /* Pointer to user definable data for TCB extension       */
@@ -981,7 +996,7 @@ struct os_tcb {
     OS_TICK TickCtrPrev;                                    /* Previous time when task was            ready           */
     OS_TICK TickCtrMatch;                                   /* Absolute time when task is going to be ready           */
     OS_TICK TickRemain;                                     /* Number of ticks remaining for a match (updated at ...  */
-                                                            /* ... run-time by OS_StatTask()                          */
+    /* ... run-time by OS_StatTask()                          */
     OS_TICK TimeQuanta;
     OS_TICK TimeQuantaCtr;
 
@@ -992,10 +1007,10 @@ struct os_tcb {
 
 #if OS_CFG_TASK_Q_EN > 0u
     OS_MSG_Q MsgQ;                                          /* Message queue associated with task                     */
- #if OS_CFG_TASK_PROFILE_EN > 0u
+#if OS_CFG_TASK_PROFILE_EN > 0u
     CPU_TS MsgQPendTime;                                    /* Time it took for signal to be received                 */
     CPU_TS MsgQPendTimeMax;                                 /* Max amount of time it took for signal to be received   */
- #endif
+#endif
 #endif
 
 #if OS_CFG_TASK_REG_TBL_SIZE > 0u
@@ -1051,7 +1066,8 @@ struct os_tcb {
  *  ------------------------------------------------------------------------------------------------------------------------
  */
 
-struct  os_tick_spoke {
+struct  os_tick_spoke
+{
     OS_TCB *FirstPtr;                                       /* Pointer to list of tasks in tick spoke                 */
     OS_OBJ_QTY NbrEntries;                                  /* Current number of entries in the tick spoke            */
     OS_OBJ_QTY NbrEntriesMax;                               /* Peak number of entries in the tick spoke               */
@@ -1064,7 +1080,8 @@ struct  os_tick_spoke {
  *  ------------------------------------------------------------------------------------------------------------------------
  */
 
-struct  os_tmr {
+struct  os_tmr
+{
     OS_OBJ_TYPE Type;
     CPU_CHAR *NamePtr;                                      /* Name to give the timer                                 */
     OS_TMR_CALLBACK_PTR CallbackPtr;                        /* Function to call when timer expires                    */
@@ -1085,7 +1102,8 @@ struct  os_tmr {
 
 
 
-struct  os_tmr_spoke {
+struct  os_tmr_spoke
+{
     OS_TMR *FirstPtr;                                       /* Pointer to first timer in linked list                  */
     OS_OBJ_QTY NbrEntries;
     OS_OBJ_QTY NbrEntriesMax;
@@ -1126,8 +1144,8 @@ OS_EXT OS_STATE        OSRunning;                                       /* Flag 
 
 /* ISR HANDLER TASK ------------------------- */
 #if OS_CFG_ISR_POST_DEFERRED_EN > 0u
-OS_EXT OS_INT_Q *           OSIntQInPtr;
-OS_EXT OS_INT_Q *           OSIntQOutPtr;
+OS_EXT OS_INT_Q            *OSIntQInPtr;
+OS_EXT OS_INT_Q            *OSIntQOutPtr;
 OS_EXT OS_OBJ_QTY           OSIntQNbrEntries;
 OS_EXT OS_OBJ_QTY           OSIntQNbrEntriesMax;
 OS_EXT OS_OBJ_QTY           OSIntQOvfCtr;
@@ -1137,17 +1155,17 @@ OS_EXT CPU_TS               OSIntQTaskTimeMax;
 
 /* FLAGS ------------------------------------ */
 #if OS_CFG_FLAG_EN > 0u
- #if OS_CFG_DBG_EN  > 0u
-OS_EXT OS_FLAG_GRP *        OSFlagDbgListPtr;
- #endif
+#if OS_CFG_DBG_EN  > 0u
+OS_EXT OS_FLAG_GRP         *OSFlagDbgListPtr;
+#endif
 OS_EXT OS_OBJ_QTY           OSFlagQty;
 #endif
 
 /* MEMORY MANAGEMENT ------------------------ */
 #if OS_CFG_MEM_EN > 0u
- #if OS_CFG_DBG_EN > 0u
-OS_EXT OS_MEM *             OSMemDbgListPtr;
- #endif
+#if OS_CFG_DBG_EN > 0u
+OS_EXT OS_MEM              *OSMemDbgListPtr;
+#endif
 OS_EXT OS_OBJ_QTY           OSMemQty;                                   /* Number of memory partitions created        */
 #endif
 
@@ -1158,9 +1176,9 @@ OS_EXT OS_MSG_POOL        OSMsgPool;                                    /* Pool 
 
 /* MUTEX MANAGEMENT ------------------------- */
 #if OS_CFG_MUTEX_EN > 0u
- #if OS_CFG_DBG_EN   > 0u
-OS_EXT OS_MUTEX *           OSMutexDbgListPtr;
- #endif
+#if OS_CFG_DBG_EN   > 0u
+OS_EXT OS_MUTEX            *OSMutexDbgListPtr;
+#endif
 OS_EXT OS_OBJ_QTY           OSMutexQty;                                 /* Number of mutexes created                  */
 #endif
 
@@ -1172,9 +1190,9 @@ extern CPU_DATA         OSPrioTbl[OS_PRIO_TBL_SIZE];
 
 /* QUEUES ----------------------------------- */
 #if OS_CFG_Q_EN   > 0u
- #if OS_CFG_DBG_EN > 0u
-OS_EXT OS_Q *               OSQDbgListPtr;
- #endif
+#if OS_CFG_DBG_EN > 0u
+OS_EXT OS_Q                *OSQDbgListPtr;
+#endif
 OS_EXT OS_OBJ_QTY           OSQQty;                                     /* Number of message queues created           */
 #endif
 
@@ -1201,9 +1219,9 @@ OS_EXT CPU_BOOLEAN              OSSchedRoundRobinEn;                    /* Enabl
 #endif
 /* SEMAPHORES ------------------------------- */
 #if OS_CFG_SEM_EN > 0u
- #if OS_CFG_DBG_EN > 0u
-OS_EXT OS_SEM *             OSSemDbgListPtr;
- #endif
+#if OS_CFG_DBG_EN > 0u
+OS_EXT OS_SEM              *OSSemDbgListPtr;
+#endif
 OS_EXT OS_OBJ_QTY           OSSemQty;                                   /* Number of semaphores created               */
 #endif
 
@@ -1223,7 +1241,7 @@ OS_EXT CPU_TS               OSStatTaskTimeMax;
 /* TASKS ------------------------------------ */
 OS_EXT OS_CTX_SW_CTR        OSTaskCtxSwCtr;                             /* Number of context switches                 */
 #if OS_CFG_DBG_EN > 0u
-OS_EXT OS_TCB *             OSTaskDbgListPtr;
+OS_EXT OS_TCB              *OSTaskDbgListPtr;
 #endif
 OS_EXT OS_OBJ_QTY           OSTaskQty;                                  /* Number of tasks created                    */
 
@@ -1238,9 +1256,9 @@ OS_EXT CPU_TS           OSTickTaskTimeMax;
 
 
 #if OS_CFG_TMR_EN > 0u                                                  /* TIMERS ----------------------------------- */
- #if OS_CFG_DBG_EN > 0u
-OS_EXT OS_TMR *             OSTmrDbgListPtr;
- #endif
+#if OS_CFG_DBG_EN > 0u
+OS_EXT OS_TMR              *OSTmrDbgListPtr;
+#endif
 OS_EXT OS_OBJ_QTY           OSTmrQty;                                   /* Number of timers created                   */
 OS_EXT OS_TCB               OSTmrTaskTCB;                               /* TCB of timer task                          */
 OS_EXT CPU_TS               OSTmrTaskTimeMax;
@@ -1250,8 +1268,8 @@ OS_EXT OS_CTR               OSTmrUpdateCtr;
 #endif
 
 /* TCBs ------------------------------------- */
-OS_EXT OS_TCB *         OSTCBCurPtr;                                    /* Pointer to currently running TCB           */
-OS_EXT OS_TCB *         OSTCBHighRdyPtr;                                /* Pointer to highest priority  TCB           */
+OS_EXT OS_TCB          *OSTCBCurPtr;                                    /* Pointer to currently running TCB           */
+OS_EXT OS_TCB          *OSTCBHighRdyPtr;                                /* Pointer to highest priority  TCB           */
 
 /*$PAGE*/
 /*
@@ -1262,30 +1280,30 @@ OS_EXT OS_TCB *         OSTCBHighRdyPtr;                                /* Point
  ************************************************************************************************************************
  */
 
-extern CPU_STK     * const          OSCfg_IdleTaskStkBasePtr;
+extern CPU_STK      *const          OSCfg_IdleTaskStkBasePtr;
 extern CPU_STK_SIZE const           OSCfg_IdleTaskStkLimit;
 extern CPU_STK_SIZE const           OSCfg_IdleTaskStkSize;
 extern CPU_INT32U const             OSCfg_IdleTaskStkSizeRAM;
 
-extern OS_INT_Q    * const          OSCfg_IntQBasePtr;
+extern OS_INT_Q     *const          OSCfg_IntQBasePtr;
 extern OS_OBJ_QTY const             OSCfg_IntQSize;
 extern CPU_INT32U const             OSCfg_IntQSizeRAM;
-extern CPU_STK     * const          OSCfg_IntQTaskStkBasePtr;
+extern CPU_STK      *const          OSCfg_IntQTaskStkBasePtr;
 extern CPU_STK_SIZE const           OSCfg_IntQTaskStkLimit;
 extern CPU_STK_SIZE const           OSCfg_IntQTaskStkSize;
 extern CPU_INT32U const             OSCfg_IntQTaskStkSizeRAM;
 
-extern CPU_STK     * const          OSCfg_ISRStkBasePtr;
+extern CPU_STK      *const          OSCfg_ISRStkBasePtr;
 extern CPU_STK_SIZE const           OSCfg_ISRStkSize;
 extern CPU_INT32U const             OSCfg_ISRStkSizeRAM;
 
 extern OS_MSG_SIZE const            OSCfg_MsgPoolSize;
 extern CPU_INT32U const             OSCfg_MsgPoolSizeRAM;
-extern OS_MSG      * const          OSCfg_MsgPoolBasePtr;
+extern OS_MSG       *const          OSCfg_MsgPoolBasePtr;
 
 extern OS_PRIO const                OSCfg_StatTaskPrio;
 extern OS_RATE_HZ const             OSCfg_StatTaskRate_Hz;
-extern CPU_STK     * const          OSCfg_StatTaskStkBasePtr;
+extern CPU_STK      *const          OSCfg_StatTaskStkBasePtr;
 extern CPU_STK_SIZE const           OSCfg_StatTaskStkLimit;
 extern CPU_STK_SIZE const           OSCfg_StatTaskStkSize;
 extern CPU_INT32U const             OSCfg_StatTaskStkSizeRAM;
@@ -1294,7 +1312,7 @@ extern CPU_STK_SIZE const           OSCfg_StkSizeMin;
 
 extern OS_RATE_HZ const             OSCfg_TickRate_Hz;
 extern OS_PRIO const                OSCfg_TickTaskPrio;
-extern CPU_STK     * const          OSCfg_TickTaskStkBasePtr;
+extern CPU_STK      *const          OSCfg_TickTaskStkBasePtr;
 extern CPU_STK_SIZE const           OSCfg_TickTaskStkLimit;
 extern CPU_STK_SIZE const           OSCfg_TickTaskStkSize;
 extern CPU_INT32U const             OSCfg_TickTaskStkSizeRAM;
@@ -1303,7 +1321,7 @@ extern CPU_INT32U const             OSCfg_TickWheelSizeRAM;
 
 extern OS_PRIO const                OSCfg_TmrTaskPrio;
 extern OS_RATE_HZ const             OSCfg_TmrTaskRate_Hz;
-extern CPU_STK     * const          OSCfg_TmrTaskStkBasePtr;
+extern CPU_STK      *const          OSCfg_TmrTaskStkBasePtr;
 extern CPU_STK_SIZE const           OSCfg_TmrTaskStkLimit;
 extern CPU_STK_SIZE const           OSCfg_TmrTaskStkSize;
 extern CPU_INT32U const             OSCfg_TmrTaskStkSizeRAM;
@@ -1351,61 +1369,61 @@ extern OS_TMR_SPOKE         OSCfg_TmrWheel[];
 #if OS_CFG_FLAG_EN > 0u
 
 void        OSFlagCreate              (OS_FLAG_GRP *p_grp,
-                                       CPU_CHAR *   p_name,
+                                       CPU_CHAR    *p_name,
                                        OS_FLAGS     flags,
-                                       OS_ERR *     p_err);
+                                       OS_ERR      *p_err);
 
- #if OS_CFG_FLAG_DEL_EN > 0u
-OS_OBJ_QTY        OSFlagDel                 (OS_FLAG_GRP *  p_grp,
-                                             OS_OPT         opt,
-                                             OS_ERR *       p_err);
- #endif
+#if OS_CFG_FLAG_DEL_EN > 0u
+OS_OBJ_QTY        OSFlagDel                 (OS_FLAG_GRP   *p_grp,
+        OS_OPT         opt,
+        OS_ERR        *p_err);
+#endif
 
 OS_FLAGS        OSFlagPend                (OS_FLAG_GRP *p_grp,
-                                           OS_FLAGS     flags,
-                                           OS_TICK      timeout,
-                                           OS_OPT       opt,
-                                           CPU_TS *     p_ts,
-                                           OS_ERR *     p_err);
+        OS_FLAGS     flags,
+        OS_TICK      timeout,
+        OS_OPT       opt,
+        CPU_TS      *p_ts,
+        OS_ERR      *p_err);
 
- #if OS_CFG_FLAG_PEND_ABORT_EN > 0u
-OS_OBJ_QTY        OSFlagPendAbort           (OS_FLAG_GRP *  p_grp,
-                                             OS_OPT         opt,
-                                             OS_ERR *       p_err);
- #endif
+#if OS_CFG_FLAG_PEND_ABORT_EN > 0u
+OS_OBJ_QTY        OSFlagPendAbort           (OS_FLAG_GRP   *p_grp,
+        OS_OPT         opt,
+        OS_ERR        *p_err);
+#endif
 
 OS_FLAGS        OSFlagPendGetFlagsRdy     (OS_ERR *p_err);
 
 OS_FLAGS        OSFlagPost                (OS_FLAG_GRP *p_grp,
-                                           OS_FLAGS     flags,
-                                           OS_OPT       opt,
-                                           OS_ERR *     p_err);
+        OS_FLAGS     flags,
+        OS_OPT       opt,
+        OS_ERR      *p_err);
 
 /* ------------------------------------------------ INTERNAL FUNCTIONS ---------------------------------------------- */
 
 void        OS_FlagClr                (OS_FLAG_GRP *p_grp);
 
-void        OS_FlagBlock              (OS_PEND_DATA *   p_pend_data,
-                                       OS_FLAG_GRP *    p_grp,
+void        OS_FlagBlock              (OS_PEND_DATA    *p_pend_data,
+                                       OS_FLAG_GRP     *p_grp,
                                        OS_FLAGS         flags,
                                        OS_OPT           opt,
                                        OS_TICK          timeout);
 
- #if OS_CFG_DBG_EN > 0u
+#if OS_CFG_DBG_EN > 0u
 void        OS_FlagDbgListAdd         (OS_FLAG_GRP *p_grp);
 
 void        OS_FlagDbgListRemove      (OS_FLAG_GRP *p_grp);
- #endif
+#endif
 
 void            OS_FlagInit               (OS_ERR *p_err);
 
 OS_FLAGS        OS_FlagPost               (OS_FLAG_GRP *p_grp,
-                                           OS_FLAGS     flags,
-                                           OS_OPT       opt,
-                                           CPU_TS       ts,
-                                           OS_ERR *     p_err);
+        OS_FLAGS     flags,
+        OS_OPT       opt,
+        CPU_TS       ts,
+        OS_ERR      *p_err);
 
-void        OS_FlagTaskRdy            (OS_TCB * p_tcb,
+void        OS_FlagTaskRdy            (OS_TCB *p_tcb,
                                        OS_FLAGS flags_rdy,
                                        CPU_TS   ts);
 #endif
@@ -1417,25 +1435,25 @@ void        OS_FlagTaskRdy            (OS_TCB * p_tcb,
 
 #if OS_CFG_MEM_EN > 0u
 
-void        OSMemCreate               (OS_MEM *     p_mem,
-                                       CPU_CHAR *   p_name,
-                                       void *       p_addr,
+void        OSMemCreate               (OS_MEM      *p_mem,
+                                       CPU_CHAR    *p_name,
+                                       void        *p_addr,
                                        OS_MEM_QTY   n_blks,
                                        OS_MEM_SIZE  blk_size,
-                                       OS_ERR *     p_err);
+                                       OS_ERR      *p_err);
 
-void *      OSMemGet                  (OS_MEM * p_mem,
-                                       OS_ERR * p_err);
+void       *OSMemGet                  (OS_MEM *p_mem,
+                                       OS_ERR *p_err);
 
-void        OSMemPut                  (OS_MEM * p_mem,
-                                       void *   p_blk,
-                                       OS_ERR * p_err);
+void        OSMemPut                  (OS_MEM *p_mem,
+                                       void    *p_blk,
+                                       OS_ERR *p_err);
 
 /* ------------------------------------------------ INTERNAL FUNCTIONS ---------------------------------------------- */
 
- #if OS_CFG_DBG_EN > 0u
+#if OS_CFG_DBG_EN > 0u
 void        OS_MemDbgListAdd          (OS_MEM *p_mem);
- #endif
+#endif
 
 void        OS_MemInit                (OS_ERR *p_err);
 
@@ -1448,42 +1466,42 @@ void        OS_MemInit                (OS_ERR *p_err);
 
 #if OS_CFG_MUTEX_EN > 0u
 
-void        OSMutexCreate             (OS_MUTEX *   p_mutex,
-                                       CPU_CHAR *   p_name,
-                                       OS_ERR *     p_err);
+void        OSMutexCreate             (OS_MUTEX    *p_mutex,
+                                       CPU_CHAR    *p_name,
+                                       OS_ERR      *p_err);
 
- #if OS_CFG_MUTEX_DEL_EN > 0u
-OS_OBJ_QTY        OSMutexDel                (OS_MUTEX * p_mutex,
-                                             OS_OPT     opt,
-                                             OS_ERR *   p_err);
- #endif
+#if OS_CFG_MUTEX_DEL_EN > 0u
+OS_OBJ_QTY        OSMutexDel                (OS_MUTEX *p_mutex,
+        OS_OPT     opt,
+        OS_ERR    *p_err);
+#endif
 
-void        OSMutexPend               (OS_MUTEX *   p_mutex,
+void        OSMutexPend               (OS_MUTEX    *p_mutex,
                                        OS_TICK      timeout,
                                        OS_OPT       opt,
-                                       CPU_TS *     p_ts,
-                                       OS_ERR *     p_err);
+                                       CPU_TS      *p_ts,
+                                       OS_ERR      *p_err);
 
- #if OS_CFG_MUTEX_PEND_ABORT_EN > 0u
-OS_OBJ_QTY        OSMutexPendAbort          (OS_MUTEX * p_mutex,
-                                             OS_OPT     opt,
-                                             OS_ERR *   p_err);
- #endif
+#if OS_CFG_MUTEX_PEND_ABORT_EN > 0u
+OS_OBJ_QTY        OSMutexPendAbort          (OS_MUTEX *p_mutex,
+        OS_OPT     opt,
+        OS_ERR    *p_err);
+#endif
 
-void        OSMutexPost               (OS_MUTEX *   p_mutex,
+void        OSMutexPost               (OS_MUTEX    *p_mutex,
                                        OS_OPT       opt,
-                                       OS_ERR *     p_err);
+                                       OS_ERR      *p_err);
 
 
 /* ------------------------------------------------ INTERNAL FUNCTIONS ---------------------------------------------- */
 
 void        OS_MutexClr               (OS_MUTEX *p_mutex);
 
- #if OS_CFG_DBG_EN > 0u
+#if OS_CFG_DBG_EN > 0u
 void        OS_MutexDbgListAdd        (OS_MUTEX *p_mutex);
 
 void        OS_MutexDbgListRemove     (OS_MUTEX *p_mutex);
- #endif
+#endif
 
 void        OS_MutexInit              (OS_ERR *p_err);
 #endif
@@ -1495,21 +1513,21 @@ void        OS_MutexInit              (OS_ERR *p_err);
 
 #if OS_CFG_PEND_MULTI_EN > 0u
 
-OS_OBJ_QTY        OSPendMulti               (OS_PEND_DATA * p_pend_data_tbl,
-                                             OS_OBJ_QTY     tbl_size,
-                                             OS_TICK        timeout,
-                                             OS_OPT         opt,
-                                             OS_ERR *       p_err);
+OS_OBJ_QTY        OSPendMulti               (OS_PEND_DATA *p_pend_data_tbl,
+        OS_OBJ_QTY     tbl_size,
+        OS_TICK        timeout,
+        OS_OPT         opt,
+        OS_ERR        *p_err);
 
 /* ------------------------------------------------ INTERNAL FUNCTIONS ---------------------------------------------- */
 
-OS_OBJ_QTY        OS_PendMultiGetRdy        (OS_PEND_DATA * p_pend_data_tbl,
-                                             OS_OBJ_QTY     tbl_size);
+OS_OBJ_QTY        OS_PendMultiGetRdy        (OS_PEND_DATA *p_pend_data_tbl,
+        OS_OBJ_QTY     tbl_size);
 
 CPU_BOOLEAN        OS_PendMultiValidate      (OS_PEND_DATA *p_pend_data_tbl,
-                                              OS_OBJ_QTY    tbl_size);
+        OS_OBJ_QTY    tbl_size);
 
-void        OS_PendMultiWait          (OS_PEND_DATA *   p_pend_data_tbl,
+void        OS_PendMultiWait          (OS_PEND_DATA    *p_pend_data_tbl,
                                        OS_OBJ_QTY       tbl_size,
                                        OS_TICK          timeout);
 #endif
@@ -1520,59 +1538,59 @@ void        OS_PendMultiWait          (OS_PEND_DATA *   p_pend_data_tbl,
 
 #if OS_CFG_Q_EN > 0u
 
-void        OSQCreate                 (OS_Q *       p_q,
-                                       CPU_CHAR *   p_name,
+void        OSQCreate                 (OS_Q        *p_q,
+                                       CPU_CHAR    *p_name,
                                        OS_MSG_QTY   max_qty,
-                                       OS_ERR *     p_err);
+                                       OS_ERR      *p_err);
 
- #if OS_CFG_Q_DEL_EN > 0u
-OS_OBJ_QTY        OSQDel                    (OS_Q *     p_q,
-                                             OS_OPT     opt,
-                                             OS_ERR *   p_err);
- #endif
+#if OS_CFG_Q_DEL_EN > 0u
+OS_OBJ_QTY        OSQDel                    (OS_Q      *p_q,
+        OS_OPT     opt,
+        OS_ERR    *p_err);
+#endif
 
- #if OS_CFG_Q_FLUSH_EN > 0u
-OS_MSG_QTY        OSQFlush                  (OS_Q *     p_q,
-                                             OS_ERR *   p_err);
- #endif
+#if OS_CFG_Q_FLUSH_EN > 0u
+OS_MSG_QTY        OSQFlush                  (OS_Q      *p_q,
+        OS_ERR    *p_err);
+#endif
 
-void *      OSQPend                   (OS_Q *       p_q,
+void       *OSQPend                   (OS_Q        *p_q,
                                        OS_TICK      timeout,
                                        OS_OPT       opt,
                                        OS_MSG_SIZE *p_msg_size,
-                                       CPU_TS *     p_ts,
-                                       OS_ERR *     p_err);
+                                       CPU_TS      *p_ts,
+                                       OS_ERR      *p_err);
 
- #if OS_CFG_Q_PEND_ABORT_EN > 0u
-OS_OBJ_QTY        OSQPendAbort              (OS_Q *     p_q,
-                                             OS_OPT     opt,
-                                             OS_ERR *   p_err);
- #endif
+#if OS_CFG_Q_PEND_ABORT_EN > 0u
+OS_OBJ_QTY        OSQPendAbort              (OS_Q      *p_q,
+        OS_OPT     opt,
+        OS_ERR    *p_err);
+#endif
 
-void        OSQPost                   (OS_Q *       p_q,
-                                       void *       p_void,
+void        OSQPost                   (OS_Q        *p_q,
+                                       void        *p_void,
                                        OS_MSG_SIZE  msg_size,
                                        OS_OPT       opt,
-                                       OS_ERR *     p_err);
+                                       OS_ERR      *p_err);
 
 /* ------------------------------------------------ INTERNAL FUNCTIONS ---------------------------------------------- */
 
 void        OS_QClr                   (OS_Q *p_q);
 
- #if OS_CFG_DBG_EN > 0u
+#if OS_CFG_DBG_EN > 0u
 void        OS_QDbgListAdd            (OS_Q *p_q);
 
 void        OS_QDbgListRemove         (OS_Q *p_q);
- #endif
+#endif
 
 void        OS_QInit                  (OS_ERR *p_err);
 
-void        OS_QPost                  (OS_Q *       p_q,
-                                       void *       p_void,
+void        OS_QPost                  (OS_Q        *p_q,
+                                       void        *p_void,
                                        OS_MSG_SIZE  msg_size,
                                        OS_OPT       opt,
                                        CPU_TS       ts,
-                                       OS_ERR *     p_err);
+                                       OS_ERR      *p_err);
 #endif
 
 /*$PAGE*/
@@ -1582,53 +1600,53 @@ void        OS_QPost                  (OS_Q *       p_q,
 
 #if OS_CFG_SEM_EN > 0u
 
-void        OSSemCreate               (OS_SEM *     p_sem,
-                                       CPU_CHAR *   p_name,
+void        OSSemCreate               (OS_SEM      *p_sem,
+                                       CPU_CHAR    *p_name,
                                        OS_SEM_CTR   cnt,
-                                       OS_ERR *     p_err);
+                                       OS_ERR      *p_err);
 
-OS_OBJ_QTY        OSSemDel                  (OS_SEM *   p_sem,
-                                             OS_OPT     opt,
-                                             OS_ERR *   p_err);
+OS_OBJ_QTY        OSSemDel                  (OS_SEM    *p_sem,
+        OS_OPT     opt,
+        OS_ERR    *p_err);
 
-OS_SEM_CTR        OSSemPend                 (OS_SEM *   p_sem,
-                                             OS_TICK    timeout,
-                                             OS_OPT     opt,
-                                             CPU_TS *   p_ts,
-                                             OS_ERR *   p_err);
+OS_SEM_CTR        OSSemPend                 (OS_SEM    *p_sem,
+        OS_TICK    timeout,
+        OS_OPT     opt,
+        CPU_TS    *p_ts,
+        OS_ERR    *p_err);
 
- #if OS_CFG_SEM_PEND_ABORT_EN > 0u
-OS_OBJ_QTY        OSSemPendAbort            (OS_SEM *   p_sem,
-                                             OS_OPT     opt,
-                                             OS_ERR *   p_err);
- #endif
+#if OS_CFG_SEM_PEND_ABORT_EN > 0u
+OS_OBJ_QTY        OSSemPendAbort            (OS_SEM    *p_sem,
+        OS_OPT     opt,
+        OS_ERR    *p_err);
+#endif
 
-OS_SEM_CTR        OSSemPost                 (OS_SEM *   p_sem,
-                                             OS_OPT     opt,
-                                             OS_ERR *   p_err);
+OS_SEM_CTR        OSSemPost                 (OS_SEM    *p_sem,
+        OS_OPT     opt,
+        OS_ERR    *p_err);
 
- #if OS_CFG_SEM_SET_EN > 0u
-void        OSSemSet                  (OS_SEM *     p_sem,
+#if OS_CFG_SEM_SET_EN > 0u
+void        OSSemSet                  (OS_SEM      *p_sem,
                                        OS_SEM_CTR   cnt,
-                                       OS_ERR *     p_err);
- #endif
+                                       OS_ERR      *p_err);
+#endif
 
 /* ------------------------------------------------ INTERNAL FUNCTIONS ---------------------------------------------- */
 
 void        OS_SemClr                 (OS_SEM *p_sem);
 
- #if OS_CFG_DBG_EN > 0u
+#if OS_CFG_DBG_EN > 0u
 void        OS_SemDbgListAdd          (OS_SEM *p_sem);
 
 void        OS_SemDbgListRemove       (OS_SEM *p_sem);
- #endif
+#endif
 
 void                OS_SemInit                (OS_ERR *p_err);
 
-OS_SEM_CTR          OS_SemPost                (OS_SEM * p_sem,
-                                               OS_OPT   opt,
-                                               CPU_TS   ts,
-                                               OS_ERR * p_err);
+OS_SEM_CTR          OS_SemPost                (OS_SEM *p_sem,
+        OS_OPT   opt,
+        CPU_TS   ts,
+        OS_ERR *p_err);
 #endif
 
 /*$PAGE*/
@@ -1637,108 +1655,108 @@ OS_SEM_CTR          OS_SemPost                (OS_SEM * p_sem,
 /* ================================================================================================================== */
 
 #if OS_CFG_TASK_CHANGE_PRIO_EN > 0u
-void        OSTaskChangePrio          (OS_TCB * p_tcb,
+void        OSTaskChangePrio          (OS_TCB *p_tcb,
                                        OS_PRIO  prio_new,
-                                       OS_ERR * p_err);
+                                       OS_ERR *p_err);
 #endif
 
-void        OSTaskCreate              (OS_TCB *     p_tcb,
-                                       CPU_CHAR *   p_name,
+void        OSTaskCreate              (OS_TCB      *p_tcb,
+                                       CPU_CHAR    *p_name,
                                        OS_TASK_PTR  p_task,
-                                       void *       p_arg,
+                                       void        *p_arg,
                                        OS_PRIO      prio,
-                                       CPU_STK *    p_stk_base,
+                                       CPU_STK     *p_stk_base,
                                        CPU_STK_SIZE stk_limit,
                                        CPU_STK_SIZE stk_size,
                                        OS_MSG_QTY   q_size,
                                        OS_TICK      time_quanta,
-                                       void *       p_ext,
+                                       void        *p_ext,
                                        OS_OPT       opt,
-                                       OS_ERR *     p_err);
+                                       OS_ERR      *p_err);
 
 #if OS_CFG_TASK_DEL_EN > 0u
-void        OSTaskDel                 (OS_TCB * p_tcb,
-                                       OS_ERR * p_err);
+void        OSTaskDel                 (OS_TCB *p_tcb,
+                                       OS_ERR *p_err);
 #endif
 
 #if OS_CFG_TASK_Q_EN > 0u
-OS_MSG_QTY        OSTaskQFlush              (OS_TCB *   p_tcb,
-                                             OS_ERR *   p_err);
+OS_MSG_QTY        OSTaskQFlush              (OS_TCB    *p_tcb,
+        OS_ERR    *p_err);
 
-void *      OSTaskQPend               (OS_TICK      timeout,
+void       *OSTaskQPend               (OS_TICK      timeout,
                                        OS_OPT       opt,
                                        OS_MSG_SIZE *p_msg_size,
-                                       CPU_TS *     p_ts,
-                                       OS_ERR *     p_err);
+                                       CPU_TS      *p_ts,
+                                       OS_ERR      *p_err);
 
-CPU_BOOLEAN        OSTaskQPendAbort          (OS_TCB *  p_tcb,
-                                              OS_OPT    opt,
-                                              OS_ERR *  p_err);
+CPU_BOOLEAN        OSTaskQPendAbort          (OS_TCB   *p_tcb,
+        OS_OPT    opt,
+        OS_ERR   *p_err);
 
-void        OSTaskQPost               (OS_TCB *     p_tcb,
-                                       void *       p_void,
+void        OSTaskQPost               (OS_TCB      *p_tcb,
+                                       void        *p_void,
                                        OS_MSG_SIZE  msg_size,
                                        OS_OPT       opt,
-                                       OS_ERR *     p_err);
+                                       OS_ERR      *p_err);
 
 #endif
 
 #if OS_CFG_TASK_REG_TBL_SIZE > 0u
-OS_REG        OSTaskRegGet              (OS_TCB *   p_tcb,
-                                         OS_REG_ID  id,
-                                         OS_ERR *   p_err);
+OS_REG        OSTaskRegGet              (OS_TCB    *p_tcb,
+        OS_REG_ID  id,
+        OS_ERR    *p_err);
 
 OS_REG_ID           OSTaskRegGetID            (OS_ERR *p_err);
 
-void                OSTaskRegSet              (OS_TCB *     p_tcb,
-                                               OS_REG_ID    id,
-                                               OS_REG       value,
-                                               OS_ERR *     p_err);
+void                OSTaskRegSet              (OS_TCB      *p_tcb,
+        OS_REG_ID    id,
+        OS_REG       value,
+        OS_ERR      *p_err);
 #endif
 
 #if OS_CFG_TASK_SUSPEND_EN > 0u
-void        OSTaskResume              (OS_TCB * p_tcb,
-                                       OS_ERR * p_err);
+void        OSTaskResume              (OS_TCB *p_tcb,
+                                       OS_ERR *p_err);
 
-void        OSTaskSuspend             (OS_TCB * p_tcb,
-                                       OS_ERR * p_err);
+void        OSTaskSuspend             (OS_TCB *p_tcb,
+                                       OS_ERR *p_err);
 #endif
 
 OS_SEM_CTR        OSTaskSemPend             (OS_TICK    timeout,
-                                             OS_OPT     opt,
-                                             CPU_TS *   p_ts,
-                                             OS_ERR *   p_err);
+        OS_OPT     opt,
+        CPU_TS    *p_ts,
+        OS_ERR    *p_err);
 
 #if (OS_CFG_TASK_SEM_PEND_ABORT_EN > 0u)
-CPU_BOOLEAN        OSTaskSemPendAbort        (OS_TCB *  p_tcb,
-                                              OS_OPT    opt,
-                                              OS_ERR *  p_err);
+CPU_BOOLEAN        OSTaskSemPendAbort        (OS_TCB   *p_tcb,
+        OS_OPT    opt,
+        OS_ERR   *p_err);
 #endif
 
-OS_SEM_CTR        OSTaskSemPost             (OS_TCB *   p_tcb,
-                                             OS_OPT     opt,
-                                             OS_ERR *   p_err);
+OS_SEM_CTR        OSTaskSemPost             (OS_TCB    *p_tcb,
+        OS_OPT     opt,
+        OS_ERR    *p_err);
 
-OS_SEM_CTR        OSTaskSemSet              (OS_TCB *   p_tcb,
-                                             OS_SEM_CTR cnt,
-                                             OS_ERR *   p_err);
+OS_SEM_CTR        OSTaskSemSet              (OS_TCB    *p_tcb,
+        OS_SEM_CTR cnt,
+        OS_ERR    *p_err);
 
 #if OS_CFG_STAT_TASK_STK_CHK_EN > 0u
-void        OSTaskStkChk              (OS_TCB *         p_tcb,
-                                       CPU_STK_SIZE *   p_free,
-                                       CPU_STK_SIZE *   p_used,
-                                       OS_ERR *         p_err);
+void        OSTaskStkChk              (OS_TCB          *p_tcb,
+                                       CPU_STK_SIZE    *p_free,
+                                       CPU_STK_SIZE    *p_used,
+                                       OS_ERR          *p_err);
 #endif
 
 #if OS_CFG_SCHED_ROUND_ROBIN_EN > 0u
-void        OSTaskTimeQuantaSet       (OS_TCB * p_tcb,
+void        OSTaskTimeQuantaSet       (OS_TCB *p_tcb,
                                        OS_TICK  time_quanta,
-                                       OS_ERR * p_err);
+                                       OS_ERR *p_err);
 #endif
 
 /* ------------------------------------------------ INTERNAL FUNCTIONS ---------------------------------------------- */
 
-void        OS_TaskBlock              (OS_TCB * p_tcb,
+void        OS_TaskBlock              (OS_TCB *p_tcb,
                                        OS_TICK  timeout);
 
 #if OS_CFG_DBG_EN > 0u
@@ -1751,30 +1769,30 @@ void        OS_TaskInit               (OS_ERR *p_err);
 
 void        OS_TaskInitTCB            (OS_TCB *p_tcb);
 
-void        OS_TaskQPost              (OS_TCB *     p_tcb,
-                                       void *       p_void,
+void        OS_TaskQPost              (OS_TCB      *p_tcb,
+                                       void        *p_void,
                                        OS_MSG_SIZE  msg_size,
                                        OS_OPT       opt,
                                        CPU_TS       ts,
-                                       OS_ERR *     p_err);
+                                       OS_ERR      *p_err);
 
 void        OS_TaskRdy                (OS_TCB *p_tcb);
 
 #if OS_CFG_TASK_SUSPEND_EN > 0u
-void        OS_TaskResume             (OS_TCB * p_tcb,
-                                       OS_ERR * p_err);
+void        OS_TaskResume             (OS_TCB *p_tcb,
+                                       OS_ERR *p_err);
 #endif
 
 void                OS_TaskReturn             (void);
 
-OS_SEM_CTR          OS_TaskSemPost            (OS_TCB * p_tcb,
-                                               OS_OPT   opt,
-                                               CPU_TS   ts,
-                                               OS_ERR * p_err);
+OS_SEM_CTR          OS_TaskSemPost            (OS_TCB *p_tcb,
+        OS_OPT   opt,
+        CPU_TS   ts,
+        OS_ERR *p_err);
 
 #if OS_CFG_TASK_SUSPEND_EN > 0u
-void        OS_TaskSuspend            (OS_TCB * p_tcb,
-                                       OS_ERR * p_err);
+void        OS_TaskSuspend            (OS_TCB *p_tcb,
+                                       OS_ERR *p_err);
 #endif
 
 /*$PAGE*/
@@ -1785,20 +1803,20 @@ void        OS_TaskSuspend            (OS_TCB * p_tcb,
 #if defined(OS_CFG_TLS_TBL_SIZE) && (OS_CFG_TLS_TBL_SIZE > 0u)
 OS_TLS_ID           OS_TLS_GetID       (OS_ERR *p_err);
 
-OS_TLS              OS_TLS_GetValue    (OS_TCB *    p_tcb,
+OS_TLS              OS_TLS_GetValue    (OS_TCB     *p_tcb,
                                         OS_TLS_ID   id,
-                                        OS_ERR *    p_err);
+                                        OS_ERR     *p_err);
 
 void        OS_TLS_Init        (OS_ERR *p_err);
 
-void        OS_TLS_SetValue    (OS_TCB *    p_tcb,
+void        OS_TLS_SetValue    (OS_TCB     *p_tcb,
                                 OS_TLS_ID   id,
                                 OS_TLS      value,
-                                OS_ERR *    p_err);
+                                OS_ERR     *p_err);
 
 void        OS_TLS_SetDestruct (OS_TLS_ID           id,
                                 OS_TLS_DESTRUCT_PTR p_destruct,
-                                OS_ERR *            p_err);
+                                OS_ERR             *p_err);
 
 void        OS_TLS_TaskCreate  (OS_TCB *p_tcb);
 
@@ -1814,7 +1832,7 @@ void        OS_TLS_TaskSw      (void);
 
 void        OSTimeDly                 (OS_TICK  dly,
                                        OS_OPT   opt,
-                                       OS_ERR * p_err);
+                                       OS_ERR *p_err);
 
 #if OS_CFG_TIME_DLY_HMSM_EN > 0u
 void        OSTimeDlyHMSM             (CPU_INT16U   hours,
@@ -1822,18 +1840,18 @@ void        OSTimeDlyHMSM             (CPU_INT16U   hours,
                                        CPU_INT16U   seconds,
                                        CPU_INT32U   milli,
                                        OS_OPT       opt,
-                                       OS_ERR *     p_err);
+                                       OS_ERR      *p_err);
 #endif
 
 #if OS_CFG_TIME_DLY_RESUME_EN > 0u
-void        OSTimeDlyResume           (OS_TCB * p_tcb,
-                                       OS_ERR * p_err);
+void        OSTimeDlyResume           (OS_TCB *p_tcb,
+                                       OS_ERR *p_err);
 #endif
 
 OS_TICK         OSTimeGet                 (OS_ERR *p_err);
 
 void            OSTimeSet                 (OS_TICK  ticks,
-                                           OS_ERR * p_err);
+        OS_ERR *p_err);
 
 void        OSTimeTick                (void);
 
@@ -1843,45 +1861,45 @@ void        OSTimeTick                (void);
 /* ================================================================================================================== */
 
 #if OS_CFG_TMR_EN > 0u
-void        OSTmrCreate               (OS_TMR *             p_tmr,
-                                       CPU_CHAR *           p_name,
+void        OSTmrCreate               (OS_TMR              *p_tmr,
+                                       CPU_CHAR            *p_name,
                                        OS_TICK              dly,
                                        OS_TICK              period,
                                        OS_OPT               opt,
                                        OS_TMR_CALLBACK_PTR  p_callback,
-                                       void *               p_callback_arg,
-                                       OS_ERR *             p_err);
+                                       void                *p_callback_arg,
+                                       OS_ERR              *p_err);
 
-CPU_BOOLEAN        OSTmrDel                  (OS_TMR *  p_tmr,
-                                              OS_ERR *  p_err);
+CPU_BOOLEAN        OSTmrDel                  (OS_TMR   *p_tmr,
+        OS_ERR   *p_err);
 
-OS_TICK        OSTmrRemainGet            (OS_TMR *  p_tmr,
-                                          OS_ERR *  p_err);
+OS_TICK        OSTmrRemainGet            (OS_TMR   *p_tmr,
+        OS_ERR   *p_err);
 
-CPU_BOOLEAN        OSTmrStart                (OS_TMR *  p_tmr,
-                                              OS_ERR *  p_err);
+CPU_BOOLEAN        OSTmrStart                (OS_TMR   *p_tmr,
+        OS_ERR   *p_err);
 
-OS_STATE        OSTmrStateGet             (OS_TMR * p_tmr,
-                                           OS_ERR * p_err);
+OS_STATE        OSTmrStateGet             (OS_TMR *p_tmr,
+        OS_ERR *p_err);
 
-CPU_BOOLEAN        OSTmrStop                 (OS_TMR *  p_tmr,
-                                              OS_OPT    opt,
-                                              void *    p_callback_arg,
-                                              OS_ERR *  p_err);
+CPU_BOOLEAN        OSTmrStop                 (OS_TMR   *p_tmr,
+        OS_OPT    opt,
+        void     *p_callback_arg,
+        OS_ERR   *p_err);
 
 /* ------------------------------------------------ INTERNAL FUNCTIONS ---------------------------------------------- */
 
 void        OS_TmrClr                 (OS_TMR *p_tmr);
 
- #if OS_CFG_DBG_EN > 0u
+#if OS_CFG_DBG_EN > 0u
 void        OS_TmrDbgListAdd          (OS_TMR *p_tmr);
 
 void        OS_TmrDbgListRemove       (OS_TMR *p_tmr);
- #endif
+#endif
 
 void        OS_TmrInit                (OS_ERR *p_err);
 
-void        OS_TmrLink                (OS_TMR * p_tmr,
+void        OS_TmrLink                (OS_TMR *p_tmr,
                                        OS_OPT   opt);
 
 void        OS_TmrResetPeak           (void);
@@ -1909,7 +1927,7 @@ void        OSSafetyCriticalStart     (void);
 #if OS_CFG_SCHED_ROUND_ROBIN_EN > 0u
 void        OSSchedRoundRobinCfg      (CPU_BOOLEAN  en,
                                        OS_TICK      dflt_time_quanta,
-                                       OS_ERR *     p_err);
+                                       OS_ERR      *p_err);
 
 void        OSSchedRoundRobinYield    (OS_ERR *p_err);
 
@@ -1965,12 +1983,12 @@ void            OSTaskReturnHook          (OS_TCB *p_tcb);
 
 void            OSStatTaskHook            (void);
 
-CPU_STK *       OSTaskStkInit             (OS_TASK_PTR  p_task,
-                                           void *       p_arg,
-                                           CPU_STK *    p_stk_base,
-                                           CPU_STK *    p_stk_limit,
-                                           CPU_STK_SIZE stk_size,
-                                           OS_OPT       opt);
+CPU_STK        *OSTaskStkInit             (OS_TASK_PTR  p_task,
+        void        *p_arg,
+        CPU_STK     *p_stk_base,
+        CPU_STK     *p_stk_limit,
+        CPU_STK_SIZE stk_size,
+        OS_OPT       opt);
 
 void        OSTaskSwHook              (void);
 
@@ -1996,13 +2014,13 @@ void        OS_Dbg_Init               (void);
 void        OS_IntQTaskInit           (OS_ERR *p_err);
 
 void        OS_IntQPost               (OS_OBJ_TYPE  type,
-                                       void *       p_obj,
-                                       void *       p_void,
+                                       void        *p_obj,
+                                       void        *p_void,
                                        OS_MSG_SIZE  msg_size,
                                        OS_FLAGS     flags,
                                        OS_OPT       opt,
                                        CPU_TS       ts,
-                                       OS_ERR *     p_err);
+                                       OS_ERR      *p_err);
 
 void        OS_IntQRePost             (void);
 
@@ -2015,53 +2033,53 @@ void                OS_MsgPoolInit            (OS_ERR *p_err);
 
 OS_MSG_QTY          OS_MsgQFreeAll            (OS_MSG_Q *p_msg_q);
 
-void *              OS_MsgQGet                (OS_MSG_Q *   p_msg_q,
-                                               OS_MSG_SIZE *p_msg_size,
-                                               CPU_TS *     p_ts,
-                                               OS_ERR *     p_err);
+void               *OS_MsgQGet                (OS_MSG_Q    *p_msg_q,
+        OS_MSG_SIZE *p_msg_size,
+        CPU_TS      *p_ts,
+        OS_ERR      *p_err);
 
-void        OS_MsgQInit               (OS_MSG_Q *   p_msg_q,
+void        OS_MsgQInit               (OS_MSG_Q    *p_msg_q,
                                        OS_MSG_QTY   size);
 
-void        OS_MsgQPut                (OS_MSG_Q *   p_msg_q,
-                                       void *       p_void,
+void        OS_MsgQPut                (OS_MSG_Q    *p_msg_q,
+                                       void        *p_void,
                                        OS_MSG_SIZE  msg_size,
                                        OS_OPT       opt,
                                        CPU_TS       ts,
-                                       OS_ERR *     p_err);
+                                       OS_ERR      *p_err);
 
 /* ---------------------------------------------- PEND/POST MANAGEMENT ---------------------------------------------- */
 
-void        OS_Pend                   (OS_PEND_DATA *   p_pend_data,
-                                       OS_PEND_OBJ *    p_obj,
+void        OS_Pend                   (OS_PEND_DATA    *p_pend_data,
+                                       OS_PEND_OBJ     *p_obj,
                                        OS_STATE         pending_on,
                                        OS_TICK          timeout);
 
 void        OS_PendAbort              (OS_PEND_OBJ *p_obj,
-                                       OS_TCB *     p_tcb,
+                                       OS_TCB      *p_tcb,
                                        CPU_TS       ts);
 
 void        OS_PendAbort1             (OS_PEND_OBJ *p_obj,
-                                       OS_TCB *     p_tcb,
+                                       OS_TCB      *p_tcb,
                                        CPU_TS       ts);
 
 void        OS_PendObjDel             (OS_PEND_OBJ *p_obj,
-                                       OS_TCB *     p_tcb,
+                                       OS_TCB      *p_tcb,
                                        CPU_TS       ts);
 
 void        OS_PendObjDel1            (OS_PEND_OBJ *p_obj,
-                                       OS_TCB *     p_tcb,
+                                       OS_TCB      *p_tcb,
                                        CPU_TS       ts);
 
 void        OS_Post                   (OS_PEND_OBJ *p_obj,
-                                       OS_TCB *     p_tcb,
-                                       void *       p_void,
+                                       OS_TCB      *p_tcb,
+                                       void        *p_void,
                                        OS_MSG_SIZE  msg_size,
                                        CPU_TS       ts);
 
 void        OS_Post1                  (OS_PEND_OBJ *p_obj,
-                                       OS_TCB *     p_tcb,
-                                       void *       p_void,
+                                       OS_TCB      *p_tcb,
+                                       void        *p_void,
                                        OS_MSG_SIZE  msg_size,
                                        CPU_TS       ts);
 
@@ -2106,44 +2124,44 @@ void        OS_RdyListRemove          (OS_TCB *p_tcb);
 
 /* ---------------------------------------------- PEND LIST MANAGEMENT ---------------------------------------------- */
 
-void        OS_PendDataInit           (OS_TCB *         p_tcb,
-                                       OS_PEND_DATA *   p_pend_data_tbl,
+void        OS_PendDataInit           (OS_TCB          *p_tcb,
+                                       OS_PEND_DATA    *p_pend_data_tbl,
                                        OS_OBJ_QTY       tbl_size);
 
 #if OS_CFG_DBG_EN > 0u
 void        OS_PendDbgNameAdd         (OS_PEND_OBJ *p_obj,
-                                       OS_TCB *     p_tcb);
+                                       OS_TCB      *p_tcb);
 
 void        OS_PendDbgNameRemove      (OS_PEND_OBJ *p_obj,
-                                       OS_TCB *     p_tcb);
+                                       OS_TCB      *p_tcb);
 #endif
 
-OS_PEND_LIST *      OS_PendListGetPtr         (OS_PEND_OBJ *p_obj);
+OS_PEND_LIST       *OS_PendListGetPtr         (OS_PEND_OBJ *p_obj);
 
 void                OS_PendListInit           (OS_PEND_LIST *p_pend_list);
 
-void                OS_PendListInsertHead     (OS_PEND_LIST *   p_pend_list,
-                                               OS_PEND_DATA *   p_pend_data);
+void                OS_PendListInsertHead     (OS_PEND_LIST    *p_pend_list,
+        OS_PEND_DATA    *p_pend_data);
 
-void        OS_PendListInsertPrio     (OS_PEND_LIST *   p_pend_list,
-                                       OS_PEND_DATA *   p_pend_data);
+void        OS_PendListInsertPrio     (OS_PEND_LIST    *p_pend_list,
+                                       OS_PEND_DATA    *p_pend_data);
 
-void        OS_PendListChangePrio     (OS_TCB * p_tcb,
+void        OS_PendListChangePrio     (OS_TCB *p_tcb,
                                        OS_PRIO  prio_new);
 
 void        OS_PendListRemove         (OS_TCB *p_tcb);
 
-void        OS_PendListRemove1        (OS_PEND_LIST *   p_pend_list,
-                                       OS_PEND_DATA *   p_pend_data);
+void        OS_PendListRemove1        (OS_PEND_LIST    *p_pend_list,
+                                       OS_PEND_DATA    *p_pend_data);
 
 /* ---------------------------------------------- TICK LIST MANAGEMENT ---------------------------------------------- */
 
 void        OS_TickListInit           (void);
 
-void        OS_TickListInsert         (OS_TCB * p_tcb,
+void        OS_TickListInsert         (OS_TCB *p_tcb,
                                        OS_TICK  time,
                                        OS_OPT   opt,
-                                       OS_ERR * p_err);
+                                       OS_ERR *p_err);
 
 void        OS_TickListRemove         (OS_TCB *p_tcb);
 
@@ -2171,66 +2189,66 @@ void        OS_TickListUpdate         (void);
  */
 
 #ifndef OS_CFG_APP_HOOKS_EN
- #error  "OS_CFG.H, Missing OS_CFG_APP_HOOKS_EN: Enable (1) or Disable (0) application specific hook functions"
+#error  "OS_CFG.H, Missing OS_CFG_APP_HOOKS_EN: Enable (1) or Disable (0) application specific hook functions"
 #endif
 
 
 #ifndef OS_CFG_ARG_CHK_EN
- #error  "OS_CFG.H, Missing OS_CFG_ARG_CHK_EN: Enable (1) or Disable (0) argument checking"
+#error  "OS_CFG.H, Missing OS_CFG_ARG_CHK_EN: Enable (1) or Disable (0) argument checking"
 #endif
 
 
 #ifndef OS_CFG_DBG_EN
- #error  "OS_CFG.H, Missing OS_CFG_DBG_EN: Allows you to include variables for debugging or not"
+#error  "OS_CFG.H, Missing OS_CFG_DBG_EN: Allows you to include variables for debugging or not"
 #endif
 
 
 #ifndef OS_CFG_CALLED_FROM_ISR_CHK_EN
- #error  "OS_CFG.H, Missing OS_CFG_CALLED_FROM_ISR_CHK_EN: Enable (1) or Disable (0) checking whether in an ISR in kernel services"
+#error  "OS_CFG.H, Missing OS_CFG_CALLED_FROM_ISR_CHK_EN: Enable (1) or Disable (0) checking whether in an ISR in kernel services"
 #endif
 
 
 #ifndef OS_CFG_OBJ_TYPE_CHK_EN
- #error  "OS_CFG.H, Missing OS_CFG_OBJ_TYPE_CHK_EN: Enable (1) or Disable (0) checking for proper object types in kernel services"
+#error  "OS_CFG.H, Missing OS_CFG_OBJ_TYPE_CHK_EN: Enable (1) or Disable (0) checking for proper object types in kernel services"
 #endif
 
 
 #ifndef OS_CFG_PEND_MULTI_EN
- #error  "OS_CFG.H, Missing OS_CFG_PEND_MULTI_EN: Enable (1) or Disable (0) multi-pend feature"
+#error  "OS_CFG.H, Missing OS_CFG_PEND_MULTI_EN: Enable (1) or Disable (0) multi-pend feature"
 #endif
 
 
 #if     OS_CFG_PRIO_MAX < 8u
- #error  "OS_CFG.H,         OS_CFG_PRIO_MAX must be >= 8"
+#error  "OS_CFG.H,         OS_CFG_PRIO_MAX must be >= 8"
 #endif
 
 
 #ifndef OS_CFG_SCHED_LOCK_TIME_MEAS_EN
- #error  "OS_CFG.H, Missing OS_CFG_SCHED_LOCK_TIME_MEAS_EN: Include code to measure scheduler lock time"
+#error  "OS_CFG.H, Missing OS_CFG_SCHED_LOCK_TIME_MEAS_EN: Include code to measure scheduler lock time"
 #else
- #if    (OS_CFG_SCHED_LOCK_TIME_MEAS_EN > 0u) && \
+#if    (OS_CFG_SCHED_LOCK_TIME_MEAS_EN > 0u) && \
     (OS_CFG_TS_EN                   < 1u)
-  #error  "OS_CFG.H,         OS_CFG_TS_EN must be Enabled (1) to measure scheduler lock time"
- #endif
+#error  "OS_CFG.H,         OS_CFG_TS_EN must be Enabled (1) to measure scheduler lock time"
+#endif
 #endif
 
 
 #ifndef OS_CFG_SCHED_ROUND_ROBIN_EN
- #error  "OS_CFG.H, Missing OS_CFG_SCHED_ROUND_ROBIN_EN: Include code for Round Robin Scheduling"
+#error  "OS_CFG.H, Missing OS_CFG_SCHED_ROUND_ROBIN_EN: Include code for Round Robin Scheduling"
 #endif
 
 
 #ifndef OS_CFG_STK_SIZE_MIN
- #error  "OS_CFG.H, Missing OS_CFG_STK_SIZE_MIN: Determines the minimum size for a task stack"
+#error  "OS_CFG.H, Missing OS_CFG_STK_SIZE_MIN: Determines the minimum size for a task stack"
 #endif
 
 #ifndef OS_CFG_TS_EN
- #error  "OS_CFG.H, Missing OS_CFG_TS_EN: Determines whether time stamping is enabled"
+#error  "OS_CFG.H, Missing OS_CFG_TS_EN: Determines whether time stamping is enabled"
 #else
- #if    (OS_CFG_TS_EN  >  0u) && \
+#if    (OS_CFG_TS_EN  >  0u) && \
     (CPU_CFG_TS_EN == DEF_DISABLED)
-  #error  "CPU_CFG.H,        CPU_CFG_TS_32_EN must be Enabled (1) to use time stamp feature"
- #endif
+#error  "CPU_CFG.H,        CPU_CFG_TS_32_EN must be Enabled (1) to use time stamp feature"
+#endif
 #endif
 
 /*
@@ -2240,19 +2258,19 @@ void        OS_TickListUpdate         (void);
  */
 
 #ifndef OS_CFG_FLAG_EN
- #error  "OS_CFG.H, Missing OS_CFG_FLAG_EN: Enable (1) or Disable (0) code generation for Event Flags"
+#error  "OS_CFG.H, Missing OS_CFG_FLAG_EN: Enable (1) or Disable (0) code generation for Event Flags"
 #else
- #ifndef OS_CFG_FLAG_DEL_EN
-  #error  "OS_CFG.H, Missing OS_CFG_FLAG_DEL_EN: Include code for OSFlagDel()"
- #endif
+#ifndef OS_CFG_FLAG_DEL_EN
+#error  "OS_CFG.H, Missing OS_CFG_FLAG_DEL_EN: Include code for OSFlagDel()"
+#endif
 
- #ifndef OS_CFG_FLAG_MODE_CLR_EN
-  #error  "OS_CFG.H, Missing OS_CFG_FLAG_MODE_CLR_EN: Include code for Wait on Clear EVENT FLAGS"
- #endif
+#ifndef OS_CFG_FLAG_MODE_CLR_EN
+#error  "OS_CFG.H, Missing OS_CFG_FLAG_MODE_CLR_EN: Include code for Wait on Clear EVENT FLAGS"
+#endif
 
- #ifndef OS_CFG_FLAG_PEND_ABORT_EN
-  #error  "OS_CFG.H, Missing OS_CFG_FLAG_PEND_ABORT_EN: Include code for aborting pends from another task"
- #endif
+#ifndef OS_CFG_FLAG_PEND_ABORT_EN
+#error  "OS_CFG.H, Missing OS_CFG_FLAG_PEND_ABORT_EN: Include code for aborting pends from another task"
+#endif
 #endif
 
 /*
@@ -2262,7 +2280,7 @@ void        OS_TickListUpdate         (void);
  */
 
 #ifndef OS_CFG_MEM_EN
- #error  "OS_CFG.H, Missing OS_CFG_MEM_EN: Enable (1) or Disable (0) code generation for MEMORY MANAGER"
+#error  "OS_CFG.H, Missing OS_CFG_MEM_EN: Enable (1) or Disable (0) code generation for MEMORY MANAGER"
 #endif
 
 /*
@@ -2272,15 +2290,15 @@ void        OS_TickListUpdate         (void);
  */
 
 #ifndef OS_CFG_MUTEX_EN
- #error  "OS_CFG.H, Missing OS_CFG_MUTEX_EN: Enable (1) or Disable (0) code generation for MUTEX"
+#error  "OS_CFG.H, Missing OS_CFG_MUTEX_EN: Enable (1) or Disable (0) code generation for MUTEX"
 #else
- #ifndef OS_CFG_MUTEX_DEL_EN
-  #error  "OS_CFG.H, Missing OS_CFG_MUTEX_DEL_EN: Include code for OSMutexDel()"
- #endif
+#ifndef OS_CFG_MUTEX_DEL_EN
+#error  "OS_CFG.H, Missing OS_CFG_MUTEX_DEL_EN: Include code for OSMutexDel()"
+#endif
 
- #ifndef OS_CFG_MUTEX_PEND_ABORT_EN
-  #error  "OS_CFG.H, Missing OS_CFG_MUTEX_PEND_ABORT_EN: Include code for OSMutexPendAbort()"
- #endif
+#ifndef OS_CFG_MUTEX_PEND_ABORT_EN
+#error  "OS_CFG.H, Missing OS_CFG_MUTEX_PEND_ABORT_EN: Include code for OSMutexPendAbort()"
+#endif
 #endif
 
 /*
@@ -2290,19 +2308,19 @@ void        OS_TickListUpdate         (void);
  */
 
 #ifndef OS_CFG_Q_EN
- #error  "OS_CFG.H, Missing OS_CFG_Q_EN: Enable (1) or Disable (0) code generation for QUEUES"
+#error  "OS_CFG.H, Missing OS_CFG_Q_EN: Enable (1) or Disable (0) code generation for QUEUES"
 #else
- #ifndef OS_CFG_Q_DEL_EN
-  #error  "OS_CFG.H, Missing OS_CFG_Q_DEL_EN: Include code for OSQDel()"
- #endif
+#ifndef OS_CFG_Q_DEL_EN
+#error  "OS_CFG.H, Missing OS_CFG_Q_DEL_EN: Include code for OSQDel()"
+#endif
 
- #ifndef OS_CFG_Q_FLUSH_EN
-  #error  "OS_CFG.H, Missing OS_CFG_Q_FLUSH_EN: Include code for OSQFlush()"
- #endif
+#ifndef OS_CFG_Q_FLUSH_EN
+#error  "OS_CFG.H, Missing OS_CFG_Q_FLUSH_EN: Include code for OSQFlush()"
+#endif
 
- #ifndef OS_CFG_Q_PEND_ABORT_EN
-  #error  "OS_CFG.H, Missing OS_CFG_Q_PEND_ABORT_EN: Include code for OSQPendAbort()"
- #endif
+#ifndef OS_CFG_Q_PEND_ABORT_EN
+#error  "OS_CFG.H, Missing OS_CFG_Q_PEND_ABORT_EN: Include code for OSQPendAbort()"
+#endif
 #endif
 
 /*
@@ -2312,19 +2330,19 @@ void        OS_TickListUpdate         (void);
  */
 
 #ifndef OS_CFG_SEM_EN
- #error  "OS_CFG.H, Missing OS_CFG_SEM_EN: Enable (1) or Disable (0) code generation for SEMAPHORES"
+#error  "OS_CFG.H, Missing OS_CFG_SEM_EN: Enable (1) or Disable (0) code generation for SEMAPHORES"
 #else
- #ifndef OS_CFG_SEM_DEL_EN
-  #error  "OS_CFG.H, Missing OS_CFG_SEM_DEL_EN: Include code for OSSemDel()"
- #endif
+#ifndef OS_CFG_SEM_DEL_EN
+#error  "OS_CFG.H, Missing OS_CFG_SEM_DEL_EN: Include code for OSSemDel()"
+#endif
 
- #ifndef OS_CFG_SEM_PEND_ABORT_EN
-  #error  "OS_CFG.H, Missing OS_CFG_SEM_PEND_ABORT_EN: Include code for OSSemPendAbort()"
- #endif
+#ifndef OS_CFG_SEM_PEND_ABORT_EN
+#error  "OS_CFG.H, Missing OS_CFG_SEM_PEND_ABORT_EN: Include code for OSSemPendAbort()"
+#endif
 
- #ifndef OS_CFG_SEM_SET_EN
-  #error  "OS_CFG.H, Missing OS_CFG_SEM_SET_EN: Include code for OSSemSet()"
- #endif
+#ifndef OS_CFG_SEM_SET_EN
+#error  "OS_CFG.H, Missing OS_CFG_SEM_SET_EN: Include code for OSSemSet()"
+#endif
 #endif
 
 /*
@@ -2334,43 +2352,43 @@ void        OS_TickListUpdate         (void);
  */
 
 #ifndef OS_CFG_STAT_TASK_EN
- #error  "OS_CFG.H, Missing OS_CFG_STAT_TASK_EN: Enable (1) or Disable(0) the statistics task"
+#error  "OS_CFG.H, Missing OS_CFG_STAT_TASK_EN: Enable (1) or Disable(0) the statistics task"
 #endif
 
 #ifndef OS_CFG_STAT_TASK_STK_CHK_EN
- #error  "OS_CFG.H, Missing OS_CFG_STAT_TASK_STK_CHK_EN: Check task stacks from statistics task"
+#error  "OS_CFG.H, Missing OS_CFG_STAT_TASK_STK_CHK_EN: Check task stacks from statistics task"
 #endif
 
 #ifndef OS_CFG_TASK_CHANGE_PRIO_EN
- #error  "OS_CFG.H, Missing OS_CFG_TASK_CHANGE_PRIO_EN: Include code for OSTaskChangePrio()"
+#error  "OS_CFG.H, Missing OS_CFG_TASK_CHANGE_PRIO_EN: Include code for OSTaskChangePrio()"
 #endif
 
 #ifndef OS_CFG_TASK_DEL_EN
- #error  "OS_CFG.H, Missing OS_CFG_TASK_DEL_EN: Include code for OSTaskDel()"
+#error  "OS_CFG.H, Missing OS_CFG_TASK_DEL_EN: Include code for OSTaskDel()"
 #endif
 
 #ifndef OS_CFG_TASK_Q_EN
- #error  "OS_CFG.H, Missing OS_CFG_TASK_Q_EN: Include code for OSTaskQxxx()"
+#error  "OS_CFG.H, Missing OS_CFG_TASK_Q_EN: Include code for OSTaskQxxx()"
 #endif
 
 #ifndef OS_CFG_TASK_Q_PEND_ABORT_EN
- #error  "OS_CFG.H, Missing OS_CFG_TASK_Q_PEND_ABORT_EN: Include code for OSTaskQPendAbort()"
+#error  "OS_CFG.H, Missing OS_CFG_TASK_Q_PEND_ABORT_EN: Include code for OSTaskQPendAbort()"
 #endif
 
 #ifndef OS_CFG_TASK_PROFILE_EN
- #error  "OS_CFG.H, Missing OS_CFG_TASK_PROFILE_EN: Include code for task profiling"
+#error  "OS_CFG.H, Missing OS_CFG_TASK_PROFILE_EN: Include code for task profiling"
 #endif
 
 #ifndef OS_CFG_TASK_REG_TBL_SIZE
- #error  "OS_CFG.H, Missing OS_CFG_TASK_REG_TBL_SIZE: Include support for task specific registers"
+#error  "OS_CFG.H, Missing OS_CFG_TASK_REG_TBL_SIZE: Include support for task specific registers"
 #endif
 
 #ifndef OS_CFG_TASK_SEM_PEND_ABORT_EN
- #error  "OS_CFG.H, Missing OS_CFG_TASK_SEM_PEND_ABORT_EN: Include code for OSTaskSemPendAbort()"
+#error  "OS_CFG.H, Missing OS_CFG_TASK_SEM_PEND_ABORT_EN: Include code for OSTaskSemPendAbort()"
 #endif
 
 #ifndef OS_CFG_TASK_SUSPEND_EN
- #error  "OS_CFG.H, Missing OS_CFG_TASK_SUSPEND_EN: Include code for OSTaskSuspend() and OSTaskResume()"
+#error  "OS_CFG.H, Missing OS_CFG_TASK_SUSPEND_EN: Include code for OSTaskSuspend() and OSTaskResume()"
 #endif
 
 /*
@@ -2380,11 +2398,11 @@ void        OS_TickListUpdate         (void);
  */
 
 #ifndef OS_CFG_TIME_DLY_HMSM_EN
- #error  "OS_CFG.H, Missing OS_CFG_TIME_DLY_HMSM_EN: Include code for OSTimeDlyHMSM()"
+#error  "OS_CFG.H, Missing OS_CFG_TIME_DLY_HMSM_EN: Include code for OSTimeDlyHMSM()"
 #endif
 
 #ifndef OS_CFG_TIME_DLY_RESUME_EN
- #error  "OS_CFG.H, Missing OS_CFG_TIME_DLY_RESUME_EN: Include code for OSTimeDlyResume()"
+#error  "OS_CFG.H, Missing OS_CFG_TIME_DLY_RESUME_EN: Include code for OSTimeDlyResume()"
 #endif
 
 /*
@@ -2394,11 +2412,11 @@ void        OS_TickListUpdate         (void);
  */
 
 #ifndef OS_CFG_TMR_EN
- #error  "OS_CFG.H, Missing OS_CFG_TMR_EN: When (1) enables code generation for Timer Management"
+#error  "OS_CFG.H, Missing OS_CFG_TMR_EN: When (1) enables code generation for Timer Management"
 #else
- #ifndef OS_CFG_TMR_DEL_EN
-  #error  "OS_CFG.H, Missing OS_CFG_TMR_DEL_EN: Enables (1) or Disables (0) code for OSTmrDel()"
- #endif
+#ifndef OS_CFG_TMR_DEL_EN
+#error  "OS_CFG.H, Missing OS_CFG_TMR_DEL_EN: Enables (1) or Disables (0) code for OSTmrDel()"
+#endif
 #endif
 
 /*
@@ -2409,13 +2427,13 @@ void        OS_TickListUpdate         (void);
 
 /* See 'os.h  Note #1a'.                              */
 #if LIB_VERSION < 126u
- #error  "lib_def.h, LIB_VERSION SHOULD be >= V1.26"
+#error  "lib_def.h, LIB_VERSION SHOULD be >= V1.26"
 #endif
 
 
 /* See 'os.h  Note #1b'.                              */
 #if CPU_CORE_VERSION < 125u
- #error  "cpu_core.h, CPU_CORE_VERSION SHOULD be >= V1.25"
+#error  "cpu_core.h, CPU_CORE_VERSION SHOULD be >= V1.25"
 #endif
 
 

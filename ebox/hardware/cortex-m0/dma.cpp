@@ -71,11 +71,11 @@ void Dma::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_
 void Dma::interrupt(DmaIrqType DMA_IT, FunctionalState enable)
 {
     if(DMA_IT == DmaItTc)
-        (enable == ENABLE)? LL_DMA_EnableIT_TC(DMA1, DMAy_Channelx):LL_DMA_DisableIT_TC(DMA1, DMAy_Channelx);
+        (enable == ENABLE) ? LL_DMA_EnableIT_TC(DMA1, DMAy_Channelx) : LL_DMA_DisableIT_TC(DMA1, DMAy_Channelx);
     else if(DMA_IT == DmaItTe)
-				(enable == ENABLE)? LL_DMA_EnableIT_TE(DMA1, DMAy_Channelx):LL_DMA_DisableIT_TE(DMA1, DMAy_Channelx);
+        (enable == ENABLE) ? LL_DMA_EnableIT_TE(DMA1, DMAy_Channelx) : LL_DMA_DisableIT_TE(DMA1, DMAy_Channelx);
     else if(DMA_IT == DmaItHt)
-				(enable == ENABLE)? LL_DMA_EnableIT_HT(DMA1, DMAy_Channelx):LL_DMA_DisableIT_HT(DMA1, DMAy_Channelx);
+        (enable == ENABLE) ? LL_DMA_EnableIT_HT(DMA1, DMAy_Channelx) : LL_DMA_DisableIT_HT(DMA1, DMAy_Channelx);
 }
 
 
@@ -127,11 +127,11 @@ void Dma::disable()
 
 void Dma::set_current_len(uint16_t len)
 {
-	  LL_DMA_SetDataLength(DMA1, DMAy_Channelx,len);	
+    LL_DMA_SetDataLength(DMA1, DMAy_Channelx, len);
 }
 bool Dma::get_flag_status()
 {
-		
+
     switch((uint32_t)DMAy_Channelx)
     {
     case (uint32_t)DMA1_Channel1:
@@ -157,7 +157,7 @@ void Dma::clear_flag()
     switch((uint32_t)DMAy_Channelx)
     {
     case (uint32_t)DMA1_Channel1:
-				LL_DMA_ClearFlag_TC1(DMA1);
+        LL_DMA_ClearFlag_TC1(DMA1);
         break;
     case (uint32_t)DMA1_Channel2:
         LL_DMA_ClearFlag_TC1(DMA1);

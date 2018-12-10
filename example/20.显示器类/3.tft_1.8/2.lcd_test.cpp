@@ -7,11 +7,11 @@
 
   * @brief   ebox application example .
   *
-  * Copyright 2016 shentq. All Rights Reserved.         
+  * Copyright 2016 shentq. All Rights Reserved.
   ******************************************************************************
  */
- 
- 
+
+
 #include "ebox.h"
 #include "bsp_ebox.h"
 #include "color_convert.h"
@@ -23,7 +23,7 @@
 //              SDA   接PA7（SDA）
 //              RES   接PB3 (RST)
 //              DC    接PB4 (RS)
-//              CS    接PB5 
+//              CS    接PB5
 //              BL    接PB6
 
 COLOR_HSV hsv;
@@ -60,7 +60,7 @@ void setup()
         HSV_to_RGB(hsv, rgb);
         rgb_to_565(rgb, _color[i]);
         lcd.front_color = _color[i];
-        lcd.draw_h_line(0, i, 128,BLUE);
+        lcd.draw_h_line(0, i, 128, BLUE);
     }
     lcd.disp_char8x16(0, 0, index++);
 
@@ -68,8 +68,8 @@ void setup()
 
 
     lcd.front_color = GREEN;
-    lcd.draw_circle(50, 50, 50,YELLOW);
-    lcd.draw_line(64, 50, r, 100,GREEN);
+    lcd.draw_circle(50, 50, 50, YELLOW);
+    lcd.draw_line(64, 50, r, 100, GREEN);
 
 
 }

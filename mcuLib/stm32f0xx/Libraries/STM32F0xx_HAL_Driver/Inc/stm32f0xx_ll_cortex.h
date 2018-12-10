@@ -112,7 +112,7 @@ extern "C" {
   */
 __STATIC_INLINE uint32_t LL_SYSTICK_IsActiveCounterFlag(void)
 {
-  return ((SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) == (SysTick_CTRL_COUNTFLAG_Msk));
+    return ((SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) == (SysTick_CTRL_COUNTFLAG_Msk));
 }
 
 /**
@@ -125,14 +125,14 @@ __STATIC_INLINE uint32_t LL_SYSTICK_IsActiveCounterFlag(void)
   */
 __STATIC_INLINE void LL_SYSTICK_SetClkSource(uint32_t Source)
 {
-  if (Source == LL_SYSTICK_CLKSOURCE_HCLK)
-  {
-    SET_BIT(SysTick->CTRL, LL_SYSTICK_CLKSOURCE_HCLK);
-  }
-  else
-  {
-    CLEAR_BIT(SysTick->CTRL, LL_SYSTICK_CLKSOURCE_HCLK);
-  }
+    if (Source == LL_SYSTICK_CLKSOURCE_HCLK)
+    {
+        SET_BIT(SysTick->CTRL, LL_SYSTICK_CLKSOURCE_HCLK);
+    }
+    else
+    {
+        CLEAR_BIT(SysTick->CTRL, LL_SYSTICK_CLKSOURCE_HCLK);
+    }
 }
 
 /**
@@ -144,7 +144,7 @@ __STATIC_INLINE void LL_SYSTICK_SetClkSource(uint32_t Source)
   */
 __STATIC_INLINE uint32_t LL_SYSTICK_GetClkSource(void)
 {
-  return READ_BIT(SysTick->CTRL, LL_SYSTICK_CLKSOURCE_HCLK);
+    return READ_BIT(SysTick->CTRL, LL_SYSTICK_CLKSOURCE_HCLK);
 }
 
 /**
@@ -154,7 +154,7 @@ __STATIC_INLINE uint32_t LL_SYSTICK_GetClkSource(void)
   */
 __STATIC_INLINE void LL_SYSTICK_EnableIT(void)
 {
-  SET_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk);
+    SET_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk);
 }
 
 /**
@@ -164,7 +164,7 @@ __STATIC_INLINE void LL_SYSTICK_EnableIT(void)
   */
 __STATIC_INLINE void LL_SYSTICK_DisableIT(void)
 {
-  CLEAR_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk);
+    CLEAR_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk);
 }
 
 /**
@@ -174,7 +174,7 @@ __STATIC_INLINE void LL_SYSTICK_DisableIT(void)
   */
 __STATIC_INLINE uint32_t LL_SYSTICK_IsEnabledIT(void)
 {
-  return (READ_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk) == (SysTick_CTRL_TICKINT_Msk));
+    return (READ_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk) == (SysTick_CTRL_TICKINT_Msk));
 }
 
 /**
@@ -192,8 +192,8 @@ __STATIC_INLINE uint32_t LL_SYSTICK_IsEnabledIT(void)
   */
 __STATIC_INLINE void LL_LPM_EnableSleep(void)
 {
-  /* Clear SLEEPDEEP bit of Cortex System Control Register */
-  CLEAR_BIT(SCB->SCR, ((uint32_t)SCB_SCR_SLEEPDEEP_Msk));
+    /* Clear SLEEPDEEP bit of Cortex System Control Register */
+    CLEAR_BIT(SCB->SCR, ((uint32_t)SCB_SCR_SLEEPDEEP_Msk));
 }
 
 /**
@@ -203,8 +203,8 @@ __STATIC_INLINE void LL_LPM_EnableSleep(void)
   */
 __STATIC_INLINE void LL_LPM_EnableDeepSleep(void)
 {
-  /* Set SLEEPDEEP bit of Cortex System Control Register */
-  SET_BIT(SCB->SCR, ((uint32_t)SCB_SCR_SLEEPDEEP_Msk));
+    /* Set SLEEPDEEP bit of Cortex System Control Register */
+    SET_BIT(SCB->SCR, ((uint32_t)SCB_SCR_SLEEPDEEP_Msk));
 }
 
 /**
@@ -216,8 +216,8 @@ __STATIC_INLINE void LL_LPM_EnableDeepSleep(void)
   */
 __STATIC_INLINE void LL_LPM_EnableSleepOnExit(void)
 {
-  /* Set SLEEPONEXIT bit of Cortex System Control Register */
-  SET_BIT(SCB->SCR, ((uint32_t)SCB_SCR_SLEEPONEXIT_Msk));
+    /* Set SLEEPONEXIT bit of Cortex System Control Register */
+    SET_BIT(SCB->SCR, ((uint32_t)SCB_SCR_SLEEPONEXIT_Msk));
 }
 
 /**
@@ -227,8 +227,8 @@ __STATIC_INLINE void LL_LPM_EnableSleepOnExit(void)
   */
 __STATIC_INLINE void LL_LPM_DisableSleepOnExit(void)
 {
-  /* Clear SLEEPONEXIT bit of Cortex System Control Register */
-  CLEAR_BIT(SCB->SCR, ((uint32_t)SCB_SCR_SLEEPONEXIT_Msk));
+    /* Clear SLEEPONEXIT bit of Cortex System Control Register */
+    CLEAR_BIT(SCB->SCR, ((uint32_t)SCB_SCR_SLEEPONEXIT_Msk));
 }
 
 /**
@@ -239,8 +239,8 @@ __STATIC_INLINE void LL_LPM_DisableSleepOnExit(void)
   */
 __STATIC_INLINE void LL_LPM_EnableEventOnPend(void)
 {
-  /* Set SEVEONPEND bit of Cortex System Control Register */
-  SET_BIT(SCB->SCR, ((uint32_t)SCB_SCR_SEVONPEND_Msk));
+    /* Set SEVEONPEND bit of Cortex System Control Register */
+    SET_BIT(SCB->SCR, ((uint32_t)SCB_SCR_SEVONPEND_Msk));
 }
 
 /**
@@ -251,8 +251,8 @@ __STATIC_INLINE void LL_LPM_EnableEventOnPend(void)
   */
 __STATIC_INLINE void LL_LPM_DisableEventOnPend(void)
 {
-  /* Clear SEVEONPEND bit of Cortex System Control Register */
-  CLEAR_BIT(SCB->SCR, ((uint32_t)SCB_SCR_SEVONPEND_Msk));
+    /* Clear SEVEONPEND bit of Cortex System Control Register */
+    CLEAR_BIT(SCB->SCR, ((uint32_t)SCB_SCR_SEVONPEND_Msk));
 }
 
 /**
@@ -270,7 +270,7 @@ __STATIC_INLINE void LL_LPM_DisableEventOnPend(void)
   */
 __STATIC_INLINE uint32_t LL_CPUID_GetImplementer(void)
 {
-  return (uint32_t)(READ_BIT(SCB->CPUID, SCB_CPUID_IMPLEMENTER_Msk) >> SCB_CPUID_IMPLEMENTER_Pos);
+    return (uint32_t)(READ_BIT(SCB->CPUID, SCB_CPUID_IMPLEMENTER_Msk) >> SCB_CPUID_IMPLEMENTER_Pos);
 }
 
 /**
@@ -280,17 +280,17 @@ __STATIC_INLINE uint32_t LL_CPUID_GetImplementer(void)
   */
 __STATIC_INLINE uint32_t LL_CPUID_GetVariant(void)
 {
-  return (uint32_t)(READ_BIT(SCB->CPUID, SCB_CPUID_VARIANT_Msk) >> SCB_CPUID_VARIANT_Pos);
+    return (uint32_t)(READ_BIT(SCB->CPUID, SCB_CPUID_VARIANT_Msk) >> SCB_CPUID_VARIANT_Pos);
 }
 
 /**
-  * @brief  Get Architecture number 
+  * @brief  Get Architecture number
   * @rmtoll SCB_CPUID    ARCHITECTURE  LL_CPUID_GetArchitecture
   * @retval Value should be equal to 0xC for Cortex-M0 devices
   */
 __STATIC_INLINE uint32_t LL_CPUID_GetArchitecture(void)
 {
-  return (uint32_t)(READ_BIT(SCB->CPUID, SCB_CPUID_ARCHITECTURE_Msk) >> SCB_CPUID_ARCHITECTURE_Pos);
+    return (uint32_t)(READ_BIT(SCB->CPUID, SCB_CPUID_ARCHITECTURE_Msk) >> SCB_CPUID_ARCHITECTURE_Pos);
 }
 
 /**
@@ -300,7 +300,7 @@ __STATIC_INLINE uint32_t LL_CPUID_GetArchitecture(void)
   */
 __STATIC_INLINE uint32_t LL_CPUID_GetParNo(void)
 {
-  return (uint32_t)(READ_BIT(SCB->CPUID, SCB_CPUID_PARTNO_Msk) >> SCB_CPUID_PARTNO_Pos);
+    return (uint32_t)(READ_BIT(SCB->CPUID, SCB_CPUID_PARTNO_Msk) >> SCB_CPUID_PARTNO_Pos);
 }
 
 /**
@@ -310,7 +310,7 @@ __STATIC_INLINE uint32_t LL_CPUID_GetParNo(void)
   */
 __STATIC_INLINE uint32_t LL_CPUID_GetRevision(void)
 {
-  return (uint32_t)(READ_BIT(SCB->CPUID, SCB_CPUID_REVISION_Msk) >> SCB_CPUID_REVISION_Pos);
+    return (uint32_t)(READ_BIT(SCB->CPUID, SCB_CPUID_REVISION_Msk) >> SCB_CPUID_REVISION_Pos);
 }
 
 /**

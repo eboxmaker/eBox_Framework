@@ -118,11 +118,11 @@ const CPU_CHAR  *os_pend_multi__c = "$Id: $";
  ************************************************************************************************************************
  */
 /*$PAGE*/
-OS_OBJ_QTY  OSPendMulti (OS_PEND_DATA * p_pend_data_tbl,
+OS_OBJ_QTY  OSPendMulti (OS_PEND_DATA *p_pend_data_tbl,
                          OS_OBJ_QTY     tbl_size,
                          OS_TICK        timeout,
                          OS_OPT         opt,
-                         OS_ERR *       p_err)
+                         OS_ERR        *p_err)
 {
     CPU_BOOLEAN valid;
     OS_OBJ_QTY nbr_obj_rdy;
@@ -130,30 +130,35 @@ OS_OBJ_QTY  OSPendMulti (OS_PEND_DATA * p_pend_data_tbl,
 
 
 
- #ifdef OS_SAFETY_CRITICAL
-    if (p_err == (OS_ERR *)0) {
+#ifdef OS_SAFETY_CRITICAL
+    if (p_err == (OS_ERR *)0)
+    {
         OS_SAFETY_CRITICAL_EXCEPTION();
         return ((OS_OBJ_QTY)0);
     }
- #endif
+#endif
 
- #if OS_CFG_CALLED_FROM_ISR_CHK_EN > 0u
-    if (OSIntNestingCtr > (OS_NESTING_CTR)0) {              /* Can't pend from an ISR                                 */
+#if OS_CFG_CALLED_FROM_ISR_CHK_EN > 0u
+    if (OSIntNestingCtr > (OS_NESTING_CTR)0)                /* Can't pend from an ISR                                 */
+    {
         *p_err = OS_ERR_PEND_ISR;
         return ((OS_OBJ_QTY)0);
     }
- #endif
+#endif
 
- #if OS_CFG_ARG_CHK_EN > 0u
-    if (p_pend_data_tbl == (OS_PEND_DATA *)0) {             /* Validate 'p_pend_data_tbl'                             */
+#if OS_CFG_ARG_CHK_EN > 0u
+    if (p_pend_data_tbl == (OS_PEND_DATA *)0)               /* Validate 'p_pend_data_tbl'                             */
+    {
         *p_err = OS_ERR_PTR_INVALID;
         return ((OS_OBJ_QTY)0);
     }
-    if (tbl_size == (OS_OBJ_QTY)0) {                        /* Array size must be > 0                                 */
+    if (tbl_size == (OS_OBJ_QTY)0)                          /* Array size must be > 0                                 */
+    {
         *p_err = OS_ERR_PTR_INVALID;
         return ((OS_OBJ_QTY)0);
     }
-    switch (opt) {
+    switch (opt)
+    {
     case OS_OPT_PEND_BLOCKING:
     case OS_OPT_PEND_NON_BLOCKING:
         break;
@@ -162,31 +167,37 @@ OS_OBJ_QTY  OSPendMulti (OS_PEND_DATA * p_pend_data_tbl,
         *p_err = OS_ERR_OPT_INVALID;
         return ((OS_OBJ_QTY)0);
     }
- #endif
+#endif
 
     valid = OS_PendMultiValidate(p_pend_data_tbl,           /* -------- Validate objects to be OS_SEM or OS_Q ------- */
                                  tbl_size);
-    if (valid == DEF_FALSE) {
+    if (valid == DEF_FALSE)
+    {
         *p_err = OS_ERR_OBJ_TYPE;                           /* Invalid, not OS_SEM or OS_Q                            */
         return ((OS_OBJ_QTY)0);
     }
 
-/*$PAGE*/
+    /*$PAGE*/
     CPU_CRITICAL_ENTER();
     nbr_obj_rdy = OS_PendMultiGetRdy(p_pend_data_tbl,       /* --------- SEE IF OBJECT(s) HAVE BEEN POSTED ---------- */
                                      tbl_size);
-    if (nbr_obj_rdy > (OS_OBJ_QTY)0) {
+    if (nbr_obj_rdy > (OS_OBJ_QTY)0)
+    {
         CPU_CRITICAL_EXIT();
         *p_err = OS_ERR_NONE;
         return ((OS_OBJ_QTY)nbr_obj_rdy);
     }
 
-    if ((opt & OS_OPT_PEND_NON_BLOCKING) != (OS_OPT)0) {    /* Caller wants to block if not available?                */
+    if ((opt & OS_OPT_PEND_NON_BLOCKING) != (OS_OPT)0)      /* Caller wants to block if not available?                */
+    {
         CPU_CRITICAL_EXIT();
         *p_err = OS_ERR_PEND_WOULD_BLOCK;                   /* No                                                     */
         return ((OS_OBJ_QTY)0);
-    } else {
-        if (OSSchedLockNestingCtr > (OS_NESTING_CTR)0) {    /* Can't pend when the scheduler is locked                */
+    }
+    else
+    {
+        if (OSSchedLockNestingCtr > (OS_NESTING_CTR)0)      /* Can't pend when the scheduler is locked                */
+        {
             CPU_CRITICAL_EXIT();
             *p_err = OS_ERR_SCHED_LOCKED;
             return ((OS_OBJ_QTY)0);
@@ -204,7 +215,8 @@ OS_OBJ_QTY  OSPendMulti (OS_PEND_DATA * p_pend_data_tbl,
     OSSched();                                              /* Find next highest priority task ready                  */
 
     CPU_CRITICAL_ENTER();
-    switch (OSTCBCurPtr->PendStatus) {
+    switch (OSTCBCurPtr->PendStatus)
+    {
     case OS_STATUS_PEND_OK:                                 /* We got one of the objects posted to                    */
         *p_err = OS_ERR_NONE;
         break;
@@ -251,41 +263,44 @@ OS_OBJ_QTY  OSPendMulti (OS_PEND_DATA * p_pend_data_tbl,
  ************************************************************************************************************************
  */
 
-OS_OBJ_QTY  OS_PendMultiGetRdy (OS_PEND_DATA *  p_pend_data_tbl,
+OS_OBJ_QTY  OS_PendMultiGetRdy (OS_PEND_DATA   *p_pend_data_tbl,
                                 OS_OBJ_QTY      tbl_size)
 {
     OS_OBJ_QTY i;
     OS_OBJ_QTY nbr_obj_rdy;
- #if OS_CFG_Q_EN > 0u
+#if OS_CFG_Q_EN > 0u
     OS_ERR err;
     OS_MSG_SIZE msg_size;
     OS_Q        *p_q;
     void        *p_void;
     CPU_TS ts;
- #endif
- #if OS_CFG_SEM_EN  > 0u
+#endif
+#if OS_CFG_SEM_EN  > 0u
     OS_SEM      *p_sem;
- #endif
+#endif
 
 
 
     nbr_obj_rdy = (OS_OBJ_QTY)0;
-    for (i = 0u; i < tbl_size; i++) {
-        p_pend_data_tbl->RdyObjPtr  = (OS_PEND_OBJ  *)0;         /* Clear all fields                                  */
-        p_pend_data_tbl->RdyMsgPtr  = (void         *)0;
+    for (i = 0u; i < tbl_size; i++)
+    {
+        p_pend_data_tbl->RdyObjPtr  = (OS_PEND_OBJ *)0;          /* Clear all fields                                  */
+        p_pend_data_tbl->RdyMsgPtr  = (void *)0;
         p_pend_data_tbl->RdyMsgSize = (OS_MSG_SIZE   )0;
         p_pend_data_tbl->RdyTS      = (CPU_TS        )0;
         p_pend_data_tbl->NextPtr    = (OS_PEND_DATA *)0;
         p_pend_data_tbl->PrevPtr    = (OS_PEND_DATA *)0;
-        p_pend_data_tbl->TCBPtr     = (OS_TCB       *)0;
- #if OS_CFG_Q_EN > 0u
+        p_pend_data_tbl->TCBPtr     = (OS_TCB *)0;
+#if OS_CFG_Q_EN > 0u
         p_q = (OS_Q *)((void *)p_pend_data_tbl->PendObjPtr);     /* Assume we are pointing to a message queue object  */
-        if (p_q->Type == OS_OBJ_TYPE_Q) {                        /* Is it a message queue?                            */
+        if (p_q->Type == OS_OBJ_TYPE_Q)                          /* Is it a message queue?                            */
+        {
             p_void = OS_MsgQGet(&p_q->MsgQ,                      /* Yes, Any message waiting in the message queue?    */
                                 &msg_size,
                                 &ts,
                                 &err);
-            if (err == OS_ERR_NONE) {
+            if (err == OS_ERR_NONE)
+            {
                 p_pend_data_tbl->RdyObjPtr  = p_pend_data_tbl->PendObjPtr;
                 p_pend_data_tbl->RdyMsgPtr  = p_void;            /*      Yes, save the message received               */
                 p_pend_data_tbl->RdyMsgSize = msg_size;
@@ -293,19 +308,21 @@ OS_OBJ_QTY  OS_PendMultiGetRdy (OS_PEND_DATA *  p_pend_data_tbl,
                 nbr_obj_rdy++;
             }
         }
- #endif
+#endif
 
- #if OS_CFG_SEM_EN > 0u
+#if OS_CFG_SEM_EN > 0u
         p_sem = (OS_SEM *)((void *)p_pend_data_tbl->PendObjPtr); /* Assume we are pointing to a semaphore object      */
-        if (p_sem->Type == OS_OBJ_TYPE_SEM) {                    /* Is it a semaphore?                                */
-            if (p_sem->Ctr > 0u) {                               /* Yes, Semaphore has been signaled?                 */
+        if (p_sem->Type == OS_OBJ_TYPE_SEM)                      /* Is it a semaphore?                                */
+        {
+            if (p_sem->Ctr > 0u)                                 /* Yes, Semaphore has been signaled?                 */
+            {
                 p_sem->Ctr--;                                    /*      Yes, caller may proceed                      */
                 p_pend_data_tbl->RdyObjPtr  = p_pend_data_tbl->PendObjPtr;
                 p_pend_data_tbl->RdyTS      = p_sem->TS;
                 nbr_obj_rdy++;
             }
         }
- #endif
+#endif
 
         p_pend_data_tbl++;
     }
@@ -332,40 +349,45 @@ OS_OBJ_QTY  OS_PendMultiGetRdy (OS_PEND_DATA *  p_pend_data_tbl,
  ************************************************************************************************************************
  */
 
-CPU_BOOLEAN  OS_PendMultiValidate (OS_PEND_DATA *   p_pend_data_tbl,
+CPU_BOOLEAN  OS_PendMultiValidate (OS_PEND_DATA    *p_pend_data_tbl,
                                    OS_OBJ_QTY       tbl_size)
 {
     OS_OBJ_QTY i;
     OS_OBJ_QTY ctr;
- #if OS_CFG_SEM_EN  > 0u
+#if OS_CFG_SEM_EN  > 0u
     OS_SEM      *p_sem;
- #endif
- #if OS_CFG_Q_EN > 0u
+#endif
+#if OS_CFG_Q_EN > 0u
     OS_Q        *p_q;
- #endif
+#endif
 
 
-    for (i = 0u; i < tbl_size; i++) {
-        if (p_pend_data_tbl->PendObjPtr == (OS_PEND_OBJ *)0) {   /* All .PendObjPtr in the table MUST be non NULL     */
+    for (i = 0u; i < tbl_size; i++)
+    {
+        if (p_pend_data_tbl->PendObjPtr == (OS_PEND_OBJ *)0)     /* All .PendObjPtr in the table MUST be non NULL     */
+        {
             return (DEF_FALSE);
         }
 
         ctr = 0u;
- #if OS_CFG_SEM_EN  > 0u
+#if OS_CFG_SEM_EN  > 0u
         p_sem = (OS_SEM *)((void *)p_pend_data_tbl->PendObjPtr); /* All objects to pend on must be of type OS_SEM ... */
-        if (p_sem->Type == OS_OBJ_TYPE_SEM) {
+        if (p_sem->Type == OS_OBJ_TYPE_SEM)
+        {
             ctr++;
         }
- #endif
+#endif
 
- #if OS_CFG_Q_EN > 0u
+#if OS_CFG_Q_EN > 0u
         p_q = (OS_Q *)((void *)p_pend_data_tbl->PendObjPtr);     /* ... or of type OS_Q                               */
-        if (p_q->Type == OS_OBJ_TYPE_Q) {
+        if (p_q->Type == OS_OBJ_TYPE_Q)
+        {
             ctr++;
         }
- #endif
+#endif
 
-        if (ctr == (OS_OBJ_QTY)0) {
+        if (ctr == (OS_OBJ_QTY)0)
+        {
             return (DEF_FALSE);                                  /* Found at least one invalid object type            */
         }
         p_pend_data_tbl++;
@@ -394,20 +416,20 @@ CPU_BOOLEAN  OS_PendMultiValidate (OS_PEND_DATA *   p_pend_data_tbl,
  ************************************************************************************************************************
  */
 
-void  OS_PendMultiWait (OS_PEND_DATA *  p_pend_data_tbl,
+void  OS_PendMultiWait (OS_PEND_DATA   *p_pend_data_tbl,
                         OS_OBJ_QTY      tbl_size,
                         OS_TICK         timeout)
 {
     OS_OBJ_QTY i;
     OS_PEND_LIST   *p_pend_list;
 
- #if OS_CFG_Q_EN > 0u
+#if OS_CFG_Q_EN > 0u
     OS_Q           *p_q;
- #endif
+#endif
 
- #if OS_CFG_SEM_EN > 0u
+#if OS_CFG_SEM_EN > 0u
     OS_SEM         *p_sem;
- #endif
+#endif
 
 
 
@@ -419,26 +441,29 @@ void  OS_PendMultiWait (OS_PEND_DATA *  p_pend_data_tbl,
     OS_TaskBlock(OSTCBCurPtr,                                  /* Block the task waiting for object to be posted ...  */
                  timeout);                                     /* ... but with a timeout if not                       */
 
-    for (i = 0u; i < tbl_size; i++) {
+    for (i = 0u; i < tbl_size; i++)
+    {
         p_pend_data_tbl->TCBPtr = OSTCBCurPtr;                 /* Every entry points back to the TCB of the task      */
 
- #if OS_CFG_SEM_EN > 0u
+#if OS_CFG_SEM_EN > 0u
         p_sem = (OS_SEM *)((void *)p_pend_data_tbl->PendObjPtr);
-        if (p_sem->Type == OS_OBJ_TYPE_SEM) {
+        if (p_sem->Type == OS_OBJ_TYPE_SEM)
+        {
             p_pend_list = &p_sem->PendList;
             OS_PendListInsertPrio(p_pend_list,
                                   p_pend_data_tbl);
         }
- #endif
+#endif
 
- #if OS_CFG_Q_EN > 0u
+#if OS_CFG_Q_EN > 0u
         p_q = (OS_Q *)((void *)p_pend_data_tbl->PendObjPtr);
-        if (p_q->Type == OS_OBJ_TYPE_Q) {
+        if (p_q->Type == OS_OBJ_TYPE_Q)
+        {
             p_pend_list = &p_q->PendList;
             OS_PendListInsertPrio(p_pend_list,
                                   p_pend_data_tbl);
         }
- #endif
+#endif
 
         p_pend_data_tbl++;
     }

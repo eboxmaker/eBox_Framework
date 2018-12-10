@@ -20,9 +20,10 @@
 #ifndef Print_h
 #define Print_h
 
-class Print {
-    public:
-        virtual size_t write(uint8_t) = 0;
+class Print
+{
+public:
+    virtual size_t write(uint8_t) = 0;
 };
 
 #endif

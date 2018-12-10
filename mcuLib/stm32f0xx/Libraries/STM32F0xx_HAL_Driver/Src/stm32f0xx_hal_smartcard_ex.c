@@ -110,7 +110,7 @@
   */
 void HAL_SMARTCARDEx_BlockLength_Config(SMARTCARD_HandleTypeDef *hsmartcard, uint8_t BlockLength)
 {
-  MODIFY_REG(hsmartcard->Instance->RTOR, USART_RTOR_BLEN, ((uint32_t)BlockLength << SMARTCARD_RTOR_BLEN_LSB_POS));
+    MODIFY_REG(hsmartcard->Instance->RTOR, USART_RTOR_BLEN, ((uint32_t)BlockLength << SMARTCARD_RTOR_BLEN_LSB_POS));
 }
 
 /**
@@ -123,8 +123,8 @@ void HAL_SMARTCARDEx_BlockLength_Config(SMARTCARD_HandleTypeDef *hsmartcard, uin
   */
 void HAL_SMARTCARDEx_TimeOut_Config(SMARTCARD_HandleTypeDef *hsmartcard, uint32_t TimeOutValue)
 {
-  assert_param(IS_SMARTCARD_TIMEOUT_VALUE(hsmartcard->Init.TimeOutValue));
-  MODIFY_REG(hsmartcard->Instance->RTOR, USART_RTOR_RTO, TimeOutValue);
+    assert_param(IS_SMARTCARD_TIMEOUT_VALUE(hsmartcard->Init.TimeOutValue));
+    MODIFY_REG(hsmartcard->Instance->RTOR, USART_RTOR_RTO, TimeOutValue);
 }
 
 /**
@@ -136,20 +136,20 @@ void HAL_SMARTCARDEx_TimeOut_Config(SMARTCARD_HandleTypeDef *hsmartcard, uint32_
 HAL_StatusTypeDef HAL_SMARTCARDEx_EnableReceiverTimeOut(SMARTCARD_HandleTypeDef *hsmartcard)
 {
 
-  /* Process Locked */
-  __HAL_LOCK(hsmartcard);
+    /* Process Locked */
+    __HAL_LOCK(hsmartcard);
 
-  hsmartcard->gState = HAL_SMARTCARD_STATE_BUSY;
+    hsmartcard->gState = HAL_SMARTCARD_STATE_BUSY;
 
-  /* Set the USART RTOEN bit */
-  hsmartcard->Instance->CR2 |= USART_CR2_RTOEN;
+    /* Set the USART RTOEN bit */
+    hsmartcard->Instance->CR2 |= USART_CR2_RTOEN;
 
-  hsmartcard->gState = HAL_SMARTCARD_STATE_READY;
+    hsmartcard->gState = HAL_SMARTCARD_STATE_READY;
 
-  /* Process Unlocked */
-  __HAL_UNLOCK(hsmartcard);
+    /* Process Unlocked */
+    __HAL_UNLOCK(hsmartcard);
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
@@ -161,20 +161,20 @@ HAL_StatusTypeDef HAL_SMARTCARDEx_EnableReceiverTimeOut(SMARTCARD_HandleTypeDef 
 HAL_StatusTypeDef HAL_SMARTCARDEx_DisableReceiverTimeOut(SMARTCARD_HandleTypeDef *hsmartcard)
 {
 
-  /* Process Locked */
-  __HAL_LOCK(hsmartcard);
+    /* Process Locked */
+    __HAL_LOCK(hsmartcard);
 
-  hsmartcard->gState = HAL_SMARTCARD_STATE_BUSY;
+    hsmartcard->gState = HAL_SMARTCARD_STATE_BUSY;
 
-  /* Clear the USART RTOEN bit */
-  hsmartcard->Instance->CR2 &= ~(USART_CR2_RTOEN);
+    /* Clear the USART RTOEN bit */
+    hsmartcard->Instance->CR2 &= ~(USART_CR2_RTOEN);
 
-  hsmartcard->gState = HAL_SMARTCARD_STATE_READY;
+    hsmartcard->gState = HAL_SMARTCARD_STATE_READY;
 
-  /* Process Unlocked */
-  __HAL_UNLOCK(hsmartcard);
+    /* Process Unlocked */
+    __HAL_UNLOCK(hsmartcard);
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**

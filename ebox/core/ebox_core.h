@@ -32,18 +32,18 @@
 extern "C" {
 #endif
 
-extern Cpu_t cpu;
+    extern Cpu_t cpu;
 
-extern void        (*interrupts)(void);
-extern int         (*no_interrupts)(void);
-extern void        (*ebox_reset)();
-extern uint64_t    (*micros)();
-extern uint64_t    (*millis)();
-extern void        (*delay_ms)(uint32_t ms);
-extern void        (*delay_us)(uint32_t us);
-extern size_t       ebox_printf(const char *fmt, ...);
-extern int          ebox_uart_putc(int ch);
-extern size_t       ebox_uart_write(const char *buffer, size_t size);
+    extern void        (*interrupts)(void);
+    extern int         (*no_interrupts)(void);
+    extern void        (*ebox_reset)();
+    extern uint64_t    (*micros)();
+    extern uint64_t    (*millis)();
+    extern void        (*delay_ms)(uint32_t ms);
+    extern void        (*delay_us)(uint32_t us);
+    extern size_t       ebox_printf(const char *fmt, ...);
+    extern int          ebox_uart_putc(int ch);
+    extern size_t       ebox_uart_write(const char *buffer, size_t size);
 
 
 

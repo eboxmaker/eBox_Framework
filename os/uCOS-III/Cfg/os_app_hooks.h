@@ -35,9 +35,9 @@
 
 
 #ifdef   OS_APP_HOOKS_H_GLOBALS
- #define  OS_APP_HOOKS_H_EXT
+#define  OS_APP_HOOKS_H_EXT
 #else
- #define  OS_APP_HOOKS_H_EXT  extern
+#define  OS_APP_HOOKS_H_EXT  extern
 #endif
 
 /*

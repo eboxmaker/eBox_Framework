@@ -138,12 +138,13 @@ typedef struct
 } AF_FUN_S;
 
 // PA2,9,14 tx; PA3,10 rx
-static const AF_FUN_S UART_MAP[] ={
-	PA2_ID,AF_PP_PU,LL_GPIO_AF_1,USART2_BASE,
-	PA3_ID,AF_PP_PU,LL_GPIO_AF_1,USART2_BASE,
-	PA9_ID,AF_PP_PU,LL_GPIO_AF_1,USART1_BASE,
-	PA10_ID,AF_PP_PU,LL_GPIO_AF_1,USART1_BASE,
-	P_NC
+static const AF_FUN_S UART_MAP[] =
+{
+    PA2_ID, AF_PP_PU, LL_GPIO_AF_1, USART2_BASE,
+    PA3_ID, AF_PP_PU, LL_GPIO_AF_1, USART2_BASE,
+    PA9_ID, AF_PP_PU, LL_GPIO_AF_1, USART1_BASE,
+    PA10_ID, AF_PP_PU, LL_GPIO_AF_1, USART1_BASE,
+    P_NC
 };
 
 // PB9 scl,PB9 SDA
@@ -189,7 +190,7 @@ static const AF_FUN_S TIM_MAP[] =
  *@param    val：1：输出高电平；0：输出低电平
  *@retval   NONE
 */
-//__STATIC_INLINE 
+//__STATIC_INLINE
 __STATIC_INLINE uint8_t getIndex(PIN_ID_t pin_id, const AF_FUN_S *emap, uint32_t periph)
 {
     uint8_t i = 0;

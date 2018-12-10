@@ -54,8 +54,8 @@ void setup()
     if(ret == 0)
         uart1.printf("sdcard init ok!\r\n");
     else
-        uart1.printf("sdcard init failed;err = %d\r\n",ret);
-        
+        uart1.printf("sdcard init failed;err = %d\r\n", ret);
+
     attach_sd_to_fat(&sd);
 
     res = f_mount(&fs, "0", 1);

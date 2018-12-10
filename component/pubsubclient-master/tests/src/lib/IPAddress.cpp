@@ -25,19 +25,19 @@ IPAddress::IPAddress(const uint8_t *address)
     memcpy(_address, address, sizeof(_address));
 }
 
-IPAddress& IPAddress::operator=(const uint8_t *address)
+IPAddress &IPAddress::operator=(const uint8_t *address)
 {
     memcpy(_address, address, sizeof(_address));
     return *this;
 }
 
-IPAddress& IPAddress::operator=(uint32_t address)
+IPAddress &IPAddress::operator=(uint32_t address)
 {
     memcpy(_address, (const uint8_t *)&address, sizeof(_address));
     return *this;
 }
 
-bool IPAddress::operator==(const uint8_t* addr)
+bool IPAddress::operator==(const uint8_t *addr)
 {
     return memcmp(addr, _address, sizeof(_address)) == 0;
 }

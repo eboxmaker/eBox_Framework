@@ -1,20 +1,20 @@
- /**
-  ******************************************************************************
-  * @file    main.cpp
-  * @author  cat_li
-  * @version V1.0
-  * @date    2017/07/13
-  * @brief   ebox exti example, 基于stm32nucleo(072)平台验证	
-  ******************************************************************************
-  * @attention
-  *
-  * No part of this software may be used for any commercial activities by any form 
-  * or means, without the prior written consent of shentq. This specification is 
-  * preliminary and is subject to change at any time without notice. shentq assumes
-  * no responsibility for any errors contained herein.
-  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
-  ******************************************************************************
-  */
+/**
+ ******************************************************************************
+ * @file    main.cpp
+ * @author  cat_li
+ * @version V1.0
+ * @date    2017/07/13
+ * @brief   ebox exti example, 基于stm32nucleo(072)平台验证
+ ******************************************************************************
+ * @attention
+ *
+ * No part of this software may be used for any commercial activities by any form
+ * or means, without the prior written consent of shentq. This specification is
+ * preliminary and is subject to change at any time without notice. shentq assumes
+ * no responsibility for any errors contained herein.
+ * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
+ ******************************************************************************
+ */
 
 
 /* Includes ------------------------------------------------------------------*/
@@ -57,9 +57,10 @@ void rise()
     UART.printf("\r\n rising, xx = %d", xx);
 }
 
-void fallrise(){
-		xx++;
-		UART.printf("\r\n fallrise, xx = %d", xx);
+void fallrise()
+{
+    xx++;
+    UART.printf("\r\n fallrise, xx = %d", xx);
 }
 
 /**
@@ -67,10 +68,10 @@ void fallrise(){
  *@param    none
  *@retval   none
 */
-class Test 
+class Test
 {
-    public:
-    void event() 
+public:
+    void event()
     {
         LED1.toggle();
     }
@@ -81,19 +82,19 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-	
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
+
     LED1.mode(OUTPUT_PP);
-	// 上升沿，下降沿均触发,绑定同一个中断回调函数
+    // 上升沿，下降沿均触发,绑定同一个中断回调函数
     ex.begin();
-    ex.attach(fallrise,FALL_RISING);
+    ex.attach(fallrise, FALL_RISING);
     ex.enable(FALL_RISING);
 
     // 上升沿，下降沿调用不同的回调函数
     userbt1.begin();
-    userbt1.attach(rise,RISE);
-	userbt1.attach(&test,&Test::event,FALL);
-	userbt1.enable(FALL_RISING);	
+    userbt1.attach(rise, RISE);
+    userbt1.attach(&test, &Test::event, FALL);
+    userbt1.enable(FALL_RISING);
 
 }
 

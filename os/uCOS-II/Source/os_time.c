@@ -13,10 +13,10 @@
 *
 * LICENSING TERMS:
 * ---------------
-*   uC/OS-II is provided in source form for FREE evaluation, for educational use or for peaceful research.  
-* If you plan on using  uC/OS-II  in a commercial product you need to contact Micriµm to properly license 
-* its use in your product. We provide ALL the source code for your convenience and to help you experience 
-* uC/OS-II.   The fact that the  source is provided does  NOT  mean that you can use it without  paying a 
+*   uC/OS-II is provided in source form for FREE evaluation, for educational use or for peaceful research.
+* If you plan on using  uC/OS-II  in a commercial product you need to contact Micriµm to properly license
+* its use in your product. We provide ALL the source code for your convenience and to help you experience
+* uC/OS-II.   The fact that the  source is provided does  NOT  mean that you can use it without  paying a
 * licensing fee.
 *********************************************************************************************************
 */
@@ -50,14 +50,17 @@ void  OSTimeDly (INT16U ticks)
 
 
 
-    if (OSIntNesting > 0) {                      /* See if trying to call from an ISR                  */
+    if (OSIntNesting > 0)                        /* See if trying to call from an ISR                  */
+    {
         return;
     }
-    if (ticks > 0) {                             /* 0 means no delay!                                  */
+    if (ticks > 0)                               /* 0 means no delay!                                  */
+    {
         OS_ENTER_CRITICAL();
         y            =  OSTCBCur->OSTCBY;        /* Delay current task                                 */
         OSRdyTbl[y] &= ~OSTCBCur->OSTCBBitX;
-        if (OSRdyTbl[y] == 0) {
+        if (OSRdyTbl[y] == 0)
+        {
             OSRdyGrp &= ~OSTCBCur->OSTCBBitY;
         }
         OSTCBCur->OSTCBDly = ticks;              /* Load ticks in TCB                                  */
@@ -99,37 +102,46 @@ INT8U  OSTimeDlyHMSM (INT8U hours, INT8U minutes, INT8U seconds, INT16U ms)
     INT16U loops;
 
 
-    if (OSIntNesting > 0) {                      /* See if trying to call from an ISR                  */
+    if (OSIntNesting > 0)                        /* See if trying to call from an ISR                  */
+    {
         return (OS_ERR_TIME_DLY_ISR);
     }
 #if OS_ARG_CHK_EN > 0
-    if (hours == 0) {
-        if (minutes == 0) {
-            if (seconds == 0) {
-                if (ms == 0) {
+    if (hours == 0)
+    {
+        if (minutes == 0)
+        {
+            if (seconds == 0)
+            {
+                if (ms == 0)
+                {
                     return (OS_ERR_TIME_ZERO_DLY);
                 }
             }
         }
     }
-    if (minutes > 59) {
+    if (minutes > 59)
+    {
         return (OS_ERR_TIME_INVALID_MINUTES);    /* Validate arguments to be within range              */
     }
-    if (seconds > 59) {
+    if (seconds > 59)
+    {
         return (OS_ERR_TIME_INVALID_SECONDS);
     }
-    if (ms > 999) {
+    if (ms > 999)
+    {
         return (OS_ERR_TIME_INVALID_MS);
     }
 #endif
-                                                 /* Compute the total number of clock ticks required.. */
-                                                 /* .. (rounded to the nearest tick)                   */
+    /* Compute the total number of clock ticks required.. */
+    /* .. (rounded to the nearest tick)                   */
     ticks = ((INT32U)hours * 3600L + (INT32U)minutes * 60L + (INT32U)seconds) * OS_TICKS_PER_SEC
-          + OS_TICKS_PER_SEC * ((INT32U)ms + 500L / OS_TICKS_PER_SEC) / 1000L;
+            + OS_TICKS_PER_SEC * ((INT32U)ms + 500L / OS_TICKS_PER_SEC) / 1000L;
     loops = (INT16U)(ticks >> 16);               /* Compute the integral number of 65536 tick delays   */
     ticks = ticks & 0xFFFFL;                     /* Obtain  the fractional number of ticks             */
     OSTimeDly((INT16U)ticks);
-    while (loops > 0) {
+    while (loops > 0)
+    {
         OSTimeDly((INT16U)32768u);
         OSTimeDly((INT16U)32768u);
         loops--;
@@ -173,37 +185,47 @@ INT8U  OSTimeDlyResume (INT8U prio)
 
 
 
-    if (prio >= OS_LOWEST_PRIO) {
+    if (prio >= OS_LOWEST_PRIO)
+    {
         return (OS_ERR_PRIO_INVALID);
     }
     OS_ENTER_CRITICAL();
     ptcb = OSTCBPrioTbl[prio];                                 /* Make sure that task exist            */
-    if (ptcb == (OS_TCB *)0) {
+    if (ptcb == (OS_TCB *)0)
+    {
         OS_EXIT_CRITICAL();
         return (OS_ERR_TASK_NOT_EXIST);                        /* The task does not exist              */
     }
-    if (ptcb == OS_TCB_RESERVED) {
+    if (ptcb == OS_TCB_RESERVED)
+    {
         OS_EXIT_CRITICAL();
         return (OS_ERR_TASK_NOT_EXIST);                        /* The task does not exist              */
     }
-    if (ptcb->OSTCBDly == 0) {                                 /* See if task is delayed               */
+    if (ptcb->OSTCBDly == 0)                                   /* See if task is delayed               */
+    {
         OS_EXIT_CRITICAL();
         return (OS_ERR_TIME_NOT_DLY);                          /* Indicate that task was not delayed   */
     }
 
     ptcb->OSTCBDly = 0;                                        /* Clear the time delay                 */
-    if ((ptcb->OSTCBStat & OS_STAT_PEND_ANY) != OS_STAT_RDY) {
+    if ((ptcb->OSTCBStat & OS_STAT_PEND_ANY) != OS_STAT_RDY)
+    {
         ptcb->OSTCBStat     &= ~OS_STAT_PEND_ANY;              /* Yes, Clear status flag               */
         ptcb->OSTCBStatPend  =  OS_STAT_PEND_TO;               /* Indicate PEND timeout                */
-    } else {
+    }
+    else
+    {
         ptcb->OSTCBStatPend  =  OS_STAT_PEND_OK;
     }
-    if ((ptcb->OSTCBStat & OS_STAT_SUSPEND) == OS_STAT_RDY) {  /* Is task suspended?                   */
+    if ((ptcb->OSTCBStat & OS_STAT_SUSPEND) == OS_STAT_RDY)    /* Is task suspended?                   */
+    {
         OSRdyGrp               |= ptcb->OSTCBBitY;             /* No,  Make ready                      */
         OSRdyTbl[ptcb->OSTCBY] |= ptcb->OSTCBBitX;
         OS_EXIT_CRITICAL();
         OS_Sched();                                            /* See if this is new highest priority  */
-    } else {
+    }
+    else
+    {
         OS_EXIT_CRITICAL();                                    /* Task may be suspended                */
     }
     return (OS_ERR_NONE);

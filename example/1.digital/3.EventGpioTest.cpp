@@ -7,11 +7,11 @@
 
   * @brief   ebox application example .
 	*					 2018-8-2	通过引入bsp，定义硬件端口，方便例程可以在不同平台上运行
-  * Copyright 2016 shentq. All Rights Reserved.         
+  * Copyright 2016 shentq. All Rights Reserved.
   ******************************************************************************
  */
- 
- 
+
+
 #include "ebox.h"
 #include "EventGpio.h"
 #include "EventManager.h"
@@ -23,7 +23,7 @@
 	*	3	高定平，低电平会连续触发，触发周期5ms，可通过修改EvenGpio.h中的IO_EDGE_FILTER_COUNTS修改
 	* 4	长按时会禁用单击事件，且长按发生后不触发释放事件。但不影响上升沿和下降沿事件
 	* 5 如果没有长按，则下降沿=单击，上升沿=释放
-	* 
+	*
 	*/
 
 /* 定义例程名和例程发布日期 */
@@ -89,13 +89,13 @@ void long_press1()
 // 长按时会禁用单击事件，且长按发生后不触发释放事件。但不影响上升沿和下降沿事件
 //EventGpio event_io_2(&PA8,0,0,pos,neg,click1,release1,long_press1);
 // 如果没有长按，则下降沿=单击，上升沿=释放
-EventGpio event_io_2(&PA8,0,0,pos,neg,click1,release1,0);
+EventGpio event_io_2(&PA8, 0, 0, pos, neg, click1, release1, 0);
 EventManager io_manager;
 void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
     //event_io_1.begin(1);
     event_io_2.begin(1);
     //io_manager.add(&event_io_1);

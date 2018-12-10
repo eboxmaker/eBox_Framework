@@ -301,9 +301,9 @@ typedef  CPU_INT32U CPU_SR;                                     /* Defines   CPU
 
 /* Allocates CPU status register word (see Note #3a).   */
 #if     (CPU_CFG_CRITICAL_METHOD == CPU_CRITICAL_METHOD_STATUS_LOCAL)
- #define  CPU_SR_ALLOC()             CPU_SR cpu_sr = (CPU_SR)0
+#define  CPU_SR_ALLOC()             CPU_SR cpu_sr = (CPU_SR)0
 #else
- #define  CPU_SR_ALLOC()
+#define  CPU_SR_ALLOC()
 #endif
 
 
@@ -315,17 +315,17 @@ typedef  CPU_INT32U CPU_SR;                                     /* Defines   CPU
 #ifdef   CPU_CFG_INT_DIS_MEAS_EN
 /* Disable interrupts, ...                      */
 /* & start interrupts disabled time measurement.*/
- #define  CPU_CRITICAL_ENTER()  do { CPU_INT_DIS();         \
+#define  CPU_CRITICAL_ENTER()  do { CPU_INT_DIS();         \
                                      CPU_IntDisMeasStart(); }  while (0)
 /* Stop & measure   interrupts disabled time,   */
 /* ...  & re-enable interrupts.                 */
- #define  CPU_CRITICAL_EXIT()   do { CPU_IntDisMeasStop();  \
+#define  CPU_CRITICAL_EXIT()   do { CPU_IntDisMeasStop();  \
                                      CPU_INT_EN();          }  while (0)
 
 #else
 
- #define  CPU_CRITICAL_ENTER()  do { CPU_INT_DIS(); } while (0)         /* Disable   interrupts.                        */
- #define  CPU_CRITICAL_EXIT()   do { CPU_INT_EN();  } while (0)         /* Re-enable interrupts.                        */
+#define  CPU_CRITICAL_ENTER()  do { CPU_INT_DIS(); } while (0)         /* Disable   interrupts.                        */
+#define  CPU_CRITICAL_EXIT()   do { CPU_INT_EN();  } while (0)         /* Re-enable interrupts.                        */
 
 #endif
 
@@ -601,66 +601,66 @@ void            CPU_BitBandSet   (CPU_ADDR      addr,
  */
 
 #ifndef  CPU_CFG_ADDR_SIZE
- #error  "CPU_CFG_ADDR_SIZE              not #define'd in 'cpu.h'               "
- #error  "                         [MUST be  CPU_WORD_SIZE_08   8-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_16  16-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_32  32-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_64  64-bit alignment]"
+#error  "CPU_CFG_ADDR_SIZE              not #define'd in 'cpu.h'               "
+#error  "                         [MUST be  CPU_WORD_SIZE_08   8-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_16  16-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_32  32-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_64  64-bit alignment]"
 
 #elif  ((CPU_CFG_ADDR_SIZE != CPU_WORD_SIZE_08) && \
     (CPU_CFG_ADDR_SIZE != CPU_WORD_SIZE_16) && \
     (CPU_CFG_ADDR_SIZE != CPU_WORD_SIZE_32) && \
     (CPU_CFG_ADDR_SIZE != CPU_WORD_SIZE_64))
- #error  "CPU_CFG_ADDR_SIZE        illegally #define'd in 'cpu.h'               "
- #error  "                         [MUST be  CPU_WORD_SIZE_08   8-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_16  16-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_32  32-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_64  64-bit alignment]"
+#error  "CPU_CFG_ADDR_SIZE        illegally #define'd in 'cpu.h'               "
+#error  "                         [MUST be  CPU_WORD_SIZE_08   8-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_16  16-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_32  32-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_64  64-bit alignment]"
 #endif
 
 
 #ifndef  CPU_CFG_DATA_SIZE
- #error  "CPU_CFG_DATA_SIZE              not #define'd in 'cpu.h'               "
- #error  "                         [MUST be  CPU_WORD_SIZE_08   8-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_16  16-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_32  32-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_64  64-bit alignment]"
+#error  "CPU_CFG_DATA_SIZE              not #define'd in 'cpu.h'               "
+#error  "                         [MUST be  CPU_WORD_SIZE_08   8-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_16  16-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_32  32-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_64  64-bit alignment]"
 
 #elif  ((CPU_CFG_DATA_SIZE != CPU_WORD_SIZE_08) && \
     (CPU_CFG_DATA_SIZE != CPU_WORD_SIZE_16) && \
     (CPU_CFG_DATA_SIZE != CPU_WORD_SIZE_32) && \
     (CPU_CFG_DATA_SIZE != CPU_WORD_SIZE_64))
- #error  "CPU_CFG_DATA_SIZE        illegally #define'd in 'cpu.h'               "
- #error  "                         [MUST be  CPU_WORD_SIZE_08   8-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_16  16-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_32  32-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_64  64-bit alignment]"
+#error  "CPU_CFG_DATA_SIZE        illegally #define'd in 'cpu.h'               "
+#error  "                         [MUST be  CPU_WORD_SIZE_08   8-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_16  16-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_32  32-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_64  64-bit alignment]"
 #endif
 
 
 #ifndef  CPU_CFG_DATA_SIZE_MAX
- #error  "CPU_CFG_DATA_SIZE_MAX          not #define'd in 'cpu.h'               "
- #error  "                         [MUST be  CPU_WORD_SIZE_08   8-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_16  16-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_32  32-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_64  64-bit alignment]"
+#error  "CPU_CFG_DATA_SIZE_MAX          not #define'd in 'cpu.h'               "
+#error  "                         [MUST be  CPU_WORD_SIZE_08   8-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_16  16-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_32  32-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_64  64-bit alignment]"
 
 #elif  ((CPU_CFG_DATA_SIZE_MAX != CPU_WORD_SIZE_08) && \
     (CPU_CFG_DATA_SIZE_MAX != CPU_WORD_SIZE_16) && \
     (CPU_CFG_DATA_SIZE_MAX != CPU_WORD_SIZE_32) && \
     (CPU_CFG_DATA_SIZE_MAX != CPU_WORD_SIZE_64))
- #error  "CPU_CFG_DATA_SIZE_MAX    illegally #define'd in 'cpu.h'               "
- #error  "                         [MUST be  CPU_WORD_SIZE_08   8-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_16  16-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_32  32-bit alignment]"
- #error  "                         [     ||  CPU_WORD_SIZE_64  64-bit alignment]"
+#error  "CPU_CFG_DATA_SIZE_MAX    illegally #define'd in 'cpu.h'               "
+#error  "                         [MUST be  CPU_WORD_SIZE_08   8-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_16  16-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_32  32-bit alignment]"
+#error  "                         [     ||  CPU_WORD_SIZE_64  64-bit alignment]"
 #endif
 
 
 
 #if     (CPU_CFG_DATA_SIZE_MAX < CPU_CFG_DATA_SIZE)
- #error  "CPU_CFG_DATA_SIZE_MAX    illegally #define'd in 'cpu.h' "
- #error  "                         [MUST be  >= CPU_CFG_DATA_SIZE]"
+#error  "CPU_CFG_DATA_SIZE_MAX    illegally #define'd in 'cpu.h' "
+#error  "                         [MUST be  >= CPU_CFG_DATA_SIZE]"
 #endif
 
 
@@ -668,48 +668,48 @@ void            CPU_BitBandSet   (CPU_ADDR      addr,
 
 /*$PAGE*/
 #ifndef  CPU_CFG_ENDIAN_TYPE
- #error  "CPU_CFG_ENDIAN_TYPE            not #define'd in 'cpu.h'   "
- #error  "                         [MUST be  CPU_ENDIAN_TYPE_BIG   ]"
- #error  "                         [     ||  CPU_ENDIAN_TYPE_LITTLE]"
+#error  "CPU_CFG_ENDIAN_TYPE            not #define'd in 'cpu.h'   "
+#error  "                         [MUST be  CPU_ENDIAN_TYPE_BIG   ]"
+#error  "                         [     ||  CPU_ENDIAN_TYPE_LITTLE]"
 
 #elif  ((CPU_CFG_ENDIAN_TYPE != CPU_ENDIAN_TYPE_BIG   ) && \
     (CPU_CFG_ENDIAN_TYPE != CPU_ENDIAN_TYPE_LITTLE))
- #error  "CPU_CFG_ENDIAN_TYPE      illegally #define'd in 'cpu.h'   "
- #error  "                         [MUST be  CPU_ENDIAN_TYPE_BIG   ]"
- #error  "                         [     ||  CPU_ENDIAN_TYPE_LITTLE]"
+#error  "CPU_CFG_ENDIAN_TYPE      illegally #define'd in 'cpu.h'   "
+#error  "                         [MUST be  CPU_ENDIAN_TYPE_BIG   ]"
+#error  "                         [     ||  CPU_ENDIAN_TYPE_LITTLE]"
 #endif
 
 
 
 
 #ifndef  CPU_CFG_STK_GROWTH
- #error  "CPU_CFG_STK_GROWTH             not #define'd in 'cpu.h'    "
- #error  "                         [MUST be  CPU_STK_GROWTH_LO_TO_HI]"
- #error  "                         [     ||  CPU_STK_GROWTH_HI_TO_LO]"
+#error  "CPU_CFG_STK_GROWTH             not #define'd in 'cpu.h'    "
+#error  "                         [MUST be  CPU_STK_GROWTH_LO_TO_HI]"
+#error  "                         [     ||  CPU_STK_GROWTH_HI_TO_LO]"
 
 #elif  ((CPU_CFG_STK_GROWTH != CPU_STK_GROWTH_LO_TO_HI) && \
     (CPU_CFG_STK_GROWTH != CPU_STK_GROWTH_HI_TO_LO))
- #error  "CPU_CFG_STK_GROWTH       illegally #define'd in 'cpu.h'    "
- #error  "                         [MUST be  CPU_STK_GROWTH_LO_TO_HI]"
- #error  "                         [     ||  CPU_STK_GROWTH_HI_TO_LO]"
+#error  "CPU_CFG_STK_GROWTH       illegally #define'd in 'cpu.h'    "
+#error  "                         [MUST be  CPU_STK_GROWTH_LO_TO_HI]"
+#error  "                         [     ||  CPU_STK_GROWTH_HI_TO_LO]"
 #endif
 
 
 
 
 #ifndef  CPU_CFG_CRITICAL_METHOD
- #error  "CPU_CFG_CRITICAL_METHOD        not #define'd in 'cpu.h'             "
- #error  "                         [MUST be  CPU_CRITICAL_METHOD_INT_DIS_EN  ]"
- #error  "                         [     ||  CPU_CRITICAL_METHOD_STATUS_STK  ]"
- #error  "                         [     ||  CPU_CRITICAL_METHOD_STATUS_LOCAL]"
+#error  "CPU_CFG_CRITICAL_METHOD        not #define'd in 'cpu.h'             "
+#error  "                         [MUST be  CPU_CRITICAL_METHOD_INT_DIS_EN  ]"
+#error  "                         [     ||  CPU_CRITICAL_METHOD_STATUS_STK  ]"
+#error  "                         [     ||  CPU_CRITICAL_METHOD_STATUS_LOCAL]"
 
 #elif  ((CPU_CFG_CRITICAL_METHOD != CPU_CRITICAL_METHOD_INT_DIS_EN  ) && \
     (CPU_CFG_CRITICAL_METHOD != CPU_CRITICAL_METHOD_STATUS_STK  ) && \
     (CPU_CFG_CRITICAL_METHOD != CPU_CRITICAL_METHOD_STATUS_LOCAL))
- #error  "CPU_CFG_CRITICAL_METHOD  illegally #define'd in 'cpu.h'             "
- #error  "                         [MUST be  CPU_CRITICAL_METHOD_INT_DIS_EN  ]"
- #error  "                         [     ||  CPU_CRITICAL_METHOD_STATUS_STK  ]"
- #error  "                         [     ||  CPU_CRITICAL_METHOD_STATUS_LOCAL]"
+#error  "CPU_CFG_CRITICAL_METHOD  illegally #define'd in 'cpu.h'             "
+#error  "                         [MUST be  CPU_CRITICAL_METHOD_INT_DIS_EN  ]"
+#error  "                         [     ||  CPU_CRITICAL_METHOD_STATUS_STK  ]"
+#error  "                         [     ||  CPU_CRITICAL_METHOD_STATUS_LOCAL]"
 #endif
 
 

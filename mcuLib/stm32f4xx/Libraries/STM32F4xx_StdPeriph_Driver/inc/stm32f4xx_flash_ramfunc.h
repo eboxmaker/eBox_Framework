@@ -16,8 +16,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -31,7 +31,7 @@
 #define __STM32F4xx_FLASH_RAMFUNC_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -43,36 +43,36 @@
 
 /** @addtogroup FLASH RAMFUNC
   * @{
-  */ 
+  */
 
 /* Exported types ------------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-/** 
+/**
   * @brief  __RAM_FUNC definition
-  */ 
+  */
 #if defined ( __CC_ARM   )
 /* ARM Compiler
    ------------
-   RAM functions are defined using the toolchain options. 
+   RAM functions are defined using the toolchain options.
    Functions that are executed in RAM should reside in a separate source module.
-   Using the 'Options for File' dialog you can simply change the 'Code / Const' 
+   Using the 'Options for File' dialog you can simply change the 'Code / Const'
    area of a module to a memory space in physical RAM.
    Available memory areas are declared in the 'Target' tab of the 'Options for Target'
-   dialog. 
+   dialog.
 */
-#define __RAM_FUNC void 
+#define __RAM_FUNC void
 
 #elif defined ( __ICCARM__ )
 /* ICCARM Compiler
    ---------------
-   RAM functions are defined using a specific toolchain keyword "__ramfunc". 
+   RAM functions are defined using a specific toolchain keyword "__ramfunc".
 */
 #define __RAM_FUNC __ramfunc void
 
 #elif defined   (  __GNUC__  )
 /* GNU Compiler
    ------------
-  RAM functions are defined using a specific toolchain attribute 
+  RAM functions are defined using a specific toolchain attribute
    "__attribute__((section(".RamFunc")))".
 */
 #define __RAM_FUNC void  __attribute__((section(".RamFunc")))
@@ -93,11 +93,11 @@ __RAM_FUNC FLASH_FlashSleepModeCmd(FunctionalState NewState);
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

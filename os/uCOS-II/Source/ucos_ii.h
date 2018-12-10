@@ -133,7 +133,7 @@ extern "C" {
 #define  OS_EVENT_TYPE_FLAG           5u
 
 #define  OS_TMR_TYPE                100u    /* Used to identify Timers ...                             */
-                                            /* ... (Must be different value than OS_EVENT_TYPE_xxx)    */
+/* ... (Must be different value than OS_EVENT_TYPE_xxx)    */
 
 /*
 *********************************************************************************************************
@@ -386,7 +386,8 @@ extern "C" {
 */
 
 #if (OS_EVENT_EN) && (OS_MAX_EVENTS > 0)
-typedef struct os_event {
+typedef struct os_event
+{
     INT8U    OSEventType;                    /* Type of event control block (see OS_EVENT_TYPE_xxxx)    */
     void    *OSEventPtr;                     /* Pointer to message or queue structure                   */
     INT16U   OSEventCnt;                     /* Semaphore Count (not used if other EVENT type)          */
@@ -426,7 +427,8 @@ typedef  INT32U   OS_FLAGS;
 #endif
 
 
-typedef struct os_flag_grp {                /* Event Flag Group                                        */
+typedef struct os_flag_grp                  /* Event Flag Group                                        */
+{
     INT8U         OSFlagType;               /* Should be set to OS_EVENT_TYPE_FLAG                     */
     void         *OSFlagWaitList;           /* Pointer to first NODE of task waiting on event flag     */
     OS_FLAGS      OSFlagFlags;              /* 8, 16 or 32 bit flags                                   */
@@ -437,17 +439,18 @@ typedef struct os_flag_grp {                /* Event Flag Group                 
 
 
 
-typedef struct os_flag_node {               /* Event Flag Wait List Node                               */
+typedef struct os_flag_node                 /* Event Flag Wait List Node                               */
+{
     void         *OSFlagNodeNext;           /* Pointer to next     NODE in wait list                   */
     void         *OSFlagNodePrev;           /* Pointer to previous NODE in wait list                   */
     void         *OSFlagNodeTCB;            /* Pointer to TCB of waiting task                          */
     void         *OSFlagNodeFlagGrp;        /* Pointer to Event Flag Group                             */
     OS_FLAGS      OSFlagNodeFlags;          /* Event flag to wait on                                   */
     INT8U         OSFlagNodeWaitType;       /* Type of wait:                                           */
-                                            /*      OS_FLAG_WAIT_AND                                   */
-                                            /*      OS_FLAG_WAIT_ALL                                   */
-                                            /*      OS_FLAG_WAIT_OR                                    */
-                                            /*      OS_FLAG_WAIT_ANY                                   */
+    /*      OS_FLAG_WAIT_AND                                   */
+    /*      OS_FLAG_WAIT_ALL                                   */
+    /*      OS_FLAG_WAIT_OR                                    */
+    /*      OS_FLAG_WAIT_ANY                                   */
 } OS_FLAG_NODE;
 #endif
 
@@ -459,7 +462,8 @@ typedef struct os_flag_node {               /* Event Flag Wait List Node        
 */
 
 #if OS_MBOX_EN > 0
-typedef struct os_mbox_data {
+typedef struct os_mbox_data
+{
     void   *OSMsg;                         /* Pointer to message in mailbox                            */
 #if OS_LOWEST_PRIO <= 63
     INT8U   OSEventTbl[OS_EVENT_TBL_SIZE]; /* List of tasks waiting for event to occur                 */
@@ -478,7 +482,8 @@ typedef struct os_mbox_data {
 */
 
 #if (OS_MEM_EN > 0) && (OS_MAX_MEM_PART > 0)
-typedef struct os_mem {                   /* MEMORY CONTROL BLOCK                                      */
+typedef struct os_mem                     /* MEMORY CONTROL BLOCK                                      */
+{
     void   *OSMemAddr;                    /* Pointer to beginning of memory partition                  */
     void   *OSMemFreeList;                /* Pointer to list of free memory blocks                     */
     INT32U  OSMemBlkSize;                 /* Size (in bytes) of each block of memory                   */
@@ -490,7 +495,8 @@ typedef struct os_mem {                   /* MEMORY CONTROL BLOCK               
 } OS_MEM;
 
 
-typedef struct os_mem_data {
+typedef struct os_mem_data
+{
     void   *OSAddr;                    /* Pointer to the beginning address of the memory partition     */
     void   *OSFreeList;                /* Pointer to the beginning of the free list of memory blocks   */
     INT32U  OSBlkSize;                 /* Size (in bytes) of each memory block                         */
@@ -508,7 +514,8 @@ typedef struct os_mem_data {
 */
 
 #if OS_MUTEX_EN > 0
-typedef struct os_mutex_data {
+typedef struct os_mutex_data
+{
 #if OS_LOWEST_PRIO <= 63
     INT8U   OSEventTbl[OS_EVENT_TBL_SIZE];  /* List of tasks waiting for event to occur                */
     INT8U   OSEventGrp;                     /* Group corresponding to tasks waiting for event to occur */
@@ -529,7 +536,8 @@ typedef struct os_mutex_data {
 */
 
 #if OS_Q_EN > 0
-typedef struct os_q {                   /* QUEUE CONTROL BLOCK                                         */
+typedef struct os_q                     /* QUEUE CONTROL BLOCK                                         */
+{
     struct os_q   *OSQPtr;              /* Link to next queue control block in list of free blocks     */
     void         **OSQStart;            /* Pointer to start of queue data                              */
     void         **OSQEnd;              /* Pointer to end   of queue data                              */
@@ -540,7 +548,8 @@ typedef struct os_q {                   /* QUEUE CONTROL BLOCK                  
 } OS_Q;
 
 
-typedef struct os_q_data {
+typedef struct os_q_data
+{
     void          *OSMsg;               /* Pointer to next message to be extracted from queue          */
     INT16U         OSNMsgs;             /* Number of messages in message queue                         */
     INT16U         OSQSize;             /* Size of message queue                                       */
@@ -561,7 +570,8 @@ typedef struct os_q_data {
 */
 
 #if OS_SEM_EN > 0
-typedef struct os_sem_data {
+typedef struct os_sem_data
+{
     INT16U  OSCnt;                          /* Semaphore count                                         */
 #if OS_LOWEST_PRIO <= 63
     INT8U   OSEventTbl[OS_EVENT_TBL_SIZE];  /* List of tasks waiting for event to occur                */
@@ -580,7 +590,8 @@ typedef struct os_sem_data {
 */
 
 #if OS_TASK_CREATE_EXT_EN > 0
-typedef struct os_stk_data {
+typedef struct os_stk_data
+{
     INT32U  OSFree;                    /* Number of free bytes on the stack                            */
     INT32U  OSUsed;                    /* Number of bytes used on the stack                            */
 } OS_STK_DATA;
@@ -593,7 +604,8 @@ typedef struct os_stk_data {
 *********************************************************************************************************
 */
 
-typedef struct os_tcb {
+typedef struct os_tcb
+{
     OS_STK          *OSTCBStkPtr;           /* Pointer to current top of stack                         */
 
 #if OS_TASK_CREATE_EXT_EN > 0
@@ -670,7 +682,8 @@ typedef  void (*OS_TMR_CALLBACK)(void *ptmr, void *parg);
 
 
 
-typedef  struct  os_tmr {
+typedef  struct  os_tmr
+{
     INT8U            OSTmrType;                       /* Should be set to OS_TMR_TYPE                                  */
     OS_TMR_CALLBACK  OSTmrCallback;                   /* Function to call when timer expires                           */
     void            *OSTmrCallbackArg;                /* Argument to pass to function when timer expires               */
@@ -684,14 +697,15 @@ typedef  struct  os_tmr {
 #endif
     INT8U            OSTmrOpt;                        /* Options (see OS_TMR_OPT_xxx)                                  */
     INT8U            OSTmrState;                      /* Indicates the state of the timer:                             */
-                                                      /*     OS_TMR_STATE_UNUSED                                       */
-                                                      /*     OS_TMR_STATE_RUNNING                                      */
-                                                      /*     OS_TMR_STATE_STOPPED                                      */
+    /*     OS_TMR_STATE_UNUSED                                       */
+    /*     OS_TMR_STATE_RUNNING                                      */
+    /*     OS_TMR_STATE_STOPPED                                      */
 } OS_TMR;
 
 
 
-typedef  struct  os_tmr_wheel {
+typedef  struct  os_tmr_wheel
+{
     OS_TMR          *OSTmrFirst;                      /* Pointer to first timer in linked list                         */
     INT16U           OSTmrEntries;
 } OS_TMR_WHEEL;
@@ -842,7 +856,7 @@ OS_FLAGS      OSFlagAccept            (OS_FLAG_GRP     *pgrp,
 #endif
 
 OS_FLAG_GRP  *OSFlagCreate            (OS_FLAGS         flags,
-                                      INT8U            *perr);
+                                       INT8U            *perr);
 
 #if OS_FLAG_DEL_EN > 0
 OS_FLAG_GRP  *OSFlagDel               (OS_FLAG_GRP     *pgrp,
@@ -1436,37 +1450,37 @@ void          OSCtxSw                 (void);
 #ifndef OS_FLAG_EN
 #error  "OS_CFG.H, Missing OS_FLAG_EN: Enable (1) or Disable (0) code generation for Event Flags"
 #else
-    #ifndef OS_MAX_FLAGS
-    #error  "OS_CFG.H, Missing OS_MAX_FLAGS: Max. number of Event Flag Groups in your application"
-    #else
-        #if     OS_MAX_FLAGS > 65500u
-        #error  "OS_CFG.H, OS_MAX_FLAGS must be <= 65500"
-        #endif
-    #endif
+#ifndef OS_MAX_FLAGS
+#error  "OS_CFG.H, Missing OS_MAX_FLAGS: Max. number of Event Flag Groups in your application"
+#else
+#if     OS_MAX_FLAGS > 65500u
+#error  "OS_CFG.H, OS_MAX_FLAGS must be <= 65500"
+#endif
+#endif
 
-    #ifndef OS_FLAGS_NBITS
-    #error  "OS_CFG.H, Missing OS_FLAGS_NBITS: Determine #bits used for event flags, MUST be either 8, 16 or 32"
-    #endif
+#ifndef OS_FLAGS_NBITS
+#error  "OS_CFG.H, Missing OS_FLAGS_NBITS: Determine #bits used for event flags, MUST be either 8, 16 or 32"
+#endif
 
-    #ifndef OS_FLAG_WAIT_CLR_EN
-    #error  "OS_CFG.H, Missing OS_FLAG_WAIT_CLR_EN: Include code for Wait on Clear EVENT FLAGS"
-    #endif
+#ifndef OS_FLAG_WAIT_CLR_EN
+#error  "OS_CFG.H, Missing OS_FLAG_WAIT_CLR_EN: Include code for Wait on Clear EVENT FLAGS"
+#endif
 
-    #ifndef OS_FLAG_ACCEPT_EN
-    #error  "OS_CFG.H, Missing OS_FLAG_ACCEPT_EN: Include code for OSFlagAccept()"
-    #endif
+#ifndef OS_FLAG_ACCEPT_EN
+#error  "OS_CFG.H, Missing OS_FLAG_ACCEPT_EN: Include code for OSFlagAccept()"
+#endif
 
-    #ifndef OS_FLAG_DEL_EN
-    #error  "OS_CFG.H, Missing OS_FLAG_DEL_EN: Include code for OSFlagDel()"
-    #endif
+#ifndef OS_FLAG_DEL_EN
+#error  "OS_CFG.H, Missing OS_FLAG_DEL_EN: Include code for OSFlagDel()"
+#endif
 
-    #ifndef OS_FLAG_NAME_SIZE
-    #error  "OS_CFG.H, Missing OS_FLAG_NAME_SIZE: Determines the size of flag group names"
-    #endif
+#ifndef OS_FLAG_NAME_SIZE
+#error  "OS_CFG.H, Missing OS_FLAG_NAME_SIZE: Determines the size of flag group names"
+#endif
 
-    #ifndef OS_FLAG_QUERY_EN
-    #error  "OS_CFG.H, Missing OS_FLAG_QUERY_EN: Include code for OSFlagQuery()"
-    #endif
+#ifndef OS_FLAG_QUERY_EN
+#error  "OS_CFG.H, Missing OS_FLAG_QUERY_EN: Include code for OSFlagQuery()"
+#endif
 #endif
 
 /*
@@ -1478,29 +1492,29 @@ void          OSCtxSw                 (void);
 #ifndef OS_MBOX_EN
 #error  "OS_CFG.H, Missing OS_MBOX_EN: Enable (1) or Disable (0) code generation for MAILBOXES"
 #else
-    #ifndef OS_MBOX_ACCEPT_EN
-    #error  "OS_CFG.H, Missing OS_MBOX_ACCEPT_EN: Include code for OSMboxAccept()"
-    #endif
+#ifndef OS_MBOX_ACCEPT_EN
+#error  "OS_CFG.H, Missing OS_MBOX_ACCEPT_EN: Include code for OSMboxAccept()"
+#endif
 
-    #ifndef OS_MBOX_DEL_EN
-    #error  "OS_CFG.H, Missing OS_MBOX_DEL_EN: Include code for OSMboxDel()"
-    #endif
+#ifndef OS_MBOX_DEL_EN
+#error  "OS_CFG.H, Missing OS_MBOX_DEL_EN: Include code for OSMboxDel()"
+#endif
 
-    #ifndef OS_MBOX_PEND_ABORT_EN
-    #error  "OS_CFG.H, Missing OS_MBOX_PEND_ABORT_EN: Include code for OSMboxPendAbort()"
-    #endif
+#ifndef OS_MBOX_PEND_ABORT_EN
+#error  "OS_CFG.H, Missing OS_MBOX_PEND_ABORT_EN: Include code for OSMboxPendAbort()"
+#endif
 
-    #ifndef OS_MBOX_POST_EN
-    #error  "OS_CFG.H, Missing OS_MBOX_POST_EN: Include code for OSMboxPost()"
-    #endif
+#ifndef OS_MBOX_POST_EN
+#error  "OS_CFG.H, Missing OS_MBOX_POST_EN: Include code for OSMboxPost()"
+#endif
 
-    #ifndef OS_MBOX_POST_OPT_EN
-    #error  "OS_CFG.H, Missing OS_MBOX_POST_OPT_EN: Include code for OSMboxPostOpt()"
-    #endif
+#ifndef OS_MBOX_POST_OPT_EN
+#error  "OS_CFG.H, Missing OS_MBOX_POST_OPT_EN: Include code for OSMboxPostOpt()"
+#endif
 
-    #ifndef OS_MBOX_QUERY_EN
-    #error  "OS_CFG.H, Missing OS_MBOX_QUERY_EN: Include code for OSMboxQuery()"
-    #endif
+#ifndef OS_MBOX_QUERY_EN
+#error  "OS_CFG.H, Missing OS_MBOX_QUERY_EN: Include code for OSMboxQuery()"
+#endif
 #endif
 
 /*
@@ -1512,21 +1526,21 @@ void          OSCtxSw                 (void);
 #ifndef OS_MEM_EN
 #error  "OS_CFG.H, Missing OS_MEM_EN: Enable (1) or Disable (0) code generation for MEMORY MANAGER"
 #else
-    #ifndef OS_MAX_MEM_PART
-    #error  "OS_CFG.H, Missing OS_MAX_MEM_PART: Max. number of memory partitions"
-    #else
-        #if     OS_MAX_MEM_PART > 65500u
-        #error  "OS_CFG.H, OS_MAX_MEM_PART must be <= 65500"
-        #endif
-    #endif
+#ifndef OS_MAX_MEM_PART
+#error  "OS_CFG.H, Missing OS_MAX_MEM_PART: Max. number of memory partitions"
+#else
+#if     OS_MAX_MEM_PART > 65500u
+#error  "OS_CFG.H, OS_MAX_MEM_PART must be <= 65500"
+#endif
+#endif
 
-    #ifndef OS_MEM_NAME_SIZE
-    #error  "OS_CFG.H, Missing OS_MEM_NAME_SIZE: Determines the size of memory partition names"
-    #endif
+#ifndef OS_MEM_NAME_SIZE
+#error  "OS_CFG.H, Missing OS_MEM_NAME_SIZE: Determines the size of memory partition names"
+#endif
 
-    #ifndef OS_MEM_QUERY_EN
-    #error  "OS_CFG.H, Missing OS_MEM_QUERY_EN: Include code for OSMemQuery()"
-    #endif
+#ifndef OS_MEM_QUERY_EN
+#error  "OS_CFG.H, Missing OS_MEM_QUERY_EN: Include code for OSMemQuery()"
+#endif
 #endif
 
 /*
@@ -1538,17 +1552,17 @@ void          OSCtxSw                 (void);
 #ifndef OS_MUTEX_EN
 #error  "OS_CFG.H, Missing OS_MUTEX_EN: Enable (1) or Disable (0) code generation for MUTEX"
 #else
-    #ifndef OS_MUTEX_ACCEPT_EN
-    #error  "OS_CFG.H, Missing OS_MUTEX_ACCEPT_EN: Include code for OSMutexAccept()"
-    #endif
+#ifndef OS_MUTEX_ACCEPT_EN
+#error  "OS_CFG.H, Missing OS_MUTEX_ACCEPT_EN: Include code for OSMutexAccept()"
+#endif
 
-    #ifndef OS_MUTEX_DEL_EN
-    #error  "OS_CFG.H, Missing OS_MUTEX_DEL_EN: Include code for OSMutexDel()"
-    #endif
+#ifndef OS_MUTEX_DEL_EN
+#error  "OS_CFG.H, Missing OS_MUTEX_DEL_EN: Include code for OSMutexDel()"
+#endif
 
-    #ifndef OS_MUTEX_QUERY_EN
-    #error  "OS_CFG.H, Missing OS_MUTEX_QUERY_EN: Include code for OSMutexQuery()"
-    #endif
+#ifndef OS_MUTEX_QUERY_EN
+#error  "OS_CFG.H, Missing OS_MUTEX_QUERY_EN: Include code for OSMutexQuery()"
+#endif
 #endif
 
 /*
@@ -1560,45 +1574,45 @@ void          OSCtxSw                 (void);
 #ifndef OS_Q_EN
 #error  "OS_CFG.H, Missing OS_Q_EN: Enable (1) or Disable (0) code generation for QUEUES"
 #else
-    #ifndef OS_MAX_QS
-    #error  "OS_CFG.H, Missing OS_MAX_QS: Max. number of queue control blocks"
-    #else
-        #if     OS_MAX_QS > 65500u
-        #error  "OS_CFG.H, OS_MAX_QS must be <= 65500"
-        #endif
-    #endif
+#ifndef OS_MAX_QS
+#error  "OS_CFG.H, Missing OS_MAX_QS: Max. number of queue control blocks"
+#else
+#if     OS_MAX_QS > 65500u
+#error  "OS_CFG.H, OS_MAX_QS must be <= 65500"
+#endif
+#endif
 
-    #ifndef OS_Q_ACCEPT_EN
-    #error  "OS_CFG.H, Missing OS_Q_ACCEPT_EN: Include code for OSQAccept()"
-    #endif
+#ifndef OS_Q_ACCEPT_EN
+#error  "OS_CFG.H, Missing OS_Q_ACCEPT_EN: Include code for OSQAccept()"
+#endif
 
-    #ifndef OS_Q_DEL_EN
-    #error  "OS_CFG.H, Missing OS_Q_DEL_EN: Include code for OSQDel()"
-    #endif
+#ifndef OS_Q_DEL_EN
+#error  "OS_CFG.H, Missing OS_Q_DEL_EN: Include code for OSQDel()"
+#endif
 
-    #ifndef OS_Q_FLUSH_EN
-    #error  "OS_CFG.H, Missing OS_Q_FLUSH_EN: Include code for OSQFlush()"
-    #endif
+#ifndef OS_Q_FLUSH_EN
+#error  "OS_CFG.H, Missing OS_Q_FLUSH_EN: Include code for OSQFlush()"
+#endif
 
-    #ifndef OS_Q_PEND_ABORT_EN
-    #error  "OS_CFG.H, Missing OS_Q_PEND_ABORT_EN: Include code for OSQPendAbort()"
-    #endif
+#ifndef OS_Q_PEND_ABORT_EN
+#error  "OS_CFG.H, Missing OS_Q_PEND_ABORT_EN: Include code for OSQPendAbort()"
+#endif
 
-    #ifndef OS_Q_POST_EN
-    #error  "OS_CFG.H, Missing OS_Q_POST_EN: Include code for OSQPost()"
-    #endif
+#ifndef OS_Q_POST_EN
+#error  "OS_CFG.H, Missing OS_Q_POST_EN: Include code for OSQPost()"
+#endif
 
-    #ifndef OS_Q_POST_FRONT_EN
-    #error  "OS_CFG.H, Missing OS_Q_POST_FRONT_EN: Include code for OSQPostFront()"
-    #endif
+#ifndef OS_Q_POST_FRONT_EN
+#error  "OS_CFG.H, Missing OS_Q_POST_FRONT_EN: Include code for OSQPostFront()"
+#endif
 
-    #ifndef OS_Q_POST_OPT_EN
-    #error  "OS_CFG.H, Missing OS_Q_POST_OPT_EN: Include code for OSQPostOpt()"
-    #endif
+#ifndef OS_Q_POST_OPT_EN
+#error  "OS_CFG.H, Missing OS_Q_POST_OPT_EN: Include code for OSQPostOpt()"
+#endif
 
-    #ifndef OS_Q_QUERY_EN
-    #error  "OS_CFG.H, Missing OS_Q_QUERY_EN: Include code for OSQQuery()"
-    #endif
+#ifndef OS_Q_QUERY_EN
+#error  "OS_CFG.H, Missing OS_Q_QUERY_EN: Include code for OSQQuery()"
+#endif
 #endif
 
 /*
@@ -1610,25 +1624,25 @@ void          OSCtxSw                 (void);
 #ifndef OS_SEM_EN
 #error  "OS_CFG.H, Missing OS_SEM_EN: Enable (1) or Disable (0) code generation for SEMAPHORES"
 #else
-    #ifndef OS_SEM_ACCEPT_EN
-    #error  "OS_CFG.H, Missing OS_SEM_ACCEPT_EN: Include code for OSSemAccept()"
-    #endif
+#ifndef OS_SEM_ACCEPT_EN
+#error  "OS_CFG.H, Missing OS_SEM_ACCEPT_EN: Include code for OSSemAccept()"
+#endif
 
-    #ifndef OS_SEM_DEL_EN
-    #error  "OS_CFG.H, Missing OS_SEM_DEL_EN: Include code for OSSemDel()"
-    #endif
+#ifndef OS_SEM_DEL_EN
+#error  "OS_CFG.H, Missing OS_SEM_DEL_EN: Include code for OSSemDel()"
+#endif
 
-    #ifndef OS_SEM_PEND_ABORT_EN
-    #error  "OS_CFG.H, Missing OS_SEM_PEND_ABORT_EN: Include code for OSSemPendAbort()"
-    #endif
+#ifndef OS_SEM_PEND_ABORT_EN
+#error  "OS_CFG.H, Missing OS_SEM_PEND_ABORT_EN: Include code for OSSemPendAbort()"
+#endif
 
-    #ifndef OS_SEM_QUERY_EN
-    #error  "OS_CFG.H, Missing OS_SEM_QUERY_EN: Include code for OSSemQuery()"
-    #endif
+#ifndef OS_SEM_QUERY_EN
+#error  "OS_CFG.H, Missing OS_SEM_QUERY_EN: Include code for OSSemQuery()"
+#endif
 
-    #ifndef OS_SEM_SET_EN
-    #error  "OS_CFG.H, Missing OS_SEM_SET_EN: Include code for OSSemSet()"
-    #endif
+#ifndef OS_SEM_SET_EN
+#error  "OS_CFG.H, Missing OS_SEM_SET_EN: Include code for OSSemSet()"
+#endif
 #endif
 
 /*
@@ -1640,13 +1654,13 @@ void          OSCtxSw                 (void);
 #ifndef OS_MAX_TASKS
 #error  "OS_CFG.H, Missing OS_MAX_TASKS: Max. number of tasks in your application"
 #else
-    #if     OS_MAX_TASKS < 2
-    #error  "OS_CFG.H,         OS_MAX_TASKS must be >= 2"
-    #endif
+#if     OS_MAX_TASKS < 2
+#error  "OS_CFG.H,         OS_MAX_TASKS must be >= 2"
+#endif
 
-    #if     OS_MAX_TASKS >  ((OS_LOWEST_PRIO - OS_N_SYS_TASKS) + 1)
-    #error  "OS_CFG.H,         OS_MAX_TASKS must be <= OS_LOWEST_PRIO - OS_N_SYS_TASKS + 1"
-    #endif
+#if     OS_MAX_TASKS >  ((OS_LOWEST_PRIO - OS_N_SYS_TASKS) + 1)
+#error  "OS_CFG.H,         OS_MAX_TASKS must be <= OS_LOWEST_PRIO - OS_N_SYS_TASKS + 1"
+#endif
 
 #endif
 
@@ -1729,46 +1743,46 @@ void          OSCtxSw                 (void);
 #ifndef OS_TMR_EN
 #error  "OS_CFG.H, Missing OS_TMR_EN: When (1) enables code generation for Timer Management"
 #elif   OS_TMR_EN > 0
-    #if     OS_SEM_EN == 0
-    #error  "OS_CFG.H, Semaphore management is required (set OS_SEM_EN to 1) when enabling Timer Management."
-    #error  "          Timer management require TWO semaphores."
-    #endif
+#if     OS_SEM_EN == 0
+#error  "OS_CFG.H, Semaphore management is required (set OS_SEM_EN to 1) when enabling Timer Management."
+#error  "          Timer management require TWO semaphores."
+#endif
 
-    #ifndef OS_TMR_CFG_MAX
-    #error  "OS_CFG.H, Missing OS_TMR_CFG_MAX: Determines the total number of timers in an application (2 .. 65500)"
-    #else
-        #if OS_TMR_CFG_MAX < 2
-        #error  "OS_CFG.H, OS_TMR_CFG_MAX should be between 2 and 65500"
-        #endif
+#ifndef OS_TMR_CFG_MAX
+#error  "OS_CFG.H, Missing OS_TMR_CFG_MAX: Determines the total number of timers in an application (2 .. 65500)"
+#else
+#if OS_TMR_CFG_MAX < 2
+#error  "OS_CFG.H, OS_TMR_CFG_MAX should be between 2 and 65500"
+#endif
 
-        #if OS_TMR_CFG_MAX > 65500
-        #error  "OS_CFG.H, OS_TMR_CFG_MAX should be between 2 and 65500"
-        #endif
-    #endif
+#if OS_TMR_CFG_MAX > 65500
+#error  "OS_CFG.H, OS_TMR_CFG_MAX should be between 2 and 65500"
+#endif
+#endif
 
-    #ifndef OS_TMR_CFG_WHEEL_SIZE
-    #error  "OS_CFG.H, Missing OS_TMR_CFG_WHEEL_SIZE: Sets the size of the timer wheel (1 .. 1023)"
-    #else
-        #if OS_TMR_CFG_WHEEL_SIZE < 2
-        #error  "OS_CFG.H, OS_TMR_CFG_WHEEL_SIZE should be between 2 and 1024"
-        #endif
+#ifndef OS_TMR_CFG_WHEEL_SIZE
+#error  "OS_CFG.H, Missing OS_TMR_CFG_WHEEL_SIZE: Sets the size of the timer wheel (1 .. 1023)"
+#else
+#if OS_TMR_CFG_WHEEL_SIZE < 2
+#error  "OS_CFG.H, OS_TMR_CFG_WHEEL_SIZE should be between 2 and 1024"
+#endif
 
-        #if OS_TMR_CFG_WHEEL_SIZE > 1024
-        #error  "OS_CFG.H, OS_TMR_CFG_WHEEL_SIZE should be between 2 and 1024"
-        #endif
-    #endif
+#if OS_TMR_CFG_WHEEL_SIZE > 1024
+#error  "OS_CFG.H, OS_TMR_CFG_WHEEL_SIZE should be between 2 and 1024"
+#endif
+#endif
 
-    #ifndef OS_TMR_CFG_NAME_SIZE
-    #error  "OS_CFG.H, Missing OS_TMR_CFG_NAME_SIZE: Determines the number of characters used for Timer names"
-    #endif
+#ifndef OS_TMR_CFG_NAME_SIZE
+#error  "OS_CFG.H, Missing OS_TMR_CFG_NAME_SIZE: Determines the number of characters used for Timer names"
+#endif
 
-    #ifndef OS_TMR_CFG_TICKS_PER_SEC
-    #error  "OS_CFG.H, Missing OS_TMR_CFG_TICKS_PER_SEC: Determines the rate at which tiem timer management task will run (Hz)"
-    #endif
+#ifndef OS_TMR_CFG_TICKS_PER_SEC
+#error  "OS_CFG.H, Missing OS_TMR_CFG_TICKS_PER_SEC: Determines the rate at which tiem timer management task will run (Hz)"
+#endif
 
-    #ifndef OS_TASK_TMR_STK_SIZE
-    #error  "OS_CFG.H, Missing OS_TASK_TMR_STK_SIZE: Determines the size of the Timer Task's stack"
-    #endif
+#ifndef OS_TASK_TMR_STK_SIZE
+#error  "OS_CFG.H, Missing OS_TASK_TMR_STK_SIZE: Determines the size of the Timer Task's stack"
+#endif
 #endif
 
 
@@ -1806,9 +1820,9 @@ void          OSCtxSw                 (void);
 #ifndef OS_MAX_EVENTS
 #error  "OS_CFG.H, Missing OS_MAX_EVENTS: Max. number of event control blocks in your application"
 #else
-    #if     OS_MAX_EVENTS > 65500u
-    #error  "OS_CFG.H, OS_MAX_EVENTS must be <= 65500"
-    #endif
+#if     OS_MAX_EVENTS > 65500u
+#error  "OS_CFG.H, OS_MAX_EVENTS must be <= 65500"
+#endif
 #endif
 
 
@@ -1882,39 +1896,39 @@ void          OSCtxSw                 (void);
 #endif
 
 #if    OS_FLAG_EN > 0
-    #if    OS_FLAG_DEL_EN > 0
-    #error "OS_CFG.H, OS_FLAG_DEL_EN must be disabled for safety-critical release code"
-    #endif
+#if    OS_FLAG_DEL_EN > 0
+#error "OS_CFG.H, OS_FLAG_DEL_EN must be disabled for safety-critical release code"
+#endif
 #endif
 
 #if    OS_MBOX_EN > 0
-    #if    OS_MBOX_DEL_EN > 0
-    #error "OS_CFG.H, OS_MBOX_DEL_EN must be disabled for safety-critical release code"
-    #endif
+#if    OS_MBOX_DEL_EN > 0
+#error "OS_CFG.H, OS_MBOX_DEL_EN must be disabled for safety-critical release code"
+#endif
 #endif
 
 #if    OS_MUTEX_EN > 0
-    #if    OS_MUTEX_DEL_EN > 0
-    #error "OS_CFG.H, OS_MUTEX_DEL_EN must be disabled for safety-critical release code"
-    #endif
+#if    OS_MUTEX_DEL_EN > 0
+#error "OS_CFG.H, OS_MUTEX_DEL_EN must be disabled for safety-critical release code"
+#endif
 #endif
 
 #if    OS_Q_EN > 0
-    #if    OS_Q_DEL_EN > 0
-    #error "OS_CFG.H, OS_Q_DEL_EN must be disabled for safety-critical release code"
-    #endif
+#if    OS_Q_DEL_EN > 0
+#error "OS_CFG.H, OS_Q_DEL_EN must be disabled for safety-critical release code"
+#endif
 #endif
 
 #if    OS_SEM_EN > 0
-    #if    OS_SEM_DEL_EN > 0
-    #error "OS_CFG.H, OS_SEM_DEL_EN must be disabled for safety-critical release code"
-    #endif
+#if    OS_SEM_DEL_EN > 0
+#error "OS_CFG.H, OS_SEM_DEL_EN must be disabled for safety-critical release code"
+#endif
 #endif
 
 #if    OS_TASK_EN > 0
-    #if    OS_TASK_DEL_EN > 0
-    #error "OS_CFG.H, OS_TASK_DEL_EN must be disabled for safety-critical release code"
-    #endif
+#if    OS_TASK_DEL_EN > 0
+#error "OS_CFG.H, OS_TASK_DEL_EN must be disabled for safety-critical release code"
+#endif
 #endif
 
 #if    OS_CRITICAL_METHOD != 3

@@ -18,14 +18,14 @@ size_t len;
 void tx()
 {
 
- PB8.toggle();
+    PB8.toggle();
 }
 void setup()
 {
-	ebox_init();
+    ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-    UART.attach(tx,TxIrq);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
+    UART.attach(tx, TxIrq);
 
     PB8.mode(OUTPUT);
 
@@ -33,12 +33,12 @@ void setup()
 }
 int main(void)
 {
-	setup();
+    setup();
 
-	while (1)
-	{
+    while (1)
+    {
 
         UART.write('a');
         delay_ms(1000);
-	}
+    }
 }

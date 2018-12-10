@@ -66,13 +66,16 @@ void  OS_TickTask (void *p_arg)
 
     p_arg = p_arg;                                          /* Prevent compiler warning                               */
 
-    while (DEF_ON) {
+    while (DEF_ON)
+    {
         (void)OSTaskSemPend((OS_TICK  )0,
                             (OS_OPT   )OS_OPT_PEND_BLOCKING,
-                            (CPU_TS  *)&ts,
-                            (OS_ERR  *)&err);               /* Wait for signal from tick interrupt                    */
-        if (err == OS_ERR_NONE) {
-            if (OSRunning == OS_STATE_OS_RUNNING) {
+                            (CPU_TS *)&ts,
+                            (OS_ERR *)&err);                /* Wait for signal from tick interrupt                    */
+        if (err == OS_ERR_NONE)
+        {
+            if (OSRunning == OS_STATE_OS_RUNNING)
+            {
                 OS_TickListUpdate();                        /* Update all tasks waiting for time                      */
             }
         }
@@ -104,7 +107,8 @@ void  OS_TickTask (void *p_arg)
 void  OS_TickTaskInit (OS_ERR *p_err)
 {
 #ifdef OS_SAFETY_CRITICAL
-    if (p_err == (OS_ERR *)0) {
+    if (p_err == (OS_ERR *)0)
+    {
         OS_SAFETY_CRITICAL_EXCEPTION();
         return;
     }
@@ -118,34 +122,37 @@ void  OS_TickTaskInit (OS_ERR *p_err)
     OS_TickListInit();                                      /* Initialize the tick list data structures               */
 
     /* ---------------- CREATE THE TICK TASK ---------------- */
-    if (OSCfg_TickTaskStkBasePtr == (CPU_STK *)0) {
+    if (OSCfg_TickTaskStkBasePtr == (CPU_STK *)0)
+    {
         *p_err = OS_ERR_TICK_STK_INVALID;
         return;
     }
 
-    if (OSCfg_TickTaskStkSize < OSCfg_StkSizeMin) {
+    if (OSCfg_TickTaskStkSize < OSCfg_StkSizeMin)
+    {
         *p_err = OS_ERR_TICK_STK_SIZE_INVALID;
         return;
     }
 
-    if (OSCfg_TickTaskPrio >= (OS_CFG_PRIO_MAX - 1u)) {     /* Only one task at the 'Idle Task' priority              */
+    if (OSCfg_TickTaskPrio >= (OS_CFG_PRIO_MAX - 1u))       /* Only one task at the 'Idle Task' priority              */
+    {
         *p_err = OS_ERR_TICK_PRIO_INVALID;
         return;
     }
 
-    OSTaskCreate((OS_TCB     *)&OSTickTaskTCB,
-                 (CPU_CHAR   *)((void *)"uC/OS-III Tick Task"),
+    OSTaskCreate((OS_TCB *)&OSTickTaskTCB,
+                 (CPU_CHAR *)((void *)"uC/OS-III Tick Task"),
                  (OS_TASK_PTR )OS_TickTask,
-                 (void       *)0,
+                 (void *)0,
                  (OS_PRIO     )OSCfg_TickTaskPrio,
-                 (CPU_STK    *)OSCfg_TickTaskStkBasePtr,
+                 (CPU_STK *)OSCfg_TickTaskStkBasePtr,
                  (CPU_STK_SIZE)OSCfg_TickTaskStkLimit,
                  (CPU_STK_SIZE)OSCfg_TickTaskStkSize,
                  (OS_MSG_QTY  )0u,
                  (OS_TICK     )0u,
-                 (void       *)0,
+                 (void *)0,
                  (OS_OPT      )(OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR | OS_OPT_TASK_NO_TLS),
-                 (OS_ERR     *)p_err);
+                 (OS_ERR *)p_err);
 }
 
 /*$PAGE*/
@@ -170,9 +177,10 @@ void  OS_TickListInit (void)
 
 
 
-    for (i = 0u; i < OSCfg_TickWheelSize; i++) {
+    for (i = 0u; i < OSCfg_TickWheelSize; i++)
+    {
         p_spoke                = (OS_TICK_SPOKE *)&OSCfg_TickWheel[i];
-        p_spoke->FirstPtr      = (OS_TCB        *)0;
+        p_spoke->FirstPtr      = (OS_TCB *)0;
         p_spoke->NbrEntries    = (OS_OBJ_QTY     )0u;
         p_spoke->NbrEntriesMax = (OS_OBJ_QTY     )0u;
     }
@@ -217,10 +225,10 @@ void  OS_TickListInit (void)
  ************************************************************************************************************************
  */
 
-void  OS_TickListInsert (OS_TCB *   p_tcb,
+void  OS_TickListInsert (OS_TCB    *p_tcb,
                          OS_TICK    time,
                          OS_OPT     opt,
-                         OS_ERR *   p_err)
+                         OS_ERR    *p_err)
 {
     OS_TICK tick_delta;
     OS_TICK tick_next;
@@ -231,9 +239,11 @@ void  OS_TickListInsert (OS_TCB *   p_tcb,
 
 
 
-    if (opt == OS_OPT_TIME_MATCH) {                              /* Task time is absolute.                            */
+    if (opt == OS_OPT_TIME_MATCH)                                /* Task time is absolute.                            */
+    {
         tick_delta = time - OSTickCtr - 1u;
-        if (tick_delta > OS_TICK_TH_RDY) {                       /* If delay already occurred, ...                    */
+        if (tick_delta > OS_TICK_TH_RDY)                         /* If delay already occurred, ...                    */
+        {
             p_tcb->TickCtrMatch = (OS_TICK        )0u;
             p_tcb->TickRemain   = (OS_TICK        )0u;
             p_tcb->TickSpokePtr = (OS_TICK_SPOKE *)0;
@@ -243,24 +253,34 @@ void  OS_TickListInsert (OS_TCB *   p_tcb,
         p_tcb->TickCtrMatch = time;
         p_tcb->TickRemain   = tick_delta + 1u;
 
-    } else if (time > (OS_TICK)0u) {
-        if (opt == OS_OPT_TIME_PERIODIC) {                       /* Task time is periodic.                            */
+    }
+    else if (time > (OS_TICK)0u)
+    {
+        if (opt == OS_OPT_TIME_PERIODIC)                         /* Task time is periodic.                            */
+        {
             tick_next  = p_tcb->TickCtrPrev + time;
             tick_delta = tick_next - OSTickCtr - 1u;
-            if (tick_delta < time) {                             /* If next periodic delay did NOT already occur, ... */
+            if (tick_delta < time)                               /* If next periodic delay did NOT already occur, ... */
+            {
                 p_tcb->TickCtrMatch = tick_next;                 /* ... set  next  periodic delay;                ... */
-            } else {
+            }
+            else
+            {
                 p_tcb->TickCtrMatch = OSTickCtr + time;          /* ... else reset periodic delay.                    */
             }
             p_tcb->TickRemain   = p_tcb->TickCtrMatch - OSTickCtr;
             p_tcb->TickCtrPrev  = p_tcb->TickCtrMatch;
 
-        } else {                                                 /* Task time is relative to current.                 */
+        }
+        else                                                     /* Task time is relative to current.                 */
+        {
             p_tcb->TickCtrMatch = OSTickCtr + time;
             p_tcb->TickRemain   = time;
         }
 
-    } else {                                                     /* Zero time delay; ...                              */
+    }
+    else                                                         /* Zero time delay; ...                              */
+    {
         p_tcb->TickCtrMatch = (OS_TICK        )0u;
         p_tcb->TickRemain   = (OS_TICK        )0u;
         p_tcb->TickSpokePtr = (OS_TICK_SPOKE *)0;
@@ -272,32 +292,45 @@ void  OS_TickListInsert (OS_TCB *   p_tcb,
     spoke   = (OS_TICK_SPOKE_IX)(p_tcb->TickCtrMatch % OSCfg_TickWheelSize);
     p_spoke = &OSCfg_TickWheel[spoke];
 
-    if (p_spoke->NbrEntries == (OS_OBJ_QTY)0u) {                 /* First entry in the spoke                          */
-        p_tcb->TickNextPtr   = (OS_TCB   *)0;
-        p_tcb->TickPrevPtr   = (OS_TCB   *)0;
+    if (p_spoke->NbrEntries == (OS_OBJ_QTY)0u)                   /* First entry in the spoke                          */
+    {
+        p_tcb->TickNextPtr   = (OS_TCB *)0;
+        p_tcb->TickPrevPtr   = (OS_TCB *)0;
         p_spoke->FirstPtr    =  p_tcb;
         p_spoke->NbrEntries  = (OS_OBJ_QTY)1u;
-    } else {
+    }
+    else
+    {
         p_tcb1     = p_spoke->FirstPtr;                          /* Point to current first TCB in the list            */
-        while (p_tcb1 != (OS_TCB *)0) {
+        while (p_tcb1 != (OS_TCB *)0)
+        {
             p_tcb1->TickRemain = p_tcb1->TickCtrMatch            /* Compute time remaining of current TCB in list     */
                                  - OSTickCtr;
-            if (p_tcb->TickRemain > p_tcb1->TickRemain) {        /* Do we need to insert AFTER current TCB in list?   */
-                if (p_tcb1->TickNextPtr != (OS_TCB *)0) {        /* Yes, are we pointing at the last TCB in the list? */
+            if (p_tcb->TickRemain > p_tcb1->TickRemain)          /* Do we need to insert AFTER current TCB in list?   */
+            {
+                if (p_tcb1->TickNextPtr != (OS_TCB *)0)          /* Yes, are we pointing at the last TCB in the list? */
+                {
                     p_tcb1               =  p_tcb1->TickNextPtr; /* No,  Point to next TCB in the list                */
-                } else {
+                }
+                else
+                {
                     p_tcb->TickNextPtr   = (OS_TCB *)0;
                     p_tcb->TickPrevPtr   =  p_tcb1;
                     p_tcb1->TickNextPtr  =  p_tcb;               /* Yes, TCB to add is now new last entry in the list */
                     p_tcb1               = (OS_TCB *)0;          /* Break loop                                        */
                 }
-            } else {                                             /* Insert before the current TCB                     */
-                if (p_tcb1->TickPrevPtr == (OS_TCB *)0) {        /* Are we inserting before the first TCB?            */
+            }
+            else                                                 /* Insert before the current TCB                     */
+            {
+                if (p_tcb1->TickPrevPtr == (OS_TCB *)0)          /* Are we inserting before the first TCB?            */
+                {
                     p_tcb->TickPrevPtr   = (OS_TCB *)0;
                     p_tcb->TickNextPtr   =  p_tcb1;
                     p_tcb1->TickPrevPtr  =  p_tcb;
                     p_spoke->FirstPtr    =  p_tcb;
-                } else {                                         /* Insert in between 2 TCBs already in the list      */
+                }
+                else                                             /* Insert in between 2 TCBs already in the list      */
+                {
                     p_tcb0               =  p_tcb1->TickPrevPtr;
                     p_tcb->TickPrevPtr   =  p_tcb0;
                     p_tcb->TickNextPtr   =  p_tcb1;
@@ -309,7 +342,8 @@ void  OS_TickListInsert (OS_TCB *   p_tcb,
         }
         p_spoke->NbrEntries++;
     }
-    if (p_spoke->NbrEntriesMax < p_spoke->NbrEntries) {          /* Keep track of maximum # of entries in each spoke  */
+    if (p_spoke->NbrEntriesMax < p_spoke->NbrEntries)            /* Keep track of maximum # of entries in each spoke  */
+    {
         p_spoke->NbrEntriesMax = p_spoke->NbrEntries;
     }
     p_tcb->TickSpokePtr = p_spoke;                               /* Link back to tick spoke                           */
@@ -343,24 +377,30 @@ void  OS_TickListRemove (OS_TCB *p_tcb)
 
 
     p_spoke = p_tcb->TickSpokePtr;
-    if (p_spoke != (OS_TICK_SPOKE *)0) {                              /* Confirm that task is in tick list            */
+    if (p_spoke != (OS_TICK_SPOKE *)0)                                /* Confirm that task is in tick list            */
+    {
         p_tcb->TickRemain = (OS_TICK)0u;
-        if (p_spoke->FirstPtr == p_tcb) {                             /* Is timer to remove at the beginning of list? */
+        if (p_spoke->FirstPtr == p_tcb)                               /* Is timer to remove at the beginning of list? */
+        {
             p_tcb1            = (OS_TCB *)p_tcb->TickNextPtr;         /* Yes                                          */
             p_spoke->FirstPtr = p_tcb1;
-            if (p_tcb1 != (OS_TCB *)0) {
+            if (p_tcb1 != (OS_TCB *)0)
+            {
                 p_tcb1->TickPrevPtr = (OS_TCB *)0;
             }
-        } else {
+        }
+        else
+        {
             p_tcb1              = p_tcb->TickPrevPtr;                 /* No, remove timer from somewhere in the list  */
             p_tcb2              = p_tcb->TickNextPtr;
             p_tcb1->TickNextPtr = p_tcb2;
-            if (p_tcb2 != (OS_TCB *)0) {
+            if (p_tcb2 != (OS_TCB *)0)
+            {
                 p_tcb2->TickPrevPtr = p_tcb1;
             }
         }
-        p_tcb->TickNextPtr  = (OS_TCB        *)0;
-        p_tcb->TickPrevPtr  = (OS_TCB        *)0;
+        p_tcb->TickNextPtr  = (OS_TCB *)0;
+        p_tcb->TickPrevPtr  = (OS_TCB *)0;
         p_tcb->TickSpokePtr = (OS_TICK_SPOKE *)0;
         p_tcb->TickCtrMatch = (OS_TICK        )0u;
         p_spoke->NbrEntries--;
@@ -390,7 +430,8 @@ void  OS_TickListResetPeak (void)
 
 
 
-    for (i = 0u; i < OSCfg_TickWheelSize; i++) {
+    for (i = 0u; i < OSCfg_TickWheelSize; i++)
+    {
         p_spoke                = (OS_TICK_SPOKE *)&OSCfg_TickWheel[i];
         p_spoke->NbrEntriesMax = (OS_OBJ_QTY     )0u;
     }
@@ -431,10 +472,13 @@ void  OS_TickListUpdate (void)
     p_spoke  = &OSCfg_TickWheel[spoke];
     p_tcb    = p_spoke->FirstPtr;
     done     = DEF_FALSE;
-    while (done == DEF_FALSE) {
-        if (p_tcb != (OS_TCB *)0) {
+    while (done == DEF_FALSE)
+    {
+        if (p_tcb != (OS_TCB *)0)
+        {
             p_tcb_next = p_tcb->TickNextPtr;                           /* Point to next TCB to update                 */
-            switch (p_tcb->TaskState) {
+            switch (p_tcb->TaskState)
+            {
             case OS_TASK_STATE_RDY:
             case OS_TASK_STATE_PEND:
             case OS_TASK_STATE_SUSPENDED:
@@ -444,10 +488,13 @@ void  OS_TickListUpdate (void)
             case OS_TASK_STATE_DLY:
                 p_tcb->TickRemain = p_tcb->TickCtrMatch                /* Compute time remaining of current TCB       */
                                     - OSTickCtr;
-                if (OSTickCtr == p_tcb->TickCtrMatch) {                /* Process each TCB that expires               */
+                if (OSTickCtr == p_tcb->TickCtrMatch)                  /* Process each TCB that expires               */
+                {
                     p_tcb->TaskState = OS_TASK_STATE_RDY;
                     OS_TaskRdy(p_tcb);                                 /* Make task ready to run                      */
-                } else {
+                }
+                else
+                {
                     done             = DEF_TRUE;                       /* Don't find a match, we're done!             */
                 }
                 break;
@@ -455,9 +502,10 @@ void  OS_TickListUpdate (void)
             case OS_TASK_STATE_PEND_TIMEOUT:
                 p_tcb->TickRemain = p_tcb->TickCtrMatch                /* Compute time remaining of current TCB       */
                                     - OSTickCtr;
-                if (OSTickCtr == p_tcb->TickCtrMatch) {                /* Process each TCB that expires               */
+                if (OSTickCtr == p_tcb->TickCtrMatch)                  /* Process each TCB that expires               */
+                {
 #if (OS_MSG_EN > 0u)
-                    p_tcb->MsgPtr     = (void      *)0;
+                    p_tcb->MsgPtr     = (void *)0;
                     p_tcb->MsgSize    = (OS_MSG_SIZE)0u;
 #endif
                     p_tcb->TS         = OS_TS_GET();
@@ -466,7 +514,9 @@ void  OS_TickListUpdate (void)
                     p_tcb->TaskState  = OS_TASK_STATE_RDY;
                     p_tcb->PendStatus = OS_STATUS_PEND_TIMEOUT;        /* Indicate pend timed out                     */
                     p_tcb->PendOn     = OS_TASK_PEND_ON_NOTHING;       /* Indicate no longer pending                  */
-                } else {
+                }
+                else
+                {
                     done              = DEF_TRUE;                      /* Don't find a match, we're done!             */
                 }
                 break;
@@ -474,10 +524,13 @@ void  OS_TickListUpdate (void)
             case OS_TASK_STATE_DLY_SUSPENDED:
                 p_tcb->TickRemain = p_tcb->TickCtrMatch                /* Compute time remaining of current TCB       */
                                     - OSTickCtr;
-                if (OSTickCtr == p_tcb->TickCtrMatch) {                /* Process each TCB that expires               */
+                if (OSTickCtr == p_tcb->TickCtrMatch)                  /* Process each TCB that expires               */
+                {
                     p_tcb->TaskState  = OS_TASK_STATE_SUSPENDED;
                     OS_TickListRemove(p_tcb);                          /* Remove from current wheel spoke             */
-                } else {
+                }
+                else
+                {
                     done              = DEF_TRUE;                      /* Don't find a match, we're done!             */
                 }
                 break;
@@ -485,9 +538,10 @@ void  OS_TickListUpdate (void)
             case OS_TASK_STATE_PEND_TIMEOUT_SUSPENDED:
                 p_tcb->TickRemain = p_tcb->TickCtrMatch                /* Compute time remaining of current TCB       */
                                     - OSTickCtr;
-                if (OSTickCtr == p_tcb->TickCtrMatch) {                /* Process each TCB that expires               */
+                if (OSTickCtr == p_tcb->TickCtrMatch)                  /* Process each TCB that expires               */
+                {
 #if (OS_MSG_EN > 0u)
-                    p_tcb->MsgPtr     = (void      *)0;
+                    p_tcb->MsgPtr     = (void *)0;
                     p_tcb->MsgSize    = (OS_MSG_SIZE)0u;
 #endif
                     p_tcb->TS         = OS_TS_GET();
@@ -496,7 +550,9 @@ void  OS_TickListUpdate (void)
                     p_tcb->TaskState  = OS_TASK_STATE_SUSPENDED;
                     p_tcb->PendStatus = OS_STATUS_PEND_TIMEOUT;        /* Indicate pend timed out                     */
                     p_tcb->PendOn     = OS_TASK_PEND_ON_NOTHING;       /* Indicate no longer pending                  */
-                } else {
+                }
+                else
+                {
                     done              = DEF_TRUE;                      /* Don't find a match, we're done!             */
                 }
                 break;
@@ -505,12 +561,15 @@ void  OS_TickListUpdate (void)
                 break;
             }
             p_tcb = p_tcb_next;
-        } else {
+        }
+        else
+        {
             done  = DEF_TRUE;
         }
     }
     ts_end = OS_TS_GET() - ts_start;                                   /* Measure execution time of tick task         */
-    if (OSTickTaskTimeMax < ts_end) {
+    if (OSTickTaskTimeMax < ts_end)
+    {
         OSTickTaskTimeMax = ts_end;
     }
     OS_CRITICAL_EXIT();

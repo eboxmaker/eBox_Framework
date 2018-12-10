@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V1.6.1
   * @date    21-October-2015
-  * @brief   This file contains all the functions prototypes for the SPDIFRX firmware 
+  * @brief   This file contains all the functions prototypes for the SPDIFRX firmware
   *          library.
   ******************************************************************************
   * @attention
@@ -17,21 +17,21 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F4xx_SPDIFRX_H
 #define __STM32F4xx_SPDIFRX_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -43,32 +43,32 @@
 
 /** @addtogroup SPDIFRX
   * @{
-  */ 
+  */
 #if defined(STM32F446xx)
 /* Exported types ------------------------------------------------------------*/
-/** 
-  * @brief  SPDIFRX Init structure definition  
+/**
+  * @brief  SPDIFRX Init structure definition
   */
 typedef struct
 {
-  uint32_t SPDIFRX_InputSelection;           /*!< Specifies the SPDIFRX input selection.
+    uint32_t SPDIFRX_InputSelection;           /*!< Specifies the SPDIFRX input selection.
                                                 This parameter can be a value of @ref SPDIFRX_Input_Selection */
 
-  uint32_t SPDIFRX_Retries;                  /*!< Specifies the Maximum allowed re-tries during synchronization phase.
+    uint32_t SPDIFRX_Retries;                  /*!< Specifies the Maximum allowed re-tries during synchronization phase.
                                                 This parameter can be a value of @ref SPDIFRX_Max_Retries */
 
-  uint32_t SPDIFRX_WaitForActivity;          /*!< Specifies the wait for activity on SPDIFRX selected input.
+    uint32_t SPDIFRX_WaitForActivity;          /*!< Specifies the wait for activity on SPDIFRX selected input.
                                                 This parameter can be a value of @ref SPDIFRX_Wait_For_Activity. */
 
-  uint32_t SPDIFRX_ChannelSelection;         /*!< Specifies whether the control flow will take the channel status from channel A or B.
+    uint32_t SPDIFRX_ChannelSelection;         /*!< Specifies whether the control flow will take the channel status from channel A or B.
                                                 This parameter can be a value of @ref SPDIFRX_Channel_Selection */
 
-  uint32_t SPDIFRX_DataFormat;               /*!< Specifies the Data samples format (LSB, MSB, ...).
+    uint32_t SPDIFRX_DataFormat;               /*!< Specifies the Data samples format (LSB, MSB, ...).
                                                 This parameter can be a value of @ref SPDIFRX_Data_Format */
-                                               
-  uint32_t SPDIFRX_StereoMode;               /*!< Specifies whether the peripheral is in stereo or mono mode.
-                                                This parameter can be a value of @ref SPDIFRX_Stereo_Mode */ 
-}SPDIFRX_InitTypeDef;
+
+    uint32_t SPDIFRX_StereoMode;               /*!< Specifies whether the peripheral is in stereo or mono mode.
+                                                This parameter can be a value of @ref SPDIFRX_Stereo_Mode */
+} SPDIFRX_InitTypeDef;
 
 
 /* Exported constants --------------------------------------------------------*/
@@ -76,13 +76,13 @@ typedef struct
 /** @defgroup SPDIFRX_Exported_Constants
   * @{
   */
-#define IS_SPDIFRX_PERIPH(PERIPH) (((PERIPH) == SPDIFRX)) 
+#define IS_SPDIFRX_PERIPH(PERIPH) (((PERIPH) == SPDIFRX))
 
 /** @defgroup SPDIFRX_Input_Selection SPDIFRX Input Selection
   * @{
   */
 #define SPDIFRX_Input_IN0               ((uint32_t)0x00000000)
-#define SPDIFRX_Input_IN1               ((uint32_t)0x00010000)  
+#define SPDIFRX_Input_IN1               ((uint32_t)0x00010000)
 #define SPDIFRX_Input_IN2               ((uint32_t)0x00020000)
 #define SPDIFRX_Input_IN3               ((uint32_t)0x00030000)
 #define IS_SPDIFRX_INPUT_SELECT(INPUT)  (((INPUT) == SPDIFRX_Input_IN1) || \
@@ -93,11 +93,11 @@ typedef struct
   * @}
   */
 
-/** @defgroup SPDIFRX_Max_Retries SPDIFRX Max Retries 
+/** @defgroup SPDIFRX_Max_Retries SPDIFRX Max Retries
   * @{
   */
 #define SPDIFRX_1MAX_RETRIES               ((uint32_t)0x00000000)
-#define SPDIFRX_4MAX_RETRIES               ((uint32_t)0x00001000)  
+#define SPDIFRX_4MAX_RETRIES               ((uint32_t)0x00001000)
 #define SPDIFRX_16MAX_RETRIES              ((uint32_t)0x00002000)
 #define SPDIFRX_64MAX_RETRIES              ((uint32_t)0x00003000)
 #define IS_SPDIFRX_MAX_RETRIES(RET)   (((RET) == SPDIFRX_1MAX_RETRIES) || \
@@ -141,7 +141,7 @@ typedef struct
                                            ((FORMAT) == SPDIFRX_32BITS_DataFormat))
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup SPDIFRX_StereoMode SPDIFRX StereoMode
   * @{
@@ -152,7 +152,7 @@ typedef struct
                                ((MODE) == SPDIFRX_StereoMode_Enabled))
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup SPDIFRX_State SPDIFRX State
   * @{
@@ -166,7 +166,7 @@ typedef struct
 /**
   * @}
   */
-	
+
 /** @defgroup SPDIFRX_Interrupts_Definition SPDIFRX Interrupts Definition
   * @{
   */
@@ -187,7 +187,7 @@ typedef struct
 /**
   * @}
   */
-	
+
 /** @defgroup SPDIFRX_Flags_Definition SPDIFRX Flags Definition
   * @{
   */
@@ -204,33 +204,33 @@ typedef struct
                                   ((FLAG) == SPDIFRX_FLAG_PERR) || ((FLAG) == SPDIFRX_FLAG_OVR) || \
                                   ((FLAG) == SPDIFRX_SR_SBD) || ((FLAG) == SPDIFRX_SR_SYNCD) || \
                                   ((FLAG) == SPDIFRX_SR_FERR) || ((FLAG) == SPDIFRX_SR_SERR) || \
-				  ((FLAG) == SPDIFRX_SR_TERR))  
+				  ((FLAG) == SPDIFRX_SR_TERR))
 #define IS_SPDIFRX_CLEAR_FLAG(FLAG)    (((FLAG) == SPDIFRX_FLAG_PERR) || ((FLAG) == SPDIFRX_FLAG_OVR)   || \
-                                        ((FLAG) == SPDIFRX_SR_SBD) || ((FLAG) == SPDIFRX_SR_SYNCD))  
+                                        ((FLAG) == SPDIFRX_SR_SBD) || ((FLAG) == SPDIFRX_SR_SYNCD))
 /**
   * @}
   */
- 	
+
 /**
   * @}
   */
 
 /* Exported macro ------------------------------------------------------------*/
-/* Exported functions --------------------------------------------------------*/ 
+/* Exported functions --------------------------------------------------------*/
 
-/*  Function used to set the SPDIFRX configuration to the default reset state *****/ 
+/*  Function used to set the SPDIFRX configuration to the default reset state *****/
 void SPDIFRX_DeInit(void);
 
 /* Initialization and Configuration functions *********************************/
-void SPDIFRX_Init(SPDIFRX_InitTypeDef* SPDIFRX_InitStruct);
-void SPDIFRX_StructInit(SPDIFRX_InitTypeDef* SPDIFRX_InitStruct);
+void SPDIFRX_Init(SPDIFRX_InitTypeDef *SPDIFRX_InitStruct);
+void SPDIFRX_StructInit(SPDIFRX_InitTypeDef *SPDIFRX_InitStruct);
 void SPDIFRX_Cmd(uint32_t SPDIFRX_State);
 void SPDIFRX_SetPreambleTypeBit(FunctionalState NewState);
 void SPDIFRX_SetUserDataChannelStatusBits(FunctionalState NewState);
 void SPDIFRX_SetValidityBit(FunctionalState NewState);
 void SPDIFRX_SetParityBit(FunctionalState NewState);
 
-/* Data transfers functions ***************************************************/ 
+/* Data transfers functions ***************************************************/
 uint32_t SPDIFRX_ReceiveData(void);
 
 /* DMA transfers management functions *****************************************/

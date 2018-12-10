@@ -88,8 +88,8 @@
 
 #if( ( configCHECK_FOR_STACK_OVERFLOW == 1 ) && ( portSTACK_GROWTH < 0 ) )
 
-	/* Only the current stack state is to be checked. */
-	#define taskCHECK_FOR_STACK_OVERFLOW()																\
+/* Only the current stack state is to be checked. */
+#define taskCHECK_FOR_STACK_OVERFLOW()																\
 	{																									\
 		/* Is the currently saved stack pointer within the stack limit? */								\
 		if( pxCurrentTCB->pxTopOfStack <= pxCurrentTCB->pxStack )										\
@@ -103,8 +103,8 @@
 
 #if( ( configCHECK_FOR_STACK_OVERFLOW == 1 ) && ( portSTACK_GROWTH > 0 ) )
 
-	/* Only the current stack state is to be checked. */
-	#define taskCHECK_FOR_STACK_OVERFLOW()																\
+/* Only the current stack state is to be checked. */
+#define taskCHECK_FOR_STACK_OVERFLOW()																\
 	{																									\
 																										\
 		/* Is the currently saved stack pointer within the stack limit? */								\
@@ -119,7 +119,7 @@
 
 #if( ( configCHECK_FOR_STACK_OVERFLOW > 1 ) && ( portSTACK_GROWTH < 0 ) )
 
-	#define taskCHECK_FOR_STACK_OVERFLOW()																\
+#define taskCHECK_FOR_STACK_OVERFLOW()																\
 	{																									\
 		const uint32_t * const pulStack = ( uint32_t * ) pxCurrentTCB->pxStack;							\
 		const uint32_t ulCheckValue = ( uint32_t ) 0xa5a5a5a5;											\
@@ -138,7 +138,7 @@
 
 #if( ( configCHECK_FOR_STACK_OVERFLOW > 1 ) && ( portSTACK_GROWTH > 0 ) )
 
-	#define taskCHECK_FOR_STACK_OVERFLOW()																								\
+#define taskCHECK_FOR_STACK_OVERFLOW()																								\
 	{																																	\
 	int8_t *pcEndOfStack = ( int8_t * ) pxCurrentTCB->pxEndOfStack;																		\
 	static const uint8_t ucExpectedStackBytes[] = {	tskSTACK_FILL_BYTE, tskSTACK_FILL_BYTE, tskSTACK_FILL_BYTE, tskSTACK_FILL_BYTE,		\
@@ -162,7 +162,7 @@
 
 /* Remove stack overflow macro if not being used. */
 #ifndef taskCHECK_FOR_STACK_OVERFLOW
-	#define taskCHECK_FOR_STACK_OVERFLOW()
+#define taskCHECK_FOR_STACK_OVERFLOW()
 #endif
 
 

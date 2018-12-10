@@ -7,7 +7,7 @@
 
   * @brief   ebox application example .
   *
-  * Copyright 2016 shentq. All Rights Reserved.         
+  * Copyright 2016 shentq. All Rights Reserved.
   ******************************************************************************
  */
 
@@ -36,7 +36,7 @@ const uint8_t PongMsg[] = "PONG";
 void OnMaster( void )
 {
     uint8_t i;
-    
+
     switch( Radio->Process( ) )
     {
     case RF_RX_TIMEOUT:
@@ -52,37 +52,38 @@ void OnMaster( void )
         Radio->SetTxPacket( Buffer, BufferSize );
         break;
     case RF_RX_DONE:
-        Radio->GetRxPacket( Buffer, ( uint16_t* )&BufferSize );
-    
+        Radio->GetRxPacket( Buffer, ( uint16_t * )&BufferSize );
+
         if( BufferSize > 0 )
         {
-            if( strncmp( ( const char* )Buffer, ( const char* )PongMsg, 4 ) == 0 )
+            if( strncmp( ( const char * )Buffer, ( const char * )PongMsg, 4 ) == 0 )
             {
                 // Indicates on a LED that the received frame is a PONG
                 //LedToggle( LED_GREEN );
                 PB8.toggle();
 
-                // Send the next PING frame            
+                // Send the next PING frame
                 Buffer[0] = 'P';
                 Buffer[1] = 'I';
                 Buffer[2] = 'N';
                 Buffer[3] = 'G';
-                // We fill the buffer with numbers for the payload 
+                // We fill the buffer with numbers for the payload
                 for( i = 4; i < BufferSize; i++ )
                 {
                     Buffer[i] = i - 4;
                 }
                 Radio->SetTxPacket( Buffer, BufferSize );
             }
-            else if( strncmp( ( const char* )Buffer, ( const char* )PingMsg, 4 ) == 0 )
-            { // A master already exists then become a slave
+            else if( strncmp( ( const char * )Buffer, ( const char * )PingMsg, 4 ) == 0 )
+            {
+                // A master already exists then become a slave
                 EnableMaster = false;
                 //LedOff( LED_RED );
                 PB9.reset();
             }
-            
-            uart1.printf("RSSI::%3.2F\r\n",SX1276LoRaGetPacketRssi());
-        }            
+
+            uart1.printf("RSSI::%3.2F\r\n", SX1276LoRaGetPacketRssi());
+        }
         break;
     case RF_TX_DONE:
         // Indicates on a LED that we have sent a PING
@@ -104,22 +105,22 @@ void OnSlave( void )
     switch( Radio->Process( ) )
     {
     case RF_RX_DONE:
-        Radio->GetRxPacket( Buffer, ( uint16_t* )&BufferSize );
-    
+        Radio->GetRxPacket( Buffer, ( uint16_t * )&BufferSize );
+
         if( BufferSize > 0 )
         {
-            if( strncmp( ( const char* )Buffer, ( const char* )PingMsg, 4 ) == 0 )
+            if( strncmp( ( const char * )Buffer, ( const char * )PingMsg, 4 ) == 0 )
             {
                 // Indicates on a LED that the received frame is a PING
                 //LedToggle( LED_GREEN );
                 PB8.toggle();
 
-               // Send the reply to the PONG string
+                // Send the reply to the PONG string
                 Buffer[0] = 'P';
                 Buffer[1] = 'O';
                 Buffer[2] = 'N';
                 Buffer[3] = 'G';
-                // We fill the buffer with numbers for the payload 
+                // We fill the buffer with numbers for the payload
                 for( i = 4; i < BufferSize; i++ )
                 {
                     Buffer[i] = i - 4;
@@ -127,20 +128,20 @@ void OnSlave( void )
 
                 Radio->SetTxPacket( Buffer, BufferSize );
             }
-            uart1.printf("RSSI::%3.2F\r\n",SX1276LoRaGetPacketRssi());
+            uart1.printf("RSSI::%3.2F\r\n", SX1276LoRaGetPacketRssi());
         }
         break;
     case RF_TX_DONE:
         // Indicates on a LED that we have sent a PONG
         //LedToggle( LED_RED );
-       // PB9.toggle();
+        // PB9.toggle();
         Radio->StartRx( );
         break;
     default:
         break;
     }
 }
-Lora lora(&PA4,&PA2,&spi1);
+Lora lora(&PA4, &PA2, &spi1);
 
 void setup()
 {
@@ -149,30 +150,30 @@ void setup()
     PB8.mode(OUTPUT_PP);
     PB9.mode(OUTPUT_PP);
     uart1.begin(115200);
-//    lora.begin(1,SX1278_BW_6,SX1278_CR_4_5,SX1278_SF_12);
-//    
-//    ex1.begin();
-//    ex1.attach(test);
-//    ex2.begin();
-//    ex2.attach(timeout);
-//    
-//    #if TXMODE
-//        lora.enttry_tx();
-//    #else
-//        lora.enttry_rx();
-//    #endif
-    
+    //    lora.begin(1,SX1278_BW_6,SX1278_CR_4_5,SX1278_SF_12);
+    //
+    //    ex1.begin();
+    //    ex1.attach(test);
+    //    ex2.begin();
+    //    ex2.attach(timeout);
+    //
+    //    #if TXMODE
+    //        lora.enttry_tx();
+    //    #else
+    //        lora.enttry_rx();
+    //    #endif
+
     Radio = RadioDriverInit( );
     Radio->Init( );
     Radio->StartRx( );
-     uart1.printf("SX1278_REG_FRF_MSB:0x%x\n",lora.readRegister(SX1278_REG_FRF_MSB));
-     uart1.printf("SX1278_REG_FRF_MID:0x%x\n",lora.readRegister(SX1278_REG_FRF_MID));
-     uart1.printf("SX1278_REG_FRF_LSB:0x%x\n",lora.readRegister(SX1278_REG_FRF_LSB));
-    
-    uart1.printf("SX1278_REG_MODEM_CONFIG_2:0x%x\n",lora.readRegister(SX1278_REG_MODEM_CONFIG_2));
-    
-    
-    
+    uart1.printf("SX1278_REG_FRF_MSB:0x%x\n", lora.readRegister(SX1278_REG_FRF_MSB));
+    uart1.printf("SX1278_REG_FRF_MID:0x%x\n", lora.readRegister(SX1278_REG_FRF_MID));
+    uart1.printf("SX1278_REG_FRF_LSB:0x%x\n", lora.readRegister(SX1278_REG_FRF_LSB));
+
+    uart1.printf("SX1278_REG_MODEM_CONFIG_2:0x%x\n", lora.readRegister(SX1278_REG_MODEM_CONFIG_2));
+
+
+
 }
 uint32_t last;
 uint8_t temp;
@@ -189,11 +190,11 @@ int main(void)
         else
         {
             OnSlave( );
-        }    
+        }
 #if( PLATFORM == SX12xxEiger ) && ( USE_UART == 1 )
 
         UartProcess( );
-        
+
         {
             uint8_t data = 0;
             if( UartGetChar( &data ) == UART_OK )
@@ -201,7 +202,7 @@ int main(void)
                 UartPutChar( data );
             }
         }
-#endif        
+#endif
     }
 #ifdef __GNUC__
     return 0;

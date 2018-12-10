@@ -42,65 +42,68 @@
 
 void SystemClock_Config(void)
 {
-  /* Configuration will allow to reach a SYSCLK frequency set to 24MHz:
-   Syst freq = ((HSI_VALUE * PLLMUL)/ PLLDIV)
-  						 ((8MHz * 12)/ 2)                  = 48MHz             */
-  LL_UTILS_PLLInitTypeDef sUTILS_PLLInitStruct = {CPUCLOCK};
-  /* Variable to store AHB and APB buses clock configuration */
-  /* Settings to have HCLK set to 48MHz and APB to 48 MHz */
-  LL_UTILS_ClkInitTypeDef sUTILS_ClkInitStruct = {LL_RCC_SYSCLK_DIV_1, LL_RCC_APB1_DIV_1};
+    /* Configuration will allow to reach a SYSCLK frequency set to 24MHz:
+     Syst freq = ((HSI_VALUE * PLLMUL)/ PLLDIV)
+    						 ((8MHz * 12)/ 2)                  = 48MHz             */
+    LL_UTILS_PLLInitTypeDef sUTILS_PLLInitStruct = {CPUCLOCK};
+    /* Variable to store AHB and APB buses clock configuration */
+    /* Settings to have HCLK set to 48MHz and APB to 48 MHz */
+    LL_UTILS_ClkInitTypeDef sUTILS_ClkInitStruct = {LL_RCC_SYSCLK_DIV_1, LL_RCC_APB1_DIV_1};
 
-  /* Switch to PLL with HSI as clock source             */
-  LL_PLL_ConfigSystemClock_HSI(&sUTILS_PLLInitStruct, &sUTILS_ClkInitStruct);
+    /* Switch to PLL with HSI as clock source             */
+    LL_PLL_ConfigSystemClock_HSI(&sUTILS_PLLInitStruct, &sUTILS_ClkInitStruct);
 }
 #else
 void SystemClock_Config(void)
 {
-  // f1系列可以直接修改system_stm32f10x.c中的宏定义修改频率，也可以在这里定义代码
+    // f1系列可以直接修改system_stm32f10x.c中的宏定义修改频率，也可以在这里定义代码
 }
 #endif
 
 void setup()
 {
-  ebox_init();
-  UART.begin(115200);
-  print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-  LED1.mode(OUTPUT_PP);
+    ebox_init();
+    UART.begin(115200);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
+    LED1.mode(OUTPUT_PP);
 }
 
 void testUs()
 {
-  uint8_t i = 255;
-  while (i--){
-    LED1.toggle();
-    delay_us(1);
-  }
+    uint8_t i = 255;
+    while (i--)
+    {
+        LED1.toggle();
+        delay_us(1);
+    }
 }
 
 void testMs()
 {
-  uint8_t i = 20;
-  while (i--){
-    LED1.toggle();
-    delay_ms(1);
-  }
+    uint8_t i = 20;
+    while (i--)
+    {
+        LED1.toggle();
+        delay_ms(1);
+    }
 }
 
-int main(void){
-  uint32_t t;
-  setup();
-  UART.printf("启动耗时：%d us,  %d ms \r\n",micros(),millis());
-  while (1)
-  {
-    t = micros();
-    testUs();
-    t = micros() - t;
-    UART.printf("testUs 耗时：%dus \r\n",t);
-    // 使用millis_seconds,减少调用消耗
-    t = millis_seconds;
-    testMs();
-    t = millis_seconds - t;
-    UART.printf("testMs 耗时：%dms \r\n",t);
-    delay_ms(5000);
-  }
+int main(void)
+{
+    uint32_t t;
+    setup();
+    UART.printf("启动耗时：%d us,  %d ms \r\n", micros(), millis());
+    while (1)
+    {
+        t = micros();
+        testUs();
+        t = micros() - t;
+        UART.printf("testUs 耗时：%dus \r\n", t);
+        // 使用millis_seconds,减少调用消耗
+        t = millis_seconds;
+        testMs();
+        t = millis_seconds - t;
+        UART.printf("testMs 耗时：%dms \r\n", t);
+        delay_ms(5000);
+    }
 }

@@ -127,9 +127,9 @@
  */
 
 #ifdef   LIB_ASCII_MODULE
- #define  LIB_ASCII_EXT
+#define  LIB_ASCII_EXT
 #else
- #define  LIB_ASCII_EXT  extern
+#define  LIB_ASCII_EXT  extern
 #endif
 
 

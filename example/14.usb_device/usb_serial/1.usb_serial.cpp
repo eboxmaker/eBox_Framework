@@ -22,8 +22,8 @@ int main(void)
     setup();
     while(1)
     {
-			 serial.printf("I am a virtual serial port\n");
-		   delay_ms(1000);
+        serial.printf("I am a virtual serial port\n");
+        delay_ms(1000);
     }
 
 }

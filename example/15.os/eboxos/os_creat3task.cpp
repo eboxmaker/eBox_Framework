@@ -36,7 +36,7 @@ void setup()
     os_task_create(task_2, &TASK_2_STK[TASK_2_STK_SIZE - 1], TASK2_PRIO);
     os_task_create(task_3, &TASK_3_STK[TASK_3_STK_SIZE - 1], TASK3_PRIO);
     uart1.printf("\r\nos创建任务成功");
-    
+
     os_start();
 }
 void task_1()

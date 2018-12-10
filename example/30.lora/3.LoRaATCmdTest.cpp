@@ -7,7 +7,7 @@
 
   * @brief   ebox application example .
   *
-  * Copyright 2016 shentq. All Rights Reserved.         
+  * Copyright 2016 shentq. All Rights Reserved.
   ******************************************************************************
  */
 
@@ -16,7 +16,7 @@
 #include "tingATCmd.h"
 
 Ting ting;
-uint8_t send_buf[10]={'1','2','3','4','5','6','7','8','9','0'};
+uint8_t send_buf[10] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
 uint8_t recv_buf[10];
 uint8_t len;
 
@@ -31,7 +31,7 @@ tLoRaSettings LoRaSettings =
     433000000,        // RFFrequency
     20,               // Power
     6,                // SignalBw [0: 7.8kHz, 1: 10.4 kHz, 2: 15.6 kHz, 3: 20.8 kHz, 4: 31.2 kHz,
-                      // 5: 41.6 kHz, 6: 62.5 kHz, 7: 125 kHz, 8: 250 kHz, 9: 500 kHz, other: Reserved]
+    // 5: 41.6 kHz, 6: 62.5 kHz, 7: 125 kHz, 8: 250 kHz, 9: 500 kHz, other: Reserved]
     10,                // SpreadingFactor [6: 64, 7: 128, 8: 256, 9: 512, 10: 1024, 11: 2048, 12: 4096  chips]
     1,                // ErrorCoding [1: 4/5, 2: 4/6, 3: 4/7, 4: 4/8]
     true,             // CrcOn [0: OFF, 1: ON]
@@ -48,14 +48,14 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    ting.begin(&PA1,&PA8,&uart3,115200);
+    ting.begin(&PA1, &PA8, &uart3, 115200);
     uart1.printf("start\r\n");
     ting.config(&LoRaSettings);
     ting.set_addr(0xffff);
     ting.set_dest(0xffff);
     ting.rx();
-    ting.pwm1(0,1600,1000);
-    ting.pwm2(0,1600,200);
+    ting.pwm1(0, 1600, 1000);
+    ting.pwm2(0, 1600, 200);
 
 }
 uint16_t addr1;
@@ -68,7 +68,7 @@ int main(void)
     {
         if(is_sender == 1)
         {
-            if(ting.send(send_buf,10) == ERR_OK)
+            if(ting.send(send_buf, 10) == ERR_OK)
                 uart1.printf("SEND OK\r\n");
         }
         else
@@ -76,14 +76,14 @@ int main(void)
             len = ting.available();
             if(len >= 10)
             {
-                ting.read(recv_buf,len);
-                
+                ting.read(recv_buf, len);
+
                 uart1.println("recv data:");
-                uart1.write(recv_buf,len);
+                uart1.write(recv_buf, len);
                 uart1.println();
 
-                ting.rssi(msg,&msg_len);
-                uart1.write(msg,msg_len);
+                ting.rssi(msg, &msg_len);
+                uart1.write(msg, msg_len);
             }
         }
 

@@ -67,38 +67,42 @@ void  OS_MsgPoolInit (OS_ERR *p_err)
 
 
 
- #ifdef OS_SAFETY_CRITICAL
-    if (p_err == (OS_ERR *)0) {
+#ifdef OS_SAFETY_CRITICAL
+    if (p_err == (OS_ERR *)0)
+    {
         OS_SAFETY_CRITICAL_EXCEPTION();
         return;
     }
- #endif
+#endif
 
- #if OS_CFG_ARG_CHK_EN > 0u
-    if (OSCfg_MsgPoolBasePtr == (OS_MSG *)0) {
+#if OS_CFG_ARG_CHK_EN > 0u
+    if (OSCfg_MsgPoolBasePtr == (OS_MSG *)0)
+    {
         *p_err = OS_ERR_MSG_POOL_NULL_PTR;
         return;
     }
-    if (OSCfg_MsgPoolSize == (OS_MSG_QTY)0) {
+    if (OSCfg_MsgPoolSize == (OS_MSG_QTY)0)
+    {
         *p_err = OS_ERR_MSG_POOL_EMPTY;
         return;
     }
- #endif
+#endif
 
     p_msg1 = OSCfg_MsgPoolBasePtr;
     p_msg2 = OSCfg_MsgPoolBasePtr;
     p_msg2++;
     loops  = OSCfg_MsgPoolSize - 1u;
-    for (i = 0u; i < loops; i++) {                          /* Init. list of free OS_MSGs                             */
+    for (i = 0u; i < loops; i++)                            /* Init. list of free OS_MSGs                             */
+    {
         p_msg1->NextPtr = p_msg2;
-        p_msg1->MsgPtr  = (void      *)0;
+        p_msg1->MsgPtr  = (void *)0;
         p_msg1->MsgSize = (OS_MSG_SIZE)0u;
         p_msg1->MsgTS   = (CPU_TS     )0u;
         p_msg1++;
         p_msg2++;
     }
-    p_msg1->NextPtr = (OS_MSG    *)0;                       /* Last OS_MSG                                            */
-    p_msg1->MsgPtr  = (void      *)0;
+    p_msg1->NextPtr = (OS_MSG *)0;                          /* Last OS_MSG                                            */
+    p_msg1->MsgPtr  = (void *)0;
     p_msg1->MsgSize = (OS_MSG_SIZE)0u;
     p_msg1->MsgTS   = (CPU_TS     )0u;
 
@@ -133,7 +137,8 @@ OS_MSG_QTY  OS_MsgQFreeAll (OS_MSG_Q *p_msg_q)
 
 
     qty = p_msg_q->NbrEntries;                              /* Get the number of OS_MSGs being freed                  */
-    if (p_msg_q->NbrEntries > (OS_MSG_QTY)0) {
+    if (p_msg_q->NbrEntries > (OS_MSG_QTY)0)
+    {
         p_msg                   = p_msg_q->InPtr;           /* Point to end of message chain                          */
         p_msg->NextPtr          = OSMsgPool.NextPtr;
         OSMsgPool.NextPtr       = p_msg_q->OutPtr;          /* Point to beginning of message chain                    */
@@ -141,8 +146,8 @@ OS_MSG_QTY  OS_MsgQFreeAll (OS_MSG_Q *p_msg_q)
         OSMsgPool.NbrFree      += p_msg_q->NbrEntries;
         p_msg_q->NbrEntries     = (OS_MSG_QTY)0;            /* Flush the message queue                                */
         p_msg_q->NbrEntriesMax  = (OS_MSG_QTY)0;
-        p_msg_q->InPtr          = (OS_MSG   *)0;
-        p_msg_q->OutPtr         = (OS_MSG   *)0;
+        p_msg_q->InPtr          = (OS_MSG *)0;
+        p_msg_q->OutPtr         = (OS_MSG *)0;
     }
     return (qty);
 }
@@ -165,14 +170,14 @@ OS_MSG_QTY  OS_MsgQFreeAll (OS_MSG_Q *p_msg_q)
  ************************************************************************************************************************
  */
 
-void  OS_MsgQInit (OS_MSG_Q *   p_msg_q,
+void  OS_MsgQInit (OS_MSG_Q    *p_msg_q,
                    OS_MSG_QTY   size)
 {
     p_msg_q->NbrEntriesSize = (OS_MSG_QTY)size;
     p_msg_q->NbrEntries     = (OS_MSG_QTY)0;
     p_msg_q->NbrEntriesMax  = (OS_MSG_QTY)0;
-    p_msg_q->InPtr          = (OS_MSG   *)0;
-    p_msg_q->OutPtr         = (OS_MSG   *)0;
+    p_msg_q->InPtr          = (OS_MSG *)0;
+    p_msg_q->OutPtr         = (OS_MSG *)0;
 }
 
 /*$PAGE*/
@@ -200,26 +205,29 @@ void  OS_MsgQInit (OS_MSG_Q *   p_msg_q,
  ************************************************************************************************************************
  */
 
-void  *OS_MsgQGet (OS_MSG_Q *   p_msg_q,
+void  *OS_MsgQGet (OS_MSG_Q    *p_msg_q,
                    OS_MSG_SIZE *p_msg_size,
-                   CPU_TS *     p_ts,
-                   OS_ERR *     p_err)
+                   CPU_TS      *p_ts,
+                   OS_ERR      *p_err)
 {
     OS_MSG  *p_msg;
     void    *p_void;
 
 
 
- #ifdef OS_SAFETY_CRITICAL
-    if (p_err == (OS_ERR *)0) {
+#ifdef OS_SAFETY_CRITICAL
+    if (p_err == (OS_ERR *)0)
+    {
         OS_SAFETY_CRITICAL_EXCEPTION();
         return ((void *)0);
     }
- #endif
+#endif
 
-    if (p_msg_q->NbrEntries == (OS_MSG_QTY)0) {             /* Is the queue empty?                                    */
+    if (p_msg_q->NbrEntries == (OS_MSG_QTY)0)               /* Is the queue empty?                                    */
+    {
         *p_msg_size = (OS_MSG_SIZE)0;                       /* Yes                                                    */
-        if (p_ts != (CPU_TS *)0) {
+        if (p_ts != (CPU_TS *)0)
+        {
             *p_ts  = (CPU_TS  )0;
         }
         *p_err = OS_ERR_Q_EMPTY;
@@ -229,16 +237,20 @@ void  *OS_MsgQGet (OS_MSG_Q *   p_msg_q,
     p_msg           = p_msg_q->OutPtr;                      /* No, get the next message to extract from the queue     */
     p_void          = p_msg->MsgPtr;
     *p_msg_size      = p_msg->MsgSize;
-    if (p_ts != (CPU_TS *)0) {
+    if (p_ts != (CPU_TS *)0)
+    {
         *p_ts  = p_msg->MsgTS;
     }
 
     p_msg_q->OutPtr = p_msg->NextPtr;                       /* Point to next message to extract                       */
 
-    if (p_msg_q->OutPtr == (OS_MSG *)0) {                   /* Are there any more messages in the queue?              */
-        p_msg_q->InPtr      = (OS_MSG   *)0;                /* No                                                     */
+    if (p_msg_q->OutPtr == (OS_MSG *)0)                     /* Are there any more messages in the queue?              */
+    {
+        p_msg_q->InPtr      = (OS_MSG *)0;                  /* No                                                     */
         p_msg_q->NbrEntries = (OS_MSG_QTY)0;
-    } else {
+    }
+    else
+    {
         p_msg_q->NbrEntries--;                              /* Yes, One less message in the queue                     */
     }
 
@@ -284,31 +296,34 @@ void  *OS_MsgQGet (OS_MSG_Q *   p_msg_q,
  ************************************************************************************************************************
  */
 
-void  OS_MsgQPut (OS_MSG_Q *    p_msg_q,
-                  void *        p_void,
+void  OS_MsgQPut (OS_MSG_Q     *p_msg_q,
+                  void         *p_void,
                   OS_MSG_SIZE   msg_size,
                   OS_OPT        opt,
                   CPU_TS        ts,
-                  OS_ERR *      p_err)
+                  OS_ERR       *p_err)
 {
     OS_MSG  *p_msg;
     OS_MSG  *p_msg_in;
 
 
 
- #ifdef OS_SAFETY_CRITICAL
-    if (p_err == (OS_ERR *)0) {
+#ifdef OS_SAFETY_CRITICAL
+    if (p_err == (OS_ERR *)0)
+    {
         OS_SAFETY_CRITICAL_EXCEPTION();
         return;
     }
- #endif
+#endif
 
-    if (p_msg_q->NbrEntries >= p_msg_q->NbrEntriesSize) {
+    if (p_msg_q->NbrEntries >= p_msg_q->NbrEntriesSize)
+    {
         *p_err = OS_ERR_Q_MAX;                              /* Message queue cannot accept any more messages          */
         return;
     }
 
-    if (OSMsgPool.NbrFree == (OS_MSG_QTY)0) {
+    if (OSMsgPool.NbrFree == (OS_MSG_QTY)0)
+    {
         *p_err = OS_ERR_MSG_POOL_EMPTY;                     /* No more OS_MSG to use                                  */
         return;
     }
@@ -317,28 +332,36 @@ void  OS_MsgQPut (OS_MSG_Q *    p_msg_q,
     OSMsgPool.NextPtr = p_msg->NextPtr;
     OSMsgPool.NbrFree--;
     OSMsgPool.NbrUsed++;
-    if (OSMsgPool.NbrUsedMax < OSMsgPool.NbrUsed) {
+    if (OSMsgPool.NbrUsedMax < OSMsgPool.NbrUsed)
+    {
         OSMsgPool.NbrUsedMax = OSMsgPool.NbrUsed;
     }
 
-    if (p_msg_q->NbrEntries == (OS_MSG_QTY)0) {             /* Is this first message placed in the queue?             */
+    if (p_msg_q->NbrEntries == (OS_MSG_QTY)0)               /* Is this first message placed in the queue?             */
+    {
         p_msg_q->InPtr         = p_msg;                     /* Yes                                                    */
         p_msg_q->OutPtr        = p_msg;
         p_msg_q->NbrEntries    = (OS_MSG_QTY)1;
         p_msg->NextPtr         = (OS_MSG *)0;
-    } else {                                                /* No                                                     */
-        if ((opt & OS_OPT_POST_LIFO) == OS_OPT_POST_FIFO) { /* Is it FIFO or LIFO?                                    */
+    }
+    else                                                    /* No                                                     */
+    {
+        if ((opt & OS_OPT_POST_LIFO) == OS_OPT_POST_FIFO)   /* Is it FIFO or LIFO?                                    */
+        {
             p_msg_in           = p_msg_q->InPtr;            /* FIFO, add to the head                                  */
             p_msg_in->NextPtr  = p_msg;
             p_msg_q->InPtr     = p_msg;
             p_msg->NextPtr     = (OS_MSG *)0;
-        } else {
+        }
+        else
+        {
             p_msg->NextPtr     = p_msg_q->OutPtr;           /* LIFO, add to the tail                                  */
             p_msg_q->OutPtr    = p_msg;
         }
         p_msg_q->NbrEntries++;
     }
-    if (p_msg_q->NbrEntriesMax < p_msg_q->NbrEntries) {
+    if (p_msg_q->NbrEntriesMax < p_msg_q->NbrEntries)
+    {
         p_msg_q->NbrEntriesMax = p_msg_q->NbrEntries;
     }
     p_msg->MsgPtr  = p_void;                                /* Deposit message in the message queue entry             */

@@ -31,26 +31,27 @@
 //    回调函数，调用周期取决于systick中断回调注册函数。如果systick中断只处理一个任务，使用
 void SystickCallBack(void)
 {
-  LED1.toggle();
+    LED1.toggle();
 }
 
 void setup()
 {
-  ebox_init();
-  UART.begin(115200);
-  print_log(EXAMPLE_NAME,EXAMPLE_DATE);
-  LED1.mode(OUTPUT_PP);
+    ebox_init();
+    UART.begin(115200);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
+    LED1.mode(OUTPUT_PP);
 
-  // 默认周期回调。1ms
-  attachSystickCallBack(SystickCallBack);
-  // 指定回调周期，回调周期是系统默认周期的N倍,500ms
-  UART.printf("单任务处理,每%dms执行一次(led 反转)",N);
-//  attachSystickCallBack(SystickCallBack,N);
+    // 默认周期回调。1ms
+    attachSystickCallBack(SystickCallBack);
+    // 指定回调周期，回调周期是系统默认周期的N倍,500ms
+    UART.printf("单任务处理,每%dms执行一次(led 反转)", N);
+    //  attachSystickCallBack(SystickCallBack,N);
 }
 
-int main(void){
-  setup();
-  while (1)
-  {
-  }
+int main(void)
+{
+    setup();
+    while (1)
+    {
+    }
 }

@@ -4,14 +4,14 @@
   * @author  shentq
   * @version V1.2
   * @date    2016/08/14
-  * @brief   
+  * @brief
   ******************************************************************************
   * @attention
   *
   * Copyright 2015 shentq. All Rights Reserved.
   *
   * Copyright Notice
-  * No part of this software may be used for any commercial activities by any form 
+  * No part of this software may be used for any commercial activities by any form
   * or means, without the prior written consent of shentq.
   *
   * @Disclaimer
@@ -44,17 +44,17 @@
 InCapture ic0(TIM1CH2);
 Pwm pwm1(TIM3CH1);
 
-uint32_t frq =0;
+uint32_t frq = 0;
 
 uint16_t p;
 void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
-    ic0.begin(1,SIMPLE);//初始化输入捕获参数，p分频
-//    UART.printf("get_detect_min_pulse_us = %d\r\n",ic0.get_detect_min_pulse_us());
+    ic0.begin(1, SIMPLE); //初始化输入捕获参数，p分频
+    //    UART.printf("get_detect_min_pulse_us = %d\r\n",ic0.get_detect_min_pulse_us());
     frq = 1000;
     pwm1.begin(frq, 30);
 }
@@ -66,13 +66,13 @@ int main(void)
     {
 
         if(ic0.available())
-        {              
-            UART.printf("peroid    = %0.2fus\r\n",ic0.get_wave_peroid());
-            UART.printf("frq(%d)= %0.2fhz\r\n",frq,ic0.get_wave_frq());
+        {
+            UART.printf("peroid    = %0.2fus\r\n", ic0.get_wave_peroid());
+            UART.printf("frq(%d)= %0.2fhz\r\n", frq, ic0.get_wave_frq());
             UART.printf("high_duty = %0.2f%%\r\n", ic0.get_wave_high_duty());
             UART.printf("low duty  = %0.2f%%\r\n\r\n", ic0.get_wave_low_duty());
         }
-        pwm1.set_frq(frq++);            
+        pwm1.set_frq(frq++);
 
         delay_ms(1000);
 

@@ -7,7 +7,7 @@
 
   * @brief   ebox application example .
   *
-  * Copyright 2016 shentq. All Rights Reserved.         
+  * Copyright 2016 shentq. All Rights Reserved.
   ******************************************************************************
  */
 
@@ -18,13 +18,13 @@
 
 #define TXMODE 1
 
-Lora lora(&PA4,&PA2,&spi1);
+Lora lora(&PA4, &PA2, &spi1);
 
-Exti ex1(&PA3,EXTI_Trigger_Rising);
-Exti ex2(&PB0,EXTI_Trigger_Rising);
+Exti ex1(&PA3, EXTI_Trigger_Rising);
+Exti ex2(&PB0, EXTI_Trigger_Rising);
 
 
-uint8_t buf[8]={0xff,0xff,0xff,0xff,'5','6','7','8'};
+uint8_t buf[8] = {0xff, 0xff, 0xff, 0xff, '5', '6', '7', '8'};
 
 
 void test()
@@ -36,20 +36,20 @@ void test()
 #else
     uint8_t len;
     PB9.toggle();
-    lora.read(buf,&len);
+    lora.read(buf, &len);
     uart1.write("====\n");
-    uart1.write(buf,len);
-		for(int i = 0;i < 8; i++)
-		{
-			buf[i] = 0;
-		}
+    uart1.write(buf, len);
+    for(int i = 0; i < 8; i++)
+    {
+        buf[i] = 0;
+    }
     uart1.write("\n====\n");
 #endif
 }
 void timeout()
 {
-  uart1.printf("timeout\n");
-  lora.clearIRQFlags();
+    uart1.printf("timeout\n");
+    lora.clearIRQFlags();
 }
 void setup()
 {
@@ -60,18 +60,18 @@ void setup()
     PB8.mode(OUTPUT_PP);
     PB9.mode(OUTPUT_PP);
     uart1.begin(115200);
-    lora.begin(1,SX1278_BW_6,SX1278_CR_4_5,SX1278_SF_10);
-    
+    lora.begin(1, SX1278_BW_6, SX1278_CR_4_5, SX1278_SF_10);
+
     ex1.begin();
     ex1.attach(test);
     ex2.begin();
     ex2.attach(timeout);
-    
-    #if TXMODE
-        lora.enttry_tx();
-    #else
-        lora.enttry_rx();
-    #endif
+
+#if TXMODE
+    lora.enttry_tx();
+#else
+    lora.enttry_rx();
+#endif
 }
 uint32_t last;
 uint8_t temp;
@@ -81,12 +81,12 @@ int main(void)
     setup();
     while(1)
     {
-        #if TXMODE
+#if TXMODE
         if(lora.state == TXREADY)
         {
-            uart1.printf("tx time:%dms\n",(uint32_t)(millis() - last));
+            uart1.printf("tx time:%dms\n", (uint32_t)(millis() - last));
             last = millis();
-            lora.write(buf,8);
+            lora.write(buf, 8);
             //temp++;
             //temp%=10;
             //buf[0] = 0x30+temp;
@@ -94,23 +94,23 @@ int main(void)
             ebox_reset();
         }
         if(millis() - last > 5000)
-        {            
+        {
             last = millis();
             temp = lora.readRegister(SX1278_REG_IRQ_FLAGS);
-            uart1.printf("temp:0x%x\n",temp);
+            uart1.printf("temp:0x%x\n", temp);
             lora.clearIRQFlags();
             lora.state = TXREADY;
         }
         //delay_ms(500);
-        #else
+#else
         if(millis() - last > 5000)
-        {            
+        {
             last = millis();
             lora.enttry_rx();
         }
-				
 
-        #endif
+
+#endif
     }
 
 }

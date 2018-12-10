@@ -359,71 +359,71 @@
 #if     (DEF_INT_CPU_NBR_BITS == DEF_INT_08_NBR_BITS)
 
 
- #define  DEF_INT_CPU_MASK                                DEF_INT_08_MASK
+#define  DEF_INT_CPU_MASK                                DEF_INT_08_MASK
 
- #define  DEF_INT_CPU_U_MIN_VAL                           DEF_INT_08U_MIN_VAL
- #define  DEF_INT_CPU_U_MAX_VAL                           DEF_INT_08U_MAX_VAL
+#define  DEF_INT_CPU_U_MIN_VAL                           DEF_INT_08U_MIN_VAL
+#define  DEF_INT_CPU_U_MAX_VAL                           DEF_INT_08U_MAX_VAL
 
- #define  DEF_INT_CPU_S_MIN_VAL                           DEF_INT_08S_MIN_VAL
- #define  DEF_INT_CPU_S_MAX_VAL                           DEF_INT_08S_MAX_VAL
+#define  DEF_INT_CPU_S_MIN_VAL                           DEF_INT_08S_MIN_VAL
+#define  DEF_INT_CPU_S_MAX_VAL                           DEF_INT_08S_MAX_VAL
 
- #define  DEF_INT_CPU_S_MIN_VAL_ONES_CPL                  DEF_INT_08S_MIN_VAL_ONES_CPL
- #define  DEF_INT_CPU_S_MAX_VAL_ONES_CPL                  DEF_INT_08S_MAX_VAL_ONES_CPL
+#define  DEF_INT_CPU_S_MIN_VAL_ONES_CPL                  DEF_INT_08S_MIN_VAL_ONES_CPL
+#define  DEF_INT_CPU_S_MAX_VAL_ONES_CPL                  DEF_INT_08S_MAX_VAL_ONES_CPL
 
 
 
 #elif   (DEF_INT_CPU_NBR_BITS == DEF_INT_16_NBR_BITS)
 
 
- #define  DEF_INT_CPU_MASK                                DEF_INT_16_MASK
+#define  DEF_INT_CPU_MASK                                DEF_INT_16_MASK
 
- #define  DEF_INT_CPU_U_MIN_VAL                           DEF_INT_16U_MIN_VAL
- #define  DEF_INT_CPU_U_MAX_VAL                           DEF_INT_16U_MAX_VAL
+#define  DEF_INT_CPU_U_MIN_VAL                           DEF_INT_16U_MIN_VAL
+#define  DEF_INT_CPU_U_MAX_VAL                           DEF_INT_16U_MAX_VAL
 
- #define  DEF_INT_CPU_S_MIN_VAL                           DEF_INT_16S_MIN_VAL
- #define  DEF_INT_CPU_S_MAX_VAL                           DEF_INT_16S_MAX_VAL
+#define  DEF_INT_CPU_S_MIN_VAL                           DEF_INT_16S_MIN_VAL
+#define  DEF_INT_CPU_S_MAX_VAL                           DEF_INT_16S_MAX_VAL
 
- #define  DEF_INT_CPU_S_MIN_VAL_ONES_CPL                  DEF_INT_16S_MIN_VAL_ONES_CPL
- #define  DEF_INT_CPU_S_MAX_VAL_ONES_CPL                  DEF_INT_16S_MAX_VAL_ONES_CPL
+#define  DEF_INT_CPU_S_MIN_VAL_ONES_CPL                  DEF_INT_16S_MIN_VAL_ONES_CPL
+#define  DEF_INT_CPU_S_MAX_VAL_ONES_CPL                  DEF_INT_16S_MAX_VAL_ONES_CPL
 
 
 
 #elif   (DEF_INT_CPU_NBR_BITS == DEF_INT_32_NBR_BITS)
 
 
- #define  DEF_INT_CPU_MASK                                DEF_INT_32_MASK
+#define  DEF_INT_CPU_MASK                                DEF_INT_32_MASK
 
- #define  DEF_INT_CPU_U_MIN_VAL                           DEF_INT_32U_MIN_VAL
- #define  DEF_INT_CPU_U_MAX_VAL                           DEF_INT_32U_MAX_VAL
+#define  DEF_INT_CPU_U_MIN_VAL                           DEF_INT_32U_MIN_VAL
+#define  DEF_INT_CPU_U_MAX_VAL                           DEF_INT_32U_MAX_VAL
 
- #define  DEF_INT_CPU_S_MIN_VAL                           DEF_INT_32S_MIN_VAL
- #define  DEF_INT_CPU_S_MAX_VAL                           DEF_INT_32S_MAX_VAL
+#define  DEF_INT_CPU_S_MIN_VAL                           DEF_INT_32S_MIN_VAL
+#define  DEF_INT_CPU_S_MAX_VAL                           DEF_INT_32S_MAX_VAL
 
- #define  DEF_INT_CPU_S_MIN_VAL_ONES_CPL                  DEF_INT_32S_MIN_VAL_ONES_CPL
- #define  DEF_INT_CPU_S_MAX_VAL_ONES_CPL                  DEF_INT_32S_MAX_VAL_ONES_CPL
+#define  DEF_INT_CPU_S_MIN_VAL_ONES_CPL                  DEF_INT_32S_MIN_VAL_ONES_CPL
+#define  DEF_INT_CPU_S_MAX_VAL_ONES_CPL                  DEF_INT_32S_MAX_VAL_ONES_CPL
 
 
 
 #elif   (DEF_INT_CPU_NBR_BITS == DEF_INT_64_NBR_BITS)
 
 
- #define  DEF_INT_CPU_MASK                                DEF_INT_64_MASK
+#define  DEF_INT_CPU_MASK                                DEF_INT_64_MASK
 
- #define  DEF_INT_CPU_U_MIN_VAL                           DEF_INT_64U_MIN_VAL
- #define  DEF_INT_CPU_U_MAX_VAL                           DEF_INT_64U_MAX_VAL
+#define  DEF_INT_CPU_U_MIN_VAL                           DEF_INT_64U_MIN_VAL
+#define  DEF_INT_CPU_U_MAX_VAL                           DEF_INT_64U_MAX_VAL
 
- #define  DEF_INT_CPU_S_MIN_VAL                           DEF_INT_64S_MIN_VAL
- #define  DEF_INT_CPU_S_MAX_VAL                           DEF_INT_64S_MAX_VAL
+#define  DEF_INT_CPU_S_MIN_VAL                           DEF_INT_64S_MIN_VAL
+#define  DEF_INT_CPU_S_MAX_VAL                           DEF_INT_64S_MAX_VAL
 
- #define  DEF_INT_CPU_S_MIN_VAL_ONES_CPL                  DEF_INT_64S_MIN_VAL_ONES_CPL
- #define  DEF_INT_CPU_S_MAX_VAL_ONES_CPL                  DEF_INT_64S_MAX_VAL_ONES_CPL
+#define  DEF_INT_CPU_S_MIN_VAL_ONES_CPL                  DEF_INT_64S_MIN_VAL_ONES_CPL
+#define  DEF_INT_CPU_S_MAX_VAL_ONES_CPL                  DEF_INT_64S_MAX_VAL_ONES_CPL
 
 
 
 #else
 
- #error  "CPU_CFG_DATA_SIZE  illegally #defined in 'cpu.h'      "
- #error  "                   [See 'cpu.h  CONFIGURATION ERRORS']"
+#error  "CPU_CFG_DATA_SIZE  illegally #defined in 'cpu.h'      "
+#error  "                   [See 'cpu.h  CONFIGURATION ERRORS']"
 
 #endif
 
@@ -467,7 +467,8 @@
  *********************************************************************************************************
  */
 
-typedef enum lib_err {
+typedef enum lib_err
+{
 
     LIB_ERR_NONE                            =         0u,
 
@@ -521,19 +522,19 @@ typedef enum lib_err {
 
 /* Trace level, default to TRACE_LEVEL_OFF.             */
 #ifndef  TRACE_LEVEL_OFF
- #define  TRACE_LEVEL_OFF                                   0u
+#define  TRACE_LEVEL_OFF                                   0u
 #endif
 
 #ifndef  TRACE_LEVEL_INFO
- #define  TRACE_LEVEL_INFO                                  1u
+#define  TRACE_LEVEL_INFO                                  1u
 #endif
 
 #ifndef  TRACE_LEVEL_DBG
- #define  TRACE_LEVEL_DBG                                   2u
+#define  TRACE_LEVEL_DBG                                   2u
 #endif
 
 #ifndef  TRACE_LEVEL_LOG
- #define  TRACE_LEVEL_LOG                                   3u
+#define  TRACE_LEVEL_LOG                                   3u
 #endif
 
 
@@ -786,33 +787,33 @@ typedef enum lib_err {
 
 #if     (CPU_CFG_DATA_SIZE_MAX == CPU_WORD_SIZE_08)
 
- #define  DEF_BIT_SET(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_SET_08(val, mask) : 0)
+#define  DEF_BIT_SET(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_SET_08(val, mask) : 0)
 
 
 #elif   (CPU_CFG_DATA_SIZE_MAX == CPU_WORD_SIZE_16)
 
- #define  DEF_BIT_SET(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_SET_08(val, mask) :   \
+#define  DEF_BIT_SET(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_SET_08(val, mask) :   \
                                                   ((sizeof(val) == CPU_WORD_SIZE_16) ? DEF_BIT_SET_16(val, mask) : 0))
 
 
 #elif   (CPU_CFG_DATA_SIZE_MAX == CPU_WORD_SIZE_32)
 
- #define  DEF_BIT_SET(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_SET_08(val, mask) :    \
+#define  DEF_BIT_SET(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_SET_08(val, mask) :    \
                                                   ((sizeof(val) == CPU_WORD_SIZE_16) ? DEF_BIT_SET_16(val, mask) :    \
                                                    ((sizeof(val) == CPU_WORD_SIZE_32) ? DEF_BIT_SET_32(val, mask) : 0)))
 
 
 #elif   (CPU_CFG_DATA_SIZE_MAX == CPU_WORD_SIZE_64)
 
- #define  DEF_BIT_SET(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_SET_08(val, mask) :     \
+#define  DEF_BIT_SET(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_SET_08(val, mask) :     \
                                                   ((sizeof(val) == CPU_WORD_SIZE_16) ? DEF_BIT_SET_16(val, mask) :     \
                                                    ((sizeof(val) == CPU_WORD_SIZE_32) ? DEF_BIT_SET_32(val, mask) :     \
                                                   ((sizeof(val) == CPU_WORD_SIZE_64) ? DEF_BIT_SET_64(val, mask) : 0))))
 
 #else
 
- #error  "CPU_CFG_DATA_SIZE_MAX  illegally #defined in 'cpu.h'      "
- #error  "                       [See 'cpu.h  CONFIGURATION ERRORS']"
+#error  "CPU_CFG_DATA_SIZE_MAX  illegally #defined in 'cpu.h'      "
+#error  "                       [See 'cpu.h  CONFIGURATION ERRORS']"
 
 #endif
 
@@ -865,33 +866,33 @@ typedef enum lib_err {
 
 #if     (CPU_CFG_DATA_SIZE_MAX == CPU_WORD_SIZE_08)
 
- #define  DEF_BIT_CLR(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_CLR_08(val, mask) : 0)
+#define  DEF_BIT_CLR(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_CLR_08(val, mask) : 0)
 
 
 #elif   (CPU_CFG_DATA_SIZE_MAX == CPU_WORD_SIZE_16)
 
- #define  DEF_BIT_CLR(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_CLR_08(val, mask) :   \
+#define  DEF_BIT_CLR(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_CLR_08(val, mask) :   \
                                                   ((sizeof(val) == CPU_WORD_SIZE_16) ? DEF_BIT_CLR_16(val, mask) : 0))
 
 
 #elif   (CPU_CFG_DATA_SIZE_MAX == CPU_WORD_SIZE_32)
 
- #define  DEF_BIT_CLR(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_CLR_08(val, mask) :    \
+#define  DEF_BIT_CLR(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_CLR_08(val, mask) :    \
                                                   ((sizeof(val) == CPU_WORD_SIZE_16) ? DEF_BIT_CLR_16(val, mask) :    \
                                                    ((sizeof(val) == CPU_WORD_SIZE_32) ? DEF_BIT_CLR_32(val, mask) : 0)))
 
 
 #elif   (CPU_CFG_DATA_SIZE_MAX == CPU_WORD_SIZE_64)
 
- #define  DEF_BIT_CLR(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_CLR_08(val, mask) :     \
+#define  DEF_BIT_CLR(val, mask)                 ((sizeof(val) == CPU_WORD_SIZE_08) ? DEF_BIT_CLR_08(val, mask) :     \
                                                   ((sizeof(val) == CPU_WORD_SIZE_16) ? DEF_BIT_CLR_16(val, mask) :     \
                                                    ((sizeof(val) == CPU_WORD_SIZE_32) ? DEF_BIT_CLR_32(val, mask) :     \
                                                   ((sizeof(val) == CPU_WORD_SIZE_64) ? DEF_BIT_CLR_64(val, mask) : 0))))
 
 #else
 
- #error  "CPU_CFG_DATA_SIZE_MAX  illegally #defined in 'cpu.h'      "
- #error  "                       [See 'cpu.h  CONFIGURATION ERRORS']"
+#error  "CPU_CFG_DATA_SIZE_MAX  illegally #defined in 'cpu.h'      "
+#error  "                       [See 'cpu.h  CONFIGURATION ERRORS']"
 
 #endif
 
@@ -1180,33 +1181,33 @@ typedef enum lib_err {
 
 #if     (CPU_CFG_DATA_SIZE_MAX == CPU_WORD_SIZE_08)
 
- #define  DEF_GET_U_MAX_VAL(obj)                 ((sizeof(obj) == CPU_WORD_SIZE_08) ? DEF_INT_08U_MAX_VAL : 0)
+#define  DEF_GET_U_MAX_VAL(obj)                 ((sizeof(obj) == CPU_WORD_SIZE_08) ? DEF_INT_08U_MAX_VAL : 0)
 
 
 #elif   (CPU_CFG_DATA_SIZE_MAX == CPU_WORD_SIZE_16)
 
- #define  DEF_GET_U_MAX_VAL(obj)                 ((sizeof(obj) == CPU_WORD_SIZE_08) ? DEF_INT_08U_MAX_VAL :   \
+#define  DEF_GET_U_MAX_VAL(obj)                 ((sizeof(obj) == CPU_WORD_SIZE_08) ? DEF_INT_08U_MAX_VAL :   \
                                                   ((sizeof(obj) == CPU_WORD_SIZE_16) ? DEF_INT_16U_MAX_VAL : 0))
 
 
 #elif   (CPU_CFG_DATA_SIZE_MAX == CPU_WORD_SIZE_32)
 
- #define  DEF_GET_U_MAX_VAL(obj)                 ((sizeof(obj) == CPU_WORD_SIZE_08) ? DEF_INT_08U_MAX_VAL :    \
+#define  DEF_GET_U_MAX_VAL(obj)                 ((sizeof(obj) == CPU_WORD_SIZE_08) ? DEF_INT_08U_MAX_VAL :    \
                                                   ((sizeof(obj) == CPU_WORD_SIZE_16) ? DEF_INT_16U_MAX_VAL :    \
                                                    ((sizeof(obj) == CPU_WORD_SIZE_32) ? DEF_INT_32U_MAX_VAL : 0)))
 
 
 #elif   (CPU_CFG_DATA_SIZE_MAX == CPU_WORD_SIZE_64)
 
- #define  DEF_GET_U_MAX_VAL(obj)                 ((sizeof(obj) == CPU_WORD_SIZE_08) ? DEF_INT_08U_MAX_VAL :     \
+#define  DEF_GET_U_MAX_VAL(obj)                 ((sizeof(obj) == CPU_WORD_SIZE_08) ? DEF_INT_08U_MAX_VAL :     \
                                                   ((sizeof(obj) == CPU_WORD_SIZE_16) ? DEF_INT_16U_MAX_VAL :     \
                                                    ((sizeof(obj) == CPU_WORD_SIZE_32) ? DEF_INT_32U_MAX_VAL :     \
                                                   ((sizeof(obj) == CPU_WORD_SIZE_64) ? DEF_INT_64U_MAX_VAL : 0))))
 
 #else
 
- #error  "CPU_CFG_DATA_SIZE_MAX  illegally #defined in 'cpu.h'      "
- #error  "                       [See 'cpu.h  CONFIGURATION ERRORS']"
+#error  "CPU_CFG_DATA_SIZE_MAX  illegally #defined in 'cpu.h'      "
+#error  "                       [See 'cpu.h  CONFIGURATION ERRORS']"
 
 #endif
 
@@ -1307,7 +1308,7 @@ typedef enum lib_err {
 
 /* See 'lib_def.h  Note #1a'.                           */
 #if     (CPU_CORE_VERSION < 12900u)
- #error  "CPU_CORE_VERSION  [SHOULD be >= V1.29.00]"
+#error  "CPU_CORE_VERSION  [SHOULD be >= V1.29.00]"
 #endif
 
 

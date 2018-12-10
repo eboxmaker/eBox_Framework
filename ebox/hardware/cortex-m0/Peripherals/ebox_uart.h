@@ -78,7 +78,7 @@
 #define UART_MAX_BITS   8
 
 #if (UART_MAX_BITS > 8)
-    #define UART_9_BIT
+#define UART_9_BIT
 #endif
 enum IrqType
 {

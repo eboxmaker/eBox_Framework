@@ -7,10 +7,10 @@
 
   * @brief   ebox application example .
   *
-  * Copyright 2016 shentq. All Rights Reserved.         
+  * Copyright 2016 shentq. All Rights Reserved.
   ******************************************************************************
  */
- 
+
 #include "ebox.h"
 #include "math.h"
 #include "colorled.h"

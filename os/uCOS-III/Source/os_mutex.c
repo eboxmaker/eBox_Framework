@@ -64,54 +64,58 @@ const CPU_CHAR  *os_mutex__c = "$Id: $";
  ************************************************************************************************************************
  */
 
-void  OSMutexCreate (OS_MUTEX * p_mutex,
-                     CPU_CHAR * p_name,
-                     OS_ERR *   p_err)
+void  OSMutexCreate (OS_MUTEX *p_mutex,
+                     CPU_CHAR *p_name,
+                     OS_ERR    *p_err)
 {
     CPU_SR_ALLOC();
 
 
 
- #ifdef OS_SAFETY_CRITICAL
-    if (p_err == (OS_ERR *)0) {
+#ifdef OS_SAFETY_CRITICAL
+    if (p_err == (OS_ERR *)0)
+    {
         OS_SAFETY_CRITICAL_EXCEPTION();
         return;
     }
- #endif
+#endif
 
- #ifdef OS_SAFETY_CRITICAL_IEC61508
-    if (OSSafetyCriticalStartFlag == DEF_TRUE) {
+#ifdef OS_SAFETY_CRITICAL_IEC61508
+    if (OSSafetyCriticalStartFlag == DEF_TRUE)
+    {
         *p_err = OS_ERR_ILLEGAL_CREATE_RUN_TIME;
         return;
     }
- #endif
+#endif
 
- #if OS_CFG_CALLED_FROM_ISR_CHK_EN > 0u
-    if (OSIntNestingCtr > (OS_NESTING_CTR)0) {              /* Not allowed to be called from an ISR                   */
+#if OS_CFG_CALLED_FROM_ISR_CHK_EN > 0u
+    if (OSIntNestingCtr > (OS_NESTING_CTR)0)                /* Not allowed to be called from an ISR                   */
+    {
         *p_err = OS_ERR_CREATE_ISR;
         return;
     }
- #endif
+#endif
 
- #if OS_CFG_ARG_CHK_EN > 0u
-    if (p_mutex == (OS_MUTEX *)0) {                         /* Validate 'p_mutex'                                     */
+#if OS_CFG_ARG_CHK_EN > 0u
+    if (p_mutex == (OS_MUTEX *)0)                           /* Validate 'p_mutex'                                     */
+    {
         *p_err = OS_ERR_OBJ_PTR_NULL;
         return;
     }
- #endif
+#endif
 
     OS_CRITICAL_ENTER();
     p_mutex->Type              =  OS_OBJ_TYPE_MUTEX;        /* Mark the data structure as a mutex                     */
     p_mutex->NamePtr           =  p_name;
-    p_mutex->OwnerTCBPtr       = (OS_TCB       *)0;
+    p_mutex->OwnerTCBPtr       = (OS_TCB *)0;
     p_mutex->OwnerNestingCtr   = (OS_NESTING_CTR)0;         /* Mutex is available                                     */
     p_mutex->TS                = (CPU_TS        )0;
     p_mutex->OwnerOriginalPrio =  OS_CFG_PRIO_MAX;
     OS_PendListInit(&p_mutex->PendList);                    /* Initialize the waiting list                            */
 
- #if OS_CFG_DBG_EN > 0u
+#if OS_CFG_DBG_EN > 0u
     OS_MutexDbgListAdd(p_mutex);
- #endif
+#endif
     OSMutexQty++;
 
     OS_CRITICAL_EXIT_NO_SCHED();
@@ -156,10 +160,10 @@ void  OSMutexCreate (OS_MUTEX * p_mutex,
  ************************************************************************************************************************
  */
 
- #if OS_CFG_MUTEX_DEL_EN > 0u
-OS_OBJ_QTY  OSMutexDel (OS_MUTEX *  p_mutex,
+#if OS_CFG_MUTEX_DEL_EN > 0u
+OS_OBJ_QTY  OSMutexDel (OS_MUTEX   *p_mutex,
                         OS_OPT      opt,
-                        OS_ERR *    p_err)
+                        OS_ERR     *p_err)
 {
     OS_OBJ_QTY cnt;
     OS_OBJ_QTY nbr_tasks;
@@ -172,26 +176,30 @@ OS_OBJ_QTY  OSMutexDel (OS_MUTEX *  p_mutex,
 
 
 
-  #ifdef OS_SAFETY_CRITICAL
-    if (p_err == (OS_ERR *)0) {
+#ifdef OS_SAFETY_CRITICAL
+    if (p_err == (OS_ERR *)0)
+    {
         OS_SAFETY_CRITICAL_EXCEPTION();
         return ((OS_OBJ_QTY)0);
     }
-  #endif
+#endif
 
-  #if OS_CFG_CALLED_FROM_ISR_CHK_EN > 0u
-    if (OSIntNestingCtr > (OS_NESTING_CTR)0) {                  /* Not allowed to delete a mutex from an ISR          */
+#if OS_CFG_CALLED_FROM_ISR_CHK_EN > 0u
+    if (OSIntNestingCtr > (OS_NESTING_CTR)0)                    /* Not allowed to delete a mutex from an ISR          */
+    {
         *p_err = OS_ERR_DEL_ISR;
         return ((OS_OBJ_QTY)0);
     }
-  #endif
+#endif
 
-  #if OS_CFG_ARG_CHK_EN > 0u
-    if (p_mutex == (OS_MUTEX *)0) {                             /* Validate 'p_mutex'                                 */
+#if OS_CFG_ARG_CHK_EN > 0u
+    if (p_mutex == (OS_MUTEX *)0)                               /* Validate 'p_mutex'                                 */
+    {
         *p_err = OS_ERR_OBJ_PTR_NULL;
         return ((OS_OBJ_QTY)0);
     }
-    switch (opt) {                                              /* Validate 'opt'                                     */
+    switch (opt)                                                /* Validate 'opt'                                     */
+    {
     case OS_OPT_DEL_NO_PEND:
     case OS_OPT_DEL_ALWAYS:
         break;
@@ -200,30 +208,35 @@ OS_OBJ_QTY  OSMutexDel (OS_MUTEX *  p_mutex,
         *p_err =  OS_ERR_OPT_INVALID;
         return ((OS_OBJ_QTY)0);
     }
-  #endif
+#endif
 
-  #if OS_CFG_OBJ_TYPE_CHK_EN > 0u
-    if (p_mutex->Type != OS_OBJ_TYPE_MUTEX) {                   /* Make sure mutex was created                        */
+#if OS_CFG_OBJ_TYPE_CHK_EN > 0u
+    if (p_mutex->Type != OS_OBJ_TYPE_MUTEX)                     /* Make sure mutex was created                        */
+    {
         *p_err = OS_ERR_OBJ_TYPE;
         return ((OS_OBJ_QTY)0);
     }
-  #endif
+#endif
 
     OS_CRITICAL_ENTER();
     p_pend_list = &p_mutex->PendList;
     cnt         = p_pend_list->NbrEntries;
     nbr_tasks   = cnt;
-    switch (opt) {
+    switch (opt)
+    {
     case OS_OPT_DEL_NO_PEND:                                    /* Delete mutex only if no task waiting               */
-        if (nbr_tasks == (OS_OBJ_QTY)0) {
-  #if OS_CFG_DBG_EN > 0u
+        if (nbr_tasks == (OS_OBJ_QTY)0)
+        {
+#if OS_CFG_DBG_EN > 0u
             OS_MutexDbgListRemove(p_mutex);
-  #endif
+#endif
             OSMutexQty--;
             OS_MutexClr(p_mutex);
             OS_CRITICAL_EXIT();
             *p_err = OS_ERR_NONE;
-        } else {
+        }
+        else
+        {
             OS_CRITICAL_EXIT();
             *p_err = OS_ERR_TASK_WAITING;
         }
@@ -232,8 +245,10 @@ OS_OBJ_QTY  OSMutexDel (OS_MUTEX *  p_mutex,
     case OS_OPT_DEL_ALWAYS:                                                /* Always delete the mutex                 */
         p_tcb_owner = p_mutex->OwnerTCBPtr;                                /* Did we had to change the prio of owner? */
         if ((p_tcb_owner       != (OS_TCB *)0) &&
-            (p_tcb_owner->Prio !=  p_mutex->OwnerOriginalPrio)) {
-            switch (p_tcb_owner->TaskState) {                              /* yes                                     */
+                (p_tcb_owner->Prio !=  p_mutex->OwnerOriginalPrio))
+        {
+            switch (p_tcb_owner->TaskState)                                /* yes                                     */
+            {
             case OS_TASK_STATE_RDY:
                 OS_RdyListRemove(p_tcb_owner);
                 p_tcb_owner->Prio = p_mutex->OwnerOriginalPrio;            /* Lower owner's prio back                 */
@@ -263,7 +278,8 @@ OS_OBJ_QTY  OSMutexDel (OS_MUTEX *  p_mutex,
         }
 
         ts = OS_TS_GET();                                                  /* Get timestamp                           */
-        while (cnt > 0u) {                                                 /* Remove all tasks from the pend list     */
+        while (cnt > 0u)                                                   /* Remove all tasks from the pend list     */
+        {
             p_pend_data = p_pend_list->HeadPtr;
             p_tcb       = p_pend_data->TCBPtr;
             OS_PendObjDel((OS_PEND_OBJ *)((void *)p_mutex),
@@ -271,9 +287,9 @@ OS_OBJ_QTY  OSMutexDel (OS_MUTEX *  p_mutex,
                           ts);
             cnt--;
         }
-  #if OS_CFG_DBG_EN > 0u
+#if OS_CFG_DBG_EN > 0u
         OS_MutexDbgListRemove(p_mutex);
-  #endif
+#endif
         OSMutexQty--;
         OS_MutexClr(p_mutex);
         OS_CRITICAL_EXIT_NO_SCHED();
@@ -288,7 +304,7 @@ OS_OBJ_QTY  OSMutexDel (OS_MUTEX *  p_mutex,
     }
     return (nbr_tasks);
 }
- #endif
+#endif
 
 /*$PAGE*/
 /*
@@ -336,11 +352,11 @@ OS_OBJ_QTY  OSMutexDel (OS_MUTEX *  p_mutex,
  ************************************************************************************************************************
  */
 
-void  OSMutexPend (OS_MUTEX *   p_mutex,
+void  OSMutexPend (OS_MUTEX    *p_mutex,
                    OS_TICK      timeout,
                    OS_OPT       opt,
-                   CPU_TS *     p_ts,
-                   OS_ERR *     p_err)
+                   CPU_TS      *p_ts,
+                   OS_ERR      *p_err)
 {
     OS_PEND_DATA pend_data;
     OS_TCB       *p_tcb;
@@ -348,26 +364,30 @@ void  OSMutexPend (OS_MUTEX *   p_mutex,
 
 
 
- #ifdef OS_SAFETY_CRITICAL
-    if (p_err == (OS_ERR *)0) {
+#ifdef OS_SAFETY_CRITICAL
+    if (p_err == (OS_ERR *)0)
+    {
         OS_SAFETY_CRITICAL_EXCEPTION();
         return;
     }
- #endif
+#endif
 
- #if OS_CFG_CALLED_FROM_ISR_CHK_EN > 0u
-    if (OSIntNestingCtr > (OS_NESTING_CTR)0) {              /* Not allowed to call from an ISR                        */
+#if OS_CFG_CALLED_FROM_ISR_CHK_EN > 0u
+    if (OSIntNestingCtr > (OS_NESTING_CTR)0)                /* Not allowed to call from an ISR                        */
+    {
         *p_err = OS_ERR_PEND_ISR;
         return;
     }
- #endif
+#endif
 
- #if OS_CFG_ARG_CHK_EN > 0u
-    if (p_mutex == (OS_MUTEX *)0) {                         /* Validate arguments                                     */
+#if OS_CFG_ARG_CHK_EN > 0u
+    if (p_mutex == (OS_MUTEX *)0)                           /* Validate arguments                                     */
+    {
         *p_err = OS_ERR_OBJ_PTR_NULL;
         return;
     }
-    switch (opt) {                                          /* Validate 'opt'                                         */
+    switch (opt)                                            /* Validate 'opt'                                         */
+    {
     case OS_OPT_PEND_BLOCKING:
     case OS_OPT_PEND_NON_BLOCKING:
         break;
@@ -376,25 +396,29 @@ void  OSMutexPend (OS_MUTEX *   p_mutex,
         *p_err = OS_ERR_OPT_INVALID;
         return;
     }
- #endif
+#endif
 
- #if OS_CFG_OBJ_TYPE_CHK_EN > 0u
-    if (p_mutex->Type != OS_OBJ_TYPE_MUTEX) {               /* Make sure mutex was created                            */
+#if OS_CFG_OBJ_TYPE_CHK_EN > 0u
+    if (p_mutex->Type != OS_OBJ_TYPE_MUTEX)                 /* Make sure mutex was created                            */
+    {
         *p_err = OS_ERR_OBJ_TYPE;
         return;
     }
- #endif
+#endif
 
-    if (p_ts != (CPU_TS *)0) {
+    if (p_ts != (CPU_TS *)0)
+    {
         *p_ts  = (CPU_TS  )0;                               /* Initialize the returned timestamp                      */
     }
 
     CPU_CRITICAL_ENTER();
-    if (p_mutex->OwnerNestingCtr == (OS_NESTING_CTR)0) {    /* Resource available?                                    */
+    if (p_mutex->OwnerNestingCtr == (OS_NESTING_CTR)0)      /* Resource available?                                    */
+    {
         p_mutex->OwnerTCBPtr       =  OSTCBCurPtr;          /* Yes, caller may proceed                                */
         p_mutex->OwnerOriginalPrio =  OSTCBCurPtr->Prio;
         p_mutex->OwnerNestingCtr   = (OS_NESTING_CTR)1;
-        if (p_ts != (CPU_TS *)0) {
+        if (p_ts != (CPU_TS *)0)
+        {
             *p_ts  = p_mutex->TS;
         }
         CPU_CRITICAL_EXIT();
@@ -402,9 +426,11 @@ void  OSMutexPend (OS_MUTEX *   p_mutex,
         return;
     }
 
-    if (OSTCBCurPtr == p_mutex->OwnerTCBPtr) {              /* See if current task is already the owner of the mutex  */
+    if (OSTCBCurPtr == p_mutex->OwnerTCBPtr)                /* See if current task is already the owner of the mutex  */
+    {
         p_mutex->OwnerNestingCtr++;
-        if (p_ts != (CPU_TS *)0) {
+        if (p_ts != (CPU_TS *)0)
+        {
             *p_ts  = p_mutex->TS;
         }
         CPU_CRITICAL_EXIT();
@@ -412,12 +438,16 @@ void  OSMutexPend (OS_MUTEX *   p_mutex,
         return;
     }
 
-    if ((opt & OS_OPT_PEND_NON_BLOCKING) != (OS_OPT)0) {    /* Caller wants to block if not available?                */
+    if ((opt & OS_OPT_PEND_NON_BLOCKING) != (OS_OPT)0)      /* Caller wants to block if not available?                */
+    {
         CPU_CRITICAL_EXIT();
         *p_err = OS_ERR_PEND_WOULD_BLOCK;                   /* No                                                     */
         return;
-    } else {
-        if (OSSchedLockNestingCtr > (OS_NESTING_CTR)0) {    /* Can't pend when the scheduler is locked                */
+    }
+    else
+    {
+        if (OSSchedLockNestingCtr > (OS_NESTING_CTR)0)      /* Can't pend when the scheduler is locked                */
+        {
             CPU_CRITICAL_EXIT();
             *p_err = OS_ERR_SCHED_LOCKED;
             return;
@@ -426,8 +456,10 @@ void  OSMutexPend (OS_MUTEX *   p_mutex,
     /* Lock the scheduler/re-enable interrupts                */
     OS_CRITICAL_ENTER_CPU_EXIT();
     p_tcb = p_mutex->OwnerTCBPtr;                           /* Point to the TCB of the Mutex owner                    */
-    if (p_tcb->Prio > OSTCBCurPtr->Prio) {                  /* See if mutex owner has a lower priority than current   */
-        switch (p_tcb->TaskState) {
+    if (p_tcb->Prio > OSTCBCurPtr->Prio)                    /* See if mutex owner has a lower priority than current   */
+    {
+        switch (p_tcb->TaskState)
+        {
         case OS_TASK_STATE_RDY:
             OS_RdyListRemove(p_tcb);                        /* Remove from ready list at current priority             */
             p_tcb->Prio = OSTCBCurPtr->Prio;                /* Raise owner's priority                                 */
@@ -466,30 +498,35 @@ void  OSMutexPend (OS_MUTEX *   p_mutex,
     OSSched();                                              /* Find the next highest priority task ready to run       */
 
     CPU_CRITICAL_ENTER();
-    switch (OSTCBCurPtr->PendStatus) {
+    switch (OSTCBCurPtr->PendStatus)
+    {
     case OS_STATUS_PEND_OK:                                 /* We got the mutex                                       */
-        if (p_ts != (CPU_TS *)0) {
+        if (p_ts != (CPU_TS *)0)
+        {
             *p_ts  = OSTCBCurPtr->TS;
         }
         *p_err = OS_ERR_NONE;
         break;
 
     case OS_STATUS_PEND_ABORT:                              /* Indicate that we aborted                               */
-        if (p_ts != (CPU_TS *)0) {
+        if (p_ts != (CPU_TS *)0)
+        {
             *p_ts  = OSTCBCurPtr->TS;
         }
         *p_err = OS_ERR_PEND_ABORT;
         break;
 
     case OS_STATUS_PEND_TIMEOUT:                            /* Indicate that we didn't get mutex within timeout       */
-        if (p_ts != (CPU_TS *)0) {
+        if (p_ts != (CPU_TS *)0)
+        {
             *p_ts  = (CPU_TS  )0;
         }
         *p_err = OS_ERR_TIMEOUT;
         break;
 
     case OS_STATUS_PEND_DEL:                                /* Indicate that object pended on has been deleted        */
-        if (p_ts != (CPU_TS *)0) {
+        if (p_ts != (CPU_TS *)0)
+        {
             *p_ts  = OSTCBCurPtr->TS;
         }
         *p_err = OS_ERR_OBJ_DEL;
@@ -534,10 +571,10 @@ void  OSMutexPend (OS_MUTEX *   p_mutex,
  ************************************************************************************************************************
  */
 
- #if OS_CFG_MUTEX_PEND_ABORT_EN > 0u
+#if OS_CFG_MUTEX_PEND_ABORT_EN > 0u
 OS_OBJ_QTY  OSMutexPendAbort (OS_MUTEX *p_mutex,
                               OS_OPT    opt,
-                              OS_ERR *  p_err)
+                              OS_ERR   *p_err)
 {
     OS_PEND_LIST  *p_pend_list;
     OS_TCB        *p_tcb;
@@ -547,26 +584,30 @@ OS_OBJ_QTY  OSMutexPendAbort (OS_MUTEX *p_mutex,
 
 
 
-  #ifdef OS_SAFETY_CRITICAL
-    if (p_err == (OS_ERR *)0) {
+#ifdef OS_SAFETY_CRITICAL
+    if (p_err == (OS_ERR *)0)
+    {
         OS_SAFETY_CRITICAL_EXCEPTION();
         return ((OS_OBJ_QTY)0u);
     }
-  #endif
+#endif
 
-  #if OS_CFG_CALLED_FROM_ISR_CHK_EN > 0u
-    if (OSIntNestingCtr > (OS_NESTING_CTR)0u) {             /* Not allowed to Pend Abort from an ISR                  */
+#if OS_CFG_CALLED_FROM_ISR_CHK_EN > 0u
+    if (OSIntNestingCtr > (OS_NESTING_CTR)0u)               /* Not allowed to Pend Abort from an ISR                  */
+    {
         *p_err =  OS_ERR_PEND_ABORT_ISR;
         return ((OS_OBJ_QTY)0u);
     }
-  #endif
+#endif
 
-  #if OS_CFG_ARG_CHK_EN > 0u
-    if (p_mutex == (OS_MUTEX *)0) {                         /* Validate 'p_mutex'                                     */
+#if OS_CFG_ARG_CHK_EN > 0u
+    if (p_mutex == (OS_MUTEX *)0)                           /* Validate 'p_mutex'                                     */
+    {
         *p_err =  OS_ERR_OBJ_PTR_NULL;
         return ((OS_OBJ_QTY)0u);
     }
-    switch (opt) {                                          /* Validate 'opt'                                         */
+    switch (opt)                                            /* Validate 'opt'                                         */
+    {
     case OS_OPT_PEND_ABORT_1:
     case OS_OPT_PEND_ABORT_ALL:
     case OS_OPT_PEND_ABORT_1   | OS_OPT_POST_NO_SCHED:
@@ -577,18 +618,20 @@ OS_OBJ_QTY  OSMutexPendAbort (OS_MUTEX *p_mutex,
         *p_err =  OS_ERR_OPT_INVALID;
         return ((OS_OBJ_QTY)0u);
     }
-  #endif
+#endif
 
-  #if OS_CFG_OBJ_TYPE_CHK_EN > 0u
-    if (p_mutex->Type != OS_OBJ_TYPE_MUTEX) {               /* Make sure mutex was created                            */
+#if OS_CFG_OBJ_TYPE_CHK_EN > 0u
+    if (p_mutex->Type != OS_OBJ_TYPE_MUTEX)                 /* Make sure mutex was created                            */
+    {
         *p_err =  OS_ERR_OBJ_TYPE;
         return ((OS_OBJ_QTY)0u);
     }
-  #endif
+#endif
 
     CPU_CRITICAL_ENTER();
     p_pend_list = &p_mutex->PendList;
-    if (p_pend_list->NbrEntries == (OS_OBJ_QTY)0u) {        /* Any task waiting on mutex?                             */
+    if (p_pend_list->NbrEntries == (OS_OBJ_QTY)0u)          /* Any task waiting on mutex?                             */
+    {
         CPU_CRITICAL_EXIT();                                /* No                                                     */
         *p_err =  OS_ERR_PEND_ABORT_NONE;
         return ((OS_OBJ_QTY)0u);
@@ -597,26 +640,29 @@ OS_OBJ_QTY  OSMutexPendAbort (OS_MUTEX *p_mutex,
     OS_CRITICAL_ENTER_CPU_EXIT();
     nbr_tasks = 0u;
     ts        = OS_TS_GET();                                /* Get local time stamp so all tasks get the same time    */
-    while (p_pend_list->NbrEntries > (OS_OBJ_QTY)0u) {
+    while (p_pend_list->NbrEntries > (OS_OBJ_QTY)0u)
+    {
         p_tcb = p_pend_list->HeadPtr->TCBPtr;
         OS_PendAbort((OS_PEND_OBJ *)((void *)p_mutex),
                      p_tcb,
                      ts);
         nbr_tasks++;
-        if (opt != OS_OPT_PEND_ABORT_ALL) {                 /* Pend abort all tasks waiting?                          */
+        if (opt != OS_OPT_PEND_ABORT_ALL)                   /* Pend abort all tasks waiting?                          */
+        {
             break;                                          /* No                                                     */
         }
     }
     OS_CRITICAL_EXIT_NO_SCHED();
 
-    if ((opt & OS_OPT_POST_NO_SCHED) == (OS_OPT)0u) {
+    if ((opt & OS_OPT_POST_NO_SCHED) == (OS_OPT)0u)
+    {
         OSSched();                                          /* Run the scheduler                                      */
     }
 
     *p_err = OS_ERR_NONE;
     return (nbr_tasks);
 }
- #endif
+#endif
 
 /*$PAGE*/
 /*
@@ -645,9 +691,9 @@ OS_OBJ_QTY  OSMutexPendAbort (OS_MUTEX *p_mutex,
  ************************************************************************************************************************
  */
 
-void  OSMutexPost (OS_MUTEX *   p_mutex,
+void  OSMutexPost (OS_MUTEX    *p_mutex,
                    OS_OPT       opt,
-                   OS_ERR *     p_err)
+                   OS_ERR      *p_err)
 {
     OS_PEND_LIST  *p_pend_list;
     OS_TCB        *p_tcb;
@@ -656,26 +702,30 @@ void  OSMutexPost (OS_MUTEX *   p_mutex,
 
 
 
- #ifdef OS_SAFETY_CRITICAL
-    if (p_err == (OS_ERR *)0) {
+#ifdef OS_SAFETY_CRITICAL
+    if (p_err == (OS_ERR *)0)
+    {
         OS_SAFETY_CRITICAL_EXCEPTION();
         return;
     }
- #endif
+#endif
 
- #if OS_CFG_CALLED_FROM_ISR_CHK_EN > 0u
-    if (OSIntNestingCtr > (OS_NESTING_CTR)0) {              /* Not allowed to call from an ISR                        */
+#if OS_CFG_CALLED_FROM_ISR_CHK_EN > 0u
+    if (OSIntNestingCtr > (OS_NESTING_CTR)0)                /* Not allowed to call from an ISR                        */
+    {
         *p_err = OS_ERR_POST_ISR;
         return;
     }
- #endif
+#endif
 
- #if OS_CFG_ARG_CHK_EN > 0u
-    if (p_mutex == (OS_MUTEX *)0) {                         /* Validate 'p_mutex'                                     */
+#if OS_CFG_ARG_CHK_EN > 0u
+    if (p_mutex == (OS_MUTEX *)0)                           /* Validate 'p_mutex'                                     */
+    {
         *p_err = OS_ERR_OBJ_PTR_NULL;
         return;
     }
-    switch (opt) {                                          /* Validate 'opt'                                         */
+    switch (opt)                                            /* Validate 'opt'                                         */
+    {
     case OS_OPT_POST_NONE:
     case OS_OPT_POST_NO_SCHED:
         break;
@@ -684,17 +734,19 @@ void  OSMutexPost (OS_MUTEX *   p_mutex,
         *p_err =  OS_ERR_OPT_INVALID;
         return;
     }
- #endif
+#endif
 
- #if OS_CFG_OBJ_TYPE_CHK_EN > 0u
-    if (p_mutex->Type != OS_OBJ_TYPE_MUTEX) {               /* Make sure mutex was created                            */
+#if OS_CFG_OBJ_TYPE_CHK_EN > 0u
+    if (p_mutex->Type != OS_OBJ_TYPE_MUTEX)                 /* Make sure mutex was created                            */
+    {
         *p_err = OS_ERR_OBJ_TYPE;
         return;
     }
- #endif
+#endif
 
     CPU_CRITICAL_ENTER();
-    if (OSTCBCurPtr != p_mutex->OwnerTCBPtr) {              /* Make sure the mutex owner is releasing the mutex       */
+    if (OSTCBCurPtr != p_mutex->OwnerTCBPtr)                /* Make sure the mutex owner is releasing the mutex       */
+    {
         CPU_CRITICAL_EXIT();
         *p_err = OS_ERR_MUTEX_NOT_OWNER;
         return;
@@ -704,22 +756,25 @@ void  OSMutexPost (OS_MUTEX *   p_mutex,
     ts          = OS_TS_GET();                              /* Get timestamp                                          */
     p_mutex->TS = ts;
     p_mutex->OwnerNestingCtr--;                             /* Decrement owner's nesting counter                      */
-    if (p_mutex->OwnerNestingCtr > (OS_NESTING_CTR)0) {     /* Are we done with all nestings?                         */
+    if (p_mutex->OwnerNestingCtr > (OS_NESTING_CTR)0)       /* Are we done with all nestings?                         */
+    {
         OS_CRITICAL_EXIT();                                 /* No                                                     */
         *p_err = OS_ERR_MUTEX_NESTING;
         return;
     }
 
     p_pend_list = &p_mutex->PendList;
-    if (p_pend_list->NbrEntries == (OS_OBJ_QTY)0) {         /* Any task waiting on mutex?                             */
-        p_mutex->OwnerTCBPtr     = (OS_TCB       *)0;       /* No                                                     */
+    if (p_pend_list->NbrEntries == (OS_OBJ_QTY)0)           /* Any task waiting on mutex?                             */
+    {
+        p_mutex->OwnerTCBPtr     = (OS_TCB *)0;             /* No                                                     */
         p_mutex->OwnerNestingCtr = (OS_NESTING_CTR)0;
         OS_CRITICAL_EXIT();
         *p_err = OS_ERR_NONE;
         return;
     }
     /* Yes                                                    */
-    if (OSTCBCurPtr->Prio != p_mutex->OwnerOriginalPrio) {
+    if (OSTCBCurPtr->Prio != p_mutex->OwnerOriginalPrio)
+    {
         OS_RdyListRemove(OSTCBCurPtr);
         OSTCBCurPtr->Prio = p_mutex->OwnerOriginalPrio;     /* Lower owner's priority back to its original one        */
         OS_PrioInsert(OSTCBCurPtr->Prio);
@@ -733,14 +788,15 @@ void  OSMutexPost (OS_MUTEX *   p_mutex,
     p_mutex->OwnerNestingCtr   = (OS_NESTING_CTR)1;
     /* Post to mutex                                          */
     OS_Post((OS_PEND_OBJ *)((void *)p_mutex),
-            (OS_TCB      *)p_tcb,
-            (void        *)0,
+            (OS_TCB *)p_tcb,
+            (void *)0,
             (OS_MSG_SIZE  )0,
             (CPU_TS       )ts);
 
     OS_CRITICAL_EXIT_NO_SCHED();
 
-    if ((opt & OS_OPT_POST_NO_SCHED) == (OS_OPT)0) {
+    if ((opt & OS_OPT_POST_NO_SCHED) == (OS_OPT)0)
+    {
         OSSched();                                          /* Run the scheduler                                      */
     }
 
@@ -767,8 +823,8 @@ void  OSMutexPost (OS_MUTEX *   p_mutex,
 void  OS_MutexClr (OS_MUTEX *p_mutex)
 {
     p_mutex->Type              =  OS_OBJ_TYPE_NONE;         /* Mark the data structure as a NONE                      */
-    p_mutex->NamePtr           = (CPU_CHAR     *)((void *)"?MUTEX");
-    p_mutex->OwnerTCBPtr       = (OS_TCB       *)0;
+    p_mutex->NamePtr           = (CPU_CHAR *)((void *)"?MUTEX");
+    p_mutex->OwnerTCBPtr       = (OS_TCB *)0;
     p_mutex->OwnerNestingCtr   = (OS_NESTING_CTR)0;
     p_mutex->TS                = (CPU_TS        )0;
     p_mutex->OwnerOriginalPrio =  OS_CFG_PRIO_MAX;
@@ -791,14 +847,17 @@ void  OS_MutexClr (OS_MUTEX *p_mutex)
  */
 
 
- #if OS_CFG_DBG_EN > 0u
+#if OS_CFG_DBG_EN > 0u
 void  OS_MutexDbgListAdd (OS_MUTEX *p_mutex)
 {
     p_mutex->DbgNamePtr               = (CPU_CHAR *)((void *)" ");
     p_mutex->DbgPrevPtr               = (OS_MUTEX *)0;
-    if (OSMutexDbgListPtr == (OS_MUTEX *)0) {
+    if (OSMutexDbgListPtr == (OS_MUTEX *)0)
+    {
         p_mutex->DbgNextPtr           = (OS_MUTEX *)0;
-    } else {
+    }
+    else
+    {
         p_mutex->DbgNextPtr           =  OSMutexDbgListPtr;
         OSMutexDbgListPtr->DbgPrevPtr =  p_mutex;
     }
@@ -816,25 +875,31 @@ void  OS_MutexDbgListRemove (OS_MUTEX *p_mutex)
     p_mutex_prev = p_mutex->DbgPrevPtr;
     p_mutex_next = p_mutex->DbgNextPtr;
 
-    if (p_mutex_prev == (OS_MUTEX *)0) {
+    if (p_mutex_prev == (OS_MUTEX *)0)
+    {
         OSMutexDbgListPtr = p_mutex_next;
-        if (p_mutex_next != (OS_MUTEX *)0) {
+        if (p_mutex_next != (OS_MUTEX *)0)
+        {
             p_mutex_next->DbgPrevPtr = (OS_MUTEX *)0;
         }
         p_mutex->DbgNextPtr = (OS_MUTEX *)0;
 
-    } else if (p_mutex_next == (OS_MUTEX *)0) {
+    }
+    else if (p_mutex_next == (OS_MUTEX *)0)
+    {
         p_mutex_prev->DbgNextPtr = (OS_MUTEX *)0;
         p_mutex->DbgPrevPtr      = (OS_MUTEX *)0;
 
-    } else {
+    }
+    else
+    {
         p_mutex_prev->DbgNextPtr =  p_mutex_next;
         p_mutex_next->DbgPrevPtr =  p_mutex_prev;
         p_mutex->DbgNextPtr      = (OS_MUTEX *)0;
         p_mutex->DbgPrevPtr      = (OS_MUTEX *)0;
     }
 }
- #endif
+#endif
 
 /*$PAGE*/
 /*
@@ -856,16 +921,17 @@ void  OS_MutexDbgListRemove (OS_MUTEX *p_mutex)
 
 void  OS_MutexInit (OS_ERR *p_err)
 {
- #ifdef OS_SAFETY_CRITICAL
-    if (p_err == (OS_ERR *)0) {
+#ifdef OS_SAFETY_CRITICAL
+    if (p_err == (OS_ERR *)0)
+    {
         OS_SAFETY_CRITICAL_EXCEPTION();
         return;
     }
- #endif
+#endif
 
- #if OS_CFG_DBG_EN > 0u
+#if OS_CFG_DBG_EN > 0u
     OSMutexDbgListPtr = (OS_MUTEX *)0;
- #endif
+#endif
 
     OSMutexQty        = (OS_OBJ_QTY)0;
     *p_err             =  OS_ERR_NONE;

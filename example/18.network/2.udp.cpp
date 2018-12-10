@@ -46,7 +46,7 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
     w5500.begin(2, mac, ip, sub, gw, dns);
 
     attach_eth_to_socket(&w5500);
@@ -61,7 +61,7 @@ void setup()
     UART.printf("GW : %d.%d.%d.%d\r\n", buf[0], buf[1], buf[2], buf[3]);
     UART.printf("Network is ready.\r\n");
 
-    if(udp.begin(0,3000) == 0)
+    if(udp.begin(0, 3000) == 0)
         UART.printf("udp server creat ok!listen on 3000\r\n");
 
 }
@@ -75,11 +75,11 @@ int main(void)
         if(len)
         {
             UART.printf("==================\r\n");
-            UART.printf("remote:%d.%d.%d.%d:%d\r\n",udp.remote_ip[0],udp.remote_ip[1],udp.remote_ip[2],udp.remote_ip[3],udp.remote_port);
+            UART.printf("remote:%d.%d.%d.%d:%d\r\n", udp.remote_ip[0], udp.remote_ip[1], udp.remote_ip[2], udp.remote_ip[3], udp.remote_port);
             UART.printf("payload:\r\n");
             UART.printf((char *)buf);
             UART.printf("==================\r\n");
-            udp.sendto(udp.remote_ip,udp.remote_port,buf,len);
+            udp.sendto(udp.remote_ip, udp.remote_port, buf, len);
         }
     }
 

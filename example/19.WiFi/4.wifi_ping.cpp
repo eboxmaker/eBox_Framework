@@ -29,14 +29,14 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
     wifi.begin(&PA4, &uart2, 115200);
     wifi.get_ap_list((char *)recv_buf);
     uart1.printf((char *)recv_buf);
     ret = wifi.join_ap();
     if(ret)
-		uart1.printf("esp8266 join wifi OK\r\n");
+        uart1.printf("esp8266 join wifi OK\r\n");
 }
 
 int main(void)
@@ -47,8 +47,8 @@ int main(void)
 
     while(1)
     {
-        wifi.ping("www.baidu.com",recv_buf);
-            uart1.printf(recv_buf);
+        wifi.ping("www.baidu.com", recv_buf);
+        uart1.printf(recv_buf);
     }
 
 }

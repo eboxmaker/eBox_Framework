@@ -122,50 +122,50 @@ OS_COMPILER_OPT  INT16U  const  OSVersionNbr       = OS_VERSION;
 
 OS_COMPILER_OPT  INT16U  const  OSDataSize = sizeof(OSCtxSwCtr)
 #if (OS_EVENT_EN > 0) && (OS_MAX_EVENTS > 0)
-                                           + sizeof(OSEventFreeList)
-                                           + sizeof(OSEventTbl)
+        + sizeof(OSEventFreeList)
+        + sizeof(OSEventTbl)
 #endif
 #if (OS_VERSION >= 251) && (OS_FLAG_EN > 0) && (OS_MAX_FLAGS > 0)
-                                           + sizeof(OSFlagTbl)
-                                           + sizeof(OSFlagFreeList)
+        + sizeof(OSFlagTbl)
+        + sizeof(OSFlagFreeList)
 #endif
 #if OS_TASK_STAT_EN > 0
-                                           + sizeof(OSCPUUsage)
-                                           + sizeof(OSIdleCtrMax)
-                                           + sizeof(OSIdleCtrRun)
-                                           + sizeof(OSStatRdy)
-                                           + sizeof(OSTaskStatStk)
+        + sizeof(OSCPUUsage)
+        + sizeof(OSIdleCtrMax)
+        + sizeof(OSIdleCtrRun)
+        + sizeof(OSStatRdy)
+        + sizeof(OSTaskStatStk)
 #endif
 #if OS_TICK_STEP_EN > 0
-                                           + sizeof(OSTickStepState)
+        + sizeof(OSTickStepState)
 #endif
 #if (OS_MEM_EN > 0) && (OS_MAX_MEM_PART > 0)
-                                           + sizeof(OSMemFreeList)
-                                           + sizeof(OSMemTbl)
+        + sizeof(OSMemFreeList)
+        + sizeof(OSMemTbl)
 #endif
 #if (OS_Q_EN > 0) && (OS_MAX_QS > 0)
-                                           + sizeof(OSQFreeList)
-                                           + sizeof(OSQTbl)
+        + sizeof(OSQFreeList)
+        + sizeof(OSQTbl)
 #endif
 #if OS_TIME_GET_SET_EN > 0
-                                           + sizeof(OSTime)
+        + sizeof(OSTime)
 #endif
-                                           + sizeof(OSIntNesting)
-                                           + sizeof(OSLockNesting)
-                                           + sizeof(OSPrioCur)
-                                           + sizeof(OSPrioHighRdy)
-                                           + sizeof(OSRdyGrp)
-                                           + sizeof(OSRdyTbl)
-                                           + sizeof(OSRunning)
-                                           + sizeof(OSTaskCtr)
-                                           + sizeof(OSIdleCtr)
-                                           + sizeof(OSTaskIdleStk)
-                                           + sizeof(OSTCBCur)
-                                           + sizeof(OSTCBFreeList)
-                                           + sizeof(OSTCBHighRdy)
-                                           + sizeof(OSTCBList)
-                                           + sizeof(OSTCBPrioTbl)
-                                           + sizeof(OSTCBTbl);
+        + sizeof(OSIntNesting)
+        + sizeof(OSLockNesting)
+        + sizeof(OSPrioCur)
+        + sizeof(OSPrioHighRdy)
+        + sizeof(OSRdyGrp)
+        + sizeof(OSRdyTbl)
+        + sizeof(OSRunning)
+        + sizeof(OSTaskCtr)
+        + sizeof(OSIdleCtr)
+        + sizeof(OSTaskIdleStk)
+        + sizeof(OSTCBCur)
+        + sizeof(OSTCBFreeList)
+        + sizeof(OSTCBHighRdy)
+        + sizeof(OSTCBList)
+        + sizeof(OSTCBPrioTbl)
+        + sizeof(OSTCBTbl);
 
 #endif
 

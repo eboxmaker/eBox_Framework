@@ -49,7 +49,7 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME,EXAMPLE_DATE);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
     w5500.begin(2, mac, ip, sub, gw, dns);
 
     attach_eth_to_socket(&w5500);
@@ -68,7 +68,7 @@ void setup()
 
     ddns.begin(SOCKET1, 3000);
 
-    ret = ddns.query((char*)name);
+    ret = ddns.query((char *)name);
     if(ret == 1) /*∑¢ÀÕDNS«Î«Û*/
         uart1.printf("Get [%s]'s IP address [%d.%d.%d.%d] from %d.%d.%d.%d\r\n", name, ddns.domain_ip[0], ddns.domain_ip[1], ddns.domain_ip[2], ddns.domain_ip[3], dns[0], dns[1], dns[2], dns[3]);
     else if(ret == -1)

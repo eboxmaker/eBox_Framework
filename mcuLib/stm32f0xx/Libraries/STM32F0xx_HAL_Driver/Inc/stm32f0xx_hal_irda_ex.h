@@ -40,10 +40,10 @@
 #define __STM32F0xx_HAL_IRDA_EX_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
-#if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC) 
+#if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC)
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx_hal_def.h"
@@ -61,7 +61,7 @@
 /** @defgroup IRDAEx_Exported_Constants IRDAEx Exported Constants
   * @{
   */
-  
+
 /** @defgroup IRDAEx_Word_Length IRDA Word Length
   * @{
   */
@@ -80,11 +80,11 @@
 /**
   * @}
   */
-    
+
 /**
   * @}
-  */  
-  
+  */
+
 /* Exported macros -----------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 
@@ -121,7 +121,7 @@
         (__CLOCKSOURCE__) = IRDA_CLOCKSOURCE_UNDEFINED;       \
         break;                                                \
      }                                                        \
-  } while(0) 
+  } while(0)
 #elif defined (STM32F042x6) || defined (STM32F048xx) ||       \
       defined (STM32F051x8) || defined (STM32F058xx)
 #define IRDA_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__) \
@@ -155,7 +155,7 @@
     {                                                         \
       (__CLOCKSOURCE__) = IRDA_CLOCKSOURCE_UNDEFINED;         \
     }                                                         \
-  } while(0) 
+  } while(0)
 #elif defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx)
 #define IRDA_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__) \
   do {                                                        \
@@ -213,7 +213,7 @@
     {                                                         \
       (__CLOCKSOURCE__) = IRDA_CLOCKSOURCE_UNDEFINED;         \
     }                                                         \
-  } while(0)   
+  } while(0)
 #elif defined(STM32F091xC) || defined(STM32F098xx)
 #define IRDA_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__) \
   do {                                                        \
@@ -317,7 +317,7 @@
   *         DMA transfers.
   * @param  __HANDLE__: specifies the IRDA Handle
   * @retval None, the mask to apply to IRDA RDR register is stored in (__HANDLE__)->Mask field.
-  */  
+  */
 #if defined (STM32F042x6) || defined (STM32F048xx) || \
     defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || \
     defined (STM32F091xC) || defined (STM32F098xx)
@@ -356,7 +356,7 @@
         (__HANDLE__)->Mask = 0x003F ;                                 \
      }                                                                \
   }                                                                   \
-} while(0) 
+} while(0)
 #else
 #define IRDA_MASK_COMPUTATION(__HANDLE__)                       \
   do {                                                                \
@@ -382,16 +382,16 @@
         (__HANDLE__)->Mask = 0x007F ;                                 \
      }                                                                \
   }                                                                   \
-} while(0) 
+} while(0)
 #endif /* defined (STM32F042x6) || defined (STM32F048xx) || \
           defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || \
           defined (STM32F091xC) || defined(STM32F098xx) */
 
 /**
   * @brief Ensure that IRDA frame length is valid.
-  * @param __LENGTH__: IRDA frame length. 
+  * @param __LENGTH__: IRDA frame length.
   * @retval SET (__LENGTH__ is valid) or RESET (__LENGTH__ is invalid)
-  */ 
+  */
 #if defined (STM32F042x6) || defined (STM32F048xx) || \
     defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || \
     defined (STM32F091xC) || defined (STM32F098xx)
@@ -420,7 +420,7 @@
   */
 
 #endif /* !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC)  */
-  
+
 #ifdef __cplusplus
 }
 #endif

@@ -39,8 +39,8 @@ const CPU_CHAR  *os_prio__c = "$Id: $";
 
 
 CPU_DATA OSPrioTbl[OS_PRIO_TBL_SIZE];                       /* Declare the array local to this file to allow for  ... */
-                                                            /* ... optimization.  In other words, this allows the ... */
-                                                            /* ... table to be located in fast memory                 */
+/* ... optimization.  In other words, this allows the ... */
+/* ... table to be located in fast memory                 */
 
 /*
  ************************************************************************************************************************
@@ -62,7 +62,8 @@ void  OS_PrioInit (void)
 
 
     /* Clear the bitmap table ... no task is ready            */
-    for (i = 0u; i < OS_PRIO_TBL_SIZE; i++) {
+    for (i = 0u; i < OS_PRIO_TBL_SIZE; i++)
+    {
         OSPrioTbl[i] = (CPU_DATA)0;
     }
 }
@@ -90,7 +91,8 @@ OS_PRIO  OS_PrioGetHighest (void)
 
     prio  = (OS_PRIO)0;
     p_tbl = &OSPrioTbl[0];
-    while (*p_tbl == (CPU_DATA)0) {                         /* Search the bitmap table for the highest priority       */
+    while (*p_tbl == (CPU_DATA)0)                           /* Search the bitmap table for the highest priority       */
+    {
         prio += DEF_INT_CPU_NBR_BITS;                       /* Compute the step of each CPU_DATA entry                */
         p_tbl++;
     }

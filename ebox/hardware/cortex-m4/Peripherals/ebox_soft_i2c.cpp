@@ -20,7 +20,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_i2c.h"
 
-#include "ebox_config.h"
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
@@ -110,9 +109,9 @@ uint8_t SoftI2c::write(uint8_t slaveAddr, uint8_t data)
 {
     uint8_t err = EOK;
     //  I2C_DEBUG("I2C Bus state,SCL is %d, SDA is %d \r\n",_scl->read(),_sda->read());
-    err += _start(1000);
-    err += _send7bitsAddress(slaveAddr, WRITE, 200);
-    err += _sendByte(data, 200);
+    err += _start();
+    err += _send7bitsAddress(slaveAddr, WRITE);
+    err += _sendByte(data);
     _stop();
     return err;
 }
@@ -124,13 +123,13 @@ uint8_t SoftI2c::write(uint8_t slaveAddr, uint8_t data)
   *          uint16_t tOut: 超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t SoftI2c::write(uint8_t slaveAddr, uint16_t regAddr, uint8_t data, uint16_t tOut)
+uint8_t SoftI2c::write(uint8_t slaveAddr, uint16_t regAddr, uint8_t data)
 {
     uint8_t err = EOK;
-    err += _start(1000);
-    err += _send7bitsAddress(slaveAddr, WRITE, tOut);
-    err += _sendByte(regAddr, tOut);
-    err += _sendByte(data, tOut);
+    err += _start();
+    err += _send7bitsAddress(slaveAddr, WRITE);
+    err += _sendByte(regAddr);
+    err += _sendByte(data);
     _stop();
     delay_us(10);
     return err;
@@ -144,14 +143,14 @@ uint8_t SoftI2c::write(uint8_t slaveAddr, uint16_t regAddr, uint8_t data, uint16
   *          uint16_t tOut:  超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t SoftI2c::write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite, uint16_t tOut)
+uint8_t SoftI2c::write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite)
 {
     uint8_t err = 0;
-    err += _start(1000);
-    err += _send7bitsAddress(slaveAddr, WRITE, tOut);
+    err += _start();
+    err += _send7bitsAddress(slaveAddr, WRITE);
     while (nWrite--)
     {
-        err += _sendByte(*data, tOut);
+        err += _sendByte(*data);
         data++;
     }
     _stop();
@@ -167,15 +166,15 @@ uint8_t SoftI2c::write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite, ui
   *          uint16_t tOut:  超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t SoftI2c::write_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nWrite, uint16_t tOut)
+uint8_t SoftI2c::write_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nWrite)
 {
     uint8_t err = 0;
-    err += _start(1000);
-    err += _send7bitsAddress(slaveAddr, WRITE, tOut);
-    err += _sendByte(regAddr, tOut);
+    err += _start();
+    err += _send7bitsAddress(slaveAddr, WRITE);
+    err += _sendByte(regAddr);
     while (nWrite--)
     {
-        err += _sendByte(*data, tOut);
+        err += _sendByte(*data);
         data++;
     }
     _stop();
@@ -192,9 +191,9 @@ uint8_t SoftI2c::write_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, u
 uint8_t SoftI2c::read(uint8_t slaveAddr)
 {
     uint8_t data ;
-    _start(1000);
-    _send7bitsAddress(slaveAddr, READ, 200);
-    _receiveByte(&data, 200);
+    _start();
+    _send7bitsAddress(slaveAddr, READ);
+    _receiveByte(&data);
     _sendNack();
     _stop();
     return data;
@@ -207,15 +206,15 @@ uint8_t SoftI2c::read(uint8_t slaveAddr)
   *          uint16_t tOut: 超时
   *@retval   读取到的数据
   */
-uint8_t SoftI2c::read(uint8_t slaveAddr, uint16_t regAddr, uint16_t tOut)
+uint8_t SoftI2c::read(uint8_t slaveAddr, uint16_t regAddr)
 {
     uint8_t data ;
-    _start(tOut);
-    _send7bitsAddress(slaveAddr, WRITE, tOut);
-    _sendByte(regAddr, tOut);
-    _start(tOut);
-    _send7bitsAddress(slaveAddr, READ, tOut);
-    _receiveByte(&data, tOut);
+    _start();
+    _send7bitsAddress(slaveAddr, WRITE);
+    _sendByte(regAddr);
+    _start();
+    _send7bitsAddress(slaveAddr, READ);
+    _receiveByte(&data);
     _sendNack();
     _stop();
     return data;
@@ -229,14 +228,14 @@ uint8_t SoftI2c::read(uint8_t slaveAddr, uint16_t regAddr, uint16_t tOut)
   *          uint16_t tOut: 超时
   *@retval   EOK，EWAIT
   */
-uint8_t SoftI2c::read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nRead, uint16_t tOut)
+uint8_t SoftI2c::read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nRead)
 {
     uint8_t err = 0;
-    err += _start(tOut);
-    err += _send7bitsAddress(slaveAddr, READ, tOut);
+    err += _start();
+    err += _send7bitsAddress(slaveAddr, READ);
     while (nRead--)
     {
-        err += _receiveByte(data, tOut);
+        err += _receiveByte(data);
         data++;
         if (nRead == 0)
         {
@@ -257,17 +256,17 @@ uint8_t SoftI2c::read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nRead, uint
   *          uint16_t tOut: 超时
   *@retval   EOK，EWAIT
   */
-uint8_t SoftI2c::read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nRead, uint16_t tOut)
+uint8_t SoftI2c::read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nRead)
 {
     uint8_t err = 0;
-    err += _start(tOut);
-    err += _send7bitsAddress(slaveAddr, WRITE, tOut);
-    err += _sendByte(regAddr, tOut);
-    err += _start(tOut);
-    err += _send7bitsAddress(slaveAddr, READ, tOut);
+    err += _start();
+    err += _send7bitsAddress(slaveAddr, WRITE);
+    err += _sendByte(regAddr);
+    err += _start();
+    err += _send7bitsAddress(slaveAddr, READ);
     while (nRead--)
     {
-        err += _receiveByte(data, tOut);
+        err += _receiveByte(data);
         data++;
         if (nRead == 0)
         {
@@ -287,14 +286,14 @@ uint8_t SoftI2c::read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, ui
  *
  * @return 从机状态.返回0表示从机空闲，返回-1表示从机忙.
  */
-uint8_t SoftI2c::check_busy(uint8_t slaveAddr, uint16_t tOut)
+uint8_t SoftI2c::check_busy(uint8_t slaveAddr)
 {
     int8_t ret;
     uint8_t i = 0;
     do
     {
-        _start(tOut);
-        ret = _send7bitsAddress(slaveAddr, WRITE, tOut);
+        _start();
+        ret = _send7bitsAddress(slaveAddr, WRITE);
         _stop();
         if(i++ == 100)
         {
@@ -310,17 +309,14 @@ uint8_t SoftI2c::check_busy(uint8_t slaveAddr, uint16_t tOut)
   *@param    timing:  时钟时序，通过readConfig获取
   *@retval   uint8_t: EOK,E_BUSY
   */
-uint8_t SoftI2c::take(uint32_t timing, uint16_t tOut)
+uint8_t SoftI2c::take(uint32_t timing)
 {
-#if	(USE_TIMEOUT != 0)
-    uint32_t end = GetEndTime(tOut);
-#endif
+    uint32_t end = GetEndTime(timeout);
+
     while (_busy == 1)
     {
         delay_ms(1);
-#if	(USE_TIMEOUT != 0)
-        if (IsTimeOut(end, tOut)) return EWAIT;
-#endif
+        if (IsTimeOut(end, timeout)) return EWAIT;
     }
     if (_timing != timing) config(timing);
     _busy = 1;
@@ -342,21 +338,17 @@ void SoftI2c::release(void)
   * @param 无.
   * @return 无.
   */
-int8_t SoftI2c::_start(uint16_t tOut)
+int8_t SoftI2c::_start()
 {
-#if	(USE_TIMEOUT != 0)
-    uint32_t end = GetEndTime(tOut);
-#endif
+    uint32_t end = GetEndTime(timeout);
     _scl->set();          // SCL高
     while (!(_sda->read() && _scl->read()))       // scl,sda 均为高电平，总线空闲
     {
-#if	(USE_TIMEOUT != 0)
-        if (IsTimeOut(end, tOut))
+        if (IsTimeOut(end, timeout))
         {
             I2C_DEBUG("start fail,bus busy SDA is %d，SCL is %d,time is %d us \r\n", _sda->read(), _scl->read(), _timing);
             return EWAIT;
         }
-#endif
     }
     _sda->set();
     _scl->set();          // SCL高
@@ -470,7 +462,7 @@ int8_t SoftI2c::_sendNack()
   * @param[in] byte 将被发送的数据.
   * @return 发送结果.EOK,EWAIT.
   */
-int8_t SoftI2c::_sendByte(uint8_t byte, uint16_t tOut)
+int8_t SoftI2c::_sendByte(uint8_t byte)
 {
     int8_t ret = EOK;
 
@@ -496,12 +488,12 @@ int8_t SoftI2c::_sendByte(uint8_t byte, uint16_t tOut)
  *
  * @return 发送结果.返回0表示发送成功，返回-1表示发送失败.
  */
-int8_t	SoftI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR, uint16_t tOut)
+int8_t	SoftI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
 {
     int8_t ret = 0;
     // 写，从地址最低位置0；读，从地址最低位置1；
     slaveAddr = (WR == WRITE) ? (slaveAddr & 0xfe) : (slaveAddr | 0x01);
-    ret = _sendByte(slaveAddr, tOut);
+    ret = _sendByte(slaveAddr);
     return ret;
 }
 
@@ -510,7 +502,7 @@ int8_t	SoftI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR, uint16_t tOut)
   * @param 无.
   * @return 接收到的数据.
   */
-int8_t SoftI2c::_receiveByte(uint8_t *data, uint16_t tOut)
+int8_t SoftI2c::_receiveByte(uint8_t *data)
 {
     uint8_t i = 8;
     uint8_t byte = 0;
