@@ -53,6 +53,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+    
+#include "mcu_config.h"
+
+    
 /** @addtogroup Library_configuration_section
   * @{
   */

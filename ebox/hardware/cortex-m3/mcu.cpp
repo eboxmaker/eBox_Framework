@@ -28,7 +28,7 @@
 #define systick_interrupt()     SysTick->CTRL |=0x0002
 
 extern "C" {
-    __IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
+    __IO uint64_t milli_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
     __IO uint16_t micro_para;
 
     static void update_system_clock(CpuClock_t *clock);
@@ -52,6 +52,7 @@ extern "C" {
     void mcu_init(void)
     {
         SystemClock_Config();
+        
         // update 时钟信息
         update_system_clock(&cpu.clock);
 
@@ -64,8 +65,8 @@ extern "C" {
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
         GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
         NVIC_PriorityGroupConfig(NVIC_GROUP_CONFIG);
-
-        attachSystickCallBack(nullFun);
+        
+        attachSystickCallBack(nullFun,1);
         update_chip_info();
     }
 
@@ -82,7 +83,7 @@ extern "C" {
     uint64_t mcu_micros(void)
     {
         uint64_t micro;
-        micro = (millis_seconds * 1000 + (1000 - (SysTick->VAL) / (micro_para)));
+        micro = (milli_seconds * 1000 + (1000 - (SysTick->VAL) / (micro_para)));
         return  micro;
     }
 
@@ -93,7 +94,7 @@ extern "C" {
       */
     uint64_t mcu_millis( void )
     {
-        return millis_seconds;
+        return milli_seconds;
     }
 
     /**
@@ -162,7 +163,7 @@ extern "C" {
     */
     void SysTick_Handler(void)
     {
-        if (millis_seconds++ % _multiple == 0)
+        if (milli_seconds++ % _multiple == 0)
         {
             callBackFun();
         }
@@ -203,14 +204,14 @@ extern "C" {
 
         cpu.flash_size = *(uint16_t *)(0x1FFFF7E0);   //芯片flash容量
 #if	EBOX_DEBUG
-        millis_seconds = 0;
+        milli_seconds = 0;
         SysTick->VAL = 0;
         //统计cpu计算能力//////////////////
         do
         {
             cpu.ability++;//统计cpu计算能力
         }
-        while (millis_seconds < 1);
+        while (milli_seconds < 1);
         cpu.ability = cpu.ability  * 1000 * 2;
         ////////////////////////////////
 #endif
