@@ -17,6 +17,7 @@ void ModbusIP::config(uint8_t *mac)
 void ModbusIP::config(uint8_t *mac, IPAddress ip)
 {
     Ethernet.begin(mac, ip);
+    Ethernet.localIP().printTo(uart1);
     _server.begin();
 }
 
@@ -75,7 +76,7 @@ void ModbusIP::task()
                 _MBAP[4] = (_len + 1) >> 8;   //_len+1 for last byte from MBAP
                 _MBAP[5] = (_len + 1) & 0x00FF;
 
-                byte sendbuffer[7 + _len];
+                byte *sendbuffer = (byte *)malloc(7 + _len);
 
                 for (i = 0 ; i < 7 ; i++)
                 {
@@ -87,9 +88,10 @@ void ModbusIP::task()
                     sendbuffer[i + 7] = _frame[i];
                 }
                 client.write(sendbuffer, _len + 7);
+                free(sendbuffer);
             }
 
-#ifndef TCP_KEEP_ALIVE
+#if  (TCP_KEEP_ALIVE == 0)
             client.stop();
 #endif
             free(_frame);
