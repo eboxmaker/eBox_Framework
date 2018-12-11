@@ -21,57 +21,63 @@
 
 #include "ebox.h"
 #include "bsp_ebox.h"
+#include <Ethernet3.h>
+#include <Modbus.h>
+#include <ModbusIP.h>
 
 /**
-  *	1	此例程演示了timer定时中断，使用tim2
-  *	2	定时器频率为1hz，每秒中断1次
-  * 3   表现为LED闪烁
+  *	1	此例程演示了MODBUS TCP/IP例程
   */
 
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"Timer interrupt example"
+#define EXAMPLE_NAME	"MODBUS TCP/IP example"
 #define EXAMPLE_DATE	"2018-08-08"
 
-Timer timer2(TIM2);
+/*
+  Modbus-Arduino Example - Lamp (Modbus IP)
+  Copyright by André Sarmento Barbosa
+  http://github.com/andresarmento/modbus-arduino
+*/
 
-void t2it()
-{
-    LED1.toggle();
-}
-class Test
-{
-public:
-    void event()
-    {
-        LED1.toggle();
-    }
-};
-Test test;
+
+//Modbus Registers Offsets (0-9999)
+const int LAMP1_COIL = 0; 
+
+ModbusIP mb;
+
+
 
 void setup()
 {
     ebox_init();
+//    os_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
     LED1.mode(OUTPUT_PP);
+    // The media access control (ethernet hardware) address for the shield
+    byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };  
+    // The IP address for the shield
+    byte ip[] = { 192, 168, 0, 120 };   
+    //Config Modbus IP 
+    mb.config(mac, ip);
+    //Set ledPin mode
+    // Add LAMP1_COIL register - Use addCoil() for digital outputs
+    mb.addCoil(LAMP1_COIL);
 
-    timer2.begin(1);
-    timer2.attach(t2it);
-    //    timer2.attach(&test,&Test::event);
-    timer2.interrupt(ENABLE);
-    timer2.start();
-    UART.printf("\r\ntimer clock       = %dMhz", timer2.get_timer_source_clock() / 1000000);
-    UART.printf("\r\nmax interrupt frq = %dKhz", timer2.get_max_frq() / 1000);
 }
 
-
+#include "ebox_mem.h"
 int main(void)
 {
     setup();
     while(1)
     {
+        //Call once inside loop() - all magic here
+        mb.task();
 
+        //Attach ledPin to LAMP1_COIL register     
+        LED1.write( mb.Coil(LAMP1_COIL));
     }
 
 
