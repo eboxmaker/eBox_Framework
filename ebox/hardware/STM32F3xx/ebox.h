@@ -34,7 +34,7 @@
 //#include "ebox_pwm.h"
 //#include "ebox_i2c.h"
 //#include "ebox_spi.h"
-//#include "ebox_uart.h"
+#include "ebox_uart.h"
 //#include "ebox_uart_stream.h"
 //#include "ebox_in_capture.h"
 //#include "ebox_encoder.h"
@@ -54,7 +54,7 @@ extern "C" {
 
 
 ////创建所有引脚对象和宏定义其指针
-//extern Uart uart1;
+extern Uart uart1;
 //extern Uart uart2;
 //extern Uart uart3;
 ////extern Uart uart4;

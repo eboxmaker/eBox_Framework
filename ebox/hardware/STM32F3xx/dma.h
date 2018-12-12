@@ -5,6 +5,7 @@
 #include "mcu.h"
 #include "FunctionPointer.h"
 
+
 //”√ªß≈‰÷√//////////////
 #define DMA_NUM (7)
 enum DmaIrqType
@@ -28,8 +29,11 @@ enum DmaItIndex
 typedef void (*DmaIrqHandler_t)(uint32_t id, DmaIrqType type);
 class Dma
 {
+
 public:
-    Dma(DMA_Stream_TypeDef *DMAy_Streamx);
+    uint32_t DMAy_Channelx;
+public:
+    Dma(uint32_t DMAy_Channelx);
 
     void rcc_enable();
     void rcc_disable();
@@ -39,13 +43,13 @@ public:
 
     void deInit();
 
-    void init(DMA_InitTypeDef *DMA_InitStruct);
+    void init(LL_DMA_InitTypeDef *DMA_InitStruct);
     void enable();
     void disable();
-
-    DMA_Stream_TypeDef *get_dma_ch();
-
-
+    void set_current_len(uint16_t len);
+    bool get_flag_status();
+    void clear_flag();
+    uint32_t get_dma_ch();
 
     /** Attach a function to call whenever a serial interrupt is generated
     *
@@ -74,13 +78,6 @@ public:
 
     static void _irq_handler(uint32_t id, DmaIrqType irq_type);
 
-
-
-
-
-
-    //    private:
-    DMA_Stream_TypeDef *DMAy_Streamx;
 protected:
     FunctionPointer _irq[3];
 
@@ -95,23 +92,13 @@ void dma_irq_handler(uint8_t index, DmaIrqHandler_t handler, uint32_t id);
 }
 #endif
 
-extern Dma Dma1Stream0;
-extern Dma Dma1Stream1;
-extern Dma Dma1Stream2;
-extern Dma Dma1Stream3;
-extern Dma Dma1Stream4;
-extern Dma Dma1Stream5;
-extern Dma Dma1Stream6;
-extern Dma Dma1Stream7;
-
-extern Dma Dma2Stream0;
-extern Dma Dma2Stream1;
-extern Dma Dma2Stream2;
-extern Dma Dma2Stream3;
-extern Dma Dma2Stream4;
-extern Dma Dma2Stream5;
-extern Dma Dma2Stream6;
-extern Dma Dma2Stream7;
-
+extern Dma Dma1Ch1;
+extern Dma Dma1Ch2;
+extern Dma Dma1Ch3;
+extern Dma Dma1Ch4;
+extern Dma Dma1Ch5;
+extern Dma Dma1Ch6;
+extern Dma Dma1Ch7;
 #endif
+
 
