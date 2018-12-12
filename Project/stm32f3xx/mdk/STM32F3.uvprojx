@@ -335,7 +335,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32F373xC,USE_FULL_LL</Define>
+              <Define>STM32F373xC,USE_FULL_LL_DRIVER</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\mcuLib\stm32f3xx\Libraries\STM32F3xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Device\ST\STM32F3xx\Include;..\..\..\ebox\core;..\..\..\ebox\core\port;..\..\..\ebox\hardware\STM32F3xx;..\..\..\ebox\hardware\STM32F3xx\Peripherals;..\..\..\user;..\..\..\user\board\stm32f373</IncludePath>
             </VariousControls>
@@ -547,11 +547,6 @@
           <GroupName>ebox_mcu</GroupName>
           <Files>
             <File>
-              <FileName>ebox_it.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\STM32F3xx\ebox_it.cpp</FilePath>
-            </File>
-            <File>
               <FileName>mcu.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\STM32F3xx\mcu.cpp</FilePath>
@@ -562,14 +557,44 @@
               <FilePath>..\..\..\ebox\hardware\STM32F3xx\rcc.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_object.cpp</FileName>
+              <FileName>nvic.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\STM32F3xx\ebox_object.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\STM32F3xx\nvic.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>dma.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\STM32F3xx\dma.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_gpio.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_gpio.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_uart.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_uart.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_soft_spi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_soft_spi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_soft_i2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_soft_i2c.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_object.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\STM32F3xx\ebox_object.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_it.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\STM32F3xx\ebox_it.cpp</FilePath>
             </File>
           </Files>
         </Group>

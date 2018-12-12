@@ -188,10 +188,10 @@ private:
     uint16_t            rx_buffer_size;
     uint16_t            tx_buffer_size;
 
-    RxMode_t            mode;
+    RxMode_t            _mode;
     Dma                 *dma_rx;
     uint32_t            dma_channel;
-    uint8_t             index;
+    uint8_t             _index;
     uint8_t             preemption_priority;
     uint8_t             sub_priority;
 

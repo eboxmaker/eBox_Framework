@@ -26,7 +26,7 @@ extern "C" {
 #endif
 #include "mcu_config.h"
 #include "rcc.h"
-//#include "nvic.h"
+#include "nvic.h"
 
 
 #define NVIC_GROUP_CONFIG NVIC_PriorityGroup_2//以后NVIC_PriorityGroupConfig()函数不需要再被调用。更不能再以非NVIC_GROUP_CONFIG值填充调用
