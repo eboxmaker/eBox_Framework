@@ -501,6 +501,9 @@ typedef enum
     STM32F107RC	,
     STM32F107VB	,
     STM32F107VC	,
+    
+    
+    STM32F373VC	= 300,
 
 
     STM32F411VE	= 400,
