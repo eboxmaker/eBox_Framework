@@ -9,8 +9,8 @@
 				2017/10/16 usart info 改用Periph_SS定义，信息中包含不同usart的时钟使能函数
 ******************************************************************************/
 
-#ifndef __STM32F072_DEFINE_H_
-#define __STM32F072_DEFINE_H_
+#ifndef __STM32F030_DEFINE_H_
+#define __STM32F030_DEFINE_H_
 
 #include "stm32f0xx_ll_bus.h"
 #include "stm32f0xx_ll_gpio.h"
@@ -35,37 +35,20 @@ static const DevToRcc_t dev_to_rcc_table[] =
     {GPIOB_BASE, LL_AHB1_GRP1_PERIPH_GPIOB},
     {GPIOC_BASE, LL_AHB1_GRP1_PERIPH_GPIOC},
     {GPIOD_BASE, LL_AHB1_GRP1_PERIPH_GPIOD},
-    {GPIOE_BASE, LL_AHB1_GRP1_PERIPH_GPIOE},
     {GPIOF_BASE, LL_AHB1_GRP1_PERIPH_GPIOF},
 
 
     {ADC1_BASE, LL_APB1_GRP2_PERIPH_ADC1},
 
     {TIM1_BASE, LL_APB1_GRP2_PERIPH_TIM1},
-    {TIM2_BASE, LL_APB1_GRP1_PERIPH_TIM2},
     {TIM3_BASE, LL_APB1_GRP1_PERIPH_TIM3},
-    //    {TIM4_BASE,LL_APB1_GRP1_PERIPH_TIM4},
-    //    {TIM5_BASE,RCC_APB1Periph_TIM5},
-    {TIM6_BASE, LL_APB1_GRP1_PERIPH_TIM6},
-    {TIM7_BASE, LL_APB1_GRP1_PERIPH_TIM7},
-    //    {TIM8_BASE,RCC_APB2Periph_TIM8},
-    //    {TIM9_BASE,RCC_APB2Periph_TIM9},
-    //    {TIM10_BASE,RCC_APB2Periph_TIM10},
-    //    {TIM11_BASE,RCC_APB2Periph_TIM11},
-    //
+
     {SPI1_BASE, LL_APB1_GRP2_PERIPH_SPI1},
-    {SPI2_BASE, LL_APB1_GRP1_PERIPH_SPI2},
-    //    {SPI3_BASE,RCC_APB1Periph_SPI3},
-    //    {SPI4_BASE,RCC_APB2Periph_SPI4},
-    //    {SPI5_BASE,RCC_APB2Periph_SPI5},
+  
     {I2C1_BASE, LL_APB1_GRP1_PERIPH_I2C1},
-    {I2C2_BASE, LL_APB1_GRP1_PERIPH_I2C2},
 
 
     {USART1_BASE, LL_APB1_GRP2_PERIPH_USART1},
-    {USART2_BASE, LL_APB1_GRP1_PERIPH_USART2},
-    {USART3_BASE, LL_APB1_GRP1_PERIPH_USART3},
-    {USART4_BASE, LL_APB1_GRP1_PERIPH_USART4},
 
     {DMA1_BASE, LL_AHB1_GRP1_PERIPH_DMA1},
 };
@@ -79,32 +62,23 @@ typedef struct
 const DevToIRQn_t dev_to_IRQn_table[] =
 {
     {TIM1_BASE, TIM1_BRK_UP_TRG_COM_IRQn, TIM1_CC_IRQn},
-    {TIM2_BASE, TIM2_IRQn},
-    {TIM3_BASE, TIM3_IRQn},
-    //    {TIM4_BASE,TIM4_IRQn},
 
-    //    {ADC1_BASE,ADC1_2_IRQn},
-    //    {ADC2_BASE,ADC1_2_IRQn},
+    {TIM3_BASE, TIM3_IRQn},
 
     {SPI1_BASE, SPI1_IRQn},
-    {SPI2_BASE, SPI2_IRQn},
 
     {I2C1_BASE, I2C1_IRQn},
-    {I2C2_BASE, I2C2_IRQn},
+
 
     {LL_DMA_CHANNEL_1, DMA1_Channel1_IRQn},
     {LL_DMA_CHANNEL_2, DMA1_Channel2_3_IRQn},
     {LL_DMA_CHANNEL_3, DMA1_Channel2_3_IRQn},
     {LL_DMA_CHANNEL_4, DMA1_Channel4_5_6_7_IRQn},
     {LL_DMA_CHANNEL_5, DMA1_Channel4_5_6_7_IRQn},
-    {LL_DMA_CHANNEL_6, DMA1_Channel4_5_6_7_IRQn},
-    {LL_DMA_CHANNEL_7, DMA1_Channel4_5_6_7_IRQn},
+
 
 
     {USART1_BASE, USART1_IRQn},
-    {USART2_BASE, USART2_IRQn},
-    {USART3_BASE, USART3_4_IRQn},
-    {USART4_BASE, USART3_4_IRQn},
 
     {LL_EXTI_LINE_0, EXTI0_1_IRQn},
     {LL_EXTI_LINE_1, EXTI0_1_IRQn},
@@ -124,26 +98,6 @@ const DevToIRQn_t dev_to_IRQn_table[] =
     {LL_EXTI_LINE_15, EXTI4_15_IRQn},
 };
 
-// PA2,9,14 tx; PA3,10 rx
-//static const AF_FUN_S UART_MAP[] ={
-//	PA_2,AF_PP_PU,LL_GPIO_AF_1,USART2_BASE,
-//	PA_3,AF_PP_PU,LL_GPIO_AF_1,USART2_BASE,
-//	PA_9,AF_PP_PU,LL_GPIO_AF_1,USART1_BASE,
-//	PA_10,AF_PP_PU,LL_GPIO_AF_1,USART1_BASE,
-//	P_NC
-//};
-
-//static const Periph_S UART_INFO[] = {
-//	USART1_BASE,LL_APB1_GRP2_PERIPH_USART1,USART1_IRQn,Irq1,
-//	USART2_BASE,LL_APB1_GRP1_PERIPH_USART2,USART2_IRQn,Irq2,
-//	NC
-//};
-
-//static const Periph_SS UART_INFO[]={
-//	USART1_BASE,LL_APB1_GRP2_EnableClock,LL_APB1_GRP2_PERIPH_USART1,USART1_IRQn,Irq1,
-//	USART2_BASE,LL_APB1_GRP1_EnableClock,LL_APB1_GRP1_PERIPH_USART2,USART2_IRQn,Irq2,
-//	NC
-//};
 typedef struct
 {
     PIN_ID_t	_pinId;		//pin_id
@@ -155,8 +109,8 @@ typedef struct
 // PA2,9,14 tx; PA3,10 rx
 static const AF_FUN_S UART_MAP[] =
 {
-    PA2_ID, AF_PP_PU, LL_GPIO_AF_1, USART2_BASE,
-    PA3_ID, AF_PP_PU, LL_GPIO_AF_1, USART2_BASE,
+//    PA2_ID, AF_PP_PU, LL_GPIO_AF_1, USART2_BASE,
+//    PA3_ID, AF_PP_PU, LL_GPIO_AF_1, USART2_BASE,
     PA9_ID, AF_PP_PU, LL_GPIO_AF_1, USART1_BASE,
     PA10_ID, AF_PP_PU, LL_GPIO_AF_1, USART1_BASE,
     P_NC

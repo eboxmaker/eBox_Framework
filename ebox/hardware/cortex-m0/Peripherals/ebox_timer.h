@@ -23,7 +23,8 @@
 
 #include "ebox_core.h"
 #include "mcu.h"
-#include "stm32f072_define.h"
+//#include "stm32f072_define.h"
+#include "mcu_define.h"
 #include "FunctionPointer.h"
 /*
 	1.Ö§³Ötim1,2,3,4,5,6,7

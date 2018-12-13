@@ -40,8 +40,8 @@
 
 #define BtnPin	PC13
 
-//#define	UART    uart1
-#define	UART    uart2
+#define	UART    uart1
+//#define	UART    uart2
 //#define I2C     i2c1
 #define I2C     si2c1
 
