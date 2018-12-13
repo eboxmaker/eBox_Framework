@@ -144,10 +144,14 @@ bool Dma::get_flag_status()
         return LL_DMA_IsActiveFlag_TC4(DMA1);
     case (uint32_t)DMA1_Channel5:
         return LL_DMA_IsActiveFlag_TC5(DMA1);
+#ifdef 	DMA1_Channel6			
     case (uint32_t)DMA1_Channel6:
         return LL_DMA_IsActiveFlag_TC6(DMA1);
+#endif		
+#ifdef 	DMA1_Channel6			
     case (uint32_t)DMA1_Channel7:
         return LL_DMA_IsActiveFlag_TC7(DMA1);
+#endif		
     default:
         break;
     }
@@ -171,12 +175,16 @@ void Dma::clear_flag()
     case (uint32_t)DMA1_Channel5:
         LL_DMA_ClearFlag_TC1(DMA1);
         break;
+#ifdef 	DMA1_Channel6	
     case (uint32_t)DMA1_Channel6:
         LL_DMA_ClearFlag_TC1(DMA1);
         break;
+#endif
+#ifdef 	DMA1_Channel7	
     case (uint32_t)DMA1_Channel7:
         LL_DMA_ClearFlag_TC1(DMA1);
         break;
+#endif		
     default:
         break;
     }
@@ -274,12 +282,14 @@ void DMA1_Channel5_IRQHandler(void)
 }
 void DMA1_Channel6_IRQHandler(void)
 {
+#ifdef 	LL_DMA_CHANNEL_6		
     if(LL_DMA_IsActiveFlag_TC6(DMA1) == SET)
     {
         irq_handler(dma_irq_ids[DMA1_CH6], DmaItTc);
         LL_DMA_ClearFlag_GI6(DMA1);
 
     }
+#endif	
 }
 void DMA1_Channel4_5_6_7_IRQnHandler(void)
 {
@@ -288,12 +298,14 @@ void DMA1_Channel4_5_6_7_IRQnHandler(void)
         irq_handler(dma_irq_ids[DMA1_CH4], DmaItTc);
         LL_DMA_ClearFlag_GI4(DMA1);
     }
+#ifdef 	LL_DMA_CHANNEL_7	
     if(LL_DMA_IsActiveFlag_TC7(DMA1) == SET)
     {
         irq_handler(dma_irq_ids[DMA1_CH7], DmaItTc);
         LL_DMA_ClearFlag_GI7(DMA1);
         return ;
     }
+#endif		
 }
 
 
@@ -309,6 +321,10 @@ Dma Dma1Ch2(LL_DMA_CHANNEL_2);
 Dma Dma1Ch3(LL_DMA_CHANNEL_3);
 Dma Dma1Ch4(LL_DMA_CHANNEL_4);
 Dma Dma1Ch5(LL_DMA_CHANNEL_5);
+#ifdef LL_DMA_CHANNEL_6
 Dma Dma1Ch6(LL_DMA_CHANNEL_6);
+#endif
+#ifdef LL_DMA_CHANNEL_7
 Dma Dma1Ch7(LL_DMA_CHANNEL_7);
+#endif
 

@@ -10,12 +10,9 @@ extern "C" {
 #endif
 
 #include "mcu_config.h"
+#include "mcu_define.h"	
+//#include "stm32f072_define.h"	
 
-typedef struct
-{
-    uint32_t dev;
-    uint8_t irqn[4];
-} DevToIRQn_t;
 
 extern const DevToIRQn_t dev_to_IRQn_table[];
 void nvic_priority_group_config(uint32_t NVIC_PriorityGroup);

@@ -6,19 +6,35 @@
 #include "ebox_type.h"
 
 
-//用户配置区域
-//请查阅ebox_cpu_type.h寻找特定信号CPU的详细配置
-#define STM32_TYPE    STM32F072RB
-#define STM32_PINS    48
-#define STM32_FLASH   128
-#define STM32_RAM1    16
-#define STM32_COMPANY "ST\0"
+
 
 #define HSE_VALUE    ((uint32_t)8000000) /*!< Value of the External oscillator in Hz */
-
+//#define STM32F072xB
+//#define USE_FULL_LL_DRIVER
 //外设配置
 
-//#include "stm32f072_define.h"
+#if defined(STM32F030x6)
+	//用户配置区域
+	//请查阅ebox_cpu_type.h寻找特定信号CPU的详细配置
+	#define STM32_TYPE    STM32F030F4
+	#define STM32_PINS    15
+	#define STM32_FLASH   32
+	#define STM32_RAM1    4
+	#define STM32_COMPANY "ST\0"
+
+#elif defined(STM32F072xB)
+
+	//用户配置区域
+	//请查阅ebox_cpu_type.h寻找特定信号CPU的详细配置
+	#define STM32_TYPE    STM32F072RB
+	#define STM32_PINS    48
+	#define STM32_FLASH   128
+	#define STM32_RAM1    16
+	#define STM32_COMPANY "ST\0"
+
+#else
+#error "Please select first the target STM32F0xx device used in your application (in stm32f0xx.h file)"
+#endif
 
 
 
