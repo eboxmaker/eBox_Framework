@@ -1,0 +1,9 @@
+C:\Users\shentq\Documents\AutoProject\AutoProject\AutoProject\bin\Debug\AutoProject.exe.config
+C:\Users\shentq\Documents\AutoProject\AutoProject\AutoProject\bin\Debug\AutoProject.exe
+C:\Users\shentq\Documents\AutoProject\AutoProject\AutoProject\bin\Debug\AutoProject.pdb
+C:\Users\shentq\Documents\AutoProject\AutoProject\AutoProject\obj\Debug\AutoProject.csprojResolveAssemblyReference.cache
+C:\Users\shentq\Documents\AutoProject\AutoProject\AutoProject\obj\Debug\AutoProject.Properties.Resources.resources
+C:\Users\shentq\Documents\AutoProject\AutoProject\AutoProject\obj\Debug\AutoProject.csproj.GenerateResource.Cache
+C:\Users\shentq\Documents\AutoProject\AutoProject\AutoProject\obj\Debug\AutoProject.exe
+C:\Users\shentq\Documents\AutoProject\AutoProject\AutoProject\obj\Debug\AutoProject.pdb
+C:\Users\shentq\Documents\AutoProject\AutoProject\AutoProject\obj\Debug\AutoProject.Form1.resources
