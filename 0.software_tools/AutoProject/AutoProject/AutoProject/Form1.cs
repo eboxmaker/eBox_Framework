@@ -9,6 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 
 namespace AutoProject
 {
@@ -18,6 +21,7 @@ namespace AutoProject
         excleOpt excle = new excleOpt();
         DataTable dt = new DataTable();
         Target mcu = new Target();
+        jsonHlep js = new jsonHlep();
         public Form1()
         {
             InitializeComponent();
@@ -35,6 +39,14 @@ namespace AutoProject
             {
                 comboBox1.Items.Add(dt.Rows[i][0]);
             }
+            //string y = System.Text.Encoding.Default.GetString(Convert.FromBase64String(x));
+
+
+            string jsonText = "{\"zone\":\"海淀\",\"zone_en\":\"haidian\"}";
+            JObject jo = (JObject)JsonConvert.DeserializeObject(jsonText);
+            string zone = jo["zone"].ToString();
+            string FileBase64str = js.FileToBase64(FileFullPath);
+
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
