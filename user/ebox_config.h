@@ -24,7 +24,7 @@
 
 //是否使用printf功能,该功能占用存储空间较多，目前确认的使用该功能的包括uart和1602
 
-#define USE_PRINTF 1
+#define USE_PRINTF 0
 
 
 #if  USE_PRINTF == 1
