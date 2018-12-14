@@ -2,8 +2,6 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_adc_ex.h
   * @author  MCD Application Team
-  * @version V1.4.0
-  * @date    27-May-2016
   * @brief   Header file of ADC HAL Extension module.
   ******************************************************************************
   * @attention
@@ -33,18 +31,18 @@
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ******************************************************************************
-  */
+  */ 
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F0xx_HAL_ADC_EX_H
 #define __STM32F0xx_HAL_ADC_EX_H
 
 #ifdef __cplusplus
-extern "C" {
+ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f0xx_hal_def.h"
+#include "stm32f0xx_hal_def.h"  
 
 /** @addtogroup STM32F0xx_HAL_Driver
   * @{
@@ -52,9 +50,9 @@ extern "C" {
 
 /** @addtogroup ADCEx
   * @{
-  */
+  */ 
 
-/* Exported types ------------------------------------------------------------*/
+/* Exported types ------------------------------------------------------------*/ 
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup ADC_Exported_Constants ADC Exported Constants
@@ -77,11 +75,11 @@ extern "C" {
 #define ADC_EXTERNALTRIGCONV_T1_TRGO        ADC1_2_EXTERNALTRIG_T1_TRGO
 #define ADC_EXTERNALTRIGCONV_T1_CC4         ADC1_2_EXTERNALTRIG_T1_CC4
 #define ADC_EXTERNALTRIGCONV_T3_TRGO        ADC1_2_EXTERNALTRIG_T3_TRGO
-#define ADC_SOFTWARE_START                  (ADC_CFGR1_EXTSEL + (uint32_t)1)
+#define ADC_SOFTWARE_START                  (ADC_CFGR1_EXTSEL + 1U)
 
 #if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC)
 #define ADC_EXTERNALTRIGCONV_T2_TRGO        ADC1_2_EXTERNALTRIG_T2_TRGO
-#endif
+#endif 
 
 #if !defined(STM32F030x6) && !defined(STM32F070x6) && !defined(STM32F042x6)
 #define ADC_EXTERNALTRIGCONV_T15_TRGO       ADC1_2_EXTERNALTRIG_T15_TRGO
@@ -89,7 +87,7 @@ extern "C" {
 
 /**
   * @}
-  */
+  */ 
 
 
 /** @defgroup ADC_channels ADC channels
@@ -102,33 +100,33 @@ extern "C" {
 /*       watchdog channel (bits AWDCH in register ADC_CFGR1).                 */
 /*       Channels are defined with decimal numbers and converted them to      */
 /*       bitfields when needed.                                               */
-#define ADC_CHANNEL_0           ((uint32_t) 0x00000000)
-#define ADC_CHANNEL_1           ((uint32_t) 0x00000001)
-#define ADC_CHANNEL_2           ((uint32_t) 0x00000002)
-#define ADC_CHANNEL_3           ((uint32_t) 0x00000003)
-#define ADC_CHANNEL_4           ((uint32_t) 0x00000004)
-#define ADC_CHANNEL_5           ((uint32_t) 0x00000005)
-#define ADC_CHANNEL_6           ((uint32_t) 0x00000006)
-#define ADC_CHANNEL_7           ((uint32_t) 0x00000007)
-#define ADC_CHANNEL_8           ((uint32_t) 0x00000008)
-#define ADC_CHANNEL_9           ((uint32_t) 0x00000009)
-#define ADC_CHANNEL_10          ((uint32_t) 0x0000000A)
-#define ADC_CHANNEL_11          ((uint32_t) 0x0000000B)
-#define ADC_CHANNEL_12          ((uint32_t) 0x0000000C)
-#define ADC_CHANNEL_13          ((uint32_t) 0x0000000D)
-#define ADC_CHANNEL_14          ((uint32_t) 0x0000000E)
-#define ADC_CHANNEL_15          ((uint32_t) 0x0000000F)
-#define ADC_CHANNEL_16          ((uint32_t) 0x00000010)
-#define ADC_CHANNEL_17          ((uint32_t) 0x00000011)
+#define ADC_CHANNEL_0           ( 0x00000000U)
+#define ADC_CHANNEL_1           ( 0x00000001U)
+#define ADC_CHANNEL_2           ( 0x00000002U)
+#define ADC_CHANNEL_3           ( 0x00000003U)
+#define ADC_CHANNEL_4           ( 0x00000004U)
+#define ADC_CHANNEL_5           ( 0x00000005U)
+#define ADC_CHANNEL_6           ( 0x00000006U)
+#define ADC_CHANNEL_7           ( 0x00000007U)
+#define ADC_CHANNEL_8           ( 0x00000008U)
+#define ADC_CHANNEL_9           ( 0x00000009U)
+#define ADC_CHANNEL_10          ( 0x0000000AU)
+#define ADC_CHANNEL_11          ( 0x0000000BU)
+#define ADC_CHANNEL_12          ( 0x0000000CU)
+#define ADC_CHANNEL_13          ( 0x0000000DU)
+#define ADC_CHANNEL_14          ( 0x0000000EU)
+#define ADC_CHANNEL_15          ( 0x0000000FU)
+#define ADC_CHANNEL_16          ( 0x00000010U)
+#define ADC_CHANNEL_17          ( 0x00000011U)
 
 #define ADC_CHANNEL_TEMPSENSOR  ADC_CHANNEL_16
 #define ADC_CHANNEL_VREFINT     ADC_CHANNEL_17
-
+    
 #if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC)
-#define ADC_CHANNEL_18          ((uint32_t) 0x00000012)
-#define ADC_CHANNEL_VBAT        ADC_CHANNEL_18
+#define ADC_CHANNEL_18          ( 0x00000012U)
+#define ADC_CHANNEL_VBAT        ADC_CHANNEL_18 
 #endif
-
+    
 /**
   * @}
   */
@@ -136,7 +134,7 @@ extern "C" {
 /**
   * @}
   */
-
+    
 /* Exported macro ------------------------------------------------------------*/
 
 
@@ -153,7 +151,7 @@ extern "C" {
   *        VrefInt/TempSensor/Vbat
   *        Note: On STM32F0, availability of internal channel Vbat depends on
   *              devices lines.
-  * @param __CHANNEL__: ADC channel
+  * @param __CHANNEL__ ADC channel
   * @retval None
   */
 #if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC)
@@ -168,14 +166,14 @@ extern "C" {
   ((__CHANNEL__) == ADC_CHANNEL_VREFINT)                                       \
  )
 #endif
-
+   
 /**
-  * @brief Select the internal measurement path to be enabled/disabled
-  *        corresponding to the selected ADC internal channel
+  * @brief Select the internal measurement path to be enabled/disabled 
+  *        corresponding to the selected ADC internal channel 
   *        VrefInt/TempSensor/Vbat.
   *        Note: On STM32F0, availability of internal channel Vbat depends on
   *              devices lines.
-  * @param __CHANNEL__: ADC channel
+  * @param __CHANNEL__ ADC channel
   * @retval Bit of register ADC_CCR
   */
 #if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC)
@@ -201,8 +199,8 @@ extern "C" {
    (ADC_CCR_VREFEN)                                                            \
  )
 #endif
-
-
+   
+   
 #if defined (STM32F030x6) || defined (STM32F070x6)
 #define IS_ADC_EXTTRIG(REGTRIG) (((REGTRIG) == ADC_EXTERNALTRIGCONV_T1_TRGO)  || \
                                  ((REGTRIG) == ADC_EXTERNALTRIGCONV_T1_CC4)   || \
@@ -213,7 +211,7 @@ extern "C" {
                                  ((REGTRIG) == ADC_EXTERNALTRIGCONV_T1_CC4)   || \
                                  ((REGTRIG) == ADC_EXTERNALTRIGCONV_T2_TRGO)  || \
                                  ((REGTRIG) == ADC_EXTERNALTRIGCONV_T3_TRGO)  || \
-                                 ((REGTRIG) == ADC_SOFTWARE_START))
+                                 ((REGTRIG) == ADC_SOFTWARE_START))   
 
 #elif defined (STM32F030xC) || defined (STM32F070xB) || defined (STM32F030x8)
 #define IS_ADC_EXTTRIG(REGTRIG) (((REGTRIG) == ADC_EXTERNALTRIGCONV_T1_TRGO)  || \
@@ -227,7 +225,7 @@ extern "C" {
                                  ((REGTRIG) == ADC_EXTERNALTRIGCONV_T2_TRGO)  || \
                                  ((REGTRIG) == ADC_EXTERNALTRIGCONV_T3_TRGO)  || \
                                  ((REGTRIG) == ADC_EXTERNALTRIGCONV_T15_TRGO) || \
-                                 ((REGTRIG) == ADC_SOFTWARE_START))
+                                 ((REGTRIG) == ADC_SOFTWARE_START))   
 #endif
 
 #if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC)
@@ -273,9 +271,9 @@ extern "C" {
 
 /**
   * @}
-  */
+  */ 
 
-
+   
 /* Exported functions --------------------------------------------------------*/
 /** @addtogroup ADCEx_Exported_Functions
   * @{
@@ -287,7 +285,7 @@ extern "C" {
   */
 
 /* ADC calibration */
-HAL_StatusTypeDef       HAL_ADCEx_Calibration_Start(ADC_HandleTypeDef *hadc);
+HAL_StatusTypeDef       HAL_ADCEx_Calibration_Start(ADC_HandleTypeDef* hadc);
 /**
   * @}
   */
@@ -295,7 +293,7 @@ HAL_StatusTypeDef       HAL_ADCEx_Calibration_Start(ADC_HandleTypeDef *hadc);
 
 /**
   * @}
-  */
+  */ 
 
 
 /**
@@ -305,7 +303,7 @@ HAL_StatusTypeDef       HAL_ADCEx_Calibration_Start(ADC_HandleTypeDef *hadc);
 /**
   * @}
   */
-
+    
 #ifdef __cplusplus
 }
 #endif

@@ -2,9 +2,7 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_irda_ex.h
   * @author  MCD Application Team
-  * @version V1.4.0
-  * @date    27-May-2016
-  * @brief   Header file of IRDA HAL Extension module.
+  * @brief   Header file of IRDA HAL Extended module.
   ******************************************************************************
   * @attention
   *
@@ -40,10 +38,10 @@
 #define __STM32F0xx_HAL_IRDA_EX_H
 
 #ifdef __cplusplus
-extern "C" {
+ extern "C" {
 #endif
 
-#if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC)
+#if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC) 
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx_hal_def.h"
@@ -52,7 +50,7 @@ extern "C" {
   * @{
   */
 
-/** @addtogroup IRDAEx IRDAEx
+/** @addtogroup IRDAEx
   * @{
   */
 
@@ -61,7 +59,7 @@ extern "C" {
 /** @defgroup IRDAEx_Exported_Constants IRDAEx Exported Constants
   * @{
   */
-
+  
 /** @defgroup IRDAEx_Word_Length IRDA Word Length
   * @{
   */
@@ -69,10 +67,10 @@ extern "C" {
     defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || \
     defined (STM32F091xC) || defined (STM32F098xx)
 #define IRDA_WORDLENGTH_7B                  ((uint32_t)USART_CR1_M1)   /*!< 7-bit long frame */
-#define IRDA_WORDLENGTH_8B                  ((uint32_t)0x00000000)     /*!< 8-bit long frame */
+#define IRDA_WORDLENGTH_8B                  (0x00000000U)              /*!< 8-bit long frame */
 #define IRDA_WORDLENGTH_9B                  ((uint32_t)USART_CR1_M0)   /*!< 9-bit long frame */
 #else
-#define IRDA_WORDLENGTH_8B                  ((uint32_t)0x00000000)     /*!< 8-bit long frame */
+#define IRDA_WORDLENGTH_8B                  (0x00000000U)              /*!< 8-bit long frame */
 #define IRDA_WORDLENGTH_9B                  ((uint32_t)USART_CR1_M)    /*!< 9-bit long frame */
 #endif /* defined (STM32F042x6) || defined (STM32F048xx) || \
           defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || \
@@ -80,10 +78,10 @@ extern "C" {
 /**
   * @}
   */
-
+    
 /**
   * @}
-  */
+  */  
 
 /* Exported macros -----------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
@@ -95,13 +93,13 @@ extern "C" {
   */
 
 /** @brief  Report the IRDA clock source.
-  * @param  __HANDLE__: specifies the IRDA Handle.
-  * @param  __CLOCKSOURCE__: output variable.
+  * @param  __HANDLE__ specifies the IRDA Handle.
+  * @param  __CLOCKSOURCE__ output variable.
   * @retval IRDA clocking source, written in __CLOCKSOURCE__.
   */
 
 #if defined(STM32F031x6) || defined(STM32F038xx)
-#define IRDA_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__) \
+#define IRDA_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__)       \
   do {                                                        \
      switch(__HAL_RCC_GET_USART1_SOURCE())                    \
      {                                                        \
@@ -124,7 +122,7 @@ extern "C" {
   } while(0)
 #elif defined (STM32F042x6) || defined (STM32F048xx) ||       \
       defined (STM32F051x8) || defined (STM32F058xx)
-#define IRDA_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__) \
+#define IRDA_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__)       \
   do {                                                        \
     if((__HANDLE__)->Instance == USART1)                      \
     {                                                         \
@@ -157,7 +155,7 @@ extern "C" {
     }                                                         \
   } while(0)
 #elif defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx)
-#define IRDA_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__) \
+#define IRDA_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__)       \
   do {                                                        \
     if((__HANDLE__)->Instance == USART1)                      \
     {                                                         \
@@ -215,7 +213,7 @@ extern "C" {
     }                                                         \
   } while(0)
 #elif defined(STM32F091xC) || defined(STM32F098xx)
-#define IRDA_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__) \
+#define IRDA_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__)       \
   do {                                                        \
     if((__HANDLE__)->Instance == USART1)                      \
     {                                                         \
@@ -315,71 +313,71 @@ extern "C" {
   *         by the reception API().
   *         This masking operation is not carried out in the case of
   *         DMA transfers.
-  * @param  __HANDLE__: specifies the IRDA Handle
-  * @retval None, the mask to apply to IRDA RDR register is stored in (__HANDLE__)->Mask field.
+  * @param  __HANDLE__ specifies the IRDA Handle.
+  * @retval None, the mask to apply to the associated UART RDR register is stored in (__HANDLE__)->Mask field.
   */
 #if defined (STM32F042x6) || defined (STM32F048xx) || \
     defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || \
     defined (STM32F091xC) || defined (STM32F098xx)
-#define IRDA_MASK_COMPUTATION(__HANDLE__)                       \
+#define IRDA_MASK_COMPUTATION(__HANDLE__)                             \
   do {                                                                \
   if ((__HANDLE__)->Init.WordLength == IRDA_WORDLENGTH_9B)            \
   {                                                                   \
      if ((__HANDLE__)->Init.Parity == IRDA_PARITY_NONE)               \
      {                                                                \
-        (__HANDLE__)->Mask = 0x01FF ;                                 \
+        (__HANDLE__)->Mask = 0x01FFU ;                                \
      }                                                                \
      else                                                             \
      {                                                                \
-        (__HANDLE__)->Mask = 0x00FF ;                                 \
+        (__HANDLE__)->Mask = 0x00FFU ;                                \
      }                                                                \
   }                                                                   \
   else if ((__HANDLE__)->Init.WordLength == IRDA_WORDLENGTH_8B)       \
   {                                                                   \
      if ((__HANDLE__)->Init.Parity == IRDA_PARITY_NONE)               \
      {                                                                \
-        (__HANDLE__)->Mask = 0x00FF ;                                 \
+        (__HANDLE__)->Mask = 0x00FFU ;                                \
      }                                                                \
      else                                                             \
      {                                                                \
-        (__HANDLE__)->Mask = 0x007F ;                                 \
+        (__HANDLE__)->Mask = 0x007FU ;                                \
      }                                                                \
   }                                                                   \
   else if ((__HANDLE__)->Init.WordLength == IRDA_WORDLENGTH_7B)       \
   {                                                                   \
      if ((__HANDLE__)->Init.Parity == IRDA_PARITY_NONE)               \
      {                                                                \
-        (__HANDLE__)->Mask = 0x007F ;                                 \
+        (__HANDLE__)->Mask = 0x007FU ;                                \
      }                                                                \
      else                                                             \
      {                                                                \
-        (__HANDLE__)->Mask = 0x003F ;                                 \
+        (__HANDLE__)->Mask = 0x003FU ;                                \
      }                                                                \
   }                                                                   \
 } while(0)
 #else
-#define IRDA_MASK_COMPUTATION(__HANDLE__)                       \
+#define IRDA_MASK_COMPUTATION(__HANDLE__)                             \
   do {                                                                \
   if ((__HANDLE__)->Init.WordLength == IRDA_WORDLENGTH_9B)            \
   {                                                                   \
      if ((__HANDLE__)->Init.Parity == IRDA_PARITY_NONE)               \
      {                                                                \
-        (__HANDLE__)->Mask = 0x01FF ;                                 \
+        (__HANDLE__)->Mask = 0x01FFU ;                                \
      }                                                                \
      else                                                             \
      {                                                                \
-        (__HANDLE__)->Mask = 0x00FF ;                                 \
+        (__HANDLE__)->Mask = 0x00FFU ;                                \
      }                                                                \
   }                                                                   \
   else if ((__HANDLE__)->Init.WordLength == IRDA_WORDLENGTH_8B)       \
   {                                                                   \
      if ((__HANDLE__)->Init.Parity == IRDA_PARITY_NONE)               \
      {                                                                \
-        (__HANDLE__)->Mask = 0x00FF ;                                 \
+        (__HANDLE__)->Mask = 0x00FFU ;                                \
      }                                                                \
      else                                                             \
      {                                                                \
-        (__HANDLE__)->Mask = 0x007F ;                                 \
+        (__HANDLE__)->Mask = 0x007FU ;                                \
      }                                                                \
   }                                                                   \
 } while(0)
@@ -389,9 +387,9 @@ extern "C" {
 
 /**
   * @brief Ensure that IRDA frame length is valid.
-  * @param __LENGTH__: IRDA frame length.
+  * @param __LENGTH__ IRDA frame length. 
   * @retval SET (__LENGTH__ is valid) or RESET (__LENGTH__ is invalid)
-  */
+  */ 
 #if defined (STM32F042x6) || defined (STM32F048xx) || \
     defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || \
     defined (STM32F091xC) || defined (STM32F098xx)
@@ -420,7 +418,7 @@ extern "C" {
   */
 
 #endif /* !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC)  */
-
+  
 #ifdef __cplusplus
 }
 #endif
