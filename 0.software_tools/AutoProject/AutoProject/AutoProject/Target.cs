@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace AutoProject
 {
@@ -27,6 +28,7 @@ namespace AutoProject
         }
         public int parserStringToInt(string str)
         {
+
             string result = System.Text.RegularExpressions.Regex.Replace(str, @"[^0-9]+", "");
             int value = Convert.ToInt16(result);
             return value;
