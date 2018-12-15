@@ -18,7 +18,7 @@
 	//请查阅ebox_cpu_type.h寻找特定信号CPU的详细配置
 	#define STM32_TYPE    STM32F030F4
 	#define STM32_PINS    15
-	#define STM32_FLASH   32			// 标称16k，实际超过16k
+	#define STM32_FLASH   32
 	#define STM32_RAM1    4
 	#define STM32_COMPANY "ST\0"
 
@@ -27,7 +27,7 @@
 	//用户配置区域
 	//请查阅ebox_cpu_type.h寻找特定信号CPU的详细配置
 	#define STM32_TYPE    STM32F072RB
-	#define STM32_PINS    51
+	#define STM32_PINS    48
 	#define STM32_FLASH   128
 	#define STM32_RAM1    16
 	#define STM32_COMPANY "ST\0"
