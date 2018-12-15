@@ -20,7 +20,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_uart.h"
 #include "ebox_mem.h"
-//#include "stm32f072_define.h"
 #include "mcu_define.h"
 
 static uint32_t serial_irq_ids[UART_NUM] = {0};
@@ -439,13 +438,12 @@ extern "C" {
         {
             rx_buffer_one(USART1, NUM_UART1);
             irq_handler(serial_irq_ids[NUM_UART1], RxIrq);
-            CLEAR_BIT(USART1->ISR, B10000); //强制清除
+						LL_USART_RequestRxDataFlush(USART1);
         }
         if(LL_USART_IsActiveFlag_TXE(USART1) == SET)
         {
             tx_bufferx_one(USART1, NUM_UART1);
             irq_handler(serial_irq_ids[NUM_UART1], TxIrq);
-            LL_USART_IsActiveFlag_TXE(USART1);
         }
     }
 #endif
@@ -467,8 +465,6 @@ extern "C" {
         {
             tx_bufferx_one(USART2, NUM_UART2);
             irq_handler(serial_irq_ids[NUM_UART2], TxIrq);
-            // 清除发送结束中断标志
-            //            LL_USART_IsActiveFlag_TXE(USART2);
         }
     }
 #endif		

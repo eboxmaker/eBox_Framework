@@ -1,0 +1,10 @@
+1  ebox_uart 中 nvic 使能，时钟使能需要修复 ， 9.12 修复
+2  需要优化rcc.cpp。 目前的方式比较耗资源
+3  dma需要优化，使之可以适应DMA1，DMA1。目前只能使用MDA1
+4  使用uart1回导致无法下载程序，原因不祥	   9.16 修复
+5  I2C需要优化，其中begin,config 都要优化
+6  ADC 初始化ok，需要完善DMA转换
+7  STM32F0 adc只能按照固定顺序读取
+8  iflash部分，f0,f1,f4有差异，需要优化，保持接口一致
+9  timer接口需优化
+10 encoder 无法运行，需要处理
