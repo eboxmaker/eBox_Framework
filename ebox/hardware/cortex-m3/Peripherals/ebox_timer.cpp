@@ -37,7 +37,7 @@ void Timer::begin(uint32_t frq)
     uint32_t _prescaler = 1;
     uint8_t index;
 
-    if(frq >= get_max_frq())frq = get_max_frq();//控制最大频率
+//    if(frq >= get_max_frq())frq = get_max_frq();//控制最大频率
     for(; _prescaler <= 0xffff; _prescaler++)
     {
         _period = get_timer_source_clock() / _prescaler / frq;
