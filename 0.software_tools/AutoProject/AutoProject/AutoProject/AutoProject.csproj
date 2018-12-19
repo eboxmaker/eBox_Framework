@@ -56,9 +56,12 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="jsonHlep.cs" />
+    <Compile Include="JsonManager.cs" />
+    <Compile Include="MCUListKeyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Target.cs" />
+    <Compile Include="XMLReadWrite.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

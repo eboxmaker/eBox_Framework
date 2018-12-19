@@ -22,6 +22,7 @@ namespace AutoProject
         DataTable dt = new DataTable();
         Target mcu = new Target();
         jsonHlep js = new jsonHlep();
+        JsonManager jm = new JsonManager();
         public Form1()
         {
             InitializeComponent();
@@ -47,6 +48,12 @@ namespace AutoProject
             string zone = jo["zone"].ToString();
             string FileBase64str = js.FileToBase64(FileFullPath);
 
+
+            jm.OpenFile(".\\mcu\\mcusFeaturesAndDescription.json");
+            jm.Save(".\\mcu\\mcusFeaturesAndDescription1.json");
+            DataTable dt1 =  jm.toDataTable(jm.Serialize(jm.jo));
+            dataGridView1.DataSource = dt1;
+                
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
