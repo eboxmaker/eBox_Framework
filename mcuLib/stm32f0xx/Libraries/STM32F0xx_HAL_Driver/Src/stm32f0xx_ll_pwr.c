@@ -2,8 +2,6 @@
   ******************************************************************************
   * @file    stm32f0xx_ll_pwr.c
   * @author  MCD Application Team
-  * @version V1.4.0
-  * @date    27-May-2016
   * @brief   PWR LL module driver.
   ******************************************************************************
   * @attention
@@ -73,13 +71,13 @@
   */
 ErrorStatus LL_PWR_DeInit(void)
 {
-    /* Force reset of PWR clock */
-    LL_APB1_GRP1_ForceReset(LL_APB1_GRP1_PERIPH_PWR);
+  /* Force reset of PWR clock */
+  LL_APB1_GRP1_ForceReset(LL_APB1_GRP1_PERIPH_PWR);
 
-    /* Release reset of PWR clock */
-    LL_APB1_GRP1_ReleaseReset(LL_APB1_GRP1_PERIPH_PWR);
+  /* Release reset of PWR clock */
+  LL_APB1_GRP1_ReleaseReset(LL_APB1_GRP1_PERIPH_PWR);
 
-    return SUCCESS;
+  return SUCCESS;
 }
 
 /**

@@ -16,7 +16,7 @@ int len;
 void setup()
 {
     ebox_init();
-    UART.begin(115200);
+    UART.begin(115200,RxIt);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 }
 int main(void)
@@ -31,7 +31,7 @@ int main(void)
         {
             char c = UART.read();
 
-            UART.printf("%c", c);
+            UART.printf("%c \r\n", c);
 
         }
     }

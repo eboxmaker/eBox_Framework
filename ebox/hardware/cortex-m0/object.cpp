@@ -22,8 +22,11 @@
 
 ////´®¿Ú
 // tx,rx
-Uart uart1(USART1, &PA9, &PA10);
+//Uart uart1(USART1, &PA9, &PA10);
+Uart uart1(USART1, &PB6, &PB7);
+#ifdef USART2_BASE 
 Uart uart2(USART2, &PA2, &PA3);
+#endif
 //Uart uart3(USART3, &PB10, &PB11);
 
 //#if (MCU_PINS >= 100)

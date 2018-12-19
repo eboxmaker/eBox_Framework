@@ -2,8 +2,6 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_smartcard_ex.h
   * @author  MCD Application Team
-  * @version V1.4.0
-  * @date    27-May-2016
   * @brief   Header file of SMARTCARD HAL Extended module.
   ******************************************************************************
   * @attention
@@ -40,10 +38,10 @@
 #define __STM32F0xx_HAL_SMARTCARD_EX_H
 
 #ifdef __cplusplus
-extern "C" {
+ extern "C" {
 #endif
 
-#if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC)
+#if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC) 
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx_hal_def.h"
@@ -56,21 +54,21 @@ extern "C" {
   * @{
   */
 
-/* Exported types ------------------------------------------------------------*/
+/* Exported types ------------------------------------------------------------*/  
 /* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-
-/** @defgroup SMARTCARD_Extended_Exported_Macros SMARTCARDEx Exported Macros
+/* Exported macros -----------------------------------------------------------*/  
+/* Private macros ------------------------------------------------------------*/
+/** @defgroup SMARTCARDEx_Private_Macros SMARTCARD Extended Private Macros
   * @{
   */
-
-/** @brief  Reports the SMARTCARD clock source.
-  * @param  __HANDLE__: specifies the SMARTCARD Handle
-  * @param  __CLOCKSOURCE__ : output variable
+  
+/** @brief  Report the SMARTCARD clock source.
+  * @param  __HANDLE__ specifies the SMARTCARD Handle.
+  * @param  __CLOCKSOURCE__ output variable.
   * @retval the SMARTCARD clocking source, written in __CLOCKSOURCE__.
   */
 #if defined(STM32F031x6) || defined(STM32F038xx)
-#define SMARTCARD_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__) \
+#define SMARTCARD_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__)       \
   do {                                                             \
      switch(__HAL_RCC_GET_USART1_SOURCE())                         \
      {                                                             \
@@ -94,7 +92,7 @@ extern "C" {
 #elif defined (STM32F030x8) ||                                     \
       defined (STM32F042x6) || defined (STM32F048xx) ||            \
       defined (STM32F051x8) || defined (STM32F058xx)
-#define SMARTCARD_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__) \
+#define SMARTCARD_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__)       \
   do {                                                             \
     if((__HANDLE__)->Instance == USART1)                           \
     {                                                              \
@@ -125,8 +123,8 @@ extern "C" {
     {                                                              \
       (__CLOCKSOURCE__) = SMARTCARD_CLOCKSOURCE_UNDEFINED;         \
     }                                                              \
-  } while(0)
-#elif defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx)
+  } while(0) 
+#elif defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx)   
 #define SMARTCARD_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__) \
   do {                                                             \
     if((__HANDLE__)->Instance == USART1)                           \
@@ -183,9 +181,9 @@ extern "C" {
     {                                                              \
       (__CLOCKSOURCE__) = SMARTCARD_CLOCKSOURCE_UNDEFINED;         \
     }                                                              \
-  } while(0)
-#elif defined(STM32F091xC) || defined(STM32F098xx)
-#define SMARTCARD_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__) \
+  } while(0) 
+#elif defined(STM32F091xC) || defined(STM32F098xx) 
+#define SMARTCARD_GETCLOCKSOURCE(__HANDLE__,__CLOCKSOURCE__)       \
   do {                                                             \
     if((__HANDLE__)->Instance == USART1)                           \
     {                                                              \
@@ -274,9 +272,9 @@ extern "C" {
     {                                                              \
       (__CLOCKSOURCE__) = SMARTCARD_CLOCKSOURCE_UNDEFINED;         \
     }                                                              \
-  } while(0)
+  } while(0)      
 #endif /* defined(STM32F031x6) || defined(STM32F038xx) */
-
+  
 /**
   * @}
   */
@@ -299,8 +297,6 @@ void              HAL_SMARTCARDEx_TimeOut_Config(SMARTCARD_HandleTypeDef *hsmart
 HAL_StatusTypeDef HAL_SMARTCARDEx_EnableReceiverTimeOut(SMARTCARD_HandleTypeDef *hsmartcard);
 HAL_StatusTypeDef HAL_SMARTCARDEx_DisableReceiverTimeOut(SMARTCARD_HandleTypeDef *hsmartcard);
 
-/* Peripheral State and Error functions ***************************************/
-
 /**
   * @}
   */
@@ -317,8 +313,8 @@ HAL_StatusTypeDef HAL_SMARTCARDEx_DisableReceiverTimeOut(SMARTCARD_HandleTypeDef
   * @}
   */
 
-#endif /* !defined(STM32F030x6) && !defined(STM32F030x8)&& !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC)  */
-
+#endif /* !defined(STM32F030x6) && !defined(STM32F030x8)&& !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC)  */  
+  
 #ifdef __cplusplus
 }
 #endif

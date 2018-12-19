@@ -54,10 +54,12 @@ void InCapture::begin(uint16_t prescaler, ICMode_t mode)
         _overflow_times = &t1_overflow_times;
         _tIndex = TIM1_IT_Update;
         break;
+#ifdef TIM2_BASE		
     case (uint32_t)TIM2_BASE:
         _overflow_times = &t2_overflow_times;
         _tIndex = TIM2_IT_Update;
         break;
+#endif		
     case (uint32_t)TIM3_BASE:
         _overflow_times = &t3_overflow_times;
         _tIndex = TIM3_IT_Update;
@@ -69,12 +71,17 @@ void InCapture::begin(uint16_t prescaler, ICMode_t mode)
     //    case (uint32_t)TIM5_BASE:
     //        index = TIM5_IT_Update;
     //        break;
+#ifdef 	TIM6_BASE	
     case (uint32_t)TIM6_BASE:
         _tIndex = TIM6_IT_Update;
         break;
+#endif
+
+#ifdef 	TIM7_BASE	
     case (uint32_t)TIM7_BASE:
         _tIndex = TIM7_IT_Update;
         break;
+#endif		
     }
 
     _enableClock();

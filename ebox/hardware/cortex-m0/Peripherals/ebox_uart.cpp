@@ -20,7 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_uart.h"
 #include "ebox_mem.h"
-#include "stm32f072_define.h"
+#include "mcu_define.h"
 
 static uint32_t serial_irq_ids[UART_NUM] = {0};
 static uart_irq_handler irq_handler;
@@ -100,17 +100,21 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 #endif
 
 #if USE_UART2
+#ifdef USART2_BASE
     case (uint32_t)USART2_BASE:
         dma_rx = &Dma1Ch5;
         _index = NUM_UART2;
         break;
+#endif		
 #endif
 
 #if USE_UART3
+#ifdef USART3_BASE
     case (uint32_t)USART3_BASE:
         dma_rx = &Dma1Ch2;
         _index = NUM_UART3;
         break;
+#endif		
 #endif
     }
 
@@ -142,16 +146,19 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
         _Parity = LL_USART_PARITY_NONE;
         break;
     }
-
+#ifdef 	LL_USART_STOPBITS_0_5	
     if(stop_bit == 0.5)
-        _StopBits = LL_USART_STOPBITS_0_5;
-    else if(stop_bit == 1)
+        _StopBits = LL_USART_STOPBITS_0_5;	
+    else
+#endif			
+		if(stop_bit == 1)
         _StopBits = LL_USART_STOPBITS_1;
     else if(stop_bit == 1.5)
         _StopBits = LL_USART_STOPBITS_2;
+#ifdef 	LL_USART_STOPBITS_0_5			
     else if(stop_bit == 2)
         _StopBits = LL_USART_STOPBITS_1_5;
-
+#endif
     nvic(ENABLE, 0, 0);
     // 初始化IO
     index = getIndex(_rx_pin->id, UART_MAP);
@@ -431,19 +438,19 @@ extern "C" {
         {
             rx_buffer_one(USART1, NUM_UART1);
             irq_handler(serial_irq_ids[NUM_UART1], RxIrq);
-            CLEAR_BIT(USART1->ISR, B10000); //强制清除
+						LL_USART_RequestRxDataFlush(USART1);
         }
         if(LL_USART_IsActiveFlag_TXE(USART1) == SET)
         {
             tx_bufferx_one(USART1, NUM_UART1);
             irq_handler(serial_irq_ids[NUM_UART1], TxIrq);
-            LL_USART_IsActiveFlag_TXE(USART1);
         }
     }
 #endif
 
 
 #if USE_UART2
+#ifdef USART2_BASE
     void USART2_IRQHandler(void)
     {
         if(LL_USART_IsActiveFlag_RXNE(USART2) == SET)
@@ -458,10 +465,9 @@ extern "C" {
         {
             tx_bufferx_one(USART2, NUM_UART2);
             irq_handler(serial_irq_ids[NUM_UART2], TxIrq);
-            // 清除发送结束中断标志
-            //            LL_USART_IsActiveFlag_TXE(USART2);
         }
     }
+#endif		
 #endif
 
     void serial_irq_handler(uint8_t index, uart_irq_handler handler, uint32_t id)

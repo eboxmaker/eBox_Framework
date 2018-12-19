@@ -2,8 +2,6 @@
   ******************************************************************************
   * @file    stm32f0xx_ll_crs.h
   * @author  MCD Application Team
-  * @version V1.4.0
-  * @date    27-May-2016
   * @brief   CRS LL module driver.
   ******************************************************************************
   * @attention
@@ -73,10 +71,10 @@
   */
 ErrorStatus LL_CRS_DeInit(void)
 {
-    LL_APB1_GRP1_ForceReset(LL_APB1_GRP1_PERIPH_CRS);
-    LL_APB1_GRP1_ReleaseReset(LL_APB1_GRP1_PERIPH_CRS);
+  LL_APB1_GRP1_ForceReset(LL_APB1_GRP1_PERIPH_CRS);
+  LL_APB1_GRP1_ReleaseReset(LL_APB1_GRP1_PERIPH_CRS);
 
-    return  SUCCESS;
+  return  SUCCESS;
 }
 
 
@@ -98,7 +96,7 @@ ErrorStatus LL_CRS_DeInit(void)
 /**
   * @}
   */
-
+  
 #endif /* USE_FULL_LL_DRIVER */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
