@@ -16,13 +16,13 @@
 
 //#define STM32_TYPE    _STM32_TYPE(_X1,_X2,_X3,_X4)
 /* MCU CONFIG BEGIN */
-#define STM32_TYPE    STM32F407ZE
-#define STM32_PINS    144
-#define STM32_FLASH   512
-#define STM32_RAM1    192
+#define STM32_TYPE    STM32F030C8
+#define STM32_PINS    48
+#define STM32_FLASH   64
+#define STM32_RAM1    8
 #define STM32_COMPANY "ST\0"
 #define HSE_VALUE    ((uint32_t)8000000) /*!< Value of the External oscillator in Hz */
-#define STM32F10X_HD
+#define STM32F10X_MD
 /* MCU CONFIG END */
 
 
