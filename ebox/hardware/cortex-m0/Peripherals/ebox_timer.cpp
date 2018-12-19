@@ -218,9 +218,11 @@ void Timer::setFrequency(uint32_t frq)
     case (uint32_t)TIM1_BASE:
         _tIndex = TIM1_IT_Update;
         break;
+#ifdef 	TIM2_BASE	
     case (uint32_t)TIM2_BASE:
         _tIndex = TIM2_IT_Update;
         break;
+#endif		
     case (uint32_t)TIM3_BASE:
         _tIndex = TIM3_IT_Update;
         break;
@@ -230,12 +232,17 @@ void Timer::setFrequency(uint32_t frq)
     //    case (uint32_t)TIM5_BASE:
     //        index = TIM5_IT_Update;
     //        break;
+#ifdef 	TIM6_BASE	
     case (uint32_t)TIM6_BASE:
         _tIndex = TIM6_IT_Update;
         break;
+#endif
+
+#ifdef 	TIM7_BASE	
     case (uint32_t)TIM7_BASE:
         _tIndex = TIM7_IT_Update;
         break;
+#endif		
     }
     tim_irq_init(_tIndex, (&Timer::_irq_handler), (uint32_t)this);
 }

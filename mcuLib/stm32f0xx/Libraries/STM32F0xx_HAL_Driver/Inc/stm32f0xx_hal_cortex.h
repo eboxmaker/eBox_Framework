@@ -2,8 +2,6 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_cortex.h
   * @author  MCD Application Team
-  * @version V1.4.0
-  * @date    27-May-2016
   * @brief   Header file of CORTEX HAL module.
   ******************************************************************************
   * @attention
@@ -33,14 +31,14 @@
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ******************************************************************************
-  */
+  */ 
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F0xx_HAL_CORTEX_H
 #define __STM32F0xx_HAL_CORTEX_H
 
 #ifdef __cplusplus
-extern "C" {
+ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -52,19 +50,19 @@ extern "C" {
 
 /** @addtogroup CORTEX CORTEX
   * @{
-  */
+  */ 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
 /** @defgroup CORTEX_Exported_Constants CORTEX Exported Constants
   * @{
   */
-
+  
 /** @defgroup CORTEX_SysTick_clock_source CORTEX SysTick clock source
   * @{
   */
-#define SYSTICK_CLKSOURCE_HCLK_DIV8    ((uint32_t)0x00000000)
-#define SYSTICK_CLKSOURCE_HCLK         ((uint32_t)0x00000004)
+#define SYSTICK_CLKSOURCE_HCLK_DIV8    (0x00000000U)
+#define SYSTICK_CLKSOURCE_HCLK         (0x00000004U)
 
 /**
   * @}
@@ -73,19 +71,19 @@ extern "C" {
 /**
   * @}
   */
-
+  
 /* Exported Macros -----------------------------------------------------------*/
 
 /* Exported functions --------------------------------------------------------*/
 /** @addtogroup CORTEX_Exported_Functions CORTEX Exported Functions
   * @{
   */
-/** @addtogroup CORTEX_Exported_Functions_Group1 Initialization and de-initialization functions
+/** @addtogroup CORTEX_Exported_Functions_Group1 Initialization and de-initialization functions 
  *  @brief    Initialization and Configuration functions
  * @{
  */
 /* Initialization and de-initialization functions *******************************/
-void HAL_NVIC_SetPriority(IRQn_Type IRQn, uint32_t PreemptPriority, uint32_t SubPriority);
+void HAL_NVIC_SetPriority(IRQn_Type IRQn,uint32_t PreemptPriority, uint32_t SubPriority);
 void HAL_NVIC_EnableIRQ(IRQn_Type IRQn);
 void HAL_NVIC_DisableIRQ(IRQn_Type IRQn);
 void HAL_NVIC_SystemReset(void);
@@ -94,11 +92,11 @@ uint32_t HAL_SYSTICK_Config(uint32_t TicksNumb);
   * @}
   */
 
-/** @addtogroup CORTEX_Exported_Functions_Group2 Peripheral Control functions
+/** @addtogroup CORTEX_Exported_Functions_Group2 Peripheral Control functions 
  *  @brief   Cortex control functions
  * @{
  */
-
+ 
 /* Peripheral Control functions *************************************************/
 uint32_t HAL_NVIC_GetPriority(IRQn_Type IRQn);
 uint32_t HAL_NVIC_GetPendingIRQ(IRQn_Type IRQn);
@@ -109,13 +107,13 @@ void HAL_SYSTICK_IRQHandler(void);
 void HAL_SYSTICK_Callback(void);
 /**
   * @}
-  */
+  */ 
 
 /**
   * @}
-  */
+  */ 
 
-/* Private types -------------------------------------------------------------*/
+/* Private types -------------------------------------------------------------*/ 
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
@@ -130,7 +128,7 @@ void HAL_SYSTICK_Callback(void);
                                       ((SOURCE) == SYSTICK_CLKSOURCE_HCLK_DIV8))
 /**
   * @}
-  */
+  */ 
 
 /**
   * @}
@@ -139,13 +137,13 @@ void HAL_SYSTICK_Callback(void);
 /**
   * @}
   */
-
+    
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* __STM32F0xx_HAL_CORTEX_H */
-
+ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

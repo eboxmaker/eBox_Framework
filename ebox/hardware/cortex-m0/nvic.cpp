@@ -3,55 +3,7 @@
 #include "nvic.h"
 
 
-//设备->中断号查询表
-const DevToIRQn_t dev_to_IRQn_table[] =
-{
-    {TIM1_BASE, TIM1_BRK_UP_TRG_COM_IRQn, TIM1_CC_IRQn},
-    {TIM2_BASE, TIM2_IRQn},
-    {TIM3_BASE, TIM3_IRQn},
-    //    {TIM4_BASE,TIM4_IRQn},
 
-    //    {ADC1_BASE,ADC1_2_IRQn},
-    //    {ADC2_BASE,ADC1_2_IRQn},
-
-    {SPI1_BASE, SPI1_IRQn},
-    {SPI2_BASE, SPI2_IRQn},
-
-    {I2C1_BASE, I2C1_IRQn},
-    {I2C2_BASE, I2C2_IRQn},
-
-    {LL_DMA_CHANNEL_1, DMA1_Channel1_IRQn},
-    {LL_DMA_CHANNEL_2, DMA1_Channel2_3_IRQn},
-    {LL_DMA_CHANNEL_3, DMA1_Channel2_3_IRQn},
-    {LL_DMA_CHANNEL_4, DMA1_Channel4_5_6_7_IRQn},
-    {LL_DMA_CHANNEL_5, DMA1_Channel4_5_6_7_IRQn},
-    {LL_DMA_CHANNEL_6, DMA1_Channel4_5_6_7_IRQn},
-    {LL_DMA_CHANNEL_7, DMA1_Channel4_5_6_7_IRQn},
-
-
-    {USART1_BASE, USART1_IRQn},
-    {USART2_BASE, USART2_IRQn},
-    {USART3_BASE, USART3_4_IRQn},
-    {USART4_BASE, USART3_4_IRQn},
-
-    {LL_EXTI_LINE_0, EXTI0_1_IRQn},
-    {LL_EXTI_LINE_1, EXTI0_1_IRQn},
-    {LL_EXTI_LINE_2, EXTI2_3_IRQn},
-    {LL_EXTI_LINE_3, EXTI2_3_IRQn},
-    {LL_EXTI_LINE_4, EXTI4_15_IRQn},
-    {LL_EXTI_LINE_5, EXTI4_15_IRQn},
-    {LL_EXTI_LINE_6, EXTI4_15_IRQn},
-    {LL_EXTI_LINE_7, EXTI4_15_IRQn},
-    {LL_EXTI_LINE_8, EXTI4_15_IRQn},
-    {LL_EXTI_LINE_9, EXTI4_15_IRQn},
-    {LL_EXTI_LINE_10, EXTI4_15_IRQn},
-    {LL_EXTI_LINE_11, EXTI4_15_IRQn},
-    {LL_EXTI_LINE_12, EXTI4_15_IRQn},
-    {LL_EXTI_LINE_13, EXTI4_15_IRQn},
-    {LL_EXTI_LINE_14, EXTI4_15_IRQn},
-    {LL_EXTI_LINE_15, EXTI4_15_IRQn},
-
-};
 /**
  *@name     void nvic_priority_group_config(uint32_t NVIC_PriorityGroup)
  *@brief    中断优先级分组配置

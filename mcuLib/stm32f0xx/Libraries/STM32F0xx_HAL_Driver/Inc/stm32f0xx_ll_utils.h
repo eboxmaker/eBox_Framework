@@ -2,8 +2,6 @@
   ******************************************************************************
   * @file    stm32f0xx_ll_utils.h
   * @author  MCD Application Team
-  * @version V1.4.0
-  * @date    27-May-2016
   * @brief   Header file of UTILS LL module.
   @verbatim
   ==============================================================================
@@ -75,7 +73,7 @@ extern "C" {
   */
 
 /* Max delay can be used in LL_mDelay */
-#define LL_MAX_DELAY                  (uint32_t)0xFFFFFFFFU
+#define LL_MAX_DELAY                  0xFFFFFFFFU
 
 /**
  * @brief Unique device ID register base address
@@ -107,22 +105,22 @@ extern "C" {
   */
 typedef struct
 {
-    uint32_t PLLMul;   /*!< Multiplication factor for PLL VCO input clock.
+  uint32_t PLLMul;   /*!< Multiplication factor for PLL VCO input clock.
                           This parameter can be a value of @ref RCC_LL_EC_PLL_MUL
 
                           This feature can be modified afterwards using unitary function
                           @ref LL_RCC_PLL_ConfigDomain_SYS(). */
 
 #if defined(RCC_PLLSRC_PREDIV1_SUPPORT)
-    uint32_t PLLDiv;   /*!< Division factor for PLL VCO output clock.
-                          This parameter can be a value of @ref RCC_LL_EC_PREDIV_DIV
-
+  uint32_t PLLDiv;   /*!< Division factor for PLL VCO output clock.
+                          This parameter can be a value of @ref RCC_LL_EC_PREDIV_DIV 
+  
                           This feature can be modified afterwards using unitary function
                           @ref LL_RCC_PLL_ConfigDomain_SYS(). */
 #else
-    uint32_t Prediv;   /*!< Division factor for HSE used as PLL clock source.
-                          This parameter can be a value of @ref RCC_LL_EC_PREDIV_DIV
-
+  uint32_t Prediv;   /*!< Division factor for HSE used as PLL clock source.
+                          This parameter can be a value of @ref RCC_LL_EC_PREDIV_DIV 
+  
                           This feature can be modified afterwards using unitary function
                           @ref LL_RCC_PLL_ConfigDomain_SYS(). */
 #endif /* RCC_PLLSRC_PREDIV1_SUPPORT */
@@ -133,13 +131,13 @@ typedef struct
   */
 typedef struct
 {
-    uint32_t AHBCLKDivider;         /*!< The AHB clock (HCLK) divider. This clock is derived from the system clock (SYSCLK).
+  uint32_t AHBCLKDivider;         /*!< The AHB clock (HCLK) divider. This clock is derived from the system clock (SYSCLK).
                                        This parameter can be a value of @ref RCC_LL_EC_SYSCLK_DIV
 
                                        This feature can be modified afterwards using unitary function
                                        @ref LL_RCC_SetAHBPrescaler(). */
 
-    uint32_t APB1CLKDivider;        /*!< The APB1 clock (PCLK1) divider. This clock is derived from the AHB clock (HCLK).
+  uint32_t APB1CLKDivider;        /*!< The APB1 clock (PCLK1) divider. This clock is derived from the AHB clock (HCLK).
                                        This parameter can be a value of @ref RCC_LL_EC_APB1_DIV
 
                                        This feature can be modified afterwards using unitary function
@@ -158,8 +156,8 @@ typedef struct
 /** @defgroup UTILS_EC_HSE_BYPASS HSE Bypass activation
   * @{
   */
-#define LL_UTILS_HSEBYPASS_OFF        (uint32_t)0x00000000U       /*!< HSE Bypass is not enabled                */
-#define LL_UTILS_HSEBYPASS_ON         (uint32_t)0x00000001U       /*!< HSE Bypass is enabled                    */
+#define LL_UTILS_HSEBYPASS_OFF        0x00000000U       /*!< HSE Bypass is not enabled                */
+#define LL_UTILS_HSEBYPASS_ON         0x00000001U       /*!< HSE Bypass is enabled                    */
 /**
   * @}
   */
@@ -185,7 +183,7 @@ typedef struct
   */
 __STATIC_INLINE uint32_t LL_GetUID_Word0(void)
 {
-    return (uint32_t)(READ_REG(*((uint32_t *)UID_BASE_ADDRESS)));
+  return (uint32_t)(READ_REG(*((uint32_t *)UID_BASE_ADDRESS)));
 }
 
 /**
@@ -194,7 +192,7 @@ __STATIC_INLINE uint32_t LL_GetUID_Word0(void)
   */
 __STATIC_INLINE uint32_t LL_GetUID_Word1(void)
 {
-    return (uint32_t)(READ_REG(*((uint32_t *)(UID_BASE_ADDRESS + 4U))));
+  return (uint32_t)(READ_REG(*((uint32_t *)(UID_BASE_ADDRESS + 4U))));
 }
 
 /**
@@ -203,7 +201,7 @@ __STATIC_INLINE uint32_t LL_GetUID_Word1(void)
   */
 __STATIC_INLINE uint32_t LL_GetUID_Word2(void)
 {
-    return (uint32_t)(READ_REG(*((uint32_t *)(UID_BASE_ADDRESS + 8U))));
+  return (uint32_t)(READ_REG(*((uint32_t *)(UID_BASE_ADDRESS + 8U))));
 }
 
 /**
@@ -214,8 +212,9 @@ __STATIC_INLINE uint32_t LL_GetUID_Word2(void)
   */
 __STATIC_INLINE uint32_t LL_GetFlashSize(void)
 {
-    return (uint16_t)(READ_REG(*((uint32_t *)FLASHSIZE_BASE_ADDRESS)));
+  return (uint16_t)(READ_REG(*((uint32_t *)FLASHSIZE_BASE_ADDRESS)));
 }
+
 
 /**
   * @}
@@ -228,18 +227,18 @@ __STATIC_INLINE uint32_t LL_GetFlashSize(void)
 /**
   * @brief  This function configures the Cortex-M SysTick source of the time base.
   * @param  HCLKFrequency HCLK frequency in Hz (can be calculated thanks to RCC helper macro)
-  * @note   When a RTOS is used, it is recommended to avoid changing the SysTick
+  * @note   When a RTOS is used, it is recommended to avoid changing the SysTick 
   *         configuration by calling this function, for a delay use rather osDelay RTOS service.
   * @param  Ticks Number of ticks
   * @retval None
   */
 __STATIC_INLINE void LL_InitTick(uint32_t HCLKFrequency, uint32_t Ticks)
 {
-    /* Configure the SysTick to have interrupt in 1ms time base */
-    SysTick->LOAD  = (uint32_t)((HCLKFrequency / Ticks) - 1UL);  /* set reload register */
-    SysTick->VAL   = 0UL;                                       /* Load the SysTick Counter Value */
-    SysTick->CTRL  = SysTick_CTRL_CLKSOURCE_Msk |
-                     SysTick_CTRL_ENABLE_Msk;                   /* Enable the Systick Timer */
+  /* Configure the SysTick to have interrupt in 1ms time base */
+  SysTick->LOAD  = (uint32_t)((HCLKFrequency / Ticks) - 1UL);  /* set reload register */
+  SysTick->VAL   = 0UL;                                       /* Load the SysTick Counter Value */
+  SysTick->CTRL  = SysTick_CTRL_CLKSOURCE_Msk |
+                   SysTick_CTRL_ENABLE_Msk;                   /* Enable the Systick Timer */
 }
 
 void        LL_Init1msTick(uint32_t HCLKFrequency);
@@ -255,13 +254,13 @@ void        LL_mDelay(uint32_t Delay);
 
 void        LL_SetSystemCoreClock(uint32_t HCLKFrequency);
 ErrorStatus LL_PLL_ConfigSystemClock_HSI(LL_UTILS_PLLInitTypeDef *UTILS_PLLInitStruct,
-        LL_UTILS_ClkInitTypeDef *UTILS_ClkInitStruct);
+                                         LL_UTILS_ClkInitTypeDef *UTILS_ClkInitStruct);
 #if defined(RCC_CFGR_SW_HSI48)
 ErrorStatus LL_PLL_ConfigSystemClock_HSI48(LL_UTILS_PLLInitTypeDef *UTILS_PLLInitStruct,
-        LL_UTILS_ClkInitTypeDef *UTILS_ClkInitStruct);
+                                           LL_UTILS_ClkInitTypeDef *UTILS_ClkInitStruct);
 #endif /*RCC_CFGR_SW_HSI48*/
 ErrorStatus LL_PLL_ConfigSystemClock_HSE(uint32_t HSEFrequency, uint32_t HSEBypass,
-        LL_UTILS_PLLInitTypeDef *UTILS_PLLInitStruct, LL_UTILS_ClkInitTypeDef *UTILS_ClkInitStruct);
+                                         LL_UTILS_PLLInitTypeDef *UTILS_PLLInitStruct, LL_UTILS_ClkInitTypeDef *UTILS_ClkInitStruct);
 
 /**
   * @}

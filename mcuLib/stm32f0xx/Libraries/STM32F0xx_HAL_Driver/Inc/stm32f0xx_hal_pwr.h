@@ -2,8 +2,6 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_pwr.h
   * @author  MCD Application Team
-  * @version V1.4.0
-  * @date    27-May-2016
   * @brief   Header file of PWR HAL module.
   ******************************************************************************
   * @attention
@@ -32,7 +30,7 @@
   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
-  ******************************************************************************
+  ******************************************************************************  
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
@@ -40,7 +38,7 @@
 #define __STM32F0xx_HAL_PWR_H
 
 #ifdef __cplusplus
-extern "C" {
+ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -59,12 +57,12 @@ extern "C" {
 
 /** @defgroup PWR_Exported_Constants PWR Exported Constants
   * @{
-  */
+  */ 
 
 /** @defgroup PWR_Regulator_state_in_STOP_mode PWR Regulator state in STOP mode
   * @{
   */
-#define PWR_MAINREGULATOR_ON                        ((uint32_t)0x00000000)
+#define PWR_MAINREGULATOR_ON                        (0x00000000U)
 #define PWR_LOWPOWERREGULATOR_ON                    PWR_CR_LPDS
 
 #define IS_PWR_REGULATOR(REGULATOR) (((REGULATOR) == PWR_MAINREGULATOR_ON) || \
@@ -76,8 +74,8 @@ extern "C" {
 /** @defgroup PWR_SLEEP_mode_entry PWR SLEEP mode entry
   * @{
   */
-#define PWR_SLEEPENTRY_WFI              ((uint8_t)0x01)
-#define PWR_SLEEPENTRY_WFE              ((uint8_t)0x02)
+#define PWR_SLEEPENTRY_WFI              ((uint8_t)0x01U)
+#define PWR_SLEEPENTRY_WFE              ((uint8_t)0x02U)
 #define IS_PWR_SLEEP_ENTRY(ENTRY) (((ENTRY) == PWR_SLEEPENTRY_WFI) || ((ENTRY) == PWR_SLEEPENTRY_WFE))
 /**
   * @}
@@ -86,8 +84,8 @@ extern "C" {
 /** @defgroup PWR_STOP_mode_entry PWR STOP mode entry
   * @{
   */
-#define PWR_STOPENTRY_WFI               ((uint8_t)0x01)
-#define PWR_STOPENTRY_WFE               ((uint8_t)0x02)
+#define PWR_STOPENTRY_WFI               ((uint8_t)0x01U)
+#define PWR_STOPENTRY_WFE               ((uint8_t)0x02U)
 #define IS_PWR_STOP_ENTRY(ENTRY) (((ENTRY) == PWR_STOPENTRY_WFI) || ((ENTRY) == PWR_STOPENTRY_WFE))
 /**
   * @}
@@ -104,7 +102,7 @@ extern "C" {
   */
 
 /** @brief  Check PWR flag is set or not.
-  * @param  __FLAG__: specifies the flag to check.
+  * @param  __FLAG__ specifies the flag to check.
   *           This parameter can be one of the following values:
   *            @arg PWR_FLAG_WU: Wake Up flag. This flag indicates that a wakeup event
   *                  was received from the WKUP pin or from the RTC alarm (Alarm A),
@@ -116,7 +114,7 @@ extern "C" {
   *            @arg PWR_FLAG_PVDO: PVD Output. This flag is valid only if PVD is enabled
   *                  by the HAL_PWR_EnablePVD() function. The PVD is stopped by Standby mode
   *                  For this reason, this bit is equal to 0 after Standby or reset
-  *                  until the PVDE bit is set.
+  *                  until the PVDE bit is set. 
   *                  Warning: this Flag is not available on STM32F030x8 products
   *            @arg PWR_FLAG_VREFINTRDY: This flag indicates that the internal reference
   *                  voltage VREFINT is ready.
@@ -126,12 +124,12 @@ extern "C" {
 #define __HAL_PWR_GET_FLAG(__FLAG__) ((PWR->CSR & (__FLAG__)) == (__FLAG__))
 
 /** @brief  Clear the PWR's pending flags.
-  * @param  __FLAG__: specifies the flag to clear.
+  * @param  __FLAG__ specifies the flag to clear.
   *          This parameter can be one of the following values:
   *            @arg PWR_FLAG_WU: Wake Up flag
   *            @arg PWR_FLAG_SB: StandBy flag
   */
-#define __HAL_PWR_CLEAR_FLAG(__FLAG__) (PWR->CR |=  (__FLAG__) << 2)
+#define __HAL_PWR_CLEAR_FLAG(__FLAG__) (PWR->CR |=  (__FLAG__) << 2U)
 
 
 /**
@@ -146,8 +144,8 @@ extern "C" {
 /** @addtogroup PWR_Exported_Functions PWR Exported Functions
   * @{
   */
-
-/** @addtogroup PWR_Exported_Functions_Group1 Initialization and de-initialization functions
+  
+/** @addtogroup PWR_Exported_Functions_Group1 Initialization and de-initialization functions 
   * @{
   */
 
@@ -158,7 +156,7 @@ void HAL_PWR_DeInit(void);
   * @}
   */
 
-/** @addtogroup PWR_Exported_Functions_Group2 Peripheral Control functions
+/** @addtogroup PWR_Exported_Functions_Group2 Peripheral Control functions 
   * @{
   */
 

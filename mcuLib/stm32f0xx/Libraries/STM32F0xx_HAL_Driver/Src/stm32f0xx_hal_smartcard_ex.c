@@ -2,14 +2,11 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_smartcard_ex.c
   * @author  MCD Application Team
-  * @version V1.4.0
-  * @date    27-May-2016
   * @brief   SMARTCARD HAL module driver.
-  *
   *          This file provides extended firmware functions to manage the following
   *          functionalities of the SmartCard.
-  *           + Initialization and de-initialization function
-  *           + Peripheral Control function
+  *           + Initialization and de-initialization functions
+  *           + Peripheral Control functions
   *
   *
   @verbatim
@@ -59,8 +56,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx_hal.h"
 
-#ifdef HAL_SMARTCARD_MODULE_ENABLED
-
 #if !defined(STM32F030x6) && !defined(STM32F030x8)&& !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC)
 
 /** @addtogroup STM32F0xx_HAL_Driver
@@ -71,6 +66,7 @@
   * @brief SMARTCARD Extended HAL module driver
   * @{
   */
+#ifdef HAL_SMARTCARD_MODULE_ENABLED
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -79,7 +75,7 @@
 /* Private function prototypes -----------------------------------------------*/
 
 /* Exported functions --------------------------------------------------------*/
-/** @defgroup SMARTCARDEx_Exported_Functions  SMARTCARDEx Exported Functions
+/** @defgroup SMARTCARDEx_Exported_Functions  SMARTCARD Extended Exported Functions
   * @{
   */
 
@@ -103,46 +99,48 @@
 
 /**
   * @brief Update on the fly the SMARTCARD block length in RTOR register.
-  * @param hsmartcard: Pointer to a SMARTCARD_HandleTypeDef structure that contains
+  * @param hsmartcard Pointer to a SMARTCARD_HandleTypeDef structure that contains
   *                    the configuration information for the specified SMARTCARD module.
-  * @param BlockLength: SMARTCARD block length (8-bit long at most)
+  * @param BlockLength SMARTCARD block length (8-bit long at most)
   * @retval None
   */
 void HAL_SMARTCARDEx_BlockLength_Config(SMARTCARD_HandleTypeDef *hsmartcard, uint8_t BlockLength)
 {
-    MODIFY_REG(hsmartcard->Instance->RTOR, USART_RTOR_BLEN, ((uint32_t)BlockLength << SMARTCARD_RTOR_BLEN_LSB_POS));
+  MODIFY_REG(hsmartcard->Instance->RTOR, USART_RTOR_BLEN, ((uint32_t)BlockLength << SMARTCARD_RTOR_BLEN_LSB_POS));
 }
 
 /**
   * @brief Update on the fly the receiver timeout value in RTOR register.
-  * @param hsmartcard: Pointer to a SMARTCARD_HandleTypeDef structure that contains
+  * @param hsmartcard Pointer to a SMARTCARD_HandleTypeDef structure that contains
   *                    the configuration information for the specified SMARTCARD module.
-  * @param TimeOutValue: receiver timeout value in number of baud blocks. The timeout
+  * @param TimeOutValue receiver timeout value in number of baud blocks. The timeout
   *                     value must be less or equal to 0x0FFFFFFFF.
   * @retval None
   */
 void HAL_SMARTCARDEx_TimeOut_Config(SMARTCARD_HandleTypeDef *hsmartcard, uint32_t TimeOutValue)
 {
-    assert_param(IS_SMARTCARD_TIMEOUT_VALUE(hsmartcard->Init.TimeOutValue));
-    MODIFY_REG(hsmartcard->Instance->RTOR, USART_RTOR_RTO, TimeOutValue);
+  assert_param(IS_SMARTCARD_TIMEOUT_VALUE(hsmartcard->Init.TimeOutValue));
+  MODIFY_REG(hsmartcard->Instance->RTOR, USART_RTOR_RTO, TimeOutValue);
 }
 
 /**
   * @brief Enable the SMARTCARD receiver timeout feature.
-  * @param hsmartcard: Pointer to a SMARTCARD_HandleTypeDef structure that contains
+  * @param hsmartcard Pointer to a SMARTCARD_HandleTypeDef structure that contains
   *                    the configuration information for the specified SMARTCARD module.
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_SMARTCARDEx_EnableReceiverTimeOut(SMARTCARD_HandleTypeDef *hsmartcard)
 {
 
+  if(hsmartcard->gState == HAL_SMARTCARD_STATE_READY)
+  {
     /* Process Locked */
     __HAL_LOCK(hsmartcard);
 
     hsmartcard->gState = HAL_SMARTCARD_STATE_BUSY;
 
     /* Set the USART RTOEN bit */
-    hsmartcard->Instance->CR2 |= USART_CR2_RTOEN;
+    SET_BIT(hsmartcard->Instance->CR2, USART_CR2_RTOEN);
 
     hsmartcard->gState = HAL_SMARTCARD_STATE_READY;
 
@@ -150,24 +148,31 @@ HAL_StatusTypeDef HAL_SMARTCARDEx_EnableReceiverTimeOut(SMARTCARD_HandleTypeDef 
     __HAL_UNLOCK(hsmartcard);
 
     return HAL_OK;
+  }
+  else
+  {
+    return HAL_BUSY;
+  }
 }
 
 /**
   * @brief Disable the SMARTCARD receiver timeout feature.
-  * @param hsmartcard: Pointer to a SMARTCARD_HandleTypeDef structure that contains
+  * @param hsmartcard Pointer to a SMARTCARD_HandleTypeDef structure that contains
   *                    the configuration information for the specified SMARTCARD module.
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_SMARTCARDEx_DisableReceiverTimeOut(SMARTCARD_HandleTypeDef *hsmartcard)
 {
 
+  if(hsmartcard->gState == HAL_SMARTCARD_STATE_READY)
+  {
     /* Process Locked */
     __HAL_LOCK(hsmartcard);
 
     hsmartcard->gState = HAL_SMARTCARD_STATE_BUSY;
 
     /* Clear the USART RTOEN bit */
-    hsmartcard->Instance->CR2 &= ~(USART_CR2_RTOEN);
+    CLEAR_BIT(hsmartcard->Instance->CR2, USART_CR2_RTOEN);
 
     hsmartcard->gState = HAL_SMARTCARD_STATE_READY;
 
@@ -175,6 +180,11 @@ HAL_StatusTypeDef HAL_SMARTCARDEx_DisableReceiverTimeOut(SMARTCARD_HandleTypeDef
     __HAL_UNLOCK(hsmartcard);
 
     return HAL_OK;
+  }
+  else
+  {
+    return HAL_BUSY;
+  }
 }
 
 /**
@@ -184,6 +194,8 @@ HAL_StatusTypeDef HAL_SMARTCARDEx_DisableReceiverTimeOut(SMARTCARD_HandleTypeDef
 /**
   * @}
   */
+
+#endif /* HAL_SMARTCARD_MODULE_ENABLED */
 
 /**
   * @}
@@ -194,7 +206,5 @@ HAL_StatusTypeDef HAL_SMARTCARDEx_DisableReceiverTimeOut(SMARTCARD_HandleTypeDef
   */
 
 #endif /* !defined(STM32F030x6) && !defined(STM32F030x8)&& !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC)  */
-
-#endif /* HAL_SMARTCARD_MODULE_ENABLED */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
