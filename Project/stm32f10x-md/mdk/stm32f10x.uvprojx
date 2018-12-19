@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>__CC_ARM,ARM_MATH_CM3</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266;..\..\..\ebox\core\port;..\..\..\component\MPU6050;..\..\..\component\mqtt\src;..\..\..\os\ebox_os;..\..\..\component\Ethernet3;..\..\..\component\Ethernet3\utility;..\..\..\component\modbus\libraries\ModbusIP;..\..\..\component\soft_uart</IncludePath>
+              <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266;..\..\..\ebox\core\port;..\..\..\component\MPU6050;..\..\..\component\mqtt\src;..\..\..\os\ebox_os;..\..\..\component\Ethernet3;..\..\..\component\Ethernet3\utility;..\..\..\component\modbus\libraries\ModbusIP;..\..\..\component\soft_uart;..\..\..\component\Firmata;..\..\..\component\Firmata\utility</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -962,6 +962,67 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\user\board\spark_f1\bsp_ebox.cpp</FilePath>
             </File>
+            <File>
+              <FileName>fb58pid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\user\fb58pid.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>arduinoFFT.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\apps\FFT\src\arduinoFFT.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1020,6 +1081,12 @@
     <apis/>
     <components>
       <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.1.1" condition="ARMv6_7_8-M Device">
+        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.3.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
+      <component Cclass="CMSIS" Cgroup="DSP" Cvendor="ARM" Cversion="1.5.2" condition="CMSIS DSP">
         <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.3.0"/>
         <targetInfos>
           <targetInfo name="Target 1"/>
