@@ -1,0 +1,49 @@
+已完成工作：
+sdoserv.h
+ecat_def.h
+APPLICATION相关#DEFINE移入SKETCH，在COEAPPL.C中使用EXTERN
+coeappl.h
+esc.h
+ecatslv.h
+mailbox.h
+ecatcoe.h
+
+objdef.h
+	=TOBJ10F1
+TOBJ10F1 sErrorSettings
+#if _OBJDEF_
+= {2, 0x00, MAX_SM_EVENT_MISSED}
+#endif
+;
+PROTO    CHAR OBJMEM         aSubindexDesc[13]
+#ifdef _OBJDEF_
+ = { "SubIndex 000" }
+#endif
+;
+ecatappl.h
+el9800appl.h:
+其中的Application Handler移入ethercat.h.
+其余的OBJD移入INO文件。
+
+el9800hw.h
+
+硬件：
+SIRQ＝PE6（原D7）＝＝＝＝＝＝＝＝＝＝＝＝14
+SSEL＝PD6（原IO12）＝＝＝＝＝＝＝＝＝＝＝15
+SYNC＝PB7（原IO11）＝＝＝＝＝＝＝＝＝＝＝16
+D7＝PC7（原IO13）＝＝＝＝＝＝＝＝＝＝＝＝7
+MOSI,PB2＝IO11（原IO16）＝＝＝＝＝＝＝＝＝＝11
+MISO,PB3＝IO12（原IO14）＝＝＝＝＝＝＝＝＝＝12
+SCK,PB1＝IO13（原IO15）＝＝＝＝＝＝＝＝＝＝13
+原17是指RXLED（PCINT0）
+
+待处理：
+1. pName不好变成ROM是因为它需要STRLEN
+2. OBJDESC的问题是引用太多。
+
+
+
+
+
+
+
