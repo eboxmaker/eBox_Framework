@@ -1,0 +1,3 @@
+# arducat
+The ArduCAT is an Arduino  “At Heart” board aiming to ease the EtherCAT  slave device development with the Arduino technology. The board provides 2 100BASE-TX ports for EtherCAT real-time data link which is ideal for PC-based automation. Using ATMega2560 processor and LAN9252 adapter, it is compatible with Arduino Mega board, having the same pin definition. The switching regulator on board can source up to 2A current at 5V or 3.3V with mere heat dissipation. The open source software library and slave stack code generation tool that come with the board support the EtherCAT PDO and CoE function, which make developers concentrate on the application code, simplifying the work on hardware and protocol stack. 
+    
