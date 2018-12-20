@@ -21,7 +21,7 @@
 
 #include "ebox.h"
 #include "bsp_ebox.h"
-
+#include "base64.h"
 /**
 	*	1	此例程演示了GPIO中断
     *   2   其中userbt1连接用户按键，按下和弹起绑定不同的回调函数
@@ -38,7 +38,7 @@ uint32_t xx;
 
 
 Exti   userbt1(&BtnPin);
-Exti   ex(&PA0);
+//Exti   ex(&BtnPin);
 
 /**
  *@brief    静态回调函数
@@ -86,15 +86,15 @@ void setup()
 
     LED1.mode(OUTPUT_PP);
     // 上升沿，下降沿均触发,绑定同一个中断回调函数
-    ex.begin();
-    ex.attach(fallrise, FALL_RISING);
-    ex.enable(FALL_RISING);
+//    ex.begin();
+//    ex.attach(fallrise, FALL_RISING);
+//    ex.enable(FALL_RISING);
 
     // 上升沿，下降沿调用不同的回调函数
     userbt1.begin();
     userbt1.attach(rise, RISE);
-    userbt1.attach(&test, &Test::event, FALL);
-    userbt1.enable(FALL_RISING);
+    userbt1.attach(fall, FALL);
+    userbt1.interrupt(FALL_RISING,ENABLE);
 
 }
 
@@ -104,7 +104,8 @@ int main(void)
     setup();
     while(1)
     {
-        ;
+        //userbt1.soft_triger();
+        delay_ms(1000);
     }
 }
 

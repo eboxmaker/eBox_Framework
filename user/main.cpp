@@ -21,62 +21,12 @@
 
 #include "ebox.h"
 #include "bsp_ebox.h"
-
-/**
-	*	1	此例程演示了GPIO中断
-    *   2   其中userbt1连接用户按键，按下和弹起绑定不同的回调函数
-            弹起串口打印信息，按下反转led输出
-    *   3   ex连接PA0，下降沿和上升沿绑定同一个回调函数，x++并从串口输出
-	*/
+#include "./base64/base64.h"
 
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"STM32F0 GPIO_EXTI example"
-#define EXAMPLE_DATE	"2017-09-10"
+#define EXAMPLE_NAME	"Base64 example"
+#define EXAMPLE_DATE	"2018-12-10"
 
-
-uint32_t xx;
-
-
-Exti   userbt1(&BtnPin);
-//Exti   ex(&BtnPin);
-
-/**
- *@brief    静态回调函数
- *@param    none
- *@retval   none
-*/
-void fall()
-{
-    xx--;
-    UART.printf("\r\n falling,xx = %d", xx);
-}
-
-void rise()
-{
-    xx++;
-    UART.printf("\r\n rising, xx = %d", xx);
-}
-
-void fallrise()
-{
-    xx++;
-    UART.printf("\r\n fallrise, xx = %d", xx);
-}
-
-/**
- *@brief    测试类，用来测试类成员绑定
- *@param    none
- *@retval   none
-*/
-class Test
-{
-public:
-    void event()
-    {
-        LED1.toggle();
-    }
-};
-Test test;
 
 void setup()
 {
@@ -84,18 +34,41 @@ void setup()
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
-    LED1.mode(OUTPUT_PP);
-    // 上升沿，下降沿均触发,绑定同一个中断回调函数
-//    ex.begin();
-//    ex.attach(fallrise, FALL_RISING);
-//    ex.enable(FALL_RISING);
+  
+    String str1 = "Hello world";
+    String str2;
+    String str3;
+    base64_encode(str2,str1);
+    uart1.println(str2);
+    base64_decode(str3,str2);
+    uart1.println(str3);
 
-    // 上升沿，下降沿调用不同的回调函数
-    userbt1.begin();
-    userbt1.attach(rise, RISE);
-    userbt1.attach(fall, FALL);
-    userbt1.interrupt(FALL_RISING,ENABLE);
+    // encoding
+    char input[] = "Hello world";
+    int inputLen = sizeof(input);
 
+    int encodedLen = base64_enc_len(inputLen);
+    char encoded[100];
+
+    Serial.print(input); Serial.print(" = ");
+
+    // note input is consumed in this step: it will be empty afterwards
+    base64_encode(encoded, input, inputLen); 
+
+    Serial.println(encoded);
+
+
+
+    // decoding
+    char input2[] = "SGVsbG8gd29ybGQA";
+    int input2Len = sizeof(input2);
+
+    int decodedLen = base64_dec_len(input2, input2Len);
+    char decoded[100];
+
+    base64_decode(decoded, input2, input2Len);
+
+    Serial.print(input2); Serial.print(" = "); Serial.println(decoded);
 }
 
 
@@ -104,8 +77,6 @@ int main(void)
     setup();
     while(1)
     {
-        //userbt1.soft_triger();
-        delay_ms(1000);
     }
 }
 
