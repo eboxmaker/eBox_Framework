@@ -613,11 +613,6 @@
               <FilePath>..\..\..\ebox\core\ebox_init.cpp</FilePath>
             </File>
             <File>
-              <FileName>retarge.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\retarge.c</FilePath>
-            </File>
-            <File>
               <FileName>big_little.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\ebox\core\big_little.c</FilePath>
@@ -696,6 +691,11 @@
               <FileName>ebox_virtual_hmi.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\port\ebox_virtual_hmi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>retarge.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\retarge.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -891,6 +891,11 @@
               <FileName>soft_uart.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\soft_uart\soft_uart.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Base64.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\apps\base64\Base64.cpp</FilePath>
             </File>
           </Files>
         </Group>

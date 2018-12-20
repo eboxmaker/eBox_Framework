@@ -84,8 +84,10 @@ SYNC = PE7(INT7)
 -----------------------------------------------------------------------------------------*/
 
 //#define    WAIT_SPI_IF                        //spi.end();//while( SPI1_IF );//while( !SPI1_IF );
-#define    SELECT_SPI                      PA4.reset();//digitalWrite(15, LOW);//{(LPC_GPIO3->DATA) &= ~(SPI_ACTIVE);}
-#define    DESELECT_SPI                    PA4.set();//digitalWrite(15, HIGH);//{(LPC_GPIO3->DATA) |= (SPI_DEACTIVE);}
+#define    SPI_CS                          PA4//digitalWrite(15, LOW);//{(LPC_GPIO3->DATA) &= ~(SPI_ACTIVE);}
+#define    SPI_CS_INIT                     SPI_CS.mode(OUTPUT_PP)//digitalWrite(15, LOW);//{(LPC_GPIO3->DATA) &= ~(SPI_ACTIVE);}
+#define    SELECT_SPI                      SPI_CS.reset()//digitalWrite(15, LOW);//{(LPC_GPIO3->DATA) &= ~(SPI_ACTIVE);}
+#define    DESELECT_SPI                    SPI_CS.set()//digitalWrite(15, HIGH);//{(LPC_GPIO3->DATA) |= (SPI_DEACTIVE);}
 //#define    INIT_SSPIF                        //{(SPI1_IF)=0;}
 #define SPI1_CON0_VALUE                    	0x000000C7//0x027E
 #define SPI1_CON0_VALUE_16BIT            	0x000000CF//0x047E
@@ -113,6 +115,8 @@ SYNC = PE7(INT7)
 ------
 -----------------------------------------------------------------------------------------*/
 
+
+#define ESC_PIN     PA3
 #define	   INIT_ESC_INT		attachInterrupt(6,SIRQ_IRQHandler,LOW );
 
 
@@ -122,7 +126,7 @@ SYNC = PE7(INT7)
 ------    SYNC0 Interrupt
 ------
 -----------------------------------------------------------------------------------------*/
-
+#define SYNC0_PIN   PA2
 #define	   INIT_SYNC0_INT		//{(LPC_GPIO1->IE)|=(1<<9);(LPC_GPIO1->IS)|=(1<<9);(LPC_GPIO1->IEV)&=~(1<<9);NVIC_EnableIRQ(EINT1_IRQn);}
 //#define    DISABLE_SYNC0_INT    detachInterrupt(7);//            {(LPC_GPIO1->IE)&=~(1<<9);}//disable interrupt source INT3
 //#define    ENABLE_SYNC0_INT     attachInterrupt(7,SYNC_IRQHandler,LOW );//           {(LPC_GPIO1->IE)|=(1<<9);} //enable interrupt source INT3
@@ -309,13 +313,14 @@ UINT8 Ethercat::HW_Init(void)
     UINT16 intMask;
 	UINT32 data;
 	//Initial SSEL pin 
-    PA4.mode(OUTPUT_PP_PU);
+    SPI_CS_INIT;
+
     
     SpiConfig_t config;
     config.bit_order = MSB_FIRST;
     config.dev_num = PA4.id;
     config.mode = SPI_MODE3;
-   config.prescaler = SPI_CLOCK_DIV2;
+    config.prescaler = SPI_CLOCK_DIV2;
     
 	//Initial SPI
 	SPI.begin(&config);
