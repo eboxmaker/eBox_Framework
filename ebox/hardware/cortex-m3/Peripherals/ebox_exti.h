@@ -55,8 +55,9 @@ public:
     Exti(Gpio *exti_pin);
     void begin(PIN_MODE mode = INPUT, ExtiType type = IT);
 
-    void enable(TrigType trig, uint32_t priority = 0);
-    void disable(TrigType trig);
+    void nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
+    void interrupt(TrigType type, FunctionalState enable);
+    void soft_triger();
 
     /**
     *@brief    exti °ó¶¨ÖÐ¶Ï

@@ -83,10 +83,10 @@ SYNC = PE7(INT7)
 ------
 -----------------------------------------------------------------------------------------*/
 
-#define    WAIT_SPI_IF                        //spi.end();//while( SPI1_IF );//while( !SPI1_IF );
-#define    SELECT_SPI                      PORTH &= ~(1<<2);//digitalWrite(15, LOW);//{(LPC_GPIO3->DATA) &= ~(SPI_ACTIVE);}
-#define    DESELECT_SPI                    PORTH |= (1<<2);//digitalWrite(15, HIGH);//{(LPC_GPIO3->DATA) |= (SPI_DEACTIVE);}
-#define    INIT_SSPIF                        //{(SPI1_IF)=0;}
+//#define    WAIT_SPI_IF                        //spi.end();//while( SPI1_IF );//while( !SPI1_IF );
+#define    SELECT_SPI                      PA4.reset();//digitalWrite(15, LOW);//{(LPC_GPIO3->DATA) &= ~(SPI_ACTIVE);}
+#define    DESELECT_SPI                    PA4.set();//digitalWrite(15, HIGH);//{(LPC_GPIO3->DATA) |= (SPI_DEACTIVE);}
+//#define    INIT_SSPIF                        //{(SPI1_IF)=0;}
 #define SPI1_CON0_VALUE                    	0x000000C7//0x027E
 #define SPI1_CON0_VALUE_16BIT            	0x000000CF//0x047E
 #define SPI1_CON1_VALUE                    	0x00000002//Write at end
@@ -94,7 +94,7 @@ SYNC = PE7(INT7)
 #define SPI_DEACTIVE                    (1<<4)
 #define SPI_ACTIVE                      (1<<4)
 
-
+#define SPI spi1
 /*-----------------------------------------------------------------------------------------
 ------
 ------    Global Interrupt setting
@@ -124,8 +124,8 @@ SYNC = PE7(INT7)
 -----------------------------------------------------------------------------------------*/
 
 #define	   INIT_SYNC0_INT		//{(LPC_GPIO1->IE)|=(1<<9);(LPC_GPIO1->IS)|=(1<<9);(LPC_GPIO1->IEV)&=~(1<<9);NVIC_EnableIRQ(EINT1_IRQn);}
-#define    DISABLE_SYNC0_INT    detachInterrupt(7);//            {(LPC_GPIO1->IE)&=~(1<<9);}//disable interrupt source INT3
-#define    ENABLE_SYNC0_INT     attachInterrupt(7,SYNC_IRQHandler,LOW );//           {(LPC_GPIO1->IE)|=(1<<9);} //enable interrupt source INT3
+//#define    DISABLE_SYNC0_INT    detachInterrupt(7);//            {(LPC_GPIO1->IE)&=~(1<<9);}//disable interrupt source INT3
+//#define    ENABLE_SYNC0_INT     attachInterrupt(7,SYNC_IRQHandler,LOW );//           {(LPC_GPIO1->IE)|=(1<<9);} //enable interrupt source INT3
 
 /*-----------------------------------------------------------------------------------------
 ------
@@ -188,20 +188,20 @@ UINT32 SPIReadDWord (UINT16 Address)
 void SPIWriteDWord (UINT16 Address, UINT32 Val)
 {
     //Assert CS line
-//    SELECT_SPI;
-//    //Write Command
-//    SPI.transfer(CMD_SERIAL_WRITE);
-//    //Write Address
-//    SPI.transfer(*((UINT8*)&Address+1));
-//    SPI.transfer(*((UINT8*)&Address+0));
-//    //Write Bytes
-//    SPI.transfer(*((UINT8*)&Val+0));
-//    SPI.transfer(*((UINT8*)&Val+1));
-//    SPI.transfer(*((UINT8*)&Val+2));
-//    SPI.transfer(*((UINT8*)&Val+3));
+    SELECT_SPI;
+    //Write Command
+    SPI.transfer(CMD_SERIAL_WRITE);
+    //Write Address
+    SPI.transfer(*((UINT8*)&Address+1));
+    SPI.transfer(*((UINT8*)&Address+0));
+    //Write Bytes
+    SPI.transfer(*((UINT8*)&Val+0));
+    SPI.transfer(*((UINT8*)&Val+1));
+    SPI.transfer(*((UINT8*)&Val+2));
+    SPI.transfer(*((UINT8*)&Val+3));
 
-//    //De-Assert CS line
-//    DESELECT_SPI;
+    //De-Assert CS line
+    DESELECT_SPI;
 }
 
 #define ESC_CSR_CMD_REG		0x304
@@ -308,67 +308,82 @@ UINT8 Ethercat::HW_Init(void)
 {
     UINT16 intMask;
 	UINT32 data;
-//	//Initial SSEL pin 
-//	PORTH &= ~(1<<2);
-//	DDRH |= (1<<2);
-//	//Initial SPI
-//	SPI.begin();
-//      /* initialize the SPI registers for the ESC SPI */
+	//Initial SSEL pin 
+    PA4.mode(OUTPUT_PP_PU);
+    
+    SpiConfig_t config;
+    config.bit_order = MSB_FIRST;
+    config.dev_num = PA4.id;
+    config.mode = SPI_MODE3;
+   config.prescaler = SPI_CLOCK_DIV2;
+    
+	//Initial SPI
+	SPI.begin(&config);
+      /* initialize the SPI registers for the ESC SPI */
 //	SPI.setClockDivider(SPI_CLOCK_DIV8);
 //	SPI.setBitOrder(MSBFIRST); 
 //	SPI.setDataMode(SPI_MODE3);	//CPOL=CPHA=1
-//	//Initialize with a rising edge
+	//Initialize with a rising edge
 //	PORTH |= (1<<2);
+    PA4.set();
+    
+	data = 0;
+	while(data!=0x87654321)
+	{
+		data = SPIReadDWord (0x64);
+		delay_ms(1);
+	}
+	Serial.print("ByteOrder Passed:");
+	Serial.println(data,HEX);
+	Serial.flush();
+	data = 0;
+	while(!(data&0x08000000))
+	{
+		data = SPIReadDWord (0x74);
+		delay_ms(1);
+	}
+	Serial.print("Device Ready:");
+	Serial.println(data,HEX);
+	Serial.flush();
+    do
+    {
+        intMask = 0x93;
+        HW_EscWriteWord(intMask, ESC_AL_EVENTMASK_OFFSET);
+        intMask = 0;
+        HW_EscReadWord(intMask, ESC_AL_EVENTMASK_OFFSET);
+    } while (intMask != 0x93);
+	Serial.println("AL_EVENTMASK_OFFSET_Written.");
+	Serial.flush();
 
-//	data = 0;
-//	while(data!=0x87654321)
-//	{
-//		data = SPIReadDWord (0x64);
-//		delay(1);
-//	}
-//	Serial.print("ByteOrder Passed:");
-//	Serial.println(data,HEX);
-//	Serial.flush();
-//	data = 0;
-//	while(!(data&0x08000000))
-//	{
-//		data = SPIReadDWord (0x74);
-//		delay(1);
-//	}
-//	Serial.print("Device Ready:");
-//	Serial.println(data,HEX);
-//	Serial.flush();
-//    do
-//    {
-//        intMask = 0x93;
-//        HW_EscWriteWord(intMask, ESC_AL_EVENTMASK_OFFSET);
-//        intMask = 0;
-//        HW_EscReadWord(intMask, ESC_AL_EVENTMASK_OFFSET);
-//    } while (intMask != 0x93);
-//	Serial.println("AL_EVENTMASK_OFFSET_Written.");
-//	Serial.flush();
+    //INIT_ESC_INT
+    Exti   userbt1(&PA3);
 
-//    INIT_ESC_INT
-//    HW_ResetALEventMask(0);
+    userbt1.begin();
+    //userbt1.attach(SIRQ_IRQHandler, RISE);
+    userbt1.attach(SIRQ_IRQHandler, FALL);
+    userbt1.interrupt(FALL,ENABLE);
 
-//    //IRQ enable,IRQ polarity, IRQ buffer type in Interrupt Configuration register.
-//    //Wrte 0x54 - 0x00000111
-//    data = 0x00000101;
-//    SPIWriteDWord (0x54, data);
-//    //Write in Interrupt Enable register -->
-//    //Write 0x5c - 0x00000001
-//    data = 0x00000001;
-//    SPIWriteDWord (0x5C, data);
-//    SPIReadDWord(0x58);
+    
+    HW_ResetALEventMask(0);
 
-//    INIT_SYNC0_INT
-////    ENABLE_SYNC0_INT;
+    //IRQ enable,IRQ polarity, IRQ buffer type in Interrupt Configuration register.
+    //Wrte 0x54 - 0x00000111
+    data = 0x00000101;
+    SPIWriteDWord (0x54, data);
+    //Write in Interrupt Enable register -->
+    //Write 0x5c - 0x00000001
+    data = 0x00000001;
+    SPIWriteDWord (0x5C, data);
+    SPIReadDWord(0x58);
 
-//    INIT_ECAT_TIMER;
-//    START_ECAT_TIMER;
+    INIT_SYNC0_INT
+//    ENABLE_SYNC0_INT;
 
-//    /* enable all interrupts */
-//    ENABLE_GLOBAL_INT;
+    INIT_ECAT_TIMER;
+    START_ECAT_TIMER;
+
+    /* enable all interrupts */
+    ENABLE_GLOBAL_INT;
 
     return 0;
 }

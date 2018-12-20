@@ -83,104 +83,61 @@ void Exti::begin(PIN_MODE mode, ExtiType type)
     switch (type)
     {
     case IT:
-        //    LL_EXTI_EnableIT_0_31(_extiLine);
-        //    LL_EXTI_DisableEvent_0_31(_extiLine);
         SET_BIT(EXTI->IMR, _extiLine);
         CLEAR_BIT(EXTI->EMR, _extiLine);
         break;
     case EVENT:
-        //    LL_EXTI_EnableEvent_0_31(_extiLine);
-        //    LL_EXTI_DisableIT_0_31(_extiLine);
         SET_BIT(EXTI->EMR, _extiLine);
         CLEAR_BIT(EXTI->IMR, _extiLine);
         break;
     case IT_EVENT:
-        //    LL_EXTI_EnableIT_0_31(_extiLine);
-        //    LL_EXTI_EnableEvent_0_31(_extiLine);
+
         SET_BIT(EXTI->EMR, _extiLine);
         SET_BIT(EXTI->IMR, _extiLine);
         break;
     default:
-        //    LL_EXTI_EnableIT_0_31(_extiLine);
-        //    LL_EXTI_DisableEvent_0_31(_extiLine);
         SET_BIT(EXTI->IMR, _extiLine);
         CLEAR_BIT(EXTI->EMR, _extiLine);
         break;
     }
+    nvic(ENABLE);
 }
 
-//void Exti::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
-//{
-//    nvic_dev_set_priority((uint32_t)exti_line,0,0,0);
-//    if(enable != DISABLE)
-//        nvic_dev_enable((uint32_t)exti_line,0);
-//    else
-//        nvic_dev_disable((uint32_t)exti_line,0);
-//}
-
-/**
-  *@brief    使能中断
-  *@param    trig 触发类型
-  *@retval   NONE
-  */
-void Exti::enable(TrigType trig, uint32_t priority)
+void Exti::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
+    nvic_dev_set_priority((uint32_t)_extiLine,0,0,0);
+    if(enable != DISABLE)
+        nvic_dev_enable((uint32_t)_extiLine,0);
+    else
+        nvic_dev_disable((uint32_t)_extiLine,0);
+}
+
+
+void Exti::interrupt(TrigType trig, FunctionalState enable)
+{
+
     switch (trig) // 使能触发类型
     {
     case FALL:
-        //    LL_EXTI_EnableFallingTrig_0_31(_extiLine);
-        //    LL_EXTI_DisableRisingTrig_0_31(_extiLine);
-        SET_BIT(EXTI->FTSR, _extiLine);
-        CLEAR_BIT(EXTI->RTSR, _extiLine);
+        bit_write(EXTI->FTSR,GETPINNUMBER(_pin->id),enable);
         break;
     case RISE:
-        //    LL_EXTI_EnableRisingTrig_0_31(_extiLine);
-        //    LL_EXTI_DisableFallingTrig_0_31(_extiLine);
-        SET_BIT(EXTI->RTSR, _extiLine);
-        CLEAR_BIT(EXTI->FTSR, _extiLine);
+        bit_write(EXTI->RTSR,GETPINNUMBER(_pin->id),enable);
         break;
     case FALL_RISING:
-        //    LL_EXTI_EnableFallingTrig_0_31(_extiLine);
-        //    LL_EXTI_EnableRisingTrig_0_31(_extiLine);
-        SET_BIT(EXTI->FTSR, _extiLine);
-        SET_BIT(EXTI->RTSR, _extiLine);
+        bit_write(EXTI->FTSR,GETPINNUMBER(_pin->id),enable);
+        bit_write(EXTI->RTSR,GETPINNUMBER(_pin->id),enable);
         break;
     default:
         break;
     }
-
-    nvic_dev_set_priority((uint32_t)_extiLine, 0, 0, 0);
-    nvic_dev_enable((uint32_t)_extiLine, 0);
 }
 
-/**
-  *@brief    禁止触发
-  *@param    trig 触发类型
-  *@retval   NONE
-  */
-void Exti::disable(TrigType trig)
+void Exti::soft_triger()
 {
-
-    switch (trig)
-    {
-    case FALL:
-        //    LL_EXTI_DisableFallingTrig_0_31(_extiLine);
-        CLEAR_BIT(EXTI->FTSR, _extiLine);
-        break;
-    case RISE:
-        //    LL_EXTI_DisableRisingTrig_0_31(_extiLine);
-        CLEAR_BIT(EXTI->RTSR, _extiLine);
-        break;
-    case FALL_RISING:
-        //    LL_EXTI_DisableRisingTrig_0_31(_extiLine);
-        //    LL_EXTI_DisableFallingTrig_0_31(_extiLine);
-        CLEAR_BIT(EXTI->RTSR, _extiLine);
-        CLEAR_BIT(EXTI->FTSR, _extiLine);
-        break;
-    default:
-        break;
-    }
+    bit_set(EXTI->SWIER,GETPINNUMBER(_pin->id));
 }
+
 /**
  *@brief    EXTI 静态成员函数，在中断中调用，解析执行相关回调函数
  *@param    uint32_t id 对象地址，用来识别对象；IrqType irq_type 中断类型
