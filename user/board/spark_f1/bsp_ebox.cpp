@@ -37,16 +37,6 @@ W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
 //mcuGpio		BtnPin(GPIOA,GPIO_Pin_8);
 //Uart 			UART(USART1, &PA9, &PA10);
 
-
-// 使用object.cpp,使用下列方式重命名IO对象，可以减少code区消耗
-//#define   LED1  PB8
-//#define   LED2  PB9
-//#define   LED3  PB10
-
-//#define   BtnPin	PA8
-#define   UART	uart1
-
-
 /*
 *********************************************************************************************************
 *	函 数 名: PrintfLog

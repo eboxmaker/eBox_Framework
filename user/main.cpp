@@ -1,31 +1,43 @@
-/**
- ******************************************************************************
- * @file    main.cpp
- * @author  cat_li
- * @version V1.0
- * @date    2017/07/13
- * @brief   ebox exti example, 基于stm32nucleo(072)平台验证
- ******************************************************************************
- * @attention
- *
- * No part of this software may be used for any commercial activities by any form
- * or means, without the prior written consent of shentq. This specification is
- * preliminary and is subject to change at any time without notice. shentq assumes
- * no responsibility for any errors contained herein.
- * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
- ******************************************************************************
- */
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
 
+Copyright 2015 shentq. All Rights Reserved.
+*/
 
-/* Includes ------------------------------------------------------------------*/
+//STM32 RUN IN eBox
+
 
 #include "ebox.h"
 #include "bsp_ebox.h"
-#include "./base64/base64.h"
+#include "ebox_mem.h"
+
+#include "../Ethernet3/utility/w5500.h"
+#include "../Ethernet3/Ethernet3.h"
+#include "../Ethernet3/EthernetUdp3.h"         // UDP library from: bjoern@cs.stanford.edu 12/30/2008
+
+/**
+	*	1	此例程需要调用eDrive目录下的w5500模块
+	*	2	此例程演示了w5500的初始化，基本信息打印
+	*/
+
+
 
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"Base64 example"
-#define EXAMPLE_DATE	"2018-12-10"
+#define EXAMPLE_NAME	"TCP client example"
+#define EXAMPLE_DATE	"2018-08-11"
+
+
+uint8_t mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+IPAddress local_ip(192, 168, 1, 177);
+
+IPAddress server_ip(192,168,1,101);
+uint16_t server_port = 6000;
+
+
+EthernetClient client;
 
 
 void setup()
@@ -34,50 +46,49 @@ void setup()
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
-  
-    String str1 = "Hello world";
-    String str2;
-    String str3;
-    base64_encode(str2,str1);
-    uart1.println(str2);
-    base64_decode(str3,str2);
-    uart1.println(str3);
 
-    // encoding
-    char input[] = "Hello world";
-    int inputLen = sizeof(input);
+    Ethernet.begin(mac, local_ip);
+    if (client.connect(server_ip, server_port))
+    {
+        Serial.println("connected");
+    }
+    else
+    {
+        Serial.println("connection failed");
+    }
 
-    int encodedLen = base64_enc_len(inputLen);
-    char encoded[100];
-
-    Serial.print(input); Serial.print(" = ");
-
-    // note input is consumed in this step: it will be empty afterwards
-    base64_encode(encoded, input, inputLen); 
-
-    Serial.println(encoded);
-
-
-
-    // decoding
-    char input2[] = "SGVsbG8gd29ybGQA";
-    int input2Len = sizeof(input2);
-
-    int decodedLen = base64_dec_len(input2, input2Len);
-    char decoded[100];
-
-    base64_decode(decoded, input2, input2Len);
-
-    Serial.print(input2); Serial.print(" = "); Serial.println(decoded);
 }
-
-
+uint32_t last_time = 0;
 int main(void)
 {
     setup();
+
+    last_time = millis();
     while(1)
     {
+        if (!client.connected())
+        {
+            client.stop();
+            client.connect(server_ip, server_port);
+       }
+        else
+        {
+            if (client.available())
+            {
+                char c = client.read();
+                client.print(c);
+            }
+
+            if(millis() - last_time > 1000)
+            {
+                last_time = millis();
+                client.println("hello world");
+                client.println();
+            }
+        }
     }
+
+
 }
 
 

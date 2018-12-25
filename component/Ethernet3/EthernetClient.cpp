@@ -62,7 +62,6 @@ int EthernetClient::connect(IPAddress ip, uint16_t port)
     if (_srcport == 0) _srcport = 49152; //Use IANA recommended ephemeral port range 49152-65535
     socket(_sock, SnMR::TCP, _srcport, 0);
 
-    uart1.println(ip.toString());
     if (!::connect(_sock, rawIPAddress(ip), port))
     {
         _sock = MAX_SOCK_NUM;
