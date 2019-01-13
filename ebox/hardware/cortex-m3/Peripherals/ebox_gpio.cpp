@@ -20,28 +20,67 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_gpio.h"
 
+// 获取Pin,返回值0-15
+#define GETPIN(A) 	 	  (uint16_t)(1<<(A&0x0f))
+// 获取端口索引，返回0,1,2,3,4,5
+//#define GETPORTINDEX(A)   ((A)&0xf0)>>4
+#define GETPORT(A)   (GPIO_TypeDef*)(((((A)&0xf0)+0x20)<<6)+APB2PERIPH_BASE)
+
 /**
   *@brief    构造函数
   *@param    port port; pin pin
   *@retval   None
   */
-mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
-{
-    uint8_t temp1, temp2;
-    _port = port;
-    _pin = pin;
-    temp1 = (((uint32_t)port - APB2PERIPH_BASE) >> 10) - 2;
+//mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
+//{
+//    uint8_t temp1, temp2;
+//    _port = port;
+//    _pin = pin;
+//    temp1 = (((uint32_t)port - APB2PERIPH_BASE) >> 10) - 2;
 
-    for (int i = 0; i <= 15; i ++)
-    {
-        if (((_pin >> i) & 0xfffe) == 0)
-        {
-            temp2 = i ;
-            break;
-        }
-    }
-    this->id = (PIN_ID_t)(temp1 * 16 + temp2);
+//    for (int i = 0; i <= 15; i ++)
+//    {
+//        if (((_pin >> i) & 0xfffe) == 0)
+//        {
+//            temp2 = i ;
+//            break;
+//        }
+//    }
+//    this->id = (PIN_ID_t)(temp1 * 16 + temp2);
+//}
+
+/**
+  *@brief    构造函数
+  *@param    PIN_ID_t pin_id
+  *@retval   None
+  */
+mcuGpio::mcuGpio(PIN_ID_t pin_id){
+	id = pin_id;
+//	switch(GETPORTINDEX(id))
+//	{			
+//		case 0:
+//			_port = GPIOA;
+//			break;
+//		case 1:
+//			_port = GPIOB;
+//			break;
+//		case 2:
+//			_port = GPIOC;
+//			break;
+//		case 3:
+//			_port = GPIOD;
+//			break;
+//		case 4:
+//			_port = GPIOE;
+//			break;
+//		case 5:
+//			_port = GPIOF;
+//			break;
+//	}
+		_port = GETPORT(id);
+		_pin = GETPIN(id);
 }
+
 /**
   *@brief    GPIO模式设置
   *@param    mode:PIN_MODE枚举变量类型
