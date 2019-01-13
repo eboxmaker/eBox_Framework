@@ -40,6 +40,8 @@
 #define LED2 PA1
 #define LED3 PA2
 
+#define UART uart1
+
 //#define BtnPin	PH15
 
 
