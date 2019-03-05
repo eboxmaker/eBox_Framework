@@ -5,9 +5,6 @@
 #include "stdint.h"
 #include "ebox_type.h"
 
-
-
-
 #define HSE_VALUE    ((uint32_t)8000000) /*!< Value of the External oscillator in Hz */
 //#define STM32F072xB
 //#define USE_FULL_LL_DRIVER
@@ -33,7 +30,7 @@
 	#define STM32_COMPANY "ST\0"
 
 #else
-#error "Please select first the target STM32F0xx device used in your application (in stm32f0xx.h file)"
+#error "Please config target STM32F0xx device used in your application (in mcu_config.h file)"
 #endif
 
 
@@ -68,10 +65,6 @@ extern int __bss_end;
 
 #define MCU_SRAM1_USED       (MCU_HEAP_BEGIN - MCU_SRAM1_BEGIN)
 #define MCU_SRAM1_REMAIND    (MCU_SRAM1_END - MCU_HEAP_BEGIN)
-
-
-
-
 
 
 

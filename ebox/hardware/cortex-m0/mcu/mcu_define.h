@@ -43,7 +43,7 @@ typedef struct
 #elif defined(STM32F072xB)
   #include "stm32f072_define.h"
 #else
-#error "Please select first the target STM32F0xx device used in your application (in stm32f0xx.h file)"
+#error "Please add and include the target STM32F0xx device define (in mcu_define.h file)"
 #endif
 
 /**
