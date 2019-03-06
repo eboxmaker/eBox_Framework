@@ -688,11 +688,6 @@
               <FilePath>..\..\..\ebox\core\myprintf.c</FilePath>
             </File>
             <File>
-              <FileName>snprintf.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\snprintf.cpp</FilePath>
-            </File>
-            <File>
               <FileName>ebox_virtual_hmi.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\port\ebox_virtual_hmi.cpp</FilePath>
