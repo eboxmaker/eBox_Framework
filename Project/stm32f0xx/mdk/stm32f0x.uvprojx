@@ -517,11 +517,6 @@
               <FilePath>..\..\..\ebox\core\ringbuf.cpp</FilePath>
             </File>
             <File>
-              <FileName>snprintf.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\snprintf.cpp</FilePath>
-            </File>
-            <File>
               <FileName>sort.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\sort.cpp</FilePath>
