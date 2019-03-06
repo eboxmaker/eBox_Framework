@@ -22,9 +22,8 @@
 
 // 获取Pin,返回值0-15
 #define GETPIN(A) 	 	  (uint16_t)(1<<(A&0x0f))
-// 获取端口索引，返回0,1,2,3,4,5
-//#define GETPORTINDEX(A)   ((A)&0xf0)>>4
-#define GETPORT(A)   (GPIO_TypeDef*)(((((A)&0xf0)+0x20)<<6)+AHB2PERIPH_BASE)
+// 获取端口号，注意f0和f1端口号获取方式不一样
+#define GETPORT(A)   (GPIO_TypeDef*)(((((A)&0xf0))<<6)+AHB2PERIPH_BASE)
 
 ///**
 //  *@brief    构造函数

@@ -22,16 +22,17 @@
 #include "ebox.h"
 
 
-#define	HARDWARE	"stm32f030f4"
+#define	HARDWARE	"stm32f072x"
 #define F0
 
-#define PWMLED  PA5
+#define PWMLED  	PA5
+#define LED1  		PA5
 #define TIM3CH1		TIM3,&PA6
 #define TIM1CH1		TIM1,&PA8
 #define TIM1CH2		TIM1,&PA9
 
-#define	UART    uart1
-//#define UART	  uart2
+//#define	UART    uart1
+#define UART	  uart2
 //#define I2C     i2c1
 #define I2C     si2c1
 

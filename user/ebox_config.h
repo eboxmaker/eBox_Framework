@@ -25,7 +25,7 @@
  * 1 标准库printf，优点：可靠，稳定；缺点：占用空间大
  * 2 自定义printf，有点：空间小；缺点：可能有bug。仅建议在flash紧张时使用
  */
-#define USE_PRINTF 2
+#define USE_PRINTF 1
 
 #if  USE_PRINTF == 1				
 #include <stdio.h>
