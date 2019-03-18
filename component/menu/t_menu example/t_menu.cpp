@@ -1,61 +1,38 @@
-/*
-file   : *.cpp
-author : shentq
-version: V1.0
-date   : 2015/7/5
 
-Copyright 2015 shentq. All Rights Reserved.
-*/
-
-//STM32 RUN IN eBox
-
-
-#include "ebox.h"
+#include "t_menu.h"
 #include "bsp_ebox.h"
-#include "..\component\menu\t_menu.h"
 
-
-extern fsm_rt_t top_menu_engine(menuEngineCb_t *ptThis);
-
-extern fsm_rt_t top_menu_item_a_handler();
-extern fsm_rt_t top_menu_item_b_handler();
-extern fsm_rt_t top_menu_item_c_handler();
-extern fsm_rt_t sec_menu_item_a_handler();
-extern fsm_rt_t sec_menu_item_b_handler();
-
-extern const menu_t c_tTopMenu;
-extern const menu_t c_tSecMenu;
-
-// 定义一系列菜单项
-menuItem_t c_tTopMenuItems[] = {
+// 父菜单项
+const menuItem_t c_tTopMenuItems[] = {
     {	top_menu_item_a_handler,NULL,"1 开灯"},
 		{	top_menu_item_b_handler,NULL,"2 关灯"},
 		{	NULL,(menu_t *)&c_tSecMenu,"3 进入子菜单"},
 };
 
-// 定义一系列菜单项
-menuItem_t c_tSecMenuItems[] = {
-    {	sec_menu_item_a_handler,NULL,"1 输入小数"},
-		{	sec_menu_item_b_handler,NULL,"2 保存数据"},
-		{	top_menu_item_c_handler,NULL,"3 返回上一层"},
-};
 // 顶层菜单
 const menu_t c_tTopMenu = {
-    c_tTopMenuItems,                      //!< menu item list
+    (menuItem_t *)c_tTopMenuItems,                      //!< menu item list
     getArraySize(c_tTopMenuItems),                            //!< menu item count
     NULL,                                               //!< top menu has no parent
     top_menu_engine,                                    
 };
 
+// 子菜单项
+const menuItem_t c_tSecMenuItems[] = {
+    {	sec_menu_item_a_handler,NULL,"1 输入小数"},
+		{	sec_menu_item_b_handler,NULL,"2 保存数据"},
+		{	top_menu_item_c_handler,NULL,"3 返回上一层"},
+};
+
 // 二级菜单
 const menu_t c_tSecMenu = {
-    c_tSecMenuItems,                      //!< menu item list
+    (menuItem_t *)c_tSecMenuItems,                      //!< menu item list
     getArraySize(c_tSecMenuItems),                            //!< menu item count
     (menu_t*)&c_tTopMenu,                                               //!< top menu has no parent
     top_menu_engine,                                    
 };
 
-static menuEngineCb_t s_tMenuDemo = {0,&c_tTopMenu,0};
+menuEngineCb_t s_tMenuDemo = {0,&c_tTopMenu,0};
 
 fsm_rt_t top_menu_item_a_handler()
 {
@@ -78,7 +55,7 @@ fsm_rt_t sec_menu_item_a_handler(){
     while (UART.available()==0);
     tmp = UART.parseFloat();
   }while (UART.read() != 0x0d);
-  UART.printf("input is %.02f ,%x \r\n",tmp,t);
+  UART.printf("input is %.02fmv \r\n",tmp);
   UART.setTimeout(200);
   return fsm_rt_cpl;
 }
@@ -119,7 +96,7 @@ fsm_rt_t top_menu_engine(menuEngineCb_t *ptThis)
   };
   uint8_t key;
   menuItem_t *ptItem;
-//	default_menu_item_t *ptItem;
+
   switch (ptThis->tState){
   case START:
     ptThis->tState++;
@@ -146,7 +123,6 @@ fsm_rt_t top_menu_engine(menuEngineCb_t *ptThis)
     return fsm_rt_cpl;
     break;
   }
-
 }
 
 fsm_rt_t menu_task(menuEngineCb_t *ptThis)
@@ -168,23 +144,4 @@ fsm_rt_t menu_task(menuEngineCb_t *ptThis)
     } while(false);
     
     return fsm_rt_err;
-}
-
-void setup()
-{
-    ebox_init();
-    UART.begin(115200);
-		UART.setTimeout(200);
-		LED1.mode(OUTPUT_PP);
-		UART.printf("\r\n");
-	displayCurrentMenu(&s_tMenuDemo);
-
-}
-
-int main(void)
-{
-    setup();
-		while(1){
-			menu_task(&s_tMenuDemo);
-		}
 }
