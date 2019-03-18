@@ -1,5 +1,26 @@
-#ifndef __TMENU_H
-#define __TMENU_H
+/**
+  ******************************************************************************
+  * @file    t_menuDef.h
+  * @author  好心情
+  * @version V1.0
+  * @date    2019/3/14
+  * @brief	 一个简单的文本菜单，根据Gorgon_Meducer（傻孩子）大神的代码整理而来，
+	*		原文连接 
+	* https://www.amobbs.com/forum.php?mod=viewthread&tid=5688720&highlight=%E8%8F%9C%E5%8D%95
+  ******************************************************************************
+  * @attention
+  *
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
+  * preliminary and is subject to change at any time without notice. shentq assumes
+  * no responsibility for any errors contained herein.
+  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
+  ******************************************************************************
+  */
+
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __TMENU_DEF_H
+#define __TMENU_DEF_H
 #include "ebox.h"
 
 #ifndef __FSM_RT_TYPE__
@@ -26,7 +47,7 @@ typedef fsm_rt_t menuEngine_t(menuEngineCb_t *);			// 菜单处理引擎
 
 
 
-/*------------------------------------一以下为菜单结构体--------------------------------------------*/
+/*------------------------------------以下为菜单结构体--------------------------------------------*/
 
 /**
 	*@brief    菜单项结构体，用来描述一个菜单项，可以继承扩展
@@ -38,10 +59,12 @@ struct __menuItem {
     menuItemHandler_t    *fnHandle;                      //!< handler
     menu_t               *ptChild;                       //!< Child Menu
     //! depends on your application, you can add/remove/change following members
-    char                *pchTitle;                      //!< Menu Title
+    char                 *pchTitle;                      //!< Menu Title
 //    char                *pchDescription;                //!< Description for this menu item
 //    char                chShortCutKey;                  //!< Shortcut Key value in current menu
 };
+
+
 
 /**
 	*@brief   菜单容器，用来保存一系列具体菜单项
