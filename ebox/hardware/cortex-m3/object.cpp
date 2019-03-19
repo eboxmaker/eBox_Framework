@@ -20,6 +20,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox.h"
 
+#if USE_OBJECT
+
 //´®¿Ú
 Uart uart1(USART1, &PA9, &PA10);
 Uart uart2(USART2, &PA2, &PA3);
@@ -181,6 +183,7 @@ mcuGpio PG12(PG12_ID);
 mcuGpio PG13(PG13_ID);
 mcuGpio PG14(PG14_ID);
 mcuGpio PG15(PG15_ID);
+#endif
 #endif
 
 

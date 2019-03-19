@@ -28,6 +28,78 @@
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
+#if USE_OBJECT == 0
+extern mcuGpio PA0;
+extern mcuGpio PA1;
+extern mcuGpio PA2;
+extern mcuGpio PA3;
+extern mcuGpio PA4;
+extern mcuGpio PA5;
+extern mcuGpio PA6;
+extern mcuGpio PA7;
+extern mcuGpio PA8;
+extern mcuGpio PA9;
+extern mcuGpio PA10;
+extern mcuGpio PA11;
+extern mcuGpio PA12;
+extern mcuGpio PA13;
+extern mcuGpio PA14;
+extern mcuGpio PA15;
+
+extern mcuGpio PB0;
+extern mcuGpio PB1;
+extern mcuGpio PB2;
+extern mcuGpio PB3;
+extern mcuGpio PB4;
+extern mcuGpio PB5;
+extern mcuGpio PB5;
+extern mcuGpio PB6;
+extern mcuGpio PB7;
+extern mcuGpio PB8;
+extern mcuGpio PB9;
+extern mcuGpio PB10;
+extern mcuGpio PB11;
+extern mcuGpio PB12;
+extern mcuGpio PB13;
+extern mcuGpio PB14;
+extern mcuGpio PB15;
+
+#if (MCU_PINS >= 64)
+extern mcuGpio PC0;
+extern mcuGpio PC1;
+extern mcuGpio PC2;
+extern mcuGpio PC3;
+extern mcuGpio PC4;
+extern mcuGpio PC5;
+extern mcuGpio PC5;
+extern mcuGpio PC6;
+extern mcuGpio PC7;
+extern mcuGpio PC8;
+extern mcuGpio PC9;
+extern mcuGpio PC10;
+extern mcuGpio PC11;
+extern mcuGpio PC12;
+#endif
+extern mcuGpio PC13;
+extern mcuGpio PC14;
+extern mcuGpio PC15;
+
+#if (MCU_PINS >= 64)
+extern mcuGpio PD0;
+extern mcuGpio PD1;
+#endif
+
+
+extern Uart uart1;
+extern Uart uart2;
+extern Uart uart3;
+
+extern mcuSpi spi1;
+extern mcuSpi spi2;
+
+#endif
+
+
 #define LED1 PB8
 #define LED2 PB9
 #define LED3 PB10

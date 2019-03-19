@@ -4,7 +4,7 @@
   * @author  shentq
   * @version V2.1
   * @date    2016/08/14
-  * @brief
+  * @brief	 实例外设
   ******************************************************************************
   * @attention
   *
@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox.h"
 
+#if USE_OBJECT
 ////串口
 // tx,rx
 //Uart uart1(USART1, &PA9, &PA10);
@@ -185,5 +186,7 @@ mcuGpio PG12(PG12_ID);
 mcuGpio PG13(PG13_ID);
 mcuGpio PG14(PG14_ID);
 mcuGpio PG15(PG15_ID);
+
+#endif
 
 #endif
