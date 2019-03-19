@@ -21,6 +21,76 @@
 #include "bsp_ebox.h"
 #include "ebox_mem.h"
 
+// 如果不使用object.cpp, 使用下列方式创建IO对象
+#if USE_OBJECT == 0
+mcuGpio PA0(PA0_ID);
+mcuGpio PA1(PA1_ID);
+mcuGpio PA2(PA2_ID);
+mcuGpio PA3(PA3_ID);
+mcuGpio PA4(PA4_ID);
+mcuGpio PA5(PA5_ID);
+mcuGpio PA6(PA6_ID);
+mcuGpio PA7(PA7_ID);
+mcuGpio PA8(PA8_ID);
+mcuGpio PA9(PA9_ID);
+mcuGpio PA10(PA10_ID);
+mcuGpio PA11(PA11_ID);
+mcuGpio PA12(PA12_ID);
+mcuGpio PA13(PA13_ID);
+mcuGpio PA14(PA14_ID);
+mcuGpio PA15(PA15_ID);
+
+mcuGpio PB0(PB0_ID);
+mcuGpio PB1(PB1_ID);
+mcuGpio PB2(PB2_ID);
+mcuGpio PB3(PB3_ID);
+mcuGpio PB4(PB4_ID);
+mcuGpio PB5(PB5_ID);
+mcuGpio PB6(PB6_ID);
+mcuGpio PB7(PB7_ID);
+mcuGpio PB8(PB8_ID);
+mcuGpio PB9(PB9_ID);
+mcuGpio PB10(PB10_ID);
+mcuGpio PB11(PB11_ID);
+mcuGpio PB12(PB12_ID);
+mcuGpio PB13(PB13_ID);
+mcuGpio PB14(PB14_ID);
+mcuGpio PB15(PB15_ID);
+
+
+#if (MCU_PINS >= 64)
+mcuGpio PC0(PC0_ID);
+mcuGpio PC1(PC1_ID);
+mcuGpio PC2(PC2_ID);
+mcuGpio PC3(PC3_ID);
+mcuGpio PC4(PC4_ID);
+mcuGpio PC5(PC5_ID);
+mcuGpio PC6(PC6_ID);
+mcuGpio PC7(PC7_ID);
+mcuGpio PC8(PC8_ID);
+mcuGpio PC9(PC9_ID);
+mcuGpio PC10(PC10_ID);
+mcuGpio PC11(PC11_ID);
+mcuGpio PC12(PC12_ID);
+#endif
+mcuGpio PC13(PC13_ID);
+mcuGpio PC14(PC14_ID);
+mcuGpio PC15(PC15_ID);
+
+#if (MCU_PINS >= 64)
+mcuGpio PD0(PD0_ID);
+mcuGpio PD1(PD1_ID);
+#endif
+
+Uart uart1(USART1, &PA9, &PA10);
+Uart uart2(USART2, &PA2, &PA3);
+Uart uart3(USART3, &PB10, &PB11);
+
+//spi
+mcuSpi  spi1(SPI1, &PA5, &PA6, &PA7);
+mcuSpi  spi2(SPI2, &PB13, &PB14, &PB15);
+mcuSpi  spi3(SPI3, &PB3, &PB4, &PB5);
+#endif
 //Button  btn(&BtnPin,1);
 //// 依赖edrive目录下 led模块
 //Led     led1(&LED1,0);
@@ -29,22 +99,7 @@
 //Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
 W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
 
-// 如果不使用object.cpp, 使用下列方式创建IO对象
-//mcuGpio 		LED1(GPIOB,GPIO_Pin_8);
-//mcuGpio 		LED2(GPIOB,GPIO_Pin_9);
-//mcuGpio 		LED3(GPIOB,GPIO_Pin_10);
 
-//mcuGpio		BtnPin(GPIOA,GPIO_Pin_8);
-//Uart 			UART(USART1, &PA9, &PA10);
-
-
-// 使用object.cpp,使用下列方式重命名IO对象，可以减少code区消耗
-//#define   LED1  PB8
-//#define   LED2  PB9
-//#define   LED3  PB10
-
-//#define   BtnPin	PA8
-#define   UART	uart1
 
 
 /*

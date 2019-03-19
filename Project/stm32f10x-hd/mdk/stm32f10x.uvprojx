@@ -950,7 +950,7 @@
             <File>
               <FileName>bsp_ebox.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\user\board\spark_f1\bsp_ebox.cpp</FilePath>
+              <FilePath>..\..\..\user\board\stm32f10x_hd\bsp_ebox.cpp</FilePath>
             </File>
           </Files>
         </Group>

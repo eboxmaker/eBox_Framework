@@ -64,5 +64,11 @@
  */
 #define FLASH_OVERRIDE  1
 
+/* 是否使用object，该配置影响object.cpp & ebox.h
+ * 0 不使用object，用户需要根据需要实例对象,建议在bsp_ebox中实例
+ * 1 使用默认实例
+ */
+#define	USE_OBJECT			1
+
 #endif
 
