@@ -102,8 +102,8 @@ static const AF_FUN_S UART_MAP[] =
 static const AF_FUN_S I2C_MAP[] =
 {
     // i2c1
-    PB8_ID, AF_PP_PU, LL_GPIO_AF_1, I2C1_BASE,
-    PB9_ID, AF_PP_PU, LL_GPIO_AF_1, I2C1_BASE,
+		PA9_ID,AF_PP_PU,LL_GPIO_AF_4,I2C1_BASE,
+		PA10_ID,AF_PP_PU,LL_GPIO_AF_4,I2C1_BASE,
     (PIN_ID_t)0xff
 };
 
