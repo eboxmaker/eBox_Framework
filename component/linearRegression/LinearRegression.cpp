@@ -1,6 +1,7 @@
 
 #include "LinearRegression.h"
 #include "string.h"
+#include "ebox_mem.h"
 
 // 求线性回归方程：Y = a + bx
 // dada[rows*2]数组：X, Y；rows：数据行数；a, b：返回回归系数
