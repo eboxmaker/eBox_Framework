@@ -20,6 +20,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_iflash.h"
 #include "stm32f0xx_hal_flash_ex.h"
+#include "ebox_config.h"
+
+#define USE_EBOX_MEM	1
 
 #if USE_EBOX_MEM
 #include "ebox_mem.h"
@@ -27,7 +30,7 @@
 
 #if USE_PRINTF
 // 是否打印调试信息, 1打印,0不打印
-#define debug 0
+#define debug 1
 #endif
 
 #if debug
