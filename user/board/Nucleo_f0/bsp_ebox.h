@@ -72,8 +72,8 @@ extern Uart uart2;
 #define TIM1CH1		TIM1,&PA8
 #define TIM1CH2		TIM1,&PA9
 
-#define	UART    uart1
-//#define UART	  uart2
+//#define	UART    uart1
+#define UART	  uart2
 //#define I2C     i2c1
 #define I2C     si2c1
 
