@@ -9,7 +9,7 @@
 //请查阅ebox_cpu_type.h寻找特定信号CPU的详细配置
 
 #define STM32_TYPE    STM32F103C8
-#define STM32_PINS    64
+#define STM32_PINS    48
 #define STM32_FLASH   128
 #define STM32_RAM1    20
 #define STM32_COMPANY "ST\0"
