@@ -62,18 +62,6 @@
 
 #include "ebox_core.h"
 
-/*--------------------------------------------------------*
- *                    系 统 宏 定 义                      *
- *--------------------------------------------------------*/
-
-//----------------------I0端口定义------------------------//
-
-
-//-----------------------初始化设置-----------------------//
-
-
-//-----------------------初始化配置-----------------------//
-
 
 //-----------------------初始化指令-----------------------//
 
@@ -83,42 +71,43 @@
 #define XLevelL		0x00
 #define XLevelH		0x10
 #define XLevel	    ( ( XLevelH & 0x0F ) * 16 + XLevelL )
-#define Max_Column	128
+#define Max_Column	256
 #define Max_Row		64
 #define	Brightness	0xCF
-#define X_WIDTH		128
-#define Y_WIDTH		64
+#define SSD1322_LCDWIDTH		256
+#define SSD1322_LCDHEIGHT		64
 #define SIZE		16
+#define BITS_PER_PIXEL  4
 
 
-class Oled4Spi
+#define SSD1322_256_64_4
+//#define SSD1322_256_64_1
+
+
+//#define BLACK 0x00
+//#define WHITE 0x0F
+//#define INVERSE 2
+
+class OledSSD1322:public Vhmi
 {
 public:
-    Oled4Spi(Gpio *cs, Gpio *dc, Gpio *res, Gpio *scl_d0, Gpio *sda_d1);
+    OledSSD1322(Gpio *cs, Gpio *dc, Gpio *res, Gpio *scl_d0, Gpio *sda_d1);
 
-    Oled4Spi(Gpio *cs, Gpio *dc,Gpio *res , Spi *spi);
+    OledSSD1322(Gpio *cs, Gpio *dc,Gpio *res , Spi *spi);
 
     void begin();
 
-    void init(void);
-    void clear(uint8_t value);
+    virtual void    draw_pixel(int16_t x, int16_t y,uint32_t color);
+    virtual void    fill_screen(uint32_t color);
+
     void clear();
+    void flush();
     void display_on(void);
     void display_off(void);
 
-    void draw_point(uint8_t x, uint8_t y);
-
-    void show_char(uint8_t x, uint8_t y, uint8_t chr, uint8_t Char_Size);
-    void show_string(uint8_t x, uint8_t y, char *p, uint8_t Char_Size);
-    void show_num(uint8_t x, uint8_t y, uint32_t num, uint8_t len, uint8_t size);
-    void show_chinese(uint8_t x, uint8_t y, uint8_t no);
-
-    void fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t dot);
-    void draw_bmp(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, const unsigned char BMP[]);
-    void draw_bmp(uint8_t *BMP,uint8_t Gray_Level,uint8_t Color);//BMP为图像数据，Gray_Level=0时全屏只显示一种颜色，Gray_Level=1时显示支持灰度图片；Color为灰度值0～15;
-
-
 private:
+    void init(void);
+
     void write_data_hard(uint8_t data);	//OLED写数据
     void write_cmd_hard(uint8_t cmd);	//OLED写命令  
 
@@ -127,8 +116,6 @@ private:
 
     void write_data(uint8_t dat);	//OLED写数据
     void write_cmd(uint8_t cmd);	//OLED写命令
-    void set_pos(uint16_t x, uint16_t y);	// OLED 设置坐标
-    uint32_t oled_pow(uint8_t m, uint8_t n);	//m^n
 
     void set_column_addr(uint16_t x0, uint16_t x1);	// OLED 设置坐标
     void set_row_addr(uint16_t y0, uint16_t y1);	// OLED 设置坐标
@@ -141,6 +128,12 @@ private:
 
     Spi *spi;
     SpiConfig_t config;
+    
+public:
+    int16_t width;
+    int16_t hight;
+    uint16_t buffer_size;
+
 };
 #endif
 

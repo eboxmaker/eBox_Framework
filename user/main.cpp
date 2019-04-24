@@ -24,53 +24,54 @@
 #include "math.h"
 #include "font.h"
 #include "oled_ssd1322.h"
+#include "gui.h"
+#include "ebox_mem.h"
 
 //Oled4Spi oled(&PA4, &PA2, &PA1, &PA5, &PA7);
-Oled4Spi oled(&PA4, &PA2, &PA1, &spi1);
-extern uint8_t BMP3[];
+OledSSD1322 oled(&PA4, &PA2, &PA1, &spi1);
+GUI gui;
+
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
     uart1.printf("开始");
     oled.begin();
-
+    gui.begin(&oled,SSD1322_LCDWIDTH,SSD1322_LCDHEIGHT);
 
 }
-#include "font.h"
-    uint32_t last,now;
+
+uint32_t last,now;
+int x =0,y=0;
 
 int main(void)
 {
     setup();
 
-    int x =0,i = 0;
-                oled.clear();
-    uart1.printf("清空\r\n");
     while(1)
     {
-            last = millis();
-        //oled.draw_bmp(BMP3,1,0x04);
-//        delay_ms(100);
-            if(i == 0)
-            {
-                x++;
-                
-               if(x == 0xf)
-                   i = 1;
-            }
-            else
-            {
-               x--;
-                if(x == 0)
-                    i = 0;
-            }
-           oled.clear(x);
-//            oled.clear(0x08);
-//            oled.clear(0x015);
-            now = millis();
-            delay_ms(500);
-        uart1.printf("RUNNING:%d x = %d\r\n",now - last,x);
+        last = millis();
+        gui.fill_screen(GUI_BLACK);
+
+            
+        x = random(0,256);
+        y = random(0,64);
+        oled.draw_pixel(x,y,0xff);
+
+        oled.draw_circle(x,y,10,0xf);
+
+        gui.set_font(&GUI_FontHZ16X16);
+
+        gui.set_color(GUI_YELLOW);
+        gui.set_text_mode(TEXT_MODE_TRANS);
+        gui.printf(35, 33, "申同强M2.5");
+        gui.printf(35, 50, "ug/m");
+
+        oled.flush();
+        now = millis();
+        
+        delay_ms(50);
+        uart1.printf("RUNNING:%d x = %d mem=%0.2fK\r\n",now - last,x,ebox_get_free()/1024.0);
 
     }
 }
