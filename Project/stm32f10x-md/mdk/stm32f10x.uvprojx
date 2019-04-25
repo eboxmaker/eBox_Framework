@@ -852,6 +852,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\OLED_SSD1322.cpp</FilePath>
             </File>
+            <File>
+              <FileName>GT30L32S4W.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\GT30L32S4W.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -996,11 +1001,6 @@
               <FileName>gui_port.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\gui\gui_port.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_text.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_text.cpp</FilePath>
             </File>
           </Files>
         </Group>
