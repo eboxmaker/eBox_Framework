@@ -54,17 +54,19 @@
         FontBase base;
         int16_t width;
         int16_t hight;
-        uint8_t size;
+        uint8_t nBytesOfChar;
         int16_t num;
     }Font_t;
     extern Font_t Ascii5x7;
     extern Font_t Ascii8x16;
+    extern Font_t Hz32x32;
+
 class FontLib
 {
 public:
     
     typedef struct {
-        uint8_t ptr[100];
+        uint8_t ptr[2000];
         int16_t width;
         int16_t hight;
         int16_t len;
@@ -82,7 +84,8 @@ public:
     FontLib(Gpio *cs , Spi *spi);
 
     void begin();
-    void get_char_frame(uint16_t inner_code,Font_t &font,Frame_t &frame);
+    void get_char_buf(uint16_t inner_code,Font_t &font,uint8_t *p);
+    void get_one_hz_frame(const char *str,Font_t &font,Frame_t &frame);
     void get_str_frame(const char *str,Font_t &font,Frame_t &frame);
     void read_nbytes(uint32_t addr,uint8_t *buf,uint16_t nbytes);
 private:
