@@ -34,7 +34,8 @@ OledSSD1322 oled(&PA4, &PA2, &PA1, &spi1);
 GUI gui;
 //FontLib font(&PA8,&PA5,&PA7,&PA6);
 
-uint8_t buf[5120];
+uint8_t buf[1024];
+uint8_t buf2[256];
         FontLib font(&PA8,&spi1);
         FontLib::Frame_t frame;
 void setup()
@@ -44,34 +45,43 @@ void setup()
     uart1.printf("开始");
     oled.begin();
     gui.begin(&oled,SSD1322_LCDWIDTH,SSD1322_LCDHEIGHT);
-    int fsize = 16;
     font.begin();
-    font.get_str_frame("ABCD",Ascii8x16,frame);
-// while(1)
-        for(int i = 0; i < frame.len; i++)
-        {
-            uart1.print(frame.ptr[i],HEX);
-            uart1.print('\t');
-        }
-         uart1.println();
+//    buf2 = (uint8_t *)ebox_malloc(100);
+//    gui.drawBitmap(0,0,frame.ptr,frame.width,frame.hight,0xff);
+    oled.flush();
+//while(1)
+//        for(int i = 0; i < frame.len; i++)
+//        {
+//            uart1.print(frame.ptr[i],HEX);
+//            uart1.print('\t');
+//        }
+//         uart1.println();
         
-    for(int j = 0; j < 5; j++)
-    {
+//    for(int j = 0; j < 5; j++)
+//    {
 
+//        uint32_t addr = (('A'  - 0x20)<<4) + 0x1DD780;
+//        uart1.printf("====%c@0x%X====\r\n",'0' + j,addr);
 
-        uint32_t addr = (('A' + j  - 0x20)<<4) + 0x1DD780;
-        font.read_nbytes( addr ,buf,fsize);
-        uart1.printf("====%c@0x%X====\r\n",'0' + j,addr);
+//        font.read_nbytes( addr ,buf,Ascii8x16.nBytesOfChar);
+//        font.get_char_buf('A',Ascii8x16,buf2);
 
-        for(int i = 0; i < fsize; i++)
-        {
-            uart1.print(buf[i],HEX);
-            uart1.print('\t');
-        }
-         uart1.println();
-    }
+//        uart1.print("1:");
+//        for(int i = 0; i < Ascii8x16.nBytesOfChar; i++)
+//        {
+//            uart1.print(buf[i],HEX);
+//            uart1.print('\t');
+//        }
+//        uart1.print("2:");
+//        for(int i = 0; i < Ascii8x16.nBytesOfChar; i++)
+//        {
+//            uart1.print(buf2[i],HEX);
+//            uart1.print('\t');
+//        }
+//         uart1.println();
+//    }
 
-while(1);
+//while(1);
 }
 
 uint32_t last,now;
@@ -83,28 +93,37 @@ int main(void)
 
     while(1)
     {
-//        last = millis();
-//        gui.fill_screen(GUI_BLACK);
+        gui.fill_screen(0);
+        font.get_one_hz_frame("：",Hz32x32,frame);
+        gui.drawBitmap(0,0,frame.ptr,frame.width,frame.hight,0xff,8);
+        
+        font.get_one_hz_frame("我",Hz32x32,frame);
+        gui.drawBitmap(15,0,frame.ptr,frame.width,frame.hight,0xff,8);
 
-//            
-//        x = random(0,256);
-//        y = random(0,64);
-//        oled.draw_pixel(x,y,0xff);
+       font.get_str_frame("123aaBD",Ascii8x16,frame);
+        gui.drawBitmap(48,0,frame.ptr,frame.width,frame.hight,0xff,8);
+        font.get_str_frame("你",Hz32x32,frame);
+        gui.drawBitmap(0,32,frame.ptr,frame.width,frame.hight,0xff,1);
 
-//        oled.draw_circle(x,y,10,0xf);
+        last = millis();
+        x = random(0,256);
+        y = random(0,64);
+        oled.draw_pixel(x,y,0xff);
 
-//        gui.set_font(&GUI_FontHZ16X16);
+        oled.draw_circle(x,y,10,0xf);
 
-//        gui.set_color(GUI_YELLOW);
-//        gui.set_text_mode(TEXT_MODE_TRANS);
-//        gui.printf(35, 33, "申同强M2.5");
-//        gui.printf(35, 50, "ug/m");
+        gui.set_font(&GUI_FontHZ16X16);
 
-//        oled.flush();
-//        now = millis();
-//        
-//        delay_ms(50);
-//        uart1.printf("RUNNING:%d x = %d mem=%0.2fK\r\n",now - last,x,ebox_get_free()/1024.0);
+        gui.set_color(GUI_YELLOW);
+        gui.set_text_mode(TEXT_MODE_TRANS);
+        gui.printf(35, 33, "申同强M2.5");
+        gui.printf(35, 50, "ug/m");
+
+        oled.flush();
+        now = millis();
+        
+        delay_ms(500);
+        uart1.printf("RUNNING:%d x = %d mem=%0.2fK\r\n",now - last,x,ebox_get_free()/1024.0);
 
     }
 }

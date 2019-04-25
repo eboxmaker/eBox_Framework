@@ -95,9 +95,9 @@ void OledSSD1322::draw_pixel(int16_t x, int16_t y,uint32_t color)
 }
 void OledSSD1322::fill_screen(uint32_t color)
 {
-    color &=0xff;
+    color &=0x0f;
    for(uint32_t i = 0; i < buffer_size; i++)
-        buffer[i] = 0;
+        buffer[i] = color | color << 4;
 }
 /***********************************************************
 *   º¯ÊýÃû³Æ£º
