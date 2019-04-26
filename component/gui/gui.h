@@ -97,6 +97,12 @@ extern const GUI_FONT GUI_Font32_ASCII;
 extern const GUI_FONT GUI_FontHZ16X16;
 
 
+typedef enum{
+    FONT_INNER,
+    FONT_ONLY_HZ_EXTERN,
+    FONT_ONLY_ASCII_EXTERN,
+    FONT_ALL_EXTERN
+}FontSelect_t;
 
 #ifndef _swap_int16_t
 #define _swap_int16_t(a, b) { int16_t t = a; a = b; b = t; }
@@ -119,13 +125,21 @@ private:
 
     //字体相关设置
     GUI_FONT *current_font;
+    FontSelect_t font_select;
     uint8_t  text_mode;
     uint8_t  text_style;
     uint8_t  text_auto_reline;
-
+    //外部字库的传入接口
+    eBoxCharInfo_t info;
+    uint8_t text_extern_font_ascii_id;
+    uint8_t text_extern_font_hz_id;
+    
+    bool text_font_ascii_extern_enable;
+    bool text_font_hz_extern_enable;
 
 public:
 
+    void attach( bool (*api)(uint16_t inner_code,uint8_t font_id,eBoxCharInfo_t *info));
     void begin(Vhmi *_lcd, uint16_t w, uint16_t h);
 
     //settings
@@ -166,9 +180,13 @@ public:
 
     //text
     //设置字体
-    void set_font(const GUI_FONT *font);
-    void set_text_style(uint8_t style);
-    void set_text_mode(uint8_t mode);
+    void set_font_select(FontSelect_t select);//设置字库选择
+    void set_font(const GUI_FONT *font);//设置内部字库
+    void set_font_ascii_extern(uint8_t font_id);//设置外部ASCII字库
+    void set_font_hz_extern(uint8_t font_id);//设置外部汉子字库
+    
+    void set_text_style(uint8_t style);//无效
+    void set_text_mode(uint8_t mode);//设置填充模式
     void set_text_auto_reline(uint8_t enable);
 
     //解码转换,打印字符等函数

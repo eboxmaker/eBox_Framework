@@ -156,55 +156,39 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>63</LineNumber>
+          <LineNumber>178</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134230844</Address>
+          <Address>134235046</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\component\gui\gui_text.cpp</Filename>
+          <Filename>..\..\..\component\edriver\GT30L32S4W.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../component/gui/gui_text.cpp\63</Expression>
+          <Expression>\\ebox\../../../component/edriver/GT30L32S4W.cpp\178</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>120</LineNumber>
+          <LineNumber>90</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134234706</Address>
+          <Address>134238918</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\component\edriver\GT30L32S4W.cpp</Filename>
+          <Filename>..\..\..\user\main.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../component/edriver/GT30L32S4W.cpp\120</Expression>
+          <Expression>\\ebox\../../../user/main.cpp\90</Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>66</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134234432</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\component\edriver\GT30L32S4W.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../component/edriver/GT30L32S4W.cpp\66</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>95</LineNumber>
+          <LineNumber>110</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -213,23 +197,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\..\component\edriver\GT30L32S4W.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>225</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\..\component\edriver\GT30L32S4W.cpp</Filename>
+          <Filename>..\..\..\user\main.cpp</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -249,6 +217,11 @@
           <count>2</count>
           <WinNumber>1</WinNumber>
           <ItemText>addr</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>info</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
