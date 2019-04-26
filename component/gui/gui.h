@@ -142,6 +142,8 @@ public:
     void attach( bool (*api)(uint16_t inner_code,uint8_t font_id,eBoxCharInfo_t *info));
     void begin(Vhmi *_lcd, uint16_t w, uint16_t h);
 
+    //fun
+    void clear();
     //settings
     void        set_rotation(uint8_t value);
     int16_t     ro_x(int16_t x, int16_t y);

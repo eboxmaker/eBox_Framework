@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    bsp_ebox.h
-  * @author  cat_li
+  * @file    t_menu.h
+  * @author  好心情
   * @version V1.0
-  * @date    2018/07/31
-  * @brief   硬件相关信息声明
+  * @date    2019/3/14
+  * @brief	 t_menu example
   ******************************************************************************
   * @attention
   *
@@ -17,30 +17,23 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __BSP_EBOX_H
-#define __BSP_EBOX_H
-#include "ebox.h"
-//#include "led.h"
-#include "lcd_1.8.h"
-//#include "cnc.h"
-#include "button.h"
-#include "gui.h"
+#ifndef __TMENU_H
+#define __TMENU_H
+#include "..\component\menu\t_menuDef.h"
 
-#include "oled_ssd1322.h"
+extern fsm_rt_t top_menu_engine(menuEngineCb_t *ptThis);
 
-extern OledSSD1322 oled;
-extern GUI gui;
+extern fsm_rt_t top_menu_item_a_handler();
+extern fsm_rt_t top_menu_item_b_handler();
+extern fsm_rt_t top_menu_item_c_handler();
+extern fsm_rt_t sec_menu_item_a_handler();
+extern fsm_rt_t sec_menu_item_b_handler();
 
-#define	HARDWARE	"ebox_spark，STM32F103C8T6"
+extern void displayCurrentMenu(menuEngineCb_t * s_tmenu);
+extern fsm_rt_t menu_task(menuEngineCb_t *ptThis);
 
-#define UART uart1
-#define LED1 PB8
-#define LED2 PB9
-#define LED3 PB10
-
-extern void print_log(const char *name = "", const char *date = "");
-
-
+extern const menu_t c_tTopMenu;
+extern const menu_t c_tSecMenu;
+extern menuEngineCb_t s_tMenuDemo;
 
 #endif
-
