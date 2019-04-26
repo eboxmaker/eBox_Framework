@@ -1,4 +1,10 @@
 #include "gui.h"
+#include "gt30l32s4w.h"
+
+extern FontLib font;
+
+
+bool (*extern_font_api)(uint16_t inner_code,uint8_t font_id,eBoxCharInfo_t *info);
 
 /*********************************************************************
 *
@@ -6,6 +12,10 @@
 *
 **********************************************************************
 */
+void GUI::attach( bool (*api)(uint16_t inner_code,uint8_t font_id,eBoxCharInfo_t *info))
+{
+    extern_font_api = api;
+}
 void GUI::set_font(const GUI_FONT *font)
 {
     this->current_font = (GUI_FONT *)font;
@@ -19,6 +29,48 @@ void GUI::set_text_mode(uint8_t mode)
 {
     text_mode = mode;
 }
+
+
+void GUI::set_font_select(FontSelect_t select){
+    
+    switch((uint8_t)select)
+    {
+        case FONT_INNER:
+            text_font_ascii_extern_enable = false;
+            text_font_hz_extern_enable = false;
+            break;
+        case FONT_ALL_EXTERN:
+            text_font_ascii_extern_enable = true;
+            text_font_hz_extern_enable = true;
+            break;
+            
+        case FONT_ONLY_ASCII_EXTERN:
+            text_font_ascii_extern_enable = true;
+            text_font_hz_extern_enable = false;
+            break;
+            
+        case FONT_ONLY_HZ_EXTERN:
+            text_font_ascii_extern_enable = false;
+            text_font_hz_extern_enable = true;
+            break;
+            
+        default:
+            text_font_ascii_extern_enable = false;
+            text_font_hz_extern_enable = false;
+            break;
+
+    }
+}
+
+void GUI::set_font_ascii_extern(uint8_t font_id){
+    
+    text_extern_font_ascii_id = font_id;
+}
+void GUI::set_font_hz_extern(uint8_t font_id){
+    
+    text_extern_font_hz_id = font_id;
+}
+
 void GUI::set_text_auto_reline(uint8_t enable)
 {
     text_auto_reline = enable;
@@ -100,6 +152,7 @@ void GUI::disp_index(const GUI_FONT_PROP *font_list, uint16_t index)
     cursor_y -= current_font->YDist;
     cursor_x += pCharInfo->XSize;
 }
+#include "ebox_mem.h"
 
 void GUI::disp_char(uint16_t ch)
 {
@@ -115,8 +168,50 @@ void GUI::disp_char(uint16_t ch)
         set_cursor(0, cursor_y);
         return;
     }
-    char_index_of_font(ch, &font_list, &index);
-    disp_index(font_list, index);
+    
+    
+    if(ch < 0x7e)    {
+//        char_index_of_font(ch, &font_list, &index);
+//        disp_index(font_list, index);
+        if(text_font_ascii_extern_enable == false )//ASCII使用内部
+        {
+            char_index_of_font(ch, &font_list, &index);
+            disp_index(font_list, index);
+        }
+        else
+        {
+            extern_font_api(ch,text_extern_font_ascii_id,&info);
+            if(cursor_x + info.XSize > _width ){
+                cursor_y += info.YSize;
+                cursor_x = 0;
+            }
+            drawBitmap(cursor_x,cursor_y,info.pData,info.XSize,info.YSize,0xff);
+            ebox_free(info.pData);
+            cursor_x += info.XSize;
+        }
+    }else{
+
+        if(text_font_hz_extern_enable ==  false)
+        {
+            char_index_of_font(ch, &font_list, &index);
+            disp_index(font_list, index);
+
+        }else
+        {
+
+            extern_font_api(ch,text_extern_font_hz_id,&info);
+            
+            if(cursor_x + info.XSize > _width ){
+                cursor_y += info.YSize;
+                cursor_x = 0;
+            }
+            drawBitmap(cursor_x,cursor_y,info.pData,info.XSize,info.YSize,0xff);
+            ebox_free(info.pData);
+            cursor_x += info.XSize;
+        }
+
+
+    }
 }
 void GUI::disp_char_at(uint16_t ch, int16_t x, int16_t y)
 {

@@ -115,7 +115,15 @@ typedef struct
     uint8_t sec;
     uint8_t week;
 } DateTime_t;
-
+typedef struct
+{
+    uint8_t     XSize;
+    uint8_t     XDist;
+    uint16_t    YSize;
+    uint8_t     YDist;
+    uint8_t BytesPerLine;
+    unsigned char   *pData;
+} eBoxCharInfo_t;
 
 #define ALIGN(size, align)                 ((align + size - 1) & (~ (align - 1)))
 #define ALIGN_4BYTE(size)                  ((4 + size - 1) & (~ (4 - 1)))

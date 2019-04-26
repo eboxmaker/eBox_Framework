@@ -67,6 +67,7 @@ void OledSSD1322::begin(void)	//≥ı ºªØSSD1306
     for(uint32_t i = 0; i < (64*256/2); i++)
         buffer[i] = 0;
     init();
+    flush();
 }
 void OledSSD1322::draw_pixel(int16_t x, int16_t y,uint32_t color)
 {

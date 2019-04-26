@@ -21,6 +21,37 @@
 #define __GT30L32S4W_H
 
 #include "ebox_core.h"
+#include "gui.h"
+
+
+enum FontID{
+        Ascii_5x7_ID,
+        Ascii_7x8_ID,
+        Ascii_6x12_ID,
+        Ascii_8x16_ID,
+        Ascii_12x24_ID,
+        Ascii_16x32_ID,
+        Ascii_12_ID,
+        Ascii_12_Arial_ID,
+        Ascii_12_Times_New_Roman_ID,
+        Ascii_16_Arial_ID,
+        Ascii_16_Times_New_Roman_ID,
+        Ascii_24_Arial_ID,
+        Ascii_24_Times_New_Roman_ID,
+        Ascii_32_Arial_ID,
+        Ascii_32_Times_New_Roman_ID,
+        
+        
+        Hz_12x12_ID,
+        Hz_15x16_ID ,
+        Hz_24x24_ID ,
+        Hz_32x32_ID ,
+        Hz_6x12_Extern_ID ,
+        Hz_8x16_Extern_ID ,
+        Hz_8x16_special_ID ,
+        Hz_12x24_GB_Extern_ID ,
+        Hz_16x32_GB_Extern_ID ,
+};
 
     enum FontBase{
         Ascii_5x7_Base=0x1DDF80,
@@ -33,11 +64,11 @@
         Ascii_12_Arial_Base=0x1DC400,
         Ascii_12_Times_New_Roman_Base=0x1DCDC0,
         Ascii_16_Arial_Base=0x1DE580,
-        Ascii_16_Times_New_RomanBase=0x1DF240,
+        Ascii_16_Times_New_Roman_Base=0x1DF240,
         Ascii_24_Arial_Base=0x1E22D0,
-        Ascii_24_Times_New_RomanBase=0x1E3E90,
+        Ascii_24_Times_New_Roman_Base=0x1E3E90,
         Ascii_32_Arial_Base=0x1E99D0,
-        Ascii_32_Times_New_RomanBase=0x1ECA90,
+        Ascii_32_Times_New_Roman_Base=0x1ECA90,
         
         
         Hz_12x12_Base = 0,
@@ -57,41 +88,22 @@
         uint8_t nBytesOfChar;
         int16_t num;
     }Font_t;
-    extern Font_t Ascii5x7;
-    extern Font_t Ascii8x16;
-    extern Font_t Hz32x32;
+        
+extern Font_t FontInfoTable[];
+
 
 class FontLib
 {
-public:
-    
-    typedef struct {
-        uint8_t ptr[2000];
-        int16_t width;
-        int16_t hight;
-        int16_t len;
-    }Frame_t;
-    
-
-    
-
-
-
-    
-//    Frame_t frame;
 public:
     FontLib(Gpio *cs , Gpio *clk, Gpio *si,Gpio *so);
     FontLib(Gpio *cs , Spi *spi);
 
     void begin();
-    void get_char_buf(uint16_t inner_code,Font_t &font,uint8_t *p);
-    void get_one_hz_frame(const char *str,Font_t &font,Frame_t &frame);
-    void get_str_frame(const char *str,Font_t &font,Frame_t &frame);
-    void read_nbytes(uint32_t addr,uint8_t *buf,uint16_t nbytes);
+
+    bool get_data(uint16_t inner_code,uint8_t font_id,eBoxCharInfo_t *info);
 private:
     uint32_t char_to_addr(uint16_t inner_code,Font_t &font);
-
-
+    void read_nbytes(uint32_t addr,uint8_t *buf,uint16_t nbytes);
 
     void write_byte(uint8_t data);
     uint8_t read_byte();

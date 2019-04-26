@@ -20,8 +20,72 @@
 /* Includes ------------------------------------------------------------------*/
 #include "gt30l32s4w.h"
 #include "ebox.h"
-Font_t Ascii8x16 = {Ascii_8x16_Base,8,16,16,96};
-Font_t Hz32x32 = {Hz_32x32_Base,32,32,128,6736};
+
+//const uint32_t FontBaseTable[] = 
+//{
+//0x1DDF80,//        Ascii_5x7_Base=0x1DDF80,
+//0x1DE280,//        Ascii_7x8_Base=0x1DE280,
+//0x1DBE00,//        Ascii_6x12_Base=0x1DBE00,
+//0x1DD780,//        Ascii_8x16_Base=0x1DD780,
+//0x1DFF00,//        Ascii_12x24_Base=0x1DFF00,
+//0x1E5A50,//        Ascii_16x32_Base=0x1E5A50,
+//0x1DDF80,//        Ascii_12_Base=0x1DDF80,
+//0x1DC400,//        Ascii_12_Arial_Base=0x1DC400,
+//0x1DCDC0,//        Ascii_12_Times_New_Roman_Base=0x1DCDC0,
+//0x1DE580,//        Ascii_16_Arial_Base=0x1DE580,
+//0x1DF240,//        Ascii_16_Times_New_RomanBase=0x1DF240,
+//0x1E22D0,//        Ascii_24_Arial_Base=0x1E22D0,
+//0x1E3E90,//        Ascii_24_Times_New_RomanBase=0x1E3E90,
+//0x1E99D0,//        Ascii_32_Arial_Base=0x1E99D0,
+//0x1ECA90,//        Ascii_32_Times_New_RomanBase=0x1ECA90,
+//        
+//        
+//0,//        Hz_12x12_Base = 0,
+//0x2C9D0,//        Hz_15x16_Base = 0x2C9D0,
+//0x68190,//        Hz_24x24_Base = 0x68190,
+//0XEDF00,//        Hz_32x32_Base = 0XEDF00,
+//0x1DBE0C,//        Hz_6x12_Extern_Base = 0x1DBE0C,
+//0x1DD790,//        Hz_8x16_Extern_Base = 0x1DD790,
+//0x1F2880,//        Hz_8x16_special_Base = 0x1F2880,
+//0x1DFF30,//        Hz_12x24_GB_Extern_Base = 0x1DFF30,
+//0x1E5A90//        Hz_16x32_GB_Extern_Base = 0x1E5A90,
+//};
+
+//        Ascii_12_Arial_ID,
+//        Ascii_12_Times_New_Roman_ID,
+//        Ascii_16_Arial_ID,
+//        Ascii_16_Times_New_RomanID,
+//        Ascii_24_Arial_ID,
+//        Ascii_24_Times_New_RomanID,
+//        Ascii_32_Arial_ID,
+//        Ascii_32_Times_New_RomanID,
+Font_t FontInfoTable[] = 
+{
+    /*0*/{Ascii_5x7_Base,5,7,8,96},
+    /*1*/{Ascii_7x8_Base,7,8,8,96},
+    /*2*/{Ascii_6x12_Base,6,12,12,96},
+    /*3*/{Ascii_8x16_Base,8,16,16,96},
+    /*4*/{Ascii_12x24_Base,12,24,48,96},
+    /*5*/{Ascii_16x32_Base,16,32,64,96},
+    /*6*/{Ascii_12_Base,8,16,16,96},
+    /*7*/{Ascii_12_Arial_Base,8,16,16,96},
+    /*8*/{Ascii_12_Times_New_Roman_Base,8,16,16,96},
+    /*9*/{Ascii_16_Arial_Base,8,16,16,96},
+    /*10*/{Ascii_16_Times_New_Roman_Base,8,16,16,96},
+    /*11*/{Ascii_24_Arial_Base,8,16,16,96},
+    /*12*/{Ascii_24_Times_New_Roman_Base,8,16,16,96},
+    /*13*/{Ascii_32_Arial_Base,8,16,16,96},
+    /*14*/{Ascii_32_Times_New_Roman_Base,8,16,16,96},
+
+
+    /*15*/{Hz_12x12_Base,12,12,24,6736+846},
+    /*16*/{Hz_15x16_Base,15,16,32,6736+846},
+    /*17*/{Hz_24x24_Base,24,24,72,6736+846},
+    /*18*/{Hz_32x32_Base,32,32,128,6736+846},
+    
+    
+
+};
 
 FontLib::FontLib(Gpio *cs , Gpio *clk, Gpio *si,Gpio *so)
 {
@@ -53,39 +117,15 @@ void FontLib::begin()
         config.dev_num = cs->id;
         config.mode = SPI_MODE0;
         config.bit_order = MSB_FIRST;
-        config.prescaler = SPI_CLOCK_DIV4;
+        config.prescaler = SPI_CLOCK_DIV16;
         spi->begin(&config);
     }
-    uint8_t temp[16];
-    read_nbytes( 0 ,temp,16);
+    delay_ms(100);
+    uint8_t temp[256];
+    read_nbytes( 0 ,temp,255);
 }
 
-//        Ascii_5x7_Base=0x1DDF80,
-//        Ascii_7x8_Base=0x1DE280,
-//        Ascii_6x12_Base=0x1DBE00,
-//        Ascii_8x16_Base=0x1DD780,
-//        Ascii_12x24_Base=0x1DFF00,
-//        Ascii_16x32_Base=0x1E5A50,
-//        Ascii_12_Base=0x1DDF80,
-//        Ascii_12_Arial_Base=0x1DC400,
-//        Ascii_12_Times_New_Roman_Base=0x1DCDC0,
-//        Ascii_16_Arial_Base=0x1DE580,
-//        Ascii_16_Times_New_RomanBase=0x1DF240,
-//        Ascii_24_Arial_Base=0x1E22D0,
-//        Ascii_24_Times_New_RomanBase=0x1E3E90,
-//        Ascii_32_Arial_Base=0x1E99D0,
-//        Ascii_32_Times_New_RomanBase=0x1ECA90,
-//        
-//        
-//        Hz_12x12_Base = 0,
-//        Hz_15x16_Base = 0x2C9D0,
-//        Hz_24x24_Base = 0x68190,
-//        Hz_32x32_Base = 0XEDF00,
-//        Hz_6x12_Extern_Base = 0x1DBE0C,
-//        Hz_8x16_Extern_Base = 0x1DD790,
-//        Hz_8x16_special_Base = 0x1F2880,
-//        Hz_12x24_GB_Extern_Base = 0x1DFF30,
-//        Hz_16x32_GB_Extern_Base = 0x1E5A90,
+
 uint32_t FontLib::char_to_addr(uint16_t inner_code,Font_t &font)
 {
     uint32_t Address;
@@ -132,9 +172,9 @@ uint32_t FontLib::char_to_addr(uint16_t inner_code,Font_t &font)
             break;
         case Hz_24x24_Base:
             if(MSB >=0xA1 && MSB <= 0Xa9 && LSB >=0xA1)
-                Address =( (MSB - 0xA1) * 94 + (LSB - 0xA1))*32 + font.base;
+                Address =( (MSB - 0xA1) * 94 + (LSB - 0xA1))*72 + font.base;
             else if(MSB >=0xB0 && MSB <= 0xF7 && LSB >=0xA1)
-                Address = ((MSB - 0xB0) * 94 + (LSB - 0xA1)+ 846)*32 + font.base;
+                Address = ((MSB - 0xB0) * 94 + (LSB - 0xA1)+ 846)*72 + font.base;
             break;
         case Hz_32x32_Base:
 
@@ -143,93 +183,29 @@ uint32_t FontLib::char_to_addr(uint16_t inner_code,Font_t &font)
             else if(MSB >=0xB0 && MSB <= 0xF7 && LSB >=0xA1)
             Address = ((MSB - 0xB0) * 94 + (LSB - 0xA1)+ 846)*128+ Hz_32x32_Base;
             break;
+        default:
+            Address = 0xffffffff;
+            break;
     }      
 return Address;   
 }
-void FontLib::get_char_buf(uint16_t inner_code,Font_t &font,uint8_t *p)
-{
-    uint8_t temp[256];
-    uint32_t addr;
-    addr = char_to_addr(inner_code,font);
-    read_nbytes( addr ,temp,font.nBytesOfChar);
-    memcpy(p,temp,font.nBytesOfChar);
 
-}
-void FontLib::get_one_hz_frame(const char *str,Font_t &font,Frame_t &frame)
-{
-    uint16_t code = 0;
-    uint32_t addr;
-    uint8_t buf[200];
-        frame.len = 0;
-    frame.width = 0;
-    while(*str)
-    {
-        if(*str < 0x7e)//ÊÇ×ÖÄ¸
-            code = *str++;
-        else//ºº×Ö
-        {
-            code = (*str++) << 8;
-            code += *str++;
-        }
-                    
-        addr = char_to_addr(code,font);
-        read_nbytes( addr ,&buf[frame.len],font.nBytesOfChar);
-        
-        frame.len += font.nBytesOfChar;
-        
-        frame.width += font.width;
-        frame.hight = font.hight;
-//        uart1.print("addr");
-//        uart1.println(addr,HEX);        
-    }
-    memcpy(frame.ptr,buf,font.nBytesOfChar);
-//    
-//    for(int i = 0; i < frame.hight; i++) 
-//    {
-//        for(int j = 0; j < ybytes; j++)
-//        {
-//            frame.ptr[i*ybytes + j] = buf[j*font.hight + i];
-//        }
-//    }
-}
 
-void FontLib::get_str_frame(const char *str,Font_t &font,Frame_t &frame)
+bool FontLib::get_data(uint16_t inner_code,uint8_t font_id,eBoxCharInfo_t *info)
 {
-    uint16_t code = 0;
+
     uint32_t addr;
-    uint8_t buf[200];
-        frame.len = 0;
-    frame.width = 0;
-    while(*str)
-    {
-        if(*str < 0x7e)//ÊÇ×ÖÄ¸
-            code = *str++;
-        else//ºº×Ö
-        {
-            code = (*str++) << 8;
-            code += *str++;
-        }
-                    
-        addr = char_to_addr(code,font);
-        read_nbytes( addr ,&buf[frame.len],font.nBytesOfChar);
+    info->pData = (uint8_t *)malloc(FontInfoTable[font_id].nBytesOfChar);
+
+    addr = char_to_addr(inner_code,FontInfoTable[font_id]);
+    if(addr != 0xFFFFFFFF){
+        read_nbytes( addr ,info->pData,FontInfoTable[font_id].nBytesOfChar);
+        info->XSize = FontInfoTable[font_id].width;
+        info->YSize = FontInfoTable[font_id].hight;
+        info->BytesPerLine = FontInfoTable[font_id].nBytesOfChar / FontInfoTable[font_id].hight;
         
-        frame.len += font.nBytesOfChar;
-        
-        frame.width += font.width;
-        frame.hight = font.hight;
-//        uart1.print("addr");
-//        uart1.println(addr,HEX);        
+        return true;
     }
-    int ybytes = frame.width/font.width;
-    
-    for(int i = 0; i < frame.hight; i++) 
-    {
-        for(int j = 0; j < ybytes; j++)
-        {
-            frame.ptr[i*ybytes + j] = buf[j*font.hight + i];
-        }
-    }
-    
 }
 
 
@@ -288,7 +264,6 @@ void FontLib::read_nbytes(uint32_t addr,uint8_t *buf,uint16_t nbytes)
 	
     cs->reset();
     
-    delay_us(10);
     
     if(this->spi == NULL)
     {
@@ -310,6 +285,5 @@ void FontLib::read_nbytes(uint32_t addr,uint8_t *buf,uint16_t nbytes)
         spi->release();
     }
     cs->set(); 
-    delay_us(10);    
 }
 
