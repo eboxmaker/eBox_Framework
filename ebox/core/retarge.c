@@ -2,31 +2,31 @@
 #include "ebox_core.h"
 
 
-#pragma import(__use_no_semihosting)
+//#pragma import(__use_no_semihosting)
 
-struct __FILE
-{
-    int handle;
-};
-
-
-FILE __stdout;
-
-int _sys_exit(int x)
-{
-    x = x;
-}
+//struct __FILE
+//{
+//    int handle;
+//};
 
 
-int _ttywrch(int ch)
-{
-    ch = ch;
-}
+//FILE __stdout;
 
-int fputc(int ch, FILE *f)
-{
+//int _sys_exit(int x)
+//{
+//    x = x;
+//}
 
-    ebox_uart_putc(ch);
-    return ch;
-}
+
+//int _ttywrch(int ch)
+//{
+//    ch = ch;
+//}
+
+//int fputc(int ch, FILE *f)
+//{
+
+//    ebox_uart_putc(ch);
+//    return ch;
+//}
 

@@ -131,6 +131,7 @@ void GUI::draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint32_t col
 
     lcd->draw_line(tempx0, tempy0, tempx1, tempy1, color);
 }
+#include "bsp_ebox.h"
 void GUI::draw_rect(int16_t x0, int16_t y0, int16_t x1, int16_t y1)
 {
     draw_h_line(x0, y0, x1);
@@ -147,6 +148,16 @@ void GUI::fill_rect(int16_t x0, int16_t y0, int16_t x1, int16_t y1)
     tempy1 = ro_y(x1, y1);
 
     lcd->fill_rect(min(tempx0, tempx1), min(tempy0, tempy1), max(tempx0, tempx1), max(tempy0, tempy1), this->color);
+}
+void GUI::fill_rect(int16_t x0, int16_t y0, int16_t x1, int16_t y1,uint32_t color)
+{
+    int16_t tempx0, tempy0, tempx1, tempy1;
+    tempx0 = ro_x(x0, y0);
+    tempy0 = ro_y(x0, y0);
+    tempx1 = ro_x(x1, y1);
+    tempy1 = ro_y(x1, y1);
+
+    lcd->fill_rect(min(tempx0, tempx1), min(tempy0, tempy1), max(tempx0, tempx1), max(tempy0, tempy1), color);
 }
 void GUI::fill_screen(uint32_t color)
 {

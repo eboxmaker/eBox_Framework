@@ -111,6 +111,33 @@ typedef enum{
 /*************************************
  * GUI API
 *************************************/
+
+class GuiList
+{
+
+        
+    public:
+        GuiList(int16_t x,int16_t y,int16_t x_size,int16_t y_size)
+        {
+            this->x = x;
+            this->y = y;
+            this->x_size = x_size;
+            this->y_size = y_size;
+            
+            orientation = 0;
+        }
+    
+        int16_t x;
+        int16_t y;
+        int16_t x_size;
+        int16_t y_size;
+    
+        bool orientation;
+        uint16_t slider_len;
+        int max;
+        int prograss;
+};
+
 class GUI
 {
 private:
@@ -163,6 +190,7 @@ public:
     void draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint32_t color);
     void draw_rect(int16_t x, int16_t y, int16_t x1, int16_t y1);
     void fill_rect(int16_t x0, int16_t y0, int16_t x1, int16_t y1);
+    void fill_rect(int16_t x0, int16_t y0, int16_t x1, int16_t y1,uint32_t color);
     void fill_screen(uint32_t color) ;
 
     //graphic
@@ -212,7 +240,8 @@ public:
     void drawBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t w, int16_t h, uint32_t color, uint16_t bg) ;
     void drawXBitmap(int16_t x, int16_t y, const uint8_t *bitmap, int16_t w, int16_t h, uint32_t color) ;
 
-
+    void drawList(GuiList &list);
 };
+
 
 #endif
