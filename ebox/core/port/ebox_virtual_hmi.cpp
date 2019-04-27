@@ -171,3 +171,6 @@ void Vhmi::draw_circle(int16_t x, int16_t y, int16_t r, uint32_t color)
         draw_pixel(x - b, y - a, color);
     }
 }
+void Vhmi::flush()
+{
+}

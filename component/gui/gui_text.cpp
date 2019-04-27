@@ -180,14 +180,14 @@ void GUI::disp_char(uint16_t ch)
         }
         else
         {
-            extern_font_api(ch,text_extern_font_ascii_id,&info);
-            if(cursor_x + info.XSize > _width ){
-                cursor_y += info.YSize;
+            extern_font_api(ch,text_extern_font_ascii_id,&char_info);
+            if(cursor_x + char_info.XSize > _width ){
+                cursor_y += char_info.YSize;
                 cursor_x = 0;
             }
-            drawBitmap(cursor_x,cursor_y,info.pData,info.XSize,info.YSize,0xff);
-            ebox_free(info.pData);
-            cursor_x += info.XSize;
+            drawBitmap(cursor_x,cursor_y,char_info.pData,char_info.XSize,char_info.YSize,0xff);
+            ebox_free(char_info.pData);
+            cursor_x += char_info.XSize;
         }
     }else{
 
@@ -199,15 +199,15 @@ void GUI::disp_char(uint16_t ch)
         }else
         {
 
-            extern_font_api(ch,text_extern_font_hz_id,&info);
+            extern_font_api(ch,text_extern_font_hz_id,&char_info);
             
-            if(cursor_x + info.XSize > _width ){
-                cursor_y += info.YSize;
+            if(cursor_x + char_info.XSize > _width ){
+                cursor_y += char_info.YSize;
                 cursor_x = 0;
             }
-            drawBitmap(cursor_x,cursor_y,info.pData,info.XSize,info.YSize,0xff);
-            ebox_free(info.pData);
-            cursor_x += info.XSize;
+            drawBitmap(cursor_x,cursor_y,char_info.pData,char_info.XSize,char_info.YSize,0xff);
+            ebox_free(char_info.pData);
+            cursor_x += char_info.XSize;
         }
 
 
@@ -245,11 +245,11 @@ void GUI::disp_string_at(const char *str, int16_t x, int16_t y)
 }
 void GUI::printf(const char *fmt, ...)
 {
-    char buf[30];
+    char buf[256];
     uint8_t i = 0;
     va_list va_params;
     va_start(va_params, fmt);
-    ebox_vsnprintf(buf, 30, fmt, va_params);
+    ebox_vsnprintf(buf, 256, fmt, va_params);
     va_end(va_params);
     while(buf[i] != '\0')
     {
@@ -268,11 +268,11 @@ void GUI::printf(const char *fmt, ...)
 
 void GUI::printf(int16_t x, int16_t y, const char *fmt, ...)
 {
-    char buf[30];
+    char buf[256];
     uint8_t i = 0;
     va_list va_params;
     va_start(va_params, fmt);
-    ebox_vsnprintf(buf, 30, fmt, va_params);
+    ebox_vsnprintf(buf, 256, fmt, va_params);
     va_end(va_params);
     set_cursor(x, y);
     while(buf[i] != '\0')

@@ -19,9 +19,9 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __TMENU_H
 #define __TMENU_H
-#include "..\component\menu\t_menuDef.h"
+#include "..\component\menu\menuDef.h"
 
-extern fsm_rt_t top_menu_engine(menuEngineCb_t *ptThis);
+extern fsm_rt_t top_menu_engine(menuManager_t *ptThis);
 
 extern fsm_rt_t top_menu_item_a_handler();
 extern fsm_rt_t top_menu_item_b_handler();
@@ -29,11 +29,16 @@ extern fsm_rt_t top_menu_item_c_handler();
 extern fsm_rt_t sec_menu_item_a_handler();
 extern fsm_rt_t sec_menu_item_b_handler();
 
-extern void displayCurrentMenu(menuEngineCb_t * s_tmenu);
-extern fsm_rt_t menu_task(menuEngineCb_t *ptThis);
 
-extern const menu_t c_tTopMenu;
-extern const menu_t c_tSecMenu;
-extern menuEngineCb_t s_tMenuDemo;
+extern fsm_rt_t menu1_3_handler();
+
+extern void displayCurrentMenu(menuManager_t * s_tmenu);
+extern fsm_rt_t menu_task(menuManager_t *ptThis);
+
+extern const menu_t menu1;
+extern const menu_t menu1_1;
+extern const menu_t menu1_1_2;
+extern menuManager_t menu_demo;
+
 
 #endif
