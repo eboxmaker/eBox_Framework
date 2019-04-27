@@ -19,10 +19,7 @@ void GUI::begin(Vhmi *_lcd, uint16_t w, uint16_t h)
     set_text_auto_reline(0);
     set_text_mode(TEXT_MODE_NORMAL);
 };
-void GUI::clear()
-{
-    fill_screen(0);
-}
+
 
 /*********************************************************************
 *

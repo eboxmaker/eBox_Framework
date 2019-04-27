@@ -131,13 +131,13 @@ void GUI::draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint32_t col
 
     lcd->draw_line(tempx0, tempy0, tempx1, tempy1, color);
 }
-#include "bsp_ebox.h"
 void GUI::draw_rect(int16_t x0, int16_t y0, int16_t x1, int16_t y1)
 {
     draw_h_line(x0, y0, x1);
     draw_h_line(x0, y1, x1);
     draw_v_line(x0, y0, y1);
     draw_v_line(x1, y0, y1);
+    
 }
 void GUI::fill_rect(int16_t x0, int16_t y0, int16_t x1, int16_t y1)
 {
@@ -163,4 +163,11 @@ void GUI::fill_screen(uint32_t color)
 {
     lcd->fill_screen(color);
 }
-
+void GUI::clear()
+{
+    fill_screen(0);
+}
+void GUI::flush()
+{
+    lcd->flush();
+}

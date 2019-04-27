@@ -25,6 +25,7 @@
 OledSSD1322 oled(&PA4, &PA2, &PA1, &spi1);
 
 GUI gui;
+GuiSideBar side_bar(0,0,64,4);
 
 
 

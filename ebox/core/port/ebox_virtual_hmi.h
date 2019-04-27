@@ -13,5 +13,6 @@ public:
     virtual void    fill_rect(int16_t x, int16_t y, int16_t x1, int16_t y1, uint32_t color);
     virtual void    draw_circle(int16_t x, int16_t y, int16_t r, uint32_t color);
     virtual void    fill_screen(uint32_t color) = 0 ;
+    virtual void    flush();
 };
 #endif

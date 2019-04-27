@@ -112,25 +112,25 @@ typedef enum{
  * GUI API
 *************************************/
 
-class GuiList
+class GuiSideBar
 {
 
         
     public:
-        GuiList(int16_t x,int16_t y,int16_t x_size,int16_t y_size)
+        GuiSideBar(int16_t x,int16_t y,int16_t bar_len,int16_t bar_width)
         {
             this->x = x;
             this->y = y;
-            this->x_size = x_size;
-            this->y_size = y_size;
+            this->len = bar_len;
+            this->width = bar_width;
             
             orientation = 0;
         }
     
         int16_t x;
         int16_t y;
-        int16_t x_size;
-        int16_t y_size;
+        int16_t len;
+        int16_t width;
     
         bool orientation;
         uint16_t slider_len;
@@ -157,7 +157,7 @@ private:
     uint8_t  text_style;
     uint8_t  text_auto_reline;
     //外部字库的传入接口
-    eBoxCharInfo_t info;
+    eBoxCharInfo_t char_info;
     uint8_t text_extern_font_ascii_id;
     uint8_t text_extern_font_hz_id;
     
@@ -171,6 +171,7 @@ public:
 
     //fun
     void clear();
+    void flush();
     //settings
     void        set_rotation(uint8_t value);
     int16_t     ro_x(int16_t x, int16_t y);
@@ -214,11 +215,11 @@ public:
     void set_font(const GUI_FONT *font);//设置内部字库
     void set_font_ascii_extern(uint8_t font_id);//设置外部ASCII字库
     void set_font_hz_extern(uint8_t font_id);//设置外部汉子字库
-    
+    eBoxCharInfo_t get_extern_char_info(){return char_info;};
     void set_text_style(uint8_t style);//无效
     void set_text_mode(uint8_t mode);//设置填充模式
     void set_text_auto_reline(uint8_t enable);
-
+    
     //解码转换,打印字符等函数
     void char_index_of_font(uint16_t code, const GUI_FONT_PROP **font_list, uint16_t *index);
     void disp_index(const GUI_FONT_PROP *font_list, uint16_t index);
@@ -240,7 +241,7 @@ public:
     void drawBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t w, int16_t h, uint32_t color, uint16_t bg) ;
     void drawXBitmap(int16_t x, int16_t y, const uint8_t *bitmap, int16_t w, int16_t h, uint32_t color) ;
 
-    void drawList(GuiList &list);
+    void draw_sidebar(GuiSideBar &bar);
 };
 
 

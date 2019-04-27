@@ -30,6 +30,7 @@
 
 extern OledSSD1322 oled;
 extern GUI gui;
+extern GuiSideBar side_bar;
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 

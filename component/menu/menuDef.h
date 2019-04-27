@@ -23,6 +23,8 @@
 #define __TMENU_DEF_H
 #include "ebox.h"
 
+extern "C"
+{
 #ifndef __FSM_RT_TYPE__
 #define __FSM_RT_TYPE__
 //! \name finit state machine state
@@ -38,12 +40,12 @@ typedef enum {
 #endif
 
 // 为菜单结构体创建别名，方便使用
-typedef struct __menuItem      		menuItem_t;					// 菜单项
-typedef struct __menu        			menu_t;   					// 菜单，即菜单容器,菜单页
-typedef struct __menuEngineCb     menuEngineCb_t;		  // 菜单处理引擎状态机，用来标记当前菜单状态
+typedef struct __menuItem       menuItem_t;					// 菜单项
+typedef struct __menu           menu_t;   					// 菜单，即菜单容器,菜单页
+typedef struct __menuManager    menuManager_t;		  // 菜单处理引擎状态机，用来标记当前菜单状态
 // 回调函数
 typedef fsm_rt_t menuItemHandler_t(void);	            // 菜单项功能处理函数	
-typedef fsm_rt_t menuEngine_t(menuEngineCb_t *);			// 菜单处理引擎
+typedef fsm_rt_t menuEngineCallBack_t(menuManager_t *);			// 菜单处理引擎
 
 
 
@@ -56,10 +58,10 @@ typedef fsm_rt_t menuEngine_t(menuEngineCb_t *);			// 菜单处理引擎
 	*					一般这两个指针取值互斥，如果该菜单既有动作又有子菜单，需要特殊处理
 	*/
 struct __menuItem {
-    menuItemHandler_t    *fnHandle;                      //!< handler
-    menu_t               *ptChild;                       //!< Child Menu
+    menuItemHandler_t    *handle;                      //!< handler
+    menu_t               *child;                       //!< Child Menu
     //! depends on your application, you can add/remove/change following members
-    char                 *pchTitle;                      //!< Menu Title
+    const char            *title;                      //!< Menu Title
 //    char                *pchDescription;                //!< Description for this menu item
 //    char                chShortCutKey;                  //!< Shortcut Key value in current menu
 };
@@ -74,10 +76,11 @@ struct __menuItem {
 	*					*fnEngine 菜单处理引擎，每个菜单可以根据需要有不同的处理引擎
 	*/
 struct __menu{
-    menuItem_t          *ptItems;                         //!< menu item list
-    uint_fast8_t        chCount;                          //!< menu item count
-    menu_t              *ptParent;                        //!< parent menu;	指向父菜单
-    menuEngine_t        *fnEngine;                        //!< engine for process current menu 当前菜单处理引擎
+    const char          *name;                         //!< menu item list
+    menuItem_t          *items;                         //!< menu item list
+    uint_fast8_t        count;                          //!< menu item count
+    menu_t              *parent;                        //!< parent menu;	指向父菜单
+    menuEngineCallBack_t        *engine;                        //!< engine for process current menu 当前菜单处理引擎
 };
 
 /**
@@ -86,9 +89,10 @@ struct __menu{
  	*					*ptCurrentMenu			当前菜单
 	*					chCurrentItemIndex 	当前菜单在ptItems中的下标索引
 	*/
-struct __menuEngineCb {
-    uint_fast8_t    tState;
-    const menu_t    *ptCurrentMenu;
-    uint_fast8_t    chCurrentItemIndex;
+struct __menuManager {
+    uint_fast8_t    state;
+    const menu_t    *current_menu;
+    uint_fast8_t    item_index;
 };
+}
 #endif
