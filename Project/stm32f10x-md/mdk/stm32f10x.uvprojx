@@ -1007,6 +1007,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\component\gui\FontCustom.cpp</FilePath>
             </File>
+            <File>
+              <FileName>gui_list.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_list.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

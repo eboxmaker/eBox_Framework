@@ -1,16 +1,30 @@
+#include "ebox_core.h"
 #include "ebox_virtual_hmi.h"
 
 
-void Vhmi::draw_v_line(int16_t x, int16_t y, int16_t h, uint32_t color)
+void Vhmi::draw_v_line(int16_t x, int16_t y0, int16_t y1, uint32_t color)
 {
-    while(h--)
-        draw_pixel(x, y++, color);
+    int16_t tempy0,tempy1;
+    tempy0 = min(y0,y1);
+    tempy1 = max(y0,y1);
+    
+    while(tempy1 >= tempy0)
+        draw_pixel(x, tempy0++, color);
 
 }
-void Vhmi::draw_h_line(int16_t x, int16_t y, int16_t w, uint32_t color)
+void Vhmi::draw_h_line(int16_t x0, int16_t y0, int16_t x1, uint32_t color)
 {
-    while(w--)
-        draw_pixel(x++, y, color);
+ 
+    int16_t tempx0,tempx1;
+    tempx0 = min(x0,x1);
+    tempx1 = max(x0,x1);
+    
+    while(tempx1 >= tempx0)
+        draw_pixel(tempx0++, y0, color);
+    
+    
+//while(w--)
+//    draw_pixel(x++, y, color);
 
 }
 
@@ -113,9 +127,9 @@ void Vhmi::draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint32_t co
 void Vhmi::fill_rect(int16_t x, int16_t y, int16_t x1, int16_t y1, uint32_t color)
 {
     int16_t tempx = x, tempy = y;
-    for(tempx = x; tempx < x1; tempx++)
+    for(tempx = x; tempx <= x1; tempx++)
     {
-        for(tempy = y; tempy < y1; tempy++)
+        for(tempy = y; tempy <= y1; tempy++)
             draw_pixel(tempx, tempy, color);
     }
 }
