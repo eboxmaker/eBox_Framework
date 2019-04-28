@@ -57,7 +57,7 @@ void setup()
     gui.set_color(GUI_YELLOW);
     gui.set_font(&GUI_FontHZ16X16);
     gui.set_text_mode(TEXT_MODE_TRANS);
-    
+    gui.set_rotation(0);
     side_bar.max = 3;
     side_bar.prograss = 0;
     side_bar.orientation = 1;   
