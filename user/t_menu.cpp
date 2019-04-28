@@ -6,9 +6,9 @@
 #include "ebox_mem.h"
 /////////////////////////////顶层级菜单/////////////////////////////////////////////////
 const menuItem_t menu_items[] = {
-    {	NULL,               (menu_t *)&menu_1, "用户菜单       1"},
-    {	NULL,               (menu_t *)&menu_2, "厂家菜单       2"},
-    {	menu1_3_handler,    NULL,               "设备信息       3"},
+    {	NULL,               (menu_t *)&menu_1,  "用户菜单       1"},
+    {	NULL,               (menu_t *)&menu_2,  "厂家菜单       2"},
+    {	NULL,               (menu_t *)&menu_3,  "设备信息       3"},
 };
 
 // 菜单1
@@ -23,13 +23,14 @@ const menu_t menu = {
 
 #if 1///////////////////一级菜单/////////////////////////////////////////////////
 
+#if 1//用户一级菜单
 //用户-> xxx////////////////////////////////////////////////////////////////
 //1>x/////////////////////////////////////////////////////
 const menuItem_t menu_1_items[] = {
     {   NULL,    (menu_t *)&menu_1_1,   "输出设置   1.1"},
     {   NULL,    (menu_t *)&menu_1_2,   "报警设置   1.2"},
-    {   NULL,    (menu_t *)&menu_1_3,                  "设备标定   1.3"},
-    {   NULL,    (menu_t *)&menu_1_4,                  "系统设置   1.4"},
+    {   NULL,    (menu_t *)&menu_1_3,   "设备标定   1.3"},
+    {   NULL,    (menu_t *)&menu_1_4,   "系统设置   1.4"},
 };
 
 // 菜单1
@@ -41,15 +42,17 @@ const menu_t menu_1 = {
     1 - 1,
     top_menu_engine,                                    
 };
+#endif
+//用户一级菜单结束
 
-
+#if 1//厂家一级菜单
 //厂家-> xxx////////////////////////////////////////////////////////////////
 //2>x/////////////////////////////////////////////////////
 const menuItem_t menu_2_items[] = {
     {   NULL,    NULL,                  "锆池设定温度       2.1"},
     {   NULL,    (menu_t *)&menu_2_2,   "锆池升温设置       2.2"},
-    {   NULL,    NULL,                  "锆池性能诊断       2.3"},
-    {   NULL,    NULL,                  "设备信息设置       2.4"},
+    {   NULL,    (menu_t *)&menu_2_3,   "锆池性能诊断       2.3"},
+    {   NULL,    (menu_t *)&menu_2_4,   "设备信息设置       2.4"},
     {   NULL,    NULL,                  "1#电流4mA系数      2.5"},
     {   NULL,    NULL,                  "1#电流20mA系数     2.6"},
     {   NULL,    NULL,                  "2#电流4mA系数      2.7"},
@@ -70,9 +73,37 @@ const menu_t menu_2 = {
     2 - 1,
     top_menu_engine,                                    
 };
-///二级菜单已结束//////////////////////////////////////////////////////////////
 #endif
-///////二级菜单结束
+//厂家一级菜单结束
+
+#if 1//设备信息一级菜单
+//设备信息-> xxx////////////////////////////////////////////////////////////////
+//2>x/////////////////////////////////////////////////////
+const menuItem_t menu_3_items[] = {
+    {   NULL,    NULL,  "设备序列号     3.1"},
+    {   NULL,    NULL,  "出厂日期       3.2"},
+    {   NULL,    NULL,  "硬件版本       3.3"},
+    {   NULL,    NULL,  "软件版本       3.4"},
+    {   NULL,    NULL,  "通讯卡模式     3.5"},
+    {   NULL,    NULL,  "查看日志       3.6"},
+    {   NULL,    NULL,  "查看报警       3.7"},
+    {   NULL,    NULL,  "清除报警       3.8"},
+};
+
+// 菜单3
+const menu_t menu_3 = {
+     "厂家菜单2",
+    (menuItem_t *)menu_3_items,                      //!< menu item list
+    getArraySize(menu_3_items),                            //!< menu item count
+    (menu_t*)&menu,                                               //!< top menu has no parent
+    3 - 1,
+    top_menu_engine,                                    
+};
+#endif
+//厂家一级菜单结束
+
+#endif
+///////一级菜单结束
 
 #if 1///////////////////用户二级菜单/////////////////////////////////////////////////
 
@@ -81,7 +112,7 @@ const menu_t menu_2 = {
 const menuItem_t menu_1_1_items[] = 
 {
     {   NULL,    (menu_t *)&menu_1_1_1,     "电流环输出      1.1.1"},
-    {   NULL,    NULL,                      "继电器输出      1.1.2"},
+    {   NULL,    (menu_t *)&menu_1_1_2,     "继电器输出      1.1.2"},
 };
 //菜单
 const menu_t menu_1_1 = {
@@ -150,10 +181,10 @@ const menu_t menu_1_3 = {
 
 const menuItem_t menu_1_4_items[] = 
 {
-    {   NULL,    NULL,   "显示设置          1.4.1"},
-    {   NULL,    NULL,   "系统参数设置      1.4.2"},
-    {   NULL,    NULL,   "通讯设置          1.4.1"},
-    {   NULL,    NULL,   "恢复出厂          1.4.2"},
+    {   NULL,    (menu_t *)&menu_1_4_1,   "显示设置          1.4.1"},
+    {   NULL,    (menu_t *)&menu_1_4_2,   "系统参数设置      1.4.2"},
+    {   NULL,    (menu_t *)&menu_1_4_3,   "通讯设置          1.4.3"},
+    {   NULL,    NULL,                    "恢复出厂          1.4.4"},
 };
 //菜单1.2
 const menu_t menu_1_4 = {
@@ -171,10 +202,9 @@ const menu_t menu_1_4 = {
 
 ///////////////////////////////////
 #endif
-//用户三级菜单结束
+//用户二级菜单结束
 
 #if 1///////////////////厂家二级菜单/////////////////////////////////
-
 #if 1//厂家->锆池升温设定->xxx////////////////////////////////////////////////////////////////
 ///// 2.2选项/////////////////////////////////////////////////////
 const menuItem_t menu_2_2_items[] = {   
@@ -196,25 +226,52 @@ const menu_t menu_2_2 = {
 };
 #endif 
 
+#if 1//厂家->锆池性能诊断->xxx////////////////////////////////////////////////////////////////
+///// 2.2选项/////////////////////////////////////////////////////
+const menuItem_t menu_2_3_items[] = {   
+    {   NULL,    NULL,                  "锆池响应时间         2.3.1"},
+    {   NULL,    NULL,                  "锆池响应时间阈值     2.3.2"},
+    {   NULL,    NULL,                  "锆池恢复速率         2.3.3"},
+    {   NULL,    NULL,                  "锆池恢复速率阈值     2.3.4"},
+    {   NULL,    NULL,                  "锆池上升速率         2.3.5"},
+    {   NULL,    NULL,                  "锆池上升速率阈值     2.3.5"},
+    {   NULL,    NULL,                  "锆池阻抗诊断         2.3.5"},
+    {   NULL,    NULL,                  "锆池阻抗阈值         2.3.5"},
+};
 
+// 菜单1.1
+const menu_t menu_2_3 = {
+     "锆池升温设定",
+    (menuItem_t *)menu_2_3_items,                      //!< menu item list
+    getArraySize(menu_2_3_items),                            //!< menu item count
+    (menu_t*)&menu_2,                                               //!< top menu has no parent
+    3 - 1,
+    top_menu_engine,                                    
+};
+#endif 
 
+#if 1//厂家->设备信息设置->xxx////////////////////////////////////////////////////////////////
+///// 2.2选项/////////////////////////////////////////////////////
+const menuItem_t menu_2_4_items[] = {   
+    {   NULL,    NULL,                  "设备序列号  2.4.1"},
+    {   NULL,    NULL,                  "出厂日期    2.4.2"},
+    {   NULL,    NULL,                  "硬件版本    2.4.3"},
+    {   NULL,    NULL,                  "软件版本    2.4.4"},
+};
 
+// 菜单1.1
+const menu_t menu_2_4 = {
+     "锆池升温设定",
+    (menuItem_t *)menu_2_4_items,                      //!< menu item list
+    getArraySize(menu_2_4_items),                            //!< menu item count
+    (menu_t*)&menu_2,                                               //!< top menu has no parent
+    4 - 1,
+    top_menu_engine,                                    
+};
+#endif 
 
-
-
-#endif //end 厂家四级菜单
-
-
-
-
-
-
-
-
-
-
-
-//厂家三级菜单结束
+#endif
+//厂家二级菜单结束
 
 
 #if 1//三级用户菜单
@@ -224,7 +281,7 @@ const menu_t menu_2_2 = {
 const menuItem_t menu_1_1_1_items[] = {
     {   NULL,    NULL,                      "电流环模式         1.1.1.1"},
     {   NULL,   (menu_t *)&menu_1_1_1_2,    "电流环1            1.1.1.2"},
-    {   NULL,    NULL,                      "电流环2            1.1.1.3"},
+    {   NULL,    (menu_t *)&menu_1_1_1_3,   "电流环2            1.1.1.3"},
     {   NULL,    NULL,                      "报警时电流输出     1.1.1.4"},
     {   NULL,    NULL,                      "报警时电流设置     1.1.1.5"},
     {   NULL,    NULL,                      "锆池加温时电流输出 1.1.1.6"},
@@ -315,9 +372,9 @@ const menuItem_t menu_1_3_2_items[] = {
     {   NULL,   NULL,   "三点半自动标定       1.3.2.2"},
     {   NULL,   NULL,   "单点手动标定         1.3.2.3"},
     {   NULL,   NULL,   "两点手动标定         1.3.2.4"},
-    {   NULL,   NULL,   "三点手动标定         1.3.2.4"},
-    {   NULL,   NULL,   "自动标定模式         1.3.2.4"},
-    {   NULL,   NULL,   "自动标定模式选择     1.3.2.4"},
+    {   NULL,   NULL,   "三点手动标定         1.3.2.5"},
+    {   NULL,   NULL,   "自动标定模式         1.3.2.6"},
+    {   NULL,   NULL,   "自动标定模式选择     1.3.2.7"},
 
 };
 
@@ -334,12 +391,84 @@ const menu_t menu_1_3_2 = {
 
 #endif
 
+#if 1//用户->系统设置->显示设置->xxxx////////////////////////////////////////////////////////////////
 
+///// 1.4.1选项/////////////////////////////////////////////////////
+const menuItem_t menu_1_4_1_items[] = {
+    {   NULL,   NULL,   "语言           1.4.1.1"},
+    {   NULL,   NULL,   "主显示         1.4.1.2"},
+    {   NULL,   NULL,   "副显示         1.4.1.3"},
+    {   NULL,   NULL,   "副显示滚屏     1.4.1.4"},
+    {   NULL,   NULL,   "副显示滚屏时间 1.4.1.5"},
+    {   NULL,   NULL,   "对比度         1.4.1.6"},
+    {   NULL,   NULL,   "锁屏时间       1.4.1.7"},
 
+};
+
+// 菜单1.4.1
+const menu_t menu_1_4_1 = {
+     "标定模式",
+    (menuItem_t *)menu_1_4_1_items,                      //!< menu item list
+    getArraySize(menu_1_4_1_items),                            //!< menu item count
+    (menu_t*)&menu_1_4,                                               //!< top menu has no parent
+    1 - 1,
+    top_menu_engine,                                    
+};
+#endif
+
+#if 1//用户->系统设置->系统参数->xxxx////////////////////////////////////////////////////////////////
+
+///// 1.4.1选项/////////////////////////////////////////////////////
+const menuItem_t menu_1_4_2_items[] = {
+    {   NULL,   NULL,   "分体线揽长度           1.4.2.1"},
+    {   NULL,   NULL,   "热电偶类型         1.4.2.2"},
+    {   NULL,   NULL,   "温度单位         1.4.2.3"},
+};
+
+// 菜单1.4.1
+const menu_t menu_1_4_2 = {
+     "标定模式",
+    (menuItem_t *)menu_1_4_2_items,                      //!< menu item list
+    getArraySize(menu_1_4_2_items),                            //!< menu item count
+    (menu_t*)&menu_1_4,                                               //!< top menu has no parent
+    2 - 1,
+    top_menu_engine,                                    
+};
+#endif
+
+#if 1//用户->系统设置->通讯设置->xxxx////////////////////////////////////////////////////////////////
+
+///// 1.4.1选项/////////////////////////////////////////////////////
+const menuItem_t menu_1_4_3_items[] = {
+    {   NULL,   NULL,   "通讯模式     1.4.3.1"},
+    {   NULL,   NULL,   "设备ID       1.4.3.2"},
+    {   NULL,   NULL,   "Hart硬件编号 1.4.3.3"},
+    {   NULL,   NULL,   "比特率       1.4.3.4"},
+    {   NULL,   NULL,   "通讯地址     1.4.3.5"},
+};
+
+// 菜单1.4.1
+const menu_t menu_1_4_3 = {
+     "标定模式",
+    (menuItem_t *)menu_1_4_3_items,                      //!< menu item list
+    getArraySize(menu_1_4_3_items),                            //!< menu item count
+    (menu_t*)&menu_1_4,                                               //!< top menu has no parent
+    3 - 1,
+    top_menu_engine,                                    
+};
+#endif
 
 
 #endif
 
+
+
+//三级用户菜单结束
+#if 1 //厂家三级菜单
+
+
+#endif
+//厂家三级菜单结束
 
 
 #if 1//四级用户菜单
@@ -367,7 +496,36 @@ const menu_t menu_1_1_1_2 = {
 };
 #endif
 
+#if 1//用户->输出设置->电流环输出->电流环2设置->xxxx////////////////////////////////////////////////////////////////
+////////////////// 1.1.1.2选项/////////////////////////////////////////////////////
+const menuItem_t menu_1_1_1_3_items[] = { 
+    {   NULL,    NULL,                  "电流环组态     1.1.1.2.1"},
+    {   NULL,    NULL,                  "输出基数       1.1.1.2.2"},
+    {   NULL,    NULL,                  "输出零点       1.1.1.2.3"},
+    {   NULL,    NULL,                  "输出量程       1.1.1.2.4"},
+    {   NULL,    NULL,                  "输出阻尼       1.1.1.2.5"},
+    {   NULL,    NULL,                  "输出对应关系   1.1.1.2.6"},
+    {   NULL,    NULL,                  "输出模式       1.1.1.2.7"},
+    {   NULL,    NULL,                  "校准信号输出   1.1.1.2.8"},
+};
+
+// 菜单1.1.2.2
+const menu_t menu_1_1_1_3 = {
+     "电流环2",
+    (menuItem_t *)menu_1_1_1_3_items,                      //!< menu item list
+    getArraySize(menu_1_1_1_3_items),                            //!< menu item count
+    (menu_t*)&menu_1_1_1,                                               //!< top menu has no parent
+    3 - 1,
+    top_menu_engine,                                    
+};
 #endif
+
+
+
+#endif
+
+//四级用菜单结束
+
 
 menuManager_t menu_demo = {0,&menu,0};
 
