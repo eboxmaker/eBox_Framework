@@ -35,9 +35,38 @@ extern fsm_rt_t menu1_3_handler();
 extern void displayCurrentMenu(menuManager_t * s_tmenu);
 extern fsm_rt_t menu_task(menuManager_t *ptThis);
 
-extern const menu_t menu1;
-extern const menu_t menu1_1;
-extern const menu_t menu1_1_2;
+//一级菜单
+extern const menu_t menu;//顶层菜单
+
+//一级菜单
+extern const menu_t menu_1;
+extern const menu_t menu_2;//厂家菜单
+
+//二级菜单
+extern const menu_t menu_1_1;//用户菜单->输出设置
+extern const menu_t menu_1_2;//用户菜单->报警设置
+extern const menu_t menu_1_3;//用户菜单->设备标定
+extern const menu_t menu_1_4;//用户菜单->系统设置
+
+
+extern const menu_t menu_2_2;//厂家菜单->锆池升温设置
+extern const menu_t menu_2_3;//厂家菜单->锆池性能诊断
+extern const menu_t menu_2_4;//厂家菜单->设备信息设置
+
+
+
+//三级菜单
+extern const menu_t menu_1_1_1;//用户菜单->报警设置->电流环输出
+extern const menu_t menu_1_1_2;//用户菜单->报警设置->继电器输出
+extern const menu_t menu_1_3_1;
+extern const menu_t menu_1_3_2;
+
+//四级菜单
+extern const menu_t menu_1_1_1_2;//用户菜单->报警设置->电流环输出->电流环1
+extern const menu_t menu_1_1_2_3;//用户菜单->报警设置->继电器输出->电流环2
+
+
+
 extern menuManager_t menu_demo;
 
 

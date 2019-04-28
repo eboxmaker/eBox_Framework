@@ -80,6 +80,7 @@ struct __menu{
     menuItem_t          *items;                         //!< menu item list
     uint_fast8_t        count;                          //!< menu item count
     menu_t              *parent;                        //!< parent menu;	指向父菜单
+    uint8_t             parent_index;                        //!< parent menu;	指向父菜单
     menuEngineCallBack_t        *engine;                        //!< engine for process current menu 当前菜单处理引擎
 };
 
