@@ -13,14 +13,18 @@ public:
     virtual uint32_t    read_config() = 0;
     // 单字节读写
     virtual uint8_t	write(uint8_t slaveAddr, uint8_t data) = 0;
+    virtual uint8_t write(uint8_t slaveAddr, uint8_t regAddr, uint8_t data) = 0;
     virtual uint8_t write(uint8_t slaveAddr, uint16_t regAddr, uint8_t data) = 0;
     virtual uint8_t read(uint8_t slaveAddr) = 0;
+    virtual uint8_t read(uint8_t slaveAddr, uint8_t regAddr) = 0;
     virtual uint8_t read(uint8_t slaveAddr, uint16_t regAddr) = 0;
     // 读写n字节
     virtual uint8_t write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t num_to_write) = 0;
+    virtual uint8_t	write_buf(uint8_t slaveAddr, uint8_t regAddr, uint8_t *data, uint16_t num_to_write) = 0;
     virtual uint8_t	write_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t num_to_write) = 0;
 
     virtual uint8_t	read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t num_to_read) = 0;
+    virtual uint8_t	read_buf(uint8_t slaveAddr, uint8_t regAddr, uint8_t *data, uint16_t num_to_read) = 0;
     virtual uint8_t	read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t num_to_read) = 0;
     // 等待设备响应
     virtual uint8_t check_busy(uint8_t slaveAddr) = 0;
