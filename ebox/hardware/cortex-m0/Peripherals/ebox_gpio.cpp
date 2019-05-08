@@ -20,51 +20,89 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_gpio.h"
 
+// 获取Pin,返回值0-15
+#define GETPIN(A) 	 	  (uint16_t)(1<<(A&0x0f))
+// 获取端口号，注意f0和f1端口号获取方式不一样
+#define GETPORT(A)   (GPIO_TypeDef*)(((((A)&0xf0))<<6)+AHB2PERIPH_BASE)
+
+///**
+//  *@brief    构造函数
+//  *@param    port port; pin pin
+//  *@retval   None
+//  */
+//mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
+//{
+//    uint8_t temp1, temp2;
+//    _port = port;
+//    _pin = pin;
+//    switch ((uint32_t)(port))
+//    {
+//    case (uint32_t)GPIOA_BASE:
+//        temp1 = 0;
+//        break;
+//    case (uint32_t)GPIOB_BASE:
+//        temp1 = 1;
+//        break;
+//    case (uint32_t)GPIOC_BASE:
+//        temp1 = 2;
+//        break;
+//    case (uint32_t)GPIOD_BASE:
+//        temp1 = 3;
+//        break;
+//#if !(defined(STM32F030x6)||defined(STM32F031x6))
+//    case (uint32_t)GPIOE_BASE:
+//        temp1 = 4;
+//        break;
+//#endif
+//    case (uint32_t)GPIOF_BASE:
+//        temp1 = 5;
+//        break;
+//    default:
+//        temp1 = 0;
+//        break;
+//    }
+//    for (int i = 0; i <= 15; i ++)
+//    {
+//        if ((_pin >> i) == 0)
+//        {
+//            temp2 = i - 1;
+//            break;
+//        }
+//    }
+//    id = (PIN_ID_t)(temp1 * 16 + temp2);
+//}
+
 /**
   *@brief    构造函数
-  *@param    port port; pin pin
+  *@param    PIN_ID_t pin_id
   *@retval   None
   */
-mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
-{
-    uint8_t temp1, temp2;
-    _port = port;
-    _pin = pin;
-    switch ((uint32_t)(port))
-    {
-    case (uint32_t)GPIOA_BASE:
-        temp1 = 0;
-        break;
-    case (uint32_t)GPIOB_BASE:
-        temp1 = 1;
-        break;
-    case (uint32_t)GPIOC_BASE:
-        temp1 = 2;
-        break;
-    case (uint32_t)GPIOD_BASE:
-        temp1 = 3;
-        break;
-#if !(defined(STM32F030x6)||defined(STM32F031x6))
-    case (uint32_t)GPIOE_BASE:
-        temp1 = 4;
-        break;
-#endif
-    case (uint32_t)GPIOF_BASE:
-        temp1 = 5;
-        break;
-    default:
-        temp1 = 0;
-        break;
-    }
-    for (int i = 0; i <= 15; i ++)
-    {
-        if ((_pin >> i) == 0)
-        {
-            temp2 = i - 1;
-            break;
-        }
-    }
-    id = (PIN_ID_t)(temp1 * 16 + temp2);
+mcuGpio::mcuGpio(PIN_ID_t pin_id){
+	id = pin_id;
+//	switch(GETPORTINDEX(id))
+//	{
+//		case 0:
+//			_port = GPIOA;
+//			break;
+//		case 1:
+//			_port = GPIOB;
+//			break;
+//		case 2:
+//			_port = GPIOC;
+//			break;
+//		case 3:
+//			_port = GPIOD;
+//			break;
+//		case 4:
+//			_port = GPIOE;
+//			break;
+//		case 5:
+//			_port = GPIOF;
+//			break;
+//	}
+//	
+	  _port = GETPORT(id);
+		_pin = GETPIN(id);
 }
 /**
   *@brief    GPIO模式设置

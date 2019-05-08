@@ -61,16 +61,6 @@ public:
     virtual void    release(void);
 
 private:
-    //    virtual int8_t start();
-    //    virtual int8_t stop();
-    //    virtual int8_t send_ack();
-    //    virtual int8_t send_no_ack();
-
-    //    virtual int8_t sendByte(uint8_t regData);
-    //    virtual int8_t send_7bits_address(uint8_t slave_address);
-    //    virtual int8_t receiveByte(uint8_t *data);
-    //    virtual int8_t wait_ack(){return 0;};//由硬件来完成。已经集成在各个函数内部。
-
     I2C_TypeDef 	*_i2cx;		// i2c外设
     uint32_t   	 	_timing;	// i2c时序
     uint8_t     	_busy;

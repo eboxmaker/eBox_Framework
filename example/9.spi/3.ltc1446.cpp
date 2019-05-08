@@ -47,17 +47,18 @@ void setup()
 }
 int main(void)
 {
-    uint32_t i = 2048, t = 0;
+    uint32_t i = 0, t = 4000;
     setup();
 
     while(1)
     {
         if(i != t)
         {
-            i--;
-            ltc1.write(4096 - i, i);
-            UART.printf("通道A电压 = %.01f mv; 通道B电压 = %.01f mv \r\n", adc.read_voltage(&ADCA), adc.read_voltage(&ADCB));
-            delay_ms(2000);
+            i+=100;
+            ltc1.write(i, i);
+            UART.printf("通道A电压 = %.01f mv; 通道B电压 = %.01f mv \r\n", (float)(4096 - i),(float) i);
+//					            UART.printf("通道A电压 = %.01f mv; 通道B电压 = %.01f mv \r\n", adc.read_voltage(&ADCA), adc.read_voltage(&ADCB));
+            delay_ms(10000);
         }
         else
         {
