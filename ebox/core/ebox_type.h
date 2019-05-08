@@ -68,6 +68,7 @@ typedef struct
 
 } Cpu_t;
 
+// 利用联合体特性，可以快速的长uint16拆分成两个uint8_t型，反过来也可以合成
 typedef union
 {
     uint8_t byte[2];

@@ -67,7 +67,7 @@ public:
     //    Stream() {_timeout=1000;}
     Stream()
     {
-        _timeout = 1000;   //设置为100ms
+        _timeout = 1000;   //设置为1000ms
     }
 
     // parsing methods

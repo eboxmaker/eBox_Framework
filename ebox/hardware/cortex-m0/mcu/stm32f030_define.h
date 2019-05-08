@@ -91,8 +91,8 @@ const DevToIRQn_t dev_to_IRQn_table[] =
 // PA2,9,14 tx; PA3,10 rx
 static const AF_FUN_S UART_MAP[] =
 {
-//    PA2_ID, AF_PP_PU, LL_GPIO_AF_1, USART2_BASE,
-//    PA3_ID, AF_PP_PU, LL_GPIO_AF_1, USART2_BASE,
+    PA2_ID, AF_PP_PU, LL_GPIO_AF_1, USART1_BASE,
+    PA3_ID, AF_PP_PU, LL_GPIO_AF_1, USART1_BASE,
     PA9_ID, AF_PP_PU, LL_GPIO_AF_1, USART1_BASE,
     PA10_ID, AF_PP_PU, LL_GPIO_AF_1, USART1_BASE,
     P_NC
@@ -102,8 +102,8 @@ static const AF_FUN_S UART_MAP[] =
 static const AF_FUN_S I2C_MAP[] =
 {
     // i2c1
-    PB8_ID, AF_PP_PU, LL_GPIO_AF_1, I2C1_BASE,
-    PB9_ID, AF_PP_PU, LL_GPIO_AF_1, I2C1_BASE,
+		PA9_ID,AF_PP_PU,LL_GPIO_AF_4,I2C1_BASE,
+		PA10_ID,AF_PP_PU,LL_GPIO_AF_4,I2C1_BASE,
     (PIN_ID_t)0xff
 };
 

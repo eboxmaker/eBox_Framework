@@ -21,13 +21,13 @@
 #ifndef __EBOX_CONFIG_H
 #define __EBOX_CONFIG_H
 
+/* 是否使用printf功能,该功能占用存储空间较多，目前确认的使用该功能的包括uart和1602
+ * 1 标准库printf，优点：可靠，稳定；缺点：占用空间大
+ * 2 自定义printf，有点：空间小；缺点：可能有bug。仅建议在flash紧张时使用
+ */
+#define USE_PRINTF 1
 
-//是否使用printf功能,该功能占用存储空间较多，目前确认的使用该功能的包括uart和1602
-
-#define USE_PRINTF 3
-
-
-#if  USE_PRINTF == 1
+#if  USE_PRINTF == 1				
 #include <stdio.h>
 #include <stdarg.h>
 #define ebox_vsnprintf(...)    vsnprintf(__VA_ARGS__)
@@ -35,19 +35,10 @@
 #define ebox_vsprintf(...)     vsprintf(__VA_ARGS__)
 #define ebox_sprintf(...)      sprintf(__VA_ARGS__)
 
-#elif USE_PRINTF == 2
-#include "snprintf.h"
-#define ebox_vsnprintf(...)    rpl_vsnprintf(__VA_ARGS__)
-#define ebox_snprintf(...)     rpl_snprintf(__VA_ARGS__)
-#define ebox_vsprintf(...)     rpl_vsprintf(__VA_ARGS__)
-#define ebox_sprintf(...)      rpl_sprintf(__VA_ARGS__)
-
-
-#elif  USE_PRINTF == 3
+#elif  USE_PRINTF == 2
 #include "Myprintf.h"
 #define ebox_vsnprintf(...)    _ebox_vsnprintf(__VA_ARGS__)
 #define ebox_snprintf(...)     _ebox_snprintf(__VA_ARGS__)
-
 #define ebox_vsprintf(...)     _ebox_vsprintf(__VA_ARGS__)
 #define ebox_sprintf(...)      _ebox_sprintf(__VA_ARGS__)
 
@@ -72,6 +63,12 @@
  * 1 只保留新写入的数据。 节省内存
  */
 #define FLASH_OVERRIDE  1
+
+/* 是否使用object，该配置影响object.cpp & ebox.h
+ * 0 不使用object，用户需要根据需要实例对象,建议在bsp_ebox中实例
+ * 1 使用默认实例
+ */
+#define	USE_OBJECT			1
 
 #endif
 

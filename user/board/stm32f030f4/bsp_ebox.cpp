@@ -30,12 +30,30 @@
 //W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
 
 //// 如果不使用object.cpp, 使用下列方式创建IO对象
-////mcuGpio 		LED1(GPIOB,GPIO_Pin_8);
-////mcuGpio 		LED2(GPIOB,GPIO_Pin_9);
-////mcuGpio 		LED3(GPIOB,GPIO_Pin_10);
+#if USE_OBJECT == 0
+// 如果不使用object.cpp, 使用下列方式创建IO对象
+mcuGpio PA0(PA0_ID);
+mcuGpio PA1(PA1_ID);
+mcuGpio PA2(PA2_ID);
+mcuGpio PA3(PA3_ID);
+mcuGpio PA4(PA4_ID);
+mcuGpio PA5(PA5_ID);
+mcuGpio PA6(PA6_ID);
+mcuGpio PA7(PA7_ID);
 
-////mcuGpio		BtnPin(GPIOA,GPIO_Pin_8);
-////Uart 			UART(USART1, &PA9, &PA10);
+mcuGpio PA9(PA9_ID);
+mcuGpio PA10(PA10_ID);
+
+mcuGpio PA13(PA13_ID);
+mcuGpio PA14(PA14_ID);
+
+mcuGpio PB1(PB1_ID);
+
+mcuGpio PF0(PF0_ID);
+mcuGpio PF1(PF1_ID);
+
+Uart uart1(USART1, &PA2, &PA3);
+#endif
 
 
 //// 使用object.cpp,使用下列方式重命名IO对象，可以减少code区消耗

@@ -49,6 +49,7 @@ extern "C" {
     void ebox_init(void);
 }
 
+#if USE_OBJECT
 
 //创建所有引脚对象和宏定义其指针
 extern Uart uart1;
@@ -206,12 +207,9 @@ extern mcuGpio PG14;
 extern mcuGpio PG15;
 #endif
 
-
-
-
-
-
-
+#else
+#include "bsp_ebox.h"
+#endif
 
 #endif
 
