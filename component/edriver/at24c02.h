@@ -42,13 +42,13 @@ public:
     }
     void begin(uint32_t speed);
 
-    int8_t write_byte(uint16_t byte_addr, uint8_t byte);
-    int8_t write_byte(uint16_t byte_addr, uint8_t *buf, uint16_t num_to_write);
+    int8_t write_byte(uint8_t byte_addr, uint8_t byte);
+    int8_t write_byte(uint8_t byte_addr, uint8_t *buf, uint16_t num_to_write);
 
-    uint8_t read_byte(uint16_t byte_addr);
-    int8_t	read_byte(uint16_t byte_addr, uint8_t *buf, uint16_t num_to_read);
+    uint8_t read_byte(uint8_t byte_addr);
+    int8_t	read_byte(uint8_t byte_addr, uint8_t *buf, uint16_t num_to_read);
 
-    int8_t write_page(uint8_t *buf, uint32_t addr, uint8_t num_to_write);
+    int8_t write_page(uint8_t *buf, uint8_t addr, uint8_t num_to_write);
 private:
     I2c *i2c;
     uint32_t _timing;
