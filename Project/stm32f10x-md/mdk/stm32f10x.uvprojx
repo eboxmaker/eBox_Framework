@@ -878,9 +878,9 @@
               <FilePath>..\..\..\component\apps\EventGpio.cpp</FilePath>
             </File>
             <File>
-              <FileName>EventIo.cpp</FileName>
+              <FileName>EventVar.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\component\apps\EventIo.cpp</FilePath>
+              <FilePath>..\..\..\component\apps\EventVar.cpp</FilePath>
             </File>
             <File>
               <FileName>soft_uart.cpp</FileName>

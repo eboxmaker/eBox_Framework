@@ -79,17 +79,14 @@ void long_press1()
 {
     UART.println("检测到长按，长按时不响应单击");
 }
-//EventGpio event_io_1(&PA8,0,0,0,0,click,release,0);
 
 
-/** 创建EventGpio对象，并挂载事件回调函数，按顺序分别为高电平，低电平，上升沿，
-  *下降沿，单击，释放，长按.不需要响应的事件填写为0
+/** 创建EventGpio对象，并挂载事件回调函数高电平，低电平，上升沿，
+  *下降沿，单击，释放，长按.不需要响应的事件不需要处理
 	*/
-//EventGpio event_io_2(&PA8,high,low,pos,neg,click1,release1,long_press1);
-// 长按时会禁用单击事件，且长按发生后不触发释放事件。但不影响上升沿和下降沿事件
-//EventGpio event_io_2(&PA8,0,0,pos,neg,click1,release1,long_press1);
-// 如果没有长按，则下降沿=单击，上升沿=释放
-EventGpio event_io_2(&PA8, 0, 0, pos, neg, click1, release1, 0);
+// 使用长按事件会自动禁用单击事件，且长按发生后不触发释放事件。但不影响上升沿和下降沿事件
+// 使用长按事件，可以和释放事件配合，当没有触发长按事件的时候，释放事件会被执行
+EventGpio btn(&PA8, 1);
 EventManager io_manager;
 void setup()
 {
@@ -97,9 +94,19 @@ void setup()
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
     //event_io_1.begin(1);
-    event_io_2.begin(1);
-    //io_manager.add(&event_io_1);
-    io_manager.add(&event_io_2);
+    
+    
+    btn.event_click = click;
+    btn.event_release = release;
+    btn.event_long_press = long_press;
+    btn.long_press_type = EventGpio::Continue;
+//    btn.event_high = high;
+//    btn.event_low = low;
+//    btn.event_neg_edge = neg;
+//    btn.event_pos_edge = pos;
+    
+    btn.begin();
+    io_manager.add(&btn);
 }
 int main(void)
 {
@@ -107,7 +114,7 @@ int main(void)
 
     while(1)
     {
-        io_manager.process();
+        io_manager.loop();
         delay_ms(1);
     }
 }
