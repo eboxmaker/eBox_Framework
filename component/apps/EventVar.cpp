@@ -1,11 +1,11 @@
-#include "eventio.h"
+#include "eventVar.h"
 
 template <class T>
-void EventVar<T>::process(void)
+void EventVar<T>::loop(void)
 {
-    if(*io != state)
+    if(*var != state)
     {
-        if(*io <= state)
+        if(*var <= state)
         {
             if(event_nag_edge != NULL)
                 event_nag_edge();
@@ -17,6 +17,6 @@ void EventVar<T>::process(void)
         }
         if(event_changed != NULL)
             event_changed();
-        state = *io;
+        state = *var;
     }
 }

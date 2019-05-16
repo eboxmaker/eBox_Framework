@@ -2,33 +2,39 @@
 #define __EVENT_MANAGER_H
 
 #include "ebox.h"
-
-
-#include "EventIo.h"
-#include "EventGpio.h"
 #include "list.h"
+
+class Event
+{
+
+public:
+    Event() {};
+    virtual void loop(void) = 0;
+
+} ;
+
 class EventManager
 {
 public:
-    void add(EventIo *handler)
+    void add(Event *object)
     {
-        list.insert_tail(handler);
+        list.insert_tail(object);
     }
 
-    void process()
+    void loop()
     {
         int i = 0;
         while(i < list.size())
         {
-            te = (EventIo *)list.data(i);
-            te->process();
+            node = (Event *)list.data(i);
+            node->loop();
             i++;
         }
     }
 
 private:
     List list;
-    EventIo *te;
+    Event *node;
 
 };
 
