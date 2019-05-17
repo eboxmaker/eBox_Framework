@@ -17,7 +17,7 @@
 //长按事件触发事件
 #define LONG_PRESS_COUNTS       2000//2000ms
 //长按事件连续触发间隔
-#define LONG_PRESS_INTERVAL       100//2000ms
+#define LONG_PRESS_INTERVAL       500//2000ms
 
 
 

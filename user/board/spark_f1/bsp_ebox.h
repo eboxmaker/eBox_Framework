@@ -21,7 +21,6 @@
 #define __BSP_EBOX_H
 #include "ebox.h"
 #include "lcd_1.8.h"
-#include "button.h"
 #include "gui.h"
 
 #include "oled_ssd1322.h"
