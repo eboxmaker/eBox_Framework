@@ -18,7 +18,7 @@
 #include "bsp_ebox.h"
 
 /**
-	*	1	此例程需要调用apps目录下的EventGpio , eventio,EventManager模块
+	*	1	此例程需要调用apps目录下的EventGpio ,EventManager模块
 	*	2	此例程演示了IO事件响应，分别为低电平，高电平，下降沿，上升沿，单击，释放，长按
 	*	3	高定平，低电平会连续触发，触发周期5ms，可通过修改EvenGpio.h中的IO_EDGE_FILTER_COUNTS修改
 	* 4	长按时会禁用单击事件，且长按发生后不触发释放事件。但不影响上升沿和下降沿事件
@@ -67,18 +67,7 @@ void long_press()
 {
     UART.println("检测到长按，长按时不响应单击");
 }
-void click1()
-{
-    UART.println("检测到按键单击");
-}
-void release1()
-{
-    UART.println("检测到按键释放");
-}
-void long_press1()
-{
-    UART.println("检测到长按，长按时不响应单击");
-}
+
 
 
 /** 创建EventGpio对象，并挂载事件回调函数高电平，低电平，上升沿，
@@ -93,7 +82,6 @@ void setup()
     ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
-    //event_io_1.begin(1);
     
     
     btn.event_click = click;

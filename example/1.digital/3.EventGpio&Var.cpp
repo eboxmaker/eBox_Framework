@@ -14,11 +14,12 @@
 
 #include "ebox.h"
 #include "EventGpio.h"
-#include "EventManager.h"
+#include "EventVar.h"
+#include "ringbuf.h"
 #include "bsp_ebox.h"
 
 /**
-	*	1	此例程需要调用apps目录下的EventGpio , eventio,EventManager模块
+	*	1	此例程需要调用apps目录下的EventGpio , eventVar,EventManager模块
 	*	2	此例程演示了IO事件响应，分别为低电平，高电平，下降沿，上升沿，单击，释放，长按
 	*	3	高定平，低电平会连续触发，触发周期5ms，可通过修改EvenGpio.h中的IO_EDGE_FILTER_COUNTS修改
 	* 4	长按时会禁用单击事件，且长按发生后不触发释放事件。但不影响上升沿和下降沿事件
@@ -27,8 +28,8 @@
 	*/
 
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"EventGPIO example"
-#define EXAMPLE_DATE	"2018-08-02"
+#define EXAMPLE_NAME	"EventGPIO&EventVar example"
+#define EXAMPLE_DATE	"2019-05-17"
 
 
 // 下降沿检测
@@ -79,15 +80,28 @@ void long_press1()
 {
     UART.println("检测到长按，长按时不响应单击");
 }
-
-
+void up()
+{
+    UART.println("var 增加");
+}
+void down()
+{
+    UART.println("var 减少");
+}void change()
+{
+    UART.println("var 变化");
+}
 /** 创建EventGpio对象，并挂载事件回调函数高电平，低电平，上升沿，
   *下降沿，单击，释放，长按.不需要响应的事件不需要处理
 	*/
 // 使用长按事件会自动禁用单击事件，且长按发生后不触发释放事件。但不影响上升沿和下降沿事件
 // 使用长按事件，可以和释放事件配合，当没有触发长按事件的时候，释放事件会被执行
 EventGpio btn(&PA8, 1);
-EventManager io_manager;
+
+uint8_t volume = 0;
+EventVar<uint8_t> var(&volume);
+
+EventManager event_manager;
 void setup()
 {
     ebox_init();
@@ -105,16 +119,36 @@ void setup()
 //    btn.event_neg_edge = neg;
 //    btn.event_pos_edge = pos;
     
+    var.event_changed = change;
+    var.event_nag_edge = down;
+    var.event_pos_edge = up;
     btn.begin();
-    io_manager.add(&btn);
+    
+    event_manager.add(&btn);
+    event_manager.add(&var);
 }
+uint32_t last;
+uint8_t flag = 0;
 int main(void)
 {
     setup();
 
     while(1)
     {
-        io_manager.loop();
+        event_manager.loop();
         delay_ms(1);
+        if(millis() - last > 1000)
+        {
+            last = millis();
+            if(flag==0)
+                volume++;
+            else
+                volume--;
+            if(volume >= 3)
+                flag = 1;
+            else if (volume == 0)
+                flag = 0;
+        }
+        
     }
 }
