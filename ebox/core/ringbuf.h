@@ -25,32 +25,11 @@
 
 /**
 使用方法：
-用户创建一个自定义的unsigned char/uint8_t类型的缓冲区.例如：uint8_t buf[512];
-使用RINGBUF ringbuf(buf,512);创建一个对象；
+用户创建一个RingBufxx类的对象.例如创建一个uint8_t的环形缓冲区：RingBufUint8 ring;
 用户可以调用ringbuf.write(c);填入数据；返回true成功。
 调用ringbuf.available()。可获得缓冲区可用数据的长度，0表示空；
 如果不为空，可以调用ringbuf.read()读取一个字节，
-也可以调用ringbuf.read(userbuf,length);将读取特定长度的数据，输出到userbuf中。
 */
-class RINGBUF
-{
-
-
-public:
-    RINGBUF();
-    void begin(unsigned char *buf, int lenght);
-    void write(unsigned char c);
-    unsigned char read(void);
-    int available();
-    void clear();
-
-private:
-    volatile int head;
-    volatile int tail;
-    int max;
-    unsigned char *buf;
-
-};
 
 template <class T>
 class RingBuf
@@ -99,6 +78,22 @@ public:
 
 
 
+    bool read(T &ch)
+    {
+        //        __disable_irq();
+        // if the head isn't ahead of the tail, we don't have any characters
+        if (head == tail)
+        {
+            return false;
+        }
+        else
+        {
+            ch = ptr[tail];
+            tail = (unsigned int)(tail + 1) % max;
+            return true;
+        }
+        //        __enable_irq();
+    }
     T read(void)
     {
         //        __disable_irq();
