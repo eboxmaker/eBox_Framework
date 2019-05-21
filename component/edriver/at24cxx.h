@@ -65,7 +65,7 @@ public:
     {
         this->i2c = i2c;
     }
-    void begin(uint32_t speed,uint16_t eetype);
+    void begin(I2c::Config_t cfg,uint16_t eetype);
     
     int8_t slaveadj(uint16_t byte_addr);           //slave_add 自动调整
     
@@ -76,7 +76,7 @@ public:
     int8_t write_page(uint8_t *buf, uint32_t addr, uint16_t num_to_write);
 private:
     I2c *i2c;
-    uint32_t _timing;
+    I2c::Config_t cfg;
     
     uint16_t  ee_type; 
     uint8_t   slave_add;
