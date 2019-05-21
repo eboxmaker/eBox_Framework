@@ -22,7 +22,6 @@
 #define __DS3231_H__
 
 #include "ebox_core.h"
-#include "ebox.h"
 
 #define DS3231_ADDRESS 0xD0    //Æ÷¼þÐ´µØÖ· 
 #define DS3231_SECOND       0x00    //Ãë
@@ -56,11 +55,11 @@ class DS3231
 public:
     DateTime_t t;
 public:
-    DS3231(SoftI2c *i2c)
+    DS3231(I2c *i2c)
     {
         this->i2c = i2c;
     };
-    void begin(uint32_t speed);
+    void begin();
     void get_date_time(DateTime_t *t);
     void get_time(char *buf);
     void get_date(char *buf);
@@ -68,7 +67,8 @@ public:
     void set_time(void *dt);
 
 private:
-    SoftI2c *i2c;
+    I2c *i2c;
+    I2c::Config_t cfg;
     uint32_t speed;
     uint8_t bcd_to_dec(uint8_t bcd_code);
     uint8_t dec_to_bcd(uint8_t dec);
