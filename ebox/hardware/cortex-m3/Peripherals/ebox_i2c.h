@@ -24,8 +24,6 @@
 #include "ebox_core.h"
 #include "mcu.h"
 
-#define WRITE   0
-#define READ    1
 
 /*
 	1.Ö§³ÖI2C1ºÍI2C2

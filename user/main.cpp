@@ -10,7 +10,6 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 #include "ebox.h"
 #include "bsp_ebox.h"
-
 #include "at24c02.h"
 
 /**
@@ -24,7 +23,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #define EXAMPLE_NAME	"AT24C02 example"
 #define EXAMPLE_DATE	"2018-08-11"
 
-At24c02 ee(&si2c2);
+At24c02 ee(&si2c2,SLAVE_ADDR);
 uint8_t data;
 
 void setup()
@@ -46,7 +45,6 @@ int main(void)
     while(1)
     {
         ret = 0;
-
         uart1.printf("=================wbuf================\r\n");
         for(uint16_t i = 0; i < MAX_LEN; i++)
         {
@@ -55,7 +53,6 @@ int main(void)
         for(uint16_t i = 0; i < MAX_LEN; i++)
         {
             uart1.printf(" %02x ", wbuf[i ]);
-            //ee.byteWrite(i*16+j,buf[i*16+j]);
         }
         uart1.printf("\r\n ");
         ee.write_byte(1, wbuf, MAX_LEN);

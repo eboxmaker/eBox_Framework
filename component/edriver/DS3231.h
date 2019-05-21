@@ -55,9 +55,12 @@ class DS3231
 public:
     DateTime_t t;
 public:
-    DS3231(I2c *i2c)
+    DS3231(I2c *i2c,uint16_t slaveAddr)
     {
         this->i2c = i2c;
+        cfg.speed = I2c::K200;
+        cfg.slaveAddr = DS3231_ADDRESS;
+        cfg.regAddrBits = I2c::BIT8;
     };
     void begin();
     void get_date_time(DateTime_t *t);

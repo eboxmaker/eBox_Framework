@@ -22,11 +22,7 @@
 
     
 void DS3231::begin()
-{
-    cfg.speed = I2c::K200;
-    cfg.slaveAddr = DS3231_ADDRESS;
-    cfg.regAddrBits = I2c::Bit8;
-    
+{  
     i2c->begin(&cfg);
 }
 uint8_t DS3231::bcd_to_dec(uint8_t bcd_code)

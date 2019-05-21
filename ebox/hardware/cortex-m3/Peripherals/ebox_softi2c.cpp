@@ -139,7 +139,7 @@ uint8_t SoftI2c::write(uint16_t regAddr, uint8_t data)
     uint8_t err = EOK;
     err += _start();
     err += _send7bitsAddress(cfg->slaveAddr, WRITE);
-    if(cfg->regAddrBits == Bit16)
+    if(cfg->regAddrBits == BIT16)
         err += _sendByte(regAddr>>8);
     err += _sendByte(regAddr);
     
@@ -209,7 +209,7 @@ uint8_t SoftI2c::write_buf(uint16_t regAddr, uint8_t *data, uint16_t nWrite)
     uint8_t err = 0;
     err += _start();
     err += _send7bitsAddress(cfg->slaveAddr, WRITE);
-    if(cfg->regAddrBits == Bit16)
+    if(cfg->regAddrBits == BIT16)
         err += _sendByte(regAddr>>8);
     err += _sendByte(regAddr);
     
@@ -273,7 +273,7 @@ uint8_t SoftI2c::read(uint16_t regAddr)
     uint8_t data ;
     _start();
     _send7bitsAddress(cfg->slaveAddr, WRITE);
-    if(cfg->regAddrBits == Bit16)
+    if(cfg->regAddrBits == BIT16)
         _sendByte(regAddr>>8);
     _sendByte(regAddr);
     _start();
@@ -357,7 +357,7 @@ uint8_t SoftI2c::read_buf(uint16_t regAddr, uint8_t *data, uint16_t nRead)
     uint8_t err = 0;
     err += _start();
     err += _send7bitsAddress(cfg->slaveAddr, WRITE);
-    if(cfg->regAddrBits == Bit16)
+    if(cfg->regAddrBits == BIT16)
         err += _sendByte(regAddr>>8);
     err += _sendByte(regAddr);
     err += _start();
@@ -414,8 +414,11 @@ uint8_t SoftI2c::take(Config_t *newConfig)
     while (_busy == 1)
     {
         delay_ms(1);
-        if (IsTimeOut(end, timeout)) return EWAIT;
-
+        if (IsTimeOut(end, timeout))
+        {
+            ebox_printf("\r\nI2C产生多线程异常调用\r\n");
+            return EWAIT;
+        }
     }
     if (cfg->slaveAddr != newConfig->slaveAddr) config(newConfig);
     _busy = 1;
@@ -489,7 +492,7 @@ void SoftI2c::_stop()
  */
 int8_t SoftI2c::_waitAck()
 {
-    uint8_t re;
+    uint8_t ret;
     //    uint8_t cErrTime = 100;
     //    _sda->mode(INPUT_PU);
     //    _scl->set();
@@ -513,15 +516,15 @@ int8_t SoftI2c::_waitAck()
     delay_us(_timing);
     if (!_sda->read())	//SDA为低则从设备返回Ack，否则没返回
     {
-        re = 0;
+        ret = 0;
     }
     else
     {
-        re = 1;
+        ret = 1;
     }
     _scl->reset();
     delay_us(_timing);
-    return re;
+    return ret;
 }
 
 /**

@@ -36,9 +36,12 @@
 class At24c02
 {
 public:
-    At24c02(I2c *i2c)
+    At24c02(I2c *i2c,uint16_t slaveAddr)
     {
         this->i2c = i2c;
+        cfg.slaveAddr = slaveAddr;
+        cfg.regAddrBits = I2c::BIT8;
+        cfg.speed = I2c::K100;
     }
     void begin();
 
