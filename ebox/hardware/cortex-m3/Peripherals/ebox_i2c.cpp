@@ -148,7 +148,7 @@ uint8_t mcuI2c::write(uint16_t regAddr, uint8_t data)
     I2C_DEBUG("I2C state sr2 = %d, sr1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
     err += _start();
     err += _send7bitsAddress(cfg->slaveAddr, WRITE);
-    if(cfg->regAddrBits == Bit16)
+    if(cfg->regAddrBits == BIT16)
         err += _sendByte(regAddr>>8);
     err += _sendByte(regAddr);
     err += _sendByte(data);
@@ -216,7 +216,7 @@ uint8_t mcuI2c::write_buf(uint16_t regAddr, uint8_t *data, uint16_t nWrite)
     uint8_t err = 0;
     err += _start();
     err += _send7bitsAddress(cfg->slaveAddr, WRITE);
-    if(cfg->regAddrBits == Bit16)
+    if(cfg->regAddrBits == BIT16)
         err += _sendByte(regAddr>>8);
     err += _sendByte(regAddr);
     
@@ -284,7 +284,7 @@ uint8_t mcuI2c::read(uint16_t regAddr)
     _sendByte(regAddr);
     _start();
     _send7bitsAddress(cfg->slaveAddr, READ);
-    if(cfg->regAddrBits == Bit16)
+    if(cfg->regAddrBits == BIT16)
         _sendByte(regAddr>>8);
     _sendByte(regAddr);
     _sendNack();
@@ -366,7 +366,7 @@ uint8_t mcuI2c::read_buf(uint16_t regAddr, uint8_t *data, uint16_t nRead)
     uint8_t err = 0;
     err += _start();
     err += _send7bitsAddress(cfg->slaveAddr, WRITE);
-    if(cfg->regAddrBits == Bit16)
+    if(cfg->regAddrBits == BIT16)
         err += _sendByte(regAddr>>8);
     err += _sendByte(regAddr);
     err += _start();

@@ -6,25 +6,32 @@
 class I2c
 {
 public:
-    enum Speed_t
+    
+    typedef enum 
+    {
+        WRITE = 0,
+        READ = 1
+    }RW_t;
+    
+    typedef enum 
     {
         K400,
         K300,
         K200,
         K100,
         K10,
-    };
-    enum Bits_t
+    }Speed_t;
+    typedef enum 
     {
-        Bit8,
-        Bit16,
-    };
+        BIT8,
+        BIT16,
+    }Bits_t;
     
     typedef struct 
     {
         Speed_t     speed;
         Bits_t      regAddrBits;
-        uint16_t     slaveAddr;
+        uint16_t    slaveAddr;
     } Config_t;
 
 public:
