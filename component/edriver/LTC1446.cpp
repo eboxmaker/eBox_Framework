@@ -29,9 +29,9 @@ void LTCX::begin()
     if(initialized == 0)
     {
         spi_dev_LTC1446.dev_num = cs->id ;      // 用cs pinid作为设备id
-        spi_dev_LTC1446.mode = SPI_MODE3;
-        spi_dev_LTC1446.prescaler = SPI_CLOCK_DIV256;
-        spi_dev_LTC1446.bit_order = MSB_FIRST;
+        spi_dev_LTC1446.mode = Spi::MODE3;
+        spi_dev_LTC1446.prescaler = Spi::DIV256;
+        spi_dev_LTC1446.bit_order = Spi::MSB;
     }
 
     spi->begin(&spi_dev_LTC1446);

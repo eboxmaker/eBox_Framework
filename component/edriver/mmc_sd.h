@@ -39,7 +39,7 @@ public:
 private:
     Gpio            *cs;
     Spi             *spi;
-    SpiConfig_t SPIDevSDCard;
+    Spi::Config_t SPIDevSDCard;
 
 
 };

@@ -51,7 +51,7 @@ SoftI2c::SoftI2c(Gpio *scl, Gpio *sda)
   *@param    speed:  速率 10,100,200,300,400 分别代表10k，100k，200k,300k,400k
   *@retval   None
   */
-void SoftI2c::begin(Config_t *cfg)
+void SoftI2c::begin(Config_t *newConfig)
 {
     _sda->mode(OUTPUT_OD_PU);
     _scl->mode(OUTPUT_OD_PU);
@@ -59,7 +59,7 @@ void SoftI2c::begin(Config_t *cfg)
     _scl->set();
 
     I2C_DEBUG("scl pin id 0x%x state is %d , sda pin id 0x%x  state is %d \r\n", _scl->id, _scl->read(), _sda->id, _sda->read());
-    config(cfg);
+    config(newConfig);
 }
 
 /**
@@ -69,9 +69,9 @@ void SoftI2c::begin(Config_t *cfg)
  *
  * @return 0.
  */
-void SoftI2c::config(Config_t *cfg)
+void SoftI2c::config(Config_t *newConfig)
 {
-    this->cfg = cfg;
+    this->cfg = newConfig;
     switch(cfg->speed)
     {
     case K400:

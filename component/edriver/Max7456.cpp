@@ -29,9 +29,9 @@ void OSD::begin()
     if(initialized == 0)
     {
         spi_dev_max7456.dev_num = cs->id;
-        spi_dev_max7456.mode = SPI_MODE0;
-        spi_dev_max7456.prescaler = SPI_CLOCK_DIV128;
-        spi_dev_max7456.bit_order = MSB_FIRST;
+        spi_dev_max7456.mode = Spi::MODE0;
+        spi_dev_max7456.prescaler = Spi::DIV128;
+        spi_dev_max7456.bit_order = Spi::MSB;
     }
 
     spi->begin(&spi_dev_max7456);

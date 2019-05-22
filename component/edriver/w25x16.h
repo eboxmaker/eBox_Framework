@@ -62,7 +62,7 @@ public:
 
 private:
     uint8_t     spi_flash_buf[4096];
-    SpiConfig_t spi_dev_w25x16;
+    Spi::Config_t spi_dev_w25x16;
     Gpio        *cs;
     Spi         *spi;
     uint8_t     initialized;

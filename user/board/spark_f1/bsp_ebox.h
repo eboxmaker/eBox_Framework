@@ -20,9 +20,10 @@
 #ifndef __BSP_EBOX_H
 #define __BSP_EBOX_H
 #include "ebox.h"
-
+#include "../Ethernet3/utility/w5500.h"
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
+extern W5500Class w5500;
 
 #define UART uart1
 #define LED1 PB8

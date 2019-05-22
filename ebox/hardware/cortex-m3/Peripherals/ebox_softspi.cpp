@@ -38,63 +38,63 @@ SoftSpi::SoftSpi(Gpio *sck, Gpio *miso, Gpio *mosi)
     _mosi = mosi;
 
 }
-void SoftSpi::begin(SpiConfig_t *spi_config)
+void SoftSpi::begin(Config_t *newConfig)
 {
 
     _sck->mode(OUTPUT_PP);
     _miso->mode(INPUT);
     _mosi->mode(OUTPUT_PP);
 
-    config(spi_config);
+    config(newConfig);
     switch(mode)
     {
-    case SPI_MODE0:
+    case MODE0:
         _sck->reset();
         break;
-    case SPI_MODE1:
+    case MODE1:
         _sck->reset();
         break;
-    case SPI_MODE2:
+    case MODE2:
         _sck->set();
         break;
-    case SPI_MODE3:
+    case MODE3:
         _sck->set();
         break;
     }
 }
-void SoftSpi::config(SpiConfig_t *spi_config)
+void SoftSpi::config(Config_t *newConfig)
 {
-    current_dev_num = spi_config->dev_num;
-    mode = spi_config->mode;
-    bit_order = spi_config->bit_order;
-    switch(spi_config->prescaler)
+    current_dev_num = newConfig->dev_num;
+    mode = newConfig->mode;
+    bit_order = newConfig->bit_order;
+    switch(newConfig->prescaler)
     {
-    case SPI_CLOCK_DIV2:
+    case DIV2:
         spi_delay = 0;
         break;
-    case SPI_CLOCK_DIV4:
+    case DIV4:
         spi_delay = 1;
         break;
-    case SPI_CLOCK_DIV8:
+    case DIV8:
         spi_delay = 2;
         break;
-    case SPI_CLOCK_DIV16:
+    case DIV16:
         spi_delay = 4;
         break;
-    case SPI_CLOCK_DIV32:
+    case DIV32:
         spi_delay = 8;
         break;
-    case SPI_CLOCK_DIV64:
+    case DIV64:
         spi_delay = 16;
         break;
-    case SPI_CLOCK_DIV128:
+    case DIV128:
         spi_delay = 32;
         break;
-    case SPI_CLOCK_DIV256:
+    case DIV256:
         spi_delay = 64;
         break;
     default:
-        spi_delay = spi_config->prescaler;
+        spi_delay = newConfig->prescaler;
         break;
     }
 }
@@ -116,7 +116,7 @@ uint8_t SoftSpi::transfer0(uint8_t data)
     for (i = 0; i < 8; i++)
     {
         ///////////////////上升沿之前主机准备数据//////////
-        if (bit_order == LSB_FIRST)
+        if (bit_order == LSB)
         {
             _mosi->write(!!(data & (1 << i)));
         }
@@ -127,7 +127,7 @@ uint8_t SoftSpi::transfer0(uint8_t data)
         delay_us(spi_delay);//保持一段时间，保证主机信号到达从机
         /////////////////上升沿之后主机接收数据（通知从机接收主机之前准备好的数据）////////////
         _sck->set();
-        if (bit_order == LSB_FIRST)
+        if (bit_order == LSB)
         {
             RcvData |= _miso->read() << i;
         }
@@ -155,7 +155,7 @@ uint8_t SoftSpi::transfer1(uint8_t data)
     {
         ///////////////////上升沿之后主机准备数据//////////
         _sck->set();
-        if (bit_order == LSB_FIRST)
+        if (bit_order == LSB)
         {
             _mosi->write(!!(data & (1 << i)));
         }
@@ -166,7 +166,7 @@ uint8_t SoftSpi::transfer1(uint8_t data)
         delay_us(spi_delay);//保持一段时间，保证主机发送信号到达从机。
         /////////////////下降沿之后主机接收数据（通知从机接收主机之前准备好的数据）////////////
         _sck->reset();
-        if (bit_order == LSB_FIRST)
+        if (bit_order == LSB)
         {
             RcvData |= _miso->read() << i;
         }
@@ -191,7 +191,7 @@ uint8_t SoftSpi::transfer2(uint8_t data)
     for (i = 0; i < 8; i++)
     {
         ///////////////////下降沿之前主机准备数据//////////
-        if (bit_order == LSB_FIRST)
+        if (bit_order == LSB)
         {
             _mosi->write(!!(data & (1 << i)));
         }
@@ -202,7 +202,7 @@ uint8_t SoftSpi::transfer2(uint8_t data)
         delay_us(spi_delay);//保持一段时间，保证主机发送信号到达从机。
         /////////////////下降沿之后主机接收数据（通知从机接收主机之前准备好的数据）////////////
         _sck->reset();
-        if (bit_order == LSB_FIRST)
+        if (bit_order == LSB)
         {
             RcvData |= _miso->read() << i;
         }
@@ -229,7 +229,7 @@ uint8_t SoftSpi::transfer3(uint8_t data)
     {
         ///////////////////下降沿之后主机准备数据//////////
         _sck->reset();
-        if (bit_order == LSB_FIRST)
+        if (bit_order == LSB)
         {
             _mosi->write(!!(data & (1 << i)));
         }
@@ -240,7 +240,7 @@ uint8_t SoftSpi::transfer3(uint8_t data)
         delay_us(spi_delay);//保持一段时间，保证主机发送信号到达从机。
         /////////////////上升沿之后主机接收数据（通知从机接收主机之前准备好的数据）////////////
         _sck->set();
-        if (bit_order == LSB_FIRST)
+        if (bit_order == LSB)
         {
             RcvData |= _miso->read() << i;
         }
@@ -258,16 +258,16 @@ uint8_t SoftSpi::transfer(uint8_t data)
     uint8_t RcvData = 0 ;
     switch(mode)
     {
-    case SPI_MODE0:
+    case MODE0:
         RcvData = transfer0(data);
         break;
-    case SPI_MODE1:
+    case MODE1:
         RcvData = transfer1(data);
         break;
-    case SPI_MODE2:
+    case MODE2:
         RcvData = transfer2(data);
         break;
-    case SPI_MODE3:
+    case MODE3:
         RcvData = transfer3(data);
         break;
     default :
@@ -315,16 +315,16 @@ int8_t  SoftSpi::read_buf(uint8_t *rcvdata, uint16_t len)
     return 0;
 }
 
-int8_t SoftSpi::take(SpiConfig_t *spi_config)
+int8_t SoftSpi::take(Config_t *newConfig)
 {
-    while((busy == 1) && (spi_config->dev_num != read_config()))
+    while((busy == 1) && (newConfig->dev_num != read_config()))
         delay_ms(1);
-    if(spi_config->dev_num == read_config())
+    if(newConfig->dev_num == read_config())
     {
         busy = 1;
         return 0;
     }
-    config(spi_config);
+    config(newConfig);
     busy = 1;
     return 0;
 }

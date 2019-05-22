@@ -27,9 +27,9 @@ void W25x16::begin()
     if(initialized == 0)
     {
         spi_dev_w25x16.dev_num = cs->id;
-        spi_dev_w25x16.mode = SPI_MODE0;
-        spi_dev_w25x16.bit_order = MSB_FIRST;
-        spi_dev_w25x16.prescaler = SPI_CLOCK_DIV4;
+        spi_dev_w25x16.mode = Spi::MODE0;
+        spi_dev_w25x16.bit_order = Spi::MSB;
+        spi_dev_w25x16.prescaler = Spi::DIV4;
     }
 
     spi->begin(&spi_dev_w25x16);
