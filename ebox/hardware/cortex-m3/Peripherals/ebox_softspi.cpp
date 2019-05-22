@@ -317,20 +317,25 @@ int8_t  SoftSpi::read_buf(uint8_t *rcvdata, uint16_t len)
 
 int8_t SoftSpi::take(Config_t *newConfig)
 {
-    while((busy == 1) && (newConfig->dev_num != read_config()))
-        delay_ms(1);
-    if(newConfig->dev_num == read_config())
+    uint32_t end = GetEndTime(200);
+
+    while (_busy == 1)
     {
-        busy = 1;
-        return 0;
+        delay_ms(1);
+        if (IsTimeOut(end, 200))
+        {
+            ebox_printf("\r\nSPI产生多线程异常调用\r\n");
+            return EWAIT;
+        }
     }
-    config(newConfig);
-    busy = 1;
-    return 0;
+    if (newConfig->dev_num != read_config()) 
+        config(newConfig);
+    _busy = 1;
+    return EOK;
 }
 int8_t SoftSpi::release(void)
 {
-    busy = 0;
+    _busy = 0;
     return 0;
 }
 
