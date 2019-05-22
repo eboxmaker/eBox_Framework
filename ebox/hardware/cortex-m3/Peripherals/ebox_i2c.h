@@ -36,8 +36,8 @@ class mcuI2c : public I2c
 public:
     mcuI2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin);
     // 启动I2C, speed - 10,100,400 分别代表10k，100k，400k
-    virtual void	begin(Config_t *cfg);
-    virtual void    config(Config_t *cfg);
+    virtual void	begin(Config_t *newConfig);
+    virtual void    config(Config_t *newConfig);
     // 单字节读写
     virtual uint8_t	write(uint16_t slaveAddr,uint8_t data);
     virtual uint8_t write(uint16_t slaveAddr,uint16_t regAddr, uint8_t data);
@@ -53,7 +53,7 @@ public:
     virtual uint8_t check_busy(uint16_t slaveAddr);
 
     // 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
-    virtual uint8_t take(Config_t *cfg);
+    virtual uint8_t take(Config_t *newConfig);
     // 释放I2C控制权
     virtual void    release(void);
 
@@ -89,8 +89,8 @@ class SoftI2c : public I2c
 public:
     SoftI2c(Gpio *scl, Gpio *sda);
     // 启动I2C, speed - 10,100,400 分别代表10k，100k，400k
-    virtual void      begin(Config_t *cfg );
-    virtual void      config(Config_t *cfg );
+    virtual void      begin(Config_t *newConfig );
+    virtual void      config(Config_t *newConfig );
     // 单字节读写
     virtual uint8_t   write(uint16_t slaveAddr,uint8_t data);
     virtual uint8_t   write(uint16_t slaveAddr,uint16_t regAddr, uint8_t data);
@@ -106,7 +106,7 @@ public:
     virtual uint8_t   check_busy(uint16_t slaveAddr);
 
     // 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
-    virtual uint8_t   take(Config_t *cfg );
+    virtual uint8_t   take(Config_t *newConfig );
     // 释放I2C控制权
     virtual void    release(void);
 
@@ -126,7 +126,7 @@ private:
 private:
     Gpio            *_sda;
     Gpio            *_scl;
-    Config_t   *cfg;	// 
+    Config_t        *cfg;	// 
 	uint32_t   	 	_timing;	// i2c时序
     uint8_t 	    _busy;
 };

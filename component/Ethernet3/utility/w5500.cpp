@@ -30,9 +30,9 @@ void W5500Class::init(uint8_t socketNumbers)
     if(initialized == 0)
     {
         config.dev_num = cs->id;
-        config.mode = SPI_MODE0;
-        config.prescaler = SPI_CLOCK_DIV2;
-        config.bit_order = MSB_FIRST;
+        config.mode = Spi::MODE0;
+        config.prescaler = Spi::DIV2;
+        config.bit_order = Spi::MSB;
         initialized = 1;
     }
     spi->begin(&config);

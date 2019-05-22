@@ -127,7 +127,7 @@ private:
     Gpio *sda_pin;	//D1
 
     Spi *spi;
-    SpiConfig_t config;
+    Spi::Config_t config;
     
 public:
     int16_t width;

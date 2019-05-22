@@ -358,7 +358,7 @@ private:
     Gpio *cs;
     Gpio *rst_pin;
     Gpio *int_pin;
-    SpiConfig_t config;
+    Spi::Config_t config;
     Spi *spi;
     uint8_t initialized;
     // could do inline optimizations

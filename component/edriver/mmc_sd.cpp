@@ -9,9 +9,9 @@ int SD::begin(uint8_t dev_num)
 {
     int ret = 0;
     SPIDevSDCard.dev_num = dev_num;
-    SPIDevSDCard.mode = SPI_MODE0;
-    SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
-    SPIDevSDCard.bit_order = MSB_FIRST;
+    SPIDevSDCard.mode = Spi::MODE0;
+    SPIDevSDCard.prescaler = Spi::DIV2;
+    SPIDevSDCard.bit_order = Spi::MSB;
 
     cs->mode(OUTPUT_PP);
     cs->set();
@@ -138,7 +138,7 @@ uint8_t SD::init()
     uint16_t retry = 0;  // 用来进行超时计数
     uint8_t buff[6];
 
-    SPIDevSDCard.prescaler = SPI_CLOCK_DIV256;
+    SPIDevSDCard.prescaler = Spi::DIV256;
     spi->begin(&SPIDevSDCard);
     cs->reset();
     // 纯延时，等待SD卡上电完成
@@ -213,7 +213,7 @@ uint8_t SD::init()
         }
         //----------MMC卡额外初始化操作结束------------
         //设置SPI为高速模式
-        SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
+        SPIDevSDCard.prescaler = Spi::DIV2;
         spi->config(&SPIDevSDCard);
 
         spi->write(0xFF);
@@ -271,7 +271,7 @@ uint8_t SD::init()
         else SD_Type = SD_TYPE_V2;
         //-----------鉴别SD2.0卡版本结束-----------
         //设置SPI为高速模式
-        SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
+        SPIDevSDCard.prescaler = Spi::DIV2;
         spi->config(&SPIDevSDCard);
 
         // }
@@ -456,7 +456,7 @@ uint8_t SD::read_single_block(uint32_t sector, uint8_t *buffer)
     uint8_t r1;
 
     //设置为高速模式
-    SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
+    SPIDevSDCard.prescaler = Spi::DIV2;
     spi->take(&SPIDevSDCard);
 
     if(SD_Type != SD_TYPE_V2HC)
@@ -491,7 +491,7 @@ uint8_t SD::write_single_block(uint32_t sector, const  uint8_t *data)
     //  uint16_t i;
     uint32_t retry;
     //设置为高速模式
-    SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
+    SPIDevSDCard.prescaler = Spi::DIV2;
     spi->take(&SPIDevSDCard);
 
     //如果不是SDHC，给定的是sector地址，将其转换成byte地址
@@ -570,7 +570,7 @@ uint8_t SD::read_multi_block(uint32_t sector, uint8_t *buffer, uint8_t count)
 {
     uint8_t r1;
 
-    SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
+    SPIDevSDCard.prescaler = Spi::DIV2;
     spi->take(&SPIDevSDCard);
 
     if(SD_Type != SD_TYPE_V2HC)
@@ -617,7 +617,7 @@ uint8_t SD::write_multi_block(uint32_t sector,  const uint8_t *data, uint8_t cou
     uint8_t r1;
     //  uint16_t i;
 
-    SPIDevSDCard.prescaler = SPI_CLOCK_DIV2;
+    SPIDevSDCard.prescaler = Spi::DIV2;
     spi->take(&SPIDevSDCard);
 
 

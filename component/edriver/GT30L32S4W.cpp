@@ -115,9 +115,9 @@ void FontLib::begin()
     else
     {
         config.dev_num = cs->id;
-        config.mode = SPI_MODE0;
-        config.bit_order = MSB_FIRST;
-        config.prescaler = SPI_CLOCK_DIV4;
+        config.mode = Spi::MODE0;
+        config.bit_order = Spi::MSB;
+        config.prescaler = Spi::DIV4;
         spi->begin(&config);
     }
     delay_ms(100);

@@ -51,18 +51,18 @@ mcuI2c::mcuI2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin)
  *@param    speed:  速率 10,100，200,400 分别代表10k，100k,200k，400k
  *@retval   None
 */
-void  mcuI2c::begin(I2c::Config_t *cfg)
+void  mcuI2c::begin(I2c::Config_t *newConfig)
 {
     rcc_clock_cmd((uint32_t)_i2cx, ENABLE);
 
     _sda->mode(AF_OD);
     _scl->mode(AF_OD);
-    config(cfg);
+    config(newConfig);
 }
 
-void mcuI2c::config(I2c::Config_t *cfg)
+void mcuI2c::config(I2c::Config_t *newConfig)
 {
-    this->cfg = cfg;
+    this->cfg = newConfig;
    switch (cfg->speed)
     {
     case K10:

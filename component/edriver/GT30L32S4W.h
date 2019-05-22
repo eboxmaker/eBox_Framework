@@ -115,7 +115,7 @@ private:
     Gpio *so;
 
     Spi *spi;
-    SpiConfig_t config;
+    Spi::Config_t config;
 
 };
 #endif

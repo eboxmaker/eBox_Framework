@@ -59,9 +59,9 @@ void OledSSD1322::begin(void)	//³õÊ¼»¯SSD1306
     else
     {
         config.dev_num = cs_pin->id;
-        config.mode = SPI_MODE0;
-        config.bit_order = MSB_FIRST;
-        config.prescaler = SPI_CLOCK_DIV8;
+        config.mode = Spi::MODE0;
+        config.bit_order = Spi::MSB;
+        config.prescaler = Spi::DIV8;
         spi->begin(&config);
     }
     for(uint32_t i = 0; i < (64*256/2); i++)
