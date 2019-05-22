@@ -24,7 +24,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #define EXAMPLE_NAME	"AT24C02 example"
 #define EXAMPLE_DATE	"2018-08-11"
 
-At24c02 ee(&I2C);
+At24c02 ee(&I2C,SLAVE_ADDR);
 uint8_t data;
 
 void setup()
@@ -32,7 +32,7 @@ void setup()
     ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
-    ee.begin(1);
+    ee.begin();
 }
 int16_t x, i;
 uint8_t wbuf[512];
@@ -58,11 +58,11 @@ int main(void)
             //ee.byteWrite(i*16+j,buf[i*16+j]);
         }
         uart1.printf("\r\n ");
-        ee.write_byte(256, wbuf, MAX_LEN);
+        ee.write_byte(0, wbuf, MAX_LEN);
 
         uart1.printf("==================rbuf==============\r\n");
 
-        data = ee.read_byte(256, rbuf, MAX_LEN);
+        data = ee.read_byte(0, rbuf, MAX_LEN);
         for(uint16_t i = 0; i < MAX_LEN; i++)
         {
             uart1.printf(" %02x ", rbuf[i]);
@@ -79,7 +79,7 @@ int main(void)
         if(ret == 1)
         {
             uart1.printf("eeprom check ......[err]");
-            ee.begin(4000);
+            ee.begin();
         }
         else
             uart1.printf("eeprom check ......[OK]");

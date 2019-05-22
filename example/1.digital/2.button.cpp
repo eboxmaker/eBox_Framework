@@ -31,52 +31,59 @@
 #define EXAMPLE_DATE	"2018-08-02"
 
 
+/** 创建EventGpio对象，并挂载事件回调函数高电平，低电平，上升沿，
+  *下降沿，单击，释放，长按.不需要响应的事件不需要处理
+	*/
+// 使用长按事件会自动禁用单击事件，且长按发生后不触发释放事件。但不影响上升沿和下降沿事件
+// 使用长按事件，可以和释放事件配合，当没有触发长按事件的时候，释放事件会被执行
+EventGpio btn(&PA8, 1,"btn1");
+EventManager manager;
+
 // 下降沿检测
-void neg()
+void neg(Object *sender)
 {
     UART.println("检测到下降沿信号");
 }
 // 上升沿检测
-void pos()
+void pos(Object *sender)
 {
     UART.println("检测到上升沿信号");
 }
 // 高电平回调函数
-void high()
+void high(Object *sender)
 {
     UART.println("检测到高电平");
 }
 
 // 高电平回调函数
-void low()
+void low(Object *sender)
 {
     UART.println("检测到低电平");
 }
 // 单击回调函数
-void click()
+void click(Object *sender)
 {
     UART.println("检测到按键单击");
 }
 // 释放回调函数
-void release()
+void release(Object *sender)
 {
-    UART.println("检测到按键释放");
+    if(&btn == sender)
+        UART.println("检测到按键释放");
+    EventGpio *newObject = (EventGpio *)sender;
+    UART.println(newObject->name);
+    UART.println(sender->name);
 }
 // 长按回调函数
-void long_press()
+void long_press(Object *sender)
 {
     UART.println("检测到长按，长按时不响应单击");
 }
 
 
 
-/** 创建EventGpio对象，并挂载事件回调函数高电平，低电平，上升沿，
-  *下降沿，单击，释放，长按.不需要响应的事件不需要处理
-	*/
-// 使用长按事件会自动禁用单击事件，且长按发生后不触发释放事件。但不影响上升沿和下降沿事件
-// 使用长按事件，可以和释放事件配合，当没有触发长按事件的时候，释放事件会被执行
-EventGpio btn(&PA8, 1);
-EventManager io_manager;
+
+
 void setup()
 {
     ebox_init();
@@ -94,7 +101,9 @@ void setup()
 //    btn.event_pos_edge = pos;
     
     btn.begin();
-    io_manager.add(&btn);
+    manager.add(&btn);
+    
+    manager.print_list(UART);
 }
 int main(void)
 {
@@ -102,7 +111,7 @@ int main(void)
 
     while(1)
     {
-        io_manager.loop();
+        manager.loop();
         delay_ms(1);
     }
 }

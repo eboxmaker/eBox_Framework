@@ -28,22 +28,31 @@
 #define EXAMPLE_NAME	"EventVar example"
 #define EXAMPLE_DATE	"2019-05-17"
 
-void up()
+
+uint8_t volume = 0;
+EventVarUint8 var(&volume,"volume");
+
+
+void up(Object *sender)
 {
-    UART.println("var 增加");
+    EventVarUint8 *ptr = (EventVarUint8 *)sender; 
+    UART.print("var:");
+    UART.print((uint8_t)(*ptr->var));
+    UART.println(" 增加");
 }
-void down()
+void down(Object *sender)
 {
-    UART.println("var 减少");
-}void change()
+    EventVarUint8 *ptr = (EventVarUint8 *)sender; 
+    UART.print("var:");
+    UART.print((uint8_t)(*ptr->var));
+    UART.println(" 减少");
+}void change(Object *sender)
 {
     UART.println("var 变化");
 }
 
-uint8_t volume = 0;
-EventVar<uint8_t> var(&volume);
 
-EventManager event_manager;
+EventManager manager;
 void setup()
 {
     ebox_init();
@@ -55,7 +64,8 @@ void setup()
     var.event_nag_edge = down;
     var.event_pos_edge = up;
     
-    event_manager.add(&var);
+    manager.add(&var);
+    manager.print_list(UART);
 }
 uint32_t last;
 uint8_t flag = 0;
@@ -65,7 +75,7 @@ int main(void)
 
     while(1)
     {
-        event_manager.loop();
+        manager.loop();
         delay_ms(1);
         if(millis() - last > 1000)
         {

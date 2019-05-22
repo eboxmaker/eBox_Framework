@@ -29,7 +29,10 @@ void setup()
     ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
-    I2C.begin(1);
+    I2c::Config_t config;
+    config.speed = I2c::K100;
+    config.regAddrBits = I2c::BIT8;
+    I2C.begin(&config);
 }
 
 int main(void)

@@ -1,93 +1,94 @@
-/*
-file   : *.cpp
-author : shentq
-version: V1.0
-date   : 2015/7/5
+/**
+  ******************************************************************************
+  * @file   : *.cpp
+  * @author : shentq
+  * @version: V1.2
+  * @date   : 2016/08/14
 
-Copyright 2015 shentq. All Rights Reserved.
-*/
+  * @brief   ebox application example .
+	*					 2018-8-2	通过引入bsp，定义硬件端口，方便例程可以在不同平台上运行
+  * Copyright 2016 shentq. All Rights Reserved.
+  ******************************************************************************
+ */
 
-//STM32 RUN IN eBox
+
 #include "ebox.h"
+#include "EventGpio.h"
+#include "EventVar.h"
+#include "ringbuf.h"
 #include "bsp_ebox.h"
-#include "at24c02.h"
 
 /**
-    *	1	此例程需要调用eDrive目录下的at24c02驱动
-	*	2	此例程演示了at24c02的读写操作
-    *   3   通过begin可以设置i2c速率为10k，100k，200k，400k
-    *   4   通过config可以自由设置i2c速率，注意f0需要借助官方工具生成timing传入
+	*	1	此例程需要调用apps目录下的EventVar.h , EventManager模块
+	*	2	此例程演示了Var事件响应，分别为变大，变小，变化三种事件
+	*
 	*/
 
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"AT24C02 example"
-#define EXAMPLE_DATE	"2018-08-11"
+#define EXAMPLE_NAME	"EventVar example"
+#define EXAMPLE_DATE	"2019-05-17"
 
-At24c02 ee(&si2c2,SLAVE_ADDR);
-uint8_t data;
 
+uint8_t volume = 0;
+EventVarUint8 var(&volume,"volume");
+
+
+void up(Object *sender)
+{
+    EventVarUint8 *ptr = (EventVarUint8 *)sender; 
+    UART.print("var:");
+    UART.print((uint8_t)(*ptr->var));
+    UART.println(" 增加");
+}
+void down(Object *sender)
+{
+    EventVarUint8 *ptr = (EventVarUint8 *)sender; 
+    UART.print("var:");
+    UART.print((uint8_t)(*ptr->var));
+    UART.println(" 减少");
+}void change(Object *sender)
+{
+    UART.println("var 变化");
+}
+
+
+EventManager manager;
 void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
-    ee.begin();
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);    
+   
+   
+    var.event_changed = change;
+    var.event_nag_edge = down;
+    var.event_pos_edge = up;
+    
+    manager.add(&var);
+    manager.print_list(UART);
 }
-int16_t x, i;
-uint8_t wbuf[512];
-uint8_t rbuf[512];
-#define MAX_LEN 10
-int ret = 0;
+uint32_t last;
+uint8_t flag = 0;
 int main(void)
 {
     setup();
 
     while(1)
     {
-        ret = 0;
-        uart1.printf("=================wbuf================\r\n");
-        for(uint16_t i = 0; i < MAX_LEN; i++)
+        manager.loop();
+        delay_ms(1);
+        if(millis() - last > 1000)
         {
-            wbuf[i] = random() % 256;
+            last = millis();
+            if(flag==0)
+                volume++;
+            else
+                volume--;
+            if(volume >= 3)
+                flag = 1;
+            else if (volume == 0)
+                flag = 0;
         }
-        for(uint16_t i = 0; i < MAX_LEN; i++)
-        {
-            uart1.printf(" %02x ", wbuf[i ]);
-        }
-        uart1.printf("\r\n ");
-        ee.write_byte(1, wbuf, MAX_LEN);
-
-        uart1.printf("==================rbuf==============\r\n");
-
-        data = ee.read_byte(1, rbuf, MAX_LEN);
-        for(uint16_t i = 0; i < MAX_LEN; i++)
-        {
-            uart1.printf(" %02x ", rbuf[i]);
-        }
-        uart1.printf("\r\n ");
-        for(int i = 0; i < MAX_LEN; i++)
-        {
-            if(wbuf[i] != rbuf[i])
-            {
-                ret = 1;
-                break;
-            }
-        }
-        if(ret == 1)
-        {
-            uart1.printf("eeprom check ......[err]");
-            ee.begin();
-        }
-        else
-            uart1.printf("eeprom check ......[OK]");
-
-        uart1.printf("\r\n================================\r\n");
-        delay_ms(1000);
+        
     }
-
-
 }
-
-
-
-

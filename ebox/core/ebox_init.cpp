@@ -6,7 +6,6 @@
 void ebox_init(void)
 {
 
-    ebox_heap_init((void *)MCU_HEAP_BEGIN, (void *)MCU_HEAP_END);
     interrupts  = __enable_irq;
     no_interrupts = __disable_irq;
     delay_ms    = mcu_delay_ms;

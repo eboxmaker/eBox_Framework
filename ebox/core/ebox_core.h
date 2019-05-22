@@ -113,7 +113,7 @@ extern "C" {
 
 
 #ifdef __cplusplus
-
+#include "object.h"
 #include "WCharacter.h"
 #include "WString.h"
 #include "port/ebox_port_gpio.h"
