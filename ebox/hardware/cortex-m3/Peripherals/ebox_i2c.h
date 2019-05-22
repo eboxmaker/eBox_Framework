@@ -39,18 +39,18 @@ public:
     virtual void	begin(Config_t *cfg);
     virtual void    config(Config_t *cfg);
     // 单字节读写
-    virtual uint8_t	write(uint8_t data);
-    virtual uint8_t write(uint16_t regAddr, uint8_t data);
-    virtual uint8_t read();
-    virtual uint8_t read(uint16_t regAddr);
+    virtual uint8_t	write(uint16_t slaveAddr,uint8_t data);
+    virtual uint8_t write(uint16_t slaveAddr,uint16_t regAddr, uint8_t data);
+    virtual uint8_t read(uint16_t slaveAddr);
+    virtual uint8_t read(uint16_t slaveAddr,uint16_t regAddr);
     // 读写n字节
-    virtual uint8_t write_buf(uint8_t *data, uint16_t nWrite);
-    virtual uint8_t	write_buf(uint16_t regAddr, uint8_t *data, uint16_t nWrite);
+    virtual uint8_t write_buf(uint16_t slaveAddr,uint8_t *data, uint16_t nWrite);
+    virtual uint8_t	write_buf(uint16_t slaveAddr,uint16_t regAddr, uint8_t *data, uint16_t nWrite);
 
-    virtual uint8_t	read_buf(uint8_t *data, uint16_t nRead);
-    virtual uint8_t	read_buf(uint16_t regAddr, uint8_t *data, uint16_t nRead);
+    virtual uint8_t	read_buf(uint16_t slaveAddr,uint8_t *data, uint16_t nRead);
+    virtual uint8_t	read_buf(uint16_t slaveAddr,uint16_t regAddr, uint8_t *data, uint16_t nRead);
     // 等待设备响应
-    virtual uint8_t check_busy();
+    virtual uint8_t check_busy(uint16_t slaveAddr);
 
     // 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
     virtual uint8_t take(Config_t *cfg);
@@ -92,18 +92,18 @@ public:
     virtual void      begin(Config_t *cfg );
     virtual void      config(Config_t *cfg );
     // 单字节读写
-    virtual uint8_t   write(uint8_t data);
-    virtual uint8_t   write(uint16_t regAddr, uint8_t data);
-    virtual uint8_t   read();
-    virtual uint8_t   read(uint16_t regAddr);
+    virtual uint8_t   write(uint16_t slaveAddr,uint8_t data);
+    virtual uint8_t   write(uint16_t slaveAddr,uint16_t regAddr, uint8_t data);
+    virtual uint8_t   read(uint16_t slaveAddr);
+    virtual uint8_t   read(uint16_t slaveAddr,uint16_t regAddr);
     // 读写n字节
-    virtual uint8_t   write_buf(uint8_t *data, uint16_t nWrite);
-    virtual uint8_t	  write_buf(uint16_t regAddr, uint8_t *data, uint16_t nWrite);
+    virtual uint8_t   write_buf(uint16_t slaveAddr,uint8_t *data, uint16_t nWrite);
+    virtual uint8_t	  write_buf(uint16_t slaveAddr,uint16_t regAddr, uint8_t *data, uint16_t nWrite);
 
-    virtual uint8_t	  read_buf(uint8_t *data, uint16_t nRead);
-    virtual uint8_t	  read_buf(uint16_t regAddr, uint8_t *data, uint16_t nRead);
+    virtual uint8_t	  read_buf(uint16_t slaveAddr,uint8_t *data, uint16_t nRead);
+    virtual uint8_t	  read_buf(uint16_t slaveAddr,uint16_t regAddr, uint8_t *data, uint16_t nRead);
     // 等待设备响应
-    virtual uint8_t   check_busy();
+    virtual uint8_t   check_busy(uint16_t slaveAddr);
 
     // 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
     virtual uint8_t   take(Config_t *cfg );

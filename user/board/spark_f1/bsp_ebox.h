@@ -20,14 +20,7 @@
 #ifndef __BSP_EBOX_H
 #define __BSP_EBOX_H
 #include "ebox.h"
-#include "lcd_1.8.h"
-#include "gui.h"
 
-#include "oled_ssd1322.h"
-
-extern OledSSD1322 oled;
-extern GUI gui;
-extern GuiSideBar side_bar;
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
@@ -35,7 +28,7 @@ extern GuiSideBar side_bar;
 #define LED1 PB8
 #define LED2 PB9
 #define LED3 PB10
-
+#define I2C  si2c2
 extern void print_log(const char *name = "", const char *date = "");
 
 

@@ -6,6 +6,7 @@ void EventGpio::begin()
         io->mode(INPUT_PD);
     else
         io->mode(INPUT_PU);
+
 }
 void EventGpio::loop()
 {
@@ -25,13 +26,13 @@ void EventGpio::loop()
                 {
                     state = 0;//将IO状态标记改为当前IO状态
                     if(event_neg_edge != NULL)
-                        event_neg_edge();
+                        event_neg_edge(this);
                 }
                 else//初始态为0，则上升沿
                 {
                     state = 1;//将IO状态标记改为当前IO状态
                     if(event_pos_edge != NULL)
-                        event_pos_edge();
+                        event_pos_edge(this);
                 }
                 changed = 0;//执行完回调函数，将变化标记清空
             }
@@ -54,7 +55,7 @@ void EventGpio::loop()
         {
             click_released = 1;//标记释放事件发生过
             if(event_release !=  NULL)
-                event_release();
+                event_release(this);
         }
         click_pushed = 0;//按键已经被释放，清除按下的状态
 
@@ -81,7 +82,7 @@ void EventGpio::loop()
                             {
                                 long_pressed = 1;
                                 if(event_long_press !=  NULL)
-                                    event_long_press();
+                                    event_long_press(this);
                             }
                         }
                     }
@@ -94,7 +95,7 @@ void EventGpio::loop()
                             {
                                 long_pressed = 1;
                                 if(event_long_press !=  NULL)
-                                    event_long_press();
+                                    event_long_press(this);
                             }
                         }
                     }
@@ -108,7 +109,7 @@ void EventGpio::loop()
                 {
                     click_pushed = 1;
                     if(event_click !=  NULL)
-                        event_click();
+                        event_click(this);
                 }
 
             }
@@ -118,10 +119,10 @@ void EventGpio::loop()
     }
     if(io->read() == 1){
         if(event_high != NULL)
-            event_high();
+            event_high(this);
     }
     else{
         if(NULL != event_low)
-            event_low();
+            event_low(this);
     }
 }

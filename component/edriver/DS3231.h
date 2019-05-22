@@ -58,8 +58,8 @@ public:
     DS3231(I2c *i2c,uint16_t slaveAddr)
     {
         this->i2c = i2c;
+        this->slaveAddr = slaveAddr;
         cfg.speed = I2c::K200;
-        cfg.slaveAddr = DS3231_ADDRESS;
         cfg.regAddrBits = I2c::BIT8;
     };
     void begin();
@@ -72,7 +72,7 @@ public:
 private:
     I2c *i2c;
     I2c::Config_t cfg;
-    uint32_t speed;
+    uint16_t slaveAddr;
     uint8_t bcd_to_dec(uint8_t bcd_code);
     uint8_t dec_to_bcd(uint8_t dec);
 };

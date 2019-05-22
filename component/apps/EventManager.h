@@ -4,7 +4,7 @@
 #include "ebox.h"
 #include "list.h"
 
-class Event
+class Event:public Object
 {
 
 public:
@@ -19,6 +19,15 @@ public:
     void add(Event *object)
     {
         list.insert_tail(object);
+    }
+    void print_list(Uart &uart)
+    {
+        uart.printf("list size:%d\r\n",list.size());
+        for(int i = 0; i < list.size(); i++)
+        {
+            node = (Event *)list.data(i);
+            uart.println(node->name);
+        }
     }
 
     void loop()

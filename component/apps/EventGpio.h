@@ -31,7 +31,7 @@ class EventGpio : public Event
        LongPressType_t long_press_type;
 
 public:
-    EventGpio(Gpio *io,uint8_t first_state)
+    EventGpio(Gpio *io,uint8_t first_state,String _name = "null")
     {
         this->io = io;
         this->first_state = first_state;
@@ -48,17 +48,18 @@ public:
         event_release = NULL;
         event_long_press = NULL;
         long_press_type = Continue;
+        this->name = _name;
+
     }
     void begin();
     virtual void loop(void);
-    
-    void (*event_high)();
-    void (*event_low)();
-    void (*event_pos_edge)();
-    void (*event_neg_edge)();
-    void (*event_click)();
-    void (*event_release)();
-    void (*event_long_press)();
+    void (*event_high)(Object *sender);
+    void (*event_low)(Object *sender);
+    void (*event_pos_edge)(Object *sender);
+    void (*event_neg_edge)(Object *sender);
+    void (*event_click)(Object *sender);
+    void (*event_release)(Object *sender);
+    void (*event_long_press)(Object *sender);
 
 
 private:
