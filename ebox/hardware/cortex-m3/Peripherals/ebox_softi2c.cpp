@@ -106,25 +106,6 @@ uint8_t SoftI2c::write(uint16_t slaveAddr,uint8_t data)
     return err;
 }
 
-///**
-//  *@brief    指定位置写入一个字节. start->data->stop
-//  *@param    uint8_t slaveAddr:  从机地址
-//  *          uint8_t regAddr:  要写入的寄存器地址
-//  *          uint8_t data:  要写入的数据
-//  *          : 超时
-//  *@retval   状态 EOK 成功； EWAIT 超时
-//  */
-//uint8_t SoftI2c::write(uint8_t regAddr, uint8_t data)
-//{
-//    uint8_t err = EOK;
-//    err += _start();
-//    err += _send7bitsAddress(cfg->slaveAddr, WRITE);
-//    err += _sendByte(regAddr);
-//    err += _sendByte(data);
-//    _stop();
-//    delay_us(10);
-//    return err;
-//}
 
 /**
   *@brief    指定位置写入一个字节. start->data->stop
@@ -171,30 +152,6 @@ uint8_t SoftI2c::write_buf(uint16_t slaveAddr,uint8_t *data, uint16_t nWrite)
     return err;
 }
 
-///**
-//  *@brief    在指定寄存器连续写 start->regAddr->data....->stop
-//  *@param    uint8_t slaveAddr:  从机地址
-//  *          uint8_t regAddr：要写入的寄存器地址
-//  *          uint8_t *data:  要写入的数据
-//  *          uint16_t nWrite  要写入的数据长度
-//  *          :  超时
-//  *@retval   状态 EOK 成功； EWAIT 超时
-//  */
-//uint8_t SoftI2c::write_buf(uint8_t regAddr, uint8_t *data, uint16_t nWrite)
-//{
-//    uint8_t err = 0;
-//    err += _start();
-//    err += _send7bitsAddress(cfg->slaveAddr, WRITE);
-//    err += _sendByte(regAddr);
-//    while (nWrite--)
-//    {
-//        err += _sendByte(*data);
-//        data++;
-//    }
-//    _stop();
-//    return err;
-//}
-
 /**
   *@brief    在指定寄存器连续写 start->regAddr->data....->stop
   *@param    uint8_t slaveAddr:  从机地址
@@ -240,26 +197,6 @@ uint8_t SoftI2c::read(uint16_t slaveAddr)
     return data;
 }
 
-/**
-  *@brief    读指定寄存器. start->WslaveAddr->regAddr->RslaveAddr->Nack->stop->data
-  *@param    uint8_t slaveAddr:  从机地址
-  *          uint8_t regAddr：   要读取的寄存器
-  *          : 超时
-  *@retval   读取到的数据
-  */
-//uint8_t SoftI2c::read(uint8_t slaveAddr, uint8_t regAddr)
-//{
-//    uint8_t data ;
-//    _start();
-//    _send7bitsAddress(cfg->slaveAddr, WRITE);
-//    _sendByte(regAddr);
-//    _start();
-//    _send7bitsAddress(cfg->slaveAddr, READ);
-//    _receiveByte(&data);
-//    _sendNack();
-//    _stop();
-//    return data;
-//}
 
 /**
   *@brief    读指定寄存器. start->WslaveAddr->regAddr->RslaveAddr->Nack->stop->data
@@ -311,37 +248,6 @@ uint8_t SoftI2c::read_buf(uint16_t slaveAddr,uint8_t *data, uint16_t nRead)
     }
     return err;
 }
-///**
-//  *@brief    指定寄存器连续读取. start->WslaveAddr->regAddr->RSlaverAddr->data...->nRead==1->Nack->stop->data
-//  *@param    uint8_t slaveAddr:  从机地址
-//  *          uint8_t regAddr: 寄存器地址
-//  *          uint8_t *data: 读取到的数据
-//  *          uint16_t nRead：要读取的数据长度
-//  *          : 超时
-//  *@retval   EOK，EWAIT
-//  */
-//uint8_t SoftI2c::read_buf(uint8_t regAddr, uint8_t *data, uint16_t nRead)
-//{
-//    uint8_t err = 0;
-//    err += _start();
-//    err += _send7bitsAddress(cfg->slaveAddr, WRITE);
-//    err += _sendByte(regAddr);
-//    err += _start();
-//    err += _send7bitsAddress(slaveAddr, READ);
-//    while (nRead--)
-//    {
-//        err += _receiveByte(data);
-//        data++;
-//        if (nRead == 0)
-//        {
-//            _sendNack();
-//            _stop();
-//            break;
-//        }
-//        _sendAck();
-//    }
-//    return err;
-//}
 
 /**
   *@brief    指定寄存器连续读取. start->WslaveAddr->regAddr->RSlaverAddr->data...->nRead==1->Nack->stop->data
@@ -420,7 +326,7 @@ uint8_t SoftI2c::take(Config_t *newConfig)
             return EWAIT;
         }
     }
-    newConfig->regAddrBits = cfg->regAddrBits;
+    cfg->regAddrBits = newConfig->regAddrBits;
     if (cfg->speed != newConfig->speed) config(newConfig);
     _busy = 1;
     return EOK;

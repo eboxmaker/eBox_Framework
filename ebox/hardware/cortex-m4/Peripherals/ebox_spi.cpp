@@ -25,7 +25,7 @@ mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 
 }
 
-void mcuSpi::begin(SpiConfig_t *spi_config)
+void mcuSpi::begin(Config_t *spi_config)
 {
 
     if(_spi == SPI1)
@@ -53,7 +53,7 @@ void mcuSpi::begin(SpiConfig_t *spi_config)
     rcc_clock_cmd((uint32_t)_spi, ENABLE);
     config(spi_config);
 }
-void mcuSpi::config(SpiConfig_t *spi_config)
+void mcuSpi::config(Config_t *spi_config)
 {
     SPI_InitTypeDef SPI_InitStructure;
 
@@ -68,50 +68,50 @@ void mcuSpi::config(SpiConfig_t *spi_config)
     SPI_InitStructure.SPI_CRCPolynomial = 7; //CRC多项式
     SPI_InitStructure.SPI_Mode = SPI_Mode_Master; //主机模式
 
-    if(spi_config->mode == SPI_MODE0)
+    if(spi_config->mode == MODE0)
     {
         SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
         SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
     }
-    else if(spi_config->mode == SPI_MODE1)
+    else if(spi_config->mode == MODE1)
     {
         SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
         SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
     }
-    else if(spi_config->mode == SPI_MODE2)
+    else if(spi_config->mode == MODE2)
     {
         SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
         SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
     }
-    else if(spi_config->mode == SPI_MODE3)
+    else if(spi_config->mode == MODE3)
     {
         SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
         SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
     }
     switch(spi_config->prescaler)
     {
-    case SPI_CLOCK_DIV2:
+    case DIV2:
         SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;
         break;
-    case SPI_CLOCK_DIV4:
+    case DIV4:
         SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;
         break;
-    case SPI_CLOCK_DIV8:
+    case DIV8:
         SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8;
         break;
-    case SPI_CLOCK_DIV16:
+    case DIV16:
         SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;
         break;
-    case SPI_CLOCK_DIV32:
+    case DIV32:
         SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_32;
         break;
-    case SPI_CLOCK_DIV64:
+    case DIV64:
         SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;
         break;
-    case SPI_CLOCK_DIV128:
+    case DIV128:
         SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128;
         break;
-    case SPI_CLOCK_DIV256:
+    case DIV256:
         SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;
         break;
     default :
@@ -122,10 +122,10 @@ void mcuSpi::config(SpiConfig_t *spi_config)
 
     switch(spi_config->bit_order)
     {
-    case MSB_FIRST:
+    case MSB:
         SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
         break;
-    case LSB_FIRST:
+    case LSB:
         SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_LSB;
         break;
     default :
@@ -244,18 +244,24 @@ int8_t mcuSpi::read_buf(uint8_t *recv_data, uint16_t len)
   *@param    none
   *@retval   none
   */
-int8_t mcuSpi::take(SpiConfig_t *spi_config)
+int8_t mcuSpi::take(Config_t *newConfig)
 {
-    while((_busy == 1) && (spi_config->dev_num != read_config()))
-        delay_ms(1);
-    if(spi_config->dev_num == read_config())
+
+    uint32_t end = GetEndTime(200);
+
+    while (_busy == 1)
     {
-        _busy = 1;
-        return 0;
+        delay_ms(1);
+        if (IsTimeOut(end, 200))
+        {
+            ebox_printf("\r\nSPI产生多线程异常调用\r\n");
+            return EWAIT;
+        }
     }
-    config(spi_config);
+    if (newConfig->dev_num != read_config()) 
+        config(newConfig);
     _busy = 1;
-    return 0;
+    return EOK;
 }
 /**
   *@brief    释放控制权
