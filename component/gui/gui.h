@@ -112,31 +112,6 @@ typedef enum{
  * GUI API
 *************************************/
 
-class GuiSideBar
-{
-
-        
-    public:
-        GuiSideBar(int16_t x,int16_t y,int16_t bar_len,int16_t bar_width)
-        {
-            this->x = x;
-            this->y = y;
-            this->len = bar_len;
-            this->width = bar_width;
-            
-            orientation = 0;
-        }
-    
-        int16_t x;
-        int16_t y;
-        int16_t len;
-        int16_t width;
-    
-        bool orientation;
-        uint16_t slider_len;
-        int max;
-        int prograss;
-};
 
 class GUI
 {
@@ -241,7 +216,6 @@ public:
     void drawBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t w, int16_t h, uint32_t color, uint16_t bg) ;
     void drawXBitmap(int16_t x, int16_t y, const uint8_t *bitmap, int16_t w, int16_t h, uint32_t color) ;
 
-    void draw_sidebar(GuiSideBar &bar);
 };
 
 

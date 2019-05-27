@@ -104,7 +104,7 @@ private:
     Gpio *rs;
     Gpio *rst;
     Spi  *spi;
-    SpiConfig_t config;
+    Spi::Config_t config;
     uint16_t width, height;
     uint8_t initialized;
 

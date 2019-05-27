@@ -8,6 +8,7 @@
 #include <stdint.h>
 
 #include "ebox_cpu_type.h"
+#include "enum.h"
 
 
 #define LSB_FIRST 0
@@ -35,6 +36,47 @@
 #define E2LONG      5
 #define ENG         6
 #define EOTHER      128
+
+
+
+#define MAX_CHAR  +127// (1 Byte)
+#define MIN_CHAR -128
+
+#define MAX_SHORT  +32767// (2 Byte)
+#define MIN_SHORT -32768
+
+#define MAX_USHORT  +65535// (2 Byte)
+#define MIN_USHORT -0
+
+#define MAX_INT16  +32767// (2 Byte)
+#define MIN_INT16 -32768
+
+#define MAX_UINT16  +65535// (2 Byte)
+#define MIN_UINT16 -0
+
+
+#define MAX_INT  +2147483647// (4 Byte)
+#define MIN_INT -2147483648
+
+#define MAX_UINT  +4294967295// (4 Byte)
+#define MIN_UINT -0
+
+#define MAX_INT32  +2147483647// (4 Byte)
+#define MIN_INT32 -2147483648
+
+#define MAX_UINT32  +4294967295// (4 Byte)
+#define MIN_UINT32 -0
+
+#define MAX_LONG  +2147483647// (4 Byte)
+#define MIN_LONG -2147483648
+
+#define MAX_LONGLONG  +9223372036854775807// (8 Byte)
+#define MIN_LONGLONG -9223372036854775808
+
+#define MAX_ULONGLONG  +1844674407370955161// (8 Byte)
+#define MIN_ULONGLONG  -9223372036854775808
+
+
 
 
 typedef unsigned int word;
