@@ -65,10 +65,10 @@ void Lcd::begin()
 
     if(initialized == 0)
     {
-        config.mode = SPI_MODE2;
-        config.bit_order = MSB_FIRST;
+        config.mode = Spi::MODE2;
+        config.bit_order = Spi::MSB;
         config.dev_num = cs->id;
-        config.prescaler = SPI_CLOCK_DIV2;
+        config.prescaler = Spi::DIV2;
     }
     spi->begin(&config);
 
