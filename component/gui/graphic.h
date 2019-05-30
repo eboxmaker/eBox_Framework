@@ -3,6 +3,60 @@
 
 #include "ebox_core.h"
 
+#define GUI_TS_NORMAL           (0)
+#define GUI_TS_UNDERLINE        (1 << 0)
+#define GUI_TS_STRIKETHRU       (1 << 1)
+#define GUI_TS_OVERLINE         (1 << 2)
+
+
+#define DRAW_MODE_NORMAL (0)//正常
+#define DRAW_MODE_XOR    (1<<0)//异或
+#define DRAW_MODE_TRANS  (1<<1)//透明
+#define DRAW_MODE_REV    (1<<2)//翻转
+
+#define TEXT_MODE_NORMAL DRAW_MODE_NORMAL//正常
+#define TEXT_MODE_XOR    DRAW_MODE_XOR//异或
+#define TEXT_MODE_TRANS  DRAW_MODE_TRANS//透明
+#define TEXT_MODE_REV    DRAW_MODE_REV//翻转
+
+typedef struct
+{
+    uint8_t XSize;
+    uint8_t XDist;
+    uint8_t BytesPerLine;
+    const unsigned char   *pData;
+} GUI_CHARINFO;
+typedef struct GUI_FONT_PROP
+{
+    uint16_t First;                                /* first character               */
+    uint16_t Last;                                 /* last character                */
+    const GUI_CHARINFO   *paCharInfo;            /* address of first character    */
+    const struct GUI_FONT_PROP   *pNext;        /* pointer to next */
+} GUI_FONT_PROP;
+
+typedef struct _tFont
+{
+    const GUI_FONT_PROP *list;
+    uint16_t    YSize;
+    uint8_t     YDist;
+} GUI_FONT;
+
+/*************************************
+ * GUI FONTS
+*************************************/
+extern const GUI_FONT GUI_Font8_ASCII;
+extern const GUI_FONT GUI_Font16_ASCII;
+extern const GUI_FONT GUI_Font24_ASCII;
+extern const GUI_FONT GUI_Font32_ASCII;
+extern const GUI_FONT GUI_FontHZ16X16;
+
+
+typedef enum{
+    FONT_INNER,
+    FONT_ONLY_HZ_EXTERN,
+    FONT_ONLY_ASCII_EXTERN,
+    FONT_ALL_EXTERN
+}FontSelect_t;
 
 #ifndef _swap_int16_t
 #define _swap_int16_t(a, b) { int16_t t = a; a = b; b = t; }
@@ -12,21 +66,32 @@ class Graphic
 {
     
     public:
-        enum{
-            
-        };
-    uint32_t color, back_color;
+        enum ColorMode{RGB888,RGB565,GRAY};
+        uint32_t color, back_color;
+
+    GUI_FONT *current_font;
 
 private:
     Vhmi     *lcd;
     uint8_t  rotation;
-    uint16_t width, height; //  LCD属性。初始化后不可更改
-    uint16_t _width, _height; // Display w/h as modified by current rotation
+    uint16_t lcd_width, lcd_height; //  LCD属性。初始化后不可更改
     int16_t  cursor_x, cursor_y;
-
+    uint16_t _width, _height; // Display w/h as modified by current rotation
     uint8_t  draw_mode;
 
 
+    //字体相关设置
+    FontSelect_t font_select;
+    uint8_t  text_mode;
+    uint8_t  text_style;
+    uint8_t  text_auto_reline;
+    //外部字库的传入接口
+    eBoxCharInfo_t char_info;
+    uint8_t text_extern_font_ascii_id;
+    uint8_t text_extern_font_hz_id;
+    
+    bool text_font_ascii_extern_enable;
+    bool text_font_hz_extern_enable;
 public:
     Graphic(Vhmi *_lcd, uint16_t w, uint16_t h);
     void begin();
@@ -45,6 +110,8 @@ public:
     uint16_t    bgr2rgb(uint16_t c);
 
     //port
+    void draw_pixel();
+    void draw_pixel(uint32_t color);
     void draw_pixel(int16_t x, int16_t y);
     void draw_pixel(int16_t x, int16_t y, uint32_t color);
 
@@ -74,11 +141,45 @@ public:
     void draw_triangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2);
     void fill_triangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2);
 
+
+
+    void attach( bool (*api)(uint16_t inner_code,uint8_t font_id,eBoxCharInfo_t *info));
+
+
+//text
+    //设置字体
+    void set_font_select(FontSelect_t select);//设置字库选择
+    void set_font(const GUI_FONT *font);//设置内部字库
+    void set_font_ascii_extern(uint8_t font_id);//设置外部ASCII字库
+    void set_font_hz_extern(uint8_t font_id);//设置外部汉子字库
+    eBoxCharInfo_t get_extern_char_info(){return char_info;};
+    void set_text_style(uint8_t style);//无效
+    void set_text_mode(uint8_t mode);//设置填充模式
+    void set_text_auto_reline(uint8_t enable);
+    
+    //解码转换,打印字符等函数
+    void char_index_of_font(uint16_t code, const GUI_FONT_PROP **font_list, uint16_t *index);
+    void disp_index(const GUI_FONT_PROP *font_list, uint16_t index);
+    void disp_char(uint16_t ch);
+    void disp_chars(uint16_t ch, uint16_t cun);
+    void disp_char_at(uint16_t ch, int16_t x, int16_t y);
+    void disp_string(const char *str);
+    void disp_string_at(const char *str, int16_t x, int16_t y);
+    void printf(const char *fmt, ...);
+    void printf(int16_t x, int16_t y, const char *fmt, ...);
+    
+    uint8_t get_char_xlength(uint16_t ch,GUI_FONT *font);
+    uint16_t get_string_xlength( const char *fmt, ...);
+    
 //    void box(int16_t x, int16_t y, int16_t w, int16_t h, int16_t bc);
 //    void box2(int16_t x, int16_t y, int16_t w, int16_t h, uint8_t mode);
-    void btn_down(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
-    void btn_up(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
 
+    //bitmap
+    void drawBitmap(int16_t x, int16_t y, const uint8_t *bitmap, int16_t w, int16_t h, uint32_t color);
+    void drawBitmap(int16_t x, int16_t y, const uint8_t *bitmap, int16_t w, int16_t h, uint32_t color, uint16_t bg);
+    void drawBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t w, int16_t h, uint32_t color) ;
+    void drawBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t w, int16_t h, uint32_t color, uint16_t bg) ;
+    void drawXBitmap(int16_t x, int16_t y, const uint8_t *bitmap, int16_t w, int16_t h, uint32_t color) ;
 };
 extern Graphic *_gpu;
 #endif

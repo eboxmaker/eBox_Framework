@@ -3,7 +3,7 @@
 
 #include "graphic.h"
 #include "gui_base.h"
-class GuiButton :public GuiBase
+class GuiButton :public ActivityComponent
 {
 
     public:
@@ -13,12 +13,21 @@ class GuiButton :public GuiBase
             this->y = y;
             this->len = len;
             this->hight = hight;
+            text = "NULL";
         }
+        virtual ~GuiButton();
+        void create();
         void draw();
-    
+        void set_text(String str);
+        void set_select(bool state);
+        void btn_down(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
+        void btn_up(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
     public:
         int16_t x,y;
         int16_t len,hight;
+        String text;
+        bool    selected;
+        bool    pushed;
 };
 
 #endif

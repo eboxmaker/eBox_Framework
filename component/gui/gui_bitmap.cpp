@@ -1,9 +1,8 @@
-#include "gui.h"
-
+#include "graphic.h"
 // Draw a 1-bit image (bitmap) at the specified (x,y) position from the
 // provided bitmap buffer (must be PROGMEM memory) using the specified
 // foreground color (unset bits are transparent).
-void GUI::drawBitmap(int16_t x, int16_t y,
+void Graphic::drawBitmap(int16_t x, int16_t y,
                      const uint8_t *bitmap, int16_t w, int16_t h, uint32_t color)
 {
 
@@ -24,7 +23,7 @@ void GUI::drawBitmap(int16_t x, int16_t y,
 // Draw a 1-bit image (bitmap) at the specified (x,y) position from the
 // provided bitmap buffer (must be PROGMEM memory) using the specified
 // foreground (for set bits) and background (for clear bits) colors.
-void GUI::drawBitmap(int16_t x, int16_t y,
+void Graphic::drawBitmap(int16_t x, int16_t y,
                      const uint8_t *bitmap, int16_t w, int16_t h, uint32_t color, uint16_t bg)
 {
 
@@ -44,7 +43,7 @@ void GUI::drawBitmap(int16_t x, int16_t y,
 }
 
 // drawBitmap() variant for RAM-resident (not PROGMEM) bitmaps.
-void GUI::drawBitmap(int16_t x, int16_t y,
+void Graphic::drawBitmap(int16_t x, int16_t y,
                      uint8_t *bitmap, int16_t w, int16_t h, uint32_t color)
 {
 
@@ -63,7 +62,7 @@ void GUI::drawBitmap(int16_t x, int16_t y,
 }
 
 // drawBitmap() variant w/background for RAM-resident (not PROGMEM) bitmaps.
-void GUI::drawBitmap(int16_t x, int16_t y,
+void Graphic::drawBitmap(int16_t x, int16_t y,
                      uint8_t *bitmap, int16_t w, int16_t h, uint32_t color, uint16_t bg)
 {
 
@@ -85,7 +84,7 @@ void GUI::drawBitmap(int16_t x, int16_t y,
 //Draw XBitMap Files (*.xbm), exported from GIMP,
 //Usage: Export from GIMP to *.xbm, rename *.xbm to *.c and open in editor.
 //C Array can be directly used with this function
-void GUI::drawXBitmap(int16_t x, int16_t y,
+void Graphic::drawXBitmap(int16_t x, int16_t y,
                       const uint8_t *bitmap, int16_t w, int16_t h, uint32_t color)
 {
 

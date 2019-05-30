@@ -1,4 +1,4 @@
-#include "GUI.h"
+#include "graphic.h"
 #include "gt30l32s4w.h"
 
 extern FontLib font;

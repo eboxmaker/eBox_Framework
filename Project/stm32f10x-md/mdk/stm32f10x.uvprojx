@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>STM32F103C8</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F1xx_DFP.2.3.0</PackID>
+          <PackID>Keil.STM32F1xx_DFP.2.1.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x5000) IROM(0x08000000,0x10000) CPUTYPE("Cortex-M3") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -888,16 +888,6 @@
               <FilePath>..\..\..\component\apps\EventVar.cpp</FilePath>
             </File>
             <File>
-              <FileName>soft_uart.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\soft_uart\soft_uart.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Base64.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\apps\base64\Base64.cpp</FilePath>
-            </File>
-            <File>
               <FileName>ebox_virtual_lcd.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\ebox_virtual_lcd.cpp</FilePath>
@@ -921,6 +911,21 @@
               <FileName>bsp_ebox.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\board\spark_f1\bsp_ebox.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ui_main.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\ui_main.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ui.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\ui.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ui_setValue.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\ui_setValue.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1008,24 +1013,9 @@
               <FilePath>..\..\..\component\gui\FontCustom.cpp</FilePath>
             </File>
             <File>
-              <FileName>gui.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui.cpp</FilePath>
-            </File>
-            <File>
               <FileName>gui_bitmap.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\gui\gui_bitmap.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_graphic.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_graphic.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_port.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_port.cpp</FilePath>
             </File>
             <File>
               <FileName>gui_sidebar.cpp</FileName>
@@ -1051,6 +1041,11 @@
               <FileName>gui_base.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\gui\gui_base.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_page.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_page.cpp</FilePath>
             </File>
           </Files>
         </Group>

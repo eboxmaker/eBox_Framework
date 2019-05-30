@@ -19,6 +19,7 @@ class GuiSideBar :public GuiBase
             max = 10;
             prograss = 0;
         }
+        void create();
         void set_max(int16_t value);
         void set_prograss(int16_t value);
         void set_orientation(int16_t value);

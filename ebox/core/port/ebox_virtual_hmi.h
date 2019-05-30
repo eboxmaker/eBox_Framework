@@ -2,6 +2,12 @@
 #define __EBOX_VHMI_H
 
 #include "ebox_type.h"
+#include "enum.h"
+#include "color_table.h"
+
+
+uint16_t bgr2rgb(uint16_t c);
+uint16_t rgb24_2_rgb565(uint32_t color);   //应该会损失数据内容
 
 class Vhmi
 {
