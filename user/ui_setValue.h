@@ -10,8 +10,9 @@ class SetValuePage:public GuiPage
     
 public:
     SetValuePage(String name);
-    ~SetValuePage();
+    virtual ~SetValuePage();
     virtual void create();
+
     void loop();
     virtual void event(Object *sender,GuiMessage *msg);
 };

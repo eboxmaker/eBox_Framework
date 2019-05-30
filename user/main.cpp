@@ -57,6 +57,7 @@ int main(void)
         if(msg.str != "")
         {
             ui.event(&msg,&msg);
+            UART.printf("free:%d\r\n",ebox_get_free());
         }
         
         stop=millis();

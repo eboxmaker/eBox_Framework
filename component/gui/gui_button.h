@@ -14,6 +14,8 @@ class GuiButton :public ActivityComponent
             this->len = len;
             this->hight = hight;
             text = "NULL";
+            type = GuiType::Button;
+
         }
         virtual ~GuiButton();
         void create();
@@ -26,7 +28,6 @@ class GuiButton :public ActivityComponent
         int16_t x,y;
         int16_t len,hight;
         String text;
-        bool    selected;
         bool    pushed;
 };
 
