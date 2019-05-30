@@ -21,7 +21,6 @@
 #define __GT30L32S4W_H
 
 #include "ebox_core.h"
-#include "gui.h"
 
 
 enum FontID{

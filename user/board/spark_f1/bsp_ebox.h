@@ -20,9 +20,19 @@
 #ifndef __BSP_EBOX_H
 #define __BSP_EBOX_H
 #include "ebox.h"
+#include "EventGpio.h"
+#include "EventManager.h"
+#include "lcd_1.8.h"
+#include "graphic.h"
 #include "../Ethernet3/utility/w5500.h"
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
+
+extern Lcd lcd;
+extern Graphic gpu;
+extern EventGpio btn;
+extern EventManager manager;
+
 extern W5500Class w5500;
 
 #define UART uart1

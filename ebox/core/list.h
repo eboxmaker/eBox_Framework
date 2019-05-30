@@ -19,6 +19,8 @@
 #ifndef __LIST_H
 #define __LIST_H
 #include "ebox_type.h"
+#include "ebox_core.h"
+#include "ebox_mem.h"
 
 typedef struct _node
 {
@@ -36,6 +38,14 @@ public:
     List()
     {
         _head = NULL;
+        _size = 0;
+    }
+    ~List()
+    {
+        ebox_printf("list0:%d\r\n",ebox_get_free());
+        clear();
+        ebox_printf("list1:%d\r\n",ebox_get_free());
+
     }
     int  insert(int at, void *data);
     int  insert_head(void *data);

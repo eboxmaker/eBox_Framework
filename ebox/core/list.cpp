@@ -16,7 +16,6 @@
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
   ******************************************************************************
   */
-#include "ebox_mem.h"
 #include "list.h"
 /**
  *@brief    Listµ•œÚ¡¥±Ì

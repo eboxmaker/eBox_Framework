@@ -24,11 +24,13 @@
 class EventGpio : public Event
 {
  public:
-    typedef enum type{
+    typedef enum {
         Single = 0,
         Continue = 1
     }LongPressType_t;
-       LongPressType_t long_press_type;
+    
+    LongPressType_t long_press_type;
+    
 
 public:
     EventGpio(Gpio *io,uint8_t first_state,String _name = "null")

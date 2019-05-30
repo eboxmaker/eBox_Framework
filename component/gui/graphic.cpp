@@ -5,8 +5,8 @@ Graphic *_gpu;
 Graphic::Graphic(Vhmi *_lcd, uint16_t w, uint16_t h)
 {
     lcd = _lcd;
-    width = w;
-    height = h;
+    lcd_width = w;
+    lcd_height = h;
     _gpu = this;
 }
 
@@ -19,6 +19,9 @@ void Graphic::begin()
     set_back_color(0);
     set_color(0xffff);
 
+    
+    set_text_auto_reline(0);
+    set_text_mode(TEXT_MODE_NORMAL);
 };
 
 
@@ -29,14 +32,13 @@ void Graphic::begin()
 **********************************************************************
 */
 
-
 void Graphic::set_color(uint32_t color)
 {
-    this->color = color;
+    this->color = (color);
 }
 void Graphic::set_back_color(uint32_t back_color)
 {
-    this->back_color = back_color;
+    this->back_color = (back_color);    
 }
 
 void Graphic::set_cursor(int16_t x, int16_t y)
@@ -338,54 +340,24 @@ void Graphic::fill_triangle(int16_t x0, int16_t y0,
 //    }
 //}
 
-/**************************************************************************************
-功能描述: 在屏幕显示一凸起的按钮框
-输    入: int16_t x1,y1,x2,y2 按钮框左上角和右下角坐标
-输    出: 无
-**************************************************************************************/
-#define GUI_GRAY0           0xEF7D   	//灰色0 3165 00110 001011 00101
-#define GUI_GRAY1           0x8410      	//灰色1      00000 000000 00000
-#define GUI_GRAY2           0x4208      	//灰色2  1111111111011111
-#define GUI_WHITE           0xFFFFFF
-void Graphic::btn_down(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
-{
-    draw_line(x1,  y1,  x2, y1, GUI_GRAY2); //H
-    draw_line(x1 + 1, y1 + 1, x2, y1 + 1, GUI_GRAY1); //H
-    draw_line(x1,  y1,  x1, y2, GUI_GRAY2); //V
-    draw_line(x1 + 1, y1 + 1, x1 + 1, y2, GUI_GRAY1); //V
-    draw_line(x1,  y2,  x2, y2, GUI_WHITE); //H
-    draw_line(x2,  y1,  x2, y2, GUI_WHITE); //V
-}
-
-/**************************************************************************************
-功能描述: 在屏幕显示一凹下的按钮框
-输    入: int16_t x1,y1,x2,y2 按钮框左上角和右下角坐标
-输    出: 无
-**************************************************************************************/
-void Graphic::btn_up(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
-{
-    draw_line(x1,  y1,  x2, y1, GUI_WHITE); //H
-    draw_line(x1,  y1,  x1, y2, GUI_WHITE); //V
-
-    draw_line(x1 + 1, y2 - 1, x2, y2 - 1, GUI_GRAY1); //H
-    draw_line(x1,  y2,  x2, y2, GUI_GRAY2); //H
-    draw_line(x2 - 1, y1 + 1, x2 - 1, y2, GUI_GRAY1); //V
-    draw_line(x2, y1, x2, y2, GUI_GRAY2);  //V
-}
 
 
 
 void  Graphic::set_rotation(uint8_t value)
 {
+    limit(value,(uint8_t)0,(uint8_t)3);
     rotation = value;
-    _width = width;
-    _height = height;
+    _width = lcd_width;
+    _height = lcd_height;
     switch(rotation)
     {
     case 1:
     case 3:
         swap(&_width, &_height);
         break;
+    default :
+            break;
+
     }
 }
 int16_t Graphic::ro_x(int16_t x, int16_t y)
@@ -421,6 +393,21 @@ int16_t Graphic::ro_y(int16_t x, int16_t y)
     }
     return 0;
 
+}
+
+void Graphic::draw_pixel()
+{
+    int16_t tempx, tempy;
+    tempx = ro_x(this->cursor_x, this->cursor_y);
+    tempy = ro_y(this->cursor_x, this->cursor_y);
+    lcd->draw_pixel(tempx, tempy, this->color);
+}
+void Graphic::draw_pixel(uint32_t color)
+{
+    int16_t tempx, tempy;
+    tempx = ro_x(this->cursor_x, this->cursor_y);
+    tempy = ro_y(this->cursor_x, this->cursor_y);
+    lcd->draw_pixel(tempx, tempy, color);
 }
 void Graphic::draw_pixel(int16_t x, int16_t y)
 {
@@ -522,6 +509,14 @@ void Graphic::draw_rect(int16_t x0, int16_t y0, int16_t x1, int16_t y1)
     draw_h_line(x0, y1, x1);
     draw_v_line(x0, y0, y1);
     draw_v_line(x1, y0, y1);
+    
+}
+void Graphic::draw_rect(int16_t x0, int16_t y0, int16_t x1, int16_t y1,uint32_t color)
+{
+    draw_h_line(x0, y0, x1, color);
+    draw_h_line(x0, y1, x1, color);
+    draw_v_line(x0, y0, y1, color);
+    draw_v_line(x1, y0, y1, color);
     
 }
 void Graphic::fill_rect(int16_t x0, int16_t y0, int16_t x1, int16_t y1)

@@ -1,7 +1,35 @@
 #include "ebox_core.h"
 #include "ebox_virtual_hmi.h"
 
+uint16_t bgr2rgb(uint16_t c)
+{
+    uint16_t  r, g, b, rgb;
+    b = (c >> 0) & 0x1f;
+    g = (c >> 5) & 0x3f;
+    r = (c >> 11) & 0x1f;
+    rgb = (b << 11) + (g << 5) + (r << 0);
+    return(rgb);
 
+}
+
+uint16_t rgb24_2_rgb565(int r, int g, int b)   //应该会损失数据内容
+{
+        
+return (uint16_t)(  ((unsigned(r) << 8) & 0xF800) | 
+            
+                    ((unsigned(g) << 3) & 0x7E0)  |
+                    ((unsigned(b) >> 3))
+                 );
+}
+
+uint16_t rgb24_2_rgb565(uint32_t color)   //应该会损失数据内容
+{
+        
+return (uint16_t)(  ((color & 0xF80000) >> 8) | 
+                    ((color & 0x00FC00) >> 5)|
+                    ((color & 0x0000F1) >> 3)
+                 );
+}
 void Vhmi::draw_v_line(int16_t x, int16_t y0, int16_t y1, uint32_t color)
 {
     int16_t tempy0,tempy1;

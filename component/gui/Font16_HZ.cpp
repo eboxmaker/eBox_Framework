@@ -11,7 +11,7 @@
 **********************************************************************
 */
 
-#include "GUI.H"
+#include "graphic.H"
 
 
 /* char:     code:0x0020 */
@@ -2164,21 +2164,21 @@ GUI_CHARINFO GUI_FontHZ_16x16_CharInfo[99] =
     { 6, 16, 1, acFontHZ_0062 }, /*66: b*/
     { 6, 16, 1, acFontHZ_0063 }, /*67: c*/
     { 6, 16, 1, acFontHZ_0064 }, /*68: d*/
-    { 6, 6, 1, acFontHZ_0065 }, /*69: e*/
+    { 6, 16, 1, acFontHZ_0065 }, /*69: e*/
     { 3, 16, 1, acFontHZ_0066 }, /*70: f*/
     { 6, 16, 1, acFontHZ_0067 }, /*71: g*/
-    { 6, 6, 1, acFontHZ_0068 }, /*72: h*/
+    { 6, 16, 1, acFontHZ_0068 }, /*72: h*/
     { 2, 16, 1, acFontHZ_0069 }, /*73: i*/
     { 2, 16, 1, acFontHZ_006A }, /*74: j*/
     { 6, 16, 1, acFontHZ_006B }, /*75: k*/
     { 2, 16, 1, acFontHZ_006C }, /*76: l*/
     { 8, 16, 1, acFontHZ_006D }, /*77: m*/
-    { 6, 6, 1, acFontHZ_006E }, /*78: n*/
+    { 6, 16, 1, acFontHZ_006E }, /*78: n*/
     { 6, 16, 1, acFontHZ_006F }, /*79: o*/
     { 6, 16, 1, acFontHZ_0070 }, /*80: p*/
     { 6, 16, 1, acFontHZ_0071 }, /*81: q*/
     { 3, 16, 1, acFontHZ_0072 }, /*82: r*/
-    { 5, 5, 1, acFontHZ_0073 }, /*83: s*/
+    { 5, 16, 1, acFontHZ_0073 }, /*83: s*/
     { 3, 16, 1, acFontHZ_0074 }, /*84: t*/
     { 6, 16, 1, acFontHZ_0075 }, /*85: u*/
     { 6, 16, 1, acFontHZ_0076 }, /*86: v*/

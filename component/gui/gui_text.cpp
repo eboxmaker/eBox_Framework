@@ -1,5 +1,6 @@
-#include "gui.h"
 #include "gt30l32s4w.h"
+#include "gui_text.h"
+
 
 extern FontLib font;
 
@@ -8,30 +9,30 @@ bool (*extern_font_api)(uint16_t inner_code,uint8_t font_id,eBoxCharInfo_t *info
 
 /*********************************************************************
 *
-*       GUI text
+*       Graphic text
 *
 **********************************************************************
 */
-void GUI::attach( bool (*api)(uint16_t inner_code,uint8_t font_id,eBoxCharInfo_t *info))
+void Graphic::attach( bool (*api)(uint16_t inner_code,uint8_t font_id,eBoxCharInfo_t *info))
 {
     extern_font_api = api;
 }
-void GUI::set_font(const GUI_FONT *font)
+void Graphic::set_font(const GUI_FONT *font)
 {
     this->current_font = (GUI_FONT *)font;
 
 }
-void GUI::set_text_style(uint8_t style)
+void Graphic::set_text_style(uint8_t style)
 {
     this->text_style = style;
 }
-void GUI::set_text_mode(uint8_t mode)
+void Graphic::set_text_mode(uint8_t mode)
 {
     text_mode = mode;
 }
 
 
-void GUI::set_font_select(FontSelect_t select){
+void Graphic::set_font_select(FontSelect_t select){
     
     switch((uint8_t)select)
     {
@@ -62,22 +63,22 @@ void GUI::set_font_select(FontSelect_t select){
     }
 }
 
-void GUI::set_font_ascii_extern(uint8_t font_id){
+void Graphic::set_font_ascii_extern(uint8_t font_id){
     
     text_extern_font_ascii_id = font_id;
 }
-void GUI::set_font_hz_extern(uint8_t font_id){
+void Graphic::set_font_hz_extern(uint8_t font_id){
     
     text_extern_font_hz_id = font_id;
 }
 
-void GUI::set_text_auto_reline(uint8_t enable)
+void Graphic::set_text_auto_reline(uint8_t enable)
 {
     text_auto_reline = enable;
 }
 
 ////解码//////////////////////////////
-void GUI::char_index_of_font(uint16_t code, const GUI_FONT_PROP **font_list, uint16_t *index)
+void Graphic::char_index_of_font(uint16_t code, const GUI_FONT_PROP **font_list, uint16_t *index)
 {
     const GUI_FONT_PROP *pList;
     pList = current_font->list;
@@ -101,7 +102,7 @@ void GUI::char_index_of_font(uint16_t code, const GUI_FONT_PROP **font_list, uin
 
 }
 
-void GUI::disp_index(const GUI_FONT_PROP *font_list, uint16_t index)
+void Graphic::disp_index(const GUI_FONT_PROP *font_list, uint16_t index)
 {
     uint32_t count, row, col, mask;
     uint8_t tmp;
@@ -153,8 +154,39 @@ void GUI::disp_index(const GUI_FONT_PROP *font_list, uint16_t index)
     cursor_x += pCharInfo->XSize;
 }
 #include "ebox_mem.h"
+uint8_t Graphic::get_char_xlength(uint16_t ch,GUI_FONT *font)
+{
+    const GUI_FONT_PROP *font_list;
+    uint16_t index;
+    if(ch < 0x7e)    {
+//        char_index_of_font(ch, &font_list, &index);
+//        disp_index(font_list, index);
+        if(text_font_ascii_extern_enable == false )//ASCII使用内部
+        {
+            char_index_of_font(ch, &font_list, &index);
+            return font_list->paCharInfo[index].XSize;
+        }
+        else
+        {
+            return char_info.XSize;
+        }
+    }else{
 
-void GUI::disp_char(uint16_t ch)
+        if(text_font_hz_extern_enable ==  false)
+        {
+            char_index_of_font(ch, &font_list, &index);
+            return font_list->paCharInfo[index].XSize;
+
+        }else
+        {
+            return char_info.XSize;
+        }
+
+
+    }
+}
+
+void Graphic::disp_char(uint16_t ch)
 {
     const GUI_FONT_PROP *font_list;
     uint16_t index;
@@ -213,17 +245,17 @@ void GUI::disp_char(uint16_t ch)
 
     }
 }
-void GUI::disp_char_at(uint16_t ch, int16_t x, int16_t y)
+void Graphic::disp_char_at(uint16_t ch, int16_t x, int16_t y)
 {
     set_cursor(x, y);
     disp_char(ch);
 }
-void GUI::disp_chars(uint16_t ch, uint16_t count)
+void Graphic::disp_chars(uint16_t ch, uint16_t count)
 {
     while(count--)
         disp_char(ch);
 }
-void GUI::disp_string(const char *str)
+void Graphic::disp_string(const char *str)
 {
     uint16_t ch = 0;
     while(*str)
@@ -238,12 +270,12 @@ void GUI::disp_string(const char *str)
         }
     }
 }
-void GUI::disp_string_at(const char *str, int16_t x, int16_t y)
+void Graphic::disp_string_at(const char *str, int16_t x, int16_t y)
 {
     set_cursor(x, y);
     disp_string(str);
 }
-void GUI::printf(const char *fmt, ...)
+void Graphic::printf(const char *fmt, ...)
 {
     char buf[256];
     uint8_t i = 0;
@@ -266,7 +298,7 @@ void GUI::printf(const char *fmt, ...)
 
 }
 
-void GUI::printf(int16_t x, int16_t y, const char *fmt, ...)
+void Graphic::printf(int16_t x, int16_t y, const char *fmt, ...)
 {
     char buf[256];
     uint8_t i = 0;
@@ -287,4 +319,28 @@ void GUI::printf(int16_t x, int16_t y, const char *fmt, ...)
             disp_char(tmp);
         }
     }
+}
+
+uint16_t Graphic::get_string_xlength(const char *fmt, ...)
+{
+    char buf[256];
+    uint16_t strXPixelSize = 0;
+    uint8_t i = 0;
+    va_list va_params;
+    va_start(va_params, fmt);
+    ebox_vsnprintf(buf, 256, fmt, va_params);
+    va_end(va_params);
+    while(buf[i] != '\0')
+    {
+        if(buf[i] < 0x7e)//是字母
+            strXPixelSize += get_char_xlength(buf[i++],current_font);
+        else//汉字
+        {
+            uint16_t tmp;
+            tmp = buf[i++];
+            tmp = (tmp << 8) + buf[i++];
+            strXPixelSize += get_char_xlength(tmp,current_font);
+        }
+    }
+    return strXPixelSize;
 }
