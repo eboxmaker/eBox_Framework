@@ -10,8 +10,10 @@ class MainPage:public GuiPage
     
 public:
     MainPage(String name);
-    ~MainPage();
+    virtual ~MainPage();
     virtual void create();
+//    virtual void cancel();
+
     void loop();
     virtual void event(Object *sender,GuiMessage *msg);
 };

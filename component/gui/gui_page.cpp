@@ -11,7 +11,8 @@ void GuiPage::regedit(GuiBase *object)
 }
 void GuiPage::create()
 {
-        UART.println(name);
+    UART.print("Page:");
+    UART.println(name);
 
     GuiBase *p;
     for(int i = 0; i < baseList.size(); i++)
@@ -25,14 +26,24 @@ void GuiPage::create()
          p->create();
     }  
     update_select();
+    UART.printf("%s   bsize:%d,asize:%d\r\n",name.c_str(),baseList.size(),activityList.size());
+
 
 }
 void GuiPage::cancel()
 {
+    for(int i = 0; i < activityList.size(); i++)
+    {
+        delete (ActivityComponent *)activityList.data(i);
+    }
+    for(int i = 0; i < baseList.size(); i++)
+    {
+        delete (GuiBase *)baseList.data(i);
+    }
+    
     baseList.clear();
     activityList.clear();
     selection = 0;
-    UART.printf("%s   bsize:%d,asize:%d",name.c_str(),baseList.size(),activityList.size());
 
 }
 

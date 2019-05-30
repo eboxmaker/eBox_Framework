@@ -12,15 +12,13 @@ void Ui::begin(GuiPage  *page)
 }
 void Ui::open(GuiPage  *page)
 {
-    if(page->name == "main")
-        page->father = NULL;
-    else
-        page->father = cur_page;
-//    cur_page->cancel();
+    cur_page->cancel();
+
+    page->father = cur_page;
 
     cur_page = page;
     
-    cur_page->create();
+    page->create();
 }
 void Ui::go_back()
 {
@@ -41,4 +39,5 @@ void Ui::event(Object *sender,GuiMessage *msg)
 {
     cur_page->event(sender,msg);
 
+    
 }

@@ -17,8 +17,8 @@ MainPage *pageMain = new MainPage("main");
 
 static void onBtn1Click()
 {
+    UART.println("main BTN CLICK");
     ui.open(pageSetValue);
-    UART.println("UI BTN CLICK");
 }
 
 MainPage::MainPage(String name):GuiPage(name){
@@ -39,7 +39,8 @@ MainPage::~MainPage()
 }
 void MainPage::create()
 {
-
+    UART.print("UI:");
+    UART.println(name);
     _gpu->clear();
     btn1 = new GuiButton(10,10,60,40);
     btn2 = new GuiButton(10,60,60,40);
@@ -54,16 +55,25 @@ void MainPage::create()
     selection = 0;
     GuiPage::create();
 }
-
+//void MainPage::cancel()
+//{
+//    for(int i = 0; i < activityList.size(); i++)
+//    {
+//        delete (ActivityComponent *)activityList.data(i);
+//    }
+//    for(int i = 0; i < baseList.size(); i++)
+//    {
+//        delete (GuiBase *)baseList.data(i);
+//    }
+//    GuiPage::cancel();
+//}
+    
 void MainPage::loop()
 {
     
 }
 void MainPage::event(Object *sender,GuiMessage *msg)
-{
-    UART.println(sender->name);
-    UART.println(msg->str);
-    
+{    
     if(msg->str == "d")
     {
         if(get_selected_object()->click != NULL)

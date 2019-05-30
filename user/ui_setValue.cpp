@@ -1,37 +1,32 @@
 #include "bsp_ebox.h"
 #include "gui_button.h"
 #include "gui_sidebar.h"
-
+#include "gui_list.h"
+#include "math.h"
 #include "ui_setvalue.h"
 #include "ebox_mem.h"
 #include "ui.h"
+#include "ui_main.h"
 //static GuiButton  btnTest(10,10,60,40);
 //static GuiSideBar bar(1,10,100,5);
 static GuiButton *btn1;
 static GuiButton *btn2;
 static GuiSideBar *bar;
 static GuiSideBar *bar1;
+static GuiList      *par[5];
 
 SetValuePage *pageSetValue = new SetValuePage("set");
 
 static void onBtn1Click()
 {
+    UART.println("set BTN CLICK");
     ui.go_back();
-    UART.println("UI set BTN CLICK");
 }
 
 SetValuePage::SetValuePage(String name):GuiPage(name){
-    btn1 = new GuiButton(30,10,60,40);
-    btn2 = new GuiButton(30,60,60,40);
-    bar = new GuiSideBar(1,120,100,5);
-    bar1 = new GuiSideBar(1,140,100,5);
+
     
-    btn1->click = onBtn1Click;
-    regedit(btn1);
-    regedit(btn2);
-    regedit(bar);
-    regedit(bar1);
-    selection = 0;
+    
 };
 
 SetValuePage::~SetValuePage()
@@ -39,7 +34,7 @@ SetValuePage::~SetValuePage()
 
     for(int i = 0; i < activityList.size(); i++)
     {
-        delete (GuiBase *)activityList.data(i);
+        delete (ActivityComponent *)activityList.data(i);
     }
     for(int i = 0; i < baseList.size(); i++)
     {
@@ -48,12 +43,19 @@ SetValuePage::~SetValuePage()
 }
 void SetValuePage::create()
 {
+    UART.print("UI:");
+    UART.println(name);
     _gpu->clear();
-    btn1 = new GuiButton(10,10,60,40);
-    btn2 = new GuiButton(10,60,60,40);
-    bar = new GuiSideBar(1,10,100,5);
-    bar1 = new GuiSideBar(1,100,100,5);
+    btn1 = new GuiButton(30,10,60,40);
+    btn2 = new GuiButton(30,60,60,40);
+    bar = new GuiSideBar(1,30,100,5);
+    bar1 = new GuiSideBar(1,80,100,5);
     
+    for(int i = 0; i < 5; i++)
+    {
+        par[i] = new GuiList(0 + i*20,100,20,30);
+        regedit(par[i]);
+    }
     btn1->click = onBtn1Click;
     regedit(btn1);
     regedit(btn2);
@@ -63,43 +65,108 @@ void SetValuePage::create()
     GuiPage::create();
 }
 
+    
+
 void SetValuePage::loop()
 {
     
 }
 void SetValuePage::event(Object *sender,GuiMessage *msg)
 {
-    UART.println(sender->name);
-    UART.println(msg->str);
-    
-    if(msg->str == "d")
+    if(get_selected_object()->type == GuiType::List)
     {
-        if(get_selected_object()->click != NULL)
-            get_selected_object()->click();
-    }
-        
-    if(msg->str == "w")
-    {
-        if(selection > 0)
+        GuiList *ptr = (GuiList *)get_selected_object();
+        if(msg->str == "d")
         {
-                UART.printf("select:--\r\n");
-            selection--;
-            update_select();
-        }
-    }
-    
-        
-    if(msg->str == "s")
-    {
-        if(selection < activityList.size() - 1)
-        {
-            UART.printf("select:++\r\n");
-            UART.flush();
-               selection++;
+            if(selection < activityList.size() - 1)
+            {
+                UART.printf("select:++\r\n");
+                selection++;
                 update_select();
+            }
+            else
+            {
+                selection = 0;
+                update_select();
+
+            }
         }
+            
+        if(msg->str == "w")
+        {
+
+            if(ptr->index >= 9)
+                ptr->index = 0;  
+             else
+                ptr->index++;
+             ptr->update_value();
+        }
+        
+            
+        if(msg->str == "s")
+        {
+            if(ptr->index <= 0)
+                ptr->index=9;
+            else
+                ptr->index--;
+            ptr->update_value();
+
+        }
+        
+        if(msg->str == " ")
+        {
+            uint32_t temp = 0;
+            for(int i = 0; i < 5; i++)
+            {
+                temp += par[i]->get_value()* pow(10.0,4-i);
+                UART.printf("value:%u;%d\r\n", temp,par[i]->get_value());
+
+            }
+            UART.printf("value:%u;\r\n", temp);
+
+        }
+        UART.printf("index:%d;select:%d/%d\r\n", ptr->index,selection,activityList.size());
+        
+    
     }
-    UART.printf("select:%d/%d\r\n",selection,activityList.size());
+    else
+    {
+        if(msg->str == "d")
+        {
+            if(get_selected_object()->click != NULL)
+                get_selected_object()->click();
+        }
+            
+        if(msg->str == "w")
+        {
+            if(selection > 0)
+            {
+                UART.printf("select:--\r\n");
+                selection--;
+                update_select();
+            }
+        }
+        
+            
+        if(msg->str == "s")
+        {
+            if(selection < activityList.size() - 1)
+            {
+                UART.printf("select:++\r\n");
+                selection++;
+                update_select();
+            }
+            else
+            {
+                selection = 0;
+                            update_select();
+
+            }
+        }
+     UART.printf("cmd:%s;select:%d/%d\r\n",msg->str.c_str(),selection,activityList.size());
+   }
+    
+
 
     
 }
