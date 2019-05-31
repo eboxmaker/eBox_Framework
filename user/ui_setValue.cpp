@@ -51,8 +51,8 @@ void SetValuePage::create()
     UART.print("UI:");
     UART.println(name);
     _gpu->clear();
-    btn1 = new GuiButton(30,10,60,40);
-    btn2 = new GuiButton(30,60,60,40);
+    btn1 = new GuiButton(30,10,60,40,"btn1");
+    btn2 = new GuiButton(30,60,60,40,"btn2");
     bar = new GuiSideBar(1,30,100,5);
     bar1 = new GuiSideBar(1,80,100,5);
     

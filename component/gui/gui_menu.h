@@ -41,6 +41,8 @@ class GuiMenu :public ActivityComponent
         }
         virtual ~GuiMenu(){};
         void create();
+        virtual void show();
+        virtual void hide();
         void update_item_index();
         uint8_t get_value();
         virtual void set_select(bool state);

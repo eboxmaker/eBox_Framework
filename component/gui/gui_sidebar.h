@@ -3,7 +3,7 @@
 
 #include "graphic.h"
 #include "gui_base.h"
-class GuiSideBar :public GuiBase
+class GuiSideBar :public Component
 {
 
         
@@ -27,7 +27,8 @@ class GuiSideBar :public GuiBase
         void set_max(int16_t value);
         void set_prograss(int16_t value);
         void set_orientation(int16_t value);
-        void draw();
+        void show();
+        void hide();
         int16_t max;
 
     private:

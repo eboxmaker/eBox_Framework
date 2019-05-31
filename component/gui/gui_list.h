@@ -21,6 +21,10 @@ class GuiList :public ActivityComponent
         }
         virtual ~GuiList(){};
         void create();
+        virtual void show();
+        virtual void hide();
+            
+            
         void setIndex();
         uint8_t get_value();
         

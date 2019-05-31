@@ -19,6 +19,15 @@ void GuiList::create()
     int16_t starty = (hight - _gpu->current_font->YSize)/2 + y;
     _gpu->printf(startx,starty,str.c_str());
 }
+void GuiList::show()
+{
+    create();
+}
+void GuiList::hide()
+{
+    _gpu->fill_rect(x,y,+len,y+hight,_gpu->back_color);
+
+}
 void GuiList::set_select(bool state)
 {
     selected = state;

@@ -3,7 +3,7 @@
 
 GuiButton::~GuiButton()
 {
-    ebox_printf("btn free\r\n");
+    ebox_printf("btn %s free\r\n",name.c_str());
 }
 
 void GuiButton::create()
@@ -22,7 +22,15 @@ void GuiButton::create()
     _gpu->printf(startx,starty,text.c_str());
     
 }
+void GuiButton::show()
+{
+    create();
+}
+void GuiButton::hide()
+{
+    _gpu->fill_rect(x,y,+len,y+hight,_gpu->back_color);
 
+}
 void GuiButton::draw()
 {
     int16_t x1 = x + len -1;

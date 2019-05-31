@@ -40,7 +40,7 @@ void GuiSideBar::create()
     _gpu->draw_rect(x,y,x1,y1);//重新构建轮廓
     _gpu->fill_rect(sx0,sy0,sx1,sy1);//更新滑块显示
 }
-void GuiSideBar::draw()
+void GuiSideBar::show()
 {
     
     int16_t x1,y1;//bar结束位置
@@ -80,8 +80,22 @@ void GuiSideBar::draw()
     _gpu->fill_rect(sx0,sy0,sx1,sy1);//更新滑块显示
 
 }
-
-
+void GuiSideBar::hide()
+{
+     int16_t x1,y1;//bar结束位置
+  
+    if(orientation == 0)
+    {
+        x1 = x + len - 1;
+        y1 = y + width - 1;
+    }
+    else
+    {
+        x1 = x + width - 1;
+        y1 = y + len - 1;
+    }
+    _gpu->fill_rect(x,y,x1,y1,_gpu->back_color);//清空bar的整个区域
+}
 
 void GuiSideBar::draw_slider(uint32_t color)
 {
@@ -125,7 +139,7 @@ void GuiSideBar::set_max(int16_t value)
 {
     limit(value,(int16_t)1,(int16_t)(len - 1));
     max = value;
-    draw();
+    create();
 }
 void GuiSideBar::set_prograss(int16_t value)
 {
@@ -141,6 +155,6 @@ void GuiSideBar::set_orientation(int16_t value)
 {
     limit(value,(int16_t)0,(int16_t)1);
     orientation = value;
-    draw();
+    create();
 
 }
