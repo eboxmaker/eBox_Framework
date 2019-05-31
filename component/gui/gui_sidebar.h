@@ -3,20 +3,24 @@
 
 #include "graphic.h"
 #include "gui_base.h"
-class GuiSideBar :public GuiBase
+class GuiSideBar :public Component
 {
 
         
     public:
-        GuiSideBar(int16_t x,int16_t y,int16_t bar_len,int16_t bar_width)
+        GuiSideBar(int16_t x,int16_t y,int16_t bar_len,int16_t bar_width,
+                   bool rotation = 0,
+                   int16_t max = 10
+                       
+                   )
         {
             this->x = x;
             this->y = y;
             this->len = bar_len;
             this->width = bar_width;
             
-            orientation = 0;
-            max = 10;
+            orientation = rotation;
+            this->max = max;
             prograss = 0;
         }
         void create();
@@ -24,6 +28,7 @@ class GuiSideBar :public GuiBase
         void set_prograss(int16_t value);
         void set_orientation(int16_t value);
         void draw();
+        int16_t max;
 
     private:
         int16_t x;
@@ -33,7 +38,6 @@ class GuiSideBar :public GuiBase
     
         bool orientation;
         int16_t slider_len;
-        int16_t max;
         int16_t prograss;
         
         void draw_slider(uint32_t color);

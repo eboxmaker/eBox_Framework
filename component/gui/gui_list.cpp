@@ -13,7 +13,7 @@ void GuiList::create()
     _gpu->set_font(&GUI_FontHZ16X16);
     _gpu->set_text_mode(DRAW_MODE_NORMAL);
 
-    String str(value[0]);
+    String str(value[index]);
     uint16_t slen = _gpu->get_string_xlength(str.c_str());
     int16_t startx = (len - slen)/2 + x;
     int16_t starty = (hight - _gpu->current_font->YSize)/2 + y;

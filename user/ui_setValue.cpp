@@ -19,7 +19,12 @@ SetValuePage *pageSetValue = new SetValuePage("set");
 
 static void onBtn1Click()
 {
-    UART.println("set BTN CLICK");
+    UART.println("set BTN2 CLICK");
+    ui.go_back();
+}
+static void onBtn2Click()
+{
+    UART.println("set BTN2 CLICK");
     ui.go_back();
 }
 
@@ -163,7 +168,7 @@ void SetValuePage::event(Object *sender,GuiMessage *msg)
 
             }
         }
-     UART.printf("cmd:%s;select:%d/%d\r\n",msg->str.c_str(),selection,activityList.size());
+     UART.printf("set value cmd:%s;select:%d/%d\r\n",msg->str.c_str(),selection,activityList.size());
    }
     
 

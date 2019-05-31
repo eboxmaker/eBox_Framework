@@ -123,7 +123,7 @@ void GuiSideBar::draw_slider(uint32_t color)
 
 void GuiSideBar::set_max(int16_t value)
 {
-    limit(max,(int16_t)1,(int16_t)(len - 1));
+    limit(value,(int16_t)1,(int16_t)(len - 1));
     max = value;
     draw();
 }
