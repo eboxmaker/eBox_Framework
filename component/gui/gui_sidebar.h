@@ -3,7 +3,7 @@
 
 #include "graphic.h"
 #include "gui_base.h"
-class GuiSideBar :public Component
+class GuiSideBar :public GuiBase
 {
 
         
