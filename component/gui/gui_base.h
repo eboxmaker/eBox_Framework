@@ -16,12 +16,9 @@ class GuiBase:public Object
 {
     
     public:
-        GuiBase(){click = NULL;};
+        GuiBase(){};
         GuiType type;
     virtual ~GuiBase(){};
-    virtual void create() = 0;
-        
-    void (*click)();
     
 };
 class GuiMessage:public Object
@@ -32,11 +29,20 @@ public:
     int     intValue;
     bool    selected;
 };
-class ActivityComponent:public GuiBase
+class Component:public GuiBase
 {
     public:
+        virtual void create() = 0;
+        virtual void show()= 0;
+        virtual void hide()= 0;
+};
+class ActivityComponent:public Component
+{
+    public:
+        ActivityComponent(){click = NULL;}
         virtual void set_select(bool state) = 0;
-    
+        void (*click)();
+   
     public:
         bool    selected;
 

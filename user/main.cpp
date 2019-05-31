@@ -50,16 +50,16 @@ int main(void)
     {
 
         manager.loop();
-        start = millis();
 
         
         msg.str = UART.readString();
         if(msg.str != "")
         {
-            ui.event(&msg,&msg);
-            UART.printf("free:%d\r\n",ebox_get_free());
+            start = millis();
+           ui.event(&msg,&msg);
+            stop=millis();
+            UART.printf("剩余内存:%d\t花费时间：%d\r\n",ebox_get_free(),stop -start);
         }
         
-        stop=millis();
     }
 }

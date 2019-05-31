@@ -5,7 +5,7 @@ void GuiPage::regedit(ActivityComponent *object)
 {
     activityList.insert_tail(object);
 }
-void GuiPage::regedit(GuiBase *object)
+void GuiPage::regedit(Component *object)
 {
     baseList.insert_tail(object);
 }
@@ -13,15 +13,15 @@ void GuiPage::create()
 {
     UART.printf("¥¥Ω®:%s",name.c_str());
 
-    GuiBase *p;
+    Component *p;
     for(int i = 0; i < baseList.size(); i++)
     {
-         p = (GuiBase *)baseList.data(i);
+         p = (Component *)baseList.data(i);
          p->create();
     }
     for(int i = 0; i < activityList.size(); i++)
     {
-         p = (GuiBase *)activityList.data(i);
+         p = (Component *)activityList.data(i);
          p->create();
     }  
     update_select();
@@ -32,16 +32,16 @@ void GuiPage::show()
 {
     UART.printf("œ‘ æ:%s",name.c_str());
 
-    GuiBase *p;
+    Component *p;
     for(int i = 0; i < baseList.size(); i++)
     {
-         p = (GuiBase *)baseList.data(i);
-         p->create();
+         p = (Component *)baseList.data(i);
+         p->show();
     }
     for(int i = 0; i < activityList.size(); i++)
     {
-         p = (GuiBase *)activityList.data(i);
-         p->create();
+         p = (Component *)activityList.data(i);
+         p->show();
     }  
     update_select();
 }
@@ -56,11 +56,11 @@ void GuiPage::cancel()
 {
     for(int i = 0; i < activityList.size(); i++)
     {
-        delete (ActivityComponent *)activityList.data(i);
+        delete (Component *)activityList.data(i);
     }
     for(int i = 0; i < baseList.size(); i++)
     {
-        delete (GuiBase *)baseList.data(i);
+        delete (Component *)baseList.data(i);
     }
     
     baseList.clear();
@@ -75,9 +75,9 @@ void GuiPage::loop()
 {
     
 }
-GuiBase * GuiPage::get_selected_object()
+ActivityComponent * GuiPage::get_selected_object()
 {
-    return (GuiBase *)activityList.data(selection);
+    return (ActivityComponent *)activityList.data(selection);
 }
 void GuiPage::update_select()
 {

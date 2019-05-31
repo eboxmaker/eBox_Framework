@@ -7,18 +7,22 @@ class GuiButton :public ActivityComponent
 {
 
     public:
-        GuiButton(int16_t x,int16_t y,int16_t len,int16_t hight)
+        GuiButton(int16_t x,int16_t y,int16_t len,int16_t hight,
+                  String name = "NULL")
         {
             this->x = x;
             this->y = y;
             this->len = len;
             this->hight = hight;
             text = "NULL";
+            this->name = name;
             type = GuiType::Button;
 
         }
         virtual ~GuiButton();
         void create();
+                virtual void show();
+        virtual void hide();
         void draw();
         void set_text(String str);
         void set_select(bool state);
