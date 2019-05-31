@@ -18,12 +18,12 @@ class GuiPage :public GuiBase
         virtual void create();
         virtual void cancel();
         virtual void event(Object *sender,GuiMessage *msg) = 0;
-//        virtual void show();
-//        virtual void hide();
+        virtual void show();
+        virtual void hide();
         virtual void loop();
         virtual void regedit(ActivityComponent *object);
-        virtual void regedit(GuiBase *object);
-        virtual GuiBase *get_selected_object();
+        virtual void regedit(Component *object);
+        virtual ActivityComponent *get_selected_object();
         virtual void update_select();
     public:
         List activityList;

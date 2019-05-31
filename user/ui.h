@@ -20,8 +20,9 @@ class Ui
             
     private:
         GuiPage *cur_page;
-//        GuiPage *father;
+        GuiPage *main_page;
 };
 extern Ui ui;
-#endif
 
+
+#endif

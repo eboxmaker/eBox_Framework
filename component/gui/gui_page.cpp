@@ -5,45 +5,69 @@ void GuiPage::regedit(ActivityComponent *object)
 {
     activityList.insert_tail(object);
 }
-void GuiPage::regedit(GuiBase *object)
+void GuiPage::regedit(Component *object)
 {
     baseList.insert_tail(object);
 }
 void GuiPage::create()
 {
-    UART.print("Page:");
-    UART.println(name);
+    UART.printf("创建:%s",name.c_str());
 
-    GuiBase *p;
+    Component *p;
     for(int i = 0; i < baseList.size(); i++)
     {
-         p = (GuiBase *)baseList.data(i);
+         p = (Component *)baseList.data(i);
          p->create();
     }
     for(int i = 0; i < activityList.size(); i++)
     {
-         p = (GuiBase *)activityList.data(i);
+         p = (Component *)activityList.data(i);
          p->create();
     }  
     update_select();
-    UART.printf("%s   bsize:%d,asize:%d\r\n",name.c_str(),baseList.size(),activityList.size());
 
+
+}
+void GuiPage::show()
+{
+    UART.printf("显示:%s",name.c_str());
+
+    Component *p;
+    for(int i = 0; i < baseList.size(); i++)
+    {
+         p = (Component *)baseList.data(i);
+         p->create();
+    }
+    for(int i = 0; i < activityList.size(); i++)
+    {
+         p = (Component *)activityList.data(i);
+         p->create();
+    }  
+    update_select();
+}
+
+void GuiPage::hide()
+{
+    _gpu->clear();
+    UART.printf("隐藏：%s\r\n",name.c_str());
 
 }
 void GuiPage::cancel()
 {
     for(int i = 0; i < activityList.size(); i++)
     {
-        delete (ActivityComponent *)activityList.data(i);
+        delete (Component *)activityList.data(i);
     }
     for(int i = 0; i < baseList.size(); i++)
     {
-        delete (GuiBase *)baseList.data(i);
+        delete (Component *)baseList.data(i);
     }
     
     baseList.clear();
     activityList.clear();
     selection = 0;
+    _gpu->clear();
+    UART.printf("注销：%s\r\n",name.c_str());
 
 }
 
@@ -51,9 +75,9 @@ void GuiPage::loop()
 {
     
 }
-GuiBase * GuiPage::get_selected_object()
+ActivityComponent * GuiPage::get_selected_object()
 {
-    return (GuiBase *)activityList.data(selection);
+    return (ActivityComponent *)activityList.data(selection);
 }
 void GuiPage::update_select()
 {
