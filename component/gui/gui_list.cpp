@@ -1,7 +1,9 @@
 #include "gui_list.h"
 
 //static const uint8_t itemValueTable[10] = {0,1,2,3,4,5,6,7,8,9};
-
+GuiList::~GuiList(){ 
+    ebox_printf("GuiList %s free\r\n",name.c_str());
+};
 void GuiList::create()
 {
 
@@ -11,7 +13,7 @@ void GuiList::create()
 
     
     _gpu->set_font(&GUI_FontHZ16X16);
-    _gpu->set_text_mode(DRAW_MODE_NORMAL);
+    _gpu->set_text_mode(GuiDrawMode::Normal);
 
     String str(value[index]);
     uint16_t slen = _gpu->get_string_xlength(str.c_str());
@@ -51,7 +53,7 @@ void GuiList::set_select(bool state)
 void GuiList::update_value()
 {
     _gpu->set_font(&GUI_FontHZ16X16);
-    _gpu->set_text_mode(DRAW_MODE_NORMAL);
+    _gpu->set_text_mode(GuiDrawMode::Normal);
 
     String str(value[index]);
 

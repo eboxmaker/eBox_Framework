@@ -26,7 +26,7 @@ void Graphic::set_text_style(uint8_t style)
 {
     this->text_style = style;
 }
-void Graphic::set_text_mode(uint8_t mode)
+void Graphic::set_text_mode(GuiDrawMode mode)
 {
     text_mode = mode;
 }
@@ -122,21 +122,21 @@ void Graphic::disp_index(const GUI_FONT_PROP *font_list, uint16_t index)
             {
                 switch(text_mode)
                 {
-                case TEXT_MODE_NORMAL:
+                    case GuiDrawMode::Normal:
                     if(mask & tmp)
                         draw_pixel(cursor_x, cursor_y);
                     else
                         draw_pixel(cursor_x, cursor_y, back_color);
                     break;
-                case TEXT_MODE_XOR:
+                case GuiDrawMode::Xor:
                     if(mask & tmp)
                         draw_pixel(cursor_x, cursor_y);
                     break;
-                case TEXT_MODE_TRANS:
+                case GuiDrawMode::Trans:
                     if(mask & tmp)
                         draw_pixel(cursor_x, cursor_y);
                     break;
-                case TEXT_MODE_REV:
+                case GuiDrawMode::Reverse:
                     if(mask & tmp)
                         draw_pixel(cursor_x, cursor_y, back_color);
                     else

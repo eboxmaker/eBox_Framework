@@ -2,61 +2,30 @@
 #define __GRAPHIC_H
 
 #include "ebox_core.h"
-
-#define GUI_TS_NORMAL           (0)
-#define GUI_TS_UNDERLINE        (1 << 0)
-#define GUI_TS_STRIKETHRU       (1 << 1)
-#define GUI_TS_OVERLINE         (1 << 2)
-
-
-#define DRAW_MODE_NORMAL (0)//正常
-#define DRAW_MODE_XOR    (1<<0)//异或
-#define DRAW_MODE_TRANS  (1<<1)//透明
-#define DRAW_MODE_REV    (1<<2)//翻转
-
-#define TEXT_MODE_NORMAL DRAW_MODE_NORMAL//正常
-#define TEXT_MODE_XOR    DRAW_MODE_XOR//异或
-#define TEXT_MODE_TRANS  DRAW_MODE_TRANS//透明
-#define TEXT_MODE_REV    DRAW_MODE_REV//翻转
-
-typedef struct
-{
-    uint8_t XSize;
-    uint8_t XDist;
-    uint8_t BytesPerLine;
-    const unsigned char   *pData;
-} GUI_CHARINFO;
-typedef struct GUI_FONT_PROP
-{
-    uint16_t First;                                /* first character               */
-    uint16_t Last;                                 /* last character                */
-    const GUI_CHARINFO   *paCharInfo;            /* address of first character    */
-    const struct GUI_FONT_PROP   *pNext;        /* pointer to next */
-} GUI_FONT_PROP;
-
-typedef struct _tFont
-{
-    const GUI_FONT_PROP *list;
-    uint16_t    YSize;
-    uint8_t     YDist;
-} GUI_FONT;
-
-/*************************************
- * GUI FONTS
-*************************************/
-extern const GUI_FONT GUI_Font8_ASCII;
-extern const GUI_FONT GUI_Font16_ASCII;
-extern const GUI_FONT GUI_Font24_ASCII;
-extern const GUI_FONT GUI_Font32_ASCII;
-extern const GUI_FONT GUI_FontHZ16X16;
+#include "gui_font.h"
+//#define GUI_TS_NORMAL           (0)
+//#define GUI_TS_UNDERLINE        (1 << 0)
+//#define GUI_TS_STRIKETHRU       (1 << 1)
+//#define GUI_TS_OVERLINE         (1 << 2)
 
 
-typedef enum{
-    FONT_INNER,
-    FONT_ONLY_HZ_EXTERN,
-    FONT_ONLY_ASCII_EXTERN,
-    FONT_ALL_EXTERN
-}FontSelect_t;
+//#define DRAW_MODE_NORMAL (0)//正常
+//#define DRAW_MODE_XOR    (1<<0)//异或
+//#define DRAW_MODE_TRANS  (1<<1)//透明
+//#define DRAW_MODE_REV    (1<<2)//翻转
+
+//#define TEXT_MODE_NORMAL DRAW_MODE_NORMAL//正常
+//#define TEXT_MODE_XOR    DRAW_MODE_XOR//异或
+//#define TEXT_MODE_TRANS  DRAW_MODE_TRANS//透明
+//#define TEXT_MODE_REV    DRAW_MODE_REV//翻转
+
+
+DECLARE_ENUM(GuiDrawMode)
+Normal = 0,     //正常
+Xor,            //异或
+Trans,          //透明
+Reverse         //翻转
+END_ENUM();
 
 #ifndef _swap_int16_t
 #define _swap_int16_t(a, b) { int16_t t = a; a = b; b = t; }
@@ -82,7 +51,7 @@ private:
 
     //字体相关设置
     FontSelect_t font_select;
-    uint8_t  text_mode;
+    GuiDrawMode  text_mode;
     uint8_t  text_style;
     uint8_t  text_auto_reline;
     //外部字库的传入接口
@@ -154,7 +123,7 @@ public:
     void set_font_hz_extern(uint8_t font_id);//设置外部汉子字库
     eBoxCharInfo_t get_extern_char_info(){return char_info;};
     void set_text_style(uint8_t style);//无效
-    void set_text_mode(uint8_t mode);//设置填充模式
+    void set_text_mode(GuiDrawMode mode);//设置填充模式
     void set_text_auto_reline(uint8_t enable);
     
     //解码转换,打印字符等函数

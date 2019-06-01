@@ -23,13 +23,18 @@ class GuiSideBar :public Component
             this->max = max;
             prograss = 0;
         }
-        void create();
+        virtual void create();
+        virtual void show();
+        virtual void hide();
+
+        //侧变栏信息。只有初始化的时候才直接
+        bool orientation;
+        int16_t max;
+        int16_t prograss;
+        
+        void set_orientation(int16_t value);
         void set_max(int16_t value);
         void set_prograss(int16_t value);
-        void set_orientation(int16_t value);
-        void show();
-        void hide();
-        int16_t max;
 
     private:
         int16_t x;
@@ -37,9 +42,7 @@ class GuiSideBar :public Component
         int16_t len;
         int16_t width;
     
-        bool orientation;
         int16_t slider_len;
-        int16_t prograss;
         
         void draw_slider(uint32_t color);
         void clear_slider();
@@ -47,3 +50,4 @@ class GuiSideBar :public Component
 };
 
 #endif
+

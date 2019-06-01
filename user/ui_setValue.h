@@ -13,7 +13,7 @@ public:
     virtual ~SetValuePage();
     virtual void create();
 
-    void loop();
+    virtual void loop();
     virtual void event(Object *sender,GuiMessage *msg);
 };
 

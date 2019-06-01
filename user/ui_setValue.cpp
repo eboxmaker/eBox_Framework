@@ -41,9 +41,9 @@ SetValuePage::~SetValuePage()
     {
         delete (ActivityComponent *)activityList.data(i);
     }
-    for(int i = 0; i < baseList.size(); i++)
+    for(int i = 0; i < componentList.size(); i++)
     {
-        delete (GuiBase *)activityList.data(i);
+        delete (Component *)componentList.data(i);
     }
 }
 void SetValuePage::create()
@@ -66,7 +66,6 @@ void SetValuePage::create()
     regedit(btn2);
     regedit(bar);
     regedit(bar1);
-    selection = 0;
     GuiPage::create();
 }
 
@@ -78,99 +77,99 @@ void SetValuePage::loop()
 }
 void SetValuePage::event(Object *sender,GuiMessage *msg)
 {
-    if(get_selected_object()->type == GuiType::List)
-    {
-        GuiList *ptr = (GuiList *)get_selected_object();
-        if(msg->str == "d")
-        {
-            if(selection < activityList.size() - 1)
-            {
-                UART.printf("select:++\r\n");
-                selection++;
-                update_select();
-            }
-            else
-            {
-                selection = 0;
-                update_select();
+//    if(get_selected_object()->type == GuiType::List)
+//    {
+//        GuiList *ptr = (GuiList *)get_selected_object();
+//        if(msg->str == "d")
+//        {
+//            if(selection < activityList.size() - 1)
+//            {
+//                UART.printf("select:++\r\n");
+//                selection++;
+//                update_select();
+//            }
+//            else
+//            {
+//                selection = 0;
+//                update_select();
 
-            }
-        }
-            
-        if(msg->str == "w")
-        {
+//            }
+//        }
+//            
+//        if(msg->str == "w")
+//        {
 
-            if(ptr->index >= 9)
-                ptr->index = 0;  
-             else
-                ptr->index++;
-             ptr->update_value();
-        }
-        
-            
-        if(msg->str == "s")
-        {
-            if(ptr->index <= 0)
-                ptr->index=9;
-            else
-                ptr->index--;
-            ptr->update_value();
+//            if(ptr->index >= 9)
+//                ptr->index = 0;  
+//             else
+//                ptr->index++;
+//             ptr->update_value();
+//        }
+//        
+//            
+//        if(msg->str == "s")
+//        {
+//            if(ptr->index <= 0)
+//                ptr->index=9;
+//            else
+//                ptr->index--;
+//            ptr->update_value();
 
-        }
-        
-        if(msg->str == " ")
-        {
-            uint32_t temp = 0;
-            for(int i = 0; i < 5; i++)
-            {
-                temp += par[i]->get_value()* pow(10.0,4-i);
-                UART.printf("value:%u;%d\r\n", temp,par[i]->get_value());
+//        }
+//        
+//        if(msg->str == " ")
+//        {
+//            uint32_t temp = 0;
+//            for(int i = 0; i < 5; i++)
+//            {
+//                temp += par[i]->get_value()* pow(10.0,4-i);
+//                UART.printf("value:%u;%d\r\n", temp,par[i]->get_value());
 
-            }
-            UART.printf("value:%u;\r\n", temp);
+//            }
+//            UART.printf("value:%u;\r\n", temp);
 
-        }
-        UART.printf("index:%d;select:%d/%d\r\n", ptr->index,selection,activityList.size());
-        
-    
-    }
-    else
-    {
-        if(msg->str == "d")
-        {
-            if(get_selected_object()->click != NULL)
-                get_selected_object()->click();
-        }
-            
-        if(msg->str == "w")
-        {
-            if(selection > 0)
-            {
-                UART.printf("select:--\r\n");
-                selection--;
-                update_select();
-            }
-        }
-        
-            
-        if(msg->str == "s")
-        {
-            if(selection < activityList.size() - 1)
-            {
-                UART.printf("select:++\r\n");
-                selection++;
-                update_select();
-            }
-            else
-            {
-                selection = 0;
-                            update_select();
+//        }
+//        UART.printf("index:%d;select:%d/%d\r\n", ptr->index,selection,activityList.size());
+//        
+//    
+//    }
+//    else
+//    {
+//        if(msg->str == "d")
+//        {
+//            if(get_selected_object()->click != NULL)
+//                get_selected_object()->click();
+//        }
+//            
+//        if(msg->str == "w")
+//        {
+//            if(selection > 0)
+//            {
+//                UART.printf("select:--\r\n");
+//                selection--;
+//                update_select();
+//            }
+//        }
+//        
+//            
+//        if(msg->str == "s")
+//        {
+//            if(selection < activityList.size() - 1)
+//            {
+//                UART.printf("select:++\r\n");
+//                selection++;
+//                update_select();
+//            }
+//            else
+//            {
+//                selection = 0;
+//                            update_select();
 
-            }
-        }
-     UART.printf("set value cmd:%s;select:%d/%d\r\n",msg->str.c_str(),selection,activityList.size());
-   }
-    
+//            }
+//        }
+//     UART.printf("set value cmd:%s;select:%d/%d\r\n",msg->str.c_str(),selection,activityList.size());
+//   }
+//    
 
 
     

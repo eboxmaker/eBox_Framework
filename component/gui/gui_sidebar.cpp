@@ -145,7 +145,7 @@ void GuiSideBar::set_prograss(int16_t value)
 {
     draw_slider(_gpu->back_color);
     prograss = value;
-    draw_slider(RGB565::Green);
+    draw_slider(_gpu->color);
 
 //prograss = value;
 //    draw();
@@ -158,3 +158,4 @@ void GuiSideBar::set_orientation(int16_t value)
     create();
 
 }
+

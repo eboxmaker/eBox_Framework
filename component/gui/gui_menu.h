@@ -10,7 +10,7 @@ typedef struct _menuItem menuItem_t;
 
 struct _menuItem {
     void            (*handle)(void);        //!< handler
-    menu_t          *child;                 //!< Child Menu
+    const menu_t    *child;                 //!< Child Menu
     const char      *title;                 //!< Menu Title
 
 };
@@ -40,20 +40,27 @@ class GuiMenu :public ActivityComponent
             current_menu = menu;
         }
         virtual ~GuiMenu(){};
-        void create();
+        virtual void create();
         virtual void show();
         virtual void hide();
-        void update_item_index();
         uint8_t get_value();
         virtual void set_select(bool state);
-        void update_value();
-        
+
+            
+        //²Ëµ¥Ñ¡ÔñË÷Òý
+        int16_t index;
+        int16_t index_get();
+        void index_set(int16_t value);
+        bool index_next();
+        bool index_previous();
+
     public:
         int16_t x,y;
         int16_t len,hight;
-        int16_t index;
-        uint8_t max;
         const menu_t    *current_menu;
+        uint8_t max;
+    private:
+        void update_item_index();
 };
 
 #endif

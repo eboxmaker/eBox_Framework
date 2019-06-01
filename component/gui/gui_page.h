@@ -4,13 +4,14 @@
 #include "gui_base.h"
 #include "list.h"
 
-class GuiPage :public GuiBase
+class GuiPage :public Component
 {
     public :
         GuiPage(String name)
         {
             this->name = name;
-            last_selection = selection = 0;
+            last_index = index = 0;
+            type = GuiType::Page;
         };
         
         GuiPage *father;
@@ -24,12 +25,21 @@ class GuiPage :public GuiBase
         virtual void regedit(ActivityComponent *object);
         virtual void regedit(Component *object);
         virtual ActivityComponent *get_selected_object();
-        virtual void update_select();
+        
+        
+        
+        int16_t index_get();
+        void index_set(int16_t value);
+        bool index_next();
+        bool index_previous();
+
     public:
         List activityList;
-        List baseList;
-        int selection;
-        int last_selection;
+        List componentList;
+    
+        int index;
+        int last_index;
+        void update_index();
 
 };
 #endif 

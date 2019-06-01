@@ -30,37 +30,38 @@ typedef struct _node
 
 class List
 {
-    Node *_head;
-    Node *_tail;
-    int  _size;
-public:
+    private:
+        Node *_head;
+        Node *_tail;
+        int  _size;
+    public:
 
-    List()
-    {
-        _head = NULL;
-        _size = 0;
-    }
-    ~List()
-    {
-        ebox_printf("list0:%d\r\n",ebox_get_free());
-        clear();
-        ebox_printf("list1:%d\r\n",ebox_get_free());
+        List()
+        {
+            _head = NULL;
+            _size = 0;
+        }
+        ~List()
+        {
+    //        ebox_printf("list0:%d\r\n",ebox_get_free());
+            clear();
+    //        ebox_printf("list1:%d\r\n",ebox_get_free());
 
-    }
-    int  insert(int at, void *data);
-    int  insert_head(void *data);
-    int  insert_tail(void *data);
-    int  remove(int x);
-    void *data(int x);
-    Node *head();
-    Node *tail();
-    int  is_empty();
-    int  clear();
-    int  modify_node(int x, void *data);
-    int  swap(int x, int y);
-    int  size()
-    {
-        return _size;
-    }
+        }
+        int  insert(int at, void *data);
+        int  insert_head(void *data);
+        int  insert_tail(void *data);
+        int  remove(int x);
+        void *data(int x);
+        Node *head();
+        Node *tail();
+        int  is_empty();
+        int  clear();
+        int  modify_node(int x, void *data);
+        int  swap(int x, int y);
+        int  size()
+        {
+            return _size;
+        }
 };
 #endif
