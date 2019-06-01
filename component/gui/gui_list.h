@@ -19,16 +19,14 @@ class GuiList :public ActivityComponent
             for(int i = 0; i < 10; i++)
                 value[i] = i;
         }
-        virtual ~GuiList(){};
-        void create();
+        virtual ~GuiList();
+        virtual void create();
         virtual void show();
         virtual void hide();
-            
+        virtual void set_select(bool state);
             
         void setIndex();
         uint8_t get_value();
-        
-        void set_select(bool state);
         void update_value();
         
     public:
@@ -40,3 +38,4 @@ class GuiList :public ActivityComponent
 };
 
 #endif
+

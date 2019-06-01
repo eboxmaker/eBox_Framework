@@ -14,7 +14,7 @@ void GuiButton::create()
 
     
     _gpu->set_font(&GUI_FontHZ16X16);
-    _gpu->set_text_mode(DRAW_MODE_TRANS);
+    _gpu->set_text_mode(GuiDrawMode::Trans);
 
     uint16_t slen = _gpu->get_string_xlength(text.c_str());
     int16_t startx = (len - slen)/2 + x;
@@ -39,7 +39,7 @@ void GuiButton::draw()
 
     
     _gpu->set_font(&GUI_FontHZ16X16);
-    _gpu->set_text_mode(DRAW_MODE_TRANS);
+    _gpu->set_text_mode(GuiDrawMode::Trans);
 
     uint16_t slen = _gpu->get_string_xlength(text.c_str());
     int16_t startx = (len - slen)/2 + x;
@@ -88,7 +88,7 @@ void GuiButton::btn_down(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
     _gpu->draw_line(x1,  y2,  x2, y2, RGB565::White); //H
     _gpu->draw_line(x2,  y1,  x2, y2, RGB565::White); //V
     _gpu->set_font(&GUI_FontHZ16X16);
-    _gpu->set_text_mode(TEXT_MODE_REV);
+    _gpu->set_text_mode(GuiDrawMode::Reverse);
     
     uint16_t len = _gpu->get_string_xlength("ÉêÍ¬Ç¿");
     int16_t startx = ((x2 - x1) - len)/2 + x1;

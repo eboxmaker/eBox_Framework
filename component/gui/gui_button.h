@@ -20,12 +20,14 @@ class GuiButton :public ActivityComponent
 
         }
         virtual ~GuiButton();
-        void create();
-                virtual void show();
+        virtual void create();
+        virtual void show();
         virtual void hide();
+        virtual void set_select(bool state);
+
+
         void draw();
         void set_text(String str);
-        void set_select(bool state);
         void btn_down(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
         void btn_up(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
     public:
@@ -35,4 +37,6 @@ class GuiButton :public ActivityComponent
         bool    pushed;
 };
 
+
 #endif
+

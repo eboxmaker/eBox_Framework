@@ -44,7 +44,6 @@ uint32_t start ,stop;
 
 int main(void)
 {
-    int count = 32;
     setup();
     while (1)
     {
@@ -63,3 +62,4 @@ int main(void)
         
     }
 }
+

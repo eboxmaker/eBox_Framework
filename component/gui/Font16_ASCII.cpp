@@ -18,7 +18,7 @@ Height      : 16
 ---------------------------END-OF-HEADER------------------------------
 */
 
-#include "graphic.h"
+#include "gui_font.h"
 
 const unsigned char acFont16ASCII_32[16] =   /* code 32 */
 {

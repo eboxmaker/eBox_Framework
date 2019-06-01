@@ -22,7 +22,7 @@ void Graphic::begin()
     
     set_text_auto_reline(0);
     _gpu->set_font(&GUI_FontHZ16X16);
-    set_text_mode(TEXT_MODE_NORMAL);
+    set_text_mode(GuiDrawMode::Normal);
 };
 
 

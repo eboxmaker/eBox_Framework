@@ -18,7 +18,7 @@ Height      : 13
 ---------------------------END-OF-HEADER------------------------------
 */
 
-#include "graphic.h"
+#include "gui_font.h"
 
 /* Start of unicode area <Basic Latin> */
 const unsigned char acFont24_ASCII_0020[ 24] =   /* code 0020 */

@@ -14,7 +14,7 @@ public:
     virtual void create();
 //    virtual void cancel();
 
-    void loop();
+    virtual void loop();
     virtual void event(Object *sender,GuiMessage *msg);
 };
 
