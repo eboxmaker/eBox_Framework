@@ -40,8 +40,8 @@ class mcuSpi: public Spi
 public:
     mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
 
-    virtual void    begin (SpiConfig_t *spi_config);
-    virtual void    config(SpiConfig_t *spi_config);
+    virtual void    begin (Config_t *spi_config);
+    virtual void    config(Config_t *spi_config);
     virtual uint8_t read_config(void);
 
     virtual uint8_t transfer(uint8_t data);
@@ -53,7 +53,7 @@ public:
     virtual int8_t  write_buf(uint8_t *data, uint16_t len);
     virtual int8_t  read_buf(uint8_t *recv_data, uint16_t len);
 public:
-    virtual int8_t  take(SpiConfig_t *spi_config);
+    virtual int8_t  take(Config_t *spi_config);
     virtual int8_t  release(void);
 
 private:
@@ -76,8 +76,8 @@ class SoftSpi: public Spi
 public:
     SoftSpi(Gpio *sck, Gpio *miso, Gpio *mosi);
 
-    virtual void    begin (SpiConfig_t *spi_config);
-    virtual void    config(SpiConfig_t *spi_config);
+    virtual void    begin (Config_t *spi_config);
+    virtual void    config(Config_t *spi_config);
     virtual uint8_t read_config(void);
 
     virtual uint8_t transfer(uint8_t data);
@@ -90,7 +90,7 @@ public:
     virtual int8_t  read_buf(uint8_t *recv_data, uint16_t len);
 
 public:
-    virtual int8_t take(SpiConfig_t *spi_config);
+    virtual int8_t take(Config_t *spi_config);
     virtual int8_t release(void);
 
 private:

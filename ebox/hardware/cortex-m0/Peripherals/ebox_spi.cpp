@@ -40,7 +40,7 @@ mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
     _mosi = mosi;
 }
 
-void mcuSpi::begin(SpiConfig_t *spi_config)
+void mcuSpi::begin(Config_t *spi_config)
 {
     uint8_t index = 0;
 
@@ -57,27 +57,28 @@ void mcuSpi::begin(SpiConfig_t *spi_config)
 
 
 
-void mcuSpi::config(SpiConfig_t *spi_config)
+void mcuSpi::config(Config_t *spi_config)
 {
     current_dev_num = spi_config->dev_num;
     SPI_DEBUG("dev num 0x%x \r\n", current_dev_num);
     LL_SPI_Disable(_spi);
+		uint32_t  prescaler;
 
     switch (spi_config->mode)
     {
-    case SPI_MODE0:
+    case MODE0:
         LL_SPI_SetClockPhase(_spi, LL_SPI_PHASE_1EDGE);
         LL_SPI_SetClockPolarity(_spi, LL_SPI_POLARITY_LOW);
         break;
-    case SPI_MODE1:
+    case MODE1:
         LL_SPI_SetClockPhase(_spi, LL_SPI_PHASE_2EDGE);
         LL_SPI_SetClockPolarity(_spi, LL_SPI_POLARITY_LOW);
         break;
-    case SPI_MODE2:
+    case MODE2:
         LL_SPI_SetClockPhase(_spi, LL_SPI_PHASE_1EDGE);
         LL_SPI_SetClockPolarity(_spi, LL_SPI_POLARITY_HIGH);
         break;
-    case SPI_MODE3:
+    case MODE3:
         LL_SPI_SetClockPhase(_spi, LL_SPI_PHASE_2EDGE);
         LL_SPI_SetClockPolarity(_spi, LL_SPI_POLARITY_HIGH);
         break;
@@ -87,38 +88,35 @@ void mcuSpi::config(SpiConfig_t *spi_config)
 
     switch(spi_config->prescaler)
     {
-    case SPI_CLOCK_DIV2:
-        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV2;
+    case DIV2:
+        prescaler = LL_SPI_BAUDRATEPRESCALER_DIV2;
         break;
-    case SPI_CLOCK_DIV4:
-        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV2;
+    case DIV4:
+        prescaler = LL_SPI_BAUDRATEPRESCALER_DIV4;
         break;
-    case SPI_CLOCK_DIV8:
-        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV4;
+    case DIV8:
+        prescaler = LL_SPI_BAUDRATEPRESCALER_DIV8;
         break;
-    case SPI_CLOCK_DIV16:
-        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV8;
+    case DIV16:
+        prescaler = LL_SPI_BAUDRATEPRESCALER_DIV16;
         break;
-    case SPI_CLOCK_DIV32:
-        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV16;
+    case DIV32:
+        prescaler = LL_SPI_BAUDRATEPRESCALER_DIV32;
         break;
-    case SPI_CLOCK_DIV64:
-        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV32;
+    case DIV64:
+        prescaler = LL_SPI_BAUDRATEPRESCALER_DIV64;
         break;
-    case SPI_CLOCK_DIV128:
-        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV64;
-        break;
-    case SPI_CLOCK_DIV256:
-        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV128;
+    case DIV128:
+        prescaler = LL_SPI_BAUDRATEPRESCALER_DIV128;
         break;
     default :
-        spi_config->prescaler = LL_SPI_BAUDRATEPRESCALER_DIV256;
+        prescaler = LL_SPI_BAUDRATEPRESCALER_DIV256;
         break;
 
     }
 
     /* Configure SPI1 communication */
-    LL_SPI_SetBaudRatePrescaler(_spi, spi_config->prescaler);
+    LL_SPI_SetBaudRatePrescaler(_spi, prescaler);
     LL_SPI_SetTransferBitOrder(_spi, spi_config->bit_order);
 
     LL_SPI_SetTransferDirection(_spi, LL_SPI_FULL_DUPLEX);
@@ -212,7 +210,7 @@ int8_t mcuSpi::read_buf(uint8_t *recv_data, uint16_t data_length)
   *@param    none
   *@retval   none
   */
-int8_t mcuSpi::take(SpiConfig_t *spi_config)
+int8_t mcuSpi::take(Config_t *spi_config)
 {
     while((_busy == 1) && (spi_config->dev_num != read_config()))
         delay_ms(1);
