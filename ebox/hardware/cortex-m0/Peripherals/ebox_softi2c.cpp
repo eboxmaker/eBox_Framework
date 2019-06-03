@@ -51,28 +51,15 @@ SoftI2c::SoftI2c(Gpio *scl, Gpio *sda)
   *@param    speed:  速率 10,100,200,300,400 分别代表10k，100k，200k,300k,400k
   *@retval   None
   */
-void SoftI2c::begin(uint16_t speed)
+void SoftI2c::begin(Config_t *cfg)
 {
     _sda->mode(OUTPUT_OD_PU);
     _scl->mode(OUTPUT_OD_PU);
     _sda->set();
     _scl->set();
-
+		
     I2C_DEBUG("scl pin id 0x%x state is %d , sda pin id 0x%x  state is %d \r\n", _scl->id, _scl->read(), _sda->id, _sda->read());
-    switch(speed)
-    {
-    case 400:
-    case 300:
-    case 200:
-        _timing = 1;    // 约200k
-        break;
-    case 100:
-        _timing = 3;    // 约100k
-        break;
-    default:
-        _timing = 4;    // 约80k
-        break;
-    }
+		config(cfg);
 }
 
 /**
@@ -82,22 +69,25 @@ void SoftI2c::begin(uint16_t speed)
  *
  * @return 0.
  */
-void SoftI2c::config(uint32_t speed)
+void SoftI2c::config(Config_t *cfg)
 {
-    _timing = speed;;
+		_cfg = cfg;
+     switch(cfg->speed)
+    {
+    case K400:
+    case K300:
+    case K200:
+        _timing = 1;    // 约200k
+        break;
+    case K100:
+        _timing = 3;    // 约100k
+        break;
+    default:
+        _timing = 4;    // 约80k
+        break;
+    }
 }
 
-/**
- * @brief 读取i2c频率.
- *
- * @param 无.
- *
- * @return i2c频率.
- */
-uint32_t SoftI2c::read_config()
-{
-    return _timing;
-}
 /**
   *@brief    I2C写入一个字节. start->data->stop
   *@param    uint8_t slaveAddr:  从机地址
@@ -105,7 +95,7 @@ uint32_t SoftI2c::read_config()
   *          uint16_t tOut: 超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t SoftI2c::write(uint8_t slaveAddr, uint8_t data)
+uint8_t SoftI2c::write(uint16_t slaveAddr, uint8_t data)
 {
     uint8_t err = EOK;
     //  I2C_DEBUG("I2C Bus state,SCL is %d, SDA is %d \r\n",_scl->read(),_sda->read());
@@ -123,7 +113,7 @@ uint8_t SoftI2c::write(uint8_t slaveAddr, uint8_t data)
   *          uint16_t tOut: 超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t SoftI2c::write(uint8_t slaveAddr, uint16_t regAddr, uint8_t data)
+uint8_t SoftI2c::write(uint16_t slaveAddr, uint16_t regAddr, uint8_t data)
 {
     uint8_t err = EOK;
     err += _start();
@@ -143,7 +133,7 @@ uint8_t SoftI2c::write(uint8_t slaveAddr, uint16_t regAddr, uint8_t data)
   *          uint16_t tOut:  超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t SoftI2c::write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite)
+uint8_t SoftI2c::write_buf(uint16_t slaveAddr, uint8_t *data, uint16_t nWrite)
 {
     uint8_t err = 0;
     err += _start();
@@ -166,7 +156,7 @@ uint8_t SoftI2c::write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite)
   *          uint16_t tOut:  超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t SoftI2c::write_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nWrite)
+uint8_t SoftI2c::write_buf(uint16_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nWrite)
 {
     uint8_t err = 0;
     err += _start();
@@ -188,7 +178,7 @@ uint8_t SoftI2c::write_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, u
   *          uint16_t tOut: 超时
   *@retval   读取到的数据
   */
-uint8_t SoftI2c::read(uint8_t slaveAddr)
+uint8_t SoftI2c::read(uint16_t slaveAddr)
 {
     uint8_t data ;
     _start();
@@ -206,7 +196,7 @@ uint8_t SoftI2c::read(uint8_t slaveAddr)
   *          uint16_t tOut: 超时
   *@retval   读取到的数据
   */
-uint8_t SoftI2c::read(uint8_t slaveAddr, uint16_t regAddr)
+uint8_t SoftI2c::read(uint16_t slaveAddr, uint16_t regAddr)
 {
     uint8_t data ;
     _start();
@@ -228,7 +218,7 @@ uint8_t SoftI2c::read(uint8_t slaveAddr, uint16_t regAddr)
   *          uint16_t tOut: 超时
   *@retval   EOK，EWAIT
   */
-uint8_t SoftI2c::read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nRead)
+uint8_t SoftI2c::read_buf(uint16_t slaveAddr, uint8_t *data, uint16_t nRead)
 {
     uint8_t err = 0;
     err += _start();
@@ -256,7 +246,7 @@ uint8_t SoftI2c::read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nRead)
   *          uint16_t tOut: 超时
   *@retval   EOK，EWAIT
   */
-uint8_t SoftI2c::read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nRead)
+uint8_t SoftI2c::read_buf(uint16_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nRead)
 {
     uint8_t err = 0;
     err += _start();
@@ -286,7 +276,7 @@ uint8_t SoftI2c::read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, ui
  *
  * @return 从机状态.返回0表示从机空闲，返回-1表示从机忙.
  */
-uint8_t SoftI2c::check_busy(uint8_t slaveAddr)
+uint8_t SoftI2c::check_busy(uint16_t slaveAddr)
 {
     int8_t ret;
     uint8_t i = 0;
@@ -309,7 +299,7 @@ uint8_t SoftI2c::check_busy(uint8_t slaveAddr)
   *@param    timing:  时钟时序，通过readConfig获取
   *@retval   uint8_t: EOK,E_BUSY
   */
-uint8_t SoftI2c::take(uint32_t timing)
+uint8_t SoftI2c::take(Config_t *cfg)
 {
     uint32_t end = GetEndTime(timeout);
 
@@ -318,7 +308,9 @@ uint8_t SoftI2c::take(uint32_t timing)
         delay_ms(1);
         if (IsTimeOut(end,timeout)) return EWAIT;
     }
-    if (_timing != timing) config(timing);
+		_cfg->regAddrBits = cfg->regAddrBits;
+    if (_cfg->speed !=  cfg->speed) config(cfg);
+//    if (_timing != timing) config(timing);
     _busy = 1;
     return EOK;
 }

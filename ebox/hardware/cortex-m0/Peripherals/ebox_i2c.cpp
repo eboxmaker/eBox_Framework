@@ -68,41 +68,52 @@ mcuI2c::mcuI2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin)
   *@param    speed:  速率 10,100，200,400 分别代表10k，100k，200k，400k
   *@retval   None
   */
-void  mcuI2c::begin(uint16_t speed)
+void  mcuI2c::begin(Config_t *cfg)
 {
     uint8_t index = 0;
+
+    index = getIndex(_scl->id, I2C_MAP);
+    _scl->mode(I2C_MAP[index]._pinMode, I2C_MAP[index]._pinAf);
+    index = getIndex(_sda->id, I2C_MAP);
+    _sda->mode(I2C_MAP[index]._pinMode, I2C_MAP[index]._pinAf);
+		_cfg = cfg;
+    config(cfg);
+}
+
+void mcuI2c::config(Config_t *cfg)
+{
     switch (cpu.clock.pclk1 / 1000000)
     {
     case 48:
-        switch (speed)
+        switch (cfg->speed)
         {
-        case 10:
+        case K10:
             _timing = C48M10K;	// 10k 	@48M
             break;
-        case 400:
+        case K400:
             _timing = C48M400K;		// 400k @48M
             break;
-        case 200:
+        case K200:
             _timing = C48M200K;		// 200k @48M
             break;
-        case 100:
+        case K100:
         default:
             _timing = C48M100K;			// 100k @48M
         }
         break;
     case 8:
-        switch (speed)
+        switch (cfg->speed)
         {
-        case 10:
+        case K10:
             _timing = C8M10K;	        // 10k 	@8M
             break;
-        case 400:
+        case K400:
             _timing = C8M400K;		// 100k @8M
             break;
-        case 200:
+        case K200:
             _timing = C8M200K;		// 100k @8M
             break;
-        case 100:
+        case K100:
         default:
             _timing = C8M100K;		// 100k @8M
         }
@@ -111,18 +122,7 @@ void  mcuI2c::begin(uint16_t speed)
         _timing = C8M10K;	        // 10k 	@8M
         I2C_DEBUG("PCLK频率为%Mhz,没有该主频下I2C timing配置，默认为8M10Ktiming，建议通过config直接给timing参数", cpu.clock.pclk1 / 1000000);
     }
-
-    index = getIndex(_scl->id, I2C_MAP);
-    _scl->mode(I2C_MAP[index]._pinMode, I2C_MAP[index]._pinAf);
-    index = getIndex(_sda->id, I2C_MAP);
-    _sda->mode(I2C_MAP[index]._pinMode, I2C_MAP[index]._pinAf);
-
-    config(_timing);
-}
-
-void mcuI2c::config(uint32_t speed)
-{
-    _timing = speed;
+		
     rcc_clock_cmd((uint32_t)_i2cx, ENABLE);
     // I2C1 需要选择特定的时钟
     (_i2cx == I2C1) ? (LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_SYSCLK)) : (void());
@@ -132,11 +132,6 @@ void mcuI2c::config(uint32_t speed)
     LL_I2C_Enable(_i2cx);
 }
 
-uint32_t mcuI2c::read_config()
-{
-    return _timing;
-}
-
 /**
   *@brief    I2C写入一个字节. start->data->stop
   *@param    uint8_t slaveAddr:  从机地址
@@ -144,7 +139,7 @@ uint32_t mcuI2c::read_config()
   *          uint16_t tOut: 超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t mcuI2c::write(uint8_t slaveAddr, uint8_t data)
+uint8_t mcuI2c::write(uint16_t slaveAddr, uint8_t data)
 {
     uint32_t end = GetEndTime(timeout);
     LL_I2C_HandleTransfer(_i2cx, slaveAddr, LL_I2C_ADDRESSING_MODE_7BIT, 1, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_WRITE);
@@ -169,7 +164,7 @@ uint8_t mcuI2c::write(uint8_t slaveAddr, uint8_t data)
   *          uint16_t tOut: 超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t mcuI2c::write(uint8_t slaveAddr, uint16_t regAddr, uint8_t data)
+uint8_t mcuI2c::write(uint16_t slaveAddr, uint16_t regAddr, uint8_t data)
 {
     uint32_t end = GetEndTime(timeout);
 
@@ -200,7 +195,7 @@ uint8_t mcuI2c::write(uint8_t slaveAddr, uint16_t regAddr, uint8_t data)
   *          uint16_t tOut:  超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t mcuI2c::write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite)
+uint8_t mcuI2c::write_buf(uint16_t slaveAddr, uint8_t *data, uint16_t nWrite)
 {
 #if	(USE_TIMEOUT != 0)
     uint32_t end = GetEndTime(tOut);
@@ -291,7 +286,7 @@ uint8_t mcuI2c::write_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nWrite)
   *          uint16_t tOut:  超时
   *@retval   状态 EOK 成功； EWAIT 超时
   */
-uint8_t mcuI2c::write_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nWrite)
+uint8_t mcuI2c::write_buf(uint16_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nWrite)
 {
     uint32_t end = GetEndTime(timeout);
 
@@ -368,7 +363,7 @@ uint8_t mcuI2c::write_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, ui
   *          uint16_t tOut: 超时
   *@retval   读取到的数据
   */
-uint8_t mcuI2c::read(uint8_t slaveAddr)
+uint8_t mcuI2c::read(uint16_t slaveAddr)
 {
     uint8_t ret = 0;
     read_buf(slaveAddr, &ret, 1);
@@ -382,7 +377,7 @@ uint8_t mcuI2c::read(uint8_t slaveAddr)
   *          uint16_t tOut: 超时
   *@retval   读取到的数据
   */
-uint8_t mcuI2c::read(uint8_t slaveAddr, uint16_t regAddr)
+uint8_t mcuI2c::read(uint16_t slaveAddr, uint16_t regAddr)
 {
     uint8_t ret = 0;
     read_buf(slaveAddr, regAddr, &ret, 1);
@@ -397,7 +392,7 @@ uint8_t mcuI2c::read(uint8_t slaveAddr, uint16_t regAddr)
   *          uint16_t tOut: 超时
   *@retval   EOK，EWAIT
   */
-uint8_t mcuI2c::read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nRead)
+uint8_t mcuI2c::read_buf(uint16_t slaveAddr, uint8_t *data, uint16_t nRead)
 {
     uint32_t end = GetEndTime(timeout);
     // 发送读指令，从当前地址开始读取数据
@@ -423,7 +418,7 @@ uint8_t mcuI2c::read_buf(uint8_t slaveAddr, uint8_t *data, uint16_t nRead)
   *          uint16_t tOut: 超时
   *@retval   EOK，EWAIT
   */
-uint8_t mcuI2c::read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nRead)
+uint8_t mcuI2c::read_buf(uint16_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nRead)
 {
     uint32_t end = GetEndTime(timeout);
 
@@ -465,7 +460,7 @@ uint8_t mcuI2c::read_buf(uint8_t slaveAddr, uint16_t regAddr, uint8_t *data, uin
   *@param    slaveAddr:  设备地址
   *@retval   uint8_t: EOK,EWAIT
   */
-uint8_t mcuI2c:: check_busy(uint8_t slaveAddr)
+uint8_t mcuI2c:: check_busy(uint16_t slaveAddr)
 {
     uint8_t tmp = 0;
     uint32_t end = GetEndTime(timeout);
@@ -493,7 +488,7 @@ uint8_t mcuI2c:: check_busy(uint8_t slaveAddr)
   *@param    timing:  时钟时序，通过readConfig获取
   *@retval   uint8_t: EOK,E_BUSY
   */
-uint8_t mcuI2c::take(uint32_t timing)
+uint8_t mcuI2c::take(Config_t *cfg)
 {
     uint32_t end = GetEndTime(timeout);
     while (_busy == 1)
@@ -501,7 +496,9 @@ uint8_t mcuI2c::take(uint32_t timing)
         delay_ms(1);
         if (IsTimeOut(end, timeout)) return EWAIT;
     }
-    if (_timing != timing) config(timing);
+		_cfg->regAddrBits = cfg->regAddrBits;
+    if (_cfg->speed !=  cfg->speed) config(cfg);
+//    if (_timing != timing) config(timing);
     _busy = 1;
     return EOK;
 }
