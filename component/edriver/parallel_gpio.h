@@ -26,11 +26,25 @@
 class ParallelGpio
 {
 public:
-    Gpio *bit[8];
+    ParallelGpio() {};
+    virtual void mode(PIN_MODE mode) = 0;
+
+    virtual void write(uint16_t val) = 0;
+    virtual void read(uint16_t *val) = 0;
+    virtual uint16_t read(void) = 0;
+};
+
+class Gpio8 : public ParallelGpio
+{
 public:
-    void    mode(PIN_MODE mode);
-    void    write(uint8_t data);
-    uint8_t read();
+    Gpio8(Gpio *pin0,Gpio *pin1 = 0);
+    Gpio8(Gpio *pin[]);
+    virtual void mode(PIN_MODE mode);
+    virtual void write(uint16_t val);
+    virtual void read(uint16_t *val);
+    virtual uint16_t read(void);
+private:
+    Gpio *_bit[8];
 };
 
 #endif
