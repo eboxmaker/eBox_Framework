@@ -43,9 +43,9 @@ void Si4432::begin()
     if(initialized == 0)
     {
         spi_dev_si4432.dev_num = cs->id;
-        spi_dev_si4432.mode = SPI_MODE0;
-        spi_dev_si4432.prescaler = SPI_CLOCK_DIV4;
-        spi_dev_si4432.bit_order = MSB_FIRST;
+        spi_dev_si4432.mode = Spi::MODE0;
+        spi_dev_si4432.prescaler = Spi::DIV4;
+        spi_dev_si4432.bit_order = Spi::MSB;
     }
 
 

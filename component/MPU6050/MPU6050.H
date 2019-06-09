@@ -172,11 +172,16 @@ public:
     float SelfTest[6];
 
 public:
-    MPU6050(I2c *i2c)
+
+    MPU6050(I2c *i2c,uint16_t slaveAddr)
     {
         this->i2c = i2c;
+        this->slaveAddr = slaveAddr;
+        cfg.speed = I2c::K200;
+        cfg.regAddrBits = I2c::BIT8;
     };
-    void        begin(uint32_t speed);
+
+    void        begin( );
     int16_t 	get_data(uint8_t reg_address);
     int8_t 		get_data(uint8_t reg_address, int16_t *buf, uint8_t num_to_read);
     void        get_id(uint8_t *id);
@@ -210,7 +215,8 @@ public:
     
 private:
     I2c         *i2c;
-    uint32_t    speed;
+    I2c::Config_t cfg;
+    uint16_t slaveAddr;
 
 	float   dpsPerDigit, rangePerDigit;
 
