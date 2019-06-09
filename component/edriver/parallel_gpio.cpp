@@ -31,24 +31,36 @@
  */
 
 #include "parallel_gpio.h"
+#include "ebox_core.h"
 
-/**
- *@name     void ParallelGpio::mode(PIN_MODE mode)
- *@brief    Gpio组模式设置
- *@param    mode:   PIN_MODE枚举变量类型
- *@retval   None
-*/
-void ParallelGpio::mode(PIN_MODE mode)
+Gpio8::Gpio8(Gpio *pin[])
 {
-    bit[0]->mode(mode);
-    bit[1]->mode(mode);
-    bit[2]->mode(mode);
-    bit[3]->mode(mode);
-    bit[4]->mode(mode);
-    bit[5]->mode(mode);
-    bit[6]->mode(mode);
-    bit[7]->mode(mode);
+		uint8_t i = sizeof(*pin)/sizeof(pin[0]);
+		
 }
+
+void Gpio8::mode(PIN_MODE mode)
+{
+		_bit[0]->mode(mode);
+}
+
+///**
+// *@name     void ParallelGpio::mode(PIN_MODE mode)
+// *@brief    Gpio组模式设置
+// *@param    mode:   PIN_MODE枚举变量类型
+// *@retval   None
+//*/
+//void ParallelGpio::mode(PIN_MODE mode)
+//{
+//    bit[0]->mode(mode);
+//    bit[1]->mode(mode);
+//    bit[2]->mode(mode);
+//    bit[3]->mode(mode);
+//    bit[4]->mode(mode);
+//    bit[5]->mode(mode);
+//    bit[6]->mode(mode);
+//    bit[7]->mode(mode);
+//}
 
 /**
  *@name     void ParallelGpio::write(uint8_t data)
