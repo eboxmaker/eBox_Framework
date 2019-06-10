@@ -6,7 +6,11 @@
 #include "FunctionPointer.h"
 
 //”√ªß≈‰÷√//////////////
-#define DMA_NUM (7)
+#if defined (STM32F10X_HD)
+    #define DMA_NUM (12)
+#else 
+    #define DMA_NUM (7)
+#endif
 enum DmaIrqType
 {
     DmaItTc = 0,
