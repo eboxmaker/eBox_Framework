@@ -5,6 +5,9 @@
   * @version V1.2
   * @date    2016/08/14
   * @brief
+  *     2019/6/10  cat_li  修改实现，使之可以操作任意IO，同一个端口连续IO，同一个
+  *       类 Gpios 可以操作最多16个任意IO组合
+  *       类 Port 可以操作同一个端口的连续IO，不连续IO
   ******************************************************************************
   * @attention
   *
@@ -18,49 +21,30 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-
-/**
- ************************************************************************
- * @brief
- 目前这种做法效率比较低，但是可以支持任意IO组合，
- * 如果使用连续的GPIO可以使用控制ODR寄存器的方法加快读写速度，
- * #define DATAOUT  GPIOB->ODR             //PB[0..7]--(LCD)D0~D7
- * DATAOUT &= 0XFF00;
- * DATAOUT |= dat;
- ************************************************************************
- */
-
 #include "parallel_gpio.h"
 #include "ebox_core.h"
 
-Gpio8::Gpio8(Gpio *pin[])
+Gpios::Gpios(Gpio *pin[],uint8_t num)
 {
-		uint8_t i = sizeof(*pin)/sizeof(pin[0]);
-		
+  _num = num;
+  for (uint8_t i=0;i<_num;i++)
+  {
+    _bit[i] = pin[i];
+  }
 }
 
-void Gpio8::mode(PIN_MODE mode)
+/**
+ *@brief    Gpio组模式设置
+ *@param    mode:   PIN_MODE枚举变量类型
+ *@retval   None
+*/
+void Gpios::mode(PIN_MODE mode)
 {
-		_bit[0]->mode(mode);
+  for (uint8_t i=0;i<_num;i++)
+  {
+    (_bit[i])->mode(mode);
+  }
 }
-
-///**
-// *@name     void ParallelGpio::mode(PIN_MODE mode)
-// *@brief    Gpio组模式设置
-// *@param    mode:   PIN_MODE枚举变量类型
-// *@retval   None
-//*/
-//void ParallelGpio::mode(PIN_MODE mode)
-//{
-//    bit[0]->mode(mode);
-//    bit[1]->mode(mode);
-//    bit[2]->mode(mode);
-//    bit[3]->mode(mode);
-//    bit[4]->mode(mode);
-//    bit[5]->mode(mode);
-//    bit[6]->mode(mode);
-//    bit[7]->mode(mode);
-//}
 
 /**
  *@name     void ParallelGpio::write(uint8_t data)
@@ -68,16 +52,12 @@ void Gpio8::mode(PIN_MODE mode)
  *@param    data：输出数据
  *@retval   NONE
 */
-void ParallelGpio::write(uint8_t data)
+void Gpios::write(uint16_t val)
 {
-    bit[0]->write(data & (0x01 << 0));
-    bit[1]->write(data & (0x01 << 1));
-    bit[2]->write(data & (0x01 << 2));
-    bit[3]->write(data & (0x01 << 3));
-    bit[4]->write(data & (0x01 << 4));
-    bit[5]->write(data & (0x01 << 5));
-    bit[6]->write(data & (0x01 << 6));
-    bit[7]->write(data & (0x01 << 7));
+  for (uint8_t i=0;i<_num;i++)
+  {
+    _bit[i]->write(val & (0x01 << i));
+  }
 }
 
 /**
@@ -86,17 +66,54 @@ void ParallelGpio::write(uint8_t data)
  *@param    NONE
  *@retval   读取Gpio组的数据
 */
-uint8_t ParallelGpio::read()
+void Gpios::read(uint16_t *val)
 {
-    uint8_t data = 0;
-    data |= bit[0]->read() << 0;
-    data |= bit[1]->read() << 1;
-    data |= bit[2]->read() << 2;
-    data |= bit[3]->read() << 3;
-    data |= bit[4]->read() << 4;
-    data |= bit[5]->read() << 5;
-    data |= bit[6]->read() << 6;
-    data |= bit[7]->read() << 7;
-    return data;
+	*val = 0;
+  for (uint8_t i=0;i<_num;i++)
+  {
+    *val |= _bit[i]->read() << i;
+  }
 }
 
+uint16_t Gpios::read(void)
+{
+  uint16_t r;
+  read(&r);
+  return r;
+}
+
+//-----------------------------------------------------------------------------------//
+//Port::Port(uint32_t port, uint32_t mask)
+//{
+//  _mask = mask;
+//  _port = (GPIO_TypeDef *)port;
+//}
+
+Port::Port(uint32_t port, uint8_t pinnum, uint8_t pinoffset)
+{
+  _mask = (0xffffffff>>(32-pinnum))<<pinoffset;
+  _offset = pinoffset;
+  _port = (GPIO_TypeDef *)port;
+}
+// 该函数实现在ebox_gpio.cpp中，不同平台实现有差异
+extern void port_mode(GPIO_TypeDef* port,uint32_t pin, PIN_MODE mode);
+void Port::mode(PIN_MODE mode)
+{
+  port_mode(_port,_mask,mode);
+}
+
+void Port::write(uint16_t val){
+  //LL_GPIO_WriteOutputPort(_port,_mask&val);
+//	_offset == 0 ? _port->ODR = (_port->ODR & ~_mask) | (val & _mask) : _port->ODR = (_port->ODR & ~_mask) | ((val<<_offset) & _mask);
+  _port->ODR = (_port->ODR & ~_mask) | ((val<<_offset) & _mask);
+}
+
+uint16_t Port::read(void){
+//	return _offset== 0 ? _port->IDR & _mask:((_port->IDR & _mask) >> _offset);
+  return (_port->IDR & _mask) >> _offset;
+}
+
+void Port::read(uint16_t *val)
+{
+  *val = (_port->IDR & _mask) >> _offset;
+}
