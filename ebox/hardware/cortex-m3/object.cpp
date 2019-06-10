@@ -45,7 +45,7 @@ SoftSpi	sspi2(&PB13, &PB14, &PB15);
 mcuI2c  i2c1(I2C1, &PB6, &PB7);
 mcuI2c  i2c2(I2C2, &PB10, &PB11);
 //SoftI2c si2c(&PA4, &PA5);
-//SoftI2c si2c1(&PB6, &PB7);
+SoftI2c si2c1(&PB6, &PB7);
 SoftI2c si2c2(&PB10, &PB11);
 //can
 ////Can can1(&PB8, &PB9);

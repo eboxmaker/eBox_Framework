@@ -22,18 +22,21 @@
 #include "math.h"
 
 
-void L3G4200D::begin(uint32_t speed)
+void L3G4200D::begin()
 {
     // 0x0F = 0b00001111
     // Normal power mode, all axes enabled
-    this->speed = speed;
-    i2c->begin(speed);
+    i2c->begin(&cfg);
+
+    i2c->take(&cfg);
 
     write_reg(L3G4200D_CTRL_REG1, 0x0F);
     write_reg(L3G4200D_CTRL_REG2, 0X00);
     write_reg(L3G4200D_CTRL_REG3, 0X08);
     write_reg(L3G4200D_CTRL_REG4, 0X00);
     write_reg(L3G4200D_CTRL_REG5, 0X00);
+    i2c->release();
+
 }
 void L3G4200D::test()
 {
@@ -44,7 +47,7 @@ void L3G4200D::test()
 void L3G4200D::write_reg(uint8_t reg, uint8_t value)
 {
 
-    i2c->take(speed);
+    i2c->take(&cfg);
     i2c->write(GYR_ADDRESS, reg, value);
     i2c->release();
 }
@@ -53,7 +56,7 @@ void L3G4200D::write_reg(uint8_t reg, uint8_t value)
 uint8_t L3G4200D::read_reg(uint8_t reg)
 {
     uint8_t value;
-    i2c->take(speed);
+    i2c->take(&cfg);
     value = i2c->read(GYR_ADDRESS, reg);
     i2c->release();
 
