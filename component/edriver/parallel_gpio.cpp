@@ -24,62 +24,63 @@
 #include "parallel_gpio.h"
 #include "ebox_core.h"
 
-Gpios::Gpios(Gpio *pin[],uint8_t num)
+Gpios::Gpios(Gpio **pin,uint8_t num)
 {
-  _num = num;
-  for (uint8_t i=0;i<_num;i++)
-  {
-    _bit[i] = pin[i];
-  }
+    _num = num;
+    for (uint8_t i=0;i<_num;i++)
+    {
+        _bit[i] = pin[i];
+    }
 }
 
 /**
- *@brief    Gpio组模式设置
- *@param    mode:   PIN_MODE枚举变量类型
- *@retval   None
+*@brief    Gpio组模式设置
+*@param    mode:   PIN_MODE枚举变量类型
+*@retval   None
 */
 void Gpios::mode(PIN_MODE mode)
 {
-  for (uint8_t i=0;i<_num;i++)
-  {
-    (_bit[i])->mode(mode);
-  }
+
+    for (uint8_t i=0;i<_num;i++)
+    {
+        (_bit[i])->mode(mode);
+    }
 }
 
 /**
- *@name     void ParallelGpio::write(uint8_t data)
- *@brief    Gpio组输出数据
- *@param    data：输出数据
- *@retval   NONE
+*@name     void ParallelGpio::write(uint8_t data)
+*@brief    Gpio组输出数据
+*@param    data：输出数据
+*@retval   NONE
 */
 void Gpios::write(uint16_t val)
 {
-  for (uint8_t i=0;i<_num;i++)
-  {
-    _bit[i]->write(val & (0x01 << i));
-  }
+    for (uint8_t i=0;i<_num;i++)
+    {
+        _bit[i]->write(val & (0x01 << i));
+    }
 }
 
 /**
- *@name     void ParallelGpio::write(uint8_t data)
- *@brief    读取Gpio组输入数据
- *@param    NONE
- *@retval   读取Gpio组的数据
+*@name     void ParallelGpio::write(uint8_t data)
+*@brief    读取Gpio组输入数据
+*@param    NONE
+*@retval   读取Gpio组的数据
 */
 void Gpios::read(uint16_t *val)
 {
-	*val = 0;
-  for (uint8_t i=0;i<_num;i++)
-  {
-    *val |= _bit[i]->read() << i;
-  }
+    *val = 0;
+    for (uint8_t i=0;i<_num;i++)
+    {
+        *val |= _bit[i]->read() << i;
+    }
 }
 
 uint16_t Gpios::read(void)
 {
-  uint16_t r;
-  read(&r);
-  return r;
+    uint16_t r;
+    read(&r);
+    return r;
 }
 
 //-----------------------------------------------------------------------------------//
@@ -91,29 +92,31 @@ uint16_t Gpios::read(void)
 
 Port::Port(uint32_t port, uint8_t pinnum, uint8_t pinoffset)
 {
-  _mask = (0xffffffff>>(32-pinnum))<<pinoffset;
-  _offset = pinoffset;
-  _port = (GPIO_TypeDef *)port;
+    _mask = (0xffffffff>>(32-pinnum))<<pinoffset;
+    _offset = pinoffset;
+    _port = (GPIO_TypeDef *)port;
 }
 // 该函数实现在ebox_gpio.cpp中，不同平台实现有差异
 extern void port_mode(GPIO_TypeDef* port,uint32_t pin, PIN_MODE mode);
 void Port::mode(PIN_MODE mode)
 {
-  port_mode(_port,_mask,mode);
+    port_mode(_port,_mask,mode);
 }
 
-void Port::write(uint16_t val){
-  //LL_GPIO_WriteOutputPort(_port,_mask&val);
-//	_offset == 0 ? _port->ODR = (_port->ODR & ~_mask) | (val & _mask) : _port->ODR = (_port->ODR & ~_mask) | ((val<<_offset) & _mask);
-  _port->ODR = (_port->ODR & ~_mask) | ((val<<_offset) & _mask);
+void Port::write(uint16_t val)
+{
+    //LL_GPIO_WriteOutputPort(_port,_mask&val);
+    //	_offset == 0 ? _port->ODR = (_port->ODR & ~_mask) | (val & _mask) : _port->ODR = (_port->ODR & ~_mask) | ((val<<_offset) & _mask);
+    _port->ODR = (_port->ODR & ~_mask) | ((val<<_offset) & _mask);
 }
 
-uint16_t Port::read(void){
-//	return _offset== 0 ? _port->IDR & _mask:((_port->IDR & _mask) >> _offset);
-  return (_port->IDR & _mask) >> _offset;
+uint16_t Port::read(void)
+{
+    //	return _offset== 0 ? _port->IDR & _mask:((_port->IDR & _mask) >> _offset);
+    return (_port->IDR & _mask) >> _offset;
 }
 
 void Port::read(uint16_t *val)
 {
-  *val = (_port->IDR & _mask) >> _offset;
+    *val = (_port->IDR & _mask) >> _offset;
 }

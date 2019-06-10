@@ -24,7 +24,7 @@
 
 // 从左到右对应bit0-bitx，不连续IO或非同一port推荐使用
 Gpio *pins[] = {&PA0,&PA1,&PA2,&PB1};
-Gpios pin_io(&(*pins),4);
+Gpios pin_io(pins,4);
 
 // 操作PA2,PA3,PA4  同一port连续IO推荐使用方式
 Port PortPin(GPIOA_BASE,3,2);
