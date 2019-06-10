@@ -54,7 +54,7 @@ public:
 
 private:
     uint8_t         spi_flash_buf[256];
-    SpiConfig_t     spi_dev_si4432;
+    Spi::Config_t     spi_dev_si4432;
     Gpio            *irq;
     Gpio            *ce;
     Gpio            *cs;

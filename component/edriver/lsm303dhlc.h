@@ -71,19 +71,23 @@ public:
     int16_t acc_x, acc_y, acc_z;
     int16_t mag_x, mag_y, mag_z;
 public:
-    LSM303DLHC(SoftI2c *i2c)
+
+    LSM303DLHC(I2c *i2c,uint16_t slaveAddr)
     {
         this->i2c = i2c;
-    }
-    void begin(uint32_t speed);
+        this->slaveAddr = slaveAddr;
+        cfg.speed = I2c::K200;
+        cfg.regAddrBits = I2c::BIT8;
+    };
+    void begin();
     void write_reg(uint8_t slave_addr, uint8_t reg, uint8_t value);
     uint8_t read_reg(uint8_t slave_addr, uint8_t reg);
 
     void read_acc(void);
     void read_mag(void);
 private:
-    SoftI2c *i2c;
-    uint32_t speed;
-
+    I2c *i2c;
+    I2c::Config_t cfg;
+    uint16_t slaveAddr;
 };
 #endif

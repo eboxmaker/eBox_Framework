@@ -65,11 +65,15 @@ public:
     } vector;
 
     vector g; // gyro angular velocity readings
-    L3G4200D(SoftI2c *i2c)
+    
+    L3G4200D(I2c *i2c,uint16_t slaveAddr)
     {
         this->i2c = i2c;
-    }
-    void begin(uint32_t speed);
+        this->slaveAddr = slaveAddr;
+        cfg.speed = I2c::K200;
+        cfg.regAddrBits = I2c::BIT8;
+    };
+    void begin();
     void test();
 
     void 		write_reg(uint8_t reg, uint8_t value);
@@ -83,7 +87,7 @@ public:
     static void vector_normalize(vector *a);
 
 private:
-    SoftI2c *i2c;
-    uint32_t speed;
-};
+    I2c *i2c;
+    I2c::Config_t cfg;
+    uint16_t slaveAddr;};
 #endif

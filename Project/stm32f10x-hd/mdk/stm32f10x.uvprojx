@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>STM32F103ZE</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F1xx_DFP.2.2.0</PackID>
+          <PackID>Keil.STM32F1xx_DFP.2.3.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x10000) IROM(0x08000000,0x80000) CPUTYPE("Cortex-M3") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -838,11 +838,6 @@
               <FilePath>..\..\..\component\edriver\lsm303dhlc.cpp</FilePath>
             </File>
             <File>
-              <FileName>MPU6050.CPP</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\MPU6050\MPU6050.CPP</FilePath>
-            </File>
-            <File>
               <FileName>at24c02.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\at24c02.cpp</FilePath>
@@ -878,9 +873,14 @@
               <FilePath>..\..\..\component\apps\EventGpio.cpp</FilePath>
             </File>
             <File>
-              <FileName>EventIo.cpp</FileName>
+              <FileName>EventVar.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\component\apps\EventIo.cpp</FilePath>
+              <FilePath>..\..\..\component\apps\EventVar.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EventManager.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\component\apps\EventManager.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -930,16 +930,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>esp8266</GroupName>
-          <Files>
-            <File>
-              <FileName>ESP8266.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\WeeESP8266\ESP8266.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>user</GroupName>
           <Files>
             <File>
@@ -981,6 +971,26 @@
               <FileName>os_cpu_a.asm</FileName>
               <FileType>2</FileType>
               <FilePath>..\..\..\os\ebox_os\os_cpu_a.asm</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mpu6050</GroupName>
+          <Files>
+            <File>
+              <FileName>FourAxle.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\MPU6050\FourAxle.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>IMU.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\MPU6050\IMU.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>MPU6050.CPP</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\MPU6050\MPU6050.CPP</FilePath>
             </File>
           </Files>
         </Group>
