@@ -26,75 +26,7 @@
 //#define GETPORTINDEX(A)   ((A)&0xf0)>>4
 #define GETPORT(A)   (GPIO_TypeDef*)(((((A)&0xf0)+0x20)<<6)+APB2PERIPH_BASE)
 
-// 此函数会被 parallel—gpio.cpp调用，请勿移除
-void port_mode(GPIO_TypeDef* port,uint32_t pin, PIN_MODE mode)
-{
-    GPIO_InitTypeDef GPIO_InitStructure;
 
-    rcc_clock_cmd((uint32_t)port, ENABLE);
-
-    switch ((uint8_t)mode)
-    {
-    /*analog input mode
-     */
-    case AIN:
-        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
-        break;
-
-    /* digital input mode
-     */
-    case INPUT:
-        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-        break;
-
-    case INPUT_PD:
-        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
-        break;
-
-    case INPUT_PU:
-        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-        break;
-
-    /*digital output mode
-     */
-    case OUTPUT_OD:
-    case OUTPUT_OD_PU:
-    case OUTPUT_OD_PD:
-        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
-        break;
-
-    case OUTPUT:
-    case OUTPUT_PP:
-    case OUTPUT_PP_PU:
-    case OUTPUT_PP_PD:
-        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-        break;
-
-    /*af mode
-     */
-    case AF_OD:
-    case AF_OD_PU:
-    case AF_OD_PD:
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
-        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
-        break;
-
-    case AF_PP:
-    case AF_PP_PU:
-    case AF_PP_PD:
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
-        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-        break;
-    /* if parament is other mode,set as INPUT mode
-     */
-    default:
-        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-        break;
-    }
-    GPIO_InitStructure.GPIO_Pin = pin;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(port, &GPIO_InitStructure);   //初始化GPIOC端口
-}
 
 /**
   *@brief    构造函数
@@ -102,9 +34,9 @@ void port_mode(GPIO_TypeDef* port,uint32_t pin, PIN_MODE mode)
   *@retval   None
   */
 mcuGpio::mcuGpio(PIN_ID_t pin_id){
-		id = pin_id;
-		_port = GETPORT(id);
-		_pin = GETPIN(id);
+    id = pin_id;
+    _port = GETPORT(id);
+    _pin = GETPIN(id);
 }
 
 /**
@@ -114,72 +46,7 @@ mcuGpio::mcuGpio(PIN_ID_t pin_id){
   */
 void mcuGpio::mode(PIN_MODE mode)
 {
-		port_mode(_port,_pin,mode);
-//    GPIO_InitTypeDef GPIO_InitStructure;
-
-//    rcc_clock_cmd((uint32_t)_port, ENABLE);
-
-//    switch ((uint8_t)mode)
-//    {
-//    /*analog input mode
-//     */
-//    case AIN:
-//        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
-//        break;
-
-//    /* digital input mode
-//     */
-//    case INPUT:
-//        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-//        break;
-
-//    case INPUT_PD:
-//        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
-//        break;
-
-//    case INPUT_PU:
-//        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-//        break;
-
-//    /*digital output mode
-//     */
-//    case OUTPUT_OD:
-//    case OUTPUT_OD_PU:
-//    case OUTPUT_OD_PD:
-//        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
-//        break;
-
-//    case OUTPUT:
-//    case OUTPUT_PP:
-//    case OUTPUT_PP_PU:
-//    case OUTPUT_PP_PD:
-//        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-//        break;
-
-//    /*af mode
-//     */
-//    case AF_OD:
-//    case AF_OD_PU:
-//    case AF_OD_PD:
-//        RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
-//        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
-//        break;
-
-//    case AF_PP:
-//    case AF_PP_PU:
-//    case AF_PP_PD:
-//        RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
-//        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-//        break;
-//    /* if parament is other mode,set as INPUT mode
-//     */
-//    default:
-//        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-//        break;
-//    }
-//    GPIO_InitStructure.GPIO_Pin = _pin;
-//    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//    GPIO_Init(_port, &GPIO_InitStructure);   //初始化GPIOC端口
+    port_mode(_port,_pin,mode);
 }
 /**
   *@brief    GPIO模式设置,f1无需af_configration参数
@@ -269,4 +136,82 @@ mcuGpio mcuGpio::operator= ( int value)
 {
     (value == 0) ? (_port->BRR = _pin) : (_port->BSRR = _pin);
     return *this;
+}
+
+
+
+
+
+
+
+
+
+// 此函数会被 parallel—gpio.cpp调用，请勿移除
+void port_mode(GPIO_TypeDef* port,uint32_t pin, PIN_MODE mode)
+{
+    GPIO_InitTypeDef GPIO_InitStructure;
+
+    rcc_clock_cmd((uint32_t)port, ENABLE);
+
+    switch ((uint8_t)mode)
+    {
+    /*analog input mode
+     */
+    case AIN:
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
+        break;
+
+    /* digital input mode
+     */
+    case INPUT:
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+        break;
+
+    case INPUT_PD:
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
+        break;
+
+    case INPUT_PU:
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+        break;
+
+    /*digital output mode
+     */
+    case OUTPUT_OD:
+    case OUTPUT_OD_PU:
+    case OUTPUT_OD_PD:
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
+        break;
+
+    case OUTPUT:
+    case OUTPUT_PP:
+    case OUTPUT_PP_PU:
+    case OUTPUT_PP_PD:
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+        break;
+
+    /*af mode
+     */
+    case AF_OD:
+    case AF_OD_PU:
+    case AF_OD_PD:
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
+        break;
+
+    case AF_PP:
+    case AF_PP_PU:
+    case AF_PP_PD:
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+        break;
+    /* if parament is other mode,set as INPUT mode
+     */
+    default:
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+        break;
+    }
+    GPIO_InitStructure.GPIO_Pin = pin;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(port, &GPIO_InitStructure);   //初始化GPIOC端口
 }
