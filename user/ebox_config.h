@@ -68,7 +68,7 @@
  * 0 不使用object，用户需要根据需要实例对象,建议在bsp_ebox中实例
  * 1 使用默认实例
  */
-#define	USE_OBJECT			1
+#define	USE_OBJECT			0
 
 #endif
 

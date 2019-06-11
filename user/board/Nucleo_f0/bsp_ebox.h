@@ -21,7 +21,6 @@
 #define __BSP_EBOX_H
 #include "ebox.h"
 
-
 #define	HARDWARE	"stm32f072x"
 #define F0
 
@@ -61,10 +60,25 @@ extern mcuGpio PB13;
 extern mcuGpio PB14;
 extern mcuGpio PB15;
 
+extern mcuGpio PF0;
+extern mcuGpio PF1;
+extern mcuGpio PF6;
+extern mcuGpio PF7;
 extern Uart uart1;
 extern Uart uart2;
-
 #endif
+
+#include "parallel_gpio.h"
+#include "tft9225.h"
+#include "graphic.h"
+#include "EventGpio.h"
+#include "EventManager.h"
+
+extern Lcd 						lcd;
+extern Graphic 				gpu;
+//extern EventGpio 			btn;
+//extern EventManager 	manager;
+
 
 #define PWMLED  	PA5
 #define LED1  		PA5
@@ -73,7 +87,7 @@ extern Uart uart2;
 #define TIM1CH2		TIM1,&PA9
 
 //#define	UART    uart1
-#define UART	  uart2
+#define UART	  uart1
 //#define I2C     i2c1
 #define I2C     si2c1
 
