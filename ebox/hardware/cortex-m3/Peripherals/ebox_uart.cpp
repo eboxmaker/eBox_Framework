@@ -95,21 +95,21 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     {
 #if USE_UART1
     case (uint32_t)USART1_BASE:
-        dma_rx = &Dma1Ch5;
+        dma_rx = new Dma(DMA1_Channel5);//&Dma1Ch5;
         index = NUM_UART1;
         break;
 #endif
 
 #if USE_UART2
     case (uint32_t)USART2_BASE:
-        dma_rx = &Dma1Ch6;
+        dma_rx = new Dma(DMA1_Channel6);//&Dma1Ch6;
         index = NUM_UART2;
         break;
 #endif
 
 #if USE_UART3
     case (uint32_t)USART3_BASE:
-        dma_rx = &Dma1Ch3;
+        dma_rx = new Dma(DMA1_Channel3);//&Dma1Ch3;
         index = NUM_UART3;
         break;
 #endif

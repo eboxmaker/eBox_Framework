@@ -284,21 +284,21 @@ void dma_irq_handler(uint8_t index, DmaIrqHandler_t handler, uint32_t id)
 }
 #endif
 
-Dma Dma1Stream0(DMA1_Stream0);
-Dma Dma1Stream1(DMA1_Stream1);
-Dma Dma1Stream2(DMA1_Stream2);
-Dma Dma1Stream3(DMA1_Stream3);
-Dma Dma1Stream4(DMA1_Stream4);
-Dma Dma1Stream5(DMA1_Stream5);
-Dma Dma1Stream6(DMA1_Stream6);
-Dma Dma1Stream7(DMA1_Stream7);
+//Dma Dma1Stream0(DMA1_Stream0);
+//Dma Dma1Stream1(DMA1_Stream1);
+//Dma Dma1Stream2(DMA1_Stream2);
+//Dma Dma1Stream3(DMA1_Stream3);
+//Dma Dma1Stream4(DMA1_Stream4);
+//Dma Dma1Stream5(DMA1_Stream5);
+//Dma Dma1Stream6(DMA1_Stream6);
+//Dma Dma1Stream7(DMA1_Stream7);
 
-Dma Dma2Stream0(DMA2_Stream0);
-Dma Dma2Stream1(DMA2_Stream1);
-Dma Dma2Stream2(DMA2_Stream2);
-Dma Dma2Stream3(DMA2_Stream3);
-Dma Dma2Stream4(DMA2_Stream4);
-Dma Dma2Stream5(DMA2_Stream5);
-Dma Dma2Stream6(DMA2_Stream6);
-Dma Dma2Stream7(DMA2_Stream7);
+//Dma Dma2Stream0(DMA2_Stream0);
+//Dma Dma2Stream1(DMA2_Stream1);
+//Dma Dma2Stream2(DMA2_Stream2);
+//Dma Dma2Stream3(DMA2_Stream3);
+//Dma Dma2Stream4(DMA2_Stream4);
+//Dma Dma2Stream5(DMA2_Stream5);
+//Dma Dma2Stream6(DMA2_Stream6);
+//Dma Dma2Stream7(DMA2_Stream7);
 

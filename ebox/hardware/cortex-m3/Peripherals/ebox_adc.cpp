@@ -77,10 +77,10 @@ void  Adc::begin()
     switch((uint32_t)ADCx)
     {
     case ADC1_BASE:
-        dma = &Dma1Ch1;
+        dma = new Dma(DMA1_Channel1);//&Dma1Ch1;
         break;
     case ADC2_BASE:
-        dma = &Dma1Ch1;
+        dma = new Dma(DMA1_Channel1);//&Dma1Ch1;
         break;
     }
 

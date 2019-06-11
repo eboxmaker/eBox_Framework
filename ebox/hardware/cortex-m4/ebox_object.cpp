@@ -39,160 +39,160 @@ SoftI2c si2c2(&PB10, &PB11);
 
 
 
-mcuGpio PA0(GPIOA, GPIO_Pin_0);
-mcuGpio PA1(GPIOA, GPIO_Pin_1);
-mcuGpio PA2(GPIOA, GPIO_Pin_2);
-mcuGpio PA3(GPIOA, GPIO_Pin_3);
-mcuGpio PA4(GPIOA, GPIO_Pin_4);
-mcuGpio PA5(GPIOA, GPIO_Pin_5);
-mcuGpio PA6(GPIOA, GPIO_Pin_6);
-mcuGpio PA7(GPIOA, GPIO_Pin_7);
-mcuGpio PA8(GPIOA, GPIO_Pin_8);
-mcuGpio PA9(GPIOA, GPIO_Pin_9);
-mcuGpio PA10(GPIOA, GPIO_Pin_10);
-mcuGpio PA11(GPIOA, GPIO_Pin_11);
-mcuGpio PA12(GPIOA, GPIO_Pin_12);
-mcuGpio PA13(GPIOA, GPIO_Pin_13);
-mcuGpio PA14(GPIOA, GPIO_Pin_14);
-mcuGpio PA15(GPIOA, GPIO_Pin_15);
+mcuGpio PA0(PA0_ID);
+mcuGpio PA1(PA1_ID);
+mcuGpio PA2(PA2_ID);
+mcuGpio PA3(PA3_ID);
+mcuGpio PA4(PA4_ID);
+mcuGpio PA5(PA5_ID);
+mcuGpio PA6(PA6_ID);
+mcuGpio PA7(PA7_ID);
+mcuGpio PA8(PA8_ID);
+mcuGpio PA9(PA9_ID);
+mcuGpio PA10(PA10_ID);
+mcuGpio PA11(PA11_ID);
+mcuGpio PA12(PA12_ID);
+mcuGpio PA13(PA13_ID);
+mcuGpio PA14(PA14_ID);
+mcuGpio PA15(PA15_ID);
 
-mcuGpio PB0(GPIOB, GPIO_Pin_0);
-mcuGpio PB1(GPIOB, GPIO_Pin_1);
-mcuGpio PB2(GPIOB, GPIO_Pin_2);
-mcuGpio PB3(GPIOB, GPIO_Pin_3);
-mcuGpio PB4(GPIOB, GPIO_Pin_4);
-mcuGpio PB5(GPIOB, GPIO_Pin_5);
-mcuGpio PB6(GPIOB, GPIO_Pin_6);
-mcuGpio PB7(GPIOB, GPIO_Pin_7);
-mcuGpio PB8(GPIOB, GPIO_Pin_8);
-mcuGpio PB9(GPIOB, GPIO_Pin_9);
-mcuGpio PB10(GPIOB, GPIO_Pin_10);
-mcuGpio PB11(GPIOB, GPIO_Pin_11);
-mcuGpio PB12(GPIOB, GPIO_Pin_12);
-mcuGpio PB13(GPIOB, GPIO_Pin_13);
-mcuGpio PB14(GPIOB, GPIO_Pin_14);
-mcuGpio PB15(GPIOB, GPIO_Pin_15);
+mcuGpio PB0(PB0_ID);
+mcuGpio PB1(PB1_ID);
+mcuGpio PB2(PB2_ID);
+mcuGpio PB3(PB3_ID);
+mcuGpio PB4(PB4_ID);
+mcuGpio PB5(PB5_ID);
+mcuGpio PB6(PB6_ID);
+mcuGpio PB7(PB7_ID);
+mcuGpio PB8(PB8_ID);
+mcuGpio PB9(PB9_ID);
+mcuGpio PB10(PB10_ID);
+mcuGpio PB11(PB11_ID);
+mcuGpio PB12(PB12_ID);
+mcuGpio PB13(PB13_ID);
+mcuGpio PB14(PB14_ID);
+mcuGpio PB15(PB15_ID);
 
 
 #if (MCU_PINS >= 64)
-mcuGpio PC0(GPIOC, GPIO_Pin_0);
-mcuGpio PC1(GPIOC, GPIO_Pin_1);
-mcuGpio PC2(GPIOC, GPIO_Pin_2);
-mcuGpio PC3(GPIOC, GPIO_Pin_3);
-mcuGpio PC4(GPIOC, GPIO_Pin_4);
-mcuGpio PC5(GPIOC, GPIO_Pin_5);
-mcuGpio PC6(GPIOC, GPIO_Pin_6);
-mcuGpio PC7(GPIOC, GPIO_Pin_7);
-mcuGpio PC8(GPIOC, GPIO_Pin_8);
-mcuGpio PC9(GPIOC, GPIO_Pin_9);
-mcuGpio PC10(GPIOC, GPIO_Pin_10);
-mcuGpio PC11(GPIOC, GPIO_Pin_11);
-mcuGpio PC12(GPIOC, GPIO_Pin_12);
+mcuGpio PC0(PC0_ID);
+mcuGpio PC1(PC1_ID);
+mcuGpio PC2(PC2_ID);
+mcuGpio PC3(PC3_ID);
+mcuGpio PC4(PC4_ID);
+mcuGpio PC5(PC5_ID);
+mcuGpio PC6(PC6_ID);
+mcuGpio PC7(PC7_ID);
+mcuGpio PC8(PC8_ID);
+mcuGpio PC9(PC9_ID);
+mcuGpio PC10(PC10_ID);
+mcuGpio PC11(PC11_ID);
+mcuGpio PC12(PC12_ID);
 #endif
-mcuGpio PC13(GPIOC, GPIO_Pin_13);
-mcuGpio PC14(GPIOC, GPIO_Pin_14);
-mcuGpio PC15(GPIOC, GPIO_Pin_15);
+mcuGpio PC13(PC13_ID);
+mcuGpio PC14(PC14_ID);
+mcuGpio PC15(PC15_ID);
 
 
 
 
 
 #if (MCU_PINS >= 64)
-mcuGpio PD0(GPIOD, GPIO_Pin_0);
-mcuGpio PD1(GPIOD, GPIO_Pin_1);
+mcuGpio PD0(PD0_ID);
+mcuGpio PD1(PD1_ID);
 #endif
 #if (MCU_PINS >= 100)
-mcuGpio PD2(GPIOD, GPIO_Pin_2);
-mcuGpio PD3(GPIOD, GPIO_Pin_3);
-mcuGpio PD4(GPIOD, GPIO_Pin_4);
-mcuGpio PD5(GPIOD, GPIO_Pin_5);
-mcuGpio PD6(GPIOD, GPIO_Pin_6);
-mcuGpio PD7(GPIOD, GPIO_Pin_7);
-mcuGpio PD8(GPIOD, GPIO_Pin_8);
-mcuGpio PD9(GPIOD, GPIO_Pin_9);
-mcuGpio PD10(GPIOD, GPIO_Pin_10);
-mcuGpio PD11(GPIOD, GPIO_Pin_11);
-mcuGpio PD12(GPIOD, GPIO_Pin_12);
-mcuGpio PD13(GPIOD, GPIO_Pin_13);
-mcuGpio PD14(GPIOD, GPIO_Pin_14);
-mcuGpio PD15(GPIOD, GPIO_Pin_15);
+mcuGpio PD2(PD2_ID);
+mcuGpio PD3(PD3_ID);
+mcuGpio PD4(PD4_ID);
+mcuGpio PD5(PD5_ID);
+mcuGpio PD6(PD6_ID);
+mcuGpio PD7(PD7_ID);
+mcuGpio PD8(PD8_ID);
+mcuGpio PD9(PD9_ID);
+mcuGpio PD10(PD10_ID);
+mcuGpio PD11(PD11_ID);
+mcuGpio PD12(PD12_ID);
+mcuGpio PD13(PD13_ID);
+mcuGpio PD14(PD14_ID);
+mcuGpio PD15(PD15_ID);
 
 
-mcuGpio PE0(GPIOE, GPIO_Pin_0);
-mcuGpio PE1(GPIOE, GPIO_Pin_1);
-mcuGpio PE2(GPIOE, GPIO_Pin_2);
-mcuGpio PE3(GPIOE, GPIO_Pin_3);
-mcuGpio PE4(GPIOE, GPIO_Pin_4);
-mcuGpio PE5(GPIOE, GPIO_Pin_5);
-mcuGpio PE6(GPIOE, GPIO_Pin_6);
-mcuGpio PE7(GPIOE, GPIO_Pin_7);
-mcuGpio PE8(GPIOE, GPIO_Pin_8);
-mcuGpio PE9(GPIOE, GPIO_Pin_9);
-mcuGpio PE10(GPIOE, GPIO_Pin_10);
-mcuGpio PE11(GPIOE, GPIO_Pin_11);
-mcuGpio PE12(GPIOE, GPIO_Pin_12);
-mcuGpio PE13(GPIOE, GPIO_Pin_13);
-mcuGpio PE14(GPIOE, GPIO_Pin_14);
-mcuGpio PE15(GPIOE, GPIO_Pin_15);
+mcuGpio PE0(PE0_ID);
+mcuGpio PE1(PE1_ID);
+mcuGpio PE2(PE2_ID);
+mcuGpio PE3(PE3_ID);
+mcuGpio PE4(PE4_ID);
+mcuGpio PE5(PE5_ID);
+mcuGpio PE6(PE6_ID);
+mcuGpio PE7(PE7_ID);
+mcuGpio PE8(PE8_ID);
+mcuGpio PE9(PE9_ID);
+mcuGpio PE10(PE10_ID);
+mcuGpio PE11(PE11_ID);
+mcuGpio PE12(PE12_ID);
+mcuGpio PE13(PE13_ID);
+mcuGpio PE14(PE14_ID);
+mcuGpio PE15(PE15_ID);
 #endif
 
 #if (MCU_PINS >= 144)
-mcuGpio PF0(GPIOF, GPIO_Pin_0);
-mcuGpio PF1(GPIOF, GPIO_Pin_1);
-mcuGpio PF2(GPIOF, GPIO_Pin_2);
-mcuGpio PF3(GPIOF, GPIO_Pin_3);
-mcuGpio PF4(GPIOF, GPIO_Pin_4);
-mcuGpio PF5(GPIOF, GPIO_Pin_5);
-mcuGpio PF6(GPIOF, GPIO_Pin_6);
-mcuGpio PF7(GPIOF, GPIO_Pin_7);
-mcuGpio PF8(GPIOF, GPIO_Pin_8);
-mcuGpio PF9(GPIOF, GPIO_Pin_9);
-mcuGpio PF10(GPIOF, GPIO_Pin_10);
-mcuGpio PF11(GPIOF, GPIO_Pin_11);
-mcuGpio PF12(GPIOF, GPIO_Pin_12);
-mcuGpio PF13(GPIOF, GPIO_Pin_13);
-mcuGpio PF14(GPIOF, GPIO_Pin_14);
-mcuGpio PF15(GPIOF, GPIO_Pin_15);
+mcuGpio PF0(PF0_ID);
+mcuGpio PF1(PF1_ID);
+mcuGpio PF2(PF2_ID);
+mcuGpio PF3(PF3_ID);
+mcuGpio PF4(PF4_ID);
+mcuGpio PF5(PF5_ID);
+mcuGpio PF6(PF6_ID);
+mcuGpio PF7(PF7_ID);
+mcuGpio PF8(PF8_ID);
+mcuGpio PF9(PF9_ID);
+mcuGpio PF10(PF10_ID);
+mcuGpio PF11(PF11_ID);
+mcuGpio PF12(PF12_ID);
+mcuGpio PF13(PF13_ID);
+mcuGpio PF14(PF14_ID);
+mcuGpio PF15(PF15_ID);
 
-mcuGpio PG0(GPIOG, GPIO_Pin_0);
-mcuGpio PG1(GPIOG, GPIO_Pin_1);
-mcuGpio PG2(GPIOG, GPIO_Pin_2);
-mcuGpio PG3(GPIOG, GPIO_Pin_3);
-mcuGpio PG4(GPIOG, GPIO_Pin_4);
-mcuGpio PG5(GPIOG, GPIO_Pin_5);
-mcuGpio PG6(GPIOG, GPIO_Pin_6);
-mcuGpio PG7(GPIOG, GPIO_Pin_7);
-mcuGpio PG8(GPIOG, GPIO_Pin_8);
-mcuGpio PG9(GPIOG, GPIO_Pin_9);
-mcuGpio PG10(GPIOG, GPIO_Pin_10);
-mcuGpio PG11(GPIOG, GPIO_Pin_11);
-mcuGpio PG12(GPIOG, GPIO_Pin_12);
-mcuGpio PG13(GPIOG, GPIO_Pin_13);
-mcuGpio PG14(GPIOG, GPIO_Pin_14);
-mcuGpio PG15(GPIOG, GPIO_Pin_15);
+mcuGpio PG0(PG0_ID);
+mcuGpio PG1(PG1_ID);
+mcuGpio PG2(PG2_ID);
+mcuGpio PG3(PG3_ID);
+mcuGpio PG4(PG4_ID);
+mcuGpio PG5(PG5_ID);
+mcuGpio PG6(PG6_ID);
+mcuGpio PG7(PG7_ID);
+mcuGpio PG8(PG8_ID);
+mcuGpio PG9(PG9_ID);
+mcuGpio PG10(PG10_ID);
+mcuGpio PG11(PG11_ID);
+mcuGpio PG12(PG12_ID);
+mcuGpio PG13(PG13_ID);
+mcuGpio PG14(PG14_ID);
+mcuGpio PG15(PG15_ID);
 #endif
 
 #if (MCU_PINS >= 176)
 
-mcuGpio PH0(GPIOH, GPIO_Pin_0);
-mcuGpio PH1(GPIOH, GPIO_Pin_1);
-mcuGpio PH2(GPIOH, GPIO_Pin_2);
-mcuGpio PH3(GPIOH, GPIO_Pin_3);
-mcuGpio PH4(GPIOH, GPIO_Pin_4);
-mcuGpio PH5(GPIOH, GPIO_Pin_5);
-mcuGpio PH6(GPIOH, GPIO_Pin_6);
-mcuGpio PH7(GPIOH, GPIO_Pin_7);
-mcuGpio PH8(GPIOH, GPIO_Pin_8);
-mcuGpio PH9(GPIOH, GPIO_Pin_9);
-mcuGpio PH10(GPIOH, GPIO_Pin_10);
-mcuGpio PH11(GPIOH, GPIO_Pin_11);
-mcuGpio PH12(GPIOH, GPIO_Pin_12);
-mcuGpio PH13(GPIOH, GPIO_Pin_13);
-mcuGpio PH14(GPIOH, GPIO_Pin_14);
-mcuGpio PH15(GPIOH, GPIO_Pin_15);
+mcuGpio PH0(PH0_ID);
+mcuGpio PH1(PH1_ID);
+mcuGpio PH2(PH2_ID);
+mcuGpio PH3(PH3_ID);
+mcuGpio PH4(PH4_ID);
+mcuGpio PH5(PH5_ID);
+mcuGpio PH6(PH6_ID);
+mcuGpio PH7(PH7_ID);
+mcuGpio PH8(PH8_ID);
+mcuGpio PH9(PH9_ID);
+mcuGpio PH10(PH10_ID);
+mcuGpio PH11(PH11_ID);
+mcuGpio PH12(PH12_ID);
+mcuGpio PH13(PH13_ID);
+mcuGpio PH14(PH14_ID);
+mcuGpio PH15(PH15_ID);
 
-mcuGpio PI5(GPIOI, GPIO_Pin_5);
-mcuGpio PI6(GPIOI, GPIO_Pin_6);
-mcuGpio PI7(GPIOI, GPIO_Pin_7);
+mcuGpio PI5(PI5_ID);
+mcuGpio PI6(PI6_ID);
+mcuGpio PI7(PI7_ID);
 #endif
 
