@@ -65,23 +65,23 @@ mcuGpio PB13(PB13_ID);
 mcuGpio PB14(PB14_ID);
 mcuGpio PB15(PB15_ID);
 
-Uart uart1(USART1, &PB6, &PB7);
+mcuGpio PF0(PF0_ID);
+mcuGpio PF1(PF1_ID);
 
+mcuGpio PF6(PF6_ID);
+mcuGpio PF7(PF7_ID);
+//Uart uart1(USART1, &PB6, &PB7);
+Uart uart1(USART1, &PA9, &PA10);
 Uart uart2(USART2, &PA2, &PA3);
 
 #endif
 
-////mcuGpio		BtnPin(GPIOA,GPIO_Pin_8);
-////Uart 			UART(USART1, &PA9, &PA10);
+Port 					db(GPIOB_BASE,8);		// PB0-PB7
+Lcd  					lcd(&PA12,&PB9, &PA15, &PF6, &PF7, &db);
+Graphic 			gpu(&lcd,170,220);
+//EventGpio 		btn(&PB13, 1,"btn1");
+//EventManager 	manager;
 
-
-//// 使用object.cpp,使用下列方式重命名IO对象，可以减少code区消耗
-////#define   LED1  PB8
-////#define   LED2  PB9
-////#define   LED3  PB10
-
-////#define   BtnPin	PA8
-////#define   UART	uart1
 
 /*
 *********************************************************************************************************

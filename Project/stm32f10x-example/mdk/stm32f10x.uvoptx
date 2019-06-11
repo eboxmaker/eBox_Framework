@@ -1386,8 +1386,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\example\20.显示器类\3.tft_1.8\1.lcd_frame_rate.cpp</PathWithFileName>
-      <FilenameWithoutPath>1.lcd_frame_rate.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\example\3.pwm\1.pwm.cpp</PathWithFileName>
+      <FilenameWithoutPath>1.pwm.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1398,8 +1398,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\example\3.pwm\1.pwm.cpp</PathWithFileName>
-      <FilenameWithoutPath>1.pwm.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\example\1.digital\4.parallel_gpio.cpp</PathWithFileName>
+      <FilenameWithoutPath>4.parallel_gpio.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1410,8 +1410,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\example\1.digital\4.parallel_gpio.cpp</PathWithFileName>
-      <FilenameWithoutPath>4.parallel_gpio.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\example\20.display\3.tft_1.8\2.lcd_test.cpp</PathWithFileName>
+      <FilenameWithoutPath>2.lcd_test.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

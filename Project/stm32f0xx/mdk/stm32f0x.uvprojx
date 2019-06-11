@@ -14,16 +14,16 @@
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
-          <Device>STM32F072RBIx</Device>
+          <Device>STM32F030C8Tx</Device>
           <Vendor>STMicroelectronics</Vendor>
           <PackID>Keil.STM32F0xx_DFP.2.0.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
-          <Cpu>IRAM(0x20000000,0x00004000) IROM(0x08000000,0x00020000) CPUTYPE("Cortex-M0") CLOCK(12000000) ELITTLE</Cpu>
+          <Cpu>IRAM(0x20000000,0x00002000) IROM(0x08000000,0x00010000) CPUTYPE("Cortex-M0") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F0xx_128 -FS08000000 -FL020000 -FP0($$Device:STM32F072RBIx$CMSIS\Flash\STM32F0xx_128.FLM))</FlashDriverDll>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F0xx_64 -FS08000000 -FL010000 -FP0($$Device:STM32F030C8Tx$CMSIS\Flash\STM32F0xx_64.FLM))</FlashDriverDll>
           <DeviceId>0</DeviceId>
-          <RegisterFile>$$Device:STM32F072RBIx$Drivers\CMSIS\Device\ST\STM32F0xx\Include\stm32f0xx.h</RegisterFile>
+          <RegisterFile>$$Device:STM32F030C8Tx$Drivers\CMSIS\Device\ST\STM32F0xx\Include\stm32f0xx.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -33,7 +33,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:STM32F072RBIx$CMSIS\SVD\STM32F0x2.svd</SFDFile>
+          <SFDFile>$$Device:STM32F030C8Tx$CMSIS\SVD\STM32F0x0.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -244,12 +244,12 @@
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x4000</Size>
+                <Size>0x2000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x20000</Size>
+                <Size>0x10000</Size>
               </IROM>
               <XRAM>
                 <Type>0</Type>
@@ -274,7 +274,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x20000</Size>
+                <Size>0x10000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -299,7 +299,7 @@
               <OCR_RVCT9>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x4000</Size>
+                <Size>0x2000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -335,9 +335,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_FULL_LL_DRIVER,STM32F072xB</Define>
+              <Define>USE_FULL_LL_DRIVER,STM32F030x8</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f0xx\Libraries\STM32F0xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Device\ST\STM32F0xx\Include;..\..\..\ebox\core;..\..\..\ebox\core\port;..\..\..\ebox\hardware\cortex-m0;..\..\..\ebox\hardware\cortex-m0\Peripherals;..\..\..\user;..\..\..\user\board\Nucleo_f0;..\..\..\component\edriver;..\..\..\ebox\hardware\cortex-m0\mcu;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial</IncludePath>
+              <IncludePath>..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f0xx\Libraries\STM32F0xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Device\ST\STM32F0xx\Include;..\..\..\ebox\core;..\..\..\ebox\core\port;..\..\..\ebox\hardware\cortex-m0;..\..\..\ebox\hardware\cortex-m0\Peripherals;..\..\..\user;..\..\..\user\board\Nucleo_f0;..\..\..\component\edriver;..\..\..\ebox\hardware\cortex-m0\mcu;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\gui;..\..\..\component\apps</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -385,6 +385,49 @@
               <FileName>startup_stm32f072xb.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Device\ST\STM32F0xx\Source\Templates\arm\startup_stm32f072xb.s</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Aads>
+                    <interw>2</interw>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <thumb>2</thumb>
+                    <SplitLS>2</SplitLS>
+                    <SwStkChk>2</SwStkChk>
+                    <NoWarn>2</NoWarn>
+                    <uSurpInc>2</uSurpInc>
+                    <useXO>2</useXO>
+                    <uClangAs>2</uClangAs>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Aads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>startup_stm32f030x8.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Device\ST\STM32F0xx\Source\Templates\arm\startup_stm32f030x8.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -530,6 +573,11 @@
               <FileName>WString.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\WString.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_virtual_hmi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\port\ebox_virtual_hmi.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -711,6 +759,31 @@
               <FileName>ebox_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\user\ebox_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>ui.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\ui.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ui_main.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\ui_main.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ui_menu.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\ui_menu.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ui_password.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\ui_password.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ui_setValue.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\ui_setValue.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -2177,6 +2250,169 @@
               <FileName>4.parallel_gpio.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\example\1.digital\4.parallel_gpio.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>8.9225_test.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\example\20.display\8.9225_test.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>main.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\example\16.gui\main.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
           </Files>
         </Group>
@@ -2273,7 +2509,7 @@
                   <RVCTZI>0</RVCTZI>
                   <RVCTOtherData>0</RVCTOtherData>
                   <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
+                  <IncludeInBuild>0</IncludeInBuild>
                   <AlwaysBuild>2</AlwaysBuild>
                   <GenerateAssemblyFile>2</GenerateAssemblyFile>
                   <AssembleAssemblyFile>2</AssembleAssemblyFile>
@@ -2393,6 +2629,208 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+            <File>
+              <FileName>TFT9225.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\TFT9225.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>EventGpio.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\apps\EventGpio.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>EventVar.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\apps\EventVar.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>gui</GroupName>
+          <Files>
+            <File>
+              <FileName>Font8_ASCII.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\Font8_ASCII.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Font16_ASCII.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\Font16_ASCII.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Font16_HZ.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\Font16_HZ.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Font24_ASCII.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\Font24_ASCII.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Font32_ASCII.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\Font32_ASCII.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FontCustom.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\FontCustom.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>graphic.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\graphic.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_base.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_base.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_bitmap.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_bitmap.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_button.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_button.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_list.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_list.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_menu.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_menu.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_page.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_page.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_sidebar.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_sidebar.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_text.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_text.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_textview.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_textview.cpp</FilePath>
             </File>
           </Files>
         </Group>
