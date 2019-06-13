@@ -937,6 +937,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\user\ui_password.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ebox_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\user\board\spark_f1\ebox_config.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

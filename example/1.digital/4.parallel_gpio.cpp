@@ -27,8 +27,8 @@ Gpio *pins[] = {&PA0,&PA1,&PA2,&PB1};
 Gpios pin_io(&(*pins),4);
 
 // 操作PA2,PA3,PA4  同一port连续IO推荐使用方式
-Port PortPin(GPIOA_BASE,3,2);
-// Port PortPin(GPIOA_BASE,3);		// PA0,PA1,PA2
+//Port PortPin(GPIOA_BASE,3,2);
+ Port PortPin(GPIOA_BASE,3);		// PA0,PA1,PA2
 
 
 // 使用父类指针操作不同子类

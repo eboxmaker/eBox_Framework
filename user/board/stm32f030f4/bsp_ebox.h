@@ -41,7 +41,7 @@ extern mcuGpio PA10;
 extern mcuGpio PA13;
 extern mcuGpio PA14;
 
-extern mcuGpio PB0;
+extern mcuGpio PB1;
 
 extern mcuGpio PF0;
 extern mcuGpio PF1;
