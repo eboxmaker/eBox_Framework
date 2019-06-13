@@ -119,11 +119,6 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
-          <Key>DLGUARM</Key>
-          <Name>猬誻,(?,(?趏襜</Name>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
           <Key>UL2CM3</Key>
           <Name>UL2CM3(-S0 -C0 -P0 )  -FN1 -FC1000 -FD20000000 -FF0STM32F0xx_64 -FL010000 -FS08000000 -FP0($$Device:STM32F030C8Tx$CMSIS\Flash\STM32F0xx_64.FLM)</Name>
         </SetRegEntry>
@@ -180,6 +175,22 @@
           <Filename>..\..\..\example\20.display\8.9225_test.cpp</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\ebox\../../../example/20.display/8.9225_test.cpp\36</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>44</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134229728</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\..\example\20.display\8.9225_test.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\ebox\../../../example/20.display/8.9225_test.cpp\44</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -282,7 +293,7 @@
 
   <Group>
     <GroupName>start_code</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1014,7 +1025,7 @@
 
   <Group>
     <GroupName>example</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1473,8 +1484,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\component\edriver\TFT9225.cpp</PathWithFileName>
-      <FilenameWithoutPath>TFT9225.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\component\apps\EventGpio.cpp</PathWithFileName>
+      <FilenameWithoutPath>EventGpio.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1485,8 +1496,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\component\apps\EventGpio.cpp</PathWithFileName>
-      <FilenameWithoutPath>EventGpio.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\component\apps\EventVar.cpp</PathWithFileName>
+      <FilenameWithoutPath>EventVar.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1497,8 +1508,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\component\apps\EventVar.cpp</PathWithFileName>
-      <FilenameWithoutPath>EventVar.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\component\edriver\TFT9325.cpp</PathWithFileName>
+      <FilenameWithoutPath>TFT9325.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
