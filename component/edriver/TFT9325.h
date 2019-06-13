@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    TFT9225.h
+  * @file    TFT9325.h
   * @author  cat_li
   * @version V1.0
   * @date    2019/06/09
@@ -17,14 +17,14 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __LCD_ILI9225_H
-#define __LCD_ILI9225_H
+#ifndef __LCD_ILI9325_H
+#define __LCD_ILI9325_H
 
 #include "ebox_core.h"
 #include "font.h"
 #include "parallel_gpio.h"
 
-#define X_MAX_PIXEL	        176
+#define X_MAX_PIXEL	        170
 #define Y_MAX_PIXEL	        220
 
 #define RED  	0xf800
@@ -60,8 +60,8 @@ public:
     void set_xy(int16_t x, int16_t y);
 		
 		virtual void    draw_pixel(int16_t x, int16_t y, uint32_t color);
-//    virtual void    draw_v_line(int16_t x0, int16_t y0, int16_t y1, uint32_t color);
-//    virtual void    draw_h_line(int16_t x0, int16_t y0, int16_t x1, uint32_t color);
+    virtual void    draw_v_line(int16_t x0, int16_t y0, int16_t y1, uint32_t color);
+    virtual void    draw_h_line(int16_t x0, int16_t y0, int16_t x1, uint32_t color);
 //    virtual void    draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint32_t color);
 //    virtual void    fill_rect(int16_t x, int16_t y, int16_t x1, int16_t y1, uint32_t color);
 //    virtual void    draw_circle(int16_t x, int16_t y, int16_t r, uint32_t color);
@@ -92,6 +92,14 @@ private:
 
 		void _init(void);
 		void _write(uint16_t dat,uint8_t cmd);
-		void _setRegion(int16_t x_start, int16_t y_start);
+		void _setRegion(int16_t x_start, int16_t y_start,int16_t x_end, int16_t y_end);
+
+		void _setCommandMode();
+		void _setDataMode();
+		void _setWrite();
+		void _writeCommand(uint16_t cmd,uint16_t dat);
+		void _setIndexReg(uint16_t reg);
+		void _writeDate(uint16_t dat);
+		uint16_t _readReg(uint16_t reg);
 };
 #endif

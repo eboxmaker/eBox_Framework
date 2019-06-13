@@ -15,7 +15,7 @@
 #include "ebox.h"
 #include "bsp_ebox.h"
 #include "parallel_gpio.h"
-#include "tft9225.h"
+#include "tft9325.h"
 
 /* 定义例程名和例程发布日期 */
 #define EXAMPLE_NAME	"UartStream example"
@@ -34,14 +34,16 @@ void setup()
 		PF0.mode(OUTPUT_PP);
 		PF0.set();
     lcd.begin();
-    lcd.clear(RED);
-		lcd.draw_pixel(10,10,BLACK);
-		
+    lcd.clear(WRITE);
+//		lcd.off();
+//		lcd.draw_pixel(10,10,BLACK);
+//		lcd.on();
 
 
-    lcd.draw_h_line(0, 4, 128, BLUE);
-    lcd.draw_circle(50, 50, 50, YELLOW);
-    lcd.draw_line(64, 50, 6, 100, GREEN);
+    lcd.draw_v_line(0, 4, 128, RED);
+		lcd.draw_h_line(8, 10, 128, BLUE);
+    lcd.draw_circle(50, 50, 40, YELLOW);
+    lcd.draw_line(64, 5, 64, 128, GREEN);
 
 
 }

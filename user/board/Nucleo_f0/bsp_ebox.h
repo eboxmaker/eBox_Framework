@@ -69,7 +69,7 @@ extern Uart uart2;
 #endif
 
 #include "parallel_gpio.h"
-#include "tft9225.h"
+#include "tft9325.h"
 #include "graphic.h"
 #include "EventGpio.h"
 #include "EventManager.h"
