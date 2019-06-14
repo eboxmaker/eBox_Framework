@@ -16,7 +16,9 @@ This specification is preliminary and is subject to change at any time without n
 #define __TIMER_IT_H
 
 #include "ebox_core.h"
+#include "mcu.h"
 
+extern  uint32_t master_count[4] ;
 
 enum Tim_It_Index
 {

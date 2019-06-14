@@ -39,10 +39,9 @@
 #define EXAMPLE_DATE	"2018-08-01"
 
 
-//InCapture ic0(&PA0);//创建一个输入捕获的对象
-////Pwm pwm1(&PB6);//创建一个PWM输出对象
-InCapture ic0(TIM1CH2);
-Pwm pwm1(TIM3CH1);
+InCapture ic0(&PA0);//创建一个输入捕获的对象
+Pwm pwm1(&PB6);//创建一个PWM输出对象
+
 
 uint32_t frq = 0;
 
@@ -53,29 +52,29 @@ void setup()
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
-    ic0.begin(1, SIMPLE); //初始化输入捕获参数，p分频
-    //    UART.printf("get_detect_min_pulse_us = %d\r\n",ic0.get_detect_min_pulse_us());
-    frq = 1000;
-    pwm1.begin(frq, 30);
+    ic0.begin(1); //初始化输入捕获参数，p分频
+    UART.printf("get_detect_min_pulse_us = %d\r\n",ic0.get_detect_min_pulse_us());
+    UART.flush();
+    frq = 300000;
+    pwm1.begin(frq, 500);
 }
+extern __IO uint32_t master_count[4] ;
 
 int main(void)
 {
     setup();
     while(1)
     {
-
         if(ic0.available())
         {
-            UART.printf("peroid    = %0.2fus\r\n", ic0.get_wave_peroid());
-            UART.printf("frq(%d)= %0.2fhz\r\n", frq, ic0.get_wave_frq());
-            UART.printf("high_duty = %0.2f%%\r\n", ic0.get_wave_high_duty());
-            UART.printf("low duty  = %0.2f%%\r\n\r\n", ic0.get_wave_low_duty());
+            ic0.update_resault();
+            UART.printf("peroid    = %0.2fus\r\n", ic0.res.peroid);
+            UART.printf("frq(%d)= %0.2fhz\r\n", frq, ic0.res.frq);
+            UART.printf("high_duty = %0.2f%%\r\n", ic0.res.high_duty);
+            UART.printf("low duty  = %0.2f%%\r\n\r\n", ic0.res.low_duty);
         }
         pwm1.set_frq(frq++);
-
         delay_ms(1000);
-
     }
 }
 
