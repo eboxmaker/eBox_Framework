@@ -8,8 +8,7 @@ class mcuGpio : public Gpio
 {
 public:
 
-    mcuGpio(GPIO_TypeDef *port, uint16_t pin);
-		mcuGpio(PIN_ID_t pin_id);		
+    mcuGpio(PIN_ID_t pin_id);		
     virtual void mode(PIN_MODE mode);
     virtual void mode(PIN_MODE mode, uint8_t af_configration);
     virtual void set();
@@ -29,9 +28,10 @@ private:
     //    uint32_t port_set_reg;
     //    uint32_t port_reset_reg;
 
-    GPIO_TypeDef *port; /**< 引脚的端口 */
-    uint16_t pin; /**< 引脚的序号 */
+    GPIO_TypeDef *port;    /**< 引脚的端口 */
+    uint16_t pin;          /**< 引脚的序号 */
 };
 
+void port_mode(GPIO_TypeDef* port,uint32_t pin, PIN_MODE mode);
 
 #endif

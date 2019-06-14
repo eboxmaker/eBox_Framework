@@ -184,7 +184,6 @@ private:
     USART_TypeDef       *_USARTx;
     Gpio                *_tx_pin;
     Gpio                *_rx_pin;
-    uint8_t             gpio_af_usart;
     uint16_t            rx_buffer_size;
     uint16_t            tx_buffer_size;
 

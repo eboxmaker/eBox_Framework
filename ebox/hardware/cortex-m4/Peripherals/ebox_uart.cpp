@@ -83,6 +83,8 @@ void    Uart::begin(uint32_t baud_rate, RxMode_t mode)
 */
 void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float stop_bit, RxMode_t mode)
 {
+    uint8_t             gpio_af_usart;
+
     USART_InitTypeDef   USART_InitStructure;
 
     rcc_clock_cmd((uint32_t)_USARTx, ENABLE);
@@ -93,7 +95,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     case (uint32_t)USART1_BASE:
         gpio_af_usart   = GPIO_AF_USART1;
         index           = NUM_UART1;
-        dma_rx          = &Dma2Stream2;//Dma2Stream5
+        dma_rx          = new Dma(DMA2_Stream2);//&Dma2Stream2;//Dma2Stream5
         dma_channel     = DMA_Channel_4;
         break;
 #endif
@@ -102,7 +104,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     case (uint32_t)USART2_BASE:
         gpio_af_usart   = GPIO_AF_USART2;
         index           = NUM_UART2;
-        dma_rx          = &Dma1Stream5;
+        dma_rx          = new Dma(DMA1_Stream5);//&Dma1Stream5;
         dma_channel     = DMA_Channel_4;
         break;
 #endif
@@ -111,7 +113,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     case (uint32_t)USART3_BASE:
         gpio_af_usart   = GPIO_AF_USART3;
         index           = NUM_UART3;
-        dma_rx          = &Dma1Stream1;
+        dma_rx          = new Dma(DMA1_Stream1);//&Dma1Stream1;
         dma_channel     = DMA_Channel_4;
         break;
 #endif
@@ -120,7 +122,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     case (uint32_t)UART4_BASE:
         gpio_af_usart   = GPIO_AF_UART4;
         index           = NUM_UART4;
-        dma_rx          = &Dma1Stream2;
+        dma_rx          = new Dma(DMA1_Stream2);//&Dma1Stream2;
         dma_channel     = DMA_Channel_4;
         break;
 #endif
@@ -129,7 +131,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     case (uint32_t)UART5_BASE:
         gpio_af_usart   = GPIO_AF_UART5;
         index           = NUM_UART5;
-        dma_rx          = &Dma1Stream0;
+        dma_rx          = new Dma(DMA1_Stream0);//&Dma1Stream0;
         dma_channel     = DMA_Channel_4;
         break;
 #endif
@@ -138,7 +140,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     case (uint32_t)USART6_BASE:
         gpio_af_usart   = GPIO_AF_USART6;
         index           = NUM_UART6;
-        dma_rx          = &Dma2Stream1;//Dma2Stream2
+        dma_rx          = new Dma(DMA2_Stream2);//&Dma2Stream1;//Dma2Stream2
         dma_channel     = DMA_Channel_5;
         break;
 
@@ -148,7 +150,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     case (uint32_t)UART7_BASE:
         gpio_af_usart   = GPIO_AF_UART7;
         index           = NUM_UART7;
-        dma_rx          = &Dma1Stream3;
+        dma_rx          = new Dma(DMA1_Stream3);//&Dma1Stream3;
         dma_channel     = DMA_Channel_5;
         break;
 #endif
@@ -157,7 +159,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     case (uint32_t)UART8_BASE:
         gpio_af_usart   = GPIO_AF_UART8;
         index           = NUM_UART8;
-        dma_rx          = &Dma1Stream6;
+        dma_rx          = new Dma(DMA1_Stream6);//&Dma1Stream6;
         dma_channel     = DMA_Channel_5;
         break;
 #endif

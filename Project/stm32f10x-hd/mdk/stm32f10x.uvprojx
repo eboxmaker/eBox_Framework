@@ -862,6 +862,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\si4432.cpp</FilePath>
             </File>
+            <File>
+              <FileName>parallel_gpio.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\parallel_gpio.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
