@@ -70,15 +70,17 @@ void  Adc::add_ch(Gpio *io)
 }
 void  Adc::begin()
 {
+    //RCC_AHBPeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
+
     rcc_clock_cmd((uint32_t)ADCx, ENABLE);
     RCC_ADCCLKConfig(RCC_PCLK2_Div6);   //72M/6=12,ADC最大时间不能超过14M
     switch((uint32_t)ADCx)
     {
     case ADC1_BASE:
-        dma = &Dma1Ch1;
+        dma = new Dma(DMA1_Channel1);//&Dma1Ch1;
         break;
     case ADC2_BASE:
-        dma = &Dma1Ch1;
+        dma = new Dma(DMA1_Channel1);//&Dma1Ch1;
         break;
     }
 
@@ -101,10 +103,15 @@ void  Adc::begin()
 
     for(int i = 0; i < ch_num; i++)
     {
-        ADC_RegularChannelConfig(ADCx, ch_table[1][i], i + 1, ADC_SampleTime_28Cycles5);
         if(ch_table[1][i] == ADC_Channel_TempSensor)
         {
             ADC_TempSensorVrefintCmd(ENABLE); //开启内部温度传感器
+            ADC_RegularChannelConfig(ADCx, ch_table[1][i], i + 1, ADC_SampleTime_71Cycles5);
+        }
+        else
+        {
+            ADC_RegularChannelConfig(ADCx, ch_table[1][i], i + 1, ADC_SampleTime_28Cycles5);
+
         }
     }
 
@@ -193,7 +200,7 @@ float Adc::read_temp_senser()
         }
     }
 
-    temperate = (float)adc_value * (3.3 / 4096); //电压值
-    temperate = (1.43 - temperate) / 0.0043 + 25; //转换为温度值
+    temperate = (float)adc_value * (3300 / 4096.0); //电压值
+    temperate = (1430 - temperate) / 4.35 + 24.958; //转换为温度值
     return temperate;
 }

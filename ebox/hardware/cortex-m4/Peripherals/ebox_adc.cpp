@@ -96,15 +96,15 @@ void Adc::dma_cfg()
     {
 
     case ADC1_BASE:
-        dma = &Dma2Stream0;
+        dma = new Dma(DMA2_Stream0);//&Dma2Stream0;
         dma_channel = DMA_Channel_0;
         break;//&Dma2Stream4;dma_channel = DMA_Channel_0;
     case ADC2_BASE:
-        dma = &Dma2Stream2;
+        dma = new Dma(DMA2_Stream2);//&Dma2Stream2;
         dma_channel = DMA_Channel_1;;
         break;//&Dma2Stream3;dma_channel = DMA_Channel_1;
     case ADC3_BASE:
-        dma = &Dma2Stream0;
+        dma = new Dma(DMA2_Stream0);//&Dma2Stream0;
         dma_channel = DMA_Channel_2;;
         break;//&Dma2Stream1;dma_channel = DMA_Channel_2;
     }
