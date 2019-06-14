@@ -125,6 +125,7 @@ void print_log(const char *name, const char *date)
 
     UART.print("* \r\n");	                /* 打印一行空格 */
     UART.print("*************************************************************\n\r");
+    UART.flush();
 }
 
 

@@ -16,9 +16,7 @@
 
 #define LOW     0
 #define HIGH    1
-#define CHANGE  2
-#define FALLING 3
-#define RISING  4
+
 
 #define PI          3.1415926535897932384626433832795
 #define HALF_PI     1.5707963267948966192313216916398
