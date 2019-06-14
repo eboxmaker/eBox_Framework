@@ -877,6 +877,16 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\parallel_gpio.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ir_decoder.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\ir\ir_decoder.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ir_encoder.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\ir\ir_encoder.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

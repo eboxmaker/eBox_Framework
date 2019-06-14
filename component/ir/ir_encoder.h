@@ -24,15 +24,17 @@
 #include "ebox_core.h"
 #include "ebox_pwm.h"
 
-class IR_ENCODER
+class IrEncoder
 {
 public:
-    void begin(Pwm *pwm);
+    IrEncoder(Gpio &io);
+    void begin();
+    void send(uint8_t addr,uint8_t value);
     void send(uint32_t value);
 private:
     void init(void);
     void send_byte(uint8_t data);
-    Pwm *p_pwm;
+    Pwm *pwm;
 
 };
 
