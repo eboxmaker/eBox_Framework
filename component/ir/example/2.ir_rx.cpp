@@ -11,9 +11,9 @@ Copyright 2015 shentq. All Rights Reserved.
 
 
 #include "ebox.h"
-#include "ir_decoder.h"
+#include "ir/ir_decoder.h"
 
-IR_DECODER ir_decoder;
+IrDecoder ir_decoder(PB0);
 void setup()
 {
     ebox_init();
@@ -28,10 +28,10 @@ int main(void)
     {
         if(ir_decoder.available())
         {
-            uint16_t r = ir_decoder.read();
-            uart1.printf("key_code=0x%x repeat=%d\r\n", (r & 0xff), ((r & 0xff00) >> 8));
-
+            uint32_t r = ir_decoder.read();
+            uart1.printf("addr:0x%x,key_code=0x%x repeat=%d\r\n", (r &0xff0000)>>16, (r & 0xff), ((r & 0xff00) >> 8));
         }
+        delay_ms(3000);
     }
 }
 
