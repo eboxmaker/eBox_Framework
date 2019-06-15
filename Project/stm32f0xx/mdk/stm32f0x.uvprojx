@@ -2687,9 +2687,9 @@
               <FilePath>..\..\..\component\apps\EventVar.cpp</FilePath>
             </File>
             <File>
-              <FileName>TFT9325.cpp</FileName>
+              <FileName>TFT9225.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\TFT9325.cpp</FilePath>
+              <FilePath>..\..\..\component\edriver\TFT9225.cpp</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
