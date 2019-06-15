@@ -37,6 +37,10 @@ __IO uint16_t t3_overflow_times = 0;
 __IO uint16_t t4_overflow_times = 0;
 
 
+uint32_t master_count[4]  = {0};
+
+
+
 static tim_irq_handler irq_handler;
 static uint32_t tim_irq_ids[TIM_IRQ_ID_NUM];//保存对象this指针
 
@@ -64,67 +68,68 @@ extern "C" {
 
         if(TIM_GetITStatus(TIM1, TIM_IT_Update) == SET)
         {
+            master_count[0] += 0x10000;
             t1_overflow_times++;
             tim_irq_callback(TIM1_IT_Update);
             TIM_ClearITPendingBit(TIM1, TIM_FLAG_Update);
         }
-//        if(TIM_GetITStatus(TIM1, TIM_IT_CC1) == SET)
-//        {
-//            tim_irq_callback(TIM1_IT_CC1);
-//            TIM_ClearITPendingBit(TIM1, TIM_FLAG_CC1);
-//        }
-//        if(TIM_GetITStatus(TIM1, TIM_IT_CC2) == SET)
-//        {
-//            tim_irq_callback(TIM1_IT_CC2);
-//            TIM_ClearITPendingBit(TIM1, TIM_FLAG_CC2);
-//        }
-//        if(TIM_GetITStatus(TIM1, TIM_IT_CC3) == SET)
-//        {
-//            tim_irq_callback(TIM1_IT_CC3);
-//            TIM_ClearITPendingBit(TIM1, TIM_FLAG_CC3);
-//        }
-//        if(TIM_GetITStatus(TIM1, TIM_IT_CC4) == SET)
-//        {
-//            tim_irq_callback(TIM1_IT_CC4);
-//            TIM_ClearITPendingBit(TIM1, TIM_FLAG_CC4);
-//        }
+        if(TIM_GetITStatus(TIM1, TIM_IT_CC1) == SET)
+        {
+            tim_irq_callback(TIM1_IT_CC1);
+            TIM_ClearITPendingBit(TIM1, TIM_FLAG_CC1);
+        }
+        if(TIM_GetITStatus(TIM1, TIM_IT_CC2) == SET)
+        {
+            tim_irq_callback(TIM1_IT_CC2);
+            TIM_ClearITPendingBit(TIM1, TIM_FLAG_CC2);
+        }
+        if(TIM_GetITStatus(TIM1, TIM_IT_CC3) == SET)
+        {
+            tim_irq_callback(TIM1_IT_CC3);
+            TIM_ClearITPendingBit(TIM1, TIM_FLAG_CC3);
+        }
+        if(TIM_GetITStatus(TIM1, TIM_IT_CC4) == SET)
+        {
+            tim_irq_callback(TIM1_IT_CC4);
+            TIM_ClearITPendingBit(TIM1, TIM_FLAG_CC4);
+        }
     }
     void TIM2_IRQHandler(void)
     {
-
-//        if(TIM_GetITStatus(TIM2, TIM_IT_Update) == SET)
-//        {
-            //t2_overflow_times++;
+        if((TIM2->SR & TIM_IT_Update) && (TIM2->DIER & TIM_IT_Update))
+        {
+            master_count[1] += 0x10000;
+            t2_overflow_times++;
             tim_irq_callback(TIM2_IT_Update);
-            TIM_ClearITPendingBit(TIM2, TIM_FLAG_Update);
-//        }
-//        if(TIM_GetITStatus(TIM2, TIM_IT_CC1) == SET)
-//        {
-//            tim_irq_callback(TIM2_IT_CC1);
-//            TIM_ClearITPendingBit(TIM2, TIM_FLAG_CC1);
-//        }
-//        if(TIM_GetITStatus(TIM2, TIM_IT_CC2) == SET)
-//        {
-//            tim_irq_callback(TIM2_IT_CC2);
-//            TIM_ClearITPendingBit(TIM2, TIM_FLAG_CC2);
-//        }
-//        if(TIM_GetITStatus(TIM2, TIM_IT_CC3) == SET)
-//        {
-//            tim_irq_callback(TIM2_IT_CC3);
-//            TIM_ClearITPendingBit(TIM2, TIM_FLAG_CC3);
-//        }
-//        if(TIM_GetITStatus(TIM2, TIM_IT_CC4) == SET)
-//        {
-//            tim_irq_callback(TIM2_IT_CC4);
-//            TIM_ClearITPendingBit(TIM2, TIM_FLAG_CC4);
-//        }
-
+            TIM2->SR = (uint16_t)~TIM_IT_Update;
+        }
+        if((TIM2->SR & TIM_IT_CC1) && (TIM2->DIER & TIM_IT_CC1))
+        {
+            tim_irq_callback(TIM2_IT_CC1);
+            TIM2->SR = (uint16_t)~TIM_IT_CC1;
+        }
+        if((TIM2->SR & TIM_IT_CC2) && (TIM2->DIER & TIM_IT_CC2))
+        {
+            tim_irq_callback(TIM2_IT_CC2);
+            TIM2->SR = (uint16_t)~TIM_IT_CC2;
+        }
+        if((TIM2->SR & TIM_IT_CC3) && (TIM2->DIER & TIM_IT_CC3))
+        {
+            tim_irq_callback(TIM2_IT_CC3);
+            TIM2->SR = (uint16_t)~TIM_IT_CC3;
+        }
+        if((TIM2->SR & TIM_IT_CC4) && (TIM2->DIER & TIM_IT_CC4))
+        {
+            tim_irq_callback(TIM2_IT_CC4);
+            TIM2->SR = (uint16_t)~TIM_IT_CC4;
+        }
 
     }
     void TIM3_IRQHandler(void)
     {
         if(TIM_GetITStatus(TIM3, TIM_IT_Update) == SET)
         {
+            master_count[2] += 0x10000;
             t3_overflow_times++;
             tim_irq_callback(TIM3_IT_Update);
             TIM_ClearITPendingBit(TIM3, TIM_FLAG_Update);
@@ -154,6 +159,7 @@ extern "C" {
     {
         if(TIM_GetITStatus(TIM4, TIM_IT_Update) == SET)
         {
+            master_count[3] += 0x10000;
             t4_overflow_times++;
             tim_irq_callback(TIM4_IT_Update);
             TIM_ClearITPendingBit(TIM4, TIM_FLAG_Update);

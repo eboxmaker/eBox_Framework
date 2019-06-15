@@ -1,0 +1,35 @@
+diff a/ebox/hardware/cortex-m3/Peripherals/ebox_in_capture.cpp b/ebox/hardware/cortex-m3/Peripherals/ebox_in_capture.cpp	(rejected hunks)
+@@ -253,22 +253,18 @@
+     _set_polarity(this->TIMx, this->polarity);//����Ϊ�½��ز���
+ 
+ }
+-uint32_t InCapture::get_capture()
+-{
+-    uint32_t    now = 0;
+-    now = _get_capture( this->TIMx ) + (*overflow_times) * this->period;  //get capture value
+-    if(now > last_value)
+-        _capture = now - last_value;
+-    else
+-        _capture = 0xffffffff + now - last_value;
+-    last_value = now;
+-    return _capture;
+-}
++//uint32_t InCapture::get_capture()
++//{
++//    uint32_t    now = 0;
++//    now = _get_capture( this->TIMx ) + (*overflow_times) * this->period;  //get capture value
++//    if(now > last_value)
++//        _capture = now - last_value;
++//    else
++//        _capture = 0xffffffff + now - last_value;
++//    last_value = now;
++//    return _capture;
++//}
+ 
+-float InCapture::get_zone_time_us()
+-{
+-    return get_capture() * 1000000.0 / timer_clock;
+-}
+ 
+ 
+ 
