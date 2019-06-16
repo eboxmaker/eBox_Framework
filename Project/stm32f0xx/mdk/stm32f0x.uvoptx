@@ -147,9 +147,25 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
+          <LineNumber>302</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134232662</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>E:\My program\MCU\GitHub\ebox_framework\component\edriver\TFT9325.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\ebox\../../../component/edriver/TFT9325.cpp\302</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
           <LineNumber>29</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134229658</Address>
+          <Address>134229714</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -161,36 +177,20 @@
           <Expression>\\ebox\../../../example/20.display/8.9225_test.cpp\29</Expression>
         </Bp>
         <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>36</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134229696</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\example\20.display\8.9225_test.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../example/20.display/8.9225_test.cpp\36</Expression>
-        </Bp>
-        <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>44</LineNumber>
+          <LineNumber>182</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134229728</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\example\20.display\8.9225_test.cpp</Filename>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>E:\My program\MCU\GitHub\ebox_framework\component\edriver\TFT9325.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../example/20.display/8.9225_test.cpp\44</Expression>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -673,7 +673,7 @@
 
   <Group>
     <GroupName>ebox_mcu</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -741,7 +741,7 @@
       <GroupNumber>5</GroupNumber>
       <FileNumber>35</FileNumber>
       <FileType>8</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\ebox\hardware\cortex-m0\object.cpp</PathWithFileName>
@@ -753,7 +753,7 @@
       <GroupNumber>5</GroupNumber>
       <FileNumber>36</FileNumber>
       <FileType>8</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_gpio.cpp</PathWithFileName>
@@ -1508,8 +1508,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\component\edriver\TFT9325.cpp</PathWithFileName>
-      <FilenameWithoutPath>TFT9325.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\component\edriver\TFT9225.cpp</PathWithFileName>
+      <FilenameWithoutPath>TFT9225.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
