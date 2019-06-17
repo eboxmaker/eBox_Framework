@@ -41,7 +41,7 @@ typedef struct
 #if defined(STM32F030x6)
 #include "stm32f030_define.h"
 #elif defined(STM32F030x8)
-#include "stm32f030_define.h"
+#include "stm32f030x8_define.h"
 #elif defined(STM32F072xB)
   #include "stm32f072_define.h"
 #else

@@ -1,16 +1,14 @@
 /******************************************************************************
-程 序 名： stm32f030f4_define.h　
+程 序 名： stm32f030x8_define.h　
 编 写 人： cat_li
-编写时间： 2017年10月16日
-接口说明： stm32f030f4外设定义.
-	1个spi,i2c,usart,adc(11ch),15gpios,5tim(4general(3,14,16,17),1advance(1)4kRAM,16kFLASH
+编写时间： 2019年06月16日
+接口说明： stm32f030x8外设定义.
+	4kRAM,64kFLASH
 修改日志：　　
-	NO.1-  初始版本
-				2017/10/16 usart info 改用Periph_SS定义，信息中包含不同usart的时钟使能函数
 ******************************************************************************/
 
-#ifndef __STM32F030_DEFINE_H_
-#define __STM32F030_DEFINE_H_
+#ifndef __STM32F030X8_DEFINE_H_
+#define __STM32F030X8_DEFINE_H_
 
 #include "stm32f0xx_ll_bus.h"
 #include "stm32f0xx_ll_gpio.h"
