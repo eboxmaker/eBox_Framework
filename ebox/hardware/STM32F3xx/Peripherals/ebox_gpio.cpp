@@ -26,94 +26,19 @@
 //#define GETPORTINDEX(A)   ((A)&0xf0)>>4
 #define GETPORT(A)   (GPIO_TypeDef*)(((((A)&0xf0)+0x20)<<6)+AHB2PERIPH_BASE)
 
-///**
-//  *@brief    构造函数
-//  *@param    port port; pin pin
-//  *@retval   None
-//  */
-//mcuGpio::mcuGpio(GPIO_TypeDef *port, uint16_t pin)
-//{
-//    uint8_t temp1, temp2;
-//    _port = port;
-//    _pin = pin;
-//    switch ((uint32_t)(port))
-//    {
-//    case (uint32_t)GPIOA_BASE:
-//        temp1 = 0;
-//        break;
-//    case (uint32_t)GPIOB_BASE:
-//        temp1 = 1;
-//        break;
-//    case (uint32_t)GPIOC_BASE:
-//        temp1 = 2;
-//        break;
-//    case (uint32_t)GPIOD_BASE:
-//        temp1 = 3;
-//        break;
-//#if !(defined(STM32F030x6)||defined(STM32F031x6))
-//    case (uint32_t)GPIOE_BASE:
-//        temp1 = 4;
-//        break;
-//#endif
-//    case (uint32_t)GPIOF_BASE:
-//        temp1 = 5;
-//        break;
-//    default:
-//        temp1 = 0;
-//        break;
-//    }
-//    for (int i = 0; i <= 15; i ++)
-//    {
-//        if ((_pin >> i) == 0)
-//        {
-//            temp2 = i - 1;
-//            break;
-//        }
-//    }
-//    id = (PIN_ID_t)(temp1 * 16 + temp2);
-//}
+// 此函数会被 parallel—gpio.cpp调用，请勿移除
+void port_mode(GPIO_TypeDef* port,uint32_t pin, PIN_MODE mode)
+{    
+#if ENABLE_USESWD
+		if(SWD_PORT == port)
+		{
+			pin = pin & ~SWD_PIN;
+		}
+//		#error "注意:当前配置禁止用户使用SW端口，默认为PA13，PA14"
+#endif
 
-/**
-  *@brief    构造函数
-  *@param    PIN_ID_t pin_id
-  *@retval   None
-  */
-mcuGpio::mcuGpio(PIN_ID_t pin_id){
-	id = pin_id;
-//	switch(GETPORTINDEX(id))
-//	{			
-//		case 0:
-//			_port = GPIOA;
-//			break;
-//		case 1:
-//			_port = GPIOB;
-//			break;
-//		case 2:
-//			_port = GPIOC;
-//			break;
-//		case 3:
-//			_port = GPIOD;
-//			break;
-//		case 4:
-//			_port = GPIOE;
-//			break;
-//		case 5:
-//			_port = GPIOF;
-//			break;
-//	}
-		_port = GETPORT(id);
-		_pin = GETPIN(id);
-}
-/**
-  *@brief    GPIO模式设置
-  *@param    mode:PIN_MODE枚举变量类型
-  *@retval   None
-  */
-void mcuGpio::mode(PIN_MODE mode)
-{
-    LL_GPIO_InitTypeDef GPIO_InitStructure;
-    
-    rcc_clock_cmd((uint32_t)_port, ENABLE);
+    LL_GPIO_InitTypeDef GPIO_InitStructure;    
+    rcc_clock_cmd((uint32_t)port, ENABLE);
 
     switch ((uint8_t)mode)
     {
@@ -224,9 +149,29 @@ void mcuGpio::mode(PIN_MODE mode)
         break;
     }
 
-    GPIO_InitStructure.Pin = _pin;
+    GPIO_InitStructure.Pin = pin;
     GPIO_InitStructure.Speed = LL_GPIO_SPEED_FREQ_HIGH;
     LL_GPIO_Init(_port, &GPIO_InitStructure);
+}
+
+/**
+  *@brief    构造函数
+  *@param    PIN_ID_t pin_id
+  *@retval   None
+  */
+mcuGpio::mcuGpio(PIN_ID_t pin_id){
+	id = pin_id;
+  _port = GETPORT(id);
+  _pin = GETPIN(id);
+}
+/**
+  *@brief    GPIO模式设置
+  *@param    mode:PIN_MODE枚举变量类型
+  *@retval   None
+  */
+void mcuGpio::mode(PIN_MODE mode)
+{
+  port_mode(_port,_pin,mode);
 }
 
 

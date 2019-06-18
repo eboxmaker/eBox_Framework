@@ -70,5 +70,18 @@
  */
 #define	USE_OBJECT			0
 
+/* 是否使用SW接口，防止用户误关闭
+ * 0 可以将SW端口设置为普通IO口
+ * 1 禁止将SW端口设置为普通IO口
+ */
+#define ENABLE_USESWD		1
+
+#if ENABLE_USESWD
+	#ifndef SWD_PORT				//  PA13,PA14
+		#define SWD_PORT GPIOA
+		#define SWD_PIN	(1<<13 | 1<< 14) 
+	#endif
+#endif
+
 #endif
 
