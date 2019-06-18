@@ -32,6 +32,14 @@ void port_mode(GPIO_TypeDef* port,uint32_t pin, PIN_MODE mode)
 
     rcc_clock_cmd((uint32_t)port, ENABLE);
 
+#if ENABLE_USESWD
+		if(SWD_PORT == port)
+		{
+			pin = pin & ~SWD_PIN;
+		}
+//		#error "注意:当前配置禁止用户使用SW端口，默认为PA13，PA14"
+#endif
+
     switch ((uint8_t)mode)
     {
     /*analog input mode
@@ -164,122 +172,6 @@ mcuGpio::mcuGpio(PIN_ID_t pin_id){
 void mcuGpio::mode(PIN_MODE mode)
 {
 		port_mode(_port,_pin,mode);
-//    LL_GPIO_InitTypeDef GPIO_InitStructure;
-
-//    rcc_clock_cmd((uint32_t)_port, ENABLE);
-
-//    switch ((uint8_t)mode)
-//    {
-//    /*analog input mode
-//     */
-//    case AIN:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_ANALOG;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_NO;
-//        break;
-
-//    /* digital input mode
-//     */
-//    case INPUT:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_INPUT;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_NO;
-//        break;
-
-//    case INPUT_PD:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_INPUT;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_DOWN;
-//        break;
-
-//    case INPUT_PU:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_INPUT;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_UP;
-//        break;
-
-//    /*digital output mode
-//     */
-//    case OUTPUT_OD:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_OUTPUT;
-//        GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_NO;
-//        break;
-
-//    case OUTPUT_OD_PU:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_OUTPUT;
-//        GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_UP;
-//        break;
-
-//    case OUTPUT_OD_PD:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_OUTPUT;
-//        GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_DOWN;
-//        break;
-
-//    case OUTPUT:
-//    case OUTPUT_PP:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_OUTPUT;
-//        GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_NO;
-//        break;
-
-//    case OUTPUT_PP_PU:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_OUTPUT;
-//        GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_UP;
-//        break;
-
-//    case OUTPUT_PP_PD:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_OUTPUT;
-//        GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_DOWN;
-//        break;
-//    /*af mode
-//     */
-//    case AF_OD:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_ALTERNATE;
-//        GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_NO;
-//        break;
-
-//    case AF_OD_PU:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_ALTERNATE;
-//        GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_UP;
-//        break;
-
-//    case AF_OD_PD:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_ALTERNATE;
-//        GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_DOWN;
-//        break;
-
-//    case AF_PP:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_ALTERNATE;
-//        GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_NO;
-//        break;
-
-//    case AF_PP_PU:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_ALTERNATE;
-//        GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_UP;
-//        break;
-
-//    case AF_PP_PD:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_ALTERNATE;
-//        GPIO_InitStructure.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_DOWN;
-//        break;
-//    /* if parament is other mode,set as INPUT mode
-//     */
-//    default:
-//        GPIO_InitStructure.Mode = LL_GPIO_MODE_INPUT;
-//        GPIO_InitStructure.Pull = LL_GPIO_PULL_NO;
-//        break;
-//    }
-
-//    GPIO_InitStructure.Pin = _pin;
-//    GPIO_InitStructure.Speed = LL_GPIO_SPEED_HIGH;
-//    LL_GPIO_Init(_port, &GPIO_InitStructure);
 }
 
 
