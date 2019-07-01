@@ -32,7 +32,7 @@ class ParallelGpio
 {
     public:
         ParallelGpio() {};
-        virtual void mode(PIN_MODE mode) = 0;
+        virtual void mode(PinMode_t mode) = 0;
         virtual void write(uint16_t val) = 0;
         virtual void read(uint16_t *val) = 0;
         virtual uint16_t read(void) = 0;
@@ -47,7 +47,7 @@ class Gpios : public ParallelGpio
 {
     public:
         Gpios(Gpio **pin,uint8_t num);
-        virtual void mode(PIN_MODE mode);
+        virtual void mode(PinMode_t mode);
         virtual void write(uint16_t val);
         virtual void read(uint16_t *val);
         virtual uint16_t read(void);
@@ -82,7 +82,7 @@ class Port : public ParallelGpio
          *@retval   NONE
          */
         Port(uint32_t port, uint8_t pinnum, uint8_t pinoffset = 0);
-        virtual void mode(PIN_MODE mode);
+        virtual void mode(PinMode_t mode);
         virtual void write(uint16_t val);
         virtual void read(uint16_t *val);
         virtual uint16_t read(void);

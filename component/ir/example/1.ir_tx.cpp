@@ -11,15 +11,13 @@ Copyright 2015 shentq. All Rights Reserved.
 
 
 #include "ebox.h"
-#include "ir_encoder.h"
+#include "ir/ir_encoder.h"
 
-PWM nec_tx(&PA0);
-IR_ENCODER nec;
+IrEncoder nec(PA0);
 void setup()
 {
     ebox_init();
-    nec_tx.begin(38000, 0);
-    nec.begin(&nec_tx);
+    nec.begin();
 
 }
 int main(void)
@@ -27,7 +25,7 @@ int main(void)
     setup();
     while(1)
     {
-        nec.send(0x00ff55aa);
+        nec.send(0x12,0x45);
         delay_ms(1000);
     }
 }

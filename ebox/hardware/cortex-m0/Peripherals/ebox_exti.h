@@ -53,7 +53,7 @@ class Exti
 {
 public:
     Exti(Gpio *exti_pin);
-    void begin(PIN_MODE mode = INPUT, ExtiType type = IT);
+    void begin(PinMode_t mode = INPUT, ExtiType type = IT);
 
     void enable(TrigType trig, uint32_t priority = 0);
     void disable(TrigType trig);
