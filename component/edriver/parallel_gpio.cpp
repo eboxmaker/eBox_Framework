@@ -84,15 +84,10 @@ uint16_t Gpios::read(void)
 }
 
 //-----------------------------------------------------------------------------------//
-//Port::Port(uint32_t port, uint32_t mask)
-//{
-//  _mask = mask;
-//  _port = (GPIO_TypeDef *)port;
-//}
 
 Port::Port(uint32_t port, uint8_t pinnum, uint8_t pinoffset)
 {
-    _mask = (0xffffffff>>(32-pinnum))<<pinoffset;
+    _mask = (0xffff>>(16-pinnum))<<pinoffset;
     _offset = pinoffset;
     _port = (GPIO_TypeDef *)port;
 }
