@@ -12,6 +12,22 @@ Page,
 Menu,
 END_ENUM();
 
+
+DECLARE_ENUM(GuiDockMode)
+Left = 0,
+Mid,
+Right
+END_ENUM();
+
+
+DECLARE_ENUM(GuiOutlineMode)
+None = 0,
+Surround
+END_ENUM();
+
+    
+    
+    
 class GuiBase:public Object
 {
     
@@ -40,8 +56,12 @@ class Component:public GuiBase
 class ActivityComponent:public Component
 {
     public:
+        ActivityComponent()
+        {
+            click = NULL;
+            selected = false;
+        }
         virtual ~ActivityComponent(){};
-        ActivityComponent(){click = NULL;}
         virtual void set_select(bool state) = 0;
         void (*click)();
    

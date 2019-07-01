@@ -68,7 +68,7 @@
  * 0 不使用object，用户需要根据需要实例对象,建议在bsp_ebox中实例
  * 1 使用默认实例
  */
-#define	USE_OBJECT			0
+#define	USE_OBJECT			1
 
 /* 是否使用SW接口，防止用户误关闭
  * 0 可以将SW端口设置为普通IO口

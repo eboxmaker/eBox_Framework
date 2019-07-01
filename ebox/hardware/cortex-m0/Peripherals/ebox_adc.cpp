@@ -106,7 +106,7 @@ void  Adc::begin()
 
     LL_ADC_REG_Init(ADCx, &ADC_REG_InitStruct);
 
-    LL_ADC_SetSamplingTimeCommonChannels(ADC1, LL_ADC_SAMPLINGTIME_41CYCLES_5);
+    LL_ADC_SetSamplingTimeCommonChannels(ADC1, LL_ADC_SAMPLINGTIME_239CYCLES_5);
     for(int i = 0; i < ch_num; i++)
     {
         LL_ADC_REG_SetSequencerChAdd(ADCx, ch_table[1][i]);

@@ -9,11 +9,31 @@ class GuiPage :public Component
     public :
         GuiPage(String name)
         {
+            this->x = 0;
+            this->y = 0;
+            this->len = 256;
+            this->hight = 64;
+            
             this->name = name;
             last_index = index = 0;
             type = GuiType::Page;
+            outline = GuiOutlineMode::None;
         };
         
+        GuiPage(int16_t x,int16_t y,int16_t len,int16_t hight,
+                String name)
+        {
+            this->x = x;
+            this->y = y;
+            this->len = len;
+            this->hight = hight;
+
+            this->name = name;
+            last_index = index = 0;
+            type = GuiType::Page;
+            outline = GuiOutlineMode::Surround;
+
+        };       
         GuiPage *father;
         
         virtual void create();
@@ -22,8 +42,8 @@ class GuiPage :public Component
         virtual void show();
         virtual void hide();
         virtual void loop();
-        virtual void regedit(ActivityComponent *object);
-        virtual void regedit(Component *object);
+        virtual void Register(ActivityComponent *object);
+        virtual void Register(Component *object);
         virtual ActivityComponent *get_selected_object();
         
         
@@ -40,6 +60,13 @@ class GuiPage :public Component
         int index;
         int last_index;
         void update_index();
+    
+    private:
+        int16_t x;
+        int16_t y;
+        int16_t len;
+        int16_t hight;
+        GuiOutlineMode outline;
 
 };
 #endif 

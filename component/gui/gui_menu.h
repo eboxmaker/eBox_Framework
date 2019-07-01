@@ -27,15 +27,17 @@ class GuiMenu :public ActivityComponent
 
     public:
         GuiMenu(int16_t x,int16_t y,int16_t len,int16_t hight,
-                const menu_t *menu)
+                const menu_t *menu,String name)
         {
             this->x = x;
             this->y = y;
             this->len = len;
             this->hight = hight;
+            font = &GUI_Font16_ASCII;
+            text_mode = GuiDrawMode::Trans;
             index = 0;
             max = 3;
-            name = "";
+            this->name = name;
             type = GuiType::Menu;
             current_menu = menu;
         }
@@ -59,6 +61,8 @@ class GuiMenu :public ActivityComponent
         int16_t len,hight;
         const menu_t    *current_menu;
         uint8_t max;
+        const GUI_FONT *font;
+        GuiDrawMode text_mode;
     private:
         void update_item_index();
 };

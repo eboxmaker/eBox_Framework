@@ -38,14 +38,14 @@ class Graphic
         enum ColorMode{RGB888,RGB565,GRAY};
         uint32_t color, back_color;
 
-    GUI_FONT *current_font;
+        GUI_FONT *current_font;
+        uint16_t _width, _height; // Display w/h as modified by current rotation
 
 private:
     Vhmi     *lcd;
     uint8_t  rotation;
     uint16_t lcd_width, lcd_height; //  LCD属性。初始化后不可更改
     int16_t  cursor_x, cursor_y;
-    uint16_t _width, _height; // Display w/h as modified by current rotation
     uint8_t  draw_mode;
 
 
