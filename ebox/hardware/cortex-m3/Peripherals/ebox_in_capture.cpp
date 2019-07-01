@@ -329,7 +329,7 @@ void InCapture::complex_event()
         low_capture = capture;
         set_polarity_falling();//ÇÐ»»¼ì²âÏÂ½µÑØ
     }
-    if((high_capture!= 0) && (low_capture != 0))
+//    if((high_capture!= 0) && (low_capture != 0))
         _available = true;
     
 }

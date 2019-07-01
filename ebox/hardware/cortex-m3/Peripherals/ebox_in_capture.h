@@ -83,8 +83,8 @@ class InCapture
 public:
     InCapture(Gpio *capture_pin);
     void        begin(uint16_t prescaler = 1, ICMode_t mode = SIMPLE); //使用默认参数，分频系数为1；最大量程为120s
-    inline void        set_polarity_falling();
-    inline void        set_polarity_rising();
+    void        set_polarity_falling();
+    void        set_polarity_rising();
     void        close();
 
     //需要用户在中断中处理更精细的任务，处理状态机等事务，比如红外解码，超声波测距

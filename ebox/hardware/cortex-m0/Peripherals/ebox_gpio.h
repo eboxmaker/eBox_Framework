@@ -28,9 +28,9 @@
 class mcuGpio : public Gpio
 {
 public:
-		mcuGpio(PIN_ID_t pin_id);		
-    virtual void mode(PIN_MODE mode);
-    virtual void mode(PIN_MODE mode, uint8_t af_configration);
+		mcuGpio(PinId_t pin_id);		
+    virtual void mode(PinMode_t mode);
+    virtual void mode(PinMode_t mode, uint8_t af_configration);
     virtual void set();
     virtual void reset();
     virtual void write(uint8_t val);

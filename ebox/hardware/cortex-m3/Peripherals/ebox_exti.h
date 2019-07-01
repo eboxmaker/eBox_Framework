@@ -53,7 +53,7 @@ class Exti
 {
 public:
     Exti(Gpio *exti_pin);
-    void begin(PIN_MODE mode = INPUT, ExtiType type = IT);
+    void begin(PinMode_t mode = INPUT, ExtiType type = IT);
 
     void nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
     void interrupt(TrigType type, FunctionalState enable);

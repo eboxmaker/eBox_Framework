@@ -30,10 +30,10 @@
 
 /**
   *@brief    构造函数
-  *@param    PIN_ID_t pin_id
+  *@param    PinId_t pin_id
   *@retval   None
   */
-mcuGpio::mcuGpio(PIN_ID_t pin_id){
+mcuGpio::mcuGpio(PinId_t pin_id){
     id = pin_id;
     _port = GETPORT(id);
     _pin = GETPIN(id);
@@ -44,7 +44,7 @@ mcuGpio::mcuGpio(PIN_ID_t pin_id){
   *@param    mode:PIN_MODE枚举变量类型
   *@retval   None
   */
-void mcuGpio::mode(PIN_MODE mode)
+void mcuGpio::mode(PinMode_t mode)
 {
     port_mode(_port,_pin,mode);
 }
@@ -53,7 +53,7 @@ void mcuGpio::mode(PIN_MODE mode)
   *@param    mode: PIN_MODE枚举变量类型，af_configration 第二功能
   *@retval   None
   */
-void mcuGpio::mode(PIN_MODE mode, uint8_t af_configration)
+void mcuGpio::mode(PinMode_t mode, uint8_t af_configration)
 {
     mcuGpio::mode(mode);
 }
@@ -147,7 +147,7 @@ mcuGpio mcuGpio::operator= ( int value)
 
 
 // 此函数会被 parallel—gpio.cpp调用，请勿移除
-void port_mode(GPIO_TypeDef* port,uint32_t pin, PIN_MODE mode)
+void port_mode(GPIO_TypeDef* port,uint32_t pin, PinMode_t mode)
 {
 #if ENABLE_USESWD
 		if(SWD_PORT == port)

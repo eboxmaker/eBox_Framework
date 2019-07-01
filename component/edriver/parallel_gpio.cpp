@@ -38,7 +38,7 @@ Gpios::Gpios(Gpio **pin,uint8_t num)
 *@param    mode:   PIN_MODE枚举变量类型
 *@retval   None
 */
-void Gpios::mode(PIN_MODE mode)
+void Gpios::mode(PinMode_t mode)
 {
 
     for (uint8_t i=0;i<_num;i++)
@@ -92,8 +92,8 @@ Port::Port(uint32_t port, uint8_t pinnum, uint8_t pinoffset)
     _port = (GPIO_TypeDef *)port;
 }
 // 该函数实现在ebox_gpio.cpp中，不同平台实现有差异
-extern void port_mode(GPIO_TypeDef* port,uint32_t pin, PIN_MODE mode);
-void Port::mode(PIN_MODE mode)
+extern void port_mode(GPIO_TypeDef* port,uint32_t pin, PinMode_t mode);
+void Port::mode(PinMode_t mode)
 {
     port_mode(_port,_mask,mode);
 }
