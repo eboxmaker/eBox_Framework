@@ -149,8 +149,15 @@ mcuGpio mcuGpio::operator= ( int value)
 // 此函数会被 parallel—gpio.cpp调用，请勿移除
 void port_mode(GPIO_TypeDef* port,uint32_t pin, PIN_MODE mode)
 {
-    GPIO_InitTypeDef GPIO_InitStructure;
+#if ENABLE_USESWD
+		if(SWD_PORT == port)
+		{
+			pin = pin & ~SWD_PIN;
+		}
+//		#error "注意:当前配置禁止用户使用SW端口，默认为PA13，PA14"
+#endif
 
+    GPIO_InitTypeDef GPIO_InitStructure;
     rcc_clock_cmd((uint32_t)port, ENABLE);
 
     switch ((uint8_t)mode)

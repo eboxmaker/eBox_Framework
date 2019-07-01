@@ -87,7 +87,7 @@ class Port : public ParallelGpio
         virtual void read(uint16_t *val);
         virtual uint16_t read(void);
     private:
-        uint32_t _mask;
+        uint16_t _mask;
         uint8_t _offset;
         GPIO_TypeDef *_port;
 
