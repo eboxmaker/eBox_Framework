@@ -27,7 +27,7 @@ typedef enum
     AF_PP,
     AF_PP_PU,
     AF_PP_PD,
-} PIN_MODE;
+} PinMode_t;
 
 typedef enum
 {
@@ -58,14 +58,14 @@ typedef enum
     PI0_ID = 0x80,  PI1_ID,     PI2_ID,     PI3_ID,     PI4_ID,     PI5_ID,     PI6_ID,     PI7_ID,
     PI8_ID,         PI9_ID,     PI10_ID,    PI11_ID,    PI12_ID,    PI13_ID,    PI14_ID,    PI15_ID,
     P_NC = 0xff
-} PIN_ID_t; ///<引脚的名字
+} PinId_t; ///<引脚的名字
 
 class Gpio
 {
 public:
     Gpio() {};
-    virtual void mode(PIN_MODE mode) = 0;
-    virtual void mode(PIN_MODE mode, uint8_t af_configration) = 0;
+    virtual void mode(PinMode_t mode) = 0;
+    virtual void mode(PinMode_t mode, uint8_t af_configration) = 0;
     virtual void set() = 0;
     virtual void reset() = 0;
 
@@ -74,7 +74,7 @@ public:
     virtual uint8_t read(void) = 0;
     virtual void toggle() = 0;
 
-    PIN_ID_t id;
+    PinId_t id;
 };
 
 #endif
