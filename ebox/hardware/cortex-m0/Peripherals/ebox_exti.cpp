@@ -76,7 +76,7 @@ Exti::Exti(Gpio *pin)
  * @param    mode: gpio模式，type 中断类型，IT，EVENT,IT_EVENT。默认为中断
  * @return   NONE
  */
-void Exti::begin(PIN_MODE mode, ExtiType type)
+void Exti::begin(PinMode_t mode, ExtiType type)
 {
     _pin->mode(mode);
 

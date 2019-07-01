@@ -31,7 +31,10 @@
 /** @defgroup analog私有宏定义
 * @{
 */
-
+// pin.id 为8bit，高4位标识port 0-5,低4位为io,0-15
+#define GETEXTIPORT(a) ((uint32_t)a >>4 )
+#define GETEXTILINE(a) ((uint32_t)1<<( a & 0x0f ))
+#define GETPINNUMBER(a)(a & 0x0f)
 /**
   * @}
   */
@@ -64,12 +67,11 @@ int exti_irq_init(uint8_t index, exti_irq_handler handler, uint32_t id)
  *           - CHANGE: 上升沿和下降沿均触发中断
  * @return   NONE
  */
-Exti::Exti(Gpio *pin, uint8_t trigger)
+Exti::Exti(Gpio *pin)
 {
-
-
     this->pin = pin;
-    this->trigger = trigger;
+    exti_line = 1 << pin_source;
+    exti_irq_init(this->pin_source, (&Exti::_irq_handler), (uint32_t)this);
 
 }
 
@@ -81,21 +83,38 @@ Exti::Exti(Gpio *pin, uint8_t trigger)
  * @note    初始化会默认开启中断，如果用户想禁用中断，
  *          可以调用interrupt(DISABLE)关闭中断。
  */
-void Exti::begin()
+void Exti::begin(PinMode_t mode, Exti_t type)
 {
 
+    pin->mode((mode == INPUT) ? (INPUT_PU) : (mode));
 
-    port_source = (uint32_t)pin->id >> 4;
-    pin_source = pin->id & 0x0f;
-    exti_line = 1 << pin_source;
+//    port_source = (uint32_t)pin->id >> 4;
+//    pin_source = pin->id & 0x0f;
+//    GPIO_EXTILineConfig(GETEXTIPORT(pin->id), GETPINNUMBER(pin->id));
 
-    exti_irq_init(this->pin_source, (&Exti::_irq_handler), (uint32_t)this);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
 
+    switch (type)
+    {
+    case IT:
+        SET_BIT(EXTI->IMR, exti_line);
+        CLEAR_BIT(EXTI->EMR, exti_line);
+        break;
+    case EVENT:
+        SET_BIT(EXTI->EMR, exti_line);
+        CLEAR_BIT(EXTI->IMR, exti_line);
+        break;
+    case IT_EVENT:
 
-    pin->mode(INPUT_PU);
+        SET_BIT(EXTI->EMR, exti_line);
+        SET_BIT(EXTI->IMR, exti_line);
+        break;
+    default:
+        SET_BIT(EXTI->IMR, exti_line);
+        CLEAR_BIT(EXTI->EMR, exti_line);
+        break;
+    }
     nvic(ENABLE, 0, 0);
-    interrupt(ENABLE);
 
 }
 
@@ -116,16 +135,16 @@ void Exti::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub
  *
  * @return  NONE
  */
-void Exti::interrupt(FunctionalState enable)
+void Exti::interrupt(Trigger_t type,FunctionalState enable)
 {
 
     EXTI_InitTypeDef EXTI_InitStructure;
-    switch(trigger)
+    switch(type)
     {
-    case RISING:
+    case RISE:
         EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //上升沿沿中断
         break;
-    case FALLING:
+    case FALL:
         EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; //下降沿中断
         break;
     case CHANGE:
