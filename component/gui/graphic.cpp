@@ -21,7 +21,7 @@ void Graphic::begin()
 
     
     set_text_auto_reline(0);
-    _gpu->set_font(&GUI_FontHZ16X16);
+    _gpu->set_font(&GUI_Font16_ASCII);
     set_text_mode(GuiDrawMode::Normal);
 };
 
@@ -456,7 +456,7 @@ void Graphic::draw_h_line(int16_t x0, int16_t y0, int16_t x1,uint32_t color)
 
 void Graphic::draw_v_line(int16_t x0, int16_t y0, int16_t y1)
 {
-   lcd->draw_v_line(x0,y0,y1,this->color);
+   draw_v_line(x0,y0,y1,this->color);
 }
 void Graphic::draw_v_line(int16_t x0, int16_t y0, int16_t y1,uint32_t color)
 {

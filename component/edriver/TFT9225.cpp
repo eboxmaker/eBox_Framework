@@ -261,6 +261,14 @@ void  Lcd::fill_rect(int16_t x, int16_t y, int16_t x1, int16_t y1, uint32_t colo
 	}
 }
 
+void  Lcd::fill_rect(int16_t x, int16_t y, int16_t x1, int16_t y1, uint32_t *color,uint16_t size){
+	_setRegion(x,y,(x1-x),(y1-y));
+	_setIndexReg(LCD_REG_22_MWrte);
+	for(uint32_t i=0;i<size;i++)
+	{		_writeDate(*color++);
+	}
+}
+
 void Lcd::fill_screen(uint32_t color)
 {
   clear(color);
@@ -277,7 +285,7 @@ void Lcd::draw_v_line(int16_t x0, int16_t y0, int16_t y1, uint32_t color){
   _setIndexReg(LCD_REG_22_MWrte);
 
   /* Fill a complete vertical line */
-  for(counter = 0; counter < y1; counter++)
+  for(counter = y0; counter < y1; counter++)
   {
     _writeDate(color);
   }
@@ -290,7 +298,7 @@ void Lcd::draw_h_line(int16_t x0, int16_t y0, int16_t x1, uint32_t color){
   /* Prepare to write GRAM */
   _setIndexReg(LCD_REG_22_MWrte);
   /* Fill a complete vertical line */
-  for(uint16_t counter = 0; counter < x1; counter++)
+  for(uint16_t counter = x0; counter < x1; counter++)
   {	
     _writeDate(color);
   }

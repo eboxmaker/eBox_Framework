@@ -1,17 +1,19 @@
 #include "gui_page.h"
 #include "bsp_ebox.h"
 
-void GuiPage::regedit(ActivityComponent *object)
+void GuiPage::Register(ActivityComponent *object)
 {
     activityList.insert_tail(object);
 }
-void GuiPage::regedit(Component *object)
+void GuiPage::Register(Component *object)
 {
     componentList.insert_tail(object);
 }
 void GuiPage::create()
 {
     UART.printf("´´½¨:%s",name.c_str());
+    
+    _gpu->fill_rect(x,y, x + len - 1,  y+ hight - 1,_gpu->back_color);
 
     Component *p;
     for(int i = 0; i < componentList.size(); i++)
@@ -25,6 +27,9 @@ void GuiPage::create()
          p->create();
     }  
     index_set(0);
+    
+    if(outline == GuiOutlineMode::Surround)
+        _gpu->draw_rect(x,y, x + len - 1,  y+ hight - 1);
 
 
 }
@@ -48,7 +53,7 @@ void GuiPage::show()
 
 void GuiPage::hide()
 {
-    _gpu->clear();
+    _gpu->fill_rect(x,y, x + len - 1,  y+ hight - 1,_gpu->back_color);
     UART.printf("Òþ²Ø£º%s\r\n",name.c_str());
 
 }

@@ -32,7 +32,13 @@ extern const GUI_FONT GUI_Font8_ASCII;
 extern const GUI_FONT GUI_Font16_ASCII;
 extern const GUI_FONT GUI_Font24_ASCII;
 extern const GUI_FONT GUI_Font32_ASCII;
+extern const GUI_FONT GUI_FontHZ24x36;
 extern const GUI_FONT GUI_FontHZ16X16;
+extern const GUI_FONT GUI_FontHZ20x20;
+extern const GUI_FONT GUI_FontD32;
+extern const GUI_FONT GUI_FontD48;
+extern const GUI_FONT GUI_FontD36x48;
+extern const GUI_FONT GUI_FontF32B_ASCII;
 
 
 typedef enum{

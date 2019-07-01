@@ -17,6 +17,8 @@ class GuiButton :public ActivityComponent
             text = "NULL";
             this->name = name;
             type = GuiType::Button;
+            font = &GUI_Font16_ASCII;
+            text_mode = GuiDrawMode::Trans;
 
         }
         virtual ~GuiButton();
@@ -26,15 +28,16 @@ class GuiButton :public ActivityComponent
         virtual void set_select(bool state);
 
 
-        void draw();
         void set_text(String str);
-        void btn_down(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
-        void btn_up(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
+//        void btn_down(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
+//        void btn_up(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
     public:
         int16_t x,y;
         int16_t len,hight;
         String text;
         bool    pushed;
+        const GUI_FONT *font;
+        GuiDrawMode text_mode;
 };
 
 

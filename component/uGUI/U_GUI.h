@@ -4,32 +4,7 @@
 extern "C" {
 #include "ugui.h"
 }
-//class LCD_DRIVER{
-//public:
-//  UG_RESULT _HW_DrawLine( UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c );
-//  void _HW_DrawPixel( UG_S16 x, UG_S16 y, UG_COLOR c );
-//  UG_RESULT _HW_FillFrame( UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c );
-//};
-
-//LCD_DRIVER P;
-
-//void temp_DrawPixel( UG_S16 x, UG_S16 y, UG_COLOR c )
-//{
-//	P._HW_DrawPixel(x,y,c);
-//}
-
-//UG_RESULT temp_DrawLine( UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c )
-//{
-//	 P._HW_DrawLine(x1,y1,x2,y2,c);
-//   return UG_RESULT_OK;
-//}
-
-//UG_RESULT temp_FillFrame( UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c )
-//{
-//	 P._HW_FillFrame(x1,y1,x2,y2,c);
-//   return UG_RESULT_OK;
-//}
-
+#include "ebox_core.h"
 class U_GUI
 {
 public:
@@ -113,8 +88,18 @@ public:
     };
     // ÎÄ±¾Êä³ö
     void PutString( UG_S16 x, UG_S16 y, char *str )
-    {
-        UG_PutString(x, y, str);
+    {				
+        UG_PutString(x*_gui.font.char_width, y*_gui.font.char_height, str);
+    };
+		void PutString( UG_S16 x, UG_S16 y, const char *fmt, ...)
+    {	
+				char buf[256];
+				uint8_t i = 0;
+				va_list va_params;
+				va_start(va_params, fmt);
+				ebox_vsnprintf(buf, 256, fmt, va_params);
+				va_end(va_params);			
+        UG_PutString(x*_gui.font.char_width, y*_gui.font.char_height, buf);
     };
     void PutChar( char chr, UG_S16 x, UG_S16 y, UG_COLOR fc, UG_COLOR bc )
     {
