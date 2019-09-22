@@ -813,6 +813,11 @@
               <FilePath>..\..\..\ebox\hardware\cortex-m3\ebox_it.cpp</FilePath>
             </File>
             <File>
+              <FileName>ebox_pulse.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_pulse.cpp</FilePath>
+            </File>
+            <File>
               <FileName>object.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\object.cpp</FilePath>
