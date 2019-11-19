@@ -22,6 +22,13 @@
 #define __DS3231_H__
 
 #include "ebox_core.h"
+#include "basicRtc.h"
+#include "ebox_uart.h"
+#include "ebox_exti.h"
+
+/*
+ *本驱动只支持24小时制
+*/
 
 #define DS3231_ADDRESS 0xD0    //器件写地址 
 #define DS3231_SECOND       0x00    //秒
@@ -49,32 +56,51 @@
 #define DS3231_TEMPERATUREL 0x12    //温度寄存器低字节(高2位)  
 //timer.w_year,timer.w_month,timer.w_date,timer.hour,timer.min,timer.sec
 
-class DS3231
+class DS3231:public BasicRtc
 {
 
 public:
-    DateTime_t t;
+    typedef enum{
+        HOUR24,
+        HOUR12,
+    }HourMode_t;
+
 public:
     DS3231(I2c *i2c,uint16_t slaveAddr)
     {
         this->i2c = i2c;
+        this->intPin = NULL;
         this->slaveAddr = slaveAddr;
         cfg.speed = I2c::K200;
         cfg.regAddrBits = I2c::BIT8;
     };
-    void begin();
-    void get_date_time(DateTime_t *t);
-    void get_time(char *buf);
-    void get_date(char *buf);
-
-    void set_time(void *dt);
+    DS3231(I2c *i2c,Gpio *intPin,uint16_t slaveAddr)
+    {
+        this->i2c = i2c;
+        this->slaveAddr = slaveAddr;
+        this->intPin = intPin;
+        cfg.speed = I2c::K200;
+        cfg.regAddrBits = I2c::BIT8;
+    };    
+    
+    virtual void begin();
+    virtual void event();
+    virtual void loop();
+    virtual void    write_dt(DateTime_t &dt);
+    DateTime_t      read_date_time();
 
 private:
     I2c *i2c;
+    Gpio *intPin;
+    Exti *exti;
     I2c::Config_t cfg;
+    uint32_t last_time;
     uint16_t slaveAddr;
-    uint8_t bcd_to_dec(uint8_t bcd_code);
-    uint8_t dec_to_bcd(uint8_t dec);
+    void set_hour_mode(HourMode_t mode);
+    HourMode_t get_hour_mode();
+
+    HourMode_t hour_mode;
+
 };
 
 

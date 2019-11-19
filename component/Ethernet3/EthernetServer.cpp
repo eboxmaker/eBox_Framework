@@ -54,13 +54,16 @@ void EthernetServer::accept()
         begin();
     }
 }
-
+//uint32_t last_time = 0;
 EthernetClient EthernetServer::available()
 {
+//    uint32_t diff = millis() - last_time;
+//    last_time = millis();
     accept();
 
     for (int sock = 0; sock < MAX_SOCK_NUM; sock++)
     {
+//        ebox_printf("%d\r\n",diff);
         EthernetClient client(sock);
         if (EthernetClass::_server_port[sock] == _port &&
                 (client.status() == SnSR::ESTABLISHED ||

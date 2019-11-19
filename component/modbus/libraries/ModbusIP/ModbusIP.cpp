@@ -60,7 +60,7 @@ void ModbusIP::task()
             if (_MBAP[2] != 0 || _MBAP[3] != 0) return; //Not a MODBUSIP packet
             if (_len > MODBUSIP_MAXFRAME) return;      //Length is over MODBUSIP_MAXFRAME
 
-            _frame = (byte *) malloc(_len);
+            _frame = (byte *) ebox_malloc(_len);
             i = 0;
             while (client.available())
             {
@@ -76,7 +76,7 @@ void ModbusIP::task()
                 _MBAP[4] = (_len + 1) >> 8;   //_len+1 for last byte from MBAP
                 _MBAP[5] = (_len + 1) & 0x00FF;
 
-                byte *sendbuffer = (byte *)malloc(7 + _len);
+                byte *sendbuffer = (byte *)ebox_malloc(7 + _len);
 
                 for (i = 0 ; i < 7 ; i++)
                 {
@@ -88,13 +88,13 @@ void ModbusIP::task()
                     sendbuffer[i + 7] = _frame[i];
                 }
                 client.write(sendbuffer, _len + 7);
-                free(sendbuffer);
+                ebox_free(sendbuffer);
             }
 
 #if  (TCP_KEEP_ALIVE == 0)
             client.stop();
 #endif
-            free(_frame);
+            ebox_free(_frame);
             _len = 0;
         }
     }
