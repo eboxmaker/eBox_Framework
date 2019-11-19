@@ -22,12 +22,17 @@ Copyright 2015 shentq. All Rights Reserved.
 #define EXAMPLE_NAME	"ds3231 example"
 #define EXAMPLE_DATE	"2018-08-11"
 
-DS3231 ds(&si2c);
+SoftI2c si2c(&PC6,&PC7);
 
-DateTime_t t;
+
+DS3231 ds(&si2c,0xD0);
+
+DateTime_t dt;
+DateTime_t dt1;
 char time[9];
 char date[9];
 
+uint32_t last_time;
 
 void setup()
 {
@@ -35,34 +40,64 @@ void setup()
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
-    ds.begin(400000);
-
-    t.year = 15;
-    t.month = 7;
-    t.date = 3;
-    t.hour = 23;
-    t.min = 59;
-    t.sec = 55;
-
+    ds.begin();
+    DataU16_t buf[3];
+    
+    buf[0].byte[0] = 30;
+    buf[0].byte[1] = 37;
+    buf[1].byte[0] = 20;
+    buf[1].byte[1] = 10;
+    buf[2].byte[0] = 11;
+    buf[2].byte[1] = 19;
+    
+    dt.year = buf[2].byte[1];
+    dt.month = buf[2].byte[0];
+    dt.date = buf[1].byte[1];
+    dt.hour = buf[1].byte[0];
+    dt.min = buf[0].byte[1];
+    dt.sec = buf[0].byte[0];
+    
+//    t.year = 19;
+//    t.month = 11;
+//    t.date = 10;
+//    t.hour = 23;
+//    t.min = 59;
+//    t.sec = 55;
+    ds.set_dt_mb(buf);
 
 }
 int main(void)
 {
     setup();
-    ds.set_time(&t);
     while(1)
     {
-        ds.get_date_time(&t);
-        ds.get_time(time);
-        ds.get_date(date);
-        UART.printf("=======\r\n");
-        UART.printf("%02d-%02d-%02d %02d:%02d:%02d\r\n", t.year, t.month, t.date, t.hour, t.min, t.sec);
+        ds.loop();
 
-        UART.printf(date);
-        UART.printf(" ");
-        UART.printf(time);
-        UART.printf("\r\n");
-        delay_ms(1000);
+        dt = ds.get_dt();
+        String time = ds.get_time();
+        String date = ds.get_date();
+
+
+//        UART.printf(date);
+//        UART.printf(" ");
+//        UART.printf(time);
+//        UART.printf("\r\n");
+        if(millis() - last_time > 1000)
+        {
+            last_time = millis();
+            
+            UART.printf("========RTC测试======\r\n");
+            UART.printf("20%02d-%02d-%02d %02d:%02d:%02d\r\n", dt.year, dt.month, dt.date, dt.hour, dt.min, dt.sec);
+            UART.println(date);
+            UART.println(time);
+            
+            uint32_t stamp = ds.get_unix_timestamp(8,ds.dateTime);
+            UART.printf("UNIX时间戳：%u\r\n",stamp);
+
+            dt1 =  ds.date_next_n_days(10);
+            UART.printf("10天之后的日期：20%02d-%02d-%02d\r\n",dt1.year, dt1.month, dt1.date);
+//            ds.print(UART);
+        }
     }
 
 
