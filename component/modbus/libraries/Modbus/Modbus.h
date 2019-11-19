@@ -3,13 +3,14 @@
     Copyright (C) 2014 Andr?Sarmento Barbosa
 */
 #include "ebox.h"
-
+#include "ebox_mem.h"
 #ifndef MODBUS_H
 #define MODBUS_H
 
 #define MAX_REGS     32
 #define MAX_FRAME   128
 //#define USE_HOLDING_REGISTERS_ONLY
+typedef void (*MBcallbackType)(uint8_t);
 
 typedef unsigned int u_int;
 
@@ -45,8 +46,8 @@ enum
 
 typedef struct TRegister
 {
-    word address;
-    word value;
+    uint16_t address;
+    uint16_t value;
     struct TRegister *next;
 } TRegister;
 
@@ -56,23 +57,25 @@ private:
     TRegister *_regs_head;
     TRegister *_regs_last;
 
-    void readRegisters(word startreg, word numregs);
-    void writeSingleRegister(word reg, word value);
-    void writeMultipleRegisters(byte *frame, word startreg, word numoutputs, byte bytecount);
+    void readRegisters(uint16_t startreg, uint16_t numregs);
+    void writeSingleRegister(uint16_t reg, uint16_t value);
+    void writeMultipleRegisters(byte *frame, uint16_t startreg, uint16_t numoutputs, byte bytecount);
     void exceptionResponse(byte fcode, byte excode);
 #ifndef USE_HOLDING_REGISTERS_ONLY
-    void readCoils(word startreg, word numregs);
-    void readInputStatus(word startreg, word numregs);
-    void readInputRegisters(word startreg, word numregs);
-    void writeSingleCoil(word reg, word status);
-    void writeMultipleCoils(byte *frame, word startreg, word numoutputs, byte bytecount);
+    void readCoils(uint16_t startreg, uint16_t numregs);
+    void readInputStatus(uint16_t startreg, uint16_t numregs);
+    void readInputRegisters(uint16_t startreg, uint16_t numregs);
+    void writeSingleCoil(uint16_t reg, uint16_t status);
+    void writeMultipleCoils(byte *frame, uint16_t startreg, uint16_t numoutputs, byte bytecount);
 #endif
 
-    TRegister *searchRegister(word addr);
+    TRegister *searchRegister(uint16_t addr);
 
-    void addReg(word address, word value = 0);
-    bool Reg(word address, word value);
-    word Reg(word address);
+    void addReg(uint16_t address, uint16_t value = 0);
+    bool Reg(uint16_t address, uint16_t value);
+    uint16_t Reg(uint16_t address);
+
+    MBcallbackType callback;
 
 protected:
     byte *_frame;
@@ -83,23 +86,25 @@ protected:
 public:
     Modbus();
 
-    void addHreg(word offset, word value = 0);
-    bool Hreg(word offset, word value);
-    word Hreg(word offset);
+    void addHreg(uint16_t offset, uint16_t value = 0);
+    bool Hreg(uint16_t offset, uint16_t value);
+    uint16_t Hreg(uint16_t offset);
 
 #ifndef USE_HOLDING_REGISTERS_ONLY
-    void addCoil(word offset, bool value = false);
-    void addIsts(word offset, bool value = false);
-    void addIreg(word offset, word value = 0);
+    void addCoil(uint16_t offset, bool value = false);
+    void addIsts(uint16_t offset, bool value = false);
+    void addIreg(uint16_t offset, uint16_t value = 0);
 
-    bool Coil(word offset, bool value);
-    bool Ists(word offset, bool value);
-    bool Ireg(word offset, word value);
+    bool Coil(uint16_t offset, bool value);
+    bool Ists(uint16_t offset, bool value);
+    bool Ireg(uint16_t offset, uint16_t value);
 
-    bool Coil(word offset);
-    bool Ists(word offset);
-    word Ireg(word offset);
+    bool Coil(uint16_t offset);
+    bool Ists(uint16_t offset);
+    uint16_t Ireg(uint16_t offset);
 #endif
+    void attach(MBcallbackType cb){callback = cb;};
+
 };
 
 #endif //MODBUS_H

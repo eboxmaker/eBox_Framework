@@ -179,13 +179,13 @@ float Adc::read_voltage(Gpio *io)
     for(int i = 0; i < ch_num; i++)
     {
         if(io->id == ch_table[0][i])
-            return (adc_buf[i] * 3300.0 / 4096);
+            return (adc_buf[i] * 3287.0 / 4096);
     }
     return 0;
 }
 float Adc::read_voltage(int index)
 {
-    return (adc_buf[index] * 3300.0 / 4096);
+    return (adc_buf[index] * 3287.0 / 4096);
 }
 float Adc::read_temp_senser()
 {
@@ -200,7 +200,7 @@ float Adc::read_temp_senser()
         }
     }
 
-    temperate = (float)adc_value * (3300 / 4096.0); //电压值
+    temperate = (float)adc_value * (3287 / 4096.0); //电压值
     temperate = (1430 - temperate) / 4.35 + 24.958; //转换为温度值
     return temperate;
 }
