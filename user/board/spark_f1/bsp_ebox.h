@@ -42,7 +42,7 @@ extern W5500Class w5500;
 #define I2C  si2c2
 extern void print_log(const char *name = "", const char *date = "");
 
-
+#define Serial UART
 
 #endif
 
