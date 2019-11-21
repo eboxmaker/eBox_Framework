@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>__CC_ARM,ARM_MATH_CM3</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\user;..\..\..\user\board\stm32f10x_hd;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266;..\..\..\ebox\core\port;..\..\..\component\MPU6050;..\..\..\component\mqtt\src;..\..\..\os\ebox_os</IncludePath>
+              <IncludePath>..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\component\apps\calendar;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\user;..\..\..\user\board\stm32f10x_hd;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266;..\..\..\ebox\core\port;..\..\..\component\MPU6050;..\..\..\component\mqtt\src;..\..\..\os\ebox_os</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -688,9 +688,9 @@
               <FilePath>..\..\..\ebox\core\myprintf.c</FilePath>
             </File>
             <File>
-              <FileName>ebox_virtual_hmi.cpp</FileName>
+              <FileName>ebox_hmi.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\port\ebox_virtual_hmi.cpp</FilePath>
+              <FilePath>..\..\..\ebox\core\port\ebox_hmi.cpp</FilePath>
             </File>
             <File>
               <FileName>basicRtc.cpp</FileName>
@@ -856,11 +856,6 @@
               <FileName>EventManager.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\component\apps\EventManager.h</FilePath>
-            </File>
-            <File>
-              <FileName>calendar.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\apps\calendar.cpp</FilePath>
             </File>
           </Files>
         </Group>
