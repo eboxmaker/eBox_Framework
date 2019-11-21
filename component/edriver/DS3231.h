@@ -83,13 +83,14 @@ public:
         cfg.regAddrBits = I2c::BIT8;
     };    
     
-    virtual void begin();
-    virtual void event();
-    virtual void loop();
-    virtual void    write_dt(DateTime_t &dt);
-    DateTime_t      read_date_time();
-
+    virtual void        begin();
+    virtual void        event();
+    virtual void        loop();
+    
 private:
+    virtual void        write_dt(DateTime_t &dt);
+    virtual DateTime_t  read_dt();
+
     I2c *i2c;
     Gpio *intPin;
     Exti *exti;
