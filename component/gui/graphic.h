@@ -41,7 +41,7 @@ class Graphic
     GUI_FONT *current_font;
 
 private:
-    Vhmi     *lcd;
+    HMI     *lcd;
     uint8_t  rotation;
     uint16_t lcd_width, lcd_height; //  LCD属性。初始化后不可更改
     int16_t  cursor_x, cursor_y;
@@ -62,7 +62,7 @@ private:
     bool text_font_ascii_extern_enable;
     bool text_font_hz_extern_enable;
 public:
-    Graphic(Vhmi *_lcd, uint16_t w, uint16_t h);
+    Graphic(HMI *_lcd, uint16_t w, uint16_t h);
     void begin();
 
     //fun

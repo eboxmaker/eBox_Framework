@@ -1,5 +1,5 @@
-#ifndef __EBOX_VHMI_H
-#define __EBOX_VHMI_H
+#ifndef __EBOX_HMI_H
+#define __EBOX_HMI_H
 
 #include "ebox_type.h"
 #include "enum.h"
@@ -9,7 +9,7 @@
 uint16_t bgr2rgb(uint16_t c);
 uint16_t rgb24_2_rgb565(uint32_t color);   //应该会损失数据内容
 
-class Vhmi
+class HMI
 {
 public:
     virtual void    draw_pixel(int16_t x, int16_t y, uint32_t color) = 0;
