@@ -119,7 +119,7 @@ extern "C" {
 #include "port/ebox_port_gpio.h"
 #include "port/ebox_port_spi.h"
 #include "port/ebox_port_i2c.h"
-#include "port/ebox_virtual_hmi.h"
+#include "port/ebox_hmi.h"
 
 
 uint16_t makeWord(unsigned int w);

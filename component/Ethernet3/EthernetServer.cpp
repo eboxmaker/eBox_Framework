@@ -15,6 +15,7 @@ EthernetServer::EthernetServer(uint16_t port)
 
 void EthernetServer::begin()
 {
+//    ebox_printf("server begin\r\n");
     for (int sock = 0; sock < MAX_SOCK_NUM; sock++)
     {
         EthernetClient client(sock);
@@ -23,15 +24,16 @@ void EthernetServer::begin()
             socket(sock, SnMR::TCP, _port, 0);
             listen(sock);
             EthernetClass::_server_port[sock] = _port;
+//            ebox_printf("sock:%d status 0x%x\r\n",sock,client.status());
             break;
         }
+//        ebox_printf("sock:%d status 0x%x\r\n",sock,client.status());
     }
 }
 
 void EthernetServer::accept()
 {
     int listening = 0;
-
     for (int sock = 0; sock < MAX_SOCK_NUM; sock++)
     {
         EthernetClient client(sock);
@@ -41,22 +43,28 @@ void EthernetServer::accept()
             if (client.status() == SnSR::LISTEN)
             {
                 listening = 1;
+//                ebox_printf("listen sock:%d\r\n",sock);
             }
             else if (client.status() == SnSR::CLOSE_WAIT && !client.available())
             {
                 client.stop();
             }
         }
+//        ebox_printf("sock:%d port:%d\r\n",sock,EthernetClass::_server_port[sock]);
+
     }
 
     if (!listening)
     {
+//        ebox_printf("重新初始化网络\r\n");
         begin();
     }
 }
 //uint32_t last_time = 0;
 EthernetClient EthernetServer::available()
 {
+//        uint8_t buf[10];
+
 //    uint32_t diff = millis() - last_time;
 //    last_time = millis();
     accept();
@@ -69,6 +77,8 @@ EthernetClient EthernetServer::available()
                 (client.status() == SnSR::ESTABLISHED ||
                  client.status() == SnSR::CLOSE_WAIT))
         {
+//            client.remoteIP(buf);
+//            ebox_printf("remote ip:%d:%d:%d:%d   0x%x\r\n",buf[0],buf[1],buf[2],buf[3],client.status());
             if (client.available())
             {
                 // XXX: don't always pick the lowest numbered socket.
@@ -89,7 +99,7 @@ size_t EthernetServer::write(const uint8_t *buffer, size_t size)
 {
     size_t n = 0;
 
-    accept();
+//    accept();
 
     for (int sock = 0; sock < MAX_SOCK_NUM; sock++)
     {

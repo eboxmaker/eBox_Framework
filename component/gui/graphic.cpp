@@ -2,7 +2,7 @@
 
 Graphic *_gpu;
 
-Graphic::Graphic(Vhmi *_lcd, uint16_t w, uint16_t h)
+Graphic::Graphic(HMI *_lcd, uint16_t w, uint16_t h)
 {
     lcd = _lcd;
     lcd_width = w;
