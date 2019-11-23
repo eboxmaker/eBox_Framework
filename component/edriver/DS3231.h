@@ -71,7 +71,7 @@ public:
         this->i2c = i2c;
         this->intPin = NULL;
         this->slaveAddr = slaveAddr;
-        cfg.speed = I2c::K200;
+        cfg.speed = I2c::K400;
         cfg.regAddrBits = I2c::BIT8;
     };
     DS3231(I2c *i2c,Gpio *intPin,uint16_t slaveAddr)
@@ -79,7 +79,7 @@ public:
         this->i2c = i2c;
         this->slaveAddr = slaveAddr;
         this->intPin = intPin;
-        cfg.speed = I2c::K200;
+        cfg.speed = I2c::K400;
         cfg.regAddrBits = I2c::BIT8;
     };    
     
