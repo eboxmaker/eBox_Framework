@@ -10,7 +10,6 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 #include "ebox.h"
 #include "bsp_ebox.h"
-
 #include "ds3231.h"
 
 /**
@@ -65,7 +64,7 @@ void setup()
     String str = "19-11-21 14:17:00";
 //    ds.set_dt_string(str);
 
-    ds.set_dt_string("19-11-21 17:45:0");
+    ds.set_dt_string("80-11-7 17:45:0");
 //    t.year = 19;
 //    t.month = 11;
 //    t.date = 10;
@@ -95,25 +94,36 @@ int main(void)
         if(millis() - last_time > 1000)
         {
             last_time = millis();
-            
+            dt = ds.get_dt();
             UART.printf("========RTC测试======\r\n");
             UART.printf("20%02d-%02d-%02d %02d:%02d:%02d week:%d\r\n", dt.year, dt.month, dt.date, dt.hour, dt.min, dt.sec,dt.week);
             UART.println(date);
             UART.println(time);
             
-            uint32_t stamp = get_unix_timestamp(ds.dateTime);
+            uint32_t stamp = get_unix_timestamp(dt);
             UART.printf("UNIX时间戳：%u\r\n",stamp);
 
             dt = get_utc_dt(dt,8);
             ds.print(UART,dt);
             
-            dt1 =  date_next_n_days(ds.dateTime,30);
+            dt1 =  date_next_n_days(dt,30);
             UART.printf("30天之后的日期：20%02d-%02d-%02d\r\n",dt1.year, dt1.month, dt1.date);
             
-            dt1 =  date_before_n_days(ds.dateTime,30);
+            dt1 =  date_before_n_days(dt,30);
             UART.printf("30天之前的日期：20%02d-%02d-%02d\r\n",dt1.year, dt1.month, dt1.date);
 
-            Cdt.GetChinaCalendar(ds.dateTime);
+            String  str;
+            Cdt.update_cdt(dt);
+            str = Cdt.get_str();
+            UART.println(str);
+            
+            
+            str = Cdt.get_jieqi_str(dt);
+            UART.println(str);
+            
+            uint8_t day = Cdt.get_jieqi_mday(dt);
+            UART.printf("%d年%d月%d日：%d\r\n",dt.year,dt.month,dt.date,day);
+
             Cdt.print(UART);
             //            ds.print(UART);
         }

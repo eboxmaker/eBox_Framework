@@ -1,5 +1,8 @@
 #include "basicRtc.h"
 
+
+
+
 void BasicRtc::set_dt(DateTime_t &dt)
 {
     write_dt(dt);
@@ -140,7 +143,7 @@ void BasicRtc::dt_check(DateTime_t &dt)
     limit(dt.date,(uint8_t)1,(uint8_t)31);
     limit(dt.month,(uint8_t)1,(uint8_t)12);
     limit(dt.year,(uint8_t)0,(uint8_t)99);
-    max_date = date_max_in_month(dt.year,dt.month);
+    max_date = get_max_days_in_month(dt.year,dt.month);
     if(dt.date >  max_date)
     {
         dt.date = max_date;
@@ -167,23 +170,11 @@ void BasicRtc::print(Uart &uart,DateTime_t &dt)
 
 
 /*********************************************************************************************************
-** 函数名称:GetChinaCalendar
 ** 功能描述:公农历转换(只允许1901-2099年)
-** 输　入:  year        公历年
-**          month       公历月
-**          day         公历日
-**          p           储存农历日期地址
-** 输　出:  1           成功
-**          0           失败
-** 作　者:  Campo
-** 修  改:  赖皮
-** 日　期:  2007年02月06日
-**-------------------------------------------------------------------------------------------------------
-** 修改人:
-** 日　期:
-**------------------------------------------------------------------------------------------------------
+** 输　入:  dt     公历
+** 输　出:  cdt    农历
 ********************************************************************************************************/
-DateTime_t ChinaCalendar::GetChinaCalendar(DateTime_t &dt)
+DateTime_t ChinaCalendar::update_cdt(DateTime_t &dt)
 { 
 	unsigned char temp1,temp2,temp3,month_p,yearH,yearL;	
 	unsigned char flag_y;
@@ -342,138 +333,295 @@ void ChinaCalendar::print(Uart &uart)
     uart.printf("%s\r\n",str.c_str());
 
 }
+String ChinaCalendar::get_year_str()
+{
+	u8 SEyear;
+	SEyear = get_sky_earth_year(cdt.year + 2000);
+    String str = "";
+    
+    str += sky[SEyear%10];//  甲
+    str += earth[SEyear%12];//  子	
+}
+
 String ChinaCalendar::get_month_str()
 {
     String str = "";
-    switch(cdt.month)
-    {
-        case 1:
-            str += "正";break;
-        case 2:
-             str += "二";break;
-        case 3:
-            str += "三";break;
-        case 4:
-            str += "四";break;
-        case 5:
-            str += "五";break;
-        case 6:
-            return "六";break;
-        case 7:
-            str += "七";break;
-        case 8:
-            str += "八";break;
-        case 9:
-            str += "九";break;
-        case 10:
-            str += "十";break;
-        case 11:
-            str += "冬";break;
-        case 12:
-            str += "腊";break;
-    }
+    str += monthcode[cdt.month - 1];
     str += "月";
     return str;
 }
 String ChinaCalendar::get_date_str()
 {
-    switch(cdt.date)
+    String str = "";
+    switch(cdt.date/10)
     {
+        case 0:
+            str += "初";break;
         case 1:
-            return "初一";
+            str += "十";break;
         case 2:
-            return "初二";
+            str += "廿";break;
         case 3:
-            return "初三";
-        case 4:
-            return "初四";
-        case 5:
-            return "初五";
-        case 6:
-            return "初六";
-        case 7:
-            return "初七";
-        case 8:
-            return "初八";
-        case 9:
-            return "初九";
-        case 10:
-            return "初十";
-        case 11:
-            return "十一";
-        case 12:
-            return "十二";
-        case 13:
-            return "十三";
-        case 14:
-            return "十四";
-        case 15:
-            return "十五";
-        case 16:
-            return "十六";
-        case 17:
-            return "十七";
-        case 18:
-            return "十八";
-        case 19:
-            return "十九";
-        case 20:
-            return "二十";
-        case 21:
-            return "廿一";
-        case 22:
-            return "廿二";
-        case 23:
-            return "廿三";
-        case 24:
-            return "廿四";
-        case 25:
-            return "廿五";
-        case 26:
-            return "廿六";
-        case 27:
-            return "廿七";
-        case 28:
-            return "廿八";
-        case 29:
-            return "廿九";
-        case 30:
-            return "三十";
+            str += "三";break;
     }
-    return "";
+    str += monthcode[(cdt.date - 1 ) %10];
+    return str;
 }
-
-
-String ChinaCalendar::get_solar_terms()
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 函数名称:GetSkyEarth
+// 功能描述:输入公历日期得到一个甲子年(只允许1901-2099年)
+// 输　入:  year        公历年
+// 输　出:  甲子年																						   
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+uint8_t ChinaCalendar::get_sky_earth_year(uint16_t year)
 {
-//    if(cdt.month == 1 && cdt.date == 1) solar_terms = "春节";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x20)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
-//    else if(cdt.month == 1 && cdt.date == 0x05)solar_terms = "小寒";
+	uint8_t x;
+	
+	if(year>=1984)
+	{
+		year=year-1984;
+		x=year%60;				
+	}
+	else
+	{
+		year=1984-year;
+		x=60-year%60;
+	}
+	return x;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 函数名称:GetChinaCalendarStr
+// 功能描述:	
+//          
+// 输　出:  返回str="己亥猪年 十月廿七"																						  
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+String ChinaCalendar::get_str()
+{
+    String str = "";
+	u8 SEyear;
+	SEyear = get_sky_earth_year(cdt.year + 2000);
+    
+    str += sky[SEyear%10];//  甲
+    str += earth[SEyear%12];//  子	
+    str += get_zodiac_str();
+    str += "年 ";
+    
+    str += get_month_str();// 
+    str += get_date_str();// 
+    return str;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 功能描述:输入公历日期得到本月24节气日期 day<15返回上半月节气,反之返回下半月	
+// 输　入:  dt     公历 
+// 输　出:  特殊年份节气的偏差值																		  
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int ChinaCalendar::spacil_year_offset(DateTime_t dt)
+{
+    int year =dt.year + 2000;
+    
+    uint8_t jq_index = (dt.month-1) * 2 ;   //获得节气顺序标号(0～23
+	if(dt.date >= 15) jq_index++;           //判断是否是上半月
+    
+    if(jq_index == 0 && year == 2019)//小寒 
+    {
+        return -1;
+    }
+    else if(jq_index == 1 && year == 2082)//大寒 
+    {
+        return 1;
+    }
+//    else if(jq_index == 2 && year == 2082)//立春 
+//    {
+//        return 1;
+//    }
+    else if(jq_index == 3 && year == 2026)//雨水 
+    {
+        return -1;
+    }
+//    else if(jq_index == 4 && year == 2082)//惊蛰  
+//    {
+//        return 1;
+//    }
+    else if(jq_index == 5 && year == 2084)//春分  
+    {
+        return 1;
+    }
+//    else if(jq_index == 6 && year == 2082)//清明 
+//    {
+//        return 1;
+//    }
+//    else if(jq_index == 7 && year == 2082)//谷雨  
+//    {
+//        return 1;
+//    }
+//    else if(jq_index == 8 && year == 2082)//立夏  
+//    {
+//        return 1;
+//    }
+    else if(jq_index == 9 && year == 2008)//小满  
+    {
+        return 1;
+    }
+//    else if(jq_index == 10 && year == 2082)//芒种     
+//    {
+//        return 1;
+//    }
+//    else if(jq_index == 11 && year == 2082)//夏至   
+//    {
+//        return 1;
+//    }
+    else if(jq_index == 12 && year == 2016)//小暑  
+    {
+        return 1;
+    }
+//    else if(jq_index == 13 && year == 2082)//大暑  
+//    {
+//        return 1;
+//    }
+    else if(jq_index == 14 && year == 2002)//立秋  
+    {
+        return 1;
+    }
+//    else if(jq_index == 15 && year == 2082)//处暑  
+//    {
+//        return 1;
+//    }
+//    else if(jq_index == 16 && year == 2082)//白露  
+//    {
+//        return 1;
+//    }
+//    else if(jq_index == 17 && year == 2082)//秋分  
+//    {
+//        return 1;
+//    }
+//    else if(jq_index == 18 && year == 2082)//寒露  
+//    {
+//        return 1;
+//    }
+    else if(jq_index == 19 && year == 2089)//霜降  
+    {
+        return 1;
+    }
+    else if(jq_index == 20 && year == 2089)//立冬  
+    {
+        return 1;
+    }
+//    else if(jq_index == 21 && year == 2082)//小雪
+//    {
+//        return 1;
+//    }
+//    else if(jq_index == 22 && year == 2082)//大雪 
+//    {
+//        return 1;
+//    }
+    else if(jq_index == 23 && year == 2021)//冬至 
+    {
+        return -1;
+    }
+    
+    
+    
+return 0;
     
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 功能描述:输入公历日期得到本月24节气日期 day<15返回上半月节气,反之返回下半月	
+//          如:GetJieQiStr(2007,02,08,str) 返回str[0]=4
+// 输　入:  dt     公历 
+// 输　出:  节气的日期																			  
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** 
+* 计算 num =[Y*D+C]-L这是传说中的寿星通用公式 
+* 公式解读：年数的后2位乘0.2422加C(即：centuryValue)取整数后，减闰年数 
+* 根据年月日计算出节气的索引值（0-23）
+*/ 
+uint8_t ChinaCalendar::get_jieqi_mday(DateTime_t &dt)
+{
+    uint16_t y = dt.year;
+    uint8_t day;
+    uint8_t jq_index = (dt.month-1) * 2 ;                             //获得节气顺序标号(0～23
+	if(dt.date >= 15) jq_index++;                             //判断是否是上半月
+    
+    //注意：凡闰年3月1日前闰年数要减一，即：L=[(Y-1)/4],
+    //因为小寒、大寒、立春、雨水这两个节气都小于3月1日,所以 y = y-1 
+    if(is_leap_year(dt.year + 2000))
+    {
+        if(dt.month < 3)
+            y -= 1;
+    }
+    day = dt.year*0.2422 + CENTURY_ARRAY[1][jq_index] - y/4;
+    day += spacil_year_offset(dt);
+    return day;
+}
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 功能描述:输入公历日期得到24节气字符串	
+//          如:GetJieQiStr(2007,02,08,str) 返回str="离雨水还有11天"
+// 输　入:  dt     公历 
+// 输　出:  str    储存24节气字符串地址   15Byte																		  
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+String ChinaCalendar::get_jieqi_str(DateTime_t &_dt)
+{
+    DateTime_t dt = _dt;
+    String str;
+    uint8_t days = 0;
+	u8 jq_mday,jq_index,max_days_in_month;
+    
+    jq_mday = get_jieqi_mday(dt);
+	if(jq_mday==0)	return "";
 
+	jq_index = (dt.month-1) *2 ;                             //获得节气顺序标号(0～23
+	if(dt.date >= 15) jq_index++;                             //判断是否是上半月
+
+	if(dt.date==jq_mday)                                 //今天正是一个节气日
+	{
+        str = JieQiStr[jq_index];
+		return str;
+	}
+    str += "离";
+    if(dt.date<jq_mday)                                  //如果今天日期小于本月的节气日期
+	{
+        str +=JieQiStr[jq_index];
+		days=jq_mday-dt.date;
+	} 
+	else                                            //如果今天日期大于本月的节气日期
+	{
+        if((jq_index+1) >23)  return "";
+        str += JieQiStr[jq_index + 1];
+		if(dt.date < 15)
+		{
+            uint8_t temp = dt.date;
+            dt.date = 15;
+			jq_mday = get_jieqi_mday(dt);
+            dt.date = temp;
+			days = jq_mday - dt.date;
+		}
+		else                                        //翻月
+		{
+			max_days_in_month = get_max_days_in_month(dt.year,dt.month);
+
+			if(++dt.month==13)	
+                dt.month=1;
+            uint8_t temp = dt.date;
+            dt.date = 1;
+			jq_mday = get_jieqi_mday(dt);//  GetJieQi(year,month,1,&JQdate);
+            dt.date = temp;
+			days = max_days_in_month - dt.date + jq_mday;
+		}
+	}
+    str += days ;
+    str += "天";
+    return str;
+}
+uint8_t ChinaCalendar::get_zodiac()
+{
+    return get_sky_earth_year(cdt.year + 2000)%12;
+}
+String ChinaCalendar::get_zodiac_str()
+{
+    return zodiac_table[get_sky_earth_year(cdt.year + 2000)%12];
+}
 
 
 
@@ -487,7 +635,7 @@ bool is_leap_year(uint16_t _year)
     {
         if(_year % 100 == 0)
         {
-            if(_year % 400 == 0)return 1; //如果以00结尾,还要能被400整除
+            if(_year % 400 == 0)return true; //如果以00结尾,还要能被400整除
             else return false;
         }
         else return true;
@@ -510,23 +658,7 @@ uint8_t calculate_week(DateTime_t &dt)
     return dt.week;
 }
 
-uint8_t bcd_to_dec(uint8_t bcd_code)
-{
-    uint8_t temp, dec;
-    temp = (bcd_code >> 4) * 10;
-    dec = (bcd_code & 0x0f) + temp;
-    return dec;
-}
-uint8_t dec_to_bcd(uint8_t dec)
-{
-    uint8_t temp, temp2, bcd;
-    temp = dec / 10;
-    temp2 = dec % 10;
 
-    bcd =  (temp << 4) + temp2;
-
-    return bcd;
-}
 uint32_t sec_in_day(DateTime_t &_dt)
 {
     return _dt.hour * 3600 + _dt.min * 60 + _dt.sec;
@@ -571,10 +703,10 @@ uint16_t day_in_year(DateTime_t &_dt)
     }
     return temp_day;
 }
-uint8_t date_max_in_month(uint8_t year,uint8_t month)
+uint8_t get_max_days_in_month(uint16_t year,uint8_t month)
 {
     bool flag; 
-    
+    year += 2000;
     switch(month)
     {
         case 1:
@@ -715,7 +847,7 @@ DateTime_t  get_utc_dt(uint32_t stamp)
   //这个时间戳值的月
     int monthTmp = 0;
     for (monthTmp = 1; monthTmp < MONTH_PER_YEAR; monthTmp++) {
-       dayTmp = date_max_in_month(year,monthTmp);
+       dayTmp = get_max_days_in_month(year,monthTmp);
        if (days >= dayTmp) {
            days -= dayTmp;
        }
@@ -1051,6 +1183,80 @@ const unsigned char year_code[597]={
                     0x0d,0x15,0x41,    //2098
                     0x2d,0x92,0xB5,    //2099
 };
+//下部分数据是农历部分要使用的
 //月份数据表
 const unsigned char day_code1[9]={0x0,0x1f,0x3b,0x5a,0x78,0x97,0xb5,0xd4,0xf3};
 const unsigned int day_code2[3]={0x111,0x130,0x14e};
+const unsigned char  table_week[12]={0,3,3,6,1,4,6,2,5,0,3,5}; //月修正数据表
+const  char  *sky[10]=  {"甲","乙","丙","丁","戊","己","庚","辛","壬","癸",};//天干
+const  char  *earth[12]={"子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥",};//地支
+const  char  *zodiac_table[12]={"鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪"};//生肖
+const  char  *monthcode[12]={"一","二","三","四","五","六","七","八","九","十","冬","腊",};//农历月份
+
+//定义一个二维数组，第一维数组存储的是20世纪的节气C值，
+//第二维数组存储的是21世纪的节气C值,0到23个，
+//依次代表立春、雨水...大寒节气的C值 
+const float CENTURY_ARRAY[2][24] = 
+{
+    {4.6295,19.4599,6.3826,21.4155,5.59,20.888,6.318,21.86,6.5,22.2,7.928,
+    23.65,8.35,23.95,8.44,23.822,9.098,24.218,8.218,23.08,7.9,22.6,6.11,20.84} 
+    ,{
+    5.4055,//小寒
+    20.12,   //大寒
+    3.87,
+    18.73,
+    5.63,
+    20.646,
+    4.81,
+    20.1,
+    5.52,
+    21.04,
+    5.678,
+    21.37,
+    7.108,
+    22.83, 
+        
+    7.5,
+    23.13,
+    7.646,
+    23.042,
+    8.318,
+    23.438,//霜降
+    7.438,//立冬
+    22.36,//小雪
+    7.18,//大雪
+    21.94,//冬至
+    }
+};
+
+
+
+//以公历日期先后排序
+const char *JieQiStr[24]=   
+{
+ // 名称        角度    公历日期     周期 //
+	"小寒",     //285     1月 6日
+	"大寒",     //300     1月20日    29.5天
+	"立春",     //315     2月 4日
+	"雨水",     //330     2月19日    29.8天
+	"惊蛰",     //345     3月 6日
+	"春分",     //  0     3月21日    30.2天
+	"清明",     // 15     4月 5日
+	"谷雨",     // 30     4月20日    30.7天
+	"立夏",     // 45     5月 6日
+	"夏满",     // 60     5月21日    31.2天
+	"芒种",     // 75     6月 6日
+	"夏至",     // 90     6月21日    31.4天
+	"小暑",     //105     7月 7日
+	"大暑",     //120     7月23日    31.4天
+	"立秋",     //135     8月 8日
+	"处暑",     //150     8月23日    31.1天
+	"白露",     //165     9月 8日
+	"秋分",     //180     9月23日    30.7天
+	"寒露",     //195    10月 8日
+	"霜降",     //210    10月24日    30.1天
+	"立冬",     //225    11月 8日
+	"小雪",     //240    11月22日    29.7天
+	"大雪",     //255    12月 7日
+	"冬至"      //270    12月22日    29.5天
+};
