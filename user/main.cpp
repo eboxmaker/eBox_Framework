@@ -22,7 +22,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #define EXAMPLE_DATE	"2018-08-11"
 
 SoftI2c si2c(&PC6,&PC7);
-ChinaCalendar Cdt;
+ChinaCalendar ccalendar;
 
 DS3231 ds(&si2c,0xD0);
 
@@ -103,8 +103,8 @@ int main(void)
             uint32_t stamp = get_unix_timestamp(dt);
             UART.printf("UNIX时间戳：%u\r\n",stamp);
 
-            dt = get_utc_dt(dt,8);
-            ds.print(UART,dt);
+            dt1 = get_utc_dt(dt,8);
+            ds.print(UART,dt1);
             
             dt1 =  date_next_n_days(dt,30);
             UART.printf("30天之后的日期：20%02d-%02d-%02d\r\n",dt1.year, dt1.month, dt1.date);
@@ -112,20 +112,18 @@ int main(void)
             dt1 =  date_before_n_days(dt,30);
             UART.printf("30天之前的日期：20%02d-%02d-%02d\r\n",dt1.year, dt1.month, dt1.date);
 
-            String  str;
-            Cdt.update_cdt(dt);
-            str = Cdt.get_str();
-            UART.println(str);
             
             
-            str = Cdt.get_jieqi_str(dt);
-            UART.println(str);
             
-            uint8_t day = Cdt.get_jieqi_mday(dt);
-            UART.printf("%d年%d月%d日：%d\r\n",dt.year,dt.month,dt.date,day);
+            ccalendar.update_cdt(dt);
+            
 
-            Cdt.print(UART);
-            //            ds.print(UART);
+            ccalendar.print(UART);
+            
+            String  str;
+            str = "节气：" + ccalendar.get_jieqi_str(dt);
+            UART.println(str);
+            uint8_t day = ccalendar.get_jieqi_mday(dt);
         }
     }
 
