@@ -274,6 +274,11 @@ DateTime_t ChinaCalendar::update_cdt(DateTime_t &dt)
     cdt.sec = dt.sec;
     return cdt;
 }
+DateTime_t ChinaCalendar::get_cdt()
+{
+    return cdt;
+}
+
 
 
 /*子函数,用于读取数据表中农历月的大月或小月,如果该月为大返回1,为小返回0------------------*/
@@ -324,15 +329,7 @@ uint8_t ChinaCalendar::GetMoonDay(unsigned char month_p,unsigned short table_add
 	return(0);
 }
 
-void ChinaCalendar::print(Uart &uart)
-{
-    String str="";
-    uart.printf("20%02d-%02d-%02d %02d:%02d:%02d weed:%d\r\n",cdt.year,cdt.month,cdt.date,cdt.hour,cdt.min,cdt.sec,cdt.week);
-    str += get_month_str();
-    str += get_date_str();
-    uart.printf("%s\r\n",str.c_str());
 
-}
 String ChinaCalendar::get_year_str()
 {
 	u8 SEyear;
@@ -353,20 +350,28 @@ String ChinaCalendar::get_month_str()
 String ChinaCalendar::get_date_str()
 {
     String str = "";
-    switch(cdt.date/10)
-    {
-        case 0:
-            str += "初";break;
-        case 1:
-            str += "十";break;
-        case 2:
-            str += "廿";break;
-        case 3:
-            str += "三";break;
-    }
+    if(cdt.date <= 10)
+        str += "初";
+    else if(cdt.date <= 20)
+        str += "廿";
+    else if(cdt.date <= 20)
+        str += "三";
     str += monthcode[(cdt.date - 1 ) %10];
     return str;
 }
+String ChinaCalendar::get_fastival()
+{
+    for(int i = 0; i < 9; i++)
+    {
+        if(cdt.month == c_festival_table[i].month && cdt.date == c_festival_table[i].date)
+        {
+            return c_festival_table[i].name;
+        }
+    }
+    return "无";
+    
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 函数名称:GetSkyEarth
 // 功能描述:输入公历日期得到一个甲子年(只允许1901-2099年)
@@ -408,6 +413,10 @@ String ChinaCalendar::get_str()
     
     str += get_month_str();// 
     str += get_date_str();// 
+    
+    str += "  节日：";//
+    str += get_fastival();// 
+
     return str;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -540,6 +549,7 @@ uint8_t ChinaCalendar::get_jieqi_mday(DateTime_t &dt)
 {
     uint16_t y = dt.year;
     uint8_t day;
+    if(dt.year > 99) return 0;
     uint8_t jq_index = (dt.month-1) * 2 ;                             //获得节气顺序标号(0～23
 	if(dt.date >= 15) jq_index++;                             //判断是否是上半月
     
@@ -587,8 +597,9 @@ String ChinaCalendar::get_jieqi_str(DateTime_t &_dt)
 	} 
 	else                                            //如果今天日期大于本月的节气日期
 	{
-        if((jq_index+1) >23)  return "";
-        str += JieQiStr[jq_index + 1];
+        jq_index++;
+        jq_index %= 24;
+        str += JieQiStr[jq_index];
 		if(dt.date < 15)
 		{
             uint8_t temp = dt.date;
@@ -601,13 +612,16 @@ String ChinaCalendar::get_jieqi_str(DateTime_t &_dt)
 		{
 			max_days_in_month = get_max_days_in_month(dt.year,dt.month);
 
-			if(++dt.month==13)	
+			if(++dt.month==13)
+            {                
                 dt.month=1;
+                dt.year++;
+                if(dt.year > 99) return "";
+            }
             uint8_t temp = dt.date;
             dt.date = 1;
 			jq_mday = get_jieqi_mday(dt);//  GetJieQi(year,month,1,&JQdate);
-            dt.date = temp;
-			days = max_days_in_month - dt.date + jq_mday;
+			days = max_days_in_month - temp + jq_mday;
 		}
 	}
     str += days ;
@@ -624,7 +638,13 @@ String ChinaCalendar::get_zodiac_str()
 }
 
 
+void ChinaCalendar::print(Uart &uart)
+{
+    String str="";
+    str = get_str();
+    uart.printf("%s\r\n",str.c_str());
 
+}
 
 
 
@@ -1259,4 +1279,16 @@ const char *JieQiStr[24]=
 	"小雪",     //240    11月22日    29.7天
 	"大雪",     //255    12月 7日
 	"冬至"      //270    12月22日    29.5天
+};
+const ChinaCalendar::Festival_t c_festival_table[9] = 
+{
+{1,1,"春节"},
+{1,15,"元宵节"},
+{4,5,"清明节"},
+{5,5,"端午节"},
+{7,7,"七夕节"},
+{7,15,"中元节"},
+{8,15,"中秋节"},
+{9,9,"重阳节"},
+{12,30,"除夕"},
 };

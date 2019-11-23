@@ -87,13 +87,26 @@ class BasicRtc
 
 };
 
+
+
+
+
 class ChinaCalendar
 {
+    public:
+
+        typedef struct 
+        {
+            uint8_t month;
+            uint8_t date;
+            String name;
+        }Festival_t;
 
     public:
         ChinaCalendar(){};
             
         DateTime_t update_cdt(DateTime_t &dt);
+        DateTime_t get_cdt();
             
         String get_str();
             
@@ -108,7 +121,8 @@ class ChinaCalendar
         String get_year_str();
         String get_month_str();
         String get_date_str();
-            
+        
+        String get_fastival();
         void print(Uart &uart);
     private:
         
@@ -120,5 +134,6 @@ class ChinaCalendar
         String zodiac;
     
 };
+extern const ChinaCalendar::Festival_t c_festival_table[9];
 
 #endif
