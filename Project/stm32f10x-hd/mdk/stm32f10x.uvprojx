@@ -697,6 +697,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\basicRtc.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ebox_math.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\ebox_math.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

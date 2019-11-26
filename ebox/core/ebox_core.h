@@ -50,8 +50,8 @@ extern "C" {
     // 取最大值，最小值
 #define min3v(v1, v2, v3)   ((v1)>(v2)? ((v2)>(v3)?(v3):(v2)):((v1)>(v3)?(v3):(v2)))
 #define max3v(v1, v2, v3)   ((v1)<(v2)? ((v2)<(v3)?(v3):(v2)):((v1)<(v3)?(v3):(v1)))
-#define min(v1, v2 )        ((v1)<(v2)? (v1):(v2))
-#define max(v1, v2 )        ((v1)>(v2)? (v1):(v2))
+#define min2v(v1, v2 )        ((v1)<(v2)? (v1):(v2))
+#define max2v(v1, v2 )        ((v1)>(v2)? (v1):(v2))
     //#define abs(x)              ((x)>0?(x):-(x))
 #define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
 #define round(x)            ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
