@@ -33,8 +33,8 @@ return (uint16_t)(  ((color & 0xF80000) >> 8) |
 void HMI::draw_v_line(int16_t x, int16_t y0, int16_t y1, uint32_t color)
 {
     int16_t tempy0,tempy1;
-    tempy0 = min(y0,y1);
-    tempy1 = max(y0,y1);
+    tempy0 = min2v(y0,y1);
+    tempy1 = max2v(y0,y1);
     
     while(tempy1 >= tempy0)
         draw_pixel(x, tempy0++, color);
@@ -44,8 +44,8 @@ void HMI::draw_h_line(int16_t x0, int16_t y0, int16_t x1, uint32_t color)
 {
  
     int16_t tempx0,tempx1;
-    tempx0 = min(x0,x1);
-    tempx1 = max(x0,x1);
+    tempx0 = min2v(x0,x1);
+    tempx1 = max2v(x0,x1);
     
     while(tempx1 >= tempx0)
         draw_pixel(tempx0++, y0, color);
