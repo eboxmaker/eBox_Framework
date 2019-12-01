@@ -165,7 +165,8 @@ extern "C" {
     {
         if (milli_seconds++ % _multiple == 0)
         {
-            callBackFun();
+//            if(callBackFun != NULL)
+                callBackFun();
         }
     }
 

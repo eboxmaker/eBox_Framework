@@ -10,7 +10,6 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 #include "ebox.h"
 #include "bsp_ebox.h"
-
 #include "ds3231.h"
 
 /**
@@ -23,7 +22,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #define EXAMPLE_DATE	"2018-08-11"
 
 SoftI2c si2c(&PC6,&PC7);
-
+ChinaCalendar Cdt;
 
 DS3231 ds(&si2c,0xD0);
 
@@ -38,6 +37,7 @@ void setup()
 {
     ebox_init();
     UART.begin(115200);
+    UART.setTimeout(10);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
     ds.begin();
@@ -49,6 +49,7 @@ void setup()
     buf[1].byte[1] = 10;
     buf[2].byte[0] = 11;
     buf[2].byte[1] = 19;
+//    ds.set_dt_mb(buf);
     
     dt.year = buf[2].byte[1];
     dt.month = buf[2].byte[0];
@@ -56,14 +57,20 @@ void setup()
     dt.hour = buf[1].byte[0];
     dt.min = buf[0].byte[1];
     dt.sec = buf[0].byte[0];
+//    ds.set_dt(dt);
     
+    
+    
+    String str = "19-11-21 14:17:00";
+//    ds.set_dt_string(str);
+
+    ds.set_dt_string("80-11-7 17:45:0");
 //    t.year = 19;
 //    t.month = 11;
 //    t.date = 10;
 //    t.hour = 23;
 //    t.min = 59;
 //    t.sec = 55;
-    ds.set_dt_mb(buf);
 
 }
 int main(void)
@@ -77,7 +84,9 @@ int main(void)
         String time = ds.get_time();
         String date = ds.get_date();
 
-
+        String dtstr = uart1.readString();
+        if(dtstr != "")
+            ds.set_dt_string(dtstr);
 //        UART.printf(date);
 //        UART.printf(" ");
 //        UART.printf(time);
@@ -85,18 +94,38 @@ int main(void)
         if(millis() - last_time > 1000)
         {
             last_time = millis();
-            
+            dt = ds.get_dt();
             UART.printf("========RTC测试======\r\n");
-            UART.printf("20%02d-%02d-%02d %02d:%02d:%02d\r\n", dt.year, dt.month, dt.date, dt.hour, dt.min, dt.sec);
+            UART.printf("20%02d-%02d-%02d %02d:%02d:%02d week:%d\r\n", dt.year, dt.month, dt.date, dt.hour, dt.min, dt.sec,dt.week);
             UART.println(date);
             UART.println(time);
             
-            uint32_t stamp = ds.get_unix_timestamp(8,ds.dateTime);
+            uint32_t stamp = get_unix_timestamp(dt);
             UART.printf("UNIX时间戳：%u\r\n",stamp);
 
-            dt1 =  ds.date_next_n_days(10);
-            UART.printf("10天之后的日期：20%02d-%02d-%02d\r\n",dt1.year, dt1.month, dt1.date);
-//            ds.print(UART);
+            dt = get_utc_dt(dt,8);
+            ds.print(UART,dt);
+            
+            dt1 =  date_next_n_days(dt,30);
+            UART.printf("30天之后的日期：20%02d-%02d-%02d\r\n",dt1.year, dt1.month, dt1.date);
+            
+            dt1 =  date_before_n_days(dt,30);
+            UART.printf("30天之前的日期：20%02d-%02d-%02d\r\n",dt1.year, dt1.month, dt1.date);
+
+            String  str;
+            Cdt.update_cdt(dt);
+            str = Cdt.get_str();
+            UART.println(str);
+            
+            
+            str = Cdt.get_jieqi_str(dt);
+            UART.println(str);
+            
+            uint8_t day = Cdt.get_jieqi_mday(dt);
+            UART.printf("%d年%d月%d日：%d\r\n",dt.year,dt.month,dt.date,day);
+
+            Cdt.print(UART);
+            //            ds.print(UART);
         }
     }
 

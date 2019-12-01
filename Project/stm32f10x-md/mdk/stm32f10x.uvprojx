@@ -683,11 +683,6 @@
               <FilePath>..\..\..\ebox\core\myprintf.c</FilePath>
             </File>
             <File>
-              <FileName>ebox_virtual_hmi.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\port\ebox_virtual_hmi.cpp</FilePath>
-            </File>
-            <File>
               <FileName>retarge.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\ebox\core\retarge.c</FilePath>
@@ -696,6 +691,11 @@
               <FileName>basicRtc.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\basicRtc.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_hmi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\port\ebox_hmi.cpp</FilePath>
             </File>
           </Files>
         </Group>

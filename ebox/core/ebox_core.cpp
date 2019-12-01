@@ -34,6 +34,26 @@ char char2digital(
 
     return (char)c;
 }
+
+uint8_t bcd_to_dec(uint8_t bcd_code)
+{
+    uint8_t temp, dec;
+    temp = (bcd_code >> 4) * 10;
+    dec = (bcd_code & 0x0f) + temp;
+    return dec;
+}
+uint8_t dec_to_bcd(uint8_t dec)
+{
+    uint8_t temp, temp2, bcd;
+    temp = dec / 10;
+    temp2 = dec % 10;
+
+    bcd =  (temp << 4) + temp2;
+
+    return bcd;
+}
+
+
 /** @defgroup commonº¯Êý
   * @{
   */

@@ -88,7 +88,7 @@
 //#define WHITE 0x0F
 //#define INVERSE 2
 
-class OledSSD1322:public Vhmi
+class OledSSD1322:public HMI
 {
 public:
     OledSSD1322(Gpio *cs, Gpio *dc, Gpio *res, Gpio *scl_d0, Gpio *sda_d1);

@@ -82,10 +82,10 @@ unsigned int ebox_fifo_put(struct ebox_fifo *fifo, unsigned char *buffer, unsign
 {
     unsigned int l;
 
-    len = min(len, fifo->size - fifo->in + fifo->out);/*可能是缓冲区的空闲长度或者要写长度*/
+    len = min2v(len, fifo->size - fifo->in + fifo->out);/*可能是缓冲区的空闲长度或者要写长度*/
 
     /* first put the data starting from fifo->in to buffer end*/
-    l = min(len, fifo->size - (fifo->in & (fifo->size - 1)));
+    l = min2v(len, fifo->size - (fifo->in & (fifo->size - 1)));
     ebox_memcpy(fifo->buffer + (fifo->in & (fifo->size - 1)), buffer, l);
 
     /* then put the rest (if any) at the beginning of the buffer*/
@@ -109,10 +109,10 @@ unsigned int ebox_fifo_get(struct ebox_fifo *fifo, unsigned char *buffer, unsign
     unsigned int l;
 
     //要求读取长度和可读数据长度去最小*/
-    len = min(len, fifo->in - fifo->out);
+    len = min2v(len, fifo->in - fifo->out);
 
     /* first get the data from fifo->out until the end of the buffer*/
-    l = min(len, fifo->size - (fifo->out & (fifo->size - 1)));
+    l = min2v(len, fifo->size - (fifo->out & (fifo->size - 1)));
     ebox_memcpy(buffer, fifo->buffer + (fifo->out & (fifo->size - 1)), l);
 
     /* then get the rest (if any) from the beginning of the buffer*/

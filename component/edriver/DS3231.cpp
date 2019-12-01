@@ -45,7 +45,7 @@ void DS3231::begin()
 }
 
 //uint8_t slaveAddr, uint8_t regAddr, uint8_t *data, uint16_t nRead
-DateTime_t DS3231::read_date_time()
+DateTime_t DS3231::read_dt()
 {
     
     uint8_t buf[8];
@@ -103,7 +103,7 @@ DS3231::HourMode_t DS3231::get_hour_mode()
 }
 void DS3231::event()
 {
-    read_date_time();
+    read_dt();
 }
 
 
@@ -111,7 +111,7 @@ void DS3231::loop()
 {
     if(millis() - last_time >= 1000)
     {
-        read_date_time();
+        read_dt();
         time_buf[0] = dateTime.sec;
         time_buf[1] = dateTime.min;
         time_buf[2] = dateTime.hour;

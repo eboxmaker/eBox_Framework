@@ -51,7 +51,7 @@ typedef enum
 #define GRAY0   0xEF7D   	    //»ÒÉ«0 3165 00110 001011 00101
 #define GRAY1   0x8410      	//»ÒÉ«1      00000 000000 00000
 #define GRAY2   0x4208      	//»ÒÉ«2  1111111111011111
-class Lcd : public Vhmi
+class Lcd : public HMI
 {
 public:
     uint8_t MADCTL;
