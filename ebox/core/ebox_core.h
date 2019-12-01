@@ -50,11 +50,12 @@ extern "C" {
     // 取最大值，最小值
 #define min3v(v1, v2, v3)   ((v1)>(v2)? ((v2)>(v3)?(v3):(v2)):((v1)>(v3)?(v3):(v2)))
 #define max3v(v1, v2, v3)   ((v1)<(v2)? ((v2)<(v3)?(v3):(v2)):((v1)<(v3)?(v3):(v1)))
-#define min(v1, v2 )        ((v1)<(v2)? (v1):(v2))
-#define max(v1, v2 )        ((v1)>(v2)? (v1):(v2))
+#define min2v(v1, v2 )        ((v1)<(v2)? (v1):(v2))
+#define max2v(v1, v2 )        ((v1)>(v2)? (v1):(v2))
     //#define abs(x)              ((x)>0?(x):-(x))
 #define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
 #define round(x)            ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
+#define roundl(x)            ((x)>=0?(long)((x)-0.5):(long)((x)+0.5))
 #define radians(deg)        ((deg)*DEG_TO_RAD)
 #define degrees(rad)        ((rad)*RAD_TO_DEG)
 #define sq(x)               ((x)*(x))
@@ -103,9 +104,11 @@ extern "C" {
 #define	getArraySize(__ARR)									(sizeof(__ARR)/sizeof(__ARR[0]))		// 获取数组大小
 
 
-
-    unsigned int    random(unsigned int min, unsigned int max);
-    char            char2digital(char c);
+void        random_seed(unsigned int seed);
+unsigned int    random(unsigned int min, unsigned int max);
+char        char2digital(char c);
+uint8_t     bcd_to_dec(uint8_t bcd_code);
+uint8_t     dec_to_bcd(uint8_t dec); 
 
 #if __cplusplus
 } // extern "C"
@@ -119,7 +122,7 @@ extern "C" {
 #include "port/ebox_port_gpio.h"
 #include "port/ebox_port_spi.h"
 #include "port/ebox_port_i2c.h"
-#include "port/ebox_virtual_hmi.h"
+#include "port/ebox_hmi.h"
 
 
 uint16_t makeWord(unsigned int w);
@@ -130,10 +133,8 @@ uint16_t makeWord(unsigned char h, unsigned char l);
 void            shift_out(Gpio *data_pin, Gpio *clock_pin, uint8_t bit_order, uint8_t val);
 uint8_t         shift_in(Gpio *data_pin, Gpio *clock_pin, uint8_t bit_order);
 
-void            random_seed(unsigned int seed);
 unsigned int    random();
 unsigned int    random(unsigned int max);
-unsigned int    random(unsigned int min, unsigned int max);
 long            map(long, long, long, long, long);
 
 

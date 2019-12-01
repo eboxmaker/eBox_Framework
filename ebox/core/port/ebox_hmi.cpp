@@ -1,5 +1,5 @@
 #include "ebox_core.h"
-#include "ebox_virtual_hmi.h"
+#include "ebox_hmi.h"
 
 uint16_t bgr2rgb(uint16_t c)
 {
@@ -30,22 +30,22 @@ return (uint16_t)(  ((color & 0xF80000) >> 8) |
                     ((color & 0x0000F1) >> 3)
                  );
 }
-void Vhmi::draw_v_line(int16_t x, int16_t y0, int16_t y1, uint32_t color)
+void HMI::draw_v_line(int16_t x, int16_t y0, int16_t y1, uint32_t color)
 {
     int16_t tempy0,tempy1;
-    tempy0 = min(y0,y1);
-    tempy1 = max(y0,y1);
+    tempy0 = min2v(y0,y1);
+    tempy1 = max2v(y0,y1);
     
     while(tempy1 >= tempy0)
         draw_pixel(x, tempy0++, color);
 
 }
-void Vhmi::draw_h_line(int16_t x0, int16_t y0, int16_t x1, uint32_t color)
+void HMI::draw_h_line(int16_t x0, int16_t y0, int16_t x1, uint32_t color)
 {
  
     int16_t tempx0,tempx1;
-    tempx0 = min(x0,x1);
-    tempx1 = max(x0,x1);
+    tempx0 = min2v(x0,x1);
+    tempx1 = max2v(x0,x1);
     
     while(tempx1 >= tempx0)
         draw_pixel(tempx0++, y0, color);
@@ -56,7 +56,7 @@ void Vhmi::draw_h_line(int16_t x0, int16_t y0, int16_t x1, uint32_t color)
 
 }
 
-void Vhmi::draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint32_t color)
+void HMI::draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint32_t color)
 {
     int dx,             // difference in x's
         dy,             // difference in y's
@@ -152,7 +152,7 @@ void Vhmi::draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint32_t co
         } // end for
     } // end else |slope| > 1
 }
-void Vhmi::fill_rect(int16_t x, int16_t y, int16_t x1, int16_t y1, uint32_t color)
+void HMI::fill_rect(int16_t x, int16_t y, int16_t x1, int16_t y1, uint32_t color)
 {
     int16_t tempx = x, tempy = y;
     for(tempx = x; tempx <= x1; tempx++)
@@ -161,6 +161,7 @@ void Vhmi::fill_rect(int16_t x, int16_t y, int16_t x1, int16_t y1, uint32_t colo
             draw_pixel(tempx, tempy, color);
     }
 }
+<<<<<<< HEAD:ebox/core/port/ebox_virtual_hmi.cpp
 
 void Vhmi::fill_rect(int16_t x, int16_t y, int16_t x1, int16_t y1, uint32_t *color,uint16_t size)
 {    int16_t tempx = x, tempy = y;
@@ -174,6 +175,9 @@ void Vhmi::fill_rect(int16_t x, int16_t y, int16_t x1, int16_t y1, uint32_t *col
 	
 }
 void Vhmi::draw_circle(int16_t x, int16_t y, int16_t r, uint32_t color)
+=======
+void HMI::draw_circle(int16_t x, int16_t y, int16_t r, uint32_t color)
+>>>>>>> dev:ebox/core/port/ebox_hmi.cpp
 {
     unsigned short  a, b;
     int c;
@@ -211,6 +215,6 @@ void Vhmi::draw_circle(int16_t x, int16_t y, int16_t r, uint32_t color)
         draw_pixel(x - b, y - a, color);
     }
 }
-void Vhmi::flush()
+void HMI::flush()
 {
 }

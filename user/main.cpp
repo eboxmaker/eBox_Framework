@@ -8,69 +8,128 @@ Copyright 2015 shentq. All Rights Reserved.
 */
 
 //STM32 RUN IN eBox
-
-
 #include "ebox.h"
 #include "bsp_ebox.h"
-#include <Modbus.h>
-#include <ModbusIP.h>
-#include "../Ethernet3/utility/w5500.h"
-#include "../Ethernet3/Ethernet3.h"
-#include "../Ethernet3/EthernetUdp3.h"         // UDP library from: bjoern@cs.stanford.edu 12/30/2008
+#include "ds3231.h"
 
 /**
-	*	1	此例程需要调用eDrive目录下的w5500模块
-	*	2	此例程演示了w5500的初始化，基本信息打印
+	*	1	此例程需要调用eDrive目录下的ds3231驱动
+	*	2	此例程演示了ds3231时钟芯片的基本操作
 	*/
 
-
-
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"w5500 io test example"
+#define EXAMPLE_NAME	"ds3231 example"
 #define EXAMPLE_DATE	"2018-08-11"
 
+SoftI2c si2c(&PC6,&PC7);
+ChinaCalendar ccalendar;
 
-//Modbus Registers Offsets (0-9999)
-const int LAMP1_COIL = 100; 
-//Used Pins
-#define led  PB8
+DS3231 ds(&si2c,0xD0);
 
-//ModbusIP object
-ModbusIP mb;
+DateTime_t dt;
+DateTime_t dt1;
+char time[9];
+char date[9];
+
+uint32_t last_time;
 
 void setup()
 {
     ebox_init();
-    UART.begin(256000);
+    UART.begin(115200);
+    UART.setTimeout(10);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
-    // The media access control (ethernet hardware) address for the shield
-    byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };  
-    // The IP address for the shield
-    byte ip[] = { 192, 168, 1, 120 };   
-    //Config Modbus IP 
-    mb.config(mac, ip);
-    //Set ledPin mode
-    led.mode(OUTPUT);
-    // Add LAMP1_COIL register - Use addCoil() for digital outputs
-    mb.addCoil(LAMP1_COIL);
 
+    ds.begin();
+    DataU16_t buf[3];
     
+    buf[0].byte[0] = 30;
+    buf[0].byte[1] = 37;
+    buf[1].byte[0] = 20;
+    buf[1].byte[1] = 10;
+    buf[2].byte[0] = 11;
+    buf[2].byte[1] = 19;
+//    ds.set_dt_mb(buf);
+    
+    dt.year = buf[2].byte[1];
+    dt.month = buf[2].byte[0];
+    dt.date = buf[1].byte[1];
+    dt.hour = buf[1].byte[0];
+    dt.min = buf[0].byte[1];
+    dt.sec = buf[0].byte[0];
+//    ds.set_dt(dt);
+    
+    
+    
+    String str = "19-11-21 14:17:00";
+//    ds.set_dt_string(str);
+
+    ds.set_dt_string("80-11-7 17:45:0");
+//    t.year = 19;
+//    t.month = 11;
+//    t.date = 10;
+//    t.hour = 23;
+//    t.min = 59;
+//    t.sec = 55;
+
 }
-uint32_t last;
 int main(void)
 {
     setup();
-
     while(1)
     {
-        mb.task();
-       
-       //Attach ledPin to LAMP1_COIL register     
-        led.write(mb.Coil(LAMP1_COIL));
-        if(millis() - last > 1000)
+        ds.loop();
+
+        dt = ds.get_dt();
+        String time = ds.get_time();
+        String date = ds.get_date();
+
+        String dtstr = uart1.readString();
+        if(dtstr != "")
+            ds.set_dt_string(dtstr);
+//        UART.printf(date);
+//        UART.printf(" ");
+//        UART.printf(time);
+//        UART.printf("\r\n");
+        if(millis() - last_time > 1000)
         {
-            last = milli_seconds;
-//            uart1.printf("free:%d\r\n",ebox_get_free());
+            last_time = millis();
+            dt = ds.get_dt();
+            UART.printf("========RTC测试======\r\n");
+            UART.printf("20%02d-%02d-%02d %02d:%02d:%02d week:%d\r\n", dt.year, dt.month, dt.date, dt.hour, dt.min, dt.sec,dt.week);
+            UART.println(date);
+            UART.println(time);
+            
+            uint32_t stamp = get_unix_timestamp(dt);
+            UART.printf("UNIX时间戳：%u\r\n",stamp);
+
+            dt1 = get_utc_dt(dt,8);
+            ds.print(UART,dt1);
+            
+            dt1 =  date_next_n_days(dt,30);
+            UART.printf("30天之后的日期：20%02d-%02d-%02d\r\n",dt1.year, dt1.month, dt1.date);
+            
+            dt1 =  date_before_n_days(dt,30);
+            UART.printf("30天之前的日期：20%02d-%02d-%02d\r\n",dt1.year, dt1.month, dt1.date);
+
+            
+            
+            
+            ccalendar.update_cdt(dt);
+            
+
+            ccalendar.print(UART);
+            
+            String  str;
+            str = "节气：" + ccalendar.get_jieqi_str(dt);
+            UART.println(str);
+            uint8_t day = ccalendar.get_jieqi_mday(dt);
         }
     }
+
+
 }
+
+
+
+

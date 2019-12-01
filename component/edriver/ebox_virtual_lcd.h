@@ -6,7 +6,7 @@
 
 #include "font.h"
 
-class VLcd : public Vhmi, public Print
+class VLcd : public HMI, public Print
 {
 
 private:

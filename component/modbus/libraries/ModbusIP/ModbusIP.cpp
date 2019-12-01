@@ -19,6 +19,7 @@ void ModbusIP::config(uint8_t *mac, IPAddress ip)
     Ethernet.begin(mac, ip);
     Ethernet.localIP().printTo(uart1);
     _server.begin();
+    ebox_printf("config\r\n");
 }
 
 void ModbusIP::config(uint8_t *mac, IPAddress ip, IPAddress dns)
@@ -97,5 +98,8 @@ void ModbusIP::task()
             ebox_free(_frame);
             _len = 0;
         }
+    }
+    else
+    {
     }
 }
