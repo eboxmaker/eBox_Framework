@@ -28,8 +28,7 @@
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
-extern Lcd lcd;
-extern Graphic gpu;
+
 extern EventGpio btn;
 extern EventManager manager;
 
