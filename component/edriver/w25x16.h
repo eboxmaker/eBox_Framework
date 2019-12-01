@@ -34,9 +34,11 @@
 #define W25Q64 	0XEF16
 #define W25Q128	0XEF17
 #define W25Q256 0XEF18
+
+#define W25X_PAGE_SIZE 256
+#define W25X_SECTOR_SIZE 4096
 ////////////////////////////////////////////////////////////////////////////
-//W25X16
-#define FLASH_ID 0XEF14
+
 //cmd
 #define W25X_WriteEnable		0x06 
 #define W25X_WriteDisable		0x04 
@@ -61,14 +63,6 @@
 #define W25X_Enable4ByteAddr    0xB7
 #define W25X_Exit4ByteAddr      0xE9
 
-typedef struct 
-{
-    uint16_t page_size;
-    uint16_t page_count;
-    uint16_t sector_size;
-}W25xInfo_t;
-
-
 
 class W25x16 : public Block
 {
@@ -78,20 +72,17 @@ public:
         this->cs  = cs;
         this->spi = spi;
     }
-    int begin();
-    virtual int init();
-    
-    uint16_t    read_id();
+    virtual int begin();
     
     virtual int read_sector(uint8_t *buffer, uint32_t sector, uint8_t count);
-    void    read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read);
-    void fast_read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read);
+    void        read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read);
+    void        fast_read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read);
     
-    void write(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
+    void        write(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
     virtual int write_sector(uint8_t *data, uint32_t sector, uint8_t count);
 
     virtual int erase_sector(uint32_t dst_addr);
-    void erase_chip(void);
+    void        erase_chip(void);
 
     
     uint8_t     read_sr(uint8_t index = 0);
@@ -110,10 +101,13 @@ private:
     Spi         *spi;
     uint8_t     initialized;
 
+    int         init();
+    uint16_t    read_id();
     void        write_no_check(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
     void        write_page(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
 
-    uint16_t    type;				//定义W25QXX芯片型号		   
+    uint16_t    type;				//定义W25QXX芯片型号	
+    uint32_t    page_count;
 
 
 };

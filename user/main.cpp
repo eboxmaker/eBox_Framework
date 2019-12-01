@@ -32,23 +32,23 @@ void dirOpt()
 {
     res = f_mkdir("0:123"); //新建目录只能一级一级的建，即调用一次f_mkdir(),建一层目录而已，目录名不能以数字开头
     if(res == FR_OK)
-        uart1.printf("\r\ncreat dir ok !");
+        uart1.printf("creat dir ok !\r\n");
     else if(res == FR_EXIST)
-        uart1.printf("\r\ndir is exist !");
+        uart1.printf("dir is exist !\r\n");
     else
-        uart1.printf("\r\ncreate failed~~~~(>_<)~~~~");
+        uart1.printf("create failed err:%d\r\n",res);
 
     res = f_opendir(&DirObject, "0:123"); //打开目录
     if(res == FR_OK)
     {
-        uart1.printf("\r\nopen dir ok !");
-        uart1.printf("\r\nclust  num：%d", DirObject.clust);
-        uart1.printf("\r\nsect num：%d", DirObject.sect);
+        uart1.printf("open dir ok !\r\n");
+        uart1.printf("clust  num：%d\r\n", DirObject.clust);
+        uart1.printf("sect num：%d\r\n", DirObject.sect);
     }
     else if(res == FR_NO_PATH)
-        uart1.printf("\r\ndir is not exist");
+        uart1.printf("dir is not exist\r\n");
     else
-        uart1.printf("\r\nopen dir failed~~~~(>_<)~~~~");
+        uart1.printf("open dir failed\r\n");
     
     
 
@@ -64,9 +64,7 @@ void fileOpt()
 
     for(int i = 0; i < 100; i++)
         buf[i] = '1';
-    res = f_open(&fsrc, "0:125.txt", FA_WRITE | FA_READ | FA_CREATE_NEW ); //没有这个文件则创建该文件
-    uart1.printf("\r\n");
-
+    res = f_open(&fsrc, "0:12345.txt", FA_WRITE | FA_READ | FA_CREATE_NEW ); //没有这个文件则创建该文件
     if(res == FR_OK)
     {
         
@@ -104,14 +102,14 @@ void fileOpt()
     else if(res == FR_EXIST)
         uart1.printf("file exist\r\n");
     else
-        uart1.printf("creat/open failed~~~~(>_<)~~~~ %d\r\n", res);
+        uart1.printf("creat/open failed err:%d\r\n", res);
 
 
     /////////////////////////////////////////////////////////////////////////////////////
     u32 readsize;
     u32 buflen;
     buflen = sizeof(readBuf);
-    res = f_open(&fsrc, "0:125.txt", FA_READ); //没有这个文件则创建该文件
+    res = f_open(&fsrc, "0:12345.txt", FA_READ); //没有这个文件则创建该文件
     if(res == FR_OK)
     {
         uart1.printf("file size：%d\r\n", fsrc.fsize);
@@ -158,15 +156,12 @@ void setup()
     u8 ret;
     ebox_init();
     uart1.begin(115200);
-    if(ret == 0)
-        uart1.printf("sdcard init ok!\r\n");
-    else
-        uart1.printf("sdcard init failed;err = %d\r\n", ret);
-
+    
     flash.begin();
+    flash.erase_chip();
+    
     attach_sd_to_fat(0,&flash);
 
-//    flash.erase_chip();
     res = f_mount(&fs, "0", 1);
     if(res == FR_OK)
         uart1.printf("mount ok!\r\n", res);
@@ -181,6 +176,7 @@ void setup()
             uart1.printf("f_mkfs err!err = %d\r\n", res);
     }
     
+    fileOpt();
 
 
 }
@@ -188,12 +184,8 @@ u32 count;
 int main(void)
 {
     setup();
-    fileOpt();
-    dirOpt();
     while(1)
     {
-    fileOpt();
-
         delay_ms(1000);
     }
 

@@ -30,7 +30,7 @@ DSTATUS	my_disk_status(uint8_t pdrv)
 DSTATUS my_disk_initialize(uint8_t pdrv)
 {
     if(pdrv >= MAX_PHYSICAL) return RES_PARERR;
-    block[pdrv]->init();
+    block[pdrv]->begin();
     return 0;
 }
 

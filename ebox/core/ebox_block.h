@@ -10,7 +10,7 @@ class Block
 
     public:
         Block(){};
-        virtual int init() = 0;
+        virtual int begin() = 0;
         virtual int read_sector(uint8_t *buffer, uint32_t sector, uint8_t count) = 0;
         virtual int erase_sector(uint32_t sector) = 0;
         virtual int write_sector(uint8_t *data, uint32_t sector, uint8_t count) = 0;
