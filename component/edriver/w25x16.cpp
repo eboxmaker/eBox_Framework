@@ -20,63 +20,62 @@
 /* Includes ------------------------------------------------------------------*/
 #include "w25x16.h"
 
-W25xInfo_t w25x16_info = 
-{
-    256,
-    8192,
-    4096,
-};
+
 
 int W25x16::begin()
 {
-
+    uint16_t temp;
+    int ret = 0;
     if(initialized == 0)
     {
         cfg.dev_num = cs->id;
         cfg.mode = Spi::MODE0;
         cfg.bit_order = Spi::MSB;
-        cfg.prescaler = Spi::DIV4;
+        cfg.prescaler = Spi::DIV2;
+        cs->mode(OUTPUT_PP);
+        cs->set();
+        
+        spi->begin(&cfg); 
+        ret = init();
+        if(ret == 0)
+        {
+            temp = type - W25Q80;
+            page_count  = 4096;//W25Q80的页数是4096。没增加一个序号数量翻倍
+            for(int i = 0; i < temp; i++)
+                page_count = page_count * 2;
+            
+            capacity = W25X_PAGE_SIZE * page_count;
+            sector_size = W25X_SECTOR_SIZE;
+            sector_count = capacity / sector_size;
+            ebox_printf("=spi flash W25QXX init success!=\r\n");
+            ebox_printf("page_size  : %d\r\n",W25X_PAGE_SIZE);
+            ebox_printf("page_count : %d\r\n",page_count);
+            ebox_printf("cap        : %d MByte\r\n",capacity/1024/1024);
+            ebox_printf("sct_size   : %d Byte\r\n",sector_size);
+            ebox_printf("sct_count  : %d\r\n",sector_count);
+            ebox_printf("================================\r\n");
+            initialized = 1;
+        }
     }
-    cs->mode(OUTPUT_PP);
-    cs->set();
-    
-    spi->begin(&cfg);
-    
-    capacity = w25x16_info.page_size * w25x16_info.page_count;
-    sector_size = w25x16_info.sector_size;
-    sector_count = capacity / sector_size;
-    
-    ebox_printf("page_size: %d\r\n",w25x16_info.page_size);
-    ebox_printf("page_count: %d\r\n",w25x16_info.page_count);
-    ebox_printf("cap: %d\r\n",capacity);
-    ebox_printf("sector_size:  %d\r\n",sector_size);
-    ebox_printf("sector_count:  %d\r\n",sector_count);
-    
-	type = read_id();	          //读取FLASH ID.
-
-    
-   
+    return ret;
 }
 int W25x16::init()
 {
     uint8_t temp;
-    
-    
-//    while(1){
-    
 	type = read_id();	          //读取FLASH ID.
-    
-//    temp=read_sr(3);              //读取状态寄存器3，判断地址模式
-//    if((temp&0X01)==0)			        //如果不是4字节地址模式,则进入4字节地址模式
-//    {
-//        cs->reset();
-//        spi->write(W25X_Enable4ByteAddr);//发送进入4字节地址模式指令   
-//        cs->set();       		       
-//    }
-    ebox_printf("w25x16 init ok: type:0X%04X\r\n",type);
-    delay_ms(1000);
-//    }
-
+    temp=read_sr(3);              //读取状态寄存器3，判断地址模式
+    if((temp & 0X01) == 0)			        //如果不是4字节地址模式,则进入4字节地址模式
+    {
+        spi->take(&cfg);
+        cs->reset();
+        spi->write(W25X_Enable4ByteAddr);//发送进入4字节地址模式指令   
+        cs->set(); 
+        spi->release();
+    }
+    if(type > W25Q256 || type < W25Q80)
+        return -1;
+    else
+        return 0;
 }
 uint16_t W25x16::read_id()
 {
