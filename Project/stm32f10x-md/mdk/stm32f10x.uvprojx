@@ -938,44 +938,9 @@
               <FilePath>..\..\..\user\board\spark_f1\bsp_ebox.cpp</FilePath>
             </File>
             <File>
-              <FileName>ui_main.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\ui_main.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ui.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\ui.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ui_setValue.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\ui_setValue.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ui_menu.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\ui_menu.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ui_password.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\ui_password.cpp</FilePath>
-            </File>
-            <File>
               <FileName>ebox_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\user\board\spark_f1\ebox_config.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>mqtt</GroupName>
-          <Files>
-            <File>
-              <FileName>PubSubClient.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\mqtt\src\PubSubClient.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1016,91 +981,6 @@
               <FileName>wrapperdiskio.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\fat\wrapperdiskio.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>gui</GroupName>
-          <Files>
-            <File>
-              <FileName>Font8_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\Font8_ASCII.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font16_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\Font16_ASCII.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font16_HZ.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\Font16_HZ.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font24_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\Font24_ASCII.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font32_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\Font32_ASCII.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FontCustom.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\FontCustom.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_bitmap.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_bitmap.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_sidebar.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_sidebar.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_text.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_text.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>graphic.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\graphic.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_button.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_button.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_base.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_base.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_page.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_page.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_list.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_list.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_menu.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_menu.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_textview.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_textview.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1146,21 +1026,6 @@
               <FileName>EthernetUdp3.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\Ethernet3\EthernetUdp3.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>mb</GroupName>
-          <Files>
-            <File>
-              <FileName>Modbus.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\modbus\libraries\Modbus\Modbus.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ModbusIP.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\modbus\libraries\ModbusIP\ModbusIP.cpp</FilePath>
             </File>
           </Files>
         </Group>

@@ -161,23 +161,7 @@ void HMI::fill_rect(int16_t x, int16_t y, int16_t x1, int16_t y1, uint32_t color
             draw_pixel(tempx, tempy, color);
     }
 }
-<<<<<<< HEAD:ebox/core/port/ebox_virtual_hmi.cpp
-
-void Vhmi::fill_rect(int16_t x, int16_t y, int16_t x1, int16_t y1, uint32_t *color,uint16_t size)
-{    int16_t tempx = x, tempy = y;
-    for(tempx = x; tempx <= x1; tempx++)
-    {
-        for(tempy = y; tempy <= y1; tempy++){
-            draw_pixel(tempx, tempy, *color++);
-						if(--size == 0) return;
-				}					
-    }
-	
-}
-void Vhmi::draw_circle(int16_t x, int16_t y, int16_t r, uint32_t color)
-=======
 void HMI::draw_circle(int16_t x, int16_t y, int16_t r, uint32_t color)
->>>>>>> dev:ebox/core/port/ebox_hmi.cpp
 {
     unsigned short  a, b;
     int c;

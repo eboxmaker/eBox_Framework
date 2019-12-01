@@ -21,9 +21,7 @@
 #include "bsp_ebox.h"
 #include "ebox_mem.h"
 
-Lcd lcd(&PB5,&PB6,&PB4,&PB3,&spi1);
 
-Graphic gpu(&lcd,128,160);
 
 W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
 
