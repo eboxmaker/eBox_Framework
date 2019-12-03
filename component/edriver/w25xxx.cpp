@@ -39,7 +39,7 @@ int W25xxx::begin()
         ret = init();
         if(ret == 0)
         {
-            temp = type - W25Q80;
+            temp = type.value - W25Q80;
             page_count  = 4096;//W25Q80的页数是4096。没增加一个序号数量翻倍
             for(int i = 0; i < temp; i++)
                 page_count = page_count * 2;
@@ -47,6 +47,8 @@ int W25xxx::begin()
             capacity = W25X_PAGE_SIZE * page_count;
             sector_size = W25X_SECTOR_SIZE;
             sector_count = capacity / sector_size;
+            
+            
             ebox_printf("===========spi flash==========\r\n");
             ebox_printf("type       : 0X%04X\r\n",type);
             ebox_printf("page_size  : %d\r\n",W25X_PAGE_SIZE);
@@ -60,24 +62,163 @@ int W25xxx::begin()
     }
     return ret;
 }
+
+
 int W25xxx::init()
 {
     uint8_t temp;
-	type = read_id();	          //读取FLASH ID.
-    temp=read_sr(3);              //读取状态寄存器3，判断地址模式
-    if((temp & 0X01) == 0)			        //如果不是4字节地址模式,则进入4字节地址模式
+    
+    int ret = 0;
+    if(initialized == 0)
     {
-        spi->take(&cfg);
-        cs->reset();
-        spi->write(W25X_Enable4ByteAddr);//发送进入4字节地址模式指令   
-        cs->set(); 
-        spi->release();
+        cfg.dev_num = cs->id;
+        cfg.mode = Spi::MODE0;
+        cfg.bit_order = Spi::MSB;
+        cfg.prescaler = Spi::DIV2;
+        cs->mode(OUTPUT_PP);
+        cs->set();
+        
+        spi->begin(&cfg); 
+        type.value = read_id();	          //读取FLASH ID.
+        temp=read_sr(3);              //读取状态寄存器3，判断地址模式
+        if((temp & 0X01) == 0)			        //如果不是4字节地址模式,则进入4字节地址模式
+        {
+            spi->take(&cfg);
+            cs->reset();
+            spi->write(W25X_Enable4ByteAddr);//发送进入4字节地址模式指令   
+            cs->set(); 
+            spi->release();
+        }
+        if(type.value > W25Q256 || type.value < W25Q80)
+            ret = -1;
+        else
+            ret = 0;
+
+        if(ret == 0)
+        {
+            temp = type.value - W25Q80;
+            page_count  = 4096;//W25Q80的页数是4096。没增加一个序号数量翻倍
+            for(int i = 0; i < temp; i++)
+                page_count = page_count * 2;
+            
+            capacity = W25X_PAGE_SIZE * page_count;
+            sector_size = W25X_SECTOR_SIZE;
+            sector_count = capacity / sector_size;
+            
+            ebox_printf("===========spi flash==========\r\n");
+            ebox_printf("type       : 0X%04X\r\n",type);
+            ebox_printf("page_size  : %d\r\n",W25X_PAGE_SIZE);
+            ebox_printf("page_count : %d\r\n",page_count);
+            ebox_printf("cap        : %f MByte\r\n",capacity/1024.0/1024.0);
+            ebox_printf("sct_size   : %d Byte\r\n",sector_size);
+            ebox_printf("sct_count  : %d\r\n",sector_count);
+            ebox_printf("================================\r\n");
+            initialized = 1;
+        }
     }
-    if(type > W25Q256 || type < W25Q80)
-        return -1;
-    else
-        return 0;
+    
+    return ret;
+    
 }
+
+int W25xxx::deinit()
+{
+
+}
+
+
+
+
+ int W25xxx::read(void *buffer, bd_addr_t addr, bd_size_t size)
+ {
+ 
+    spi->take(&cfg);
+    cs->reset();
+    spi->write(W25X_ReadData);         //发送读取命令
+    if(type.value == W25Q256)                //如果是W25Q256的话地址为4字节的，要发送最高8位
+    {
+        spi->write((uint8_t)((addr)>>24));    
+    }
+    spi->write((uint8_t)((addr) >> 16)); //发送24bit地址
+    spi->write((uint8_t)((addr) >> 8));
+    spi->write((uint8_t)addr);
+    spi->read_buf((uint8_t *)buffer, size);
+    cs->set();
+    spi->release();
+    return 0;
+ }
+ int W25xxx::program(const void *buffer, bd_addr_t addr, bd_size_t size)
+ {
+     
+    const uint8_t *ptr = (const uint8_t *)buffer;
+    int count = size / get_program_size();
+    for(int i = 0; i < count; i++)
+    {
+        for(int j = 0; j < sector_size / 256; j++)
+        {
+            write_page((const uint8_t *)&ptr[j*256 + i*4096], addr+j*256 + i*4096, 256);
+        }
+    }
+
+        
+    return 0;
+ }
+ int W25xxx::erase(bd_addr_t addr, bd_size_t size)
+ {
+
+     uint16_t count =  size / get_erase_size();
+
+     for(int i = 0; i < count; i++)
+     {
+        write_enable();                  //SET WEL
+        wait_busy();
+        cs->reset();
+        spi->write(W25X_SectorErase);      //发送扇区擦除指令
+        spi->write((uint8_t)((addr) >> 16)); //发送24bit地址
+        spi->write((uint8_t)((addr) >> 8));
+        spi->write((uint8_t)addr);
+        cs->set();
+        wait_busy();   				   //等待擦除完成
+     }
+    return 0;
+     
+ }
+ bd_size_t W25xxx::get_read_size() const
+ {
+ 
+    return 256;
+ }
+ bd_size_t W25xxx::get_program_size() const 
+ {
+ 
+    return 256;
+ }
+ bd_size_t W25xxx::get_erase_size() const
+{
+    return get_program_size()*16;
+}
+
+ bd_size_t W25xxx::size() const 
+{
+    return 4096*512;
+}
+const char *W25xxx::get_type() const
+{
+    return (const char*)type.byte;
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
 uint16_t W25xxx::read_id()
 {
     uint16_t id = 0;
@@ -114,7 +255,7 @@ int W25xxx:: read_sector(uint8_t *buffer, uint32_t sector, uint8_t count)
     spi->take(&cfg);
     cs->reset();
     spi->write(W25X_ReadData);         //发送读取命令
-    if(type == W25Q256)                //如果是W25Q256的话地址为4字节的，要发送最高8位
+    if(type.value == W25Q256)                //如果是W25Q256的话地址为4字节的，要发送最高8位
     {
         spi->write((uint8_t)((addr)>>24));    
     }
@@ -305,7 +446,7 @@ void W25xxx::write_page(const uint8_t *buf, uint32_t write_addr, uint16_t num_to
     spi->take(&cfg);
     cs->reset();
     spi->write(W25X_PageProgram);      //发送写页命令
-    if(type == W25Q256)                //如果是W25Q256的话地址为4字节的，要发送最高8位
+    if(type.value == W25Q256)                //如果是W25Q256的话地址为4字节的，要发送最高8位
     {
         spi->write((uint8_t)((write_addr)>>24));    
     }
@@ -495,7 +636,7 @@ void W25xxx::write_disable(void)
     spi->write(W25X_WriteDisable);     //发送写禁止指令
     cs->set();
 }
-uint16_t W25xxx::get_type(void)
-{
-    return type;
-}
+//uint16_t W25xxx::get_type(void)
+//{
+//    return type;
+//}
