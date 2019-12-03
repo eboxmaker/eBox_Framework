@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
-  * @file    w25x16.h
+  * @file    w25xxx.h
   * @author  shentq
-  * @version V1.2
-  * @date    2016/08/14
+  * @version V2.2
+  * @date    2019/08/14
   * @brief
   ******************************************************************************
   * @attention
@@ -17,8 +17,9 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __W25X16_H
-#define __W25X16_H
+#ifndef __W25XXX_H
+#define __W25XXX_H
+
 #include "ebox_core.h"
 #include "ebox_block.h"
 
@@ -64,27 +65,26 @@
 #define W25X_Exit4ByteAddr      0xE9
 
 
-class W25x16 : public Block
+class W25xxx : public Block
 {
 public:
-    W25x16(Gpio *cs, Spi *spi)
+    W25xxx(Gpio *cs, Spi *spi)
     {
         this->cs  = cs;
         this->spi = spi;
     }
     virtual int begin();
-    
     virtual int read_sector(uint8_t *buffer, uint32_t sector, uint8_t count);
-    void        read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read);
-    void        fast_read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read);
+    virtual int write_sector(const uint8_t *buffer, uint32_t sector, uint8_t count);
     
-    void        write(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
-    virtual int write_sector(uint8_t *data, uint32_t sector, uint8_t count);
-
-    virtual int erase_sector(uint32_t dst_addr);
+    
+    
+    void        read(uint8_t *buffer, uint32_t read_addr, uint16_t num_to_read);
+    void        fast_read(uint8_t *buffer, uint32_t read_addr, uint16_t num_to_read);
+    void        write(uint8_t *buffer, uint32_t write_addr, uint16_t num_to_write);
+    int         erase_sector(uint32_t dst_addr);
     void        erase_chip(void);
 
-    
     uint8_t     read_sr(uint8_t index = 0);
     void        write_sr(uint8_t index,uint8_t value);
     void        wait_busy(void);
@@ -99,12 +99,12 @@ private:
     Spi::Config_t cfg;
     Gpio        *cs;
     Spi         *spi;
-    uint8_t     initialized;
+    bool     initialized;
 
     int         init();
     uint16_t    read_id();
-    void        write_no_check(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
-    void        write_page(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
+    void        write_no_check(const uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
+    void        write_page(const uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
 
     uint16_t    type;				//¶¨ÒåW25QXXĞ¾Æ¬ĞÍºÅ	
     uint32_t    page_count;

@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    w25x16.cpp
   * @author  shentq
-  * @version V1.2
+  * @version V2.2
   * @date    2016/08/14
   * @brief
   ******************************************************************************
@@ -18,11 +18,11 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "w25x16.h"
+#include "w25xxx.h"
 
 
 
-int W25x16::begin()
+int W25xxx::begin()
 {
     uint16_t temp;
     int ret = 0;
@@ -47,10 +47,11 @@ int W25x16::begin()
             capacity = W25X_PAGE_SIZE * page_count;
             sector_size = W25X_SECTOR_SIZE;
             sector_count = capacity / sector_size;
-            ebox_printf("=spi flash W25QXX init success!=\r\n");
+            ebox_printf("===========spi flash==========\r\n");
+            ebox_printf("type       : 0X%04X\r\n",type);
             ebox_printf("page_size  : %d\r\n",W25X_PAGE_SIZE);
             ebox_printf("page_count : %d\r\n",page_count);
-            ebox_printf("cap        : %d MByte\r\n",capacity/1024/1024);
+            ebox_printf("cap        : %f MByte\r\n",capacity/1024.0/1024.0);
             ebox_printf("sct_size   : %d Byte\r\n",sector_size);
             ebox_printf("sct_count  : %d\r\n",sector_count);
             ebox_printf("================================\r\n");
@@ -59,7 +60,7 @@ int W25x16::begin()
     }
     return ret;
 }
-int W25x16::init()
+int W25xxx::init()
 {
     uint8_t temp;
 	type = read_id();	          //读取FLASH ID.
@@ -77,7 +78,7 @@ int W25x16::init()
     else
         return 0;
 }
-uint16_t W25x16::read_id()
+uint16_t W25xxx::read_id()
 {
     uint16_t id = 0;
     spi->take(&cfg);
@@ -106,23 +107,24 @@ uint16_t W25x16::read_id()
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-int W25x16:: read_sector(uint8_t *buffer, uint32_t sector, uint8_t count)
+int W25xxx:: read_sector(uint8_t *buffer, uint32_t sector, uint8_t count)
 {
     uint32_t addr = sector * sector_size;
-    uint16_t read_count = sector_size  * count;
+    uint32_t read_count = sector_size  * count;
     spi->take(&cfg);
     cs->reset();
     spi->write(W25X_ReadData);         //发送读取命令
-//    if(type == W25Q256)                //如果是W25Q256的话地址为4字节的，要发送最高8位
-//    {
-//        spi->write((uint8_t)((addr)>>24));    
-//    }
+    if(type == W25Q256)                //如果是W25Q256的话地址为4字节的，要发送最高8位
+    {
+        spi->write((uint8_t)((addr)>>24));    
+    }
     spi->write((uint8_t)((addr) >> 16)); //发送24bit地址
     spi->write((uint8_t)((addr) >> 8));
     spi->write((uint8_t)addr);
     spi->read_buf(buffer, read_count);
     cs->set();
     spi->release();
+    return 0;
 }
 /***************************************************************
 函数名称 :  void SPI_Flash_Read(uint8_t *pBuffer,uint32_t ReadAddr,uint16_t NumByteToRead)
@@ -134,7 +136,7 @@ int W25x16:: read_sector(uint8_t *buffer, uint32_t sector, uint8_t count)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read)
+void W25xxx::read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read)
 {
     spi->take(&cfg);
     cs->reset();
@@ -157,10 +159,9 @@ void W25x16::read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-int W25x16::write_sector(uint8_t *data, uint32_t sector, uint8_t count)
+int W25xxx::write_sector(const uint8_t *data, uint32_t sector, uint8_t count)
 {
     uint32_t addr = sector * sector_size;
-    uint16_t write_count = sector_size * count;
     
     for(int i = 0; i < count; i++)
     {
@@ -171,10 +172,7 @@ int W25x16::write_sector(uint8_t *data, uint32_t sector, uint8_t count)
         }
 
     }
-    
-    
-
-//    write_no_check(data,addr,write_count);
+    return 0;
 }
 
 
@@ -188,7 +186,7 @@ int W25x16::write_sector(uint8_t *data, uint32_t sector, uint8_t count)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::fast_read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read)
+void W25xxx::fast_read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read)
 {
     spi->take(&cfg);
     cs->reset();
@@ -212,7 +210,7 @@ void W25x16::fast_read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::write(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write)
+void W25xxx::write(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write)
 {
 
     uint32_t secpos;
@@ -270,7 +268,7 @@ void W25x16::write(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::write_no_check(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write)
+void W25xxx::write_no_check(const uint8_t *buf, uint32_t write_addr, uint16_t num_to_write)
 {
     uint16_t pageremain;
     pageremain = 256 - write_addr % 256; //单页剩余的字节数
@@ -301,7 +299,7 @@ void W25x16::write_no_check(uint8_t *buf, uint32_t write_addr, uint16_t num_to_w
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::write_page(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write)
+void W25xxx::write_page(const uint8_t *buf, uint32_t write_addr, uint16_t num_to_write)
 {
     write_enable();                  //SET WEL
     spi->take(&cfg);
@@ -314,7 +312,7 @@ void W25x16::write_page(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write
     spi->write((uint8_t)((write_addr) >> 16)); //发送24bit地址
     spi->write((uint8_t)((write_addr) >> 8));
     spi->write((uint8_t)write_addr);
-    spi->write_buf(buf, num_to_write);
+    spi->write_buf((uint8_t *)buf, num_to_write);
     cs->set();
     wait_busy();					   //等待写入结束
     spi->release();
@@ -326,7 +324,7 @@ void W25x16::write_page(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-int W25x16::erase_sector(uint32_t dst_addr)
+int W25xxx::erase_sector(uint32_t dst_addr)
 {
     dst_addr *= 4096;
     write_enable();                  //SET WEL
@@ -338,7 +336,7 @@ int W25x16::erase_sector(uint32_t dst_addr)
     spi->write((uint8_t)dst_addr);
     cs->set();
     wait_busy();   				   //等待擦除完成
-
+    return 0;
 }
 /***************************************************************
 函数名称 : void SPI_Flash_Write(uint8_t *pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)
@@ -351,7 +349,7 @@ int W25x16::erase_sector(uint32_t dst_addr)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::erase_chip(void)
+void W25xxx::erase_chip(void)
 {
     write_enable();                  //SET WEL
     wait_busy();
@@ -359,6 +357,7 @@ void W25x16::erase_chip(void)
     spi->write(W25X_ChipErase); 	//发送片擦除命令
     cs->set();
     wait_busy();   				   				//等待芯片擦除结束
+    
 }
 
 
@@ -366,12 +365,12 @@ void W25x16::erase_chip(void)
 
 
 //等待空闲
-void W25x16::wait_busy(void)
+void W25xxx::wait_busy(void)
 {
     while ((read_sr() & 0x01) == 0x01); // 等待BUSY位清空
 }
 //进入掉电模式
-void W25x16::power_down(void)
+void W25xxx::power_down(void)
 {
     volatile int i;
     cs->reset();
@@ -382,7 +381,7 @@ void W25x16::power_down(void)
 
 }
 //唤醒
-void W25x16::wake_up(void)
+void W25xxx::wake_up(void)
 {
     volatile int i;
     cs->reset();
@@ -413,7 +412,7 @@ void W25x16::wake_up(void)
 输入参数 : 状态寄存器号，范:1~3
 返回值   : byte	寄存器状态
 ***************************************************************/
-uint8_t W25x16::read_sr(uint8_t index)
+uint8_t W25xxx::read_sr(uint8_t index)
 {
     uint8_t byte=0,command=0; 
     switch(index)
@@ -445,9 +444,9 @@ uint8_t W25x16::read_sr(uint8_t index)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::write_sr(uint8_t index,uint8_t value)
+void W25xxx::write_sr(uint8_t index,uint8_t value)
 {
-    uint8_t byte=0,command=0; 
+    uint8_t command=0; 
     switch(index)
     {
         case 1:
@@ -477,7 +476,7 @@ void W25x16::write_sr(uint8_t index,uint8_t value)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::write_enable(void)
+void W25xxx::write_enable(void)
 {
     cs->reset();
     spi->write(W25X_WriteEnable);      //发送写使能
@@ -490,13 +489,13 @@ void W25x16::write_enable(void)
 输出参数 : 无
 返回值   : 无
 ***************************************************************/
-void W25x16::write_disable(void)
+void W25xxx::write_disable(void)
 {
     cs->reset();
     spi->write(W25X_WriteDisable);     //发送写禁止指令
     cs->set();
 }
-uint16_t W25x16::get_type(void)
+uint16_t W25xxx::get_type(void)
 {
     return type;
 }

@@ -4,20 +4,34 @@ file   : mmc_sd.cpp
 
 #include "mmc_sd.h"
 
-
-int SD::begin(uint8_t dev_num)
+#include  "ebox.h"
+int SD::begin()
 {
     int ret = 0;
-    SPIDevSDCard.dev_num = dev_num;
-    SPIDevSDCard.mode = Spi::MODE0;
-    SPIDevSDCard.prescaler = Spi::DIV2;
-    SPIDevSDCard.bit_order = Spi::MSB;
+    if(!initialized)
+    {
+        SPIDevSDCard.dev_num = cs->id;
+        SPIDevSDCard.mode = Spi::MODE0;
+        SPIDevSDCard.prescaler = Spi::DIV2;
+        SPIDevSDCard.bit_order = Spi::MSB;
 
-    cs->mode(OUTPUT_PP);
-    cs->set();
-    SD_Type = 0;
+        cs->mode(OUTPUT_PP);
+        cs->set();
+        SD_Type = 0;
 
-    ret = init();
+        ret = init();
+        capacity = get_capacity();
+        sector_size = 512;
+        sector_count = capacity / sector_size;
+        
+//        ebox_printf("page_size  : %d\r\n",W25X_PAGE_SIZE);
+//        ebox_printf("page_count : %d\r\n",page_count);
+        uart1.printf("cap        : %f MByte\r\n",capacity/1024.0/1024.0);
+        uart1.printf("sct_size   : %d Byte\r\n",sector_size);
+        uart1.printf("sct_count  : %d\r\n",sector_count);
+        uart1.printf("================================\r\n");
+        initialized = true;
+    }
     return ret;
 }
 /*******************************************************************************
@@ -392,7 +406,7 @@ uint64_t SD::get_capacity(void)
     uint8_t r1;
     uint16_t i;
     uint16_t temp;
-    spi->take(&SPIDevSDCard);
+//    spi->take(&SPIDevSDCard);
 
     //取CSD信息，如果期间出错，返回0
     if(get_CSD(csd) != 0) return 0;
@@ -437,7 +451,7 @@ uint64_t SD::get_capacity(void)
         Capacity *= (uint32_t)temp;//字节为单位
     }
 
-    spi->release();
+//    spi->release();
 
     return (uint64_t)Capacity;
 }
@@ -566,7 +580,7 @@ uint8_t SD::write_single_block(uint32_t sector, const  uint8_t *data)
 *                   0： 成功
 *                   other：失败
 *******************************************************************************/
-uint8_t SD::read_multi_block(uint32_t sector, uint8_t *buffer, uint8_t count)
+int SD::read_sector( uint8_t *buffer,uint32_t sector, uint8_t count)
 {
     uint8_t r1;
 
@@ -612,7 +626,7 @@ uint8_t SD::read_multi_block(uint32_t sector, uint8_t *buffer, uint8_t count)
 *                   0： 成功
 *                   other：失败
 *******************************************************************************/
-uint8_t SD::write_multi_block(uint32_t sector,  const uint8_t *data, uint8_t count)
+int SD::write_sector( const uint8_t *data, uint32_t sector,  uint8_t count)
 {
     uint8_t r1;
     //  uint16_t i;

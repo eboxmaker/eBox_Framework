@@ -12,6 +12,8 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "mmc_sd.h"
 #include "wrapperdiskio.h"
 #include "ff.h"
+#include "w25xxx.h"
+
 
 
 
@@ -21,10 +23,56 @@ static FATFS fs;            // Work area (file system object) for logical drive
 FATFS *fss;
 DIR DirObject;       //目录结构
 FIL fsrc;            // 文件结构
+FILINFO FilInfo;
+FILINFO FilInfo1;
+
 
 FRESULT res;
 
 SD sd(&PB12, &spi2);
+W25x16 flash(&PA15, &spi1);
+
+u8 mf_scan_files(const char * path)
+{
+    FRESULT res;
+    char *fn;   /* This function is assuming non-Unicode cfg. */
+	  char *p; 
+#if _USE_LFN
+    fileinfo.lfsize = _MAX_LFN * 2 + 1;
+    fileinfo.lfname = mymalloc(SRAMIN,fileinfo.lfsize);
+#endif
+    uart1.printf("查看目录：%s\r\n",path);
+
+    res = f_opendir(&DirObject,path); //打开一个目录
+    if (res == FR_OK)
+    {
+        while(1)
+        {
+            res = f_readdir(&DirObject, &FilInfo);                   //读取目录下的一个文件
+            if (res != FR_OK || FilInfo.fname[0] == 0) 
+            {
+                 uart1.printf("===============\r\n");
+                break;  //错误了/到末尾了,退出
+            }
+ 
+#if _USE_LFN
+            fn = *fileinfo.lfname ? fileinfo.lfname : fileinfo.fname;
+#else
+             fn = FilInfo.fname;				  
+#endif                                               /* It is a file. */
+			 
+                 uart1.printf("%s\r\n",FilInfo.fname);
+			 FilInfo = FilInfo1;
+        }
+    }
+    else  
+    {
+        uart1.printf("错误：%d\r\n",res);
+
+    }
+    return res;
+}
+
 
 void fileOpt()
 {
@@ -85,7 +133,7 @@ void fileOpt()
         {
             //			 uart1.printf("成功读取数据：%dBytes\r\n",br);
             //			 uart1.printf("data:%s\r\n",readBuf);
-            uart1.printf_length((const char *)readBuf, sizeof(readBuf));
+            uart1.write((const char *)readBuf, sizeof(readBuf));
         }
         else
         {
@@ -109,19 +157,17 @@ void setup()
     u8 ret;
     ebox_init();
     uart1.begin(115200);
-    ret = sd.begin(3);
-    if(ret == 0)
-        uart1.printf("sdcard init ok!\r\n");
-    else
-        uart1.printf("sdcard init failed;err = %d\r\n", ret);
 
-    attach_sd_to_fat(&sd);
+    attach_sd_to_fat(0,&sd);
 
     res = f_mount(&fs, "0", 1);
     if(res == FR_OK)
         uart1.printf("mount ok!\r\n", res);
     else
         uart1.printf("mount err!err = %d\r\n", res);
+    
+    mf_scan_files("0");
+
 }
 u32 count;
 int main(void)
