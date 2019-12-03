@@ -1,7 +1,9 @@
 #include "ebox_core.h"
 
-extern "C" {
 
+#if __cplusplus
+extern "C" {
+#endif
     void        (*interrupts)(void);
     int         (*no_interrupts)(void);
     void        (*ebox_reset)(void);
@@ -11,7 +13,10 @@ extern "C" {
     void        (*delay_us)(uint32_t us);
 
     Cpu_t cpu;
-}
+#if __cplusplus
+} // extern "C"
+#endif
+
 uint16_t makeWord(unsigned int w)
 {
     return w;

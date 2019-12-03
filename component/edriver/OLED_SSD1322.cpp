@@ -21,7 +21,7 @@
 #include "oled_ssd1322.h"
 #include "font.h"
 
-    uint8_t buffer[ SSD1322_LCDWIDTH * SSD1322_LCDHEIGHT / (8/BITS_PER_PIXEL) ] = {0};
+static uint8_t buffer[ SSD1322_LCDWIDTH * SSD1322_LCDHEIGHT / (8/BITS_PER_PIXEL) ] = {0};
 
 /**********************************************************
  *                    º¯ Êý Éù Ã÷ Çø                      *

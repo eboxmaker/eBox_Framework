@@ -116,6 +116,7 @@ uint8_t     dec_to_bcd(uint8_t dec);
 
 
 #ifdef __cplusplus
+#include "ebox_retarget.h"
 #include "object.h"
 #include "WCharacter.h"
 #include "WString.h"
