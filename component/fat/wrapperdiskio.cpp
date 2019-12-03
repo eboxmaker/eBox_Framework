@@ -39,15 +39,18 @@ DRESULT my_disk_read( uint8_t pdrv, uint8_t *buffer, uint32_t sector, uint8_t co
 {
     if(pdrv >= MAX_PHYSICAL) return RES_PARERR;
     block[pdrv]->read_sector(buffer,sector, count);
+
     return RES_OK;
 }
 
 DRESULT my_disk_write(uint8_t pdrv, const uint8_t *data, uint32_t sector, uint8_t count)
 {
     if(pdrv >= MAX_PHYSICAL) return RES_PARERR;
-    for(int i = sector; i < count; i++)
-        block[pdrv]->erase_sector(sector);
     block[pdrv]->write_sector((uint8_t *)data,sector, count);
+    for(int i = 0; i < count; i++)
+    {
+        uart1.printf("write:sector %d\r\n",sector++);
+    }
     return RES_OK;
 }
 
@@ -80,7 +83,7 @@ DRESULT  my_disk_ioctl (
      /*¿é´óÐ¡ */
 
      case GET_BLOCK_SIZE :
-         *(DWORD * )buff = 1;
+         *(DWORD * )buff = 4;
          return RES_OK;
          
      default:

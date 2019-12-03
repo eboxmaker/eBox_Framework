@@ -838,11 +838,6 @@
               <FilePath>..\..\..\component\edriver\DS3231.cpp</FilePath>
             </File>
             <File>
-              <FileName>w25x16.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\w25x16.cpp</FilePath>
-            </File>
-            <File>
               <FileName>Max7456.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\Max7456.cpp</FilePath>
@@ -896,6 +891,11 @@
               <FileName>ir_encoder.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\ir\ir_encoder.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>w25xxx.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\w25xxx.cpp</FilePath>
             </File>
           </Files>
         </Group>

@@ -6,8 +6,9 @@ file   : mmc_sd.h
 #define __MMC_SD_H
 
 #include "ebox_core.h"
+#include "ebox_block.h"
 
-class SD
+class SD : public Block
 {
 
 public:
@@ -16,22 +17,22 @@ public:
         this->cs  = cs;
         this->spi = spi;
     }
-    int         begin(uint8_t dev_num);
-    uint8_t     init();
+    virtual int begin();
+    virtual int read_sector( uint8_t *buffer, uint32_t sector,uint8_t count);
+    virtual int write_sector(const uint8_t *buffer,uint32_t sector,   uint8_t count);
+    virtual uint64_t    get_capacity(void);
+    
     int         get_CID(uint8_t *cid_data);
-    int         get_CSD(uint8_t *csd_data);
-    uint64_t    get_capacity(void);
-    uint8_t     read_single_block(uint32_t sector, uint8_t *buffer);
-    uint8_t     write_single_block(uint32_t sector, const  uint8_t *data);
-    uint8_t     read_multi_block(uint32_t sector, uint8_t *buffer, uint8_t count);
-    uint8_t     write_multi_block(uint32_t sector,  const uint8_t *data, uint8_t count);
-    uint8_t     read_bytes(unsigned long address, unsigned char *buf, unsigned int offset, unsigned int bytes);
-
+    int         get_CSD(uint8_t *csd_data);        
 private:
+    uint8_t     init();
     uint8_t     _wait(void);
     uint8_t     _send_command(uint8_t cmd, uint32_t arg, uint8_t crc);
     uint8_t     _send_command_no_deassert(uint8_t cmd, uint32_t arg, uint8_t crc);
     int         _receive_data(uint8_t *data, uint16_t len, uint8_t release);
+    uint8_t     read_single_block(uint32_t sector, uint8_t *buffer);
+    uint8_t     write_single_block(uint32_t sector, const  uint8_t *data);
+    uint8_t     read_bytes(unsigned long address, unsigned char *buf, unsigned int offset, unsigned int bytes);
 
 public:
     uint8_t  SD_Type; //SD¿¨µÄÀàĞÍ
@@ -40,6 +41,7 @@ private:
     Gpio            *cs;
     Spi             *spi;
     Spi::Config_t SPIDevSDCard;
+    bool     initialized;
 
 
 };

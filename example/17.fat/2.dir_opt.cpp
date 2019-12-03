@@ -12,8 +12,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "mmc_sd.h"
 #include "wrapperdiskio.h"
 #include "ff.h"
-
-
+#include "w25xxx.h"
 
 static FATFS fs;            // Work area (file system object) for logical drive
 FATFS *fss;
@@ -21,6 +20,10 @@ DIR DirObject;       //Ŀ¼�ṹ
 FRESULT res;
 u8 ret;
 
+
+
+
+W25x16 flash(&PA15, &spi1);
 SD sd(&PB12, &spi2);
 
 void dirOpt()
@@ -50,13 +53,9 @@ void setup()
     u8 ret;
     ebox_init();
     uart1.begin(115200);
-    ret = sd.begin(3);
-    if(ret == 0)
-        uart1.printf("sdcard init ok!\r\n");
-    else
-        uart1.printf("sdcard init failed;err = %d\r\n", ret);
 
-    attach_sd_to_fat(&sd);
+    
+    attach_sd_to_fat(0,&sd);
 
     res = f_mount(&fs, "0", 1);
     if(res == FR_OK)

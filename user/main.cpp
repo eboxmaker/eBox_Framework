@@ -12,48 +12,69 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "mmc_sd.h"
 #include "wrapperdiskio.h"
 #include "ff.h"
-#include "w25x16.h"
+#include "w25xxx.h"
+#include "bsp_ebox.h"
+#include "fatstructs.h"
+mbr_t *mbr;
+part_t  *part;
+fat32_boot_t *bios;
+//SD sd(&PB12, &spi2);
 
-
-
-W25x16 flash(&PA15, &spi1);
+W25xxx flash(&PA15, &spi1);
 
 
 static FATFS fs;            // Work area (file system object) for logical drive
 FATFS *fss;
-DIR DirObject;       //目录结构
-FIL fsrc;            // 文件结构
-
+//DIR DirObject;       //目录结构
+//FIL fsrc;            // 文件结构
+FILINFO FilInfo;
+FILINFO FilInfo1;
 FRESULT res;
 
-void fileOpt();
 
-void dirOpt()
+u8 mf_scan_files(const char * path)
 {
-    res = f_mkdir("0:123"); //新建目录只能一级一级的建，即调用一次f_mkdir(),建一层目录而已，目录名不能以数字开头
-    if(res == FR_OK)
-        uart1.printf("creat dir ok !\r\n");
-    else if(res == FR_EXIST)
-        uart1.printf("dir is exist !\r\n");
-    else
-        uart1.printf("create failed err:%d\r\n",res);
+    DIR DirObject;       //目录结构
+    FRESULT res;
+    char *fn;   /* This function is assuming non-Unicode cfg. */
+	  char *p; 
+#if _USE_LFN
+    fileinfo.lfsize = _MAX_LFN * 2 + 1;
+    fileinfo.lfname = mymalloc(SRAMIN,fileinfo.lfsize);
+#endif
+    uart1.printf("查看目录：%s\r\n",path);
 
-    res = f_opendir(&DirObject, "0:123"); //打开目录
-    if(res == FR_OK)
+    res = f_opendir(&DirObject,path); //打开一个目录
+    if (res == FR_OK)
     {
-        uart1.printf("open dir ok !\r\n");
-        uart1.printf("clust  num：%d\r\n", DirObject.clust);
-        uart1.printf("sect num：%d\r\n", DirObject.sect);
+        while(1)
+        {
+            res = f_readdir(&DirObject, &FilInfo);                   //读取目录下的一个文件
+            if (res != FR_OK || FilInfo.fname[0] == 0) 
+            {
+                 uart1.printf("===============\r\n");
+                break;  //错误了/到末尾了,退出
+            }
+ 
+#if _USE_LFN
+            fn = *fileinfo.lfname ? fileinfo.lfname : fileinfo.fname;
+#else
+             fn = FilInfo.fname;				  
+#endif                                               /* It is a file. */
+			 
+                 uart1.printf("%s\r\n",FilInfo.fname);
+			 FilInfo = FilInfo1;
+        }
     }
-    else if(res == FR_NO_PATH)
-        uart1.printf("dir is not exist\r\n");
-    else
-        uart1.printf("open dir failed\r\n");
-    
-    
+    else  
+    {
+        uart1.printf("错误：%d\r\n",res);
 
-        fileOpt();
+    }
+    return res;
 }
+
+
 void fileOpt()
 {
     u8 ret;
@@ -61,14 +82,18 @@ void fileOpt()
     u8 readBuf[6] ;
     u32 bw = 0;
     u32 br = 0;
+    FIL fsrc;            // 文件结构
 
+    uint32_t total = 4097;
+    uint16_t counter;
     for(int i = 0; i < 100; i++)
         buf[i] = '1';
-    res = f_open(&fsrc, "0:12345.txt", FA_WRITE | FA_READ | FA_CREATE_NEW ); //没有这个文件则创建该文件
+    res = f_open(&fsrc, "0:12345.txt", FA_WRITE | FA_READ | FA_CREATE_ALWAYS); //没有这个文件则创建该文件
+    uart1.printf("\r\n");
+
     if(res == FR_OK)
     {
-        
-        uart1.printf("open/make file ok:%s\r\n",fsrc.dir_ptr);
+        uart1.printf("open/make file  O(∩_∩)O\r\n");
         uart1.printf("file flag:%d\r\n", fsrc.flag);
         uart1.printf("file size：%d\r\n", fsrc.fsize);
         uart1.printf("file ptr(start location)：%d\r\n", fsrc.fptr);
@@ -85,25 +110,17 @@ void fileOpt()
                 uart1.printf("write error : %d\r\n", res);
                 break;
             }
-            uart1.printf("write ok!\r\n");
+            counter += bw;
+//            uart1.printf("write ok!\r\n");
         }
-        while (bw < sizeof(buf));  //  判断是否写完(bw > 100，表示写入完成)
-        uart1.printf("file size：%d\r\n", fsrc.fsize);
-        res = f_close(&fsrc);//关闭文件
-        if(res == FR_OK)
-        {
-            uart1.printf("关闭文件成功 \r\n");
-        }
-        else
-        {
-            uart1.printf("关闭文件失败 err：%d\r\n", res);
-        }
+        while (counter < total);  //  判断是否写完(bw > 100，表示写入完成)
+        uart1.printf("write %d ok!\r\n",counter);
     }
     else if(res == FR_EXIST)
         uart1.printf("file exist\r\n");
     else
-        uart1.printf("creat/open failed err:%d\r\n", res);
-
+        uart1.printf("creat/open failed~~~~(>_<)~~~~ %d\r\n", res);
+    f_close(&fsrc);//关闭文件
 
     /////////////////////////////////////////////////////////////////////////////////////
     u32 readsize;
@@ -114,78 +131,130 @@ void fileOpt()
     {
         uart1.printf("file size：%d\r\n", fsrc.fsize);
     }
-    else
-    {
-        uart1.printf("open file err：%d\r\n", res);
-    }
-    readsize = 0;
-
     readsize = 0;
     do
     {
         res = f_read(&fsrc, readBuf, buflen, &br);
         if(res == FR_OK)
         {
-            //			 uart1.printf("成功读取数据：%dBytes\r\n",br);
-            //			 uart1.printf("data:%s\r\n",readBuf);
-            uart1.write((const char *)readBuf, sizeof(readBuf));
+//            uart1.write((const char *)readBuf, sizeof(readBuf));
         }
         else
         {
-            uart1.printf("\r\nread failederr = %d\r\n",res);
+            uart1.printf("\r\nread failed\r\n");
         }
         readsize += buflen;
         f_lseek(&fsrc, readsize);
 
     }
     while(br == buflen);
-    uart1.printf("\r\nread end\r\n");
+    uart1.printf("\r\nread %d end\r\n",readsize);
     f_close(&fsrc);//关闭文件
-//    f_mount(&fs, "0:", 0);
-
-
-
-
-
+    f_mount(&fs, "0:", 0);
 }
+    uint8_t buf[5000];
 
-uint8_t rbuf[100];
-uint8_t wbuf[100];
 void setup()
 {
     u8 ret;
     ebox_init();
-    uart1.begin(115200);
-    
-    flash.begin();
-    flash.erase_chip();
-    
+    uart1.begin(256000);
+    print_log();
+
+//    flash.begin();
+//    flash.erase_chip();
+//    flash.read(buf,0,4096);
+//    uart1.printf("=====sct 0====\r\n");
+//    for(int i = 0; i < 256; i++)    {
+//        for(int j = 0; j < 16; j++)    {
+//            uart1.printf("0X%02X ",buf[i*16 + j]);
+//            }
+//        uart1.printf("\r\n");
+//    }
+
     attach_sd_to_fat(0,&flash);
 
     res = f_mount(&fs, "0", 1);
     if(res == FR_OK)
         uart1.printf("mount ok!\r\n", res);
     else
-    {
         uart1.printf("mount err!err = %d\r\n", res);
-
-        res = f_mkfs("0",0,4096);
-        if(res == FR_OK)
-            uart1.printf("f_mkfs ok!\r\n", res);
-        else
-            uart1.printf("f_mkfs err!err = %d\r\n", res);
-    }
-    
+    f_mkfs("0",0,4096);
     fileOpt();
+    mf_scan_files("0:");
+    
+//    flash.read_sector(buf,0,1);
+//    uart1.printf("=====sct %d====\r\n",0);
+//    for(int i = 0; i < 256; i++)    {
+//        for(int j = 0; j < 16; j++)    {
+//            uart1.printf("0X%02X ",buf[i*16 + j]);
+//            }
+//        uart1.printf("\r\n");
+//    }
+    
+    
+    DataU32_t value;
+    flash.read_sector(buf,0,1);
+    mbr = (mbr_t *)buf;
 
+    
+    part = mbr->part;
+    
+    uart1.printf("diskSignature:%d\r\n",mbr->diskSignature);
+    uart1.printf("usuallyZero:%d\r\n",mbr->usuallyZero);
+    
+    uart1.printf("totalSectors:%d\r\n",part->totalSectors);
+    uart1.printf("beginSector:%d\r\n",part->beginSector);
+    uart1.printf("firstSector:%d\r\n",part->firstSector);
+    uart1.printf("endSector:%d\r\n",part->endSector);
+
+    
+    
+    flash.read_sector(buf,63,1);
+    bios = (fat32_boot_t *)buf;
+    
+    uart1.printf("fat32Version:%d\r\n",bios->fat32Version);
+    uart1.printf("bytesPerSector:%d\r\n",bios->bytesPerSector);
+    uart1.printf("sectorsPerCluster:%d\r\n",bios->sectorsPerCluster);
+    uart1.printf("fatCount:%d\r\n",bios->fatCount);
+    uart1.printf("fat32RootCluster:%d\r\n",bios->fat32RootCluster);
+
+    
+    uart1.printf("winsect:%d\r\n",fs.winsect);
+    uart1.printf("fs_type:%d\r\n",fs.fs_type);
+    uart1.printf("fsize:%d\r\n",fs.fsize);
+    uart1.printf("csize:%d\r\n",fs.csize);
+    uart1.printf("dirbase:%d\r\n",fs.dirbase);
+    uart1.printf("database:%d\r\n",fs.database);
+
+    uart1.printf("=====sct %d====\r\n",0);
+    for(int i = 0; i < 256; i++)    {
+        for(int j = 0; j < 16; j++)    {
+            uart1.printf("0X%02X ",buf[i*16 + j]);
+        }
+        uart1.printf("\r\n");
+    }
+//    for(int sct = 63; sct < 69; sct++)    {
+//        flash.read_sector(buf,sct,1);
+//        uart1.printf("=====sct %d====\r\n",sct);
+//        for(int i = 0; i < 256; i++)    {
+//            for(int j = 0; j < 16; j++)    {
+//                uart1.printf("0X%02X ",buf[i*16 + j]);
+//                }
+//            uart1.printf("\r\n");
+//        }
+//    }
 
 }
-u32 count;
+
+
 int main(void)
 {
     setup();
     while(1)
     {
+
+        //uart1.printf("\r\nrunning！");
         delay_ms(1000);
     }
 

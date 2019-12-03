@@ -14,6 +14,8 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ff.h"
 
 
+extern const char* err_str[];
+
 static FATFS fs;            // Work area (file system object) for logical drive
 FATFS *fss;
 FRESULT res;
@@ -60,19 +62,13 @@ void setup()
     u8 ret;
     ebox_init();
     uart1.begin(115200);
-    ret = sd.begin(3);
-    if(ret == 0)
-        uart1.printf("sdcard init ok!\r\n");
-    else
-        uart1.printf("sdcard init failed;err = %d\r\n", ret);
-
-    attach_sd_to_fat(&sd);
-
+    
+    attach_sd_to_fat(0,&sd);
     res = f_mount(&fs, "0", 1);
     if(res == FR_OK)
         uart1.printf("mount ok!\r\n", res);
     else
-        uart1.printf("mount err!err = %d\r\n", res);
+        uart1.printf("err code:%s\r\n", err_str[res]);
 
 }
 u32 count;
@@ -90,5 +86,29 @@ int main(void)
 }
 
 
+
+const char* err_str[] = 
+{
+    "FR_OK",				/* (0) Succeeded */
+    "FR_DISK_ERR",			/* (1) A hard error occurred in the low level disk I/O layer */
+    "FR_INT_ERR",				/* (2) Assertion failed */
+    "FR_NOT_READY",			/* (3) The physical drive cannot work */
+    "FR_NO_FILE",				/* (4) Could not find the file */
+    "FR_NO_PATH",				/* (5) Could not find the path */
+    "FR_INVALID_NAME",		/* (6) The path name format is invalid */
+    "FR_DENIED",				/* (7) Access denied due to prohibited access or directory full */
+    "FR_EXIST",				/* (8) Access denied due to prohibited access */
+    "FR_INVALID_OBJECT",		/* (9) The file/directory object is invalid */
+    "FR_WRITE_PROTECTED",		/* (10) The physical drive is write protected */
+    "FR_INVALID_DRIVE",		/* (11) The logical drive number is invalid */
+    "FR_NOT_ENABLED",			/* (12) The volume has no work area */
+    "FR_NO_FILESYSTEM",		/* (13) There is no valid FAT volume */
+    "FR_MKFS_ABORTED",		/* (14) The f_mkfs() aborted due to any parameter error */
+    "FR_TIMEOUT",				/* (15) Could not get a grant to access the volume within defined period */
+    "FR_LOCKED",				/* (16) The operation is rejected according to the file sharing policy */
+    "FR_NOT_ENOUGH_CORE",		/* (17) LFN working buffer could not be allocated */
+    "FR_TOO_MANY_OPEN_FILES",	/* (18) Number of open files > _FS_LOCK */
+    "FR_INVALID_PARAMETER"	/* (19) Given parameter is invalid */
+};
 
 
