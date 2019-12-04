@@ -16,11 +16,11 @@ enum bd_error {
 
 /** Type representing the address of a specific block
  */
-typedef uint32_t bd_addr_t;
+typedef uint64_t bd_addr_t;
 
 /** Type representing a quantity of 8-bit bytes
  */
-typedef uint32_t bd_size_t;
+typedef uint64_t bd_size_t;
 
 class BlockDevice
 {
@@ -31,11 +31,11 @@ public:
      */
     virtual ~BlockDevice() {};
 
-    /** Initialize a block device
-     *
-     *  @return         0 on success or a negative error code on failure
-     */
-    virtual int begin() = 0;
+//    /** Initialize a block device
+//     *
+//     *  @return         0 on success or a negative error code on failure
+//     */
+//    virtual int begin() = 0;
 
     /** Initialize a block device
      *

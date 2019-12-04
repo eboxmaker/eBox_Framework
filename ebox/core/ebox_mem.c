@@ -193,7 +193,8 @@ void *ebox_realloc(void *ptr, size_t size)
 {
     if(ptr == NULL)
     {
-        return ebox_malloc(size);//distribution new mem
+         ptr = ebox_malloc(size);//distribution new mem
+        return ptr;
     }
     else
     {

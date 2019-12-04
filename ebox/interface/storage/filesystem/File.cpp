@@ -47,7 +47,7 @@ int File::open(FileSystem *fs, const char *path, int flags)
     if (!err) {
         _fs = fs;
     }
-
+    
     return err;
 }
 
@@ -64,46 +64,73 @@ int File::close()
 
 ssize_t File::read(void *buffer, size_t len)
 {
+    if (!_fs) {
+        return -EINVAL;
+    }
     return _fs->file_read(_file, buffer, len);
 }
 
 ssize_t File::write(const void *buffer, size_t len)
 {
+    if (!_fs) {
+        return -EINVAL;
+    }
     return _fs->file_write(_file, buffer, len);
 }
 
 int File::sync()
 {
+    if (!_fs) {
+        return -EINVAL;
+    }
     return _fs->file_sync(_file);
 }
 
 int File::isatty()
 {
+    if (!_fs) {
+        return -EINVAL;
+    }
     return _fs->file_isatty(_file);
 }
 
 off_t File::seek(off_t offset, int whence)
 {
+    if (!_fs) {
+        return -EINVAL;
+    }
     return _fs->file_seek(_file, offset, whence);
 }
 
 off_t File::tell()
 {
+    if (!_fs) {
+        return -EINVAL;
+    }
     return _fs->file_tell(_file);
 }
 
 void File::rewind()
 {
+    if (!_fs) {
+        return ;
+    }
     return _fs->file_rewind(_file);
 }
 
 off_t File::size()
 {
+    if (!_fs) {
+        return 0;
+    }
     return _fs->file_size(_file);
 }
 
 int File::truncate(off_t length)
 {
+    if (!_fs) {
+        return -EINVAL;
+    }
     return _fs->file_truncate(_file, length);
 }
 

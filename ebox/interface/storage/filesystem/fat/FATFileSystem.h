@@ -1,4 +1,4 @@
-/* mbed Microcontroller Library
+/* ebox Microcontroller Library
  * Copyright (c) 2006-2012 ARM Limited
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,21 +26,21 @@
 #ifndef MBED_FATFILESYSTEM_H
 #define MBED_FATFILESYSTEM_H
 
-#include "features/storage/filesystem/FileSystem.h"
-#include "features/storage/blockdevice/BlockDevice.h"
-#include "FileHandle.h"
+#include "interface/storage/filesystem/FileSystem.h"
+#include "interface/storage/blockdevice/BlockDevice.h"
+//#include "FileHandle.h"
 #include <stdint.h>
-#include "PlatformMutex.h"
-#include "features/storage/filesystem/fat/ChaN/ff.h"
+//#include "PlatformMutex.h"
+#include "interface/storage/filesystem/fat/ChaN/ff.h"
 
-namespace mbed {
+namespace ebox {
 
 /**
  * FAT file system based on ChaN's FAT file system library v0.8
  *
  * Synchronization level: Thread safe
  */
-class FATFileSystem : public FileSystem {
+class FATFileSystem : public ebox::FileSystem {
 public:
     /** Lifetime of the FAT file system.
      *
@@ -234,7 +234,7 @@ protected:
      *
      *  @return         0 on success, negative error code on failure.
      */
-    virtual int file_truncate(mbed::fs_file_t file, off_t length);
+    virtual int file_truncate(ebox::fs_file_t file, off_t length);
 
     /** Open a directory on the file system.
      *
@@ -287,16 +287,16 @@ private:
     int _id;
 
 protected:
-    virtual void lock();
-    virtual void unlock();
+//    virtual void lock();
+//    virtual void unlock();
     virtual int mount(BlockDevice *bd, bool mount);
 };
 
-} // namespace mbed
+} // namespace ebox
 
 // Added "using" for backwards compatibility.
 #ifndef MBED_NO_GLOBAL_USING_DIRECTIVE
-using mbed::FATFileSystem;
+using ebox::FATFileSystem;
 #endif
 
 #endif
