@@ -1,4 +1,4 @@
-/* mbed Microcontroller Library
+/* ebox Microcontroller Library
  * Copyright (c) 2006-2019 ARM Limited
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,20 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include "features/storage/filesystem/fat/ChaN/diskio.h"
-#include "features/storage/filesystem/fat/ChaN/ffconf.h"
-#include "features/storage/filesystem/fat/ChaN/ff.h"
-#include "platform/mbed_debug.h"
-#include "platform/mbed_critical.h"
-#include "features/storage/filesystem/mbed_filesystem.h"
+#include "interface/storage/filesystem/fat/ChaN/diskio.h"
+#include "interface/storage/filesystem/fat/ChaN/ffconf.h"
+#include "interface/storage/filesystem/fat/ChaN/ff.h"
+#include "interface/storage/filesystem/mbed_filesystem.h"
 #include "FATFileSystem.h"
 
 #include <errno.h>
 #include <stdlib.h>
 
-namespace mbed {
+namespace ebox {
 
-using namespace mbed;
+using namespace ebox;
 
 static int fat_error_remap(FRESULT res)
 {
@@ -81,19 +79,19 @@ static int fat_error_remap(FRESULT res)
             return -res;
     }
 }
-
+/*
 // Helper class for deferring operations when variable falls out of scope
 template <typename T>
-class Deferred {
+class //Deferred {
 public:
     T _t;
     Callback<void(T)> _ondefer;
 
-    Deferred(const Deferred &);
-    Deferred &operator=(const Deferred &);
+    //Deferred(const //Deferred &);
+    //Deferred &operator=(const //Deferred &);
 
 public:
-    Deferred(T t, Callback<void(T)> ondefer = NULL)
+    //Deferred(T t, Callback<void(T)> ondefer = NULL)
         : _t(t), _ondefer(ondefer)
     {
     }
@@ -103,7 +101,7 @@ public:
         return _t;
     }
 
-    ~Deferred()
+    ~//Deferred()
     {
         if (_ondefer) {
             _ondefer(_t);
@@ -115,10 +113,10 @@ static void dodelete(const char *data)
 {
     delete[] data;
 }
-
+*/
 // Adds prefix needed internally by fatfs, this can be avoided for the first fatfs
 // (id 0) otherwise a prefix of "id:/" is inserted in front of the string.
-static Deferred<const char *> fat_path_prefix(int id, const char *path)
+static const char * fat_path_prefix(int id, const char *path)
 {
     // We can avoid dynamic allocation when only on fatfs is in use
     if (id == 0) {
@@ -135,96 +133,99 @@ static Deferred<const char *> fat_path_prefix(int id, const char *path)
     buffer[1] = ':';
     buffer[2] = '/';
     strcpy(buffer + strlen("0:/"), path);
-    return Deferred<const char *>(buffer, dodelete);
+    return (const char *)(buffer);
 }
 
 ////// Disk operations //////
 
 // Global access to block device from FAT driver
-static mbed::BlockDevice *_ffs[FF_VOLUMES] = {0};
-static SingletonPtr<PlatformMutex> _ffs_mutex;
+static ebox::BlockDevice *_ffs[FF_VOLUMES] = {0};
+//static SingletonPtr<PlatformMutex> _ffs_mutex;
 
 // FAT driver functions
 extern "C" DWORD get_fattime(void)
 {
-    time_t rawtime;
-    time(&rawtime);
-    struct tm *ptm = localtime(&rawtime);
-    return (DWORD)(ptm->tm_year - 80) << 25
-           | (DWORD)(ptm->tm_mon + 1) << 21
-           | (DWORD)(ptm->tm_mday) << 16
-           | (DWORD)(ptm->tm_hour) << 11
-           | (DWORD)(ptm->tm_min) << 5
-           | (DWORD)(ptm->tm_sec / 2);
+//    time_t rawtime;
+//    time(&rawtime);
+//    struct tm *ptm = localtime(&rawtime);
+//    return (DWORD)(ptm->tm_year - 80) << 25
+//           | (DWORD)(ptm->tm_mon + 1) << 21
+//           | (DWORD)(ptm->tm_mday) << 16
+//           | (DWORD)(ptm->tm_hour) << 11
+//           | (DWORD)(ptm->tm_min) << 5
+//           | (DWORD)(ptm->tm_sec / 2);
+    return 0;
 }
-
+#include "ebox_mem.h"
 extern "C" void *ff_memalloc(UINT size)
 {
-    return malloc(size);
+    return ebox_malloc(size);
 }
 
 extern "C" void ff_memfree(void *p)
 {
-    free(p);
+    ebox_free(p);
 }
 
 // Implementation of diskio functions (see ChaN/diskio.h)
 static WORD disk_get_sector_size(BYTE pdrv)
 {
     bd_size_t sector_size = _ffs[pdrv]->get_erase_size();
-    MBED_ASSERT(sector_size <= WORD(-1));
+    //MBED_ASSERT(sector_size <= WORD(-1));
 
     WORD ssize = sector_size;
     if (ssize < 512) {
         ssize = 512;
     }
 
-    MBED_ASSERT(ssize >= FF_MIN_SS && ssize <= FF_MAX_SS);
-    MBED_ASSERT(_ffs[pdrv]->get_read_size() <= _ffs[pdrv]->get_erase_size());
-    MBED_ASSERT(_ffs[pdrv]->get_program_size() <= _ffs[pdrv]->get_erase_size());
+    //MBED_ASSERT(ssize >= FF_MIN_SS && ssize <= FF_MAX_SS);
+    //MBED_ASSERT(_ffs[pdrv]->get_read_size() <= _ffs[pdrv]->get_erase_size());
+    //MBED_ASSERT(_ffs[pdrv]->get_program_size() <= _ffs[pdrv]->get_erase_size());
     return ssize;
 }
 
 static DWORD disk_get_sector_count(BYTE pdrv)
 {
     DWORD scount = _ffs[pdrv]->size() / disk_get_sector_size(pdrv);
-    MBED_ASSERT(scount >= 64);
+    //MBED_ASSERT(scount >= 64);
     return scount;
 }
 
 extern "C" DSTATUS disk_status(BYTE pdrv)
 {
-    debug_if(FFS_DBG, "disk_status on pdrv [%d]\n", pdrv);
+    //debug_if(FFS_DBG, "disk_status on pdrv [%d]\n", pdrv);
     return RES_OK;
 }
 
 extern "C" DSTATUS disk_initialize(BYTE pdrv)
 {
-    debug_if(FFS_DBG, "disk_initialize on pdrv [%d]\n", pdrv);
+    //debug_if(FFS_DBG, "disk_initialize on pdrv [%d]\n", pdrv);
     return (DSTATUS)_ffs[pdrv]->init();
 }
 
 extern "C" DRESULT disk_read(BYTE pdrv, BYTE *buff, DWORD sector, UINT count)
 {
-    debug_if(FFS_DBG, "disk_read(sector %lu, count %u) on pdrv [%d]\n", sector, count, pdrv);
+    //debug_if(FFS_DBG, "disk_read(sector %lu, count %u) on pdrv [%d]\n", sector, count, pdrv);
     DWORD ssize = disk_get_sector_size(pdrv);
-    mbed::bd_addr_t addr = (mbed::bd_addr_t)sector * ssize;
-    mbed::bd_size_t size = (mbed::bd_size_t)count * ssize;
+    ebox::bd_addr_t addr = (ebox::bd_addr_t)sector * ssize;
+    ebox::bd_size_t size = (ebox::bd_size_t)count * ssize;
     int err = _ffs[pdrv]->read(buff, addr, size);
     return err ? RES_PARERR : RES_OK;
 }
 
 extern "C" DRESULT disk_write(BYTE pdrv, const BYTE *buff, DWORD sector, UINT count)
 {
-    debug_if(FFS_DBG, "disk_write(sector %lu, count %u) on pdrv [%d]\n", sector, count, pdrv);
+    //debug_if(FFS_DBG, "disk_write(sector %lu, count %u) on pdrv [%d]\n", sector, count, pdrv);
     DWORD ssize = disk_get_sector_size(pdrv);
-    mbed::bd_addr_t addr = (mbed::bd_addr_t)sector * ssize;
-    mbed::bd_size_t size = (mbed::bd_size_t)count * ssize;
+    ebox::bd_addr_t addr = (ebox::bd_addr_t)sector * ssize;
+    ebox::bd_size_t size = (ebox::bd_size_t)count * ssize;
 
     int err = _ffs[pdrv]->erase(addr, size);
     if (err) {
+        ebox_printf("disk_write addr err:0x%x\t\n",addr);
         return RES_PARERR;
     }
+    ebox_printf("addr 0k:0x%x\r\n",addr);
 
     err = _ffs[pdrv]->program(buff, addr, size);
     if (err) {
@@ -236,7 +237,7 @@ extern "C" DRESULT disk_write(BYTE pdrv, const BYTE *buff, DWORD sector, UINT co
 
 extern "C" DRESULT disk_ioctl(BYTE pdrv, BYTE cmd, void *buff)
 {
-    debug_if(FFS_DBG, "disk_ioctl(%d)\n", cmd);
+    //debug_if(FFS_DBG, "disk_ioctl(%d)\n", cmd);
     switch (cmd) {
         case CTRL_SYNC:
             if (_ffs[pdrv] == NULL) {
@@ -259,7 +260,7 @@ extern "C" DRESULT disk_ioctl(BYTE pdrv, BYTE cmd, void *buff)
                 return RES_OK;
             }
         case GET_BLOCK_SIZE:
-            *((DWORD *)buff) = 1; // default when not known
+            *((DWORD *)buff) = 8; // default when not known
             return RES_OK;
         case CTRL_TRIM:
             if (_ffs[pdrv] == NULL) {
@@ -267,8 +268,8 @@ extern "C" DRESULT disk_ioctl(BYTE pdrv, BYTE cmd, void *buff)
             } else {
                 DWORD *sectors = (DWORD *)buff;
                 DWORD ssize = disk_get_sector_size(pdrv);
-                mbed::bd_addr_t addr = (mbed::bd_addr_t)sectors[0] * ssize;
-                mbed::bd_size_t size = (mbed::bd_size_t)(sectors[1] - sectors[0] + 1) * ssize;
+                ebox::bd_addr_t addr = (ebox::bd_addr_t)sectors[0] * ssize;
+                ebox::bd_size_t size = (ebox::bd_size_t)(sectors[1] - sectors[0] + 1) * ssize;
                 int err = _ffs[pdrv]->trim(addr, size);
                 return err ? RES_PARERR : RES_OK;
             }
@@ -302,9 +303,9 @@ int FATFileSystem::mount(BlockDevice *bd)
 
 int FATFileSystem::mount(BlockDevice *bd, bool mount)
 {
-    lock();
+    ;
     if (_id != -1) {
-        unlock();
+        ;
         return -EINVAL;
     }
 
@@ -315,29 +316,29 @@ int FATFileSystem::mount(BlockDevice *bd, bool mount)
             _fsid[0] = '0' + _id;
             _fsid[1] = ':';
             _fsid[2] = '\0';
-            debug_if(FFS_DBG, "Mounting [%s] on ffs drive [%s]\n", getName(), _fsid);
+            //debug_if(FFS_DBG, "Mounting [%s] on ffs drive [%s]\n", getName(), _fsid);
             FRESULT res = f_mount(&_fs, _fsid, mount);
-            unlock();
+            ;
             return fat_error_remap(res);
         }
     }
 
-    unlock();
+    ;
     return -ENOMEM;
 }
 
 int FATFileSystem::unmount()
 {
-    lock();
+    ;
     if (_id == -1) {
-        unlock();
+        ;
         return -EINVAL;
     }
 
     FRESULT res = f_mount(NULL, _fsid, 0);
     _ffs[_id] = NULL;
     _id = -1;
-    unlock();
+    ;
     return fat_error_remap(res);
 }
 
@@ -346,11 +347,9 @@ int FATFileSystem::unmount()
 int FATFileSystem::format(BlockDevice *bd, bd_size_t cluster_size)
 {
     FATFileSystem fs;
-    fs.lock();
 
     int err = bd->init();
     if (err) {
-        fs.unlock();
         return err;
     }
 
@@ -359,7 +358,6 @@ int FATFileSystem::format(BlockDevice *bd, bd_size_t cluster_size)
     err = bd->erase(0, header);
     if (err) {
         bd->deinit();
-        fs.unlock();
         return err;
     }
 
@@ -369,7 +367,6 @@ int FATFileSystem::format(BlockDevice *bd, bd_size_t cluster_size)
         void *buf = malloc(program_size);
         if (!buf) {
             bd->deinit();
-            fs.unlock();
             return -ENOMEM;
         }
 
@@ -380,7 +377,6 @@ int FATFileSystem::format(BlockDevice *bd, bd_size_t cluster_size)
             if (err) {
                 free(buf);
                 bd->deinit();
-                fs.unlock();
                 return err;
             }
         }
@@ -392,43 +388,37 @@ int FATFileSystem::format(BlockDevice *bd, bd_size_t cluster_size)
     err = bd->trim(0, bd->size());
     if (err) {
         bd->deinit();
-        fs.unlock();
         return err;
     }
 
     err = bd->deinit();
     if (err) {
-        fs.unlock();
         return err;
     }
 
-    err = fs.mount(bd, false);
-    if (err) {
-        fs.unlock();
-        return err;
-    }
+//    err = fs.mount(bd, false);
+//    if (err) {
+//        return err;
+//    }
 
     // Logical drive number, Partitioning rule, Allocation unit size (bytes per cluster)
     FRESULT res = f_mkfs(fs._fsid, FM_ANY | FM_SFD, cluster_size, NULL, 0);
     if (res != FR_OK) {
         fs.unmount();
-        fs.unlock();
         return fat_error_remap(res);
     }
 
     err = fs.unmount();
     if (err) {
-        fs.unlock();
         return err;
     }
 
-    fs.unlock();
     return 0;
 }
 
 int FATFileSystem::reformat(BlockDevice *bd, int allocation_unit)
 {
-    lock();
+    ;
     if (_id != -1) {
         if (!bd) {
             bd = _ffs[_id];
@@ -436,37 +426,37 @@ int FATFileSystem::reformat(BlockDevice *bd, int allocation_unit)
 
         int err = unmount();
         if (err) {
-            unlock();
+            ;
             return err;
         }
     }
 
     if (!bd) {
-        unlock();
+        ;
         return -ENODEV;
     }
 
     int err = FATFileSystem::format(bd, allocation_unit);
     if (err) {
-        unlock();
+        
         return err;
     }
 
     err = mount(bd);
-    unlock();
+    
     return err;
 }
 
 int FATFileSystem::remove(const char *path)
 {
-    Deferred<const char *> fpath = fat_path_prefix(_id, path);
+    const char * fpath = fat_path_prefix(_id, path);
 
-    lock();
+    
     FRESULT res = f_unlink(fpath);
-    unlock();
+    
 
     if (res != FR_OK) {
-        debug_if(FFS_DBG, "f_unlink() failed: %d\n", res);
+        //debug_if(FFS_DBG, "f_unlink() failed: %d\n", res);
         if (res == FR_DENIED) {
             return -ENOTEMPTY;
         }
@@ -476,44 +466,44 @@ int FATFileSystem::remove(const char *path)
 
 int FATFileSystem::rename(const char *oldpath, const char *newpath)
 {
-    Deferred<const char *> oldfpath = fat_path_prefix(_id, oldpath);
-    Deferred<const char *> newfpath = fat_path_prefix(_id, newpath);
+    const char * oldfpath;
+    const char * newfpath;
 
-    lock();
+    
     FRESULT res = f_rename(oldfpath, newfpath);
-    unlock();
+    
 
     if (res != FR_OK) {
-        debug_if(FFS_DBG, "f_rename() failed: %d\n", res);
+        //debug_if(FFS_DBG, "f_rename() failed: %d\n", res);
     }
     return fat_error_remap(res);
 }
 
 int FATFileSystem::mkdir(const char *path, mode_t mode)
 {
-    Deferred<const char *> fpath = fat_path_prefix(_id, path);
+    const char * fpath = fat_path_prefix(_id, path);
 
-    lock();
+    
     FRESULT res = f_mkdir(fpath);
-    unlock();
+    
 
     if (res != FR_OK) {
-        debug_if(FFS_DBG, "f_mkdir() failed: %d\n", res);
+        //debug_if(FFS_DBG, "f_mkdir() failed: %d\n", res);
     }
     return fat_error_remap(res);
 }
 
 int FATFileSystem::stat(const char *path, struct stat *st)
 {
-    Deferred<const char *> fpath = fat_path_prefix(_id, path);
+    const char * fpath = fat_path_prefix(_id, path);
 
-    lock();
+    
     FILINFO f;
     memset(&f, 0, sizeof(f));
 
     FRESULT res = f_stat(fpath, &f);
     if (res != FR_OK) {
-        unlock();
+        
         return fat_error_remap(res);
     }
 
@@ -523,7 +513,7 @@ int FATFileSystem::stat(const char *path, struct stat *st)
     st->st_mode |= (f.fattrib & AM_RDO) ?
                    (S_IRUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH) :
                    (S_IRWXU | S_IRWXG | S_IRWXO);
-    unlock();
+    ;
 
     return 0;
 }
@@ -535,10 +525,10 @@ int FATFileSystem::statvfs(const char *path, struct statvfs *buf)
     FATFS *fs;
     DWORD fre_clust;
 
-    lock();
+    
     FRESULT res = f_getfree(_fsid, &fre_clust, &fs);
     if (res != FR_OK) {
-        unlock();
+        
         return fat_error_remap(res);
     }
 
@@ -553,28 +543,20 @@ int FATFileSystem::statvfs(const char *path, struct statvfs *buf)
     buf->f_namemax = FF_SFN_BUF;
 #endif
 
-    unlock();
+    
     return 0;
 }
 
-void FATFileSystem::lock()
-{
-    _ffs_mutex->lock();
-}
-
-void FATFileSystem::unlock()
-{
-    _ffs_mutex->unlock();
-}
 
 
 ////// File operations //////
 int FATFileSystem::file_open(fs_file_t *file, const char *path, int flags)
 {
-    debug_if(FFS_DBG, "open(%s) on filesystem [%s], drv [%d]\n", path, getName(), _id);
+    //debug_if(FFS_DBG, "open(%s) on filesystem [%s], drv [%d]\n", path, getName(), _id);
 
     FIL *fh = new FIL;
-    Deferred<const char *> fpath = fat_path_prefix(_id, path);
+    //Deferred<const char *> fpath = fat_path_prefix(_id, path);
+    const char * fpath = fat_path_prefix(_id, path);
 
     /* POSIX flags -> FatFS open mode */
     BYTE openmode;
@@ -598,17 +580,16 @@ int FATFileSystem::file_open(fs_file_t *file, const char *path, int flags)
         openmode |= FA_OPEN_APPEND;
     }
 
-    lock();
+    ;
     FRESULT res = f_open(fh, fpath, openmode);
 
     if (res != FR_OK) {
-        unlock();
-        debug_if(FFS_DBG, "f_open('w') failed: %d\n", res);
+       
+        //debug_if(FFS_DBG, "f_open('w') failed: %d\n", res);
         delete fh;
         return fat_error_remap(res);
     }
 
-    unlock();
 
     *file = fh;
     return 0;
@@ -618,9 +599,9 @@ int FATFileSystem::file_close(fs_file_t file)
 {
     FIL *fh = static_cast<FIL *>(file);
 
-    lock();
+    
     FRESULT res = f_close(fh);
-    unlock();
+    
 
     delete fh;
     return fat_error_remap(res);
@@ -630,13 +611,13 @@ ssize_t FATFileSystem::file_read(fs_file_t file, void *buffer, size_t len)
 {
     FIL *fh = static_cast<FIL *>(file);
 
-    lock();
+    
     UINT n;
     FRESULT res = f_read(fh, buffer, len, &n);
-    unlock();
+    
 
     if (res != FR_OK) {
-        debug_if(FFS_DBG, "f_read() failed: %d\n", res);
+        //debug_if(FFS_DBG, "f_read() failed: %d\n", res);
         return fat_error_remap(res);
     } else {
         return n;
@@ -647,13 +628,13 @@ ssize_t FATFileSystem::file_write(fs_file_t file, const void *buffer, size_t len
 {
     FIL *fh = static_cast<FIL *>(file);
 
-    lock();
+    
     UINT n;
     FRESULT res = f_write(fh, buffer, len, &n);
-    unlock();
+    
 
     if (res != FR_OK) {
-        debug_if(FFS_DBG, "f_write() failed: %d", res);
+        //debug_if(FFS_DBG, "f_write() failed: %d", res);
         return fat_error_remap(res);
     } else {
         return n;
@@ -664,12 +645,12 @@ int FATFileSystem::file_sync(fs_file_t file)
 {
     FIL *fh = static_cast<FIL *>(file);
 
-    lock();
+    
     FRESULT res = f_sync(fh);
-    unlock();
+    
 
     if (res != FR_OK) {
-        debug_if(FFS_DBG, "f_sync() failed: %d\n", res);
+        //debug_if(FFS_DBG, "f_sync() failed: %d\n", res);
     }
     return fat_error_remap(res);
 }
@@ -678,7 +659,7 @@ off_t FATFileSystem::file_seek(fs_file_t file, off_t offset, int whence)
 {
     FIL *fh = static_cast<FIL *>(file);
 
-    lock();
+    
     if (whence == SEEK_END) {
         offset += f_size(fh);
     } else if (whence == SEEK_CUR) {
@@ -687,10 +668,10 @@ off_t FATFileSystem::file_seek(fs_file_t file, off_t offset, int whence)
 
     FRESULT res = f_lseek(fh, offset);
     off_t noffset = fh->fptr;
-    unlock();
+    
 
     if (res != FR_OK) {
-        debug_if(FFS_DBG, "lseek failed: %d\n", res);
+        //debug_if(FFS_DBG, "lseek failed: %d\n", res);
         return fat_error_remap(res);
     } else {
         return noffset;
@@ -701,9 +682,9 @@ off_t FATFileSystem::file_tell(fs_file_t file)
 {
     FIL *fh = static_cast<FIL *>(file);
 
-    lock();
+    
     off_t res = f_tell(fh);
-    unlock();
+    
 
     return res;
 }
@@ -712,9 +693,9 @@ off_t FATFileSystem::file_size(fs_file_t file)
 {
     FIL *fh = static_cast<FIL *>(file);
 
-    lock();
+    
     off_t res = f_size(fh);
-    unlock();
+    
 
     return res;
 }
@@ -723,27 +704,26 @@ int FATFileSystem::file_truncate(fs_file_t file, off_t length)
 {
     FIL *fh = static_cast<FIL *>(file);
 
-    lock();
     // save current position
     FSIZE_t oldoff = f_tell(fh);
 
     // seek to new file size and truncate
     FRESULT res = f_lseek(fh, length);
     if (res) {
-        unlock();
+        
         return fat_error_remap(res);
     }
 
     res = f_truncate(fh);
     if (res) {
-        unlock();
+        
         return fat_error_remap(res);
     }
 
     // restore old position
     res = f_lseek(fh, oldoff);
     if (res) {
-        unlock();
+        
         return fat_error_remap(res);
     }
 
@@ -755,14 +735,14 @@ int FATFileSystem::file_truncate(fs_file_t file, off_t length)
 int FATFileSystem::dir_open(fs_dir_t *dir, const char *path)
 {
     FATFS_DIR *dh = new FATFS_DIR;
-    Deferred<const char *> fpath = fat_path_prefix(_id, path);
+    const char * fpath = fat_path_prefix(_id, path);
 
-    lock();
+    
     FRESULT res = f_opendir(dh, fpath);
-    unlock();
+    
 
     if (res != FR_OK) {
-        debug_if(FFS_DBG, "f_opendir() failed: %d\n", res);
+        //debug_if(FFS_DBG, "f_opendir() failed: %d\n", res);
         delete dh;
         return fat_error_remap(res);
     }
@@ -775,9 +755,9 @@ int FATFileSystem::dir_close(fs_dir_t dir)
 {
     FATFS_DIR *dh = static_cast<FATFS_DIR *>(dir);
 
-    lock();
+    
     FRESULT res = f_closedir(dh);
-    unlock();
+    
 
     delete dh;
     return fat_error_remap(res);
@@ -788,9 +768,9 @@ ssize_t FATFileSystem::dir_read(fs_dir_t dir, struct dirent *ent)
     FATFS_DIR *dh = static_cast<FATFS_DIR *>(dir);
     FILINFO finfo;
 
-    lock();
+    
     FRESULT res = f_readdir(dh, &finfo);
-    unlock();
+    
 
     if (res != FR_OK) {
         return fat_error_remap(res);
@@ -817,7 +797,7 @@ void FATFileSystem::dir_seek(fs_dir_t dir, off_t offset)
     FATFS_DIR *dh = static_cast<FATFS_DIR *>(dir);
     off_t dptr = static_cast<off_t>(dh->dptr);
 
-    lock();
+    
 
     if (offset < dptr) {
         f_rewinddir(dh);
@@ -834,16 +814,16 @@ void FATFileSystem::dir_seek(fs_dir_t dir, off_t offset)
             break;
         }
     }
-    unlock();
+    
 }
 
 off_t FATFileSystem::dir_tell(fs_dir_t dir)
 {
     FATFS_DIR *dh = static_cast<FATFS_DIR *>(dir);
 
-    lock();
+    
     off_t offset = dh->dptr;
-    unlock();
+    
 
     return offset;
 }
@@ -852,9 +832,9 @@ void FATFileSystem::dir_rewind(fs_dir_t dir)
 {
     FATFS_DIR *dh = static_cast<FATFS_DIR *>(dir);
 
-    lock();
+    
     f_rewinddir(dh);
-    unlock();
+    
 }
 
-} // namespace mbed
+} // namespace ebox

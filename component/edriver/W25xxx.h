@@ -113,7 +113,6 @@ public:
     void        write_disable(void);
     
 private:
-    uint8_t     spi_flash_buf[4096];
     Spi::Config_t cfg;
     Gpio        *cs;
     Spi         *spi;

@@ -20,18 +20,17 @@
 
 
 // Standard types
-#include "platform/platform.h"
 
 // FileSystem classes
-#include "features/storage/filesystem/FileSystem.h"
-#include "features/storage/filesystem/File.h"
-#include "features/storage/filesystem/Dir.h"
+#include "interface/storage/filesystem/FileSystem.h"
+#include "interface/storage/filesystem/File.h"
+#include "interface/storage/filesystem/Dir.h"
 
 // BlockDevice classes
-#include "features/storage/blockdevice/BlockDevice.h"
-#include "features/storage/blockdevice/ChainingBlockDevice.h"
-#include "features/storage/blockdevice/SlicingBlockDevice.h"
-#include "features/storage/blockdevice/HeapBlockDevice.h"
+#include "interface/storage/blockdevice/BlockDevice.h"
+//#include "interface/storage/blockdevice/ChainingBlockDevice.h"
+//#include "interface/storage/blockdevice/SlicingBlockDevice.h"
+//#include "interface/storage/blockdevice/HeapBlockDevice.h"
 
 /** @}*/
 #endif

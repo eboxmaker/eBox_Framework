@@ -20,7 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "w25xxx.h"
 
-
+#include "ebox.h"
 
 int W25xxx::begin()
 {
@@ -49,14 +49,14 @@ int W25xxx::begin()
             sector_count = capacity / sector_size;
             
             
-            ebox_printf("===========spi flash==========\r\n");
-            ebox_printf("type       : 0X%04X\r\n",type);
-            ebox_printf("page_size  : %d\r\n",W25X_PAGE_SIZE);
-            ebox_printf("page_count : %d\r\n",page_count);
-            ebox_printf("cap        : %f MByte\r\n",capacity/1024.0/1024.0);
-            ebox_printf("sct_size   : %d Byte\r\n",sector_size);
-            ebox_printf("sct_count  : %d\r\n",sector_count);
-            ebox_printf("================================\r\n");
+            uart1.printf("===========spi flash==========\r\n");
+            uart1.printf("type       : 0X%04X\r\n",type);
+            uart1.printf("page_size  : %u\r\n",W25X_PAGE_SIZE);
+            uart1.printf("page_count : %u\r\n",page_count);
+            uart1.printf("cap        : %f MByte\r\n",capacity/1024.0/1024.0);
+            uart1.printf("sct_size   : %u Byte\r\n",sector_size);
+            uart1.printf("sct_count  : %u\r\n",sector_count);
+            uart1.printf("================================\r\n");
             initialized = 1;
         }
     }
@@ -105,14 +105,14 @@ int W25xxx::init()
             sector_size = W25X_SECTOR_SIZE;
             sector_count = capacity / sector_size;
             
-            ebox_printf("===========spi flash==========\r\n");
-            ebox_printf("type       : 0X%04X\r\n",type);
-            ebox_printf("page_size  : %d\r\n",W25X_PAGE_SIZE);
-            ebox_printf("page_count : %d\r\n",page_count);
-            ebox_printf("cap        : %f MByte\r\n",capacity/1024.0/1024.0);
-            ebox_printf("sct_size   : %d Byte\r\n",sector_size);
-            ebox_printf("sct_count  : %d\r\n",sector_count);
-            ebox_printf("================================\r\n");
+            uart1.printf("===========spi flash==========\r\n");
+            uart1.printf("type       : 0X%04X\r\n",type);
+            uart1.printf("page_size  : %u\r\n",W25X_PAGE_SIZE);
+            uart1.printf("page_count : %u\r\n",page_count);
+            uart1.printf("cap        : %f MByte\r\n",capacity/1024.0/1024.0);
+            uart1.printf("sct_size   : %u Byte\r\n",sector_size);
+            uart1.printf("sct_count  : %0.0f\r\n",sector_count*1.0);
+            uart1.printf("================================\r\n");
             initialized = 1;
         }
     }
@@ -363,6 +363,7 @@ void W25xxx::write(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write)
     secoff = write_addr % 4096; //在扇区内的偏移
     secremain = 4096 - secoff; //扇区剩余空间大小
 
+    uint8_t* spi_flash_buf = (uint8_t*)malloc(4096);
     if(num_to_write <= secremain)secremain = num_to_write; //不大于4096个字节
     while(1)
     {
