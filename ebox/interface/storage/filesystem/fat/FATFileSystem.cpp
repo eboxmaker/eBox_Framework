@@ -22,7 +22,7 @@
 #include "interface/storage/filesystem/fat/ChaN/diskio.h"
 #include "interface/storage/filesystem/fat/ChaN/ffconf.h"
 #include "interface/storage/filesystem/fat/ChaN/ff.h"
-#include "interface/storage/filesystem/mbed_filesystem.h"
+#include "interface/storage/filesystem/ebox_filesystem.h"
 #include "FATFileSystem.h"
 
 #include <errno.h>
@@ -215,17 +215,15 @@ extern "C" DRESULT disk_read(BYTE pdrv, BYTE *buff, DWORD sector, UINT count)
 
 extern "C" DRESULT disk_write(BYTE pdrv, const BYTE *buff, DWORD sector, UINT count)
 {
-    //debug_if(FFS_DBG, "disk_write(sector %lu, count %u) on pdrv [%d]\n", sector, count, pdrv);
+//    ebox_printf( "disk_write(sector %lu, count %u) on pdrv [%d]\n", sector, count, pdrv);
     DWORD ssize = disk_get_sector_size(pdrv);
     ebox::bd_addr_t addr = (ebox::bd_addr_t)sector * ssize;
     ebox::bd_size_t size = (ebox::bd_size_t)count * ssize;
 
     int err = _ffs[pdrv]->erase(addr, size);
     if (err) {
-        ebox_printf("disk_write addr err:0x%x\t\n",addr);
         return RES_PARERR;
     }
-    ebox_printf("addr 0k:0x%x\r\n",addr);
 
     err = _ffs[pdrv]->program(buff, addr, size);
     if (err) {
@@ -260,7 +258,7 @@ extern "C" DRESULT disk_ioctl(BYTE pdrv, BYTE cmd, void *buff)
                 return RES_OK;
             }
         case GET_BLOCK_SIZE:
-            *((DWORD *)buff) = 8; // default when not known
+            *((DWORD *)buff) = 1; // default when not known
             return RES_OK;
         case CTRL_TRIM:
             if (_ffs[pdrv] == NULL) {
@@ -318,7 +316,9 @@ int FATFileSystem::mount(BlockDevice *bd, bool mount)
             _fsid[2] = '\0';
             //debug_if(FFS_DBG, "Mounting [%s] on ffs drive [%s]\n", getName(), _fsid);
             FRESULT res = f_mount(&_fs, _fsid, mount);
-            ;
+            if(res){
+                ebox_printf("[FAT]mount err:%d",res);
+            }
             return fat_error_remap(res);
         }
     }
@@ -329,16 +329,16 @@ int FATFileSystem::mount(BlockDevice *bd, bool mount)
 
 int FATFileSystem::unmount()
 {
-    ;
     if (_id == -1) {
-        ;
         return -EINVAL;
     }
 
     FRESULT res = f_mount(NULL, _fsid, 0);
+    if(res){
+        ebox_printf("[FAT]unmount err:%d",res);
+    }
     _ffs[_id] = NULL;
     _id = -1;
-    ;
     return fat_error_remap(res);
 }
 
@@ -396,18 +396,20 @@ int FATFileSystem::format(BlockDevice *bd, bd_size_t cluster_size)
         return err;
     }
 
-//    err = fs.mount(bd, false);
-//    if (err) {
-//        return err;
-//    }
+    err = fs.mount(bd, false);
+    if (err) {
+        return err;
+    }
 
+    uint8_t* work = (uint8_t *) ebox_malloc(cluster_size);
     // Logical drive number, Partitioning rule, Allocation unit size (bytes per cluster)
-    FRESULT res = f_mkfs(fs._fsid, FM_ANY | FM_SFD, cluster_size, NULL, 0);
+    FRESULT res = f_mkfs(fs._fsid, FM_ANY | FM_SFD, cluster_size, work, 4096);
     if (res != FR_OK) {
+        ebox_printf("[FAT]formate err:%d",res);
         fs.unmount();
         return fat_error_remap(res);
     }
-
+    ebox_free(work);
     err = fs.unmount();
     if (err) {
         return err;
@@ -438,7 +440,7 @@ int FATFileSystem::reformat(BlockDevice *bd, int allocation_unit)
 
     int err = FATFileSystem::format(bd, allocation_unit);
     if (err) {
-        
+        ebox_printf("[FAT]reformate err:%d",err);
         return err;
     }
 
@@ -488,7 +490,7 @@ int FATFileSystem::mkdir(const char *path, mode_t mode)
     
 
     if (res != FR_OK) {
-        //debug_if(FFS_DBG, "f_mkdir() failed: %d\n", res);
+        ebox_printf("f_mkdir() failed: %d\n", res);
     }
     return fat_error_remap(res);
 }
@@ -557,7 +559,6 @@ int FATFileSystem::file_open(fs_file_t *file, const char *path, int flags)
     FIL *fh = new FIL;
     //Deferred<const char *> fpath = fat_path_prefix(_id, path);
     const char * fpath = fat_path_prefix(_id, path);
-
     /* POSIX flags -> FatFS open mode */
     BYTE openmode;
     if (flags & O_RDWR) {

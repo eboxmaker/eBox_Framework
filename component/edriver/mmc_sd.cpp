@@ -48,7 +48,7 @@ int SD::init()
     _initialise_card();
     
     
-    SPIDevSDCard.prescaler = Spi::DIV256;
+    SPIDevSDCard.prescaler = Spi::DIV32;
     spi->begin(&SPIDevSDCard);
     cs->reset();
     // 纯延时，等待SD卡上电完成
@@ -203,19 +203,17 @@ int SD::init()
 
 int  SD::deinit()
 {
-
+//    _is_initialized = false;
     return 0;
 }
 
 int  SD::read(void *b, bd_addr_t addr, bd_size_t size)
 {
     if (!is_valid_read(addr, size)) {
-        uart1.printf("addr is valid\r\n");
         return -1;
     }
     if (!_is_initialized) {
         
-        uart1.printf("no initialized\r\n");
         return -1;
     }
     uart1.flush();
@@ -236,12 +234,9 @@ int  SD::program(const void *b, bd_addr_t addr, bd_size_t size)
 {
     
     if (!is_valid_read(addr, size)) {
-        uart1.printf("addr is valid\r\n");
         return -1;
     }
     if (!_is_initialized) {
-        
-        uart1.printf("no initialized\r\n");
         return -1;
     }
     uart1.flush();
@@ -253,7 +248,6 @@ int  SD::program(const void *b, bd_addr_t addr, bd_size_t size)
     size_t blockCnt = size / _block_size;
 
     addr = addr / _block_size;
-    uart1.printf("sector:%d\r\n",addr);
     uart1.flush();
     if (blockCnt > 1) {
        return  write_sector( buffer,  addr,  blockCnt);
@@ -549,7 +543,8 @@ ebox::bd_size_t SD::_get_capacity(void)
     _sectors = Capacity / 512;
 
 //    spi->release();
-
+    ebox_printf("Capacity:%u",Capacity);
+    ebox_printf("sector:%u",_sectors);
     return (uint64_t)Capacity;
 }
 
@@ -565,7 +560,7 @@ ebox::bd_size_t SD::_get_capacity(void)
 *                   0： 成功
 *                   other：失败
 *******************************************************************************/
-uint8_t SD::read_single_block(uint32_t sector, uint8_t *buffer)
+uint8_t SD::read_single_block(uint64_t sector, uint8_t *buffer)
 {
     uint8_t r1;
 
@@ -599,7 +594,7 @@ uint8_t SD::read_single_block(uint32_t sector, uint8_t *buffer)
 *                   0： 成功
 *                   other：失败
 *******************************************************************************/
-uint8_t SD::write_single_block(uint32_t sector, const  uint8_t *data)
+uint8_t SD::write_single_block(uint64_t sector, const  uint8_t *data)
 {
     uint8_t r1;
     //  uint16_t i;

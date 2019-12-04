@@ -64,8 +64,8 @@ private:
     uint8_t     _send_command(uint8_t cmd, uint32_t arg, uint8_t crc);
     uint8_t     _send_command_no_deassert(uint8_t cmd, uint32_t arg, uint8_t crc);
     int         _receive_data(uint8_t *data, uint16_t len, uint8_t release);
-    uint8_t     read_single_block(uint32_t sector, uint8_t *buffer);
-    uint8_t     write_single_block(uint32_t sector, const  uint8_t *data);
+    uint8_t     read_single_block(uint64_t sector, uint8_t *buffer);
+    uint8_t     write_single_block(uint64_t sector, const  uint8_t *data);
     uint8_t     read_bytes(unsigned long address, unsigned char *buf, unsigned int offset, unsigned int bytes);
 
 public:

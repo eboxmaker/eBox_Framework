@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef MBED_FILESYSTEM_API_H
-#define MBED_FILESYSTEM_API_H
+#ifndef EBOX_FILESYSTEM_API_H
+#define EBOX_FILESYSTEM_API_H
 /** \addtogroup filesystem */
 /** @{*/
 

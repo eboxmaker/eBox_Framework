@@ -717,6 +717,26 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\interface\storage\filesystem\FileSystem.cpp</FilePath>
             </File>
+            <File>
+              <FileName>FileBase.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileBase.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FileHandle.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileHandle.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FilePath.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\FilePath.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FileSystemHandle.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileSystemHandle.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

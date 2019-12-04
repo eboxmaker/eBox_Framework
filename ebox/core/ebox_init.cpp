@@ -52,6 +52,7 @@ size_t ebox_printf(const char *fmt, ...)
     while(size1 == -1);
     va_end(va_params);
     DBG_UART.write(p, size1);
+    DBG_UART.flush();
     ebox_free(p);
     return size1;
 #endif

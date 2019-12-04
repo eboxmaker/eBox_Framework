@@ -20,12 +20,9 @@
 typedef int FILEHANDLE;
 
 #include <cstdio>
-#include "platform/Callback.h"
-#include "platform/mbed_poll.h"
-#include "platform/platform.h"
-#include "platform/NonCopyable.h"
+#include "ebox_retarget.h"
 
-namespace mbed {
+namespace ebox {
 
 /**
  * \defgroup platform_FileHandle FileHandle functions
@@ -43,7 +40,7 @@ namespace mbed {
  *  @note to create a file, @see File
  *  @note Synchronization level: Set by subclass
  */
-class FileHandle : private NonCopyable<FileHandle> {
+class FileHandle  {
 public:
     virtual ~FileHandle() {}
 
@@ -165,7 +162,6 @@ public:
      *  @deprecated Replaced by `off_t FileHandle::seek(off_t offset, int whence = SEEK_SET)'
      *
      */
-    MBED_DEPRECATED_SINCE("mbed-os-5.4", "Replaced by FileHandle::seek")
     virtual off_t lseek(off_t offset, int whence)
     {
         return seek(offset, whence);
@@ -179,7 +175,6 @@ public:
      *   -1 on error
      *  @deprecated Replaced by `int FileHandle::sync()'
      */
-    MBED_DEPRECATED_SINCE("mbed-os-5.4", "Replaced by FileHandle::sync")
     virtual int fsync()
     {
         return sync();
@@ -191,7 +186,6 @@ public:
      *   Length of the file
      *  @deprecated Replaced by `off_t FileHandle::size()'
      */
-    MBED_DEPRECATED_SINCE("mbed-os-5.4", "Replaced by FileHandle::size")
     virtual off_t flen()
     {
         return size();
@@ -266,11 +260,11 @@ public:
      *
      * @returns             bitmask of poll events that have occurred.
      */
-    virtual short poll(short events) const
-    {
-        // Possible default for real files
-        return POLLIN | POLLOUT;
-    }
+//    virtual short poll(short events) const
+//    {
+//        // Possible default for real files
+//        return POLLIN | POLLOUT;
+//    }
 
     /** Definition depends on the subclass implementing FileHandle.
      *  For example, if the FileHandle is of type Stream, writable() could return
@@ -278,10 +272,10 @@ public:
      *
      * @returns             true if the FileHandle is writable.
      */
-    bool writable() const
-    {
-        return poll(POLLOUT) & POLLOUT;
-    }
+//    bool writable() const
+//    {
+//        return poll(POLLOUT) & POLLOUT;
+//    }
 
     /** Definition depends on the subclass implementing FileHandle.
      *  For example, if the FileHandle is of type Stream, readable() could return
@@ -289,10 +283,10 @@ public:
      *
      *  @returns            true when there is something available to read.
      */
-    bool readable() const
-    {
-        return poll(POLLIN) & POLLIN;
-    }
+//    bool readable() const
+//    {
+//        return poll(POLLIN) & POLLIN;
+//    }
 
     /** Register a callback on state change of the file.
      *
@@ -311,10 +305,10 @@ public:
      *
      *  @param func     Function to call on state change
      */
-    virtual void sigio(Callback<void()> func)
-    {
-        //Default for real files. Do nothing for real files.
-    }
+//    virtual void sigio(Callback<void()> func)
+//    {
+//        //Default for real files. Do nothing for real files.
+//    }
 };
 
 /**@}*/

@@ -19,7 +19,6 @@
 
 #include <stdint.h>
 #include "ebox_retarget.h"
-#include "NonCopyable.h"
 
 namespace ebox {
 /** \addtogroup platform-public-api */
@@ -52,7 +51,7 @@ namespace ebox {
  *  @note to create a directory, @see Dir
  *  @note Synchronization level: Set by subclass
  */
-class DirHandle : private NonCopyable<DirHandle> {
+class DirHandle  {
 public:
     virtual ~DirHandle() {}
 

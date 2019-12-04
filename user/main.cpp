@@ -21,11 +21,12 @@ Copyright 2015 shentq. All Rights Reserved.
 using namespace ebox;
 
 SD sd(&PB12, &spi2);
+//W25xxx sd(&PA15, &spi1);
 
 FATFileSystem fs("fs");
+//LittleFileSystem fs1("fs1");
 
-
-#define MAX_BUFFER_SIZE 128
+#define MAX_BUFFER_SIZE 1
 
 Dir dir;
 File file;
@@ -48,52 +49,62 @@ void test_directory_creation()
 {
     int res = sd.init();
     
+//    sd.erase_chip();
+    res = fs.format(&sd,4*1024);
 
     res = fs.mount(&sd);
     if(res == FR_OK)
     {
-        uart1.printf("mount ok:%d\r\n",res);
+        uart1.printf("1mount ok:%d\r\n",res);
+        uart1.flush();
+        res = fs.reformat(&sd,4*1024);
+        
     }
     else
     {
-        uart1.printf("mount err :%d\r\n",res);
+        uart1.printf("1mount err :%d\r\n",res);
+        uart1.flush();
+        res = fs.mount(&sd);
+
     }
-    
-    
-    res = fs.format(&sd,);
-    if(res == FR_OK)
-    {
-        uart1.printf("format ok:%d\r\n",res);
-    }
-    else
-    {
-        uart1.printf("format err :%d\r\n",res);
-    }
-    while(1);
+//    if(res == FR_OK)
+//    {
+//        uart1.printf("reformat ok:%d\r\n",res);
+//    }
+//    else
+//    {
+//        uart1.printf("reformat err :%d\r\n",res);
+//    }
+    uart1.flush();
+
+
 
 
     res = fs.mkdir("0:potato2", 0777);
     if(res == FR_OK)
     {
-        uart1.printf("mkdir ok:%d\r\n",res);
+        uart1.printf("1mkdir ok:%d\r\n",res);
     }
     else
     {
-        uart1.printf("mkdir err :%d\r\n",res);
+        uart1.printf("1mkdir err :%d\r\n",res);
     }
+    uart1.flush();
 
     res = fs.unmount();
     if(res == FR_OK)
     {
-        uart1.printf("unmount ok:%d\r\n",res);
+        uart1.printf("1unmount ok:%d\r\n",res);
     }
     else
     {
-            uart1.printf("unmount err :%d\r\n",res);
+            uart1.printf("1unmount err :%d\r\n",res);
     }
+    uart1.flush();
 
     res = sd.deinit();
     
+//    while(1);
 }
 
 void test_root_directory()
@@ -108,7 +119,6 @@ void test_root_directory()
     while(1)
     {
         
-//        dir.seek(i++);
         res = dir.read(&x);
         if(res)
         {
@@ -200,7 +210,7 @@ int main(void)
     while(1)
     {
 
-//        uart1.printf("\r\nrunning£¡");
+        uart1.printf("\r\nrunning£¡");
         delay_ms(1000);
     }
 
