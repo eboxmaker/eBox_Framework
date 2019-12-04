@@ -86,7 +86,7 @@ public:
     virtual bd_size_t get_erase_size() const;
     virtual bd_size_t size() const ;
     virtual const char *get_type() const;
-    
+    virtual int get_erase_value() const;
     
     
     virtual int read_sector(uint8_t *buffer, uint32_t sector, uint8_t count);

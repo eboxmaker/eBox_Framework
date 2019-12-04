@@ -48,11 +48,11 @@
 /* This option switches fast seek function. (0:Disable or 1:Enable) */
 
 
-#define FF_USE_EXPAND	MBED_CONF_FAT_CHAN_FF_USE_EXPAND
+#define FF_USE_EXPAND	0
 /* This option switches f_expand function. (0:Disable or 1:Enable) */
 
 
-#define FF_USE_CHMOD	1
+#define FF_USE_CHMOD	0
 /* This option switches attribute manipulation functions, f_chmod() and f_utime().
 /  (0:Disable or 1:Enable) Also FF_FS_READONLY needs to be 0 to enable this option. */
 
@@ -288,8 +288,8 @@
 
 /* #include <windows.h>	// O/S definitions  */
 
-#define FLUSH_ON_NEW_CLUSTER    MBED_CONF_FAT_CHAN_FLUSH_ON_NEW_CLUSTER   /* Sync the file on every new cluster */
-#define FLUSH_ON_NEW_SECTOR     MBED_CONF_FAT_CHAN_FLUSH_ON_NEW_SECTOR   /* Sync the file on every new sector */
+#define FLUSH_ON_NEW_CLUSTER    0  /* Sync the file on every new cluster */
+#define FLUSH_ON_NEW_SECTOR     1   /* Sync the file on every new sector */
 /* Only one of these two defines needs to be set to 1. If both are set to 0
    the file is only sync when closed.
    Clusters are group of sectors (eg: 8 sectors). Flushing on new cluster means

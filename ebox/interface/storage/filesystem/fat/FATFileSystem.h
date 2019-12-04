@@ -27,11 +27,14 @@
 #define MBED_FATFILESYSTEM_H
 
 #include "interface/storage/filesystem/FileSystem.h"
+#include "interface/storage/filesystem/FileSystemLike.h"
 #include "interface/storage/blockdevice/BlockDevice.h"
-//#include "FileHandle.h"
+#include "interface/storage/filesystem/FileHandle.h"
 #include <stdint.h>
 //#include "PlatformMutex.h"
 #include "interface/storage/filesystem/fat/ChaN/ff.h"
+
+
 
 namespace ebox {
 

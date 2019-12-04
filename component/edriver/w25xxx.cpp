@@ -123,7 +123,7 @@ int W25xxx::init()
 
 int W25xxx::deinit()
 {
-
+ return 0;
 }
 
 
@@ -149,18 +149,14 @@ int W25xxx::deinit()
  }
  int W25xxx::program(const void *buffer, bd_addr_t addr, bd_size_t size)
  {
-     
     const uint8_t *ptr = (const uint8_t *)buffer;
-    int count = size / get_program_size();
-    for(int i = 0; i < count; i++)
-    {
-        for(int j = 0; j < sector_size / 256; j++)
-        {
-            write_page((const uint8_t *)&ptr[j*256 + i*4096], addr+j*256 + i*4096, 256);
-        }
-    }
+    int page_count = size / get_program_size();//
+    
 
-        
+    for(int i = 0; i < page_count; i++)
+    {
+        write_page((const uint8_t *)&ptr[i*256], addr+i*256 , 256);
+    }
     return 0;
  }
  int W25xxx::erase(bd_addr_t addr, bd_size_t size)
@@ -208,6 +204,10 @@ const char *W25xxx::get_type() const
     
 }
 
+int W25xxx::get_erase_value() const
+{
+    return 0;
+}
 
 
 

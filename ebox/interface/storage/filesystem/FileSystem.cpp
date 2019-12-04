@@ -22,7 +22,7 @@
 namespace ebox {
 
 FileSystem::FileSystem(const char *name)
-//    : FileSystemLike(name)
+    : FileSystemLike(name)
 {
 }
 
