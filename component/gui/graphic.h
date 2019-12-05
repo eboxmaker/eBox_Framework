@@ -3,6 +3,7 @@
 
 #include "ebox_core.h"
 #include "gui_font.h"
+#include "interface/hmi.h"
 //#define GUI_TS_NORMAL           (0)
 //#define GUI_TS_UNDERLINE        (1 << 0)
 //#define GUI_TS_STRIKETHRU       (1 << 1)

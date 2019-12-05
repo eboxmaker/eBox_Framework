@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>ARM_MATH_CM4</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcuLib\stm32f4xx\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\..\ebox\core;..\..\..\user;..\..\..\ebox\hardware\cortex-m4;..\..\..\ebox\hardware\cortex-m4\Peripherals;..\..\..\component\ddc;..\..\..\user\board\spark_f4;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\component\gui;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial</IncludePath>
+              <IncludePath>..\..\..\mcuLib\stm32f4xx\Libraries\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\mcuLib\stm32f4xx\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\..\..\ebox;..\..\..\ebox\core;..\..\..\user;..\..\..\ebox\hardware\cortex-m4;..\..\..\ebox\hardware\cortex-m4\Peripherals;..\..\..\component\ddc;..\..\..\user\board\spark_f4;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\component\gui;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -777,10 +777,50 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\WString.cpp</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>interface</GroupName>
+          <Files>
             <File>
-              <FileName>ebox_virtual_hmi.cpp</FileName>
+              <FileName>basicRtc.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\port\ebox_virtual_hmi.cpp</FilePath>
+              <FilePath>..\..\..\ebox\interface\basicRtc.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>hmi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\hmi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Dir.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\Dir.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>File.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\File.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FileSystem.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileSystem.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EventGpio.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\event\EventGpio.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EventVar.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\event\EventVar.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EventManager.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\ebox\interface\event\EventManager.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -898,26 +938,6 @@
               <FilePath>..\..\..\component\apps\color_convert.cpp</FilePath>
             </File>
             <File>
-              <FileName>calendar.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\apps\calendar.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>EventGpio.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\apps\EventGpio.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>EventVar.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\apps\EventVar.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>EventManager.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\component\apps\EventManager.h</FilePath>
-            </File>
-            <File>
               <FileName>parallel_gpio.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\parallel_gpio.cpp</FilePath>
@@ -941,11 +961,6 @@
               <FileName>FSMCIO.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\user\board\spark_f4\FSMCIO.c</FilePath>
-            </File>
-            <File>
-              <FileName>w25x16.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\w25x16.cpp</FilePath>
             </File>
           </Files>
         </Group>

@@ -19,10 +19,10 @@
 
 
 
-#include "FileBase.h"
-#include "FileHandle.h"
-#include "DirHandle.h"
-#include "FileSystemLike.h"
+//#include "FileBase.h"
+//#include "FileHandle.h"
+//#include "DirHandle.h"
+//#include "FileSystemLike.h"
 #include "interface/storage/blockdevice/BlockDevice.h"
 
 namespace ebox {
@@ -46,7 +46,8 @@ class File;
  *
  * @note Synchronization level: Set by subclass
  */
-class FileSystem  : public FileSystemLike{
+//class FileSystem  : public FileSystemLike{
+class FileSystem {
 public:
 
     /** File system lifetime.

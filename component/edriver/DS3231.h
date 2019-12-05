@@ -22,7 +22,7 @@
 #define __DS3231_H__
 
 #include "ebox_core.h"
-#include "basicRtc.h"
+#include "interface/basicRtc.h"
 #include "ebox_uart.h"
 #include "ebox_exti.h"
 

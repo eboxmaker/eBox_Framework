@@ -332,7 +332,7 @@ uint8_t ChinaCalendar::GetMoonDay(unsigned char month_p,unsigned short table_add
 
 String ChinaCalendar::get_year_str()
 {
-	u8 SEyear;
+	uint8_t SEyear;
 	SEyear = get_sky_earth_year(cdt.year + 2000);
     String str = "";
     
@@ -403,7 +403,7 @@ uint8_t ChinaCalendar::get_sky_earth_year(uint16_t year)
 String ChinaCalendar::get_str()
 {
     String str = "";
-	u8 SEyear;
+	uint8_t SEyear;
 	SEyear = get_sky_earth_year(cdt.year + 2000);
     
     str += sky[SEyear%10];//  ¼×
@@ -576,7 +576,7 @@ String ChinaCalendar::get_jieqi_str(DateTime_t &_dt)
     DateTime_t dt = _dt;
     String str;
     uint8_t days = 0;
-	u8 jq_mday,jq_index,max_days_in_month;
+	uint8_t jq_mday,jq_index,max_days_in_month;
     
     jq_mday = get_jieqi_mday(dt);
 	if(jq_mday==0)	return "";

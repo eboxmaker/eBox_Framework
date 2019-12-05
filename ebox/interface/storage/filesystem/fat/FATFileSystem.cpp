@@ -171,16 +171,11 @@ extern "C" void ff_memfree(void *p)
 static WORD disk_get_sector_size(BYTE pdrv)
 {
     bd_size_t sector_size = _ffs[pdrv]->get_erase_size();
-    //MBED_ASSERT(sector_size <= WORD(-1));
 
     WORD ssize = sector_size;
     if (ssize < 512) {
         ssize = 512;
     }
-
-    //MBED_ASSERT(ssize >= FF_MIN_SS && ssize <= FF_MAX_SS);
-    //MBED_ASSERT(_ffs[pdrv]->get_read_size() <= _ffs[pdrv]->get_erase_size());
-    //MBED_ASSERT(_ffs[pdrv]->get_program_size() <= _ffs[pdrv]->get_erase_size());
     return ssize;
 }
 

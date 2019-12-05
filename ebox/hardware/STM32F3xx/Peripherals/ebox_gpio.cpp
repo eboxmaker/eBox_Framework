@@ -27,7 +27,7 @@
 #define GETPORT(A)   (GPIO_TypeDef*)(((((A)&0xf0)+0x20)<<6)+AHB2PERIPH_BASE)
 
 // 此函数会被 parallel—gpio.cpp调用，请勿移除
-void port_mode(GPIO_TypeDef* port,uint32_t pin, PIN_MODE mode)
+void port_mode(GPIO_TypeDef* port,uint32_t pin, PinMode_t mode)
 {    
 #if ENABLE_USESWD
 		if(SWD_PORT == port)
@@ -151,25 +151,25 @@ void port_mode(GPIO_TypeDef* port,uint32_t pin, PIN_MODE mode)
 
     GPIO_InitStructure.Pin = pin;
     GPIO_InitStructure.Speed = LL_GPIO_SPEED_FREQ_HIGH;
-    LL_GPIO_Init(_port, &GPIO_InitStructure);
+    LL_GPIO_Init(port, &GPIO_InitStructure);
 }
 
 /**
   *@brief    构造函数
-  *@param    PIN_ID_t pin_id
+  *@param    PinId_t pin_id
   *@retval   None
   */
-mcuGpio::mcuGpio(PIN_ID_t pin_id){
+mcuGpio::mcuGpio(PinId_t pin_id){
 	id = pin_id;
   _port = GETPORT(id);
   _pin = GETPIN(id);
 }
 /**
   *@brief    GPIO模式设置
-  *@param    mode:PIN_MODE枚举变量类型
+  *@param    mode:PinMode_t枚举变量类型
   *@retval   None
   */
-void mcuGpio::mode(PIN_MODE mode)
+void mcuGpio::mode(PinMode_t mode)
 {
   port_mode(_port,_pin,mode);
 }
@@ -177,10 +177,10 @@ void mcuGpio::mode(PIN_MODE mode)
 
 /**
   *@brief    GPIO模式设置
-  *@param    mode: PIN_MODE枚举变量类型，af_configration 第二功能
+  *@param    mode: PinMode_t枚举变量类型，af_configration 第二功能
   *@retval   None
   */
-void mcuGpio::mode(PIN_MODE mode, uint8_t af_configration)
+void mcuGpio::mode(PinMode_t mode, uint8_t af_configration)
 {
     mcuGpio::mode(mode);
     if (_pin < LL_GPIO_PIN_8)

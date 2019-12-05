@@ -38,7 +38,7 @@ SoftSpi::SoftSpi(Gpio *sck, Gpio *miso, Gpio *mosi)
     _mosi = mosi;
 
 }
-void SoftSpi::begin(SpiConfig_t *spi_config)
+void SoftSpi::begin(Spi::Config_t *spi_config)
 {
 
     _sck->mode(OUTPUT_PP);
@@ -48,49 +48,49 @@ void SoftSpi::begin(SpiConfig_t *spi_config)
     config(spi_config);
     switch(mode)
     {
-    case SPI_MODE0:
+        case Spi::MODE0:
         _sck->reset();
         break;
-    case SPI_MODE1:
+    case Spi::MODE1:
         _sck->reset();
         break;
-    case SPI_MODE2:
+    case Spi::MODE2:
         _sck->set();
         break;
-    case SPI_MODE3:
+    case Spi::MODE3:
         _sck->set();
         break;
     }
 }
-void SoftSpi::config(SpiConfig_t *spi_config)
+void SoftSpi::config(Spi::Config_t *spi_config)
 {
     current_dev_num = spi_config->dev_num;
     mode = spi_config->mode;
     bit_order = spi_config->bit_order;
     switch(spi_config->prescaler)
     {
-    case SPI_CLOCK_DIV2:
+    case Spi::DIV2:
         spi_delay = 0;
         break;
-    case SPI_CLOCK_DIV4:
+    case Spi::DIV4:
         spi_delay = 1;
         break;
-    case SPI_CLOCK_DIV8:
+    case Spi::DIV8:
         spi_delay = 2;
         break;
-    case SPI_CLOCK_DIV16:
+    case Spi::DIV16:
         spi_delay = 4;
         break;
-    case SPI_CLOCK_DIV32:
+    case Spi::DIV32:
         spi_delay = 8;
         break;
-    case SPI_CLOCK_DIV64:
+    case Spi::DIV64:
         spi_delay = 16;
         break;
-    case SPI_CLOCK_DIV128:
+    case Spi::DIV128:
         spi_delay = 32;
         break;
-    case SPI_CLOCK_DIV256:
+    case Spi::DIV256:
         spi_delay = 64;
         break;
     default:
@@ -258,16 +258,16 @@ uint8_t SoftSpi::transfer(uint8_t data)
     uint8_t RcvData = 0 ;
     switch(mode)
     {
-    case SPI_MODE0:
+    case Spi::MODE0:
         RcvData = transfer0(data);
         break;
-    case SPI_MODE1:
+    case Spi::MODE1:
         RcvData = transfer1(data);
         break;
-    case SPI_MODE2:
+    case Spi::MODE2:
         RcvData = transfer2(data);
         break;
-    case SPI_MODE3:
+    case Spi::MODE3:
         RcvData = transfer3(data);
         break;
     default :
@@ -315,7 +315,7 @@ int8_t  SoftSpi::read_buf(uint8_t *rcvdata, uint16_t len)
     return 0;
 }
 
-int8_t SoftSpi::take(SpiConfig_t *spi_config)
+int8_t SoftSpi::take(Spi::Config_t *spi_config)
 {
     while((busy == 1) && (spi_config->dev_num != read_config()))
         delay_ms(1);

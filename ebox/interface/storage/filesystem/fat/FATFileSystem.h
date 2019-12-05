@@ -27,9 +27,9 @@
 #define MBED_FATFILESYSTEM_H
 
 #include "interface/storage/filesystem/FileSystem.h"
-#include "interface/storage/filesystem/FileSystemLike.h"
+//#include "interface/storage/filesystem/FileSystemLike.h"
 #include "interface/storage/blockdevice/BlockDevice.h"
-#include "interface/storage/filesystem/FileHandle.h"
+//#include "interface/storage/filesystem/FileHandle.h"
 #include <stdint.h>
 //#include "PlatformMutex.h"
 #include "interface/storage/filesystem/fat/ChaN/ff.h"
@@ -69,7 +69,7 @@ public:
      *
      *  @return         0 on success, negative error code on failure.
      */
-    static int format(BlockDevice *bd, bd_size_t cluster_size = 0);
+    static int format(BlockDevice *bd, bd_size_t cluster_size);
 
     /** Mount a file system to a block device.
      *
