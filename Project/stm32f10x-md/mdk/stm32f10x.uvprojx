@@ -687,16 +687,6 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\ebox\core\retarge.c</FilePath>
             </File>
-            <File>
-              <FileName>basicRtc.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\basicRtc.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_hmi.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\port\ebox_hmi.cpp</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -718,24 +708,29 @@
               <FilePath>..\..\..\ebox\interface\storage\filesystem\FileSystem.cpp</FilePath>
             </File>
             <File>
-              <FileName>FileBase.cpp</FileName>
+              <FileName>basicRtc.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileBase.cpp</FilePath>
+              <FilePath>..\..\..\ebox\interface\basicRtc.cpp</FilePath>
             </File>
             <File>
-              <FileName>FileHandle.cpp</FileName>
+              <FileName>hmi.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileHandle.cpp</FilePath>
+              <FilePath>..\..\..\ebox\interface\hmi.cpp</FilePath>
             </File>
             <File>
-              <FileName>FilePath.cpp</FileName>
+              <FileName>EventGpio.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\FilePath.cpp</FilePath>
+              <FilePath>..\..\..\ebox\interface\event\EventGpio.cpp</FilePath>
             </File>
             <File>
-              <FileName>FileSystemHandle.cpp</FileName>
+              <FileName>EventVar.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileSystemHandle.cpp</FilePath>
+              <FilePath>..\..\..\ebox\interface\event\EventVar.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EventManager.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\ebox\interface\event\EventManager.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -943,24 +938,9 @@
           <GroupName>app</GroupName>
           <Files>
             <File>
-              <FileName>EventGpio.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\apps\EventGpio.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>EventVar.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\apps\EventVar.cpp</FilePath>
-            </File>
-            <File>
               <FileName>ebox_virtual_lcd.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\ebox_virtual_lcd.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>EventManager.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\component\apps\EventManager.h</FilePath>
             </File>
           </Files>
         </Group>

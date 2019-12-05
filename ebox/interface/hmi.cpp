@@ -1,5 +1,5 @@
 #include "ebox_core.h"
-#include "ebox_hmi.h"
+#include "hmi.h"
 
 uint16_t bgr2rgb(uint16_t c)
 {

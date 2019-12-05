@@ -17,19 +17,18 @@
 /** \addtogroup storage */
 /** @{*/
 
-#ifndef MBED_LFS_FILESYSTEM_H
-#define MBED_LFS_FILESYSTEM_H
+#ifndef LFS_FILESYSTEM_H
+#define LFS_FILESYSTEM_H
 #include "interface/storage/filesystem/FileSystem.h"
 #include "interface/storage/blockdevice/BlockDevice.h"
 #include "interface/storage/filesystem/littlefs/littlefs/lfs.h"
 
 namespace ebox {
 
-#define MBED_LFS_BLOCK_SIZE 512  
-#define MBED_LFS_PROG_SIZE 64 
-#define MBED_LFS_READ_SIZE 64 
-#define MBED_LFS_LOOKAHEAD 512  
-#define MBED_LFS_INTRINSICS 1
+#define LFS_BLOCK_SIZE 4096  
+#define LFS_PROG_SIZE 256 
+#define LFS_READ_SIZE 256 
+#define LFS_LOOKAHEAD 128  
 
     /**
  * LittleFileSystem, a little file system
@@ -61,10 +60,10 @@ public:
      *      large with little ram impact. Should be a multiple of 32.
      */
     LittleFileSystem(const char *name = NULL, ebox::BlockDevice *bd = NULL,
-                     lfs_size_t read_size = MBED_LFS_READ_SIZE,
-                     lfs_size_t prog_size = MBED_LFS_PROG_SIZE,
-                     lfs_size_t block_size = MBED_LFS_BLOCK_SIZE,
-                     lfs_size_t lookahead = MBED_LFS_LOOKAHEAD);
+                     lfs_size_t read_size = LFS_READ_SIZE,
+                     lfs_size_t prog_size = LFS_PROG_SIZE,
+                     lfs_size_t block_size =LFS_BLOCK_SIZE,
+                     lfs_size_t lookahead = LFS_LOOKAHEAD);
 
     virtual ~LittleFileSystem();
 
@@ -92,10 +91,10 @@ public:
      *      large with little ram impact. Should be a multiple of 32.
      */
     static int format(ebox::BlockDevice *bd,
-                      lfs_size_t read_size = MBED_LFS_READ_SIZE,
-                      lfs_size_t prog_size = MBED_LFS_PROG_SIZE,
-                      lfs_size_t block_size = MBED_LFS_BLOCK_SIZE,
-                      lfs_size_t lookahead = MBED_LFS_LOOKAHEAD);
+                      lfs_size_t read_size = LFS_READ_SIZE,
+                      lfs_size_t prog_size = LFS_PROG_SIZE,
+                      lfs_size_t block_size = LFS_BLOCK_SIZE,
+                      lfs_size_t lookahead = LFS_LOOKAHEAD);
 
     /** Mount a file system to a block device.
      *
@@ -307,8 +306,6 @@ private:
 } // namespace mbed
 
 // Added "using" for backwards compatibility
-#ifndef MBED_NO_GLOBAL_USING_DIRECTIVE
-using ebox::LittleFileSystem;
-#endif
+//using ebox::LittleFileSystem;
 
 #endif

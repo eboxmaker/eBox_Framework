@@ -2,8 +2,8 @@
 #define __ebox_virtual_lcd_h
 
 #include "ebox_core.h"
+#include "interface/hmi.h"
 #include "print.h"
-
 #include "font.h"
 
 class VLcd : public HMI, public Print

@@ -21,6 +21,7 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 
 #include "ebox_core.h"
+#include "interface/hmi.h"
 #include "font.h"
 
 #define X_MAX_PIXEL	        128

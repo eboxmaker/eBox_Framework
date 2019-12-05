@@ -215,11 +215,11 @@ public:
 };
 // Added "using" for backwards compatibility
 #ifndef MBED_NO_GLOBAL_USING_DIRECTIVE
-using ebox::BlockDevice;
-using ebox::bd_addr_t;
-using ebox::bd_size_t;
-using ebox::BD_ERROR_OK;
-using ebox::BD_ERROR_DEVICE_ERROR;
+//using ebox::BlockDevice;
+//using ebox::bd_addr_t;
+//using ebox::bd_size_t;
+//using ebox::BD_ERROR_OK;
+//using ebox::BD_ERROR_DEVICE_ERROR;
 #endif
 
 }

@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F373xC,USE_FULL_LL_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcuLib\stm32f3xx\Libraries\STM32F3xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Device\ST\STM32F3xx\Include;..\..\..\ebox\core;..\..\..\ebox\core\port;..\..\..\ebox\hardware\STM32F3xx;..\..\..\ebox\hardware\STM32F3xx\Peripherals;..\..\..\user;..\..\..\user\board\stm32f373</IncludePath>
+              <IncludePath>..\..\..\mcuLib\stm32f3xx\Libraries\STM32F3xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Device\ST\STM32F3xx\Include;..\..\..\ebox;..\..\..\ebox\core;..\..\..\ebox\hardware\STM32F3xx;..\..\..\ebox\hardware\STM32F3xx\Peripherals;..\..\..\user;..\..\..\user\board\stm32f373</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -439,6 +439,51 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>interface</GroupName>
+          <Files>
+            <File>
+              <FileName>basicRtc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\basicRtc.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>hmi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\hmi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Dir.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\Dir.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>File.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\File.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FileSystem.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileSystem.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EventGpio.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\event\EventGpio.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EventVar.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\event\EventVar.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EventManager.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\ebox\interface\event\EventManager.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>ebox_core</GroupName>
           <Files>
             <File>
@@ -530,11 +575,6 @@
               <FileName>WString.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\WString.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_virtual_hmi.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\port\ebox_virtual_hmi.cpp</FilePath>
             </File>
           </Files>
         </Group>

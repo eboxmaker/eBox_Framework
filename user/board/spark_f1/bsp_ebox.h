@@ -20,8 +20,8 @@
 #ifndef __BSP_EBOX_H
 #define __BSP_EBOX_H
 #include "ebox.h"
-#include "EventGpio.h"
-#include "EventManager.h"
+#include "interface/event/EventGpio.h"
+#include "interface/event/EventManager.h"
 #include "lcd_1.8.h"
 #include "graphic.h"
 #include "../Ethernet3/utility/w5500.h"

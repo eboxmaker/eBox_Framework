@@ -19,7 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "DS3231.h"
-#include "basicRtc.h"
+#include "interface/basicRtc.h"
 
     
 void DS3231::begin()
