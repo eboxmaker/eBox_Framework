@@ -316,7 +316,8 @@ uint8_t EthernetClass::speed()
         if(bit_read(w5500.getPHYCFGR(), 1) == 1) return 100;
         if(bit_read(w5500.getPHYCFGR(), 1) == 0) return 10;
     }
-    else return 0;
+    else 
+        return 0;
 }
 
 const char *EthernetClass::speedReport()
@@ -326,7 +327,8 @@ const char *EthernetClass::speedReport()
         if(bit_read(w5500.getPHYCFGR(), 1) == 1) return "100 MB";
         if(bit_read(w5500.getPHYCFGR(), 1) == 0) return "10 MB";
     }
-    else return "NO LINK";
+    else
+        return "NO LINK";
 }
 
 uint8_t EthernetClass::duplex()
@@ -336,7 +338,8 @@ uint8_t EthernetClass::duplex()
         if(bit_read(w5500.getPHYCFGR(), 2) == 1) return 2;
         if(bit_read(w5500.getPHYCFGR(), 2) == 0) return 1;
     }
-    else return 0;
+    else
+        return 0;
 }
 
 const char *EthernetClass::duplexReport()

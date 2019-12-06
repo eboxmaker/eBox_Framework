@@ -62,11 +62,17 @@ public:
     // µ¥×Ö½Ú¶ÁÐ´
     virtual int8_t  write(uint8_t data)  = 0;
     virtual uint8_t read()  = 0;
-    virtual int8_t  read(uint8_t  *recv_data)  = 0;
     // buf¶ÁÐ´
     virtual int8_t  write_buf(uint8_t *data, uint16_t data_length)  = 0;
     virtual int8_t  read_buf(uint8_t *recv_data, uint16_t data_length)  = 0;
-    virtual void    wait(){};
+
+
+    virtual int8_t      dma_write(uint8_t data){ return 0;};
+    virtual uint8_t     dma_read(){ return 0;};
+    virtual uint16_t    dma_write_buf(uint8_t *data, uint16_t len){ return 0;};
+    virtual uint16_t    dma_read_buf(uint8_t *recv_data, uint16_t len){ return 0;};
+    virtual void        dma_wait(){};
+        
     virtual int8_t  take(Config_t *spi_config)  = 0;
     virtual int8_t  release(void)  = 0;
 
