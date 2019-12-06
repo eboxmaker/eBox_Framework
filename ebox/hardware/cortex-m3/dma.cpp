@@ -329,22 +329,22 @@ void DMA1_Channel1_IRQHandler(void)
 }
 void DMA1_Channel2_IRQHandler(void)
 {
-//    printf("DMA1CH2 intterupt\r\n");
     if(DMA_GetITStatus(DMA1_IT_TC2) == SET)
     {
         irq_handler(dma_irq_ids[DMA1_CH2], DmaItTc);
         DMA_ClearITPendingBit(DMA1_IT_TC2);
         DMA_Cmd(DMA1_Channel2, DISABLE); 
+//        printf("DMA1CH2 intterupt\r\n");
     }
 }
 void DMA1_Channel3_IRQHandler(void)
 {
-//    printf("DMA1CH3 intterupt\r\n");
     if(DMA_GetITStatus(DMA1_IT_TC3) == SET)
     {
         irq_handler(dma_irq_ids[DMA1_CH3], DmaItTc);
         DMA_ClearITPendingBit(DMA1_IT_TC3);
         DMA_Cmd(DMA1_Channel3, DISABLE); 
+//        printf("DMA1CH3 intterupt\r\n");
         return ;
     }
 }

@@ -239,7 +239,10 @@ int8_t mcuSpi::write(uint8_t data)
 
 //    Dma1Ch2.deInit();
 //    Dma1Ch3.deInit();
-    
+    SPI1->DR ;
+    while(SPI1->SR & 0X80);
+    printf("[spi]write(1)\n");
+
     dmaTxCfg.DMA_PeripheralBaseAddr = (uint32_t)&SPI1->DR;
     dmaTxCfg.DMA_MemoryBaseAddr = (uint32_t) tx_buffer;
     dmaTxCfg.DMA_DIR = DMA_DIR_PeripheralDST;
@@ -262,7 +265,6 @@ int8_t mcuSpi::write(uint8_t data)
     SPI_I2S_DMACmd( SPI1, SPI_I2S_DMAReq_Rx, ENABLE) ;
     Dma1Ch2.wait();
     Dma1Ch3.wait();
-    while(SPI1->SR & 0X80);
     DMA_Cmd(DMA1_Channel2, DISABLE); 
     DMA_Cmd(DMA1_Channel3, DISABLE); 
     SPI_I2S_DMACmd( SPI1, SPI_I2S_DMAReq_Tx, DISABLE) ;
@@ -276,6 +278,8 @@ int8_t mcuSpi::write(uint8_t data)
   */
 int8_t mcuSpi::write_buf(uint8_t *data, uint16_t len)
 {
+    SPI1->DR ;
+    while(SPI1->SR & 0X80);
     printf("[spi]write_buf(data,%d)\n",len);
     dmaTxCfg.DMA_PeripheralBaseAddr = (uint32_t)&SPI1->DR;
     dmaTxCfg.DMA_MemoryBaseAddr = (uint32_t) data;
@@ -299,7 +303,6 @@ int8_t mcuSpi::write_buf(uint8_t *data, uint16_t len)
     SPI_I2S_DMACmd( SPI1, SPI_I2S_DMAReq_Rx, ENABLE) ;
     Dma1Ch2.wait();
     Dma1Ch3.wait();
-    while(SPI1->SR & 0X80);
     DMA_Cmd(DMA1_Channel2, DISABLE); 
     DMA_Cmd(DMA1_Channel3, DISABLE); 
 }
@@ -317,6 +320,9 @@ uint8_t mcuSpi::read()
 //     while(SPI1->SR & 0X80);
 //    SPI_I2S_DMACmd( SPI1, SPI_I2S_DMAReq_Tx, DISABLE) ;
 //    SPI_I2S_DMACmd( SPI1, SPI_I2S_DMAReq_Rx, DISABLE) ;
+        SPI1->DR ;
+    while(SPI1->SR & 0X80);
+    printf("[spi]read(1)\n");
     
     dmaTxCfg.DMA_PeripheralBaseAddr = (uint32_t)&SPI1->DR;
     dmaTxCfg.DMA_MemoryBaseAddr = (uint32_t) tx_buffer;
@@ -338,11 +344,10 @@ uint8_t mcuSpi::read()
     
     SPI_I2S_DMACmd( SPI1, SPI_I2S_DMAReq_Tx, ENABLE) ;
     SPI_I2S_DMACmd( SPI1, SPI_I2S_DMAReq_Rx, ENABLE) ;
-    Dma1Ch2.wait();
-    Dma1Ch3.wait();
-    while(SPI1->SR & 0X80);
-    DMA_Cmd(DMA1_Channel2, DISABLE); 
-    DMA_Cmd(DMA1_Channel3, DISABLE); 
+//    Dma1Ch2.wait();
+//    Dma1Ch3.wait();
+//    DMA_Cmd(DMA1_Channel2, DISABLE); 
+//    DMA_Cmd(DMA1_Channel3, DISABLE); 
 
     return rx_buffer[0];
 
@@ -367,6 +372,8 @@ int8_t mcuSpi::read(uint8_t *recv_data)
   */
 int8_t mcuSpi::read_buf(uint8_t *recv_data, uint16_t len)
 {
+    SPI1->DR ;
+    while(SPI1->SR & 0X80);
     printf("[spi]read_buf(recv_data,%d)\n",len);
     dmaTxCfg.DMA_PeripheralBaseAddr = (uint32_t)&SPI1->DR;
     dmaTxCfg.DMA_MemoryBaseAddr = (uint32_t) tx_buffer;
@@ -388,12 +395,17 @@ int8_t mcuSpi::read_buf(uint8_t *recv_data, uint16_t len)
     
     SPI_I2S_DMACmd( SPI1, SPI_I2S_DMAReq_Tx, ENABLE) ;
     SPI_I2S_DMACmd( SPI1, SPI_I2S_DMAReq_Rx, ENABLE) ;
-    Dma1Ch2.wait();
-    Dma1Ch3.wait();
-    while(SPI1->SR & 0X80);
-    DMA_Cmd(DMA1_Channel2, DISABLE); 
-    DMA_Cmd(DMA1_Channel3, DISABLE); 
+//    Dma1Ch2.wait();
+//    Dma1Ch3.wait();
+//    DMA_Cmd(DMA1_Channel2, DISABLE); 
+//    DMA_Cmd(DMA1_Channel3, DISABLE); 
 }
+
+void mcuSpi::wait()
+{
+    while(SPI1->SR & 0X80);
+}
+
 /**
   *@brief    获取控制权
   *@param    none

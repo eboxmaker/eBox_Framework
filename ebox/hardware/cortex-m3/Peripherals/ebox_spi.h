@@ -53,6 +53,7 @@ public:
 public:
     virtual int8_t  take(Config_t *newConfig);
     virtual int8_t  release(void);
+    virtual void    wait();
 private:
 
     void dma_config( void );

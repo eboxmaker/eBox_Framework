@@ -66,7 +66,7 @@ public:
     // buf¶ÁÐ´
     virtual int8_t  write_buf(uint8_t *data, uint16_t data_length)  = 0;
     virtual int8_t  read_buf(uint8_t *recv_data, uint16_t data_length)  = 0;
-
+    virtual void    wait(){};
     virtual int8_t  take(Config_t *spi_config)  = 0;
     virtual int8_t  release(void)  = 0;
 
