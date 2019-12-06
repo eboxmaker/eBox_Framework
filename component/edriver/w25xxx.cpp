@@ -396,6 +396,8 @@ void W25xxx::write(uint8_t *buf, uint32_t write_addr, uint16_t num_to_write)
             else secremain = num_to_write;			//下一个扇区可以写完了
         }
     }
+    
+    free(spi_flash_buf);
 
 }
 

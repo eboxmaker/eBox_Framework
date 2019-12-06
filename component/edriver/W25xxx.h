@@ -111,14 +111,14 @@ public:
     void        wake_up(void);
     void        write_enable(void);
     void        write_disable(void);
-    
+        uint16_t    read_id();
+
 private:
     Spi::Config_t cfg;
     Gpio        *cs;
     Spi         *spi;
     bool        initialized;
 
-    uint16_t    read_id();
     void        write_page(const uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
 
     DataU16_t   type;				//∂®“ÂW25QXX–æ∆¨–Õ∫≈	

@@ -13,7 +13,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 #include "bsp_ebox.h"
 
-#include "w25x16.h"
+#include "w25xxx.h"
 
 
 
@@ -29,7 +29,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #define EXAMPLE_DATE	"2018-08-11"
 
 
-W25x16 flash(&PA15, &spi1);
+W25xxx flash(&PA15, &spi1);
 
 void setup()
 {

@@ -56,6 +56,8 @@ public:
     void enable();
     void disable();
     void set_current_len(uint16_t len);
+    uint16_t get_current_len();
+    void wait();
     bool get_flag_status();
     void clear_flag();
 
