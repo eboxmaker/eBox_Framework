@@ -111,7 +111,7 @@ public:
     void        wake_up(void);
     void        write_enable(void);
     void        write_disable(void);
-        uint16_t    read_id();
+    uint16_t    read_id();
 
 private:
     Spi::Config_t cfg;
