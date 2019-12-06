@@ -186,7 +186,7 @@ private:
     uint8_t             index;
     uint8_t             preemption_priority;
     uint8_t             sub_priority;
-
+    bool                _is_inited;
 protected:
     FunctionPointer _irq[2];
 };

@@ -53,6 +53,9 @@ public:
 public:
     virtual int8_t  take(Config_t *newConfig);
     virtual int8_t  release(void);
+private:
+
+    void dma_config( void );
 
 private:
     SPI_TypeDef *_spi;
@@ -61,6 +64,9 @@ private:
     Gpio        *_mosi;
 
     uint8_t     _busy;
+    DMA_InitTypeDef dmaRxCfg;
+    DMA_InitTypeDef dmaTxCfg;
+
 };
 
 /*

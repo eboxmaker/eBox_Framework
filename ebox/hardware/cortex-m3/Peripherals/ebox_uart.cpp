@@ -230,6 +230,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     interrupt(RxIrq, ENABLE);
     interrupt(TxIrq, DISABLE);
 
+    _is_inited = true;
 }
 
 /**
@@ -374,6 +375,7 @@ void Uart::flush()
 */
 size_t Uart::write(uint8_t c)
 {
+    if(!_is_inited) return 0;
     uint16_t i = (_tx_buffer_head[index] + 1) % _tx_buffer_size[index];//计算头的位置
     // head = tail, 缓冲区过满，先发送
     while (i == _tx_buffer_tail[index])
