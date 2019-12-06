@@ -143,6 +143,7 @@ int W25xxx::deinit()
     spi->write((uint8_t)((addr) >> 8));
     spi->write((uint8_t)addr);
     spi->read_buf((uint8_t *)buffer, size);
+    spi->wait();
     cs->set();
     spi->release();
     return 0;
@@ -173,6 +174,8 @@ int W25xxx::deinit()
         spi->write((uint8_t)((addr) >> 16)); //发送24bit地址
         spi->write((uint8_t)((addr) >> 8));
         spi->write((uint8_t)addr);
+        spi->wait();
+
         cs->set();
         wait_busy();   				   //等待擦除完成
      }
@@ -231,6 +234,8 @@ uint16_t W25xxx::read_id()
     spi->write(0x00);
     id |= spi->read() << 8;
     id |= spi->read();
+    spi->wait();
+
     cs->set();
     spi->release();
     
@@ -263,6 +268,8 @@ int W25xxx:: read_sector(uint8_t *buffer, uint32_t sector, uint8_t count)
     spi->write((uint8_t)((addr) >> 8));
     spi->write((uint8_t)addr);
     spi->read_buf(buffer, read_count);
+        spi->wait();
+
     cs->set();
     spi->release();
     return 0;
@@ -286,6 +293,8 @@ void W25xxx::read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read)
     spi->write((uint8_t)((read_addr) >> 8));
     spi->write((uint8_t)read_addr);
     spi->read_buf(buf, num_to_read);
+        spi->wait();
+
     cs->set();
     spi->release();
 
@@ -457,6 +466,8 @@ void W25xxx::write_page(const uint8_t *buf, uint32_t write_addr, uint16_t num_to
     spi->write((uint8_t)((write_addr) >> 8));
     spi->write((uint8_t)write_addr);
     spi->write_buf((uint8_t *)buf, num_to_write);
+    spi->wait();
+
     cs->set();
     wait_busy();					   //等待写入结束
     spi->release();
@@ -478,6 +489,8 @@ int W25xxx::erase_sector(uint32_t dst_addr)
     spi->write((uint8_t)((dst_addr) >> 16)); //发送24bit地址
     spi->write((uint8_t)((dst_addr) >> 8));
     spi->write((uint8_t)dst_addr);
+        spi->wait();
+
     cs->set();
     wait_busy();   				   //等待擦除完成
     return 0;
@@ -499,6 +512,8 @@ void W25xxx::erase_chip(void)
     wait_busy();
     cs->reset();
     spi->write(W25X_ChipErase); 	//发送片擦除命令
+        spi->wait();
+
     cs->set();
     wait_busy();   				   				//等待芯片擦除结束
     
@@ -519,6 +534,8 @@ void W25xxx::power_down(void)
     volatile int i;
     cs->reset();
     spi->write(W25X_PowerDown);        //发送掉电命令
+        spi->wait();
+
     //等待TPD
     for (i = 0; i < 300; i++);
     cs->set();
@@ -530,6 +547,8 @@ void W25xxx::wake_up(void)
     volatile int i;
     cs->reset();
     spi->write(W25X_ReleasePowerDown);   //  send W25X_PowerDown command 0xAB
+        spi->wait();
+
     //等待TRES1
     for (i = 0; i < 300; i++);
     cs->set();
@@ -577,6 +596,8 @@ uint8_t W25xxx::read_sr(uint8_t index)
     cs->reset();
     spi->write(command);    //发送读取状态寄存器命令
     byte = spi->read();
+        spi->wait();
+
     cs->set();
     return byte;
 }
@@ -609,6 +630,8 @@ void W25xxx::write_sr(uint8_t index,uint8_t value)
     cs->reset();
     spi->write(command);   //发送写取状态寄存器命令
     spi->write(value);               //写入一个字节
+        spi->wait();
+
     cs->set();
 }
 
@@ -624,6 +647,8 @@ void W25xxx::write_enable(void)
 {
     cs->reset();
     spi->write(W25X_WriteEnable);      //发送写使能
+        spi->wait();
+
     cs->set();
 }
 /***************************************************************
@@ -637,6 +662,8 @@ void W25xxx::write_disable(void)
 {
     cs->reset();
     spi->write(W25X_WriteDisable);     //发送写禁止指令
+        spi->wait();
+
     cs->set();
 }
 //uint16_t W25xxx::get_type(void)
