@@ -25,6 +25,23 @@
 #include "mcu.h"
 #include "dma.h"
 
+
+#define EBOX_DEBUG_SPI_ENABLE       true
+#define EBOX_DEBUG_SPI_ENABLE_ERR   false
+
+#if EBOX_DEBUG_SPI_ENABLE
+#define spiDebug(...)  ebox_printf("[SPI]:%d: ",__LINE__),ebox_printf(__VA_ARGS__ )
+#else
+#define spiDebug(...)
+#endif
+
+#if EBOX_DEBUG_SPI_ENABLE_ERR
+#define spiDebugErr(fmt, ...)  ebox_printf("[SPI err]:%d: " fmt "\n", __LINE__, __VA_ARGS__)
+#else
+#define spiDebugErr(fmt, ...)
+#endif
+
+
 /*
 	1.目前只测试了SPI1、SPI2，spi3望网友测试
 	2.该spi功能强大，总线支持同时挂载不同MODE ,SPEED,bit_oder的设备
