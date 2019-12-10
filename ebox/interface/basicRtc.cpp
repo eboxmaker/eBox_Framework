@@ -47,7 +47,10 @@ void BasicRtc::set_dt_string(String &str)
 
     temp[5] = str.substring(last);
     
-    dt.year = temp[0].toInt();
+    uint16_t y = temp[0].toInt();
+    if(y > 2000)
+       y -= 2000;
+    dt.year = y;
     dt.month = temp[1].toInt();
     dt.date = temp[2].toInt();
     dt.hour = temp[3].toInt();
@@ -90,7 +93,7 @@ String	BasicRtc::get_dt_string()
     return dt_str;
 
 }
-String	BasicRtc::get_date()
+String	BasicRtc::get_date_string()
 {
     String dt_str;
     char buf[20];
@@ -99,7 +102,7 @@ String	BasicRtc::get_date()
     return dt_str;
 
 }
-String	BasicRtc::get_time()
+String	BasicRtc::get_time_string()
 {
     String dt_str;
     char buf[20];
@@ -332,7 +335,7 @@ uint8_t ChinaCalendar::GetMoonDay(unsigned char month_p,unsigned short table_add
 
 String ChinaCalendar::get_year_str()
 {
-	uint8_t SEyear;
+	u8 SEyear;
 	SEyear = get_sky_earth_year(cdt.year + 2000);
     String str = "";
     
@@ -403,7 +406,7 @@ uint8_t ChinaCalendar::get_sky_earth_year(uint16_t year)
 String ChinaCalendar::get_str()
 {
     String str = "";
-	uint8_t SEyear;
+	u8 SEyear;
 	SEyear = get_sky_earth_year(cdt.year + 2000);
     
     str += sky[SEyear%10];//  ¼×
@@ -576,7 +579,7 @@ String ChinaCalendar::get_jieqi_str(DateTime_t &_dt)
     DateTime_t dt = _dt;
     String str;
     uint8_t days = 0;
-	uint8_t jq_mday,jq_index,max_days_in_month;
+	u8 jq_mday,jq_index,max_days_in_month;
     
     jq_mday = get_jieqi_mday(dt);
 	if(jq_mday==0)	return "";

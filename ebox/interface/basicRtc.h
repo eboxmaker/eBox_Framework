@@ -64,8 +64,8 @@ class BasicRtc
 
         DateTime_t      get_dt();
         String	        get_dt_string();
-        String	        get_date();
-        String	        get_time();
+        String	        get_date_string();
+        String	        get_time_string();
         void            get_date_only(char *buf);
         void            get_time_only(char *buf); 
 
@@ -75,6 +75,7 @@ class BasicRtc
         void            print(Uart &uart,DateTime_t &dt);
 
         
+        uint8_t         time_buf[6];//SMHDMY
                 
     private:
         virtual void        write_dt(DateTime_t &dt)  = 0;
@@ -83,7 +84,6 @@ class BasicRtc
         uint8_t time_zone;
     protected:
         DateTime_t      dateTime;
-        uint8_t         time_buf[6];//SMHDMY
 
 };
 

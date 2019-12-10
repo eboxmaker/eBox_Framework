@@ -110,7 +110,7 @@ void Dma::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_
 */
 void Dma::interrupt(DmaIrqType DMA_IT, FunctionalState enable)
 {
-//    printf("dma %x DmaItTc %d interrupte enable = %d\r\n",(uint32_t)DMAy_Channelx,DMA_IT,enable);
+//    dmaDebug("dma %x DmaItTc %d interrupte enable = %d\r\n",(uint32_t)DMAy_Channelx,DMA_IT,enable);
     if(DMA_IT == DmaItTc){
         DMA_ITConfig(DMAy_Channelx, DMA_IT_TC, enable);
     }
@@ -181,7 +181,7 @@ void Dma::wait()
     while( Dma1Ch3.get_current_len())
     {
 //        int i = Dma1Ch3.get_current_len();
-//        printf("%d\r\n",i);
+//        dmaDebug("%d\r\n",i);
 //        if(i == 0)
 //            break;
     }
@@ -319,7 +319,7 @@ void dma_irq_handler(uint8_t index, DmaIrqHandler_t handler, uint32_t id)
 
 void DMA1_Channel1_IRQHandler(void)
 {
-    printf("DMA1CH1 intterupt\r\n");
+    dmaDebug("DMA1CH1 intterupt\r\n");
     if(DMA_GetITStatus(DMA1_IT_TC1) == SET)
     {
         irq_handler(dma_irq_ids[DMA1_CH1], DmaItTc);
@@ -334,7 +334,7 @@ void DMA1_Channel2_IRQHandler(void)
         irq_handler(dma_irq_ids[DMA1_CH2], DmaItTc);
         DMA_ClearITPendingBit(DMA1_IT_TC2);
         DMA_Cmd(DMA1_Channel2, DISABLE); 
-//        printf("DMA1CH2 intterupt\r\n");
+//        dmaDebug("DMA1CH2 intterupt\r\n");
     }
 }
 void DMA1_Channel3_IRQHandler(void)
@@ -344,13 +344,13 @@ void DMA1_Channel3_IRQHandler(void)
         irq_handler(dma_irq_ids[DMA1_CH3], DmaItTc);
         DMA_ClearITPendingBit(DMA1_IT_TC3);
         DMA_Cmd(DMA1_Channel3, DISABLE); 
-//        printf("DMA1CH3 intterupt\r\n");
+//        dmaDebug("DMA1CH3 intterupt\r\n");
         return ;
     }
 }
 void DMA1_Channel4_IRQHandler(void)
 {
-    printf("DMA1CH4 intterupt\r\n");
+    dmaDebug("DMA1CH4 intterupt\r\n");
     if(DMA_GetITStatus(DMA1_IT_TC4) == SET)
     {
         irq_handler(dma_irq_ids[DMA1_CH4], DmaItTc);
@@ -360,7 +360,7 @@ void DMA1_Channel4_IRQHandler(void)
 }
 void DMA1_Channel5_IRQHandler(void)
 {
-    printf("DMA1CH5 intterupt\r\n");
+    dmaDebug("DMA1CH5 intterupt\r\n");
     if(DMA_GetITStatus(DMA1_IT_TC5) == SET)
     {
         irq_handler(dma_irq_ids[DMA1_CH5], DmaItTc);
@@ -370,7 +370,7 @@ void DMA1_Channel5_IRQHandler(void)
 }
 void DMA1_Channel6_IRQHandler(void)
 {
-    printf("DMA1CH6 intterupt\r\n");
+    dmaDebug("DMA1CH6 intterupt\r\n");
     if(DMA_GetITStatus(DMA1_IT_TC6) == SET)
     {
         irq_handler(dma_irq_ids[DMA1_CH6], DmaItTc);
@@ -380,7 +380,7 @@ void DMA1_Channel6_IRQHandler(void)
 }
 void DMA1_Channel7_IRQHandler(void)
 {
-    printf("DMA1CH7 intterupt\r\n");
+    dmaDebug("DMA1CH7 intterupt\r\n");
     if(DMA_GetITStatus(DMA1_IT_TC7) == SET)
     {
         irq_handler(dma_irq_ids[DMA1_CH7], DmaItTc);

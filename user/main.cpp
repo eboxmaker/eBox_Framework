@@ -154,7 +154,8 @@ int main(void)
     while(1)
     {
 
-        //uart1.printf("\r\nrunning£¡");
+        
+        printf("\r\nrunning£¡");
         delay_ms(1000);
     }
 

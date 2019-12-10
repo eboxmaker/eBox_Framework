@@ -22,16 +22,6 @@
 #include "dma.h"
 
 
-#if EBOX_DEBUG
-// 是否打印调试信息, 1打印,0不打印
-#define debug 0
-#endif
-
-#if debug
-#define  SPI_DEBUG(...) DBG("[SPI]  "),DBG(__VA_ARGS__)
-#else
-#define  SPI_DEBUG(...)
-#endif
 
 /*******************************************************************************
 * Function Name  : SPI1_DMA_Configuration
@@ -230,7 +220,7 @@ uint8_t mcuSpi::read_config(void)
   */
 uint8_t mcuSpi::transfer(uint8_t data)
 {
-    printf("\n===========err\n");
+    spiDebug("\n===========err\n");
     while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
         ;
     _spi->DR = data;
@@ -354,7 +344,7 @@ uint8_t mcuSpi::dma_read()
     dmaTx->wait();
 //    DMA_Cmd(DMA1_Channel2, DISABLE); 
 //    DMA_Cmd(DMA1_Channel3, DISABLE); 
-    printf("[spi]dma_read(data:0X%02X,1)\n",rx_buffer[0]);
+    spiDebug("[spi]dma_read(data:0X%02X,1)\n",rx_buffer[0]);
 
     return rx_buffer[0];
 
@@ -375,7 +365,7 @@ int8_t mcuSpi::dma_write(uint8_t data)
 //    dmaRx->wait();
 //    dmaTx->wait();
     while(_spi->SR & 0X80);
-    printf("[spi]dma_write(data:0X%02X,1)\n",data);
+    spiDebug("[spi]dma_write(data:0X%02X,1)\n",data);
 
     dmaTxCfg.DMA_PeripheralBaseAddr = (uint32_t)&_spi->DR;
     dmaTxCfg.DMA_MemoryBaseAddr = (uint32_t) tx_buffer;
@@ -411,7 +401,7 @@ uint16_t  mcuSpi::dma_write_buf(uint8_t *data, uint16_t len)
 { 
     
     while(_spi->SR & 0X80);
-    printf("[spi]dma_write_buf(data,%d)\n",len);
+    spiDebug("[spi]dma_write_buf(data,%d)\n",len);
     dmaTxCfg.DMA_PeripheralBaseAddr = (uint32_t)&_spi->DR;
     dmaTxCfg.DMA_MemoryBaseAddr = (uint32_t) data;
     dmaTxCfg.DMA_DIR = DMA_DIR_PeripheralDST;
@@ -440,7 +430,7 @@ uint16_t  mcuSpi::dma_read_buf(uint8_t *recv_data, uint16_t len)
 { 
     
     while(_spi->SR & 0X80);
-    printf("[spi]dma_read_buf(recv_data,%d)\n",len);
+    spiDebug("[spi]dma_read_buf(recv_data,%d)\n",len);
     dmaTxCfg.DMA_PeripheralBaseAddr = (uint32_t)&_spi->DR;
     dmaTxCfg.DMA_MemoryBaseAddr = (uint32_t) tx_buffer;
     dmaTxCfg.DMA_DIR = DMA_DIR_PeripheralDST;
