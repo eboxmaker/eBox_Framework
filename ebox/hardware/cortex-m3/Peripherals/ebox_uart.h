@@ -72,14 +72,21 @@
 #define USE_UART1 1
 #define USE_UART2 0
 #define USE_UART3 0
-#define USE_UART4 0
-#define USE_UART5 0
-#define UART_NUM (USE_UART1 + USE_UART2 + USE_UART3 + USE_UART4 + USE_UART5)
+
+#if defined (STM32F10X_HD)
+    #define USE_UART4 0
+    #define USE_UART5 0
+#endif
+
+#if defined (STM32F10X_HD)
+    #define UART_NUM (USE_UART1 + USE_UART2 + USE_UART3 + USE_UART4 + USE_UART5)
+#else
+    #define UART_NUM (USE_UART1 + USE_UART2 + USE_UART3)
+#endif
 
 #define UART_MAX_BITS   8
-
 #if (UART_MAX_BITS > 8)
-#define UART_9_BIT
+    #define UART_9_BIT
 #endif
 
 enum IrqType

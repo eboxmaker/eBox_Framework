@@ -23,13 +23,23 @@
 #if USE_OBJECT
 
 //´®¿Ú
+#if USE_UART1
 Uart uart1(USART1, &PA9, &PA10);
+#endif
+#if USE_UART2
 Uart uart2(USART2, &PA2, &PA3);
+#endif
+#if USE_UART3
 Uart uart3(USART3, &PB10, &PB11);
+#endif
 
-#if (MCU_PINS >= 100)
+#if (STM32F10X_HD)
+#if USE_UART4
 Uart uart4(UART4, &PC10, &PC11);
+#endif
+#if USE_UART5
 Uart uart5(UART5, &PC12, &PD2);
+#endif
 #endif
 
 //spi

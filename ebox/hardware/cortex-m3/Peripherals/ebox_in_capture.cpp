@@ -366,7 +366,7 @@ bool InCapture::update_resault()
         }
         _available = false;
     }
-    
+    return true;
 }
 
 bool InCapture::available()

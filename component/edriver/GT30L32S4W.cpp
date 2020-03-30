@@ -206,6 +206,7 @@ bool FontLib::get_data(uint16_t inner_code,uint8_t font_id,eBoxCharInfo_t *info)
         
         return true;
     }
+    return false;
 }
 
 

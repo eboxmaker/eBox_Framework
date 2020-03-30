@@ -2,6 +2,7 @@
 #include "mcu.h"
 #include "ebox_core.h"
 #include "ebox_mem.h"
+extern "C" {
 
 void ebox_init(void)
 {
@@ -17,7 +18,6 @@ void ebox_init(void)
 
 
 }
-extern "C" {
 /**
  *@brief    定义一个ebox_printf的输出函数，其中的输出设备必须是可用的
  *@param    NONE

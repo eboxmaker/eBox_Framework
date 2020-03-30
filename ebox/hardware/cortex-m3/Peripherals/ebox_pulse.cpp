@@ -147,9 +147,7 @@ void Pulse::set_reload(uint16_t value)
 float Pulse::get_delay_us()
 {
     uint32_t clock = get_timer_source_clock() / cfg.prescaler;
-    
-    float unit_time;
-    
+        
     float delay_time =  cfg.delay_counter / (float)clock * 1000000;
     return delay_time;
 }

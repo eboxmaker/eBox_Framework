@@ -193,9 +193,14 @@ int W25xxx::deinit()
  
     return 256;
  }
- bd_size_t W25xxx::get_erase_size() const
+
+bd_size_t W25xxx::get_erase_size() const
 {
     return get_program_size()*16;
+}
+bd_size_t W25xxx::get_erase_size(bd_addr_t addr) const
+{
+    return get_erase_size();
 }
 
  bd_size_t W25xxx::size() const 

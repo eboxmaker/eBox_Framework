@@ -353,8 +353,7 @@ size_t ebox_get_heap_end_addr(void)
 uint16_t ebox_free_block_print(void)
 {
 
-#if EBOX_DEBUG
-#if USE_PRINTF
+#if (EBOX_DEBUG && USE_PRINTF)
     eboxBlockLink_t *p;
     int i = 0;
     ebox_printf("\r\n------------------start------------------\r\n");
@@ -366,9 +365,9 @@ uint16_t ebox_free_block_print(void)
     }
     ebox_printf("-------------------end-------------------\r\n");
     return i - 2;
-#endif
-#endif
+#else
     return 0;
+#endif
 }
 
 
