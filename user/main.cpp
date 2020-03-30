@@ -33,7 +33,6 @@ void setup()
     LED1.mode(OUTPUT_PP);
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
-    
 }
 uint32_t mark1, mark2,mark3;
 int main(void)
@@ -47,10 +46,6 @@ int main(void)
         mark2 = micros();
         mark3 = mark2 -mark1;
         UART.printf("%u:%u\n",micros(),mark3);
-        ebox_printf("rrr");
-//        LED1.set();
-//        delay_ms(1000);
-//        LED1.reset();
     }
 }
 
