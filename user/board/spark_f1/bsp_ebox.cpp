@@ -37,10 +37,6 @@ EventManager manager;
 *	·µ »Ø Öµ: ÎÞ
 *********************************************************************************************************
 */
-void print_log()
-{
-    print_log("TEST","2019-12-02");
-}
 void print_log(const char *name, const char *date)
 {
     UART.print("\n\r");

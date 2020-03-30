@@ -28,7 +28,7 @@
 #define systick_interrupt()     SysTick->CTRL |=0x0002
 
 extern "C" {
-    __IO uint64_t milli_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
+    __IO uint32_t milli_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
     __IO uint16_t micro_para;
 
     static void update_system_clock(CpuClock_t *clock);
@@ -80,9 +80,9 @@ extern "C" {
       *@param    mcu
       *@retval   none
       */
-    uint64_t mcu_micros(void)
+    uint32_t mcu_micros(void)
     {
-        uint64_t micro;
+        uint32_t micro;
         micro = (milli_seconds * 1000 + (1000 - (SysTick->VAL) / (micro_para)));
         return  micro;
     }
@@ -92,7 +92,7 @@ extern "C" {
       *@param    mcu
       *@retval   none
       */
-    uint64_t mcu_millis( void )
+    uint32_t mcu_millis( void )
     {
         return milli_seconds;
     }
@@ -104,8 +104,8 @@ extern "C" {
      */
     void mcu_delay_ms(uint32_t ms)
     {
-        uint64_t end ;
-        end = mcu_micros() + ms * 1000 - 3;
+        uint32_t end ;
+        end = mcu_micros() + ms * 1000 ;
         while (mcu_micros() < end);
     }
     /**
@@ -165,8 +165,7 @@ extern "C" {
     {
         if (milli_seconds++ % _multiple == 0)
         {
-//            if(callBackFun != NULL)
-                callBackFun();
+            callBackFun();
         }
     }
 

@@ -173,7 +173,7 @@ void InCapture::base_init(uint16_t period, uint16_t prescaler)
     {
     case (uint32_t)TIM1_BASE:
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
-        NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;//
+        NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;//
         break;
     case (uint32_t)TIM2_BASE:
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);

@@ -7,8 +7,8 @@ extern "C" {
     void        (*interrupts)(void);
     int         (*no_interrupts)(void);
     void        (*ebox_reset)(void);
-    uint64_t    (*micros)(void);
-    uint64_t    (*millis)(void);
+    uint32_t    (*micros)(void);
+    uint32_t    (*millis)(void);
     void        (*delay_ms)(uint32_t ms);
     void        (*delay_us)(uint32_t us);
 

@@ -151,6 +151,7 @@ bool Dma::get_flag_status()
     default:
         break;
     }
+    return false;
 }
 void Dma::clear_flag()
 {
