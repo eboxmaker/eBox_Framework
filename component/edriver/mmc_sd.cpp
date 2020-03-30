@@ -241,8 +241,7 @@ int  SD::program(const void *b, bd_addr_t addr, bd_size_t size)
     }
     uart1.flush();
     const uint8_t *buffer = static_cast<const uint8_t *>(b);
-    int status = BD_ERROR_OK;
-    uint8_t response;
+//    int status = BD_ERROR_OK;
 
     // Get block count
     size_t blockCnt = size / _block_size;

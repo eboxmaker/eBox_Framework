@@ -23,6 +23,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#include "ebox.h"
 
 #ifndef LFS_NO_MALLOC
 #include <stdlib.h>

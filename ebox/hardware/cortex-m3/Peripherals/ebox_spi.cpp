@@ -453,6 +453,7 @@ uint16_t  mcuSpi::dma_read_buf(uint8_t *recv_data, uint16_t len)
     
     SPI_I2S_DMACmd( _spi, SPI_I2S_DMAReq_Tx, ENABLE) ;
     SPI_I2S_DMACmd( _spi, SPI_I2S_DMAReq_Rx, ENABLE) ;
+    return len;
 };
 
 

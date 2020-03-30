@@ -22,10 +22,22 @@
 #define __EBOX_H
 
 
-
 #include "ebox_core.h"
 
 
+#if __cplusplus
+extern "C" {
+#endif
+
+    void ebox_init(void);
+    size_t ebox_printf(const char *fmt, ...);
+
+#if __cplusplus
+} // extern "C"
+#endif
+
+
+#ifdef __cplusplus
 #include "ebox_gpio.h"
 #include "ebox_adc.h"
 #include "ebox_exti.h"
@@ -37,7 +49,6 @@
 #include "ebox_i2c.h"
 #include "ebox_spi.h"
 #include "ebox_uart.h"
-//#include "ebox_uart_stream.h"
 #include "ebox_rtc.h"
 #include "ebox_iflash.h"
 #include "ebox_dac.h"
@@ -46,19 +57,29 @@
 #include "ebox_step_motor.h"
 //#include "ebox_3steper.h"
 
-extern "C" {
-    void ebox_init(void);
-}
+
 
 #if USE_OBJECT
 
 //创建所有引脚对象和宏定义其指针
-extern Uart uart1;
-extern Uart uart2;
-extern Uart uart3;
-#if (MCU_PINS >= 100)
-extern Uart uart4;
-extern Uart uart5;
+#if USE_UART1
+    extern Uart uart1;
+#endif
+#if USE_UART2
+    extern Uart uart2;
+#endif
+#if USE_UART3
+    extern Uart uart3;
+#endif
+
+#if defined (STM32F10X_HD)
+    #if USE_UART4
+        extern Uart uart4;
+    #endif
+    
+    #if USE_UART5
+    extern Uart uart5;
+    #endif
 #endif
 
 extern mcuSpi spi1;
@@ -212,5 +233,6 @@ extern mcuGpio PG15;
 #include "bsp_ebox.h"
 #endif
 
+#endif
 #endif
 

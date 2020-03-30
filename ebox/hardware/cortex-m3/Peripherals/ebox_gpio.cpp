@@ -222,3 +222,4 @@ void port_mode(GPIO_TypeDef* port,uint32_t pin, PinMode_t mode)
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(port, &GPIO_InitStructure);   //³õÊ¼»¯GPIOC¶Ë¿Ú
 }
+

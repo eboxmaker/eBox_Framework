@@ -47,7 +47,7 @@ int main(void)
         mark2 = micros();
         mark3 = mark2 -mark1;
         UART.printf("%u:%u\n",micros(),mark3);
-        
+        ebox_printf("rrr");
 //        LED1.set();
 //        delay_ms(1000);
 //        LED1.reset();

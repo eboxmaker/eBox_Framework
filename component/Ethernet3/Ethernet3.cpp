@@ -305,8 +305,9 @@ uint8_t EthernetClass::link()
 
 const char *EthernetClass::linkReport()
 {
-    if(bit_read(w5500.getPHYCFGR(), 0) == 1) return "LINK";
-    else return "NO LINK";
+    if(bit_read(w5500.getPHYCFGR(), 0) == 1)
+        return "LINK";
+    return "NO LINK";
 }
 
 uint8_t EthernetClass::speed()
@@ -316,8 +317,7 @@ uint8_t EthernetClass::speed()
         if(bit_read(w5500.getPHYCFGR(), 1) == 1) return 100;
         if(bit_read(w5500.getPHYCFGR(), 1) == 0) return 10;
     }
-    else 
-        return 0;
+    return 0;
 }
 
 const char *EthernetClass::speedReport()
@@ -327,8 +327,7 @@ const char *EthernetClass::speedReport()
         if(bit_read(w5500.getPHYCFGR(), 1) == 1) return "100 MB";
         if(bit_read(w5500.getPHYCFGR(), 1) == 0) return "10 MB";
     }
-    else
-        return "NO LINK";
+    return "NO LINK";
 }
 
 uint8_t EthernetClass::duplex()
@@ -338,8 +337,8 @@ uint8_t EthernetClass::duplex()
         if(bit_read(w5500.getPHYCFGR(), 2) == 1) return 2;
         if(bit_read(w5500.getPHYCFGR(), 2) == 0) return 1;
     }
-    else
-        return 0;
+
+    return 0;
 }
 
 const char *EthernetClass::duplexReport()
@@ -349,7 +348,8 @@ const char *EthernetClass::duplexReport()
         if(bit_read(w5500.getPHYCFGR(), 2) == 1) return "FULL DUPLEX";
         if(bit_read(w5500.getPHYCFGR(), 2) == 0) return "HALF DUPLEX";
     }
-    else return "NO LINK";
+    
+    return "NO LINK";
 }
 
 void EthernetClass::setRtTimeOut(uint16_t timeout)
