@@ -335,12 +335,13 @@ uint8_t ChinaCalendar::GetMoonDay(unsigned char month_p,unsigned short table_add
 
 String ChinaCalendar::get_year_str()
 {
-	u8 SEyear;
+	uint8_t SEyear;
 	SEyear = get_sky_earth_year(cdt.year + 2000);
     String str = "";
     
     str += sky[SEyear%10];//  甲
     str += earth[SEyear%12];//  子	
+    return str;
 }
 
 String ChinaCalendar::get_month_str()
@@ -406,7 +407,7 @@ uint8_t ChinaCalendar::get_sky_earth_year(uint16_t year)
 String ChinaCalendar::get_str()
 {
     String str = "";
-	u8 SEyear;
+	uint8_t SEyear;
 	SEyear = get_sky_earth_year(cdt.year + 2000);
     
     str += sky[SEyear%10];//  甲
@@ -579,7 +580,7 @@ String ChinaCalendar::get_jieqi_str(DateTime_t &_dt)
     DateTime_t dt = _dt;
     String str;
     uint8_t days = 0;
-	u8 jq_mday,jq_index,max_days_in_month;
+	uint8_t jq_mday,jq_index,max_days_in_month;
     
     jq_mday = get_jieqi_mday(dt);
 	if(jq_mday==0)	return "";
@@ -669,7 +670,6 @@ bool is_leap_year(uint16_t _year)
 //把一月和二月看成上一年的十三月和十四月
 uint8_t calculate_week(DateTime_t &dt)
 {
-    uint8_t week;
     uint16_t year = dt.year + 2000;
     uint8_t month = dt.month;
     if(month == 1 || month == 2)
@@ -728,7 +728,6 @@ uint16_t day_in_year(DateTime_t &_dt)
 }
 uint8_t get_max_days_in_month(uint16_t year,uint8_t month)
 {
-    bool flag; 
     year += 2000;
     switch(month)
     {
@@ -755,6 +754,7 @@ uint8_t get_max_days_in_month(uint16_t year,uint8_t month)
                 return 28;
             }
     }
+    return 0;
 }
 
 uint16_t	days_between_2_date(DateTime_t &dt_current, DateTime_t &dt_target)
@@ -997,7 +997,6 @@ DateTime_t  date_next_n_days(DateTime_t &dt,uint16_t days)
 
 DateTime_t  date_before_n_days(DateTime_t &dt,uint16_t days)
 {
-    DateTime_t dtTarget = dt;
     uint32_t stamp = get_unix_timestamp(dt);
     stamp -= days * SEC_PER_DAY;
     return unix_timestamp_to_dt(stamp,8);

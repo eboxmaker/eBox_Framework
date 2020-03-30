@@ -11,7 +11,7 @@ extern "C" {
 #define systick_no_interrupt()  SysTick->CTRL &=0xfffffffd
 #define systick_interrupt()     SysTick->CTRL |=0x0002
 
-__IO uint64_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
+__IO uint32_t millis_seconds;//提供一个mills()等效的全局变量。降低cpu调用开销
 __IO uint16_t micro_para;
 
 static void update_chip_info();
@@ -32,30 +32,30 @@ void mcu_reset(void)
     NVIC_SystemReset();
 }
 
-uint64_t mcu_micros(void)
+uint32_t mcu_micros(void)
 {
-    uint64_t micro;
+    uint32_t micro;
     micro = (millis_seconds * 1000 + (1000 - (SysTick->VAL) / (micro_para)));
     return  micro;
 }
 
 
-uint64_t mcu_millis( void )
+uint32_t mcu_millis( void )
 {
     return millis_seconds;
 }
 
 void mcu_delay_ms(uint32_t ms)
 {
-    uint64_t end ;
+    uint32_t end ;
     end = mcu_micros() + ms * 1000 - 3;
     while(mcu_micros() < end);
 }
 
 
-//    void mcu_delay_us(uint64_t us)
+//    void mcu_delay_us(uint32_t us)
 //    {
-//        uint64_t end = mcu_micros() + us;
+//        uint32_t end = mcu_micros() + us;
 //        while(mcu_micros() < end);
 //    }
 /**

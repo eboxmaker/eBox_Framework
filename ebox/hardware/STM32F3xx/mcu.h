@@ -37,15 +37,15 @@ typedef  void   (*fun_noPara_t)(void);           //无参函数指针
 typedef  void   (*fun_onePara_t)(unsigned int);  //单参数函数指针
 
 ///////全局变量、函数///////////////////////////////////////////////
-extern __IO uint64_t millis_seconds;        //提供一个mills()等效的全局变量。降低cpu调用开销
+extern __IO uint32_t millis_seconds;        //提供一个mills()等效的全局变量。降低cpu调用开销
 // 初始化
 extern void     mcu_init(void);             //ebox系统初始化
 extern void     SystemClock_Config(void);   //外部实现该函数，可以修改时钟源以及时钟频率。默认工作在72Mhz
 extern void     mcu_reset(void);
 //  uint32_t get_cpu_calculate_per_sec(void);//获取cpu在不跑操作系统的情况下的计算能力。用于统计cpu绝对使用率
 // 时间相关接口
-extern uint64_t mcu_micros(void);
-extern uint64_t mcu_millis( void );
+extern uint32_t mcu_micros(void);
+extern uint32_t mcu_millis( void );
 extern void     mcu_delay_ms(uint32_t ms);
 extern void     mcu_delay_us(uint32_t us);
 // systick中断回调函数
