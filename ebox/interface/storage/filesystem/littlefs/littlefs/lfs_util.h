@@ -23,7 +23,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
-#include "ebox.h"
 
 #ifndef LFS_NO_MALLOC
 #include <stdlib.h>
@@ -51,7 +50,7 @@ extern "C"
 #include "cmsis_compiler.h"
 #else
 #define MBED_LFS_ENABLE_INFO   false
-#define MBED_LFS_ENABLE_DEBUG  true
+#define MBED_LFS_ENABLE_DEBUG  false
 #define MBED_LFS_ENABLE_WARN   true
 #define MBED_LFS_ENABLE_ERROR  true
 #define MBED_LFS_ENABLE_ASSERT true

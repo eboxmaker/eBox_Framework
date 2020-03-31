@@ -732,6 +732,11 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\ebox\interface\event\EventManager.h</FilePath>
             </File>
+            <File>
+              <FileName>ebox_block.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\blockdevice\ebox_block.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -13,11 +13,12 @@
 
 
 //软件滤波时间ms
+#define IO_EDGE_SHIFT_COUNTS   300//控制连续触发次数太多，最大触发速度300ms触发一次
 #define IO_EDGE_FILTER_COUNTS   0//默认不使用软件滤波
 //长按事件触发事件
 #define LONG_PRESS_COUNTS       2000//2000ms
 //长按事件连续触发间隔
-#define LONG_PRESS_INTERVAL       500//2000ms
+//#define LONG_PRESS_INTERVAL       500//2000ms
 
 
 
@@ -30,7 +31,8 @@ class EventGpio : public Event
     }LongPressType_t;
     
     LongPressType_t long_press_type;
-    
+    uint16_t long_press_triger_time;
+    uint32_t last_release_triger_time;
 
 public:
     EventGpio(Gpio *io,uint8_t first_state,String _name = "null")
@@ -73,7 +75,8 @@ private:
     uint8_t click_released;
     uint8_t first_state;
     uint8_t changed;
-    uint16_t long_press_triger_time;
+    uint32_t last_triger_time;
+
 
 } ;
 
