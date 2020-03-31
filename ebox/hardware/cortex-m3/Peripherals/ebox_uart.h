@@ -103,11 +103,21 @@ typedef enum
 
 enum Uart_It_Index
 {
-    NUM_UART1  = 0,
-    NUM_UART2  = 1,
-    NUM_UART3  = 2,
-    NUM_UART4  = 3,
-    NUM_UART5  = 4,
+    #if USE_UART1
+    NUM_UART1  ,
+    #endif
+    #if USE_UART2
+    NUM_UART2  ,
+    #endif
+    #if USE_UART3
+    NUM_UART3  ,
+    #endif
+    #if USE_UART4
+    NUM_UART4  ,
+    #endif
+    #if USE_UART5
+    NUM_UART5  ,
+    #endif
 } ;
 
 typedef void (*uart_irq_handler)(uint32_t id, IrqType type);

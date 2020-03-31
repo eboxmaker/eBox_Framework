@@ -10,6 +10,7 @@ void EventGpio::begin()
 }
 void EventGpio::loop()
 {
+
     if( io->read() != state)    // 如果状态变化
     {
         if(changed == 0)//如果没有被标记这一次变化，就产生一个变化的标记
@@ -53,9 +54,13 @@ void EventGpio::loop()
     {
         if(click_pushed && (long_pressed == 0))// 且检测到被按下，且没有触发long_press事件，则调用释放事件
         {
-            click_released = 1;//标记释放事件发生过
-            if(event_release !=  NULL)
-                event_release(this);
+            if(millis() - last_release_triger_time > IO_EDGE_SHIFT_COUNTS){
+                click_released = 1;//标记释放事件发生过
+                if(event_release !=  NULL){
+                    last_release_triger_time = millis();
+                        event_release(this);
+                }
+            }
         }
         click_pushed = 0;//按键已经被释放，清除按下的状态
 
@@ -71,7 +76,7 @@ void EventGpio::loop()
                 {
                     click_pushed = 1;
                     long_pressed = 0;
-                    long_press_triger_time = millis();
+                    last_triger_time = millis();
                 }
                 else //state为滤波后的IO状态值，如果和初始态不一样，且超过了长按触发条件，且之前没执行过长按事件
                 {
@@ -88,9 +93,9 @@ void EventGpio::loop()
                     }
                     else
                     {
-                        if( millis()  - long_press_triger_time  > LONG_PRESS_INTERVAL)
+                        if( millis()  - last_triger_time  > long_press_triger_time)
                         {
-                            long_press_triger_time = millis();
+                            last_triger_time = millis();
                             //且按键是按下的状态，则执行长按事件
                             {
                                 long_pressed = 1;
