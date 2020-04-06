@@ -33,11 +33,11 @@ __attribute__((weak,noreturn))
 void __aeabi_assert (const char *expr, const char *file, int line) {
   char str[12], *p;
 
-  fputs("*** assertion failed: ", stderr);
-  fputs(expr, stderr);
-  fputs(", file ", stderr);
-  fputs(file, stderr);
-  fputs(", line ", stderr);
+  ebox_printf("*** assertion failed: ", stderr);
+  ebox_printf(expr, stderr);
+  ebox_printf(", file ", stderr);
+  ebox_printf(file, stderr);
+  ebox_printf(", line ", stderr);
 
   p = str + sizeof(str);
   *--p = '\0';
@@ -46,7 +46,7 @@ void __aeabi_assert (const char *expr, const char *file, int line) {
     *--p = '0' + (line % 10);
     line /= 10;
   }
-  fputs(p, stderr);
+  ebox_printf(p, stderr);
 
   abort();
 }

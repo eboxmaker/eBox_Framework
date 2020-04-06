@@ -967,6 +967,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\user\board\spark_f1\ebox_config.h</FilePath>
             </File>
+            <File>
+              <FileName>sigmoid.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\sigmoid.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>data.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\data.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

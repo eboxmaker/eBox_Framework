@@ -110,7 +110,7 @@ class DirHandle;
  * @param fd file descriptor - STDIN_FILENO, STDOUT_FILENO or STDERR_FILENO
  * @return  pointer to FileHandle to override normal stream otherwise NULL
  */
-FileHandle *mbed_target_override_console(int fd);
+//FileHandle *mbed_target_override_console(int fd);
 
 /** Applications may implement this to change stdin, stdout, stderr.
  *
@@ -156,7 +156,7 @@ FileHandle *mbed_target_override_console(int fd);
  * @param fd file descriptor - STDIN_FILENO, STDOUT_FILENO or STDERR_FILENO
  * @return  pointer to FileHandle to override normal stream otherwise NULL
  */
-FileHandle *mbed_override_console(int fd);
+//FileHandle *mbed_override_console(int fd);
 
 /** Look up the Mbed file handle corresponding to a file descriptor
  *
@@ -178,7 +178,7 @@ FileHandle *mbed_override_console(int fd);
  *           NULL if descriptor does not correspond to a FileHandle (only
  *           possible if it's not open with current implementation).
  */
-FileHandle *mbed_file_handle(int fd);
+//FileHandle *mbed_file_handle(int fd);
 }
 
 typedef ebox::DirHandle DIR;
@@ -546,114 +546,7 @@ enum {
     DT_SOCK,    ///< This is a UNIX domain socket.
 };
 
-/* fcntl.h defines */
-#define F_GETFL 3
-#define F_SETFL 4
 
-struct pollfd {
-    int fd;
-    short events;
-    short revents;
-};
-
-/* POSIX-compatible I/O functions */
-#if __cplusplus
-extern "C" {
-#endif
-#if !MBED_CONF_PLATFORM_STDIO_MINIMAL_CONSOLE_ONLY
-    int open(const char *path, int oflag, ...);
-#ifndef __IAR_SYSTEMS_ICC__ /* IAR provides fdopen itself */
-#if __cplusplus
-    std::FILE *fdopen(int fildes, const char *mode);
-#else
-    FILE *fdopen(int fildes, const char *mode);
-#endif
-#endif
-#endif // !MBED_CONF_PLATFORM_STDIO_MINIMAL_CONSOLE_ONLY
-    ssize_t write(int fildes, const void *buf, size_t nbyte);
-    ssize_t read(int fildes, void *buf, size_t nbyte);
-    int fsync(int fildes);
-    int isatty(int fildes);
-#if !MBED_CONF_PLATFORM_STDIO_MINIMAL_CONSOLE_ONLY
-    off_t lseek(int fildes, off_t offset, int whence);
-    int ftruncate(int fildes, off_t length);
-    int fstat(int fildes, struct stat *st);
-    int fcntl(int fildes, int cmd, ...);
-    int poll(struct pollfd fds[], nfds_t nfds, int timeout);
-    int close(int fildes);
-    int stat(const char *path, struct stat *st);
-    int statvfs(const char *path, struct statvfs *buf);
-    DIR *opendir(const char *);
-    struct dirent *readdir(DIR *);
-    int closedir(DIR *);
-    void rewinddir(DIR *);
-    long telldir(DIR *);
-    void seekdir(DIR *, long);
-    int mkdir(const char *name, mode_t n);
-#endif // !MBED_CONF_PLATFORM_STDIO_MINIMAL_CONSOLE_ONLY
-#if __cplusplus
-}; // extern "C"
-
-namespace ebox {
-#if !MBED_CONF_PLATFORM_STDIO_MINIMAL_CONSOLE_ONLY
-/** This call is an analogue to POSIX fdopen().
- *
- *  It associates a C stream to an already-opened FileHandle, to allow you to
- *  use C printf/scanf/fwrite etc. The provided FileHandle must remain open -
- *  it will be closed by the C library when fclose(FILE) is called.
- *
- *  The net effect is fdopen(bind_to_fd(fh), mode), with error handling.
- *
- *  @param fh       a pointer to an opened FileHandle
- *  @param mode     operation upon the file descriptor, e.g., "w+"
- *
- *  @returns        a pointer to FILE
- */
-std::FILE *fdopen(ebox::FileHandle *fh, const char *mode);
-
-/** Bind an mbed FileHandle to a POSIX file descriptor
- *
- * This is similar to fdopen, but only operating at the POSIX layer - it
- * associates a POSIX integer file descriptor with a FileHandle, to allow you
- * to use POSIX read/write calls etc. The provided FileHandle must remain open -
- * it will be closed when close(int) is called.
- *
- *  @param fh       a pointer to an opened FileHandle
- *
- *  @return         an integer file descriptor, or negative if no descriptors available
- */
-int bind_to_fd(ebox::FileHandle *fh);
-
-#else
-/** Targets may implement this to override how to write to the console.
- *
- * If the target has provided minimal_console_putc, this is called
- * to give the target a chance to specify an alternative minimal console.
- *
- * If this is not provided, serial_putc will be used if
- * `target.console-uart` is `true`, else there will not be an output.
- *
- *  @param c   The char to write
- *  @return    The written char
- */
-int minimal_console_putc(int c);
-
-/** Targets may implement this to override how to read from the console.
- *
- * If the target has provided minimal_console_getc, this is called
- * to give the target a chance to specify an alternative minimal console.
- *
- * If this is not provided, serial_getc will be used if
- * `target.console-uart` is `true`, else no input would be captured.
- *
- *  @return  The char read from the serial port
- */
-int minimal_console_getc();
-#endif // !MBED_CONF_PLATFORM_STDIO_MINIMAL_CONSOLE_ONLY
-
-} // namespace mbed
-
-#endif // __cplusplus
 
 #endif
 /**@}*/
