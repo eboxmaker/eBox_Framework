@@ -15,7 +15,7 @@
 #include "ebox.h"
 #include "ds18b20.h"
 #include "bsp_ebox.h"
-Ds18b20 ds(&PA0);
+Ds18b20 ds(&PA1);
 bool is_exist;
 void setup()
 {
@@ -28,6 +28,10 @@ void setup()
     {
         is_exist =  false;
         uart1.printf("√ª”–’“µΩDS18B20");
+    }
+    else
+    {
+        is_exist = true;
     }
     
 
