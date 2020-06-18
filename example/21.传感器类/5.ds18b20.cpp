@@ -29,6 +29,10 @@ void setup()
         is_exist =  false;
         uart1.printf("√ª”–’“µΩDS18B20");
     }
+    else
+    {
+        is_exist = true;
+    }
     
 
 }
