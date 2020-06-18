@@ -9,14 +9,20 @@ public:
     {
         pin = _pin;
     }
-    int begin();
+    bool begin();
     int reset();
     void write(uint8_t data);
     uint8_t read();
     float get_temp();
     int is_exist();
+    void loop();
+    bool update_temp();
 private:
     Gpio *pin;
+    float temperature;
+    uint8_t state;
+    uint32_t last;
+    uint8_t buf[10];
 
 };
 #endif
