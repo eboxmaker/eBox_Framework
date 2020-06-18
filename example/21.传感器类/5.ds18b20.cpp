@@ -14,26 +14,40 @@
 
 #include "ebox.h"
 #include "ds18b20.h"
-Ds18b20 ds(&PA0);
+#include "bsp_ebox.h"
+Ds18b20 ds(&PA1);
+bool is_exist;
 void setup()
 {
     int ret;
     ebox_init();
     uart1.begin(115200);
+    print_log();
     PB8.mode(OUTPUT_PP);
-    ret = ds.begin();
-    uart1.printf("%d\n", ret);
+    if(ds.begin()== false)
+    {
+        is_exist =  false;
+        uart1.printf("Ã»ÓÐÕÒµ½DS18B20");
+    }
+    
 
 }
 int main(void)
 {
     float temper;
     setup();
+    uint32_t last = millis();
     while(1)
     {
-        temper = ds.get_temp();
-        uart1.printf("%f\n", temper);
-        delay_ms(1000);
+        if(is_exist)
+        {
+            ds.loop();
+        }
+        if(millis() - last > 1000)
+        {
+            last = millis();
+            uart1.printf("%f\n", ds.get_temp());   
+        }
 
     }
 
