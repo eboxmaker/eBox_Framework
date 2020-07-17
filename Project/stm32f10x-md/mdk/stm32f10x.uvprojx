@@ -937,6 +937,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\w25xxx.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ADS8866.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\ADS8866.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

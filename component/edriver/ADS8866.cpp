@@ -17,7 +17,8 @@ uint16_t Ads8866::read()
 {
     uint16_t value = 0;
     convst->set();
-    for(int i = 0; i < 16; i++)
+         delay_us(1);
+   for(int i = 0; i < 128; i++)
     {
         clk->set();
         delay_us(1);
@@ -25,6 +26,7 @@ uint16_t Ads8866::read()
         delay_us(1);
     }
     convst->reset();
+    delay_us(1);
     for(int i = 0; i < 16; i++)
     {
         clk->set();
