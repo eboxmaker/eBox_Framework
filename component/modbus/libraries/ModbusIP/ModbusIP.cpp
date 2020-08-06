@@ -6,6 +6,7 @@
 
 ModbusIP::ModbusIP(): _server(MODBUSIP_PORT)
 {
+
 }
 
 void ModbusIP::config(uint8_t *mac)
@@ -39,11 +40,10 @@ void ModbusIP::config(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gatew
     Ethernet.begin(mac, ip, dns, gateway, subnet);
     _server.begin();
 }
-
-void ModbusIP::task()
+bool ModbusIP::task()
 {
+    bool flag = false;
     EthernetClient client = _server.available();
-
     if (client)
     {
         if (client.connected())
@@ -51,6 +51,7 @@ void ModbusIP::task()
             int i = 0;
             while (client.available())
             {
+                flag = true;
                 _MBAP[i] = client.read();
                 i++;
                 if (i == 7) break; //MBAP length has 7 bytes size
@@ -58,10 +59,11 @@ void ModbusIP::task()
             _len = _MBAP[4] << 8 | _MBAP[5];
             _len--;  // Do not count with last byte from MBAP
 
-            if (_MBAP[2] != 0 || _MBAP[3] != 0) return; //Not a MODBUSIP packet
-            if (_len > MODBUSIP_MAXFRAME) return;      //Length is over MODBUSIP_MAXFRAME
+            if (_MBAP[2] != 0 || _MBAP[3] != 0) return false; //Not a MODBUSIP packet
+            if (_len > MODBUSIP_MAXFRAME) return false;      //Length is over MODBUSIP_MAXFRAME
 
             _frame = (byte *) ebox_malloc(_len);
+            
             i = 0;
             while (client.available())
             {
@@ -69,7 +71,17 @@ void ModbusIP::task()
                 i++;
                 if (i == _len) break;
             }
-
+            
+//			 MB_DBG("====frame context(%d)===\n",_len);
+//            for(int i = 0; i < _len; i++)
+//            {
+//                MB_DBG_DATA("0x%x ",_frame[i]);
+//            }
+//            MB_DBG("====frame end===\n");
+            
+            if(cb_pre_deal != NULL){
+                cb_pre_deal(_frame);
+            }
             this->receivePDU(_frame);
             if (_reply != MB_REPLY_OFF)
             {
@@ -88,6 +100,7 @@ void ModbusIP::task()
                 {
                     sendbuffer[i + 7] = _frame[i];
                 }
+                data_com = true;
                 client.write(sendbuffer, _len + 7);
                 ebox_free(sendbuffer);
             }
@@ -97,6 +110,7 @@ void ModbusIP::task()
 #endif
             ebox_free(_frame);
             _len = 0;
+            return flag;
         }
     }
     else

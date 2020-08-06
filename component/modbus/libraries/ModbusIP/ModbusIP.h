@@ -12,6 +12,7 @@
 #define MODBUSIP_MAXFRAME 200
 
 #define TCP_KEEP_ALIVE 1
+typedef void (*MBcallbackPredeal)(byte *_frame);
 
 class ModbusIP : public Modbus
 {
@@ -26,7 +27,15 @@ public:
     void config(uint8_t *mac, IPAddress ip, IPAddress dns);
     void config(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gateway);
     void config(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gateway, IPAddress subnet);
-    void task();
+    bool task();
+    void attach(MBcallbackPredeal cb){ cb_pre_deal = cb;}
+       
+public:
+    bool data_com;
+
+private:
+    MBcallbackPredeal cb_pre_deal;
+//    EthernetClient mclient ;
 };
 
 #endif //MODBUSIP_H
