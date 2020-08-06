@@ -74,7 +74,8 @@ __INLINE  uint16_t write_without_check(uint32_t iAddress, uint8_t *buf, uint16_t
 
 Flash::Flash()
 {
-    _start_addr = FLASH_USER_START_ADDR;
+    //MCU_FLASH_PRG_END  +  FLASH_PAGE_SIZE
+    _start_addr = MCU_FLASH_PRG_END + (FLASH_PAGE_SIZE - MCU_FLASH_PRG_END % FLASH_PAGE_SIZE);
     _end_addr = FLASH_USER_END_ADDR;
 }
 
@@ -139,10 +140,13 @@ int Flash::write(uint32_t offsetAdd, uint8_t *buf, uint32_t iNbrToWrite)
 
     volatile FLASH_Status FLASHStatus = FLASH_COMPLETE;
 
-    if ((_start_addr == 0) || (iAddress == _end_addr))
+    
+    //if ((_start_addr == 0) || (iAddress >= _end_addr))
     {
-        IFLASH_DEBUG("write: flash 定义错误，请检查起始地址和页数量 s：%d e:0x%x,i:%d\r\n", _start_addr, _end_addr, iAddress);
-        return 0;
+        IFLASH_DEBUG("write: flash prg end：0x%x , page size = 0x%x\r\n", MCU_FLASH_PRG_END,FLASH_PAGE_SIZE);
+
+        IFLASH_DEBUG("write: flash 定义错误，请检查起始地址和页数量 s：0x%x e:0x%x,i:0x%x\r\n", _start_addr, _end_addr, iAddress);
+       // return 0;
     }
     FLASH_UnlockBank1();
 
