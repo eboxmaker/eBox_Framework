@@ -25,8 +25,12 @@
 #include "binary.h"
 #include "ebox_config.h"
 
-#define EBOX_VERSION "2.2"
 
+#define EBOX_VERSION "2.3.1"
+
+#define EBOX_MAJOR_VERSION           2 // 
+#define EBOX_MINOR_VERSION           3 // 
+#define EBOX_BUGFIX_VERSION          1 // 
 
 #if __cplusplus
 extern "C" {

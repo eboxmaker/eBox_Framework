@@ -2,15 +2,29 @@
     Modbus.h - Header for Modbus Base Library
     Copyright (C) 2014 Andr?Sarmento Barbosa
 */
-#include "ebox.h"
-#include "ebox_mem.h"
+
 #ifndef MODBUS_H
 #define MODBUS_H
+#include "ebox.h"
+#include "ebox_mem.h"
+
+#define MODBUS_DEBUG   false
+
+// Logging functions
+#if MODBUS_DEBUG && EBOX_DEBUG
+#define MB_DBG(...)  DBG("[MB DBG]"), DBG(__VA_ARGS__)
+#define MB_DBG_DATA(...)   DBG(__VA_ARGS__)
+#else
+#define MB_DBG(...)
+#define MB_DBG_DATA(...)
+#endif
+
 
 #define MAX_REGS     32
 #define MAX_FRAME   128
 //#define USE_HOLDING_REGISTERS_ONLY
 typedef void (*MBcallbackType)(uint8_t);
+typedef void (*MBcallbackBeforeType)(uint8_t,uint16_t,uint16_t);
 
 typedef unsigned int u_int;
 
@@ -57,6 +71,12 @@ private:
     TRegister *_regs_head;
     TRegister *_regs_last;
 
+    TRegister *_ists_regs_head;
+    TRegister *_ists_regs_last;
+
+    TRegister *_input_regs_head;
+    TRegister *_input_regs_last;
+
     void readRegisters(uint16_t startreg, uint16_t numregs);
     void writeSingleRegister(uint16_t reg, uint16_t value);
     void writeMultipleRegisters(byte *frame, uint16_t startreg, uint16_t numoutputs, byte bytecount);
@@ -70,13 +90,22 @@ private:
 #endif
 
     TRegister *searchRegister(uint16_t addr);
-
     void addReg(uint16_t address, uint16_t value = 0);
     bool Reg(uint16_t address, uint16_t value);
     uint16_t Reg(uint16_t address);
 
-    MBcallbackType callback;
+    TRegister *searchIstsRegister(uint16_t addr);
+    void addIstsReg(uint16_t address, uint16_t value = 0);
+    bool IstsReg(uint16_t address, uint16_t value);
+    uint16_t IstsReg(uint16_t address);
 
+    TRegister *searchInputRegister(uint16_t addr);
+    void addInputReg(uint16_t address, uint16_t value = 0);
+    bool InputReg(uint16_t address, uint16_t value);
+    uint16_t InputReg(uint16_t address);
+
+    MBcallbackType callback;
+    MBcallbackBeforeType callbackBefor;
 protected:
     byte *_frame;
     byte  _len;
@@ -104,6 +133,7 @@ public:
     uint16_t Ireg(uint16_t offset);
 #endif
     void attach(MBcallbackType cb){callback = cb;};
+    void attachBefor(MBcallbackBeforeType cb){callbackBefor = cb;};
 
 };
 
