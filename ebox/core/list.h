@@ -21,7 +21,9 @@
 #include "ebox_type.h"
 #include "ebox_core.h"
 #include "ebox_mem.h"
-
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
 typedef struct _node
 {
     void           *data;
@@ -64,4 +66,7 @@ class List
             return _size;
         }
 };
+#ifdef __cplusplus
+}
+#endif // __cplusplus   
 #endif

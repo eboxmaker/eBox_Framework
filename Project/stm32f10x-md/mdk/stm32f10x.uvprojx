@@ -10,13 +10,13 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060750::V5.06 update 6 (build 750)::.\ARMCC</pCCUsed>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F103C8</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F1xx_DFP.2.1.0</PackID>
+          <PackID>Keil.STM32F1xx_DFP.2.3.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x5000) IROM(0x08000000,0x10000) CPUTYPE("Cortex-M3") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -184,8 +184,6 @@
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
             <RvdsVP>0</RvdsVP>
-            <RvdsMve>0</RvdsMve>
-            <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -326,7 +324,7 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>1</uC99>
-            <uGnu>1</uGnu>
+            <uGnu>0</uGnu>
             <useXO>0</useXO>
             <v6Lang>0</v6Lang>
             <v6LangP>0</v6LangP>
@@ -352,7 +350,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <ClangAsOpt>4</ClangAsOpt>
+            <uClangAs>0</uClangAs>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -415,7 +413,7 @@
                     <NoWarn>2</NoWarn>
                     <uSurpInc>2</uSurpInc>
                     <useXO>2</useXO>
-                    <ClangAsOpt>0</ClangAsOpt>
+                    <uClangAs>2</uClangAs>
                     <VariousControls>
                       <MiscControls></MiscControls>
                       <Define></Define>
@@ -463,7 +461,7 @@
                     <NoWarn>2</NoWarn>
                     <uSurpInc>2</uSurpInc>
                     <useXO>2</useXO>
-                    <ClangAsOpt>0</ClangAsOpt>
+                    <uClangAs>2</uClangAs>
                     <VariousControls>
                       <MiscControls></MiscControls>
                       <Define></Define>
@@ -688,6 +686,11 @@
               <FileName>retarge.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\retarge.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>list_c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\list_c.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1052,46 +1055,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>LittleFs</GroupName>
-          <Files>
-            <File>
-              <FileName>lfs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\littlefs\littlefs\lfs.c</FilePath>
-            </File>
-            <File>
-              <FileName>lfs_util.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\littlefs\littlefs\lfs_util.c</FilePath>
-            </File>
-            <File>
-              <FileName>LittleFileSystem.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\littlefs\LittleFileSystem.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>fat</GroupName>
-          <Files>
-            <File>
-              <FileName>ff.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\fat\ChaN\ff.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ffunicode.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\fat\ChaN\ffunicode.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FATFileSystem.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\fat\FATFileSystem.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
@@ -1110,20 +1073,5 @@
     </components>
     <files/>
   </RTE>
-
-  <LayerInfo>
-    <Layers>
-      <Layer>
-        <LayName>&lt;Project Info&gt;</LayName>
-        <LayDesc></LayDesc>
-        <LayUrl></LayUrl>
-        <LayKeys></LayKeys>
-        <LayCat></LayCat>
-        <LayLic></LayLic>
-        <LayTarg>0</LayTarg>
-        <LayPrjMark>1</LayPrjMark>
-      </Layer>
-    </Layers>
-  </LayerInfo>
 
 </Project>
