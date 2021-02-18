@@ -52,6 +52,9 @@ public:
     // 等待设备响应
     virtual uint8_t check_busy(uint16_t slaveAddr);
 
+    virtual uint8_t beginTransmission(uint16_t slaveAddr);
+    virtual uint8_t endTransmission(bool state = true);
+
     // 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
     virtual uint8_t take(Config_t *newConfig);
     // 释放I2C控制权
@@ -104,6 +107,9 @@ public:
     virtual uint8_t	  read_buf(uint16_t slaveAddr,uint16_t regAddr, uint8_t *data, uint16_t nRead);
     // 等待设备响应
     virtual uint8_t   check_busy(uint16_t slaveAddr);
+
+    virtual uint8_t beginTransmission(uint16_t slaveAddr);
+    virtual uint8_t endTransmission(bool state = true);
 
     // 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
     virtual uint8_t   take(Config_t *newConfig );

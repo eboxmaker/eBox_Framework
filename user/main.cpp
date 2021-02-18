@@ -15,22 +15,14 @@
 #include "ebox.h"
 #include "bsp_ebox.h"
 #include "list_c.h"
+#include "PN532.h"
+#include "PN532_I2C.h"
 
-typedef struct student {
-  char first_name[10];
-  char last_name[10];
-  unsigned int age;
-  struct list_head node_student;
-} student_t;
+PN532_I2C pn532i2c(&i2c1);
+PN532 nfc(pn532i2c);
 
-
-
-struct  intList {
-    struct list_head list;
-    int val;
-};
-
-
+    uint16_t slaveAddr;
+    I2c::Config_t cfg;
 
 void setup()
 {
@@ -38,10 +30,46 @@ void setup()
     ebox_init();
     uart1.begin(115200);
     print_log();
-    PB8.mode(OUTPUT_PP);
+
+    PB8.mode(INPUT);
+  Serial.begin(115200);
+  Serial.println("Hello!\n");
+//    cfg.speed = I2c::K100;
+//    cfg.regAddrBits = I2c::BIT8;
+//    slaveAddr = 0x48;
+//    i2c1.begin(&cfg);
+
+//    
+//    uint8_t value = 0;
+//    value = i2c1.read(slaveAddr,0x87);
+//    uart1.printf("0x87:0x%02x\n",value);
+//    i2c1.write(slaveAddr,0x87,0x01);
+//    value = i2c1.read(slaveAddr,0x87);
+//    uart1.printf("0x87:0x%02x\n",value); 
+//    
+//    value = i2c1.read(slaveAddr,0xa8);
+//    uart1.printf("0xa8:0x%02x\n",value);
+//    i2c1.write(slaveAddr,0xa8,0x01);
+//    value = i2c1.read(slaveAddr,0xa8);
+//    uart1.printf("0xa8:0x%02x\n",value); 
+
+    nfc.begin();
+
+  uint32_t versiondata = nfc.getFirmwareVersion();
+  if (! versiondata) {
+    Serial.print("Didn't find PN53x board");
+    while (1); // halt
+  }
+  // Got ok data, print it out!
+  Serial.print("Found chip PN5"); Serial.println((versiondata>>24) & 0xFF, HEX); 
+  Serial.print("Firmware ver. "); Serial.print((versiondata>>16) & 0xFF, DEC); 
+  Serial.print('.'); Serial.println((versiondata>>8) & 0xFF, DEC);
+  
+  // configure board to read RFID tags
+  nfc.SAMConfig();
+  
+  Serial.println("Waiting for an ISO14443A Card ...");    
     
-    
-    student_t *stu = NULL;
     
 }
 int main(void)
@@ -50,159 +78,99 @@ int main(void)
     int free;
     int i = 0;
     setup();
-    uint32_t last = millis();
-    
-    struct list_head *pos = NULL;
-    struct list_head *tmp = NULL;
-    struct intList *pnode;
-    
-//    LIST_HEAD(mylist);
-    struct list_head mylist;
-    INIT_LIST_HEAD(&mylist);
-    
-    if(list_empty(&mylist))
-    {
-        uart1.printf("链表为空\n");
-    }
-    free = ebox_get_free();
-    uart1.printf("free:%d\n",free); 
-    for(int i = 0; i < 10; i++)
-    {
-        struct intList *ptr = (struct intList *)ebox_malloc(sizeof(intList));
-        ptr->val = i;
-        
-        //插入链表尾部
-        list_add_tail(&(ptr->list),&mylist);
-     
-        //链表遍历
-        list_for_each(pos, &mylist) {
-            pnode = list_entry(pos, struct intList, list);
-            uart1.printf("%d ", pnode->val);
-        }
-        uart1.printf("\n");  
-    }
-    uart1.flush();
-    free = ebox_get_free();
-    uart1.printf("free:%d\n",free);    
-    
-    //查找链表中的元素
-    uart1.printf("\n查找第一个val==2的链表位置\n");
-    int location = 0;
-    list_for_each(pos, &mylist) {
-        pnode = list_entry(pos, struct intList, list);
-        location++;
-        if(pnode->val == 2)
-        {
-            uart1.printf("location=%d\n",location);
-        }
-        
-    }
-    uart1.printf("mylist len:%d\n",list_len(&mylist));  
-
-    
-
-    //删除链表中的元素
-    uart1.printf("\n删除偶数位置的元素\n");
-    index= 0 ;
-    list_for_each(pos, &mylist) {
-        pnode = list_entry(pos, struct intList, list);
-        index++;
-        if(index % 2 == 0)
-        {
-            tmp = pos;
-            pos = pos->prev;
-            list_del(tmp);
-            ebox_free(pnode);
-        }
-        
-    }
-    //新的链表打印
-    list_for_each(pos, &mylist) {
-        pnode = list_entry(pos, struct intList, list);
-        uart1.printf("%d ", pnode->val);
-    }
-    uart1.printf("\n");  
-    uart1.printf("删除成功\n");
-    uart1.flush();
-    free = ebox_get_free();
-    uart1.printf("free:%d\n",free);  
-    
-    
-    uart1.printf("\n插入链表\n");
-    struct intList addition;
-    addition.val = 1;
-    struct list_head *pre,*next;
-    int state = 0;
-    list_for_each(pos, &mylist) {
-        pnode = list_entry(pos, struct intList, list);
-        if(pnode->val == 0)
-        {
-            pre = pos;
-            state = 1;
-        }
-        if(pnode->val == 2)
-        {
-            next = pos;
-            state = 2;
-        }
-        if(state == 2)
-        {
-            __list_add(&addition.list,pre,next);
-        }
-    }
-    //新的链表打印
-    list_for_each(pos, &mylist) {
-        pnode = list_entry(pos, struct intList, list);
-        uart1.printf("%d ", pnode->val);
-    }
-    uart1.printf("\n");  
-
-    
-    uart1.printf("\n安全遍历链表\n");
-    index= 0 ;
-    list_for_each_safe(pos, tmp,&mylist)
-    {
-        index++;
-        if(index == 2)
-            list_del(pos);
-    }
-    //新的链表打印
-    list_for_each(pos, &mylist) {
-        pnode = list_entry(pos, struct intList, list);
-        uart1.printf("%d ", pnode->val);
-    }
-    uart1.printf("\n");  
-    
-    
-    uart1.printf("\n新建链表\n");
-    //创建新的链表
-    LIST_HEAD(list2);
-    for(int i = 0; i < 10; i++)
-    {
-        struct intList *ptr = (struct intList *)ebox_malloc(sizeof(intList));
-        ptr->val = 10+i;
-        //插入链表尾部
-        list_add_tail(&(ptr->list),&list2);
-    }
-    //新的链表打印
-    list_for_each(pos, &list2) {
-        pnode = list_entry(pos, struct intList, list);
-        uart1.printf("%d ", pnode->val);
-    }
-    uart1.printf("\n");
-    
-    uart1.printf("\n拼接链表\n");
-    list_splice(&list2,&mylist);
-        //新的链表打印
-    list_for_each(pos, &mylist) {
-        pnode = list_entry(pos, struct intList, list);
-        uart1.printf("%d ", pnode->val);
-    }
-    uart1.printf("\n");
-    
+   
     while(1)
     {
+    uint8_t success;
+  uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
+  uint8_t uidLength;                        // Length of the UID (4 or 7 bytes depending on ISO14443A card type)
+    
+  // Wait for an ISO14443A type cards (Mifare, etc.).  When one is found
+  // 'uid' will be populated with the UID, and uidLength will indicate
+  // if the uid is 4 bytes (Mifare Classic) or 7 bytes (Mifare Ultralight)
+  success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength);
+  
+  if (success) {
+    // Display some basic information about the card
+    Serial.println("Found an ISO14443A card");
+    Serial.print("  UID Length: ");Serial.print(uidLength, DEC);Serial.println(" bytes");
+    Serial.print("  UID Value: ");
+    nfc.PrintHex(uid, uidLength);
+    Serial.println("");
+    
+    if (uidLength == 4)
+    {
+      // We probably have a Mifare Classic card ... 
+      Serial.println("Seems to be a Mifare Classic card (4 byte UID)");
+	  
+      // Now we need to try to authenticate it for read/write access
+      // Try with the factory default KeyA: 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF
+      Serial.println("Trying to authenticate block 4 with default KEYA value");
+      uint8_t keya[6] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+	  
+	  // Start with block 4 (the first block of sector 1) since sector 0
+	  // contains the manufacturer data and it's probably better just
+	  // to leave it alone unless you know what you're doing
+      success = nfc.mifareclassic_AuthenticateBlock(uid, uidLength, 4, 0, keya);
+	  
+      if (success)
+      {
+        Serial.println("Sector 1 (Blocks 4..7) has been authenticated");
+        uint8_t data[16];
+		
+        // If you want to write something to block 4 to test with, uncomment
+		// the following line and this text should be read back in a minute
+        // data = { 'a', 'd', 'a', 'f', 'r', 'u', 'i', 't', '.', 'c', 'o', 'm', 0, 0, 0, 0};
+        // success = nfc.mifareclassic_WriteDataBlock (4, data);
+
+        // Try to read the contents of block 4
+        success = nfc.mifareclassic_ReadDataBlock(4, data);
+		
+        if (success)
+        {
+          // Data seems to have been read ... spit it out
+          Serial.println("Reading Block 4:");
+          nfc.PrintHexChar(data, 16);
+          Serial.println("");
+		  
+          // Wait a bit before reading the card again
+          delay_ms(1000);
+        }
+        else
+        {
+          Serial.println("Ooops ... unable to read the requested block.  Try another key?");
+        }
+      }
+      else
+      {
+        Serial.println("Ooops ... authentication failed: Try another key?");
+      }
+    }
+    
+    if (uidLength == 7)
+    {
+      // We probably have a Mifare Ultralight card ...
+      Serial.println("Seems to be a Mifare Ultralight tag (7 byte UID)");
+	  
+      // Try to read the first general-purpose user page (#4)
+      Serial.println("Reading page 4");
+      uint8_t data[32];
+      success = nfc.mifareultralight_ReadPage (4, data);
+      if (success)
+      {
+        // Data seems to have been read ... spit it out
+        nfc.PrintHexChar(data, 4);
+        Serial.println("");
+		
+        // Wait a bit before reading the card again
         delay_ms(1000);
+      }
+      else
+      {
+        Serial.println("Ooops ... unable to read the requested page!?");
+      }
+    }
+  }
     }
 
 }

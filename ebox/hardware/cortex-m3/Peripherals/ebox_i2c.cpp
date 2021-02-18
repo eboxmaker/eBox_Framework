@@ -197,7 +197,7 @@ uint8_t mcuI2c::write_buf(uint16_t slaveAddr,uint16_t regAddr, uint8_t *data, ui
   */
 uint8_t mcuI2c::read(uint16_t slaveAddr)
 {
-    uint8_t data ;
+    uint8_t data = 0;
     _start();
     _send7bitsAddress(slaveAddr, READ);
     _sendNack();
@@ -325,7 +325,19 @@ uint8_t mcuI2c:: check_busy(uint16_t slaveAddr)
     delay_ms(1);
     return EOK;
 }
+uint8_t mcuI2c::beginTransmission(uint16_t slaveAddr)
+{
+    uint8_t err = 0;
+    err += _start();
+    err += _send7bitsAddress(slaveAddr, WRITE);
+    _sendNack();
 
+}
+uint8_t mcuI2c::endTransmission(bool state)
+{
+//    while (!I2C_CheckEvent(_i2cx, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+    I2C_GenerateSTOP(_i2cx, ENABLE);
+}
 /**
   *@brief    获取I2C控制权
   *@param    timing:  时钟时序，通过readConfig获取
