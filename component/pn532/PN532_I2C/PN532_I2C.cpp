@@ -2,34 +2,25 @@
 #include "PN532_I2C.h"
 #include "debug.h"
 
-#define PN532_I2C_ADDRESS       (0x48 >> 1)
+#define PN532_I2C_ADDRESS       (0x48)
 
 
-PN532_I2C::PN532_I2C(I2c *wire,uint16_t slaveAddr)
+PN532_I2C::PN532_I2C(TwoWire *wire,uint16_t slaveAddr)
 {
     command = 0;
     this->_wire = wire;
     this->slaveAddr = PN532_I2C_ADDRESS;
-    cfg.regAddrBits = I2c::BIT8;
-    cfg.speed = I2c::K100;
+
 }
 
 void PN532_I2C::begin()
 {
-    _wire->begin(&cfg);
+    _wire->begin();
 }
 
 void PN532_I2C::wakeup()
-{
-//    PB7.mode(OUTPUT_OD_PU);
-//    PB7.set();
-//    delay_ms(10);
-//    PB7.reset();
-//    delay_ms(40);
-//    PB7.set();
-//    delay_ms(10);
-    
-    _wire->beginTransmission(0x48);
+{   
+    _wire->beginTransmission(PN532_I2C_ADDRESS);
     delay_ms(20);
     _wire->endTransmission();                    // I2C end
 }
@@ -37,6 +28,7 @@ void PN532_I2C::wakeup()
 int8_t PN532_I2C::writeCommand(const uint8_t buf[], uint8_t len)
 {
     command = buf[0];
+    _wire->beginTransmission(PN532_I2C_ADDRESS);
     
     write(PN532_PREAMBLE);
     write(PN532_STARTCODE1);
@@ -52,13 +44,15 @@ int8_t PN532_I2C::writeCommand(const uint8_t buf[], uint8_t len)
     DMSG("write: ");
     
 #if 1    
-//    uint8_t mcuI2c::write_buf(uint16_t slaveAddr,uint8_t *data, uint16_t nWrite)
-
-    _wire->write_buf(slaveAddr,(uint8_t*)buf,(uint16_t)len);
     for (uint8_t i = 0; i < len; i++) {
+        if (write(buf[i])) {
             sum += buf[i];
+            
             DMSG_HEX(buf[i]);
-
+        } else {
+            DMSG("\nToo many data to send, I2C doesn't support such a big packet\n");     // I2C max packet: 32 bytes
+            return PN532_INVALID_FRAME;
+        }
     }
 #else
     uint8_t bytes = 6;
@@ -81,7 +75,8 @@ int8_t PN532_I2C::writeCommand(const uint8_t buf[], uint8_t len)
     write(checksum);
     write(PN532_POSTAMBLE);
     
-    
+    _wire->endTransmission();
+
     DMSG('\n');
 
     return readAckFrame();
@@ -92,9 +87,12 @@ int16_t PN532_I2C::readResponse(uint8_t buf[], uint8_t len, uint16_t timeout)
     uint16_t time = 0;
 
     do {
-        if (read() & 1) {  // check first byte --- status
-            break;         // PN532 is ready
+        if (_wire->requestFrom(PN532_I2C_ADDRESS, len + 2)) {
+            if (read() & 1) {  // check first byte --- status
+                break;         // PN532 is ready
+            }
         }
+
         delay_ms(1);
         time++;
         if ((0 != timeout) && (time > timeout)) {
@@ -158,10 +156,12 @@ int8_t PN532_I2C::readAckFrame()
     
     uint16_t time = 0;
     do {
-        uint8_t value = read();
-        if (value & 1) {  // check first byte --- status
-            break;         // PN532 is ready
+        if (_wire->requestFrom(PN532_I2C_ADDRESS,  sizeof(PN532_ACK) + 1)) {
+            if (read() & 1) {  // check first byte --- status
+                break;         // PN532 is ready
+            }
         }
+
         delay_ms(1);
         time++;
         if (time > PN532_ACK_WAIT_TIME) {

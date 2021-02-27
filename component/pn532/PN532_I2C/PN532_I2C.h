@@ -4,10 +4,12 @@
 
 #include <ebox_core.h>
 #include "PN532Interface.h"
+#include "TwoWire.h"
+
 
 class PN532_I2C : public PN532Interface {
 public:
-    PN532_I2C(I2c *wire,uint16_t slaveAddr =  (0x48 >> 1));
+    PN532_I2C(TwoWire *wire,uint16_t slaveAddr =  (0x48 ));
     
     void begin();
     void wakeup();
@@ -15,20 +17,19 @@ public:
     int16_t readResponse(uint8_t buf[], uint8_t len, uint16_t timeout);
     
 private:
-    I2c* _wire;
+    TwoWire* _wire;
     uint8_t command;
     
     int8_t readAckFrame();
     
     inline uint8_t write(uint8_t data) {
-        return _wire->write(slaveAddr,data);
+        return _wire->write(data);
     }
     
     inline uint8_t read() {
-        return _wire->read(slaveAddr);
+        return _wire->read();
     }
     uint16_t slaveAddr;
-    I2c::Config_t cfg;
 
 };
 

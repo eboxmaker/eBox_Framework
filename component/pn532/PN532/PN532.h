@@ -82,7 +82,7 @@
 
 #define PN532_WAKEUP                        (0x55)
 
-#define PN532_I2C_ADDRESS                   (0x48 >> 1)
+#define PN532_I2C_ADDRESS                   (0x48)
 #define PN532_I2C_READBIT                   (0x01)
 #define PN532_I2C_BUSY                      (0x00)
 #define PN532_I2C_READY                     (0x01)

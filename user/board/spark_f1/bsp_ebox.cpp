@@ -50,7 +50,7 @@ void print_log(const char *name, const char *date)
     UART.print("* 硬件平台      : ");       /* 硬件平台 */
     UART.println(HARDWARE);
     UART.print("* EBOX库版本    : ebox_" );/* 版本信息 */
-    UART.println(EBOX_VERSION);
+    UART.println("123");
     UART.print("*                     CPU 信息\r\n");	/* CPU信息 */
     UART.println();
     UART.print("* CPU TYPE      : ");	    /* 打印CPU类型 */
