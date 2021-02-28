@@ -45,6 +45,7 @@ extern "C" {
     extern void        (*ebox_reset)();
     extern uint32_t    (*micros)();
     extern uint32_t    (*millis)();
+    extern void        (*delay)(uint32_t ms);
     extern void        (*delay_ms)(uint32_t ms);
     extern void        (*delay_us)(uint32_t us);
     extern size_t       ebox_printf(const char *fmt, ...);

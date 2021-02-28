@@ -9,6 +9,7 @@ extern "C" {
     void        (*ebox_reset)(void);
     uint32_t    (*micros)(void);
     uint32_t    (*millis)(void);
+    void        (*delay)(uint32_t ms);
     void        (*delay_ms)(uint32_t ms);
     void        (*delay_us)(uint32_t us);
 

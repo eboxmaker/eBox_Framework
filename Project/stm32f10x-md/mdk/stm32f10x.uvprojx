@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>ARM_MATH_CM3</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\ebox;..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\ebox\core\port;..\..\..\ebox\interface\TwoWire;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266;..\..\..\component\MPU6050;..\..\..\component\mqtt\src;..\..\..\os\ebox_os;..\..\..\component\Ethernet3;..\..\..\component\Ethernet3\utility;..\..\..\component\modbus\libraries\ModbusIP;..\..\..\component\soft_uart;..\..\..\component\Firmata;..\..\..\component\Firmata\utility;..\..\..\component\arducat\libraries\arducat;..\..\..\component\fat;..\..\..\component\littlefs;..\..\..\component\pn532\PN532;..\..\..\component\pn532\PN532_I2C</IncludePath>
+              <IncludePath>..\..\..\ebox;..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\ebox\core\port;..\..\..\ebox\interface\TwoWire;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266;..\..\..\component\MPU6050;..\..\..\component\mqtt\src;..\..\..\os\ebox_os;..\..\..\component\Ethernet3;..\..\..\component\Ethernet3\utility;..\..\..\component\modbus\libraries\ModbusIP;..\..\..\component\soft_uart;..\..\..\component\Firmata;..\..\..\component\Firmata\utility;..\..\..\component\arducat\libraries\arducat;..\..\..\component\fat;..\..\..\component\littlefs;..\..\..\component\pn532</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -989,16 +989,6 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\user\board\spark_f1\ebox_config.h</FilePath>
             </File>
-            <File>
-              <FileName>sigmoid.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\sigmoid.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>data.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\data.cpp</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -1070,19 +1060,9 @@
           <GroupName>pn532</GroupName>
           <Files>
             <File>
-              <FileName>PN532.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\pn532\PN532\PN532.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>mac_link.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\pn532\PN532\mac_link.cpp</FilePath>
-            </File>
-            <File>
               <FileName>PN532_I2C.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\component\pn532\PN532_I2C\PN532_I2C.cpp</FilePath>
+              <FilePath>..\..\..\component\pn532\PN532_I2C.cpp</FilePath>
             </File>
           </Files>
         </Group>

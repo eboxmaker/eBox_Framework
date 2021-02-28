@@ -14,8 +14,6 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "at24c02.h"
 #include "at24x.h"
 
-#include "wire.h"
-TwoWire Wire(&PB10, &PB11);
 At24x ee(&Wire);
 /**
     *	1	此例程需要调用eDrive目录下的at24c02驱动

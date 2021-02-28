@@ -93,23 +93,26 @@ private:
     Gpio            *_sda;
     Gpio            *_scl;
 	uint8_t   	 	_bitDelay;	// i2c时序
-    uint16_t        _bitTimeout;
-
+    uint8_t     _err_at;
 
 
     // private methods
+    i2c_err_t _write(const uint8_t *data, size_t);
+    i2c_err_t _write(uint8_t address,const uint8_t *data, size_t quantity, int sendStop);
+    size_t _read(uint8_t address,uint8_t *data, uint16_t quantity,uint8_t sendStop);
 
-    int i2c_start(void);
-    void i2c_stop(void);
-    i2c_err_t i2c_waitAck();
-    i2c_err_t i2c_write( uint8_t c );
-    i2c_err_t i2c_write(const uint8_t *, size_t);
-    i2c_err_t i2c_write(uint8_t address,const uint8_t *data, size_t quantity, int sendStop);
-    uint8_t i2c_read();
-    size_t i2c_read(uint8_t address,uint8_t *data, uint16_t quantity,uint8_t sendStop);
-    int8_t i2c_sendAck();
-    int8_t i2c_sendNack();
+
+    //基础的i2c功能
+    void _start(void);
+    void _stop(void);
+    i2c_err_t _waitAck();
+    i2c_err_t _sendByte( uint8_t data);
+    i2c_err_t  _send7bitsAddress(uint8_t slaveAddr, uint8_t WR);
+    uint8_t _receiveByte();
+    int8_t _sendAck();
+    int8_t _sendNack();
     
+        
 
 };
 #endif

@@ -3,7 +3,7 @@
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
-#define debug 0
+#define debug 1
 #endif
 
 #if debug
@@ -12,26 +12,19 @@
 #define  I2C_DEBUG(...)
 #endif
 
+//#define _bitDelay 5
 
 TwoWire::TwoWire(Gpio *sclPin, Gpio *sdaPin)
 {
     _scl = sclPin;
     _sda = sdaPin;
     setTimeout(100);
-    _bitTimeout = 10;
 }
 
 
 void TwoWire::begin()
 {
-    _sda->mode(OUTPUT_OD_PU);
-    _scl->mode(OUTPUT_OD_PU);
-    _sda->set();
-    _scl->set();
-    
-    setClock(K100);
-
-    I2C_DEBUG("scl pin id 0x%x state is %d , sda pin id 0x%x  state is %d \r\n", _scl->id, _scl->read(), _sda->id, _sda->read());
+    begin(K100);
 }
 
 
@@ -43,7 +36,7 @@ void TwoWire::begin()
 void TwoWire::begin(Speed_t speed)
 {
     _sda->mode(OUTPUT_OD_PU);
-    _scl->mode(OUTPUT_OD_PU);
+    _scl->mode(OUTPUT_PP_PU);
     _sda->set();
     _scl->set();
 
@@ -67,12 +60,13 @@ void TwoWire::setClock(Speed_t speed)
         _bitDelay = 1;    // 约200k
         break;
     case K100:
-        _bitDelay = 3;    // 约100k
+        _bitDelay = 3;    // 约200k
         break;
     default:
-        _bitDelay = 4;    // 约80k
+        _bitDelay = 4;    // 约200k
         break;
     }
+    ebox_printf("speed:%d\n_bit:%d\nbit:%d\n",speed,_bitDelay,_bitDelay);
 }
 
 //
@@ -84,6 +78,7 @@ void TwoWire::beginTransmission(uint8_t address)
     txAddress = address;
     txIndex = 0;
     txLength = 0;
+    _err_at = 0;
 }
 
 
@@ -99,7 +94,7 @@ uint8_t TwoWire::endTransmission(void)
 }
 uint8_t TwoWire::endTransmission(uint8_t sendStop)
 {   
-    uint8_t ret = i2c_write(txAddress, txBuffer, txLength, sendStop);
+    uint8_t ret = _write(txAddress, txBuffer, txLength, sendStop);
     txIndex = 0;
     txLength = 0;
     transmitting = 0;
@@ -135,7 +130,7 @@ uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint32_t iaddres
         quantity = I2C_BUFFER_LENGTH;
     }
     // perform blocking read into buffer
-    size_t read = i2c_read(address, rxBuffer, quantity, sendStop);
+    size_t read = _read(address, rxBuffer, quantity, sendStop);
     // set rx buffer iterator vars
     rxIndex = 0;
     rxLength = read;
@@ -230,23 +225,105 @@ void TwoWire::flush(void)
 //--------------------------------------------------------------------
 
 
-
-
-// Send a START Condition
-//
-int TwoWire::i2c_start(void)
+i2c_err_t TwoWire::_write(const uint8_t *data, size_t quantity)
 {
-    _sda->set();          // SDA高
-    _scl->set();          // SCL高
-    delay_us(_bitDelay);
-    _sda->reset();        // SDA拉低
-    delay_us(_bitDelay);
-    _scl->reset();        //SCL拉低
-    delay_us(_bitDelay);
-    return EOK;
+    i2c_err_t ret;
+    for(int i = 0; i < quantity; i++) {
+        ret = _sendByte(data[i]);
+        if(ret != I2C_ERROR_OK)
+        {
+            return ret;
+        }
+    }
+    return ret;
 }
 
-void TwoWire::i2c_stop(void)
+/*
+ * Output   0 .. success
+ *          1 .. length to long for buffer
+ *          2 .. address send, NACK received
+ *          3 .. data send, NACK received
+ *          4 .. other twi error (lost bus arbitration, bus error, ..)
+ *          5 .. timeout
+ */
+i2c_err_t TwoWire::_write(uint8_t address,const uint8_t *data, size_t quantity, int sendStop)
+{
+    i2c_err_t ret;
+    _start();
+    ret = _send7bitsAddress(address ,0); // clr read bit
+    if(ret != I2C_ERROR_OK)
+    {
+        ret =  I2C_ERROR_ADDR_NACK_NO_RECV;
+        I2C_DEBUG("I2C_ERROR_ADDR_NACK_NO_RECV\n");
+    }
+//    delay_us(200);
+    if(quantity != 0)
+    {
+        ret = _write(data, quantity);                
+        if(ret != I2C_ERROR_OK)
+        {
+            ret = I2C_ERROR_DATA_NACK_NO_RECV;
+            I2C_DEBUG("I2C_ERROR_DATA_NACK_NO_RECV\n");
+        }
+    }
+    if(sendStop)
+    {
+        _stop();
+    }
+    return ret;
+}
+/**
+  *@brief    指定寄存器连续读取. start->WslaveAddr->regAddr->RSlaverAddr->data...->nRead==1->Nack->stop->data
+  *@param    uint8_t slaveAddr:  从机地址
+  *          uint16_t regAddr: 寄存器地址
+  *          uint8_t *data: 读取到的数据
+  *          uint16_t nRead：要读取的数据长度
+  *          : 超时
+  *@retval   EOK，EWAIT
+  */
+size_t TwoWire::_read(uint8_t address,uint8_t *data, uint16_t length,uint8_t sendStop)
+{
+    int ret = 0;
+    _start();
+    ret = _sendByte(address | 0x01); // clr read bit
+    if(ret != I2C_ERROR_OK)
+        ret = 0;
+    
+    ret = length;
+    while (length--)
+    {
+        *data= _receiveByte();
+        data++;
+        if (length == 0)
+        {
+            _sendNack();
+            _stop();
+            break;
+        }
+        _sendAck();
+    }
+    return ret;
+}
+//---------------------------------------------------------------------------
+
+
+/**
+  * @brief 发送一个START信号.SCL为高电平时，SDA由高电平向低电平跳变，开始传送数据
+  * @param 无.
+  * @return 无.
+  */
+void TwoWire::_start(void)
+{
+    _sda->reset();        // SDA拉低
+    delay_us(_bitDelay);
+}
+
+/**
+  * @brief 发送一个STOP信号. SCL为高电平时，SDA由低电平向高电平跳变，结束传送数据
+  * @param 无.
+  * @return 无.
+  */
+void TwoWire::_stop(void)
 {   
     _sda->reset();      // SDA低电平
     _scl->set();        // SCL拉高并保持
@@ -260,16 +337,23 @@ void TwoWire::i2c_stop(void)
 /**
  * @brief 等待一个ACK应答. 第9个clock，若从IC发ACK，SDA会被拉低
  * @param 无.
- * @return EOK,EWAIT.
+ * @return 
+ *          0 .. success
+ *          1 .. length to long for buffer
+ *          2 .. address send, NACK received
+ *          3 .. data send, NACK received
+ *          4 .. other twi error (lost bus arbitration, bus error, ..)
+ *          5 .. timeout
  */
-i2c_err_t TwoWire::i2c_waitAck()
+i2c_err_t TwoWire::_waitAck()
 {
     i2c_err_t ret;
+    _err_at++;
     _sda->set();
     delay_us(_bitDelay);
     _scl->set();
     delay_us(_bitDelay);
-    uint32_t last = millis();
+    uint8_t cnt = 0;
     while(1)
     {
         if (!_sda->read())	//SDA为低则从设备返回Ack，否则没返回
@@ -277,13 +361,14 @@ i2c_err_t TwoWire::i2c_waitAck()
             ret = I2C_ERROR_OK;
             break;
         }
-        else if(millis() - last > _bitTimeout)
+        else if(cnt >= 2)
         {
             ret = I2C_ERROR_TIMEOUT;
-            I2C_DEBUG("I2C_ERROR_TIMEOUT\n");
+            I2C_DEBUG("I2C_ERROR_TIMEOUT(at:%d)\n",_err_at );
             break;
         }
         delay_us(_bitDelay);
+        cnt++;
     }
     _scl->reset();
     delay_us(_bitDelay);
@@ -291,18 +376,21 @@ i2c_err_t TwoWire::i2c_waitAck()
     return ret;
 }
 /*
- * Output   0 .. success
+  * @brief 发送数据.
+  * @param[in] byte 将被发送的数据.
+  * @return 
+ *          0 .. success
  *          1 .. length to long for buffer
  *          2 .. address send, NACK received
  *          3 .. data send, NACK received
  *          4 .. other twi error (lost bus arbitration, bus error, ..)
  *          5 .. timeout
  */
-i2c_err_t TwoWire::i2c_write( uint8_t c )
+i2c_err_t TwoWire::_sendByte( uint8_t c )
 {
-    i2c_err_t ret;
     uint8_t ii = 8;
-    _scl->reset(); //此时SCL已经是低
+    _scl->reset();        //SCL拉低
+    delay_us(_bitDelay);
     while( ii-- )
     {
         _sda->write(c & 0x80);   // SCL低电平时将数据送到SDA
@@ -312,50 +400,31 @@ i2c_err_t TwoWire::i2c_write( uint8_t c )
         c = c << 1;
         _scl->reset();
     }
-    ret = i2c_waitAck();
+    delay_us(_bitDelay);
+    i2c_err_t ret = _waitAck();
     
     return ret;
 }
-i2c_err_t TwoWire::i2c_write(const uint8_t *data, size_t quantity)
-{
-    int i = 0;
-    for( i = 0; i < quantity; i++) {
-        i2c_write(data[i]);
-        
-    }
-    return I2C_ERROR_OK;
-}
 
-/*
- * Output   0 .. success
- *          1 .. length to long for buffer
- *          2 .. address send, NACK received
- *          3 .. data send, NACK received
- *          4 .. other twi error (lost bus arbitration, bus error, ..)
- *          5 .. timeout
+/**
+ * @brief 发送7bit从机地址位.
+ *
+ * @param[in] slave_address 7bit从机地址位.
+ *
+ * @return 发送结果.返回0表示发送成功，返回-1表示发送失败.
  */
-i2c_err_t TwoWire::i2c_write(uint8_t address,const uint8_t *data, size_t quantity, int sendStop)
+i2c_err_t	TwoWire::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
 {
-    i2c_start();
-    i2c_err_t ret = i2c_write(address & 0xfe); // clr read bit
-    if(ret != I2C_ERROR_OK)
-        ret = I2C_ERROR_ADDR_NACK_NO_RECV;
-    if(quantity != 0)
-    {
-        ret = i2c_write(data, quantity);                
-        if(ret != I2C_ERROR_OK)
-            ret = I2C_ERROR_DATA_NACK_NO_RECV;
-    }
-    if(sendStop)
-    {
-        i2c_stop();
-    }
-    return ret;
+    // 写，从地址最低位置0；读，从地址最低位置1；
+    slaveAddr = (WR == 0) ? (slaveAddr & 0xfe) : (slaveAddr | 0x01);
+    return _sendByte(slaveAddr);;
 }
-
-// read a byte from the I2C slave device
-//
-uint8_t TwoWire::i2c_read()
+/**
+  * @brief 接收数据.
+  * @param 无.
+  * @return 接收到的数据.
+  */
+uint8_t TwoWire::_receiveByte()
 {
     uint8_t i = 8;
     uint8_t byte = 0;
@@ -374,47 +443,13 @@ uint8_t TwoWire::i2c_read()
 
     return byte;
 }
-/**
-  *@brief    指定寄存器连续读取. start->WslaveAddr->regAddr->RSlaverAddr->data...->nRead==1->Nack->stop->data
-  *@param    uint8_t slaveAddr:  从机地址
-  *          uint16_t regAddr: 寄存器地址
-  *          uint8_t *data: 读取到的数据
-  *          uint16_t nRead：要读取的数据长度
-  *          : 超时
-  *@retval   EOK，EWAIT
-  */
-size_t TwoWire::i2c_read(uint8_t address,uint8_t *data, uint16_t length,uint8_t sendStop)
-{
-    int ret = 0;
-    ret = i2c_start();
-    if(ret != I2C_ERROR_OK)
-        ret = 0;
 
-    ret = i2c_write(address | 0x01); // clr read bit
-    if(ret != I2C_ERROR_OK)
-        ret = 0;
-    
-    ret = length;
-    while (length--)
-    {
-        *data= i2c_read();
-        data++;
-        if (length == 0)
-        {
-            i2c_sendNack();
-            i2c_stop();
-            break;
-        }
-        i2c_sendAck();
-    }
-    return ret;
-}
 /**
  * @brief 发送一个ACK应答. 第9个clock期间，拉低SDA
  * @param 无.
  * @return 0.
  */
-int8_t TwoWire::i2c_sendAck()
+int8_t TwoWire::_sendAck()
 {
     //    _sda->mode(OUTPUT_PP);
     _sda->reset();          // 拉低SDA，
@@ -431,7 +466,7 @@ int8_t TwoWire::i2c_sendAck()
   * @param 无
   * @return 0.
   */
-int8_t TwoWire::i2c_sendNack()
+int8_t TwoWire::_sendNack()
 {
     _sda->set();
     delay_us(_bitDelay);

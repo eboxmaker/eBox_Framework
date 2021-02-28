@@ -5,31 +5,37 @@
 #define PN532_I2C_ADDRESS       (0x48)
 
 
-PN532_I2C::PN532_I2C(TwoWire *wire,uint16_t slaveAddr)
+PN532_I2C::PN532_I2C(TwoWire &wire)
 {
+    _wire = &wire;
     command = 0;
-    this->_wire = wire;
-    this->slaveAddr = PN532_I2C_ADDRESS;
-
 }
 
 void PN532_I2C::begin()
 {
     _wire->begin();
+        PB9.mode(OUTPUT_PP_PU);
+    PB9.reset();
+    delay_ms(400);
+    PB9.set();
+    delay_ms(400);
 }
 
 void PN532_I2C::wakeup()
-{   
-    _wire->beginTransmission(PN532_I2C_ADDRESS);
-    delay_ms(20);
+{
+    _wire->beginTransmission(PN532_I2C_ADDRESS); // I2C start
     _wire->endTransmission();                    // I2C end
+        delay_ms(40);
+
 }
 
 int8_t PN532_I2C::writeCommand(const uint8_t buf[], uint8_t len)
 {
     command = buf[0];
+  delay_ms(2);     // or whatever the delay is for waking up the board
     _wire->beginTransmission(PN532_I2C_ADDRESS);
-    
+//    _wire->endTransmission(false);
+//    delay_us(100);
     write(PN532_PREAMBLE);
     write(PN532_STARTCODE1);
     write(PN532_STARTCODE2);
@@ -76,7 +82,7 @@ int8_t PN532_I2C::writeCommand(const uint8_t buf[], uint8_t len)
     write(PN532_POSTAMBLE);
     
     _wire->endTransmission();
-
+    
     DMSG('\n');
 
     return readAckFrame();

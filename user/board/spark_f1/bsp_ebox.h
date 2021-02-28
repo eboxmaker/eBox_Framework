@@ -25,9 +25,11 @@
 #include "lcd_1.8.h"
 #include "graphic.h"
 #include "../Ethernet3/utility/w5500.h"
+#include "TwoWire.h"
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
+extern TwoWire Wire;
 
 extern EventGpio btn;
 extern EventManager manager;

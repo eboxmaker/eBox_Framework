@@ -22,6 +22,7 @@
 #include "ebox_mem.h"
 
 
+TwoWire Wire(&PB10, &PB11);
 
 W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
 

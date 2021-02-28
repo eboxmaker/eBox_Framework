@@ -9,6 +9,7 @@ void ebox_init(void)
 
     interrupts  = __enable_irq;
     no_interrupts = __disable_irq;
+    delay       = mcu_delay_ms;
     delay_ms    = mcu_delay_ms;
     delay_us    = mcu_delay_us;
     micros      = mcu_micros;

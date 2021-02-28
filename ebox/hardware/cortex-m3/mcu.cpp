@@ -116,6 +116,7 @@ extern "C" {
      */
     void  mcu_delay_us(uint32_t us)
     {
+        if(us == 0) return;
         uint32_t ticks;
         uint32_t told, tnow, tcnt = 0;
 

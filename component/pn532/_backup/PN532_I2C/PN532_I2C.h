@@ -2,14 +2,12 @@
 #ifndef __PN532_I2C_H__
 #define __PN532_I2C_H__
 
-#include <ebox_core.h>
+#include <TwoWire.h>
 #include "PN532Interface.h"
-#include "TwoWire.h"
-
 
 class PN532_I2C : public PN532Interface {
 public:
-    PN532_I2C(TwoWire *wire,uint16_t slaveAddr =  (0x48 ));
+    PN532_I2C(TwoWire &wire);
     
     void begin();
     void wakeup();
@@ -23,14 +21,12 @@ private:
     int8_t readAckFrame();
     
     inline uint8_t write(uint8_t data) {
-        return _wire->write(data);
+            return _wire->write(data);
     }
     
     inline uint8_t read() {
-        return _wire->read();
+            return _wire->read();
     }
-    uint16_t slaveAddr;
-
 };
 
 #endif
