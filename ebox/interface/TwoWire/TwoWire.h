@@ -107,6 +107,7 @@ private:
     void _stop(void);
     i2c_err_t _waitAck();
     i2c_err_t _sendByte( uint8_t data);
+    i2c_err_t _sendByte_first( uint8_t data);
     i2c_err_t  _send7bitsAddress(uint8_t slaveAddr, uint8_t WR);
     uint8_t _receiveByte();
     int8_t _sendAck();

@@ -36,7 +36,7 @@ void TwoWire::begin()
 void TwoWire::begin(Speed_t speed)
 {
     _sda->mode(OUTPUT_OD_PU);
-    _scl->mode(OUTPUT_PP_PU);
+    _scl->mode(OUTPUT_OD_PU);
     _sda->set();
     _scl->set();
 
@@ -56,14 +56,16 @@ void TwoWire::setClock(Speed_t speed)
     {
     case K400:
     case K300:
-    case K200:
         _bitDelay = 1;    // 约200k
         break;
+    case K200:
+        _bitDelay = 2;    // 约250k
+        break;
     case K100:
-        _bitDelay = 3;    // 约200k
+        _bitDelay = 3;    // 约100k
         break;
     default:
-        _bitDelay = 4;    // 约200k
+        _bitDelay = 4;    // 约80k
         break;
     }
     ebox_printf("speed:%d\n_bit:%d\nbit:%d\n",speed,_bitDelay,_bitDelay);
@@ -257,9 +259,19 @@ i2c_err_t TwoWire::_write(uint8_t address,const uint8_t *data, size_t quantity, 
         I2C_DEBUG("I2C_ERROR_ADDR_NACK_NO_RECV\n");
     }
 //    delay_us(200);
-    if(quantity != 0)
+    if(quantity > 1)
     {
-        ret = _write(data, quantity);                
+        ret = _sendByte_first(data[0]);
+        ret = _write(&data[1], quantity - 1);                
+        if(ret != I2C_ERROR_OK)
+        {
+            ret = I2C_ERROR_DATA_NACK_NO_RECV;
+            I2C_DEBUG("I2C_ERROR_DATA_NACK_NO_RECV\n");
+        }
+    }
+    else if(quantity == 1)
+    {
+        _sendByte_first(data[0]);
         if(ret != I2C_ERROR_OK)
         {
             ret = I2C_ERROR_DATA_NACK_NO_RECV;
@@ -313,7 +325,10 @@ size_t TwoWire::_read(uint8_t address,uint8_t *data, uint16_t length,uint8_t sen
   * @return 无.
   */
 void TwoWire::_start(void)
-{
+{   
+    _sda->set();
+    _scl->set();          // SCL高
+    delay_us(_bitDelay);
     _sda->reset();        // SDA拉低
     delay_us(_bitDelay);
 }
@@ -405,7 +420,39 @@ i2c_err_t TwoWire::_sendByte( uint8_t c )
     
     return ret;
 }
-
+i2c_err_t TwoWire::_sendByte_first( uint8_t c)
+{
+    uint8_t ii = 8;
+    uint8_t cnt = 0;
+    _scl->reset();        //SCL拉低
+    delay_us(_bitDelay);
+    tag:
+    while( ii-- )
+    {
+        _sda->write(c & 0x80);   // SCL低电平时将数据送到SDA
+        delay_us(_bitDelay);
+        _scl->set();                // 产生一个时钟脉冲
+        delay_us(_bitDelay);
+        if((_scl->read() == 0))
+        {
+            cnt++;
+            ii++;
+            if(cnt < 254)
+                goto tag;
+            else
+            {
+                ii--;
+                cnt = 0;
+            }
+        }
+        c = c << 1;
+        _scl->reset();
+    }
+    delay_us(_bitDelay);
+    i2c_err_t ret = _waitAck();
+    
+    return ret;
+}
 /**
  * @brief 发送7bit从机地址位.
  *

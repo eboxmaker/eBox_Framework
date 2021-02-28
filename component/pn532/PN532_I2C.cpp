@@ -1010,8 +1010,9 @@ void PN532_I2C::wiresendcommand(uint8_t* cmd, uint8_t cmdlen) {
 
   // I2C START
   Wire.beginTransmission(PN532_I2C_ADDRESS);
-  Wire.endTransmission(false);
-    delay_us(500);
+//  Wire.endTransmission(true);
+//    delay_ms(500);
+//  Wire.beginTransmission(PN532_I2C_ADDRESS);
   checksum = PN532_PREAMBLE + PN532_PREAMBLE + PN532_STARTCODE2;
   wiresend(PN532_PREAMBLE);
   wiresend(PN532_PREAMBLE);
