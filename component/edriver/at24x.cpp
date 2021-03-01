@@ -22,7 +22,7 @@
 
 void At24x::begin()
 {
-    i2c->begin();
+    i2c->begin(TwoWire::K10);
 }
 int8_t At24x::write_byte(uint8_t byte_addr, uint8_t byte)
 {

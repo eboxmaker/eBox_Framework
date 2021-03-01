@@ -258,10 +258,14 @@ i2c_err_t TwoWire::_write(uint8_t address,const uint8_t *data, size_t quantity, 
         ret =  I2C_ERROR_ADDR_NACK_NO_RECV;
         I2C_DEBUG("I2C_ERROR_ADDR_NACK_NO_RECV\n");
     }
-//    delay_us(200);
     if(quantity > 1)
     {
         ret = _sendByte_first(data[0]);
+        if(ret != I2C_ERROR_OK)
+        {
+            ret = I2C_ERROR_DATA_NACK_NO_RECV;
+            I2C_DEBUG("I2C_ERROR_DATA_NACK_NO_RECV\n");
+        }
         ret = _write(&data[1], quantity - 1);                
         if(ret != I2C_ERROR_OK)
         {
@@ -271,7 +275,7 @@ i2c_err_t TwoWire::_write(uint8_t address,const uint8_t *data, size_t quantity, 
     }
     else if(quantity == 1)
     {
-        _sendByte_first(data[0]);
+        ret = _sendByte_first(data[0]);
         if(ret != I2C_ERROR_OK)
         {
             ret = I2C_ERROR_DATA_NACK_NO_RECV;
@@ -376,7 +380,7 @@ i2c_err_t TwoWire::_waitAck()
             ret = I2C_ERROR_OK;
             break;
         }
-        else if(cnt >= 2)
+        else if(cnt >= 5)
         {
             ret = I2C_ERROR_TIMEOUT;
             I2C_DEBUG("I2C_ERROR_TIMEOUT(at:%d)\n",_err_at );
@@ -422,29 +426,31 @@ i2c_err_t TwoWire::_sendByte( uint8_t c )
 }
 i2c_err_t TwoWire::_sendByte_first( uint8_t c)
 {
-    uint8_t ii = 8;
-    uint8_t cnt = 0;
+    uint16_t cnt = 0;
     _scl->reset();        //SCL拉低
     delay_us(_bitDelay);
-    tag:
+    _sda->write(c & 0x80);   // SCL低电平时将数据送到SDA
+    delay_us(_bitDelay);
+    _scl->set();                // 产生一个时钟脉冲
+    delay_us(_bitDelay);
+    while(!_scl->read())//等待从机释放总线
+    {
+        cnt++;
+        if(cnt > 0x2ff)
+        {
+            return I2C_ERROR_TIMEOUT;
+        }
+    }
+    c = c << 1;
+    _scl->reset();
+    
+    uint8_t ii = 7;
     while( ii-- )
     {
         _sda->write(c & 0x80);   // SCL低电平时将数据送到SDA
         delay_us(_bitDelay);
         _scl->set();                // 产生一个时钟脉冲
         delay_us(_bitDelay);
-        if((_scl->read() == 0))
-        {
-            cnt++;
-            ii++;
-            if(cnt < 254)
-                goto tag;
-            else
-            {
-                ii--;
-                cnt = 0;
-            }
-        }
         c = c << 1;
         _scl->reset();
     }

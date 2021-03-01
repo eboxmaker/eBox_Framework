@@ -10,11 +10,11 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 #include "ebox.h"
 #include "bsp_ebox.h"
-
-#include "at24c02.h"
 #include "at24x.h"
+#include "TwoWire.h"
+#include <PN532_I2C.h>
 
-At24x ee(&Wire);
+PN532_I2C nfc(&PB8,&PB9);
 /**
     *	1	此例程需要调用eDrive目录下的at24c02驱动
 	*	2	此例程演示了at24c02的读写操作
@@ -26,26 +26,67 @@ At24x ee(&Wire);
 #define EXAMPLE_NAME	"AT24C02 example"
 #define EXAMPLE_DATE	"2018-08-11"
 
-uint8_t data;
+
+
+
+#define NR_SHORTSECTOR          (32)    // Number of short sectors on Mifare 1K/4K
+#define NR_LONGSECTOR           (8)     // Number of long sectors on Mifare 4K
+#define NR_BLOCK_OF_SHORTSECTOR (4)     // Number of blocks in a short sector
+#define NR_BLOCK_OF_LONGSECTOR  (16)    // Number of blocks in a long sector
+
+// Determine the sector trailer block based on sector number
+#define BLOCK_NUMBER_OF_SECTOR_TRAILER(sector) (((sector)<NR_SHORTSECTOR)? \
+  ((sector)*NR_BLOCK_OF_SHORTSECTOR + NR_BLOCK_OF_SHORTSECTOR-1):\
+  (NR_SHORTSECTOR*NR_BLOCK_OF_SHORTSECTOR + (sector-NR_SHORTSECTOR)*NR_BLOCK_OF_LONGSECTOR + NR_BLOCK_OF_LONGSECTOR-1))
+
+// Determine the sector's first block based on the sector number
+#define BLOCK_NUMBER_OF_SECTOR_1ST_BLOCK(sector) (((sector)<NR_SHORTSECTOR)? \
+  ((sector)*NR_BLOCK_OF_SHORTSECTOR):\
+  (NR_SHORTSECTOR*NR_BLOCK_OF_SHORTSECTOR + (sector-NR_SHORTSECTOR)*NR_BLOCK_OF_LONGSECTOR))
+
+// The default Mifare Classic key
+static const uint8_t KEY_DEFAULT_KEYAB[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
 void setup()
 {
     ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
-   // Wire.begin();
-    ee.begin();
 
+    uint32_t versiondata;
+    nfc.begin();
+    while(1){
+        versiondata = nfc.getFirmwareVersion();
+        if (! versiondata) {
+        Serial.print("Didn't find PN53x board");
+        //while (1); // halt
+        }
+        else
+            break;
+        delay_ms(1000);
+    }
+
+    // Got ok data, print it out!
+    Serial.print("Found chip PN5"); Serial.println((versiondata>>24) & 0xFF, HEX); 
+    Serial.print("Firmware ver. "); Serial.print((versiondata>>16) & 0xFF, DEC); 
+    Serial.print('.'); Serial.println((versiondata>>8) & 0xFF, DEC);
+
+    // Set the max number of retry attempts to read from a card
+    // This prevents us from waiting forever for a card, which is
+    // the default behaviour of the PN532.
+    bool err = nfc.setPassiveActivationRetries(0xFF);
+    if(!err)
+        Serial.println("err1\n");
+    // configure board to read RFID tags
+    err = nfc.SAMConfig();
+    if(!err)
+        Serial.println("err2\n");
+
+    Serial.println("Waiting for an ISO14443A card");
 }
-int16_t x, i;
-uint8_t wbuf[512];
-uint8_t rbuf[512];
-#define MAX_LEN 10
-int ret = 0;
-void scan1();
-void scan2();
-void test();
 
+
+void test();
 
 int main(void)
 {
@@ -54,114 +95,122 @@ int main(void)
     while(1)
     {
         test();
-        
     }
 }
-
 void test()
 {
- ret = 0;
+  uint8_t success;                          // Flag to check if there was an error with the PN532
+  uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
+  uint8_t uidLength;                        // Length of the UID (4 or 7 bytes depending on ISO14443A card type)
+  bool authenticated = false;               // Flag to indicate if the sector is authenticated
+  uint8_t blockBuffer[16];                  // Buffer to store block contents
+  uint8_t blankAccessBits[3] = { 0xff, 0x07, 0x80 };
+  uint8_t idx = 0;
+  uint8_t numOfSector = 16;                 // Assume Mifare Classic 1K for now (16 4-block sectors)
+  
+  Serial.println("Place your NDEF formatted Mifare Classic 1K card on the reader");
+  Serial.println("and press any key to continue ...");
+  
+  // Wait for user input before proceeding
+  while (!Serial.available());
+  while (Serial.available()) Serial.read();
+    
+  // Wait for an ISO14443A type card (Mifare, etc.).  When one is found
+  // 'uid' will be populated with the UID, and uidLength will indicate
+  // if the uid is 4 bytes (Mifare Classic) or 7 bytes (Mifare Ultralight)
+  success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength);
 
-        uart1.printf("=================wbuf================\r\n");
-        for(uint16_t i = 0; i < MAX_LEN; i++)
+  if (success) 
+  {
+    // We seem to have a tag ...
+    // Display some basic information about it
+    Serial.println("Found an ISO14443A card/tag");
+    Serial.print("  UID Length: ");Serial.print(uidLength, DEC);Serial.println(" bytes");
+    Serial.print("  UID Value: ");
+    nfc.PrintHex(uid, uidLength);
+    Serial.println("");
+    
+    // Make sure this is a Mifare Classic card
+    if (uidLength != 4)
+    {
+      Serial.println("Ooops ... this doesn't seem to be a Mifare Classic card!"); 
+      return;
+    }    
+    
+    Serial.println("Seems to be a Mifare Classic card (4 byte UID)");
+    Serial.println("");
+    Serial.println("Reformatting card for Mifare Classic (please don't touch it!) ... ");
+
+    // Now run through the card sector by sector
+    for (idx = 0; idx < numOfSector; idx++)
+    {
+      // Step 1: Authenticate the current sector using key B 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF
+      success = nfc.mifareclassic_AuthenticateBlock (uid, uidLength, BLOCK_NUMBER_OF_SECTOR_TRAILER(idx), 1, (uint8_t *)KEY_DEFAULT_KEYAB);
+      if (!success)
+      {
+        Serial.print("Authentication failed for sector "); Serial.println(numOfSector);
+        return;
+      }
+      
+      // Step 2: Write to the other blocks
+      if (idx == 16)
+      {
+        memset(blockBuffer, 0, sizeof(blockBuffer));
+        if (!(nfc.mifareclassic_WriteDataBlock((BLOCK_NUMBER_OF_SECTOR_TRAILER(idx)) - 3, blockBuffer)))
         {
-            wbuf[i] = random()%255;
-            rbuf[i] = 0;
+          Serial.print("Unable to write to sector "); Serial.println(numOfSector);
+          return;
         }
-        for(uint16_t i = 0; i < MAX_LEN; i++)
+      }
+      if ((idx == 0) || (idx == 16))
+      {
+        memset(blockBuffer, 0, sizeof(blockBuffer));
+        if (!(nfc.mifareclassic_WriteDataBlock((BLOCK_NUMBER_OF_SECTOR_TRAILER(idx)) - 2, blockBuffer)))
         {
-            uart1.printf(" %02x ", wbuf[i ]);
-            //ee.byteWrite(i*16+j,buf[i*16+j]);
+          Serial.print("Unable to write to sector "); Serial.println(numOfSector);
+          return;
         }
-        uart1.printf("\r\n ");
-        
-        ee.write_byte(0, wbuf, MAX_LEN);
-
-        uart1.printf("==================rbuf==============\r\n");
-
-        data = ee.read_byte(0                                                                                                                                                                           , rbuf, MAX_LEN);
-        for(uint16_t i = 0; i < MAX_LEN; i++)
+      }
+      else
+      {
+        memset(blockBuffer, 0, sizeof(blockBuffer));
+        if (!(nfc.mifareclassic_WriteDataBlock((BLOCK_NUMBER_OF_SECTOR_TRAILER(idx)) - 3, blockBuffer)))
         {
-            uart1.printf(" %02x ", rbuf[i]);
+          Serial.print("Unable to write to sector "); Serial.println(numOfSector);
+          return;
         }
-        uart1.printf("\r\n ");
-        for(int i = 0; i < MAX_LEN; i++)
+        if (!(nfc.mifareclassic_WriteDataBlock((BLOCK_NUMBER_OF_SECTOR_TRAILER(idx)) - 2, blockBuffer)))
         {
-            if(wbuf[i] != rbuf[i])
-            {
-                ret = 1;
-                break;
-            }
+          Serial.print("Unable to write to sector "); Serial.println(numOfSector);
+          return;
         }
-        if(ret == 1)
-        {
-            uart1.printf("eeprom check ......[err]");
-            ee.begin();
-        }
-        else
-            uart1.printf("eeprom check ......[OK]");
+      }
+      memset(blockBuffer, 0, sizeof(blockBuffer));
+      if (!(nfc.mifareclassic_WriteDataBlock((BLOCK_NUMBER_OF_SECTOR_TRAILER(idx)) - 1, blockBuffer)))
+      {
+        Serial.print("Unable to write to sector "); Serial.println(numOfSector);
+        return;
+      }
+      
+      // Step 3: Reset both keys to 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF
+      memcpy(blockBuffer, KEY_DEFAULT_KEYAB, sizeof(KEY_DEFAULT_KEYAB));
+      memcpy(blockBuffer + 6, blankAccessBits, sizeof(blankAccessBits));
+      blockBuffer[9] = 0x69;
+      memcpy(blockBuffer + 10, KEY_DEFAULT_KEYAB, sizeof(KEY_DEFAULT_KEYAB));
 
-        uart1.printf("\r\n================================\r\n");
-        delay_ms(1000);
-
-}
-void scan1()
-{
-      for (byte address = 0x48; address < 0x4A; ++address) {
-
-          Wire.beginTransmission(address);
-        byte error = Wire.endTransmission();
-
-        if (error != I2C_ERROR_OK) {
-            Serial.printf("I2C device not found at address 0x%02x(ERR:%d)\n",address,error);
-        }
-        else
-        {
-              Serial.printf("I2C ok 0x%02x\n",address);
-        }
+      // Step 4: Write the trailer block
+      if (!(nfc.mifareclassic_WriteDataBlock((BLOCK_NUMBER_OF_SECTOR_TRAILER(idx)), blockBuffer)))
+      {
+        Serial.print("Unable to write trailer block of sector "); Serial.println(numOfSector);
+        return;
+      }
     }
-        delay_ms(1000);
+  }
+  
+  // Wait a bit before trying again
+  Serial.println("\n\nDone!");
+  delay(1000);
+  Serial.flush();
+  while(Serial.available()) Serial.read();
+
 }
-void scan2()
-{
-      int nDevices = 0;
-
-      Serial.println("Scanning...");
-
-      for (byte address = 10; address < 255; ++address) {
-        // The i2c_scanner uses the return value of
-        // the Write.endTransmisstion to see if
-        // a device did acknowledge to the address.
-        Wire.beginTransmission(address);
-        byte error = Wire.endTransmission();
-
-        if (error == 0) {
-          Serial.print("I2C device found at address 0x");
-          if (address < 16) {
-            Serial.print("0");
-          }
-          Serial.print(address, HEX);
-          Serial.println("  !");
-
-          ++nDevices;
-        } else if (error == 4) {
-          Serial.print("Unknown error at address 0x");
-          if (address < 16) {
-            Serial.print("0");
-          }
-          Serial.println(address, HEX);
-        }
-        uart1.flush();
-
-      }
-      if (nDevices == 0) {
-        Serial.println("No I2C devices found\n");
-      } else {
-          Serial.printf("done:%d\n",nDevices);
-      }
-      delay_ms(1000); // Wait 5 seconds for next scan
-}
-
-
-
-
