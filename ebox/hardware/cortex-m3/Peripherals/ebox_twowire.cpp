@@ -79,7 +79,7 @@ void mcuTwoWire::setClock(Speed_t speed)
     default:
         _speed = (200000);
     }
-    I2C_InitStructure.I2C_ClockSpeed = 10000;
+    I2C_InitStructure.I2C_ClockSpeed = _speed;
 
     /* I2C Peripheral Enable */
     I2C_Cmd(_i2cx, ENABLE);
@@ -116,14 +116,14 @@ i2c_err_t mcuTwoWire::_write(uint8_t address,const uint8_t *data, size_t quantit
     uint32_t cnt = 0;
     i2c_err_t ret;
     _start();
-    _send7bitsAddress(address, 0);
+    ret = _send7bitsAddress(address, 0);
     while (quantity--)
     {
-        _sendByte(*data);
+        ret = _sendByte(*data);
         data++;
     }
     _stop();
-    return I2C_ERROR_OK;
+    return ret;
 }
 /**
   *@brief    指定寄存器连续读取. start->WslaveAddr->regAddr->RSlaverAddr->data...->nRead==1->Nack->stop->data
@@ -140,12 +140,12 @@ size_t mcuTwoWire::_read(uint8_t address,uint8_t *data, uint16_t length,uint8_t 
     int ret = 0;
     ret = length;
      _start();
-     _send7bitsAddress(address, 1);
+    ret = _send7bitsAddress(address, 1);
     while (length--)
     {
         if (length == 0)
         {
-            _sendNack();
+            ret = _sendNack();
             _stop();
         }
          _receiveByte(data);

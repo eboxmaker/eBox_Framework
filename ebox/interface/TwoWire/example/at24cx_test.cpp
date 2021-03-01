@@ -42,8 +42,6 @@ uint8_t wbuf[512];
 uint8_t rbuf[512];
 #define MAX_LEN 10
 int ret = 0;
-void scan1();
-void scan2();
 void test();
 
 
@@ -60,108 +58,48 @@ int main(void)
 
 void test()
 {
- ret = 0;
+    ret = 0;
 
-        uart1.printf("=================wbuf================\r\n");
-        for(uint16_t i = 0; i < MAX_LEN; i++)
+    uart1.printf("=================wbuf================\r\n");
+    for(uint16_t i = 0; i < MAX_LEN; i++)
+    {
+        wbuf[i] = random()%255;
+        rbuf[i] = 0;
+    }
+    for(uint16_t i = 0; i < MAX_LEN; i++)
+    {
+        uart1.printf(" %02x ", wbuf[i ]);
+        //ee.byteWrite(i*16+j,buf[i*16+j]);
+    }
+    uart1.printf("\r\n ");
+
+    ee.write_byte(0, wbuf, MAX_LEN);
+
+    uart1.printf("==================rbuf==============\r\n");
+
+    data = ee.read_byte(0, rbuf, MAX_LEN);
+    for(uint16_t i = 0; i < MAX_LEN; i++)
+    {
+        uart1.printf(" %02x ", rbuf[i]);
+    }
+    uart1.printf("\r\n ");
+    for(int i = 0; i < MAX_LEN; i++)
+    {
+        if(wbuf[i] != rbuf[i])
         {
-            wbuf[i] = random()%255;
-            rbuf[i] = 0;
-        }
-        for(uint16_t i = 0; i < MAX_LEN; i++)
-        {
-            uart1.printf(" %02x ", wbuf[i ]);
-            //ee.byteWrite(i*16+j,buf[i*16+j]);
-        }
-        uart1.printf("\r\n ");
-        
-        ee.write_byte(0, wbuf, MAX_LEN);
-
-        uart1.printf("==================rbuf==============\r\n");
-
-        data = ee.read_byte(0                                                                                                                                                                           , rbuf, MAX_LEN);
-        for(uint16_t i = 0; i < MAX_LEN; i++)
-        {
-            uart1.printf(" %02x ", rbuf[i]);
-        }
-        uart1.printf("\r\n ");
-        for(int i = 0; i < MAX_LEN; i++)
-        {
-            if(wbuf[i] != rbuf[i])
-            {
-                ret = 1;
-                break;
-            }
-        }
-        if(ret == 1)
-        {
-            uart1.printf("eeprom check ......[err]");
-            ee.begin();
-        }
-        else
-            uart1.printf("eeprom check ......[OK]");
-
-        uart1.printf("\r\n================================\r\n");
-        delay_ms(1000);
-
-}
-void scan1()
-{
-      for (byte address = 0x48; address < 0x4A; ++address) {
-
-          Wire.beginTransmission(address);
-        byte error = Wire.endTransmission();
-
-        if (error != I2C_ERROR_OK) {
-            Serial.printf("I2C device not found at address 0x%02x(ERR:%d)\n",address,error);
-        }
-        else
-        {
-              Serial.printf("I2C ok 0x%02x\n",address);
+            ret = 1;
+            break;
         }
     }
-        delay_ms(1000);
+    if(ret == 1)
+    {
+        uart1.printf("eeprom check ......[err]");
+        ee.begin();
+    }
+    else
+        uart1.printf("eeprom check ......[OK]");
+
+    uart1.printf("\r\n================================\r\n");
+    delay_ms(1000);
+
 }
-void scan2()
-{
-      int nDevices = 0;
-
-      Serial.println("Scanning...");
-
-      for (byte address = 10; address < 255; ++address) {
-        // The i2c_scanner uses the return value of
-        // the Write.endTransmisstion to see if
-        // a device did acknowledge to the address.
-        Wire.beginTransmission(address);
-        byte error = Wire.endTransmission();
-
-        if (error == 0) {
-          Serial.print("I2C device found at address 0x");
-          if (address < 16) {
-            Serial.print("0");
-          }
-          Serial.print(address, HEX);
-          Serial.println("  !");
-
-          ++nDevices;
-        } else if (error == 4) {
-          Serial.print("Unknown error at address 0x");
-          if (address < 16) {
-            Serial.print("0");
-          }
-          Serial.println(address, HEX);
-        }
-        uart1.flush();
-
-      }
-      if (nDevices == 0) {
-        Serial.println("No I2C devices found\n");
-      } else {
-          Serial.printf("done:%d\n",nDevices);
-      }
-      delay_ms(1000); // Wait 5 seconds for next scan
-}
-
-
-
-
