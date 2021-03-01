@@ -21,8 +21,11 @@
 #include "bsp_ebox.h"
 #include "ebox_mem.h"
 
-
-TwoWire Wire(&PB10, &PB11);
+#if WIRE_TEST
+SoftTwoWire Wire(&PB10, &PB11);
+#else
+mcuTwoWire Wire(I2C2,&PB10, &PB11);
+#endif
 
 W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
 

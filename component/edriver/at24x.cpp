@@ -46,8 +46,6 @@ int8_t At24x::write_byte(uint8_t byte_addr, uint8_t *buf, uint16_t num_to_write)
 
 uint8_t At24x::read_byte(uint8_t byte_addr)
 {
-    uint8_t byte;
-
     uint8_t num = i2c->requestFrom(slaveAddr,1,byte_addr,1,true);
     if(i2c->available())
     {

@@ -749,6 +749,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\interface\TwoWire\TwoWire.cpp</FilePath>
             </File>
+            <File>
+              <FileName>SoftTwoWire.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\TwoWire\SoftTwoWire.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -878,6 +883,11 @@
               <FileName>object.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\object.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_twowire.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_twowire.cpp</FilePath>
             </File>
           </Files>
         </Group>

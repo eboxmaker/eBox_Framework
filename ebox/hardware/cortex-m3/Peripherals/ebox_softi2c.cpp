@@ -308,19 +308,6 @@ uint8_t SoftI2c::check_busy(uint16_t slaveAddr)
     return EOK;
 }
 
-
-uint8_t SoftI2c::beginTransmission(uint16_t slaveAddr)
-{
-    uint8_t err = 0;
-    err += _start();
-    err += _send7bitsAddress(slaveAddr, WRITE);
-
-}
-uint8_t SoftI2c::endTransmission(bool state)
-{
-
-    _stop();
-}
 /**
   *@brief    获取I2C控制权
   *@param    timing:  时钟时序，通过readConfig获取

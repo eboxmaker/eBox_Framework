@@ -13,7 +13,6 @@ typedef enum {
     I2C_ERROR_DATA_NACK_NO_RECV,
     I2C_ERROR_BUS,
     I2C_ERROR_TIMEOUT,
-
 } i2c_err_t;
 
 class TwoWire : public Stream
@@ -31,12 +30,12 @@ public:
 
     
     // public methods
-    TwoWire();
-    TwoWire(Gpio *sclPin, Gpio *sdaPin);
+    TwoWire(){};
 
-    void begin();
-    void begin(Speed_t speed);
-    void setClock(Speed_t speed);
+    virtual void begin(uint8_t address)   = 0;
+    virtual void begin(int address)   = 0;
+    virtual void begin()   = 0;
+    virtual void setClock(Speed_t speed)  = 0;
 
     void beginTransmission(uint8_t address);
     void beginTransmission(int address);
@@ -75,9 +74,11 @@ public:
       using       Print::write;
 
 private:
+    // private methods
+    virtual i2c_err_t _write(const uint8_t *data, size_t)  = 0;
+    virtual i2c_err_t _write(uint8_t address,const uint8_t *data, size_t quantity, int sendStop)  = 0;
+    virtual size_t _read(uint8_t address,uint8_t *data, uint16_t quantity,uint8_t sendStop)  = 0;
     
-
-
     uint8_t rxBuffer[I2C_BUFFER_LENGTH];
     uint16_t rxIndex;
     uint16_t rxLength;
@@ -85,35 +86,10 @@ private:
     uint8_t txBuffer[I2C_BUFFER_LENGTH];
     uint16_t txIndex;
     uint16_t txLength;
+
+protected:
     uint8_t txAddress;
-
     uint8_t transmitting;
-
-  // per object data
-    Gpio            *_sda;
-    Gpio            *_scl;
-	uint8_t   	 	_bitDelay;	// i2c时序
-    uint8_t     _err_at;
-
-
-    // private methods
-    i2c_err_t _write(const uint8_t *data, size_t);
-    i2c_err_t _write(uint8_t address,const uint8_t *data, size_t quantity, int sendStop);
-    size_t _read(uint8_t address,uint8_t *data, uint16_t quantity,uint8_t sendStop);
-
-
-    //基础的i2c功能
-    void _start(void);
-    void _stop(void);
-    i2c_err_t _waitAck();
-    i2c_err_t _sendByte( uint8_t data);
-    i2c_err_t _sendByte_first( uint8_t data);
-    i2c_err_t  _send7bitsAddress(uint8_t slaveAddr, uint8_t WR);
-    uint8_t _receiveByte();
-    int8_t _sendAck();
-    int8_t _sendNack();
-    
-        
 
 };
 #endif

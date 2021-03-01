@@ -99,7 +99,7 @@ PN532_I2C::PN532_I2C(Gpio *irq, Gpio *reset) {
 */
 /**************************************************************************/
 void PN532_I2C::begin() {
-   Wire.begin();
+    Wire.begin();
 
   // Reset the PN532  
     _reset->set();
@@ -112,7 +112,7 @@ void PN532_I2C::begin() {
     int err = Wire.endTransmission();
     if(err != 0)
     {
-        Serial.printf("err:%d\n",err);
+        Serial.printf("pn532 being err:%d\n",err);
     }
     delay_ms(10);
 }

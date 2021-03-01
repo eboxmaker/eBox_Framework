@@ -58,7 +58,7 @@ void setup()
     while(1){
         versiondata = nfc.getFirmwareVersion();
         if (! versiondata) {
-        Serial.print("Didn't find PN53x board");
+        Serial.print("Didn't find PN53x board\n");
         //while (1); // halt
         }
         else
@@ -82,7 +82,7 @@ void setup()
     if(!err)
         Serial.println("err2\n");
 
-    Serial.println("Waiting for an ISO14443A card");
+    Serial.println("Waiting for an ISO14443A card\n");
 }
 
 

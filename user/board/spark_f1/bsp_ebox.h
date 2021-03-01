@@ -25,11 +25,19 @@
 #include "lcd_1.8.h"
 #include "graphic.h"
 #include "../Ethernet3/utility/w5500.h"
-#include "TwoWire.h"
+#include "SoftTwoWire.h"
+#include "ebox_TwoWire.h"
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
-extern TwoWire Wire;
+
+ #define WIRE_TEST 0
+#if WIRE_TEST
+extern SoftTwoWire Wire;
+#else
+extern mcuTwoWire Wire;
+#endif
+
 
 extern EventGpio btn;
 extern EventManager manager;
@@ -40,7 +48,7 @@ extern W5500Class w5500;
 #define LED1 PB8
 #define LED2 PB9
 #define LED3 PB10
-#define I2C  si2c2
+#define I2C  i2c2
 extern void print_log(const char *name = "test", const char *date = __DATE__);
 
 #define Serial UART

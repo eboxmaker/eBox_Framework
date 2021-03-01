@@ -126,8 +126,6 @@ float Ds18b20::get_temp()
 }
 void Ds18b20::loop()
 {
-    bool ret;
-
     switch(state)
     {
         case 0:
