@@ -31,7 +31,7 @@
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
 
- #define WIRE_TEST 0
+ #define WIRE_TEST 1
 #if WIRE_TEST
 extern SoftTwoWire Wire;
 #else

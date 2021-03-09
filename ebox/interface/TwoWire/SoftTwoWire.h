@@ -39,15 +39,15 @@ private:
 
 
     //基础的i2c功能
-    void _start(void);
-    void _stop(void);
+    i2c_err_t _start(void);
+    i2c_err_t _stop(void);
     i2c_err_t _waitAck();
     i2c_err_t _sendByte( uint8_t data);
     i2c_err_t _sendByte_first( uint8_t data);
     i2c_err_t  _send7bitsAddress(uint8_t slaveAddr, uint8_t WR);
-    uint8_t _receiveByte();
-    int8_t _sendAck();
-    int8_t _sendNack();
+    i2c_err_t _receiveByte(uint8_t *data);
+    i2c_err_t _sendAck();
+    i2c_err_t _sendNack();
     
         
 
