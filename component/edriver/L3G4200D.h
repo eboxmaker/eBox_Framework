@@ -20,7 +20,7 @@
 #ifndef __L3G4200D_H
 #define __L3G4200D_H
 #include "ebox_core.h"
-#include "ebox_i2c.h"
+#include "i2c.h"
 
 // register addresses
 #define GYR_ADDRESS 0xD2
@@ -66,12 +66,10 @@ public:
 
     vector g; // gyro angular velocity readings
     
-    L3G4200D(I2c *i2c,uint16_t slaveAddr)
+    L3G4200D(I2c *i2c,uint16_t slaveAddr = GYR_ADDRESS)
     {
         this->i2c = i2c;
         this->slaveAddr = slaveAddr;
-        cfg.speed = I2c::K200;
-        cfg.regAddrBits = I2c::BIT8;
     };
     void begin();
     void test();
@@ -88,6 +86,6 @@ public:
 
 private:
     I2c *i2c;
-    I2c::Config_t cfg;
-    uint16_t slaveAddr;};
+    uint16_t slaveAddr;
+};
 #endif

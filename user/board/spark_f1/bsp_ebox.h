@@ -25,18 +25,12 @@
 #include "lcd_1.8.h"
 #include "graphic.h"
 #include "../Ethernet3/utility/w5500.h"
-#include "SoftTwoWire.h"
-#include "ebox_TwoWire.h"
+#include "soft_i2c.h"
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
 
- #define WIRE_TEST 1
-#if WIRE_TEST
-extern SoftTwoWire Wire;
-#else
-extern mcuTwoWire Wire;
-#endif
+
 
 
 extern EventGpio btn;

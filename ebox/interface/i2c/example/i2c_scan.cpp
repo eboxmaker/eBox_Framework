@@ -11,11 +11,10 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 #include "bsp_ebox.h"
 
-#include "at24c02.h"
 #include "at24x.h"
 
-#include "TwoWire.h"
-TwoWire Wire(&PB10, &PB11);
+#include "i2c.h"
+SoftI2c Wire(&PB10, &PB11);
 /**
     *	1	此例程为IIC扫描程序
 	*	2	此例程演示了扫描总线上所有地址有响应的设备

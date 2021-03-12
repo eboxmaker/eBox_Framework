@@ -17,6 +17,7 @@
 
 
 #include "ebox_core.h"
+#include "spi.h"
 
 //extern uint8_t SPI_CS;
 #define MAX_SOCK_NUM 8

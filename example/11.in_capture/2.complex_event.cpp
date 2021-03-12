@@ -48,13 +48,18 @@ Pwm pwm1(&PB6);//创建一个PWM输出对象
 uint32_t frq = 0;
 
 uint16_t p;
+void cmp()
+{
+    ic0.complex_event();
+}
 void setup()
 {
     ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
-    ic0.begin(1, COMPLEX); //初始化输入捕获参数，p分频
+    ic0.begin(1); //初始化输入捕获参数，p分频
+    ic0.attach(cmp);
     frq = 1000;
     pwm1.begin(frq, 30);
 
@@ -75,7 +80,7 @@ int main(void)
             UART.printf("low duty  = %0.2f%%\r\n\r\n", ic0.res.low_duty);
         }
         pwm1.set_frq(frq += 100);
-        delay_ms(1000);
+        delay_ms(3000);
     }
 }
 

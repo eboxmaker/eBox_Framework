@@ -21,15 +21,12 @@ Copyright 2015 shentq. All Rights Reserved.
 #define EXAMPLE_NAME	"ds3231 example"
 #define EXAMPLE_DATE	"2018-08-11"
 
-SoftI2c si2c(&PC6,&PC7);
 ChinaCalendar Cdt;
 
-DS3231 ds(&si2c,0xD0);
+DS3231 ds(&sI2c1,0xD0);
 
 DateTime_t dt;
 DateTime_t dt1;
-char time[9];
-char date[9];
 
 uint32_t last_time;
 
@@ -81,24 +78,20 @@ int main(void)
         ds.loop();
 
         dt = ds.get_dt();
-        String time = ds.get_time();
-        String date = ds.get_date();
+
 
         String dtstr = uart1.readString();
         if(dtstr != "")
+        {
             ds.set_dt_string(dtstr);
-//        UART.printf(date);
-//        UART.printf(" ");
-//        UART.printf(time);
-//        UART.printf("\r\n");
+        }
         if(millis() - last_time > 1000)
         {
             last_time = millis();
             dt = ds.get_dt();
             UART.printf("========RTC≤‚ ‘======\r\n");
             UART.printf("20%02d-%02d-%02d %02d:%02d:%02d week:%d\r\n", dt.year, dt.month, dt.date, dt.hour, dt.min, dt.sec,dt.week);
-            UART.println(date);
-            UART.println(time);
+
             
             uint32_t stamp = get_unix_timestamp(dt);
             UART.printf("UNIX ±º‰¥¡£∫%u\r\n",stamp);

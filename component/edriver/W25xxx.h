@@ -21,6 +21,7 @@
 #define __W25XXX_H
 
 #include "ebox_core.h"
+#include "spi.h"
 #include "interface/storage/blockdevice/BlockDevice.h"
 
 using namespace ebox;

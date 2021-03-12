@@ -338,7 +338,7 @@ boolean PN532::readPassiveTargetID(uint8_t cardbaudrate, uint8_t * uid, uint8_t 
 	DMSG("No card(s) read");
     return 0x0;  // no cards read
   }
-  
+  uart1.flush();
   // Wait for a card to enter the field
   uint8_t status = PN532_I2C_BUSY;
  

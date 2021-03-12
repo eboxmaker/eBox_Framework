@@ -32,15 +32,24 @@ void DS3231::begin()
         exti->nvic(ENABLE);
         exti->interrupt(RISE,ENABLE);
     }
-    i2c->begin(&cfg);
+    i2c->begin();
     set_hour_mode(HOUR24);
     
+    
     uint8_t temp;
-    i2c->take(&cfg);
-    temp = i2c->read(slaveAddr,DS3231_CONTROL);
+    i2c->requestFrom(slaveAddr,1,DS3231_CONTROL,1,true);
+    if(i2c->available())
+    {
+        temp = i2c->read();
+    }
     temp = temp & B11111011;
-    i2c->write(slaveAddr,DS3231_CONTROL,temp);
-    i2c->release();
+
+    
+    i2c->beginTransmission(slaveAddr);
+    i2c->write(DS3231_CONTROL);
+    i2c->write(temp);
+    i2c->endTransmission();
+    
     
 }
 
@@ -49,10 +58,14 @@ DateTime_t DS3231::read_dt()
 {
     
     uint8_t buf[8];
-    i2c->take(&cfg);
-    i2c->read_buf(slaveAddr,DS3231_SECOND, buf, 7);
-    i2c->release();
-
+    int i = 0;
+    uint8_t num = i2c->requestFrom(slaveAddr,7,DS3231_SECOND,1,true);
+    while(i2c->available())
+    {
+        buf[i] = i2c->read();
+        i++;
+    }
+    
     //	timer.w_year,timer.w_month,timer.w_date,timer.hour,timer.min,timer.sec
     /******将读取的十六进制数据转换为十进制数据******/
     dateTime.year 	= bcd_to_dec(buf[6]);
@@ -77,19 +90,24 @@ void	DS3231::write_dt(DateTime_t &dt)
     tBCD.min = dec_to_bcd(dt.min);
     tBCD.sec = dec_to_bcd(dt.sec);
 
+    i2c->beginTransmission(slaveAddr);
+    i2c->write(DS3231_WEEK);
+    i2c->write(tBCD.week);
+    i2c->write(DS3231_YEAR);
+    i2c->write(tBCD.year);
+    i2c->write(DS3231_MONTH);
+    i2c->write(tBCD.month);
+    i2c->write(DS3231_DAY);
+    i2c->write(tBCD.date);
+    i2c->write(DS3231_HOUR);
+    i2c->write(tBCD.hour);
+    i2c->write(DS3231_MINUTE);
+    i2c->write(tBCD.min);
+    i2c->write(DS3231_SECOND);
+    i2c->write(tBCD.sec);
+    i2c->endTransmission();
     
-
-    i2c->take(&cfg);
-//    i2c->read_buf(slaveAddr,DS3231_SECOND, buf, 7);
-
-    i2c->write(slaveAddr,DS3231_WEEK, tBCD.week); //修改周
-    i2c->write(slaveAddr,DS3231_YEAR, tBCD.year); //修改年
-    i2c->write(slaveAddr,DS3231_MONTH, tBCD.month); //修改月
-    i2c->write(slaveAddr,DS3231_DAY, tBCD.date);  //修改日
-    i2c->write(slaveAddr,DS3231_HOUR, tBCD.hour); //修改时
-    i2c->write(slaveAddr,DS3231_MINUTE, tBCD.min); //修改分
-    i2c->write(slaveAddr,DS3231_SECOND, tBCD.sec ); //修改秒
-    i2c->release();
+   
 }
 
 

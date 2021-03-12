@@ -21,7 +21,7 @@
 #define __LSM303DLHC_H
 
 #include "ebox_core.h"
-#include "ebox_i2c.h"
+#include "i2c.h"
 
 #define LSM303_ACC_ADDR				0x32
 #define LSM303_MAG_ADDR				0x3C
@@ -72,12 +72,9 @@ public:
     int16_t mag_x, mag_y, mag_z;
 public:
 
-    LSM303DLHC(I2c *i2c,uint16_t slaveAddr)
+    LSM303DLHC(I2c *i2c)
     {
         this->i2c = i2c;
-        this->slaveAddr = slaveAddr;
-        cfg.speed = I2c::K200;
-        cfg.regAddrBits = I2c::BIT8;
     };
     void begin();
     void write_reg(uint8_t slave_addr, uint8_t reg, uint8_t value);
@@ -87,7 +84,6 @@ public:
     void read_mag(void);
 private:
     I2c *i2c;
-    I2c::Config_t cfg;
     uint16_t slaveAddr;
 };
 #endif

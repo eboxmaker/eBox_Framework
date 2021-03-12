@@ -42,7 +42,12 @@
 /**************************************************************************/
 
 #include "PN532_I2C.h"
+#include "soft_i2c.h"
 #include "bsp_ebox.h"
+
+//SoftI2c Wire(&PB10,&PB11);
+mcuI2c Wire(I2C2,&PB10,&PB11);
+
 
 byte pn532ack[] = {0x00, 0x00, 0xFF, 0x00, 0xFF, 0x00};
 byte pn532response_firmwarevers[] = {0x00, 0xFF, 0x06, 0xFA, 0xD5, 0x03};

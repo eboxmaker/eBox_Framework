@@ -127,9 +127,7 @@ uint8_t     dec_to_bcd(uint8_t dec);
 #include "object.h"
 #include "WCharacter.h"
 #include "WString.h"
-#include "port/ebox_port_gpio.h"
-#include "port/ebox_port_spi.h"
-#include "port/ebox_port_i2c.h"
+#include "ebox_port_gpio.h"
 
 
 uint16_t makeWord(unsigned int w);

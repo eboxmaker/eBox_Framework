@@ -24,7 +24,7 @@ Copyright 2015 shentq. All Rights Reserved.
 
 
 
-MPU6050 mpu(&i2c1);
+MPU6050 mpu(&sI2c1);
 
 void setup()
 {
@@ -32,7 +32,7 @@ void setup()
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
-    mpu.begin(400000);
+    mpu.begin();
 
 
 

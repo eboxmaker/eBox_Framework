@@ -18,86 +18,27 @@
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 
-#ifndef __SPI_H
-#define __SPI_H
+#ifndef __SOFT_SPI_H
+#define __SOFT_SPI_H
 
 #include "ebox_core.h"
-#include "mcu.h"
-#include "dma.h"
-
+#include "spi.h"
 
 #define EBOX_DEBUG_SPI_ENABLE       true
 #define EBOX_DEBUG_SPI_ENABLE_ERR   false
 
 #if EBOX_DEBUG_SPI_ENABLE
-#define spiDebug(...)  ebox_printf("[SPI]:%d: ",__LINE__),ebox_printf(__VA_ARGS__ )
+#define spiDebug(...)  ebox_printf("[SOFTSPI]:%d: ",__LINE__),ebox_printf(__VA_ARGS__ )
 #else
 #define spiDebug(...)
 #endif
 
 #if EBOX_DEBUG_SPI_ENABLE_ERR
-#define spiDebugErr(fmt, ...)  ebox_printf("[SPI err]:%d: " fmt "\n", __LINE__, __VA_ARGS__)
+#define spiDebugErr(fmt, ...)  ebox_printf("[SOFTSPI err]:%d: " fmt "\n", __LINE__, __VA_ARGS__)
 #else
 #define spiDebugErr(fmt, ...)
 #endif
 
-
-/*
-	1.目前只测试了SPI1、SPI2，spi3望网友测试
-	2.该spi功能强大，总线支持同时挂载不同MODE ,SPEED,bit_oder的设备
-	3.每一个spi设备应有一个自己的SPI_CONFIG的配置，以支持该设备的的读写，
-		在读写前需要获得SPI的控制权，如果获取不到则一直等待！主要是为了兼容操作系统，
-		如果不使用操作系统也必须加上获得控制权的代码，在是用完SPI后一定要释放SPI总线，
-		如果不释放总线会导致别的SPI设备一直处于等待的状态
-*/
-//默认配置 空，只依靠结构体SPICONFIG来初始化
-class mcuSpi: public Spi
-{
-public:
-    mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi);
-
-    virtual void    begin (Config_t *newConfig);
-    virtual void    config(Config_t *newConfig);
-    virtual uint8_t read_config(void);
-
-    virtual uint8_t transfer(uint8_t data);
-
-    virtual int8_t  write(uint8_t data);
-    virtual uint8_t read();
-
-    virtual int8_t  write_buf(uint8_t *data, uint16_t len);
-    virtual int8_t  read_buf(uint8_t *recv_data, uint16_t len);
-
-
-public:
-    virtual int8_t  take(Config_t *newConfig);
-    virtual int8_t  release(void);
-
-    virtual int8_t      dma_write(uint8_t data);
-    virtual uint8_t     dma_read();
-    virtual uint16_t    dma_write_buf(uint8_t *data, uint16_t len);
-    virtual uint16_t    dma_read_buf(uint8_t *recv_data, uint16_t len);
-    virtual void        dma_wait();
-
-private:
-    uint8_t tx_buffer[1];
-    uint8_t rx_buffer[1];
-
-    void dma_config( void );
-
-private:
-    SPI_TypeDef *_spi;
-    Gpio        *_sck;
-    Gpio        *_miso;
-    Gpio        *_mosi;
-
-    uint8_t     _busy;
-    DMA_InitTypeDef dmaRxCfg;
-    DMA_InitTypeDef dmaTxCfg;
-    Dma *dmaTx;
-    Dma *dmaRx;
-
-};
 
 /*
 	注意：1.该类的SPI_CLOCK_DIV是由delay_us延时函数控制。略有不准，比硬件SPI会慢很多

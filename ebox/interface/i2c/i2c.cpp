@@ -1,7 +1,7 @@
-#include "TwoWire.h"
+#include "i2c.h"
 
 
-void TwoWire::beginTransmission(uint8_t address)
+void I2c::beginTransmission(uint8_t address)
 {
     transmitting = 1;
     txAddress = address;
@@ -11,16 +11,16 @@ void TwoWire::beginTransmission(uint8_t address)
 
 
 //
-void TwoWire::beginTransmission(int address)
+void I2c::beginTransmission(int address)
 {
     beginTransmission((uint8_t)address);
 }
 
-uint8_t TwoWire::endTransmission(void)
+uint8_t I2c::endTransmission(void)
 {
     return endTransmission(true);
 }
-uint8_t TwoWire::endTransmission(uint8_t sendStop)
+uint8_t I2c::endTransmission(uint8_t sendStop)
 {   
     uint8_t ret = _write(txAddress, txBuffer, txLength, sendStop);
     txIndex = 0;
@@ -30,7 +30,7 @@ uint8_t TwoWire::endTransmission(uint8_t sendStop)
 }
 
 
-uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint32_t iaddress, uint8_t isize, uint8_t sendStop)
+uint8_t I2c::requestFrom(uint8_t address, uint8_t quantity, uint32_t iaddress, uint8_t isize, uint8_t sendStop)
 {
     if (isize > 0) 
     {
@@ -65,26 +65,26 @@ uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint32_t iaddres
 
     return read;
 }
-uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop)
+uint8_t I2c::requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop)
 {
 	return requestFrom((uint8_t)address, (uint8_t)quantity, (uint32_t)0, (uint8_t)0, (uint8_t)sendStop);
 }    
-uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity)
+uint8_t I2c::requestFrom(uint8_t address, uint8_t quantity)
 {
   return requestFrom((uint8_t)address, (uint8_t)quantity, (uint8_t)true);
 }
 
-uint8_t TwoWire::requestFrom(int address, int quantity)
+uint8_t I2c::requestFrom(int address, int quantity)
 {
   return requestFrom((uint8_t)address, (uint8_t)quantity, (uint8_t)true);
 
 }
-uint8_t TwoWire::requestFrom(int address, int quantity, int sendStop)
+uint8_t I2c::requestFrom(int address, int quantity, int sendStop)
 {
   return requestFrom((uint8_t)address, (uint8_t)quantity, (uint8_t)sendStop);
 }
 
-size_t TwoWire::write(uint8_t data)
+size_t I2c::write(uint8_t data)
 {       
     if(txLength >= I2C_BUFFER_LENGTH) {
         return 0;
@@ -95,7 +95,7 @@ size_t TwoWire::write(uint8_t data)
     return 1;
 }
 
-size_t TwoWire::write(const uint8_t *data, size_t size)
+size_t I2c::write(const uint8_t *data, size_t size)
 {
     for(size_t i = 0; i < size; ++i) {
         if(!write(data[i])) {
@@ -105,13 +105,13 @@ size_t TwoWire::write(const uint8_t *data, size_t size)
     return size;
 }
 
-int TwoWire::available(void)
+int I2c::available(void)
 {
     int result = rxLength - rxIndex;
     return result;
 }
 
-int TwoWire::read(void)
+int I2c::read(void)
 {
     int value = -1;
     if(rxIndex < rxLength) {
@@ -121,7 +121,7 @@ int TwoWire::read(void)
     return value;
 }
 
-int TwoWire::peek(void)
+int I2c::peek(void)
 {
     int value = -1;
     if(rxIndex < rxLength) {
@@ -130,7 +130,7 @@ int TwoWire::peek(void)
     return value;
 }
 
-void TwoWire::flush(void)
+void I2c::flush(void)
 {
     rxIndex = 0;
     rxLength = 0;

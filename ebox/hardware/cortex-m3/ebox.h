@@ -46,8 +46,6 @@ extern "C" {
 #include "ebox_pulse.h"
 #include "ebox_in_capture.h"
 #include "ebox_encoder.h"
-#include "ebox_i2c.h"
-#include "ebox_spi.h"
 #include "ebox_uart.h"
 #include "ebox_rtc.h"
 #include "ebox_iflash.h"
@@ -57,6 +55,10 @@ extern "C" {
 #include "ebox_step_motor.h"
 //#include "ebox_3steper.h"
 
+#include "soft_i2c.h"
+#include "soft_spi.h"
+#include "ebox_mcu_i2c.h"
+#include "ebox_mcu_spi.h"
 
 
 #if USE_OBJECT
@@ -87,11 +89,11 @@ extern mcuSpi spi2;
 extern SoftSpi sspi1;
 extern SoftSpi sspi2;
 
-extern mcuI2c i2c1;
-extern mcuI2c i2c2;
-//extern SoftI2c si2c;
-extern SoftI2c si2c1;
-extern SoftI2c si2c2;
+extern SoftI2c sI2c1;
+extern SoftI2c sI2c2;
+extern mcuI2c mcuI2c1;
+extern mcuI2c mcuI2c2;
+
 
 //extern Can can1;
 

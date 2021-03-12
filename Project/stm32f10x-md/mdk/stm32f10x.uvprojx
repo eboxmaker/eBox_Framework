@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>ARM_MATH_CM3</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\ebox;..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\ebox\core\port;..\..\..\ebox\interface\TwoWire;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266;..\..\..\component\MPU6050;..\..\..\component\mqtt\src;..\..\..\os\ebox_os;..\..\..\component\Ethernet3;..\..\..\component\Ethernet3\utility;..\..\..\component\modbus\libraries\ModbusIP;..\..\..\component\soft_uart;..\..\..\component\Firmata;..\..\..\component\Firmata\utility;..\..\..\component\arducat\libraries\arducat;..\..\..\component\fat;..\..\..\component\littlefs;..\..\..\component\pn532</IncludePath>
+              <IncludePath>..\..\..\ebox;..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\ebox\interface\spi;..\..\..\ebox\interface\i2c;..\..\..\ebox\interface\TwoWire;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266;..\..\..\component\MPU6050;..\..\..\component\mqtt\src;..\..\..\os\ebox_os;..\..\..\component\Ethernet3;..\..\..\component\Ethernet3\utility;..\..\..\component\modbus\libraries\ModbusIP;..\..\..\component\soft_uart;..\..\..\component\Firmata;..\..\..\component\Firmata\utility;..\..\..\component\arducat\libraries\arducat;..\..\..\component\fat;..\..\..\component\littlefs;..\..\..\component\pn532</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -745,14 +745,19 @@
               <FilePath>..\..\..\ebox\interface\storage\blockdevice\ebox_block.cpp</FilePath>
             </File>
             <File>
-              <FileName>TwoWire.cpp</FileName>
+              <FileName>i2c.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\TwoWire\TwoWire.cpp</FilePath>
+              <FilePath>..\..\..\ebox\interface\i2c\i2c.cpp</FilePath>
             </File>
             <File>
-              <FileName>SoftTwoWire.cpp</FileName>
+              <FileName>soft_i2c.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\TwoWire\SoftTwoWire.cpp</FilePath>
+              <FilePath>..\..\..\ebox\interface\i2c\soft_i2c.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>soft_spi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\spi\soft_spi.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -815,11 +820,6 @@
               <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_exti.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_i2c.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_i2c.cpp</FilePath>
-            </File>
-            <File>
               <FileName>ebox_iflash.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_iflash.cpp</FilePath>
@@ -838,21 +838,6 @@
               <FileName>ebox_rtc.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_rtc.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_softi2c.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_softi2c.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_softspi.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_softspi.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_spi.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_spi.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_step_motor.cpp</FileName>
@@ -880,14 +865,19 @@
               <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_pulse.cpp</FilePath>
             </File>
             <File>
+              <FileName>ebox_mcu_i2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_mcu_i2c.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_mcu_spi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_mcu_spi.cpp</FilePath>
+            </File>
+            <File>
               <FileName>object.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m3\object.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_twowire.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m3\Peripherals\ebox_twowire.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -930,11 +920,6 @@
               <FilePath>..\..\..\component\edriver\mmc_sd.cpp</FilePath>
             </File>
             <File>
-              <FileName>at24c02.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\edriver\at24c02.cpp</FilePath>
-            </File>
-            <File>
               <FileName>lcd_1.8.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\lcd_1.8.cpp</FilePath>
@@ -968,6 +953,16 @@
               <FileName>at24x.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\at24x.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>L3G4200D.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\L3G4200D.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>lsm303dhlc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\lsm303dhlc.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1073,6 +1068,41 @@
               <FileName>PN532_I2C.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\pn532\PN532_I2C.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mpu</GroupName>
+          <Files>
+            <File>
+              <FileName>FourAxle.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\MPU6050\FourAxle.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>IMU.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\MPU6050\IMU.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>MPU6050.CPP</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\MPU6050\MPU6050.CPP</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>midea</GroupName>
+          <Files>
+            <File>
+              <FileName>ir_r05d.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\ir\ir_r05d.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>midea.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\ir\midea\midea.cpp</FilePath>
             </File>
           </Files>
         </Group>

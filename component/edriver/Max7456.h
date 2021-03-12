@@ -22,6 +22,7 @@
 #define _Max7456_h
 
 #include "ebox_core.h"
+#include "spi.h"
 
 /******* FROM DATASHEET *******/
 

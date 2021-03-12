@@ -1,4 +1,4 @@
-#include "ebox_TwoWire.h"
+#include "ebox_mcu_i2c.h"
 #include "ebox.h"
 
 #if EBOX_DEBUG
@@ -7,14 +7,14 @@
 #endif
 
 #if mcuTwoWireDebug
-#define  mcuI2C_DEBUG(...) DBG("[mcuTwoWire]:"),DBG(__VA_ARGS__)
+#define  mcuI2C_DEBUG(...) DBG("[mcuI2c]:"),DBG(__VA_ARGS__)
 #else
 #define  mcuI2C_DEBUG(...)
 #endif
 
 //#define _bitDelay 5
 
-mcuTwoWire::mcuTwoWire(I2C_TypeDef *I2Cx,Gpio *sclPin, Gpio *sdaPin)
+mcuI2c::mcuI2c(I2C_TypeDef *I2Cx,Gpio *sclPin, Gpio *sdaPin)
 {
     _scl = sclPin;
     _sda = sdaPin;
@@ -29,7 +29,7 @@ mcuTwoWire::mcuTwoWire(I2C_TypeDef *I2Cx,Gpio *sclPin, Gpio *sdaPin)
   *@param    speed:  速率 10,100,200,300,400 分别代表10k，100k，200k,300k,400k
   *@retval   None
   */
-void mcuTwoWire::begin(uint8_t address)
+void mcuI2c::begin(uint8_t address)
 {
     rcc_clock_cmd((uint32_t)_i2cx, ENABLE);
     /* I2C configuration */
@@ -45,11 +45,11 @@ void mcuTwoWire::begin(uint8_t address)
     _scl->mode(AF_OD);    
     mcuI2C_DEBUG("scl_pin: 0x%x ; sda_pin: 0x%x\n",_scl->id, _sda->id);
 }
-void mcuTwoWire::begin(int address)
+void mcuI2c::begin(int address)
 {
     begin((uint8_t)address);
 }
-void mcuTwoWire::begin()
+void mcuI2c::begin()
 {
     begin((uint8_t)0);
 }
@@ -60,7 +60,7 @@ void mcuTwoWire::begin()
  *
  * @return 0.
  */
-void mcuTwoWire::setClock(Speed_t speed)
+void mcuI2c::setClock(Speed_t speed)
 {
    switch (speed)
     {
@@ -90,7 +90,7 @@ void mcuTwoWire::setClock(Speed_t speed)
     mcuI2C_DEBUG("speed:%dKhz;\n",_speed/1000);
 }
 
-i2c_err_t mcuTwoWire::_write(const uint8_t *data, size_t quantity)
+i2c_err_t mcuI2c::_write(const uint8_t *data, size_t quantity)
 {
     i2c_err_t ret;
     for(int i = 0; i < quantity; i++) {
@@ -111,7 +111,7 @@ i2c_err_t mcuTwoWire::_write(const uint8_t *data, size_t quantity)
  *          4 .. other twi error (lost bus arbitration, bus error, ..)
  *          5 .. timeout
  */
-i2c_err_t mcuTwoWire::_write(uint8_t address,const uint8_t *data, size_t quantity, int sendStop)
+i2c_err_t mcuI2c::_write(uint8_t address,const uint8_t *data, size_t quantity, int sendStop)
 {
     uint32_t cnt = 0;
     i2c_err_t ret;
@@ -137,7 +137,7 @@ i2c_err_t mcuTwoWire::_write(uint8_t address,const uint8_t *data, size_t quantit
   *          : 超时
   *@retval   EOK，EWAIT
   */
-size_t mcuTwoWire::_read(uint8_t address,uint8_t *data, uint16_t length,uint8_t sendStop)
+size_t mcuI2c::_read(uint8_t address,uint8_t *data, uint16_t length,uint8_t sendStop)
 {
     uint32_t cnt = 0;
     i2c_err_t err = I2C_ERROR_OK;
@@ -169,7 +169,7 @@ size_t mcuTwoWire::_read(uint8_t address,uint8_t *data, uint16_t length,uint8_t 
   * @param 无.
   * @return 无.
   */
-i2c_err_t mcuTwoWire::_start(void)
+i2c_err_t mcuI2c::_start(void)
 {   
     i2c_err_t ret;
     uint32_t cnt = 0;
@@ -196,7 +196,7 @@ i2c_err_t mcuTwoWire::_start(void)
   * @param 无.
   * @return 无.
   */
-i2c_err_t mcuTwoWire::_stop(void)
+i2c_err_t mcuI2c::_stop(void)
 {   
     I2C_GenerateSTOP(_i2cx, ENABLE);
     return I2C_ERROR_OK;
@@ -215,7 +215,7 @@ i2c_err_t mcuTwoWire::_stop(void)
  *          4 .. other twi error (lost bus arbitration, bus error, ..)
  *          5 .. timeout
  */
-i2c_err_t mcuTwoWire::_waitAck()
+i2c_err_t mcuI2c::_waitAck()
 {
 
 }
@@ -230,7 +230,7 @@ i2c_err_t mcuTwoWire::_waitAck()
  *          4 .. other twi error (lost bus arbitration, bus error, ..)
  *          5 .. timeout
  */
-i2c_err_t mcuTwoWire::_sendByte( uint8_t data )
+i2c_err_t mcuI2c::_sendByte( uint8_t data )
 {
     uint32_t cnt = 0;
     /* Send the byte to be written */
@@ -256,7 +256,7 @@ i2c_err_t mcuTwoWire::_sendByte( uint8_t data )
  *
  * @return 发送结果.返回0表示发送成功，返回-1表示发送失败.
  */
-i2c_err_t	mcuTwoWire::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
+i2c_err_t	mcuI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
 {
     uint32_t cnt = 0;
 
@@ -297,7 +297,7 @@ i2c_err_t	mcuTwoWire::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
   * @param 无.
   * @return 接收到的数据.
   */
-i2c_err_t mcuTwoWire::_receiveByte(uint8_t *data)
+i2c_err_t mcuI2c::_receiveByte(uint8_t *data)
 {
     i2c_err_t ret = I2C_ERROR_OK;
     uint32_t cnt = 0;
@@ -320,7 +320,7 @@ i2c_err_t mcuTwoWire::_receiveByte(uint8_t *data)
  * @param 无.
  * @return 0.
  */
-i2c_err_t mcuTwoWire::_sendAck()
+i2c_err_t mcuI2c::_sendAck()
 {
     i2c_err_t err = I2C_ERROR_OK;
     I2C_AcknowledgeConfig(_i2cx, ENABLE);
@@ -332,7 +332,7 @@ i2c_err_t mcuTwoWire::_sendAck()
   * @param 无
   * @return 0.
   */
-i2c_err_t mcuTwoWire::_sendNack()
+i2c_err_t mcuI2c::_sendNack()
 {
     i2c_err_t err = I2C_ERROR_OK;
     I2C_AcknowledgeConfig(_i2cx, DISABLE);

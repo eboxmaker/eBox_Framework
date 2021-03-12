@@ -1,20 +1,20 @@
-#include "SoftTwoWire.h"
+#include "soft_i2c.h"
 
-
+#include "ebox.h"
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
 #define SoftTwoWireDebug 1
 #endif
 
 #if SoftTwoWireDebug
-#define  I2C_DEBUG(...) DBG("[SoftTwoWire]:"),DBG(__VA_ARGS__)
+#define  I2C_DEBUG(...) DBG("[SoftI2c]:"),DBG(__VA_ARGS__),uart1.flush()
 #else
 #define  I2C_DEBUG(...)
 #endif
 
 //#define _bitDelay 5
 
-SoftTwoWire::SoftTwoWire(Gpio *sclPin, Gpio *sdaPin)
+SoftI2c::SoftI2c(Gpio *sclPin, Gpio *sdaPin)
 {
     _scl = sclPin;
     _sda = sdaPin;
@@ -27,7 +27,7 @@ SoftTwoWire::SoftTwoWire(Gpio *sclPin, Gpio *sdaPin)
   *@param    speed:  速率 10,100,200,300,400 分别代表10k，100k，200k,300k,400k
   *@retval   None
   */
-void SoftTwoWire::begin(uint8_t address)
+void SoftI2c::begin(uint8_t address)
 {
     _sda->mode(OUTPUT_OD_PU);
     _scl->mode(OUTPUT_OD_PU);
@@ -36,7 +36,7 @@ void SoftTwoWire::begin(uint8_t address)
     I2C_DEBUG("scl_pin: 0x%x ; sda_pin: 0x%x\n",_scl->id, _sda->id);
     setClock();
 }
-void SoftTwoWire::begin(int address)
+void SoftI2c::begin(int address)
 {
     _sda->mode(OUTPUT_OD_PU);
     _scl->mode(OUTPUT_OD_PU);
@@ -45,7 +45,7 @@ void SoftTwoWire::begin(int address)
     I2C_DEBUG(" scl_pin: 0x%x ; sda_pin: 0x%x\n",_scl->id, _sda->id);
     setClock();
 }
-void SoftTwoWire::begin()
+void SoftI2c::begin()
 {
     _sda->mode(OUTPUT_OD_PU);
     _scl->mode(OUTPUT_OD_PU);
@@ -61,7 +61,7 @@ void SoftTwoWire::begin()
  *
  * @return 0.
  */
-void SoftTwoWire::setClock(Speed_t speed)
+void SoftI2c::setClock(Speed_t speed)
 {
     switch(speed)
     {
@@ -82,7 +82,7 @@ void SoftTwoWire::setClock(Speed_t speed)
     I2C_DEBUG("bit delay:%d;\n",speed);
 }
 
-i2c_err_t SoftTwoWire::_write(const uint8_t *data, size_t quantity)
+i2c_err_t SoftI2c::_write(const uint8_t *data, size_t quantity)
 {
     i2c_err_t ret;
     for(int i = 0; i < quantity; i++) {
@@ -103,7 +103,7 @@ i2c_err_t SoftTwoWire::_write(const uint8_t *data, size_t quantity)
  *          4 .. other twi error (lost bus arbitration, bus error, ..)
  *          5 .. timeout
  */
-i2c_err_t SoftTwoWire::_write(uint8_t address,const uint8_t *data, size_t quantity, int sendStop)
+i2c_err_t SoftI2c::_write(uint8_t address,const uint8_t *data, size_t quantity, int sendStop)
 {
     i2c_err_t ret;
     _start();
@@ -152,7 +152,7 @@ i2c_err_t SoftTwoWire::_write(uint8_t address,const uint8_t *data, size_t quanti
   *          : 超时
   *@retval   EOK，EWAIT
   */
-size_t SoftTwoWire::_read(uint8_t address,uint8_t *data, uint16_t length,uint8_t sendStop)
+size_t SoftI2c::_read(uint8_t address,uint8_t *data, uint16_t length,uint8_t sendStop)
 {
     i2c_err_t ret;
     int len = length;
@@ -185,7 +185,7 @@ size_t SoftTwoWire::_read(uint8_t address,uint8_t *data, uint16_t length,uint8_t
   * @param 无.
   * @return 无.
   */
-i2c_err_t SoftTwoWire::_start(void)
+i2c_err_t SoftI2c::_start(void)
 {   
     _sda->set();
     _scl->set();          // SCL高
@@ -201,7 +201,7 @@ i2c_err_t SoftTwoWire::_start(void)
   * @param 无.
   * @return 无.
   */
-i2c_err_t SoftTwoWire::_stop(void)
+i2c_err_t SoftI2c::_stop(void)
 {   
     _sda->reset();      // SDA低电平
     _scl->set();        // SCL拉高并保持
@@ -224,7 +224,7 @@ i2c_err_t SoftTwoWire::_stop(void)
  *          4 .. other twi error (lost bus arbitration, bus error, ..)
  *          5 .. timeout
  */
-i2c_err_t SoftTwoWire::_waitAck()
+i2c_err_t SoftI2c::_waitAck()
 {
     i2c_err_t ret;
     _err_at++;
@@ -265,7 +265,7 @@ i2c_err_t SoftTwoWire::_waitAck()
  *          4 .. other twi error (lost bus arbitration, bus error, ..)
  *          5 .. timeout
  */
-i2c_err_t SoftTwoWire::_sendByte( uint8_t c )
+i2c_err_t SoftI2c::_sendByte( uint8_t c )
 {
     uint8_t ii = 8;
     _scl->reset();        //SCL拉低
@@ -284,7 +284,7 @@ i2c_err_t SoftTwoWire::_sendByte( uint8_t c )
     
     return ret;
 }
-i2c_err_t SoftTwoWire::_sendByte_first( uint8_t c)
+i2c_err_t SoftI2c::_sendByte_first( uint8_t c)
 {
     uint16_t cnt = 0;
     _scl->reset();        //SCL拉低
@@ -328,7 +328,7 @@ i2c_err_t SoftTwoWire::_sendByte_first( uint8_t c)
  *
  * @return 发送结果.返回0表示发送成功，返回-1表示发送失败.
  */
-i2c_err_t	SoftTwoWire::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
+i2c_err_t	SoftI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
 {
     // 写，从地址最低位置0；读，从地址最低位置1；
     slaveAddr = (WR == 0) ? (slaveAddr & 0xfe) : (slaveAddr | 0x01);
@@ -339,7 +339,7 @@ i2c_err_t	SoftTwoWire::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
   * @param 无.
   * @return 接收到的数据.
   */
-i2c_err_t SoftTwoWire::_receiveByte(uint8_t *data)
+i2c_err_t SoftI2c::_receiveByte(uint8_t *data)
 {
     uint8_t i = 8;
     uint8_t byte = 0;
@@ -366,7 +366,7 @@ i2c_err_t SoftTwoWire::_receiveByte(uint8_t *data)
  * @param 无.
  * @return 0.
  */
-i2c_err_t SoftTwoWire::_sendAck()
+i2c_err_t SoftI2c::_sendAck()
 {
     _sda->reset();          // 拉低SDA，
     delay_us(_bitDelay);
@@ -382,7 +382,7 @@ i2c_err_t SoftTwoWire::_sendAck()
   * @param 无
   * @return 0.
   */
-i2c_err_t SoftTwoWire::_sendNack()
+i2c_err_t SoftI2c::_sendNack()
 {
     _sda->set();
     delay_us(_bitDelay);

@@ -28,10 +28,9 @@ int main(void)
     {
         if(ir_decoder.available())
         {
-            uint32_t r = ir_decoder.read();
-            uart1.printf("addr:0x%x,key_code=0x%x repeat=%d\r\n", (r &0xff0000)>>16, (r & 0xff), ((r & 0xff00) >> 8));
+            IrDecoder::IrCode_t r = ir_decoder.read();
+            uart1.printf("addr:0x%x,key_code=0x%x repeat=%d\r\n", r.code.addr,r.code.value,r.code.is_repeat);
         }
-        delay_ms(3000);
     }
 }
 

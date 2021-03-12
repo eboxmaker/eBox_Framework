@@ -15,7 +15,7 @@ typedef enum {
     I2C_ERROR_TIMEOUT,
 } i2c_err_t;
 
-class TwoWire : public Stream
+class I2c : public Stream
 {
 
 public:
@@ -30,7 +30,7 @@ public:
 
     
     // public methods
-    TwoWire(){};
+    I2c(){};
 
     virtual void begin(uint8_t address)   = 0;
     virtual void begin(int address)   = 0;
@@ -71,7 +71,7 @@ public:
     {
         return write((uint8_t)n);
     }
-      using       Print::write;
+    using       Print::write;
 
 private:
     // private methods

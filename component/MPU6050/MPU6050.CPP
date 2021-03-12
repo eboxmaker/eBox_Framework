@@ -25,47 +25,34 @@ int Ascale = AFS_8G;
 
 void MPU6050::begin( )
 {
-    i2c->begin(&cfg);
-
-
-    i2c->take(&cfg);
-    i2c->write(MPU6050_ADDRESS, PWR_MGMT_1, 0);
-    i2c->write(MPU6050_ADDRESS, SMPLRT_DIV, 0x07);
-    i2c->write(MPU6050_ADDRESS, CONFIG, 0x06);
-    i2c->write(MPU6050_ADDRESS, GYRO_CONFIG, 0x18);
-    i2c->write(MPU6050_ADDRESS, ACCEL_CONFIG, 0x01);
-    i2c->write(MPU6050_ADDRESS, PWR_MGMT_1, 0);
-    i2c->write(MPU6050_ADDRESS, SMPLRT_DIV, 0x07);
-    i2c->write(MPU6050_ADDRESS, CONFIG, 0x06);
-    i2c->write(MPU6050_ADDRESS, GYRO_CONFIG, 0x18);
-    i2c->write(MPU6050_ADDRESS, ACCEL_CONFIG, 0x01);
-    i2c->release();
+    i2c->begin();
+    writeByte(MPU6050_ADDRESS, PWR_MGMT_1, 0);
+    writeByte(MPU6050_ADDRESS, SMPLRT_DIV, 0x07);
+    writeByte(MPU6050_ADDRESS, CONFIG, 0x06);
+    writeByte(MPU6050_ADDRESS, GYRO_CONFIG, 0x18);
+    writeByte(MPU6050_ADDRESS, ACCEL_CONFIG, 0x01);
+    writeByte(MPU6050_ADDRESS, PWR_MGMT_1, 0);
+    writeByte(MPU6050_ADDRESS, SMPLRT_DIV, 0x07);
+    writeByte(MPU6050_ADDRESS, CONFIG, 0x06);
+    writeByte(MPU6050_ADDRESS, GYRO_CONFIG, 0x18);
+    writeByte(MPU6050_ADDRESS, ACCEL_CONFIG, 0x01);
 }
 void MPU6050::get_id(uint8_t *id)
-{
-    i2c->take(&cfg);
-    i2c->read_buf(MPU6050_ADDRESS, WHO_AM_I_MPU6050,id ,1);
-    i2c->release();
+{    
+    *id = readByte(MPU6050_ADDRESS,WHO_AM_I_MPU6050);
 };
 
 int16_t  MPU6050::get_data(uint8_t reg_address)
 {
-    uint8_t tmp[2];
-    i2c->take(&cfg);
-    i2c->read_buf(MPU6050_ADDRESS, reg_address, tmp, 2);
-    i2c->release();
-
-    return ((tmp[0] << 8) + tmp[1]);
-
+    uint16_t value;
+    return readRegister16(reg_address);
 }
 int8_t  MPU6050::get_data(uint8_t reg_address, int16_t *buf, uint8_t num_to_read)
 {
     uint8_t tmpbuf[20];
 
-    i2c->take(&cfg);
-    i2c->read_buf(MPU6050_ADDRESS, reg_address, tmpbuf, num_to_read * 2);
-    i2c->release();
-
+    
+    readBytes(MPU6050_ADDRESS,reg_address,num_to_read * 2, tmpbuf);
     for(int i = 0; i < num_to_read ; i++)
     {
         *buf++ = (tmpbuf[i * 2 + 0] << 8) + (tmpbuf[i * 2 + 1]);
@@ -556,70 +543,67 @@ bool MPU6050::MPU6050SelfTest() // Should return percent deviation from factory 
 
 void MPU6050::writeByte(uint8_t address, uint8_t subAddress, uint8_t data)
 {
-//  Wire.beginTransmission(address);  // Initialize the Tx buffer
-//  Wire.write(subAddress);           // Put slave register address in Tx buffer
-//  Wire.write(data);                 // Put data in Tx buffer
-//  Wire.endTransmission();           // Send the Tx buffer
-    i2c->take(&cfg);
-    i2c->write(MPU6050_ADDRESS, subAddress, data);
-    i2c->release();
-
+    i2c->beginTransmission(address);  // Initialize the Tx buffer
+    i2c->write(subAddress);           // Put slave register address in Tx buffer
+    i2c->write(data);                 // Put data in Tx buffer
+    i2c->endTransmission();           // Send the Tx buffer
 }
 
 uint8_t MPU6050::readByte(uint8_t address, uint8_t subAddress)
 {
-  uint8_t data; // `data` will store the register data
-//  Wire.beginTransmission(address);         // Initialize the Tx buffer
-//  Wire.write(subAddress);	                 // Put slave register address in Tx buffer
-//  Wire.endTransmission(false);             // Send the Tx buffer, but send a restart to keep connection alive
-//  Wire.requestFrom(address, (uint8_t) 1);  // Read one byte from slave register address
-//  data = Wire.read();                      // Fill Rx buffer with result
-
-    i2c->take(&cfg);
-    i2c->read_buf(MPU6050_ADDRESS, subAddress, &data, 1);
-    i2c->release();
-
+    uint8_t data; // `data` will store the register data
+    i2c->beginTransmission(address);         // Initialize the Tx buffer
+    i2c->write(subAddress);	                 // Put slave register address in Tx buffer
+    i2c->endTransmission(false);             // Send the Tx buffer, but send a restart to keep connection alive
+    i2c->requestFrom(address, (uint8_t) 1);  // Read one byte from slave register address
+    data = i2c->read();                      // Fill Rx buffer with result
     return data;                             // Return data read from slave register
 }
 
 void MPU6050::readBytes(uint8_t address, uint8_t subAddress, uint8_t count, uint8_t * dest)
 {
-//  Wire.beginTransmission(address);   // Initialize the Tx buffer
-//  Wire.write(subAddress);            // Put slave register address in Tx buffer
-//  Wire.endTransmission(false);       // Send the Tx buffer, but send a restart to keep connection alive
-//  uint8_t i = 0;
-//  Wire.requestFrom(address, count);  // Read bytes from slave register address
-//  while (Wire.available()) {
-//    dest[i++] = Wire.read();
-//  }         // Put read results in the Rx buffer
-  
-  
-    i2c->take(&cfg);
-    i2c->read_buf(MPU6050_ADDRESS, subAddress, dest, count);
-    i2c->release();
+    i2c->beginTransmission(address);   // Initialize the Tx buffer
+    i2c->write(subAddress);            // Put slave register address in Tx buffer
+    i2c->endTransmission(false);       // Send the Tx buffer, but send a restart to keep connection alive
+    uint8_t i = 0;
+    i2c->requestFrom(address, count);  // Read bytes from slave register address
+    while (i2c->available()) {
+        dest[i++] = i2c->read();
+    }         // Put read results in the Rx buffer
+
 
 }
 
 uint8_t MPU6050::readRegister8(uint8_t reg)
 {
-    uint8_t value;
-    i2c->take(&cfg);
-    i2c->read_buf(MPU6050_ADDRESS, reg, &value, 1);
-    i2c->release();
+    uint8_t data; // `data` will store the register data
+    i2c->beginTransmission(MPU6050_ADDRESS);         // Initialize the Tx buffer
+    i2c->write(reg);	                 // Put slave register address in Tx buffer
+    i2c->endTransmission(false);             // Send the Tx buffer, but send a restart to keep connection alive
+    i2c->requestFrom(MPU6050_ADDRESS,  1);  // Read one byte from slave register address
+    data = i2c->read();                      // Fill Rx buffer with result
+    return data;                             // Return data read from slave register
 }
 void MPU6050::writeRegister8(uint8_t reg, uint8_t value)
-{
-    i2c->take(&cfg);
-    i2c->write(MPU6050_ADDRESS, reg, value);
-    i2c->release();
+{   
+    i2c->beginTransmission(MPU6050_ADDRESS);  // Initialize the Tx buffer
+    i2c->write(reg);           // Put slave register address in Tx buffer
+    i2c->write(value);                 // Put data in Tx buffer
+    i2c->endTransmission();           // Send the Tx buffer
+
 }
 
 int16_t MPU6050::readRegister16(uint8_t reg)
 {
     Data16_t data;
-    i2c->take(&cfg);
-    i2c->read_buf(MPU6050_ADDRESS, reg, data.byte, 2);
-    i2c->release();
+    i2c->beginTransmission(MPU6050_ADDRESS);   // Initialize the Tx buffer
+    i2c->write(reg);            // Put slave register address in Tx buffer
+    i2c->endTransmission(false);       // Send the Tx buffer, but send a restart to keep connection alive
+    uint8_t i = 0;
+    i2c->requestFrom(MPU6050_ADDRESS, 2);  // Read bytes from slave register address
+    while (i2c->available()) {
+        data.byte[i++] = i2c->read();
+    }         // Put read results in the Rx buffer
 
     return data.value;
 
@@ -628,7 +612,11 @@ void MPU6050::writeRegister16(uint8_t reg, int16_t value)
 {
     Data16_t data;
     data.value = value;
-    i2c->take(&cfg);
-    i2c->write_buf(MPU6050_ADDRESS, reg, data.byte,2);
-    i2c->release();
+    
+    i2c->beginTransmission(MPU6050_ADDRESS);  // Initialize the Tx buffer
+    i2c->write(reg);           // Put slave register address in Tx buffer
+    i2c->write(data.byte[0]);                 // Put data in Tx buffer
+    i2c->write(data.byte[1]);                 // Put data in Tx buffer
+    i2c->endTransmission();           // Send the Tx buffer
+
 }

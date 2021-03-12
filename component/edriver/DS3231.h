@@ -22,6 +22,7 @@
 #define __DS3231_H__
 
 #include "ebox_core.h"
+#include "i2c.h"
 #include "interface/basicRtc.h"
 #include "ebox_uart.h"
 #include "ebox_exti.h"
@@ -71,16 +72,12 @@ public:
         this->i2c = i2c;
         this->intPin = NULL;
         this->slaveAddr = slaveAddr;
-        cfg.speed = I2c::K400;
-        cfg.regAddrBits = I2c::BIT8;
     };
     DS3231(I2c *i2c,Gpio *intPin,uint16_t slaveAddr)
     {
         this->i2c = i2c;
         this->slaveAddr = slaveAddr;
         this->intPin = intPin;
-        cfg.speed = I2c::K400;
-        cfg.regAddrBits = I2c::BIT8;
     };    
     
     virtual void        begin();
@@ -94,7 +91,6 @@ private:
     I2c *i2c;
     Gpio *intPin;
     Exti *exti;
-    I2c::Config_t cfg;
     uint32_t last_time;
     uint16_t slaveAddr;
     void set_hour_mode(HourMode_t mode);

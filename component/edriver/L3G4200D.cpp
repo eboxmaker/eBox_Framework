@@ -26,16 +26,13 @@ void L3G4200D::begin()
 {
     // 0x0F = 0b00001111
     // Normal power mode, all axes enabled
-    i2c->begin(&cfg);
-
-    i2c->take(&cfg);
+    i2c->begin();
 
     write_reg(L3G4200D_CTRL_REG1, 0x0F);
     write_reg(L3G4200D_CTRL_REG2, 0X00);
     write_reg(L3G4200D_CTRL_REG3, 0X08);
     write_reg(L3G4200D_CTRL_REG4, 0X00);
     write_reg(L3G4200D_CTRL_REG5, 0X00);
-    i2c->release();
 
 }
 void L3G4200D::test()
@@ -46,20 +43,22 @@ void L3G4200D::test()
 // Writes a gyro register
 void L3G4200D::write_reg(uint8_t reg, uint8_t value)
 {
-
-    i2c->take(&cfg);
-    i2c->write(GYR_ADDRESS, reg, value);
-    i2c->release();
+    i2c->beginTransmission(GYR_ADDRESS);
+    i2c->write(reg);
+    i2c->write(value);
+    i2c->endTransmission();
 }
 
 // Reads a gyro register
 uint8_t L3G4200D::read_reg(uint8_t reg)
 {
     uint8_t value;
-    i2c->take(&cfg);
-    value = i2c->read(GYR_ADDRESS, reg);
-    i2c->release();
-
+    
+    i2c->requestFrom(GYR_ADDRESS,1,reg,1,true);
+    if(i2c->available())
+    {
+        value = i2c->read();
+    }
     return value;
 }
 // Reads the 3 gyro channels and stores them in vector g

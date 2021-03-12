@@ -10,11 +10,9 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 #include "ebox.h"
 #include "bsp_ebox.h"
+#include <PN532_I2C.h>
 
-#include "at24c02.h"
-#include "at24x.h"
-
-At24x ee(&Wire);
+PN532_I2C nfc(&PB8,&PB9);
 /**
     *	1	此例程需要调用eDrive目录下的at24c02驱动
 	*	2	此例程演示了at24c02的读写操作
@@ -26,23 +24,44 @@ At24x ee(&Wire);
 #define EXAMPLE_NAME	"AT24C02 example"
 #define EXAMPLE_DATE	"2018-08-11"
 
-uint8_t data;
-
 void setup()
 {
     ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
-   // Wire.begin();
-    ee.begin();
 
+    uint32_t versiondata;
+    nfc.begin();
+    while(1){
+        versiondata = nfc.getFirmwareVersion();
+        if (! versiondata) {
+        Serial.print("Didn't find PN53x board");
+        //while (1); // halt
+        }
+        else
+            break;
+        delay_ms(1000);
+    }
+
+    // Got ok data, print it out!
+    Serial.print("Found chip PN5"); Serial.println((versiondata>>24) & 0xFF, HEX); 
+    Serial.print("Firmware ver. "); Serial.print((versiondata>>16) & 0xFF, DEC); 
+    Serial.print('.'); Serial.println((versiondata>>8) & 0xFF, DEC);
+
+    // Set the max number of retry attempts to read from a card
+    // This prevents us from waiting forever for a card, which is
+    // the default behaviour of the PN532.
+    bool err = nfc.setPassiveActivationRetries(0xFF);
+    if(!err)
+        Serial.println("err1\n");
+    // configure board to read RFID tags
+    err = nfc.SAMConfig();
+    if(!err)
+        Serial.println("err2\n");
+
+    Serial.println("Waiting for an ISO14443A card");
 }
-int16_t x, i;
-uint8_t wbuf[512];
-uint8_t rbuf[512];
-#define MAX_LEN 10
-int ret = 0;
-void test();
+
 
 
 int main(void)
@@ -51,55 +70,31 @@ int main(void)
 
     while(1)
     {
-        test();
-        
-    }
-}
+        boolean success;
+        uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
+        uint8_t uidLength;                        // Length of the UID (4 or 7 bytes depending on ISO14443A card type)
 
-void test()
-{
-    ret = 0;
+        // Wait for an ISO14443A type cards (Mifare, etc.).  When one is found
+        // 'uid' will be populated with the UID, and uidLength will indicate
+        // if the uid is 4 bytes (Mifare Classic) or 7 bytes (Mifare Ultralight)
+        success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
 
-    uart1.printf("=================wbuf================\r\n");
-    for(uint16_t i = 0; i < MAX_LEN; i++)
-    {
-        wbuf[i] = random()%255;
-        rbuf[i] = 0;
-    }
-    for(uint16_t i = 0; i < MAX_LEN; i++)
-    {
-        uart1.printf(" %02x ", wbuf[i ]);
-        //ee.byteWrite(i*16+j,buf[i*16+j]);
-    }
-    uart1.printf("\r\n ");
-
-    ee.write_byte(0, wbuf, MAX_LEN);
-
-    uart1.printf("==================rbuf==============\r\n");
-
-    data = ee.read_byte(0, rbuf, MAX_LEN);
-    for(uint16_t i = 0; i < MAX_LEN; i++)
-    {
-        uart1.printf(" %02x ", rbuf[i]);
-    }
-    uart1.printf("\r\n ");
-    for(int i = 0; i < MAX_LEN; i++)
-    {
-        if(wbuf[i] != rbuf[i])
+        if (success) {
+            Serial.println("Found a card!");
+            Serial.print("UID Length: ");Serial.print(uidLength, DEC);Serial.println(" bytes");
+            Serial.print("UID Value: ");
+            for (uint8_t i=0; i < uidLength; i++) 
+            {
+                Serial.print(" 0x");Serial.print(uid[i], HEX); 
+            }
+            Serial.println("");
+            // Wait 1 second before continuing
+            delay(1000);
+        }
+        else
         {
-            ret = 1;
-            break;
+            // PN532 probably timed out waiting for a card
+            Serial.println("Timed out waiting for a card");
         }
     }
-    if(ret == 1)
-    {
-        uart1.printf("eeprom check ......[err]");
-        ee.begin();
-    }
-    else
-        uart1.printf("eeprom check ......[OK]");
-
-    uart1.printf("\r\n================================\r\n");
-    delay_ms(1000);
-
 }

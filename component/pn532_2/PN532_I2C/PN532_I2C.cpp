@@ -2,10 +2,12 @@
 #include "PN532_I2C.h"
 #include "debug.h"
 
+
+
 #define PN532_I2C_ADDRESS       (0x48)
 
 
-PN532_I2C::PN532_I2C(TwoWire &wire)
+PN532_I2C::PN532_I2C(I2c &wire)
 {
     _wire = &wire;
     command = 0;
@@ -14,11 +16,11 @@ PN532_I2C::PN532_I2C(TwoWire &wire)
 void PN532_I2C::begin()
 {
     _wire->begin();
-        PB9.mode(OUTPUT_PP_PU);
+    PB9.mode(OUTPUT_PP_PU);
     PB9.reset();
-    delay_ms(400);
+    delay_ms(100);
     PB9.set();
-    delay_ms(400);
+    delay_ms(100);
 }
 
 void PN532_I2C::wakeup()
@@ -31,11 +33,10 @@ void PN532_I2C::wakeup()
 
 int8_t PN532_I2C::writeCommand(const uint8_t buf[], uint8_t len)
 {
+    int err;
     command = buf[0];
-  delay_ms(2);     // or whatever the delay is for waking up the board
+    delay_ms(1);     // or whatever the delay is for waking up the board
     _wire->beginTransmission(PN532_I2C_ADDRESS);
-//    _wire->endTransmission(false);
-//    delay_us(100);
     write(PN532_PREAMBLE);
     write(PN532_STARTCODE1);
     write(PN532_STARTCODE2);
@@ -81,9 +82,13 @@ int8_t PN532_I2C::writeCommand(const uint8_t buf[], uint8_t len)
     write(checksum);
     write(PN532_POSTAMBLE);
     
-    _wire->endTransmission();
-    
+    err = _wire->endTransmission();
+    if(err)
+    {
+        uart1.printf("[pn532]:write err = %d\n",err);
+    }
     DMSG('\n');
+    delay_ms(1);     // or whatever the delay is for waking up the board
 
     return readAckFrame();
 }
@@ -102,8 +107,11 @@ int16_t PN532_I2C::readResponse(uint8_t buf[], uint8_t len, uint16_t timeout)
         delay_ms(1);
         time++;
         if ((0 != timeout) && (time > timeout)) {
+            uart1.printf("read Response timeout(%d,%d)\n",time,timeout);
             return -1;
         }
+//        uart1.printf("time:%d\n",millis());
+
     } while (1); 
     
     if (0x00 != read()      ||       // PREAMBLE

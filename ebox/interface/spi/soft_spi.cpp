@@ -18,7 +18,7 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "ebox_spi.h"
+#include "soft_spi.h"
 
 
 #if EBOX_DEBUG
@@ -317,12 +317,12 @@ int8_t  SoftSpi::read_buf(uint8_t *rcvdata, uint16_t len)
 
 int8_t SoftSpi::take(Config_t *newConfig)
 {
-    uint32_t end = GetEndTime(200);
+    uint32_t cnt = 0;
 
     while (_busy == 1)
     {
         delay_ms(1);
-        if (IsTimeOut(end, 200))
+        if (cnt >= 200)
         {
             ebox_printf("\r\nSPI产生多线程异常调用\r\n");
             return EWAIT;

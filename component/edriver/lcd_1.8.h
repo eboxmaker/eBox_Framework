@@ -21,6 +21,7 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 
 #include "ebox_core.h"
+#include "spi.h"
 #include "interface/hmi.h"
 #include "font.h"
 

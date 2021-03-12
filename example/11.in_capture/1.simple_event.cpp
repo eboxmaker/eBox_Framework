@@ -46,6 +46,10 @@ Pwm pwm1(&PB6);//创建一个PWM输出对象
 uint32_t frq = 0;
 
 uint16_t p;
+void simple()
+{
+    ic0.simple_event();
+}
 void setup()
 {
     ebox_init();
@@ -53,12 +57,11 @@ void setup()
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
     ic0.begin(1); //初始化输入捕获参数，p分频
-    UART.printf("get_detect_min_pulse_us = %d\r\n",ic0.get_detect_min_pulse_us());
+    ic0.attach(simple);
     UART.flush();
-    frq = 300000;
+    frq = 100*1000;
     pwm1.begin(frq, 500);
 }
-extern __IO uint32_t master_count[4] ;
 
 int main(void)
 {
@@ -73,7 +76,8 @@ int main(void)
             UART.printf("high_duty = %0.2f%%\r\n", ic0.res.high_duty);
             UART.printf("low duty  = %0.2f%%\r\n\r\n", ic0.res.low_duty);
         }
-        pwm1.set_frq(frq++);
+        frq+=100;
+        pwm1.set_frq(frq);
         delay_ms(1000);
     }
 }

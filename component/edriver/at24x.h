@@ -21,7 +21,7 @@
 #ifndef __AT24X_H
 #define __AT24X_H
 #include "ebox_core.h"
-#include "TwoWire.h"
+#include "i2c.h"
 
 #define AT24C02
 #define SLAVE_ADDR 0xA0
@@ -37,7 +37,7 @@
 class At24x
 {
 public:
-    At24x(TwoWire *i2c,uint16_t slaveAddr = SLAVE_ADDR)
+    At24x(I2c *i2c,uint16_t slaveAddr = SLAVE_ADDR)
     {
         this->i2c = i2c;
         this->slaveAddr = slaveAddr;
@@ -52,7 +52,7 @@ public:
 
     int8_t write_page(uint8_t *buf, uint8_t addr, uint8_t num_to_write);
 private:
-    TwoWire *i2c;
+    I2c *i2c;
     uint16_t slaveAddr;
 };
 

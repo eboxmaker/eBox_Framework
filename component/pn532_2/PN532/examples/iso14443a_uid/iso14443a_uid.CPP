@@ -11,21 +11,19 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 #include "bsp_ebox.h"
 #include "at24x.h"
-#include "TwoWire.h"
 #include <PN532_I2C.h>
 #include <PN532.h>
+//PN532_I2C nfc(&PB8,&PB9);
 
-PN532_I2C nfc(&PB8,&PB9);
+PN532_I2C pn532i2c(mcuI2c2);
+PN532 nfc(pn532i2c);
 /**
-    *	1	此例程需要调用eDrive目录下的at24c02驱动
-	*	2	此例程演示了at24c02的读写操作
-    *   3   通过begin可以设置i2c速率为10k，100k，200k，400k
-    *   4   通过config可以自由设置i2c速率，注意f0需要借助官方工具生成timing传入
+    *	1	此例程需要调用pn532_2目录下的驱动
 	*/
 
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"AT24C02 example"
-#define EXAMPLE_DATE	"2018-08-11"
+#define EXAMPLE_NAME	"PN532_I2C example"
+#define EXAMPLE_DATE	"2021-03-10"
 
 void setup()
 {
@@ -73,31 +71,32 @@ int main(void)
 
     while(1)
     {
-          boolean success;
-  uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
-  uint8_t uidLength;                        // Length of the UID (4 or 7 bytes depending on ISO14443A card type)
-  
-  // Wait for an ISO14443A type cards (Mifare, etc.).  When one is found
-  // 'uid' will be populated with the UID, and uidLength will indicate
-  // if the uid is 4 bytes (Mifare Classic) or 7 bytes (Mifare Ultralight)
-  success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
-  
-  if (success) {
-    Serial.println("Found a card!");
-    Serial.print("UID Length: ");Serial.print(uidLength, DEC);Serial.println(" bytes");
-    Serial.print("UID Value: ");
-    for (uint8_t i=0; i < uidLength; i++) 
-    {
-      Serial.print(" 0x");Serial.print(uid[i], HEX); 
-    }
-    Serial.println("");
-    // Wait 1 second before continuing
-    delay_ms(1000);
-  }
-  else
-  {
-    // PN532 probably timed out waiting for a card
-    Serial.println("Timed out waiting for a card");
-  }
+        boolean success;
+        uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
+        uint8_t uidLength;                        // Length of the UID (4 or 7 bytes depending on ISO14443A card type)
+
+        // Wait for an ISO14443A type cards (Mifare, etc.).  When one is found
+        // 'uid' will be populated with the UID, and uidLength will indicate
+        // if the uid is 4 bytes (Mifare Classic) or 7 bytes (Mifare Ultralight)
+        success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
+
+        if (success) {
+            Serial.println("Found a card!");
+            Serial.print("UID Length: ");Serial.print(uidLength, DEC);Serial.println(" bytes");
+            Serial.print("UID Value: ");
+            for (uint8_t i=0; i < uidLength; i++) 
+            {
+                Serial.print(" 0x");Serial.print(uid[i], HEX); 
+            }
+            Serial.println("");
+            // Wait 1 second before continuing
+            delay(1000);
+        }
+        else
+        {
+            // PN532 probably timed out waiting for a card
+            Serial.println("Timed out waiting for a card");
+        }
+        Serial.flush();
     }
 }

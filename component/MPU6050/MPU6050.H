@@ -22,7 +22,7 @@
 #define __MPU6050_H
 
 #include "ebox_core.h"
-
+#include "i2c.h"
 
 enum Ascale {
   AFS_2G = 0,
@@ -173,12 +173,10 @@ public:
 
 public:
 
-    MPU6050(I2c *i2c,uint16_t slaveAddr)
+    MPU6050(I2c *i2c,uint16_t slaveAddr = MPU6050_ADDRESS)
     {
         this->i2c = i2c;
         this->slaveAddr = slaveAddr;
-        cfg.speed = I2c::K200;
-        cfg.regAddrBits = I2c::BIT8;
     };
 
     void        begin( );
@@ -215,7 +213,6 @@ public:
     
 private:
     I2c         *i2c;
-    I2c::Config_t cfg;
     uint16_t slaveAddr;
 
 	float   dpsPerDigit, rangePerDigit;

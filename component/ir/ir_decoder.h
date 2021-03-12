@@ -63,13 +63,16 @@ class IrDecoder
             uint8_t addr;
         } code;
     } IrCode_t;//接收后存储的遥控码
-    
+    IrCode_t resault;
+
     typedef enum
     {
         STATE_START = 0,
         STATE_HEADER,
         STATE_DATA,
     } State_t;//接收过程状态机
+    
+    
     
     typedef union
     {
@@ -88,7 +91,7 @@ class IrDecoder
         IrDecoder(Gpio &io);
         void begin(void);
         int available(void);
-        uint32_t read(void);
+        IrCode_t read(void);
     
     private:
         void handler( void );

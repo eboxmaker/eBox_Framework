@@ -30,7 +30,7 @@
 #define Adafruit_NFCShield_I2C_h
 
 #include <ebox_core.h>
-#include <TwoWire.h>
+#include <i2c.h>
 
 
 #define PN532_PREAMBLE                      (0x00)

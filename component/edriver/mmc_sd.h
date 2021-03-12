@@ -6,6 +6,7 @@ file   : mmc_sd.h
 #define __MMC_SD_H
 
 #include "ebox_core.h"
+#include "spi.h"
 #include "interface/storage/blockdevice/BlockDevice.h"
 namespace ebox{
     

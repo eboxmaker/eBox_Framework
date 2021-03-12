@@ -1,19 +1,20 @@
-#ifndef __SOFTTWOWIRE_H
-#define __SOFTTWOWIRE_H
+#ifndef __EBOXTWOWIRE_H
+#define __EBOXTWOWIRE_H
 #include "ebox_core.h"
 #include "stream.h"
-#include "TwoWire.h"
+#include "i2c.h"
+#include "mcu.h"
 
 
-class SoftTwoWire : public TwoWire
+class mcuI2c : public I2c
 {
 
 public:
 
     
     // public methods
-    SoftTwoWire();
-    SoftTwoWire(Gpio *sclPin, Gpio *sdaPin);
+    mcuI2c();
+    mcuI2c(I2C_TypeDef *I2Cx, Gpio *sclPin, Gpio *sdaPin);
 
     virtual void begin(uint8_t address);
     virtual void begin(int address);
@@ -26,10 +27,14 @@ private:
     
 
   // per object data
+    I2C_TypeDef 	*_i2cx;		// i2cÕ‚…Ë
     Gpio            *_sda;
     Gpio            *_scl;
-	uint8_t   	 	_bitDelay;	// i2c ±–Ú
+    uint8_t         _err;
     uint8_t         _err_at;
+    uint32_t         _speed;
+    I2C_InitTypeDef  I2C_InitStructure;
+
 
 
     // private methods
@@ -43,7 +48,6 @@ private:
     i2c_err_t _stop(void);
     i2c_err_t _waitAck();
     i2c_err_t _sendByte( uint8_t data);
-    i2c_err_t _sendByte_first( uint8_t data);
     i2c_err_t  _send7bitsAddress(uint8_t slaveAddr, uint8_t WR);
     i2c_err_t _receiveByte(uint8_t *data);
     i2c_err_t _sendAck();

@@ -2,8 +2,7 @@
 #define __DEBUG_H__
 #include "ebox.h"
 
-#define DEBUG
-#ifdef DEBUG
+#if 1
 #define DMSG(str)       uart1.print(str)
 #define DMSG_HEX(n)     uart1.print(' '); uart1.print(n, HEX)
 #else

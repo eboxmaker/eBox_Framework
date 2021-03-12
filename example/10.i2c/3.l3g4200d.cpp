@@ -22,7 +22,7 @@ Copyright 2015 shentq. All Rights Reserved.
 #define EXAMPLE_NAME	"L3G4200D example"
 #define EXAMPLE_DATE	"2018-08-11"
 
-L3G4200D lg(&si2c2);
+L3G4200D lg(&sI2c2);
 
 
 void setup()
@@ -31,7 +31,7 @@ void setup()
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
-    lg.begin(100000);
+    lg.begin();
 
 
 
@@ -55,3 +55,4 @@ int main(void)
 }
 
 
+s

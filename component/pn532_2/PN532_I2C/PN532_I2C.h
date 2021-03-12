@@ -2,12 +2,12 @@
 #ifndef __PN532_I2C_H__
 #define __PN532_I2C_H__
 
-#include <TwoWire.h>
+#include <i2c.h>
 #include "PN532Interface.h"
 
 class PN532_I2C : public PN532Interface {
 public:
-    PN532_I2C(TwoWire &wire);
+    PN532_I2C(I2c &wire);
     
     void begin();
     void wakeup();
@@ -15,7 +15,7 @@ public:
     int16_t readResponse(uint8_t buf[], uint8_t len, uint16_t timeout);
     
 private:
-    TwoWire* _wire;
+    I2c* _wire;
     uint8_t command;
     
     int8_t readAckFrame();

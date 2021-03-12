@@ -24,7 +24,7 @@ Copyright 2015 shentq. All Rights Reserved.
 
 
 
-LSM303DLHC lsm(&si2c2);
+LSM303DLHC lsm(&sI2c2);
 
 void setup()
 {
@@ -32,7 +32,7 @@ void setup()
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
-    lsm.begin(400000);
+    lsm.begin();
 
 
 

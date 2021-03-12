@@ -62,8 +62,8 @@ void IrDecoder::handler( void )
     
     ic->update_resault();
     time = ic->res.peroid;
-//        uart1.printf("ms:%0.2fms\r\n", ic->res.peroid/1000.0);
-
+//    uart1.print("ms:" );
+//    uart1.println(ic->res.peroid/1000.0);
     switch ((uint8_t)state)
     {
 
@@ -150,8 +150,9 @@ int IrDecoder::available(void)
     return (int)ring.available();
 }
 
-uint32_t IrDecoder::read(void)
+IrDecoder::IrCode_t IrDecoder::read(void)
 {
-    return ring.read();
+    resault.all = ring.read();
+    return resault;
 }
 

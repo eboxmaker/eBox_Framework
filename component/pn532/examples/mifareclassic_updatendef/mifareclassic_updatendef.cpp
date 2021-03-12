@@ -10,8 +10,6 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 #include "ebox.h"
 #include "bsp_ebox.h"
-#include "at24x.h"
-#include "TwoWire.h"
 #include <PN532_I2C.h>
 
 PN532_I2C nfc(&PB8,&PB9);
