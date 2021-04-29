@@ -495,7 +495,9 @@ extern "C" {
     }
 #endif
 
+
 #if defined (STM32F10X_HD)
+    #if USE_UART4
     void UART4_IRQHandler(void)
     {
         if(USART_GetITStatus(UART4, USART_IT_RXNE) == SET)
@@ -510,6 +512,10 @@ extern "C" {
             irq_handler(serial_irq_ids[NUM_UART4], TxIrq);
         }
     }
+    #endif
+
+    #if USE_UART5
+
     void UART5_IRQHandler(void)
     {
         if(USART_GetITStatus(UART5, USART_IT_RXNE) == SET)
@@ -524,6 +530,8 @@ extern "C" {
             irq_handler(serial_irq_ids[NUM_UART5], TxIrq);
         }
     }
+    #endif
+
 #endif
 
     void serial_irq_handler(uint8_t index, uart_irq_handler handler, uint32_t id)

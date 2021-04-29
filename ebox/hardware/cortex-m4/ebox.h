@@ -32,8 +32,7 @@
 #include "ebox_exti.h"
 #include "ebox_timer.h"
 #include "ebox_pwm.h"
-#include "ebox_i2c.h"
-#include "ebox_spi.h"
+
 #include "ebox_uart.h"
 //#include "ebox_uart_stream.h"
 //#include "ebox_in_capture.h"
@@ -46,6 +45,12 @@
 //#include "ebox_can.h"
 
 #include "stdio.h"
+
+
+#include "soft_i2c.h"
+#include "soft_spi.h"
+#include "ebox_mcu_i2c.h"
+#include "ebox_mcu_spi.h"
 
 extern "C" {
 
