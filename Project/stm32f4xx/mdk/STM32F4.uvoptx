@@ -130,7 +130,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name>爇??Aw爇??Aw爇?</Name>
+          <Name></Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -154,7 +154,7 @@
           <Type>0</Type>
           <LineNumber>265</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134220172</Address>
+          <Address>134225626</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -168,9 +168,9 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>238</LineNumber>
+          <LineNumber>257</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134220022</Address>
+          <Address>134225578</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -179,87 +179,23 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_exti.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\STM32F4\../../../ebox/hardware/cortex-m4/Peripherals/ebox_exti.cpp\238</Expression>
+          <Expression>\\STM32F4\../../../ebox/hardware/cortex-m4/Peripherals/ebox_exti.cpp\257</Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>234</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134231160</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\ebox\core\myprintf.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\STM32F4\../../../ebox/core/myprintf.c\234</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>228</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134231120</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\ebox\core\myprintf.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\STM32F4\../../../ebox/core/myprintf.c\228</Expression>
-        </Bp>
-        <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>254</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134231354</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\ebox\core\myprintf.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\STM32F4\../../../ebox/core/myprintf.c\254</Expression>
-        </Bp>
-        <Bp>
-          <Number>5</Number>
-          <Type>0</Type>
-          <LineNumber>257</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_exti.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>6</Number>
-          <Type>0</Type>
           <LineNumber>284</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
+          <Address>134225728</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
+          <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\..\..\ebox\hardware\cortex-m4\Peripherals\ebox_exti.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\STM32F4\../../../ebox/hardware/cortex-m4/Peripherals/ebox_exti.cpp\284</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -1293,7 +1229,7 @@
 
   <Group>
     <GroupName>ebox_mcu</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1517,7 +1453,7 @@
 
   <Group>
     <GroupName>apps</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1593,7 +1529,7 @@
 
   <Group>
     <GroupName>modbus</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1618,6 +1554,26 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\component\modbus\libraries\ModbusSerial\ModbusSerial.cpp</PathWithFileName>
       <FilenameWithoutPath>ModbusSerial.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>edriver</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>99</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\component\edriver\at24x.cpp</PathWithFileName>
+      <FilenameWithoutPath>at24x.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

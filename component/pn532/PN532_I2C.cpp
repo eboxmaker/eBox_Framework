@@ -46,7 +46,7 @@
 #include "bsp_ebox.h"
 
 //SoftI2c Wire(&PB10,&PB11);
-mcuI2c Wire(I2C2,&PB10,&PB11);
+//mcuI2c Wire(I2C2,&PB10,&PB11);
 
 
 byte pn532ack[] = {0x00, 0x00, 0xFF, 0x00, 0xFF, 0x00};

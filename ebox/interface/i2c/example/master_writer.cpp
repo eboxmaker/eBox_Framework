@@ -10,7 +10,7 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 #include "ebox.h"
 #include "bsp_ebox.h"
-#include "TwoWire.h"
+#include "i2c.h"
 /**
     *	1	此例程为IIC扫描程序
 	*	2	此例程演示了扫描总线上所有地址有响应的设备
@@ -38,7 +38,7 @@ int main(void)
 
     while(1)
     {
-        Wire.beginTransmission(0x48); // transmit to device #8
+        Wire.beginTransmission(0xA0); // transmit to device #8
 //        Wire.write("x is ");        // sends five bytes
         Wire.write(x);              // sends one byte
         Wire.endTransmission();    // stop transmitting

@@ -76,7 +76,7 @@ void SoftI2c::setClock(Speed_t speed)
         _bitDelay = 3;    // Լ100k
         break;
     default:
-        _bitDelay = 4;    // Լ80k
+        _bitDelay = 10;    // Լ80k
         break;
     }
     I2C_DEBUG("bit delay:%d;\n",speed);

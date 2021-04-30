@@ -987,6 +987,16 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>edriver</GroupName>
+          <Files>
+            <File>
+              <FileName>at24x.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\at24x.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>

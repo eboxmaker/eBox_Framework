@@ -10,8 +10,7 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 #include "ebox.h"
 #include "bsp_ebox.h"
-#include "TwoWire.h"
-TwoWire wire(&PB10, &PB11);
+#include "i2c.h"
 /**
     *	1	此例程为IIC扫描程序
 	*	2	此例程演示了扫描总线上所有地址有响应的设备
@@ -29,7 +28,7 @@ void setup()
     ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
-    wire.begin();
+    Wire.begin();
 
 }
 
@@ -43,11 +42,11 @@ int main(void)
 
     while(1)
     {
-        wire.requestFrom(8, 6);    // request 6 bytes from slave device #8
+        Wire.requestFrom(8, 6);    // request 6 bytes from slave device #8
 
-      while (wire.available()) 
+      while (Wire.available()) 
       { // slave may send less than requested
-            char c = wire.read(); // receive a byte as character
+            char c = Wire.read(); // receive a byte as character
             Serial.print(c);         // print the character
       }
 

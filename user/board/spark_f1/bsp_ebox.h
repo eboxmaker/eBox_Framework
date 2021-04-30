@@ -31,6 +31,7 @@
 
 
 
+extern SoftI2c Wire;
 
 
 extern EventGpio btn;
@@ -43,6 +44,7 @@ extern W5500Class w5500;
 #define LED2 PB9
 #define LED3 PB10
 #define I2C  i2c2
+
 extern void print_log(const char *name = "test", const char *date = __DATE__);
 
 #define Serial UART
