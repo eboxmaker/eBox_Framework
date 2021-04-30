@@ -38,7 +38,7 @@ void setup()
 int16_t x, i;
 uint8_t wbuf[512];
 uint8_t rbuf[512];
-#define MAX_LEN 2
+#define MAX_LEN 10
 int ret = 0;
 void test();
 
@@ -50,7 +50,6 @@ int main(void)
     while(1)
     {
         test();
-        
     }
 }
 
@@ -61,7 +60,7 @@ void test()
     uart1.printf("=================wbuf================\r\n");
     for(uint16_t i = 0; i < MAX_LEN; i++)
     {
-        wbuf[i] = i;
+        wbuf[i] = random(255);
         rbuf[i] = 0;
     }
     for(uint16_t i = 0; i < MAX_LEN; i++)

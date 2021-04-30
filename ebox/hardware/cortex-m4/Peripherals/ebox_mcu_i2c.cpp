@@ -45,21 +45,39 @@ mcuI2c::mcuI2c(I2C_TypeDef *I2Cx,Gpio *sclPin, Gpio *sdaPin)
   *@param    speed:  速率 10,100,200,300,400 分别代表10k，100k，200k,300k,400k
   *@retval   None
   */
+
 void mcuI2c::begin(uint8_t address)
 {
+    uint32_t rcc_src;
+
+    _sda->mode(AF_OD_PU,GPIO_AF_I2C2);
+    _scl->mode(AF_OD_PU,GPIO_AF_I2C2);
+
     rcc_clock_cmd((uint32_t)_i2cx, ENABLE);
-    /* I2C configuration */
+    switch((uint32_t)_i2cx)    
+    {
+        case I2C1_BASE:
+            rcc_src = RCC_APB1Periph_I2C1;break;
+        case I2C2_BASE:
+            rcc_src = RCC_APB1Periph_I2C2;break;
+        case I2C3_BASE:
+            rcc_src = RCC_APB1Periph_I2C3;break;
+    }       
+    /* Reset I2Cx IP */
+    RCC_APB1PeriphResetCmd(rcc_src, ENABLE);
+    /* Release reset signal of I2Cx IP */
+    RCC_APB1PeriphResetCmd(rcc_src, DISABLE);
+
     I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
     I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
     I2C_InitStructure.I2C_OwnAddress1 = address;
     I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
     I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
-    setClock();
 
-    
-    _sda->mode(AF_OD);
-    _scl->mode(AF_OD);    
+    setClock();
+ 
     mcuI2C_DEBUG("scl_pin: 0x%x ; sda_pin: 0x%x\n",_scl->id, _sda->id);
+
 }
 void mcuI2c::begin(int address)
 {
@@ -97,11 +115,11 @@ void mcuI2c::setClock(Speed_t speed)
         _speed = (200000);
     }
     I2C_InitStructure.I2C_ClockSpeed = _speed;
+    I2C_Init(_i2cx, &I2C_InitStructure);
 
     /* I2C Peripheral Enable */
     I2C_Cmd(_i2cx, ENABLE);
     /* Apply I2C configuration after enabling it */
-    I2C_Init(_i2cx, &I2C_InitStructure);
     
     
     mcuI2C_DEBUG("speed:%dKhz;\n",_speed/1000);

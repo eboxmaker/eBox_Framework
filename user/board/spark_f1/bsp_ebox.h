@@ -32,6 +32,7 @@
 
 
 extern SoftI2c Wire;
+extern mcuI2c mcuWire;
 
 
 extern EventGpio btn;

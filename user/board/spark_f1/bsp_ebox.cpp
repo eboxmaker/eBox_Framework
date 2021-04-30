@@ -22,6 +22,7 @@
 #include "ebox_mem.h"
 
 SoftI2c Wire(&PB10, &PB11);
+mcuI2c mcuWire(I2C2, &PB10, &PB11);
 
 W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
 

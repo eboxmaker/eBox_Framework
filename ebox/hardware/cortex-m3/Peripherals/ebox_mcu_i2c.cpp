@@ -30,8 +30,27 @@ mcuI2c::mcuI2c(I2C_TypeDef *I2Cx,Gpio *sclPin, Gpio *sdaPin)
   *@retval   None
   */
 void mcuI2c::begin(uint8_t address)
-{
+{    
+    uint32_t rcc_src;
+
+    _sda->mode(AF_OD);
+    _scl->mode(AF_OD);  
+    
     rcc_clock_cmd((uint32_t)_i2cx, ENABLE);
+    switch((uint32_t)_i2cx)    
+    {
+        case I2C1_BASE:
+            rcc_src = RCC_APB1Periph_I2C1;break;
+        case I2C2_BASE:
+            rcc_src = RCC_APB1Periph_I2C2;break;
+//        case I2C3_BASE:
+//            rcc_src = RCC_APB1Periph_I2C3;break;
+    }       
+    /* Reset I2Cx IP */
+    RCC_APB1PeriphResetCmd(rcc_src, ENABLE);
+    /* Release reset signal of I2Cx IP */
+    RCC_APB1PeriphResetCmd(rcc_src, DISABLE);
+    
     /* I2C configuration */
     I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
     I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
@@ -41,8 +60,7 @@ void mcuI2c::begin(uint8_t address)
     setClock();
 
     
-    _sda->mode(AF_OD);
-    _scl->mode(AF_OD);    
+  
     mcuI2C_DEBUG("scl_pin: 0x%x ; sda_pin: 0x%x\n",_scl->id, _sda->id);
 }
 void mcuI2c::begin(int address)
