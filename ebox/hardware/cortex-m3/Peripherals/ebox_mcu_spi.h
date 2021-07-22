@@ -27,8 +27,8 @@
 #include "dma.h"
 
 
-#define EBOX_DEBUG_MCUSPI_ENABLE       true
-#define EBOX_DEBUG_MCUSPI_ENABLE_ERR   false
+#define EBOX_DEBUG_MCUSPI_ENABLE       false
+#define EBOX_DEBUG_MCUSPI_ENABLE_ERR   true
 
 #if EBOX_DEBUG_MCUSPI_ENABLE
 #define mcuSpiDebug(...)  ebox_printf("[SPI]:%d: ",__LINE__),ebox_printf(__VA_ARGS__ )

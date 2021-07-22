@@ -19,7 +19,7 @@
 #define __ESP8266_H__
 
 #include "ebox.h"
-
+#include "ringbuf.h"
 
 #define RX_BUFFER_SIZE 1024
 #define NET_DATA_BUFFER_SIZE 1024
@@ -178,7 +178,7 @@ private:
 private:
     ////接收数据相关代码//////////////////////////////////////////////////////////
     uint8_t     net_data_buf[NET_DATA_BUFFER_SIZE];//用于给环形缓冲区
-    RINGBUF     net_buf;//用于接收网络数据的环形缓冲区
+    RingBufUint8     net_buf;//用于接收网络数据的环形缓冲区
     uint16_t    net_data_rx_cnt;
     uint16_t    net_data_len;
     uint16_t    net_data_id;

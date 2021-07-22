@@ -70,7 +70,7 @@
 //”√ªß≈‰÷√//////////////
 
 #define USE_UART1 1
-#define USE_UART2 0
+#define USE_UART2 1
 #define USE_UART3 0
 
 #if defined (STM32F10X_HD)

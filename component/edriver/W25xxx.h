@@ -132,50 +132,5 @@ private:
 
 
 };
-//class W25xxx : public ebox::BlockDevice
-//{
-//public:
-//    W25xxx(Gpio *cs, Spi *spi)
-//    {
-//        this->cs  = cs;
-//        this->spi = spi;
-//    }
-//    virtual int begin();
-//    virtual int read_sector(uint8_t *buffer, uint32_t sector, uint8_t count);
-//    virtual int write_sector(const uint8_t *buffer, uint32_t sector, uint8_t count);
-//    
-//    
-//    
-//    void        read(uint8_t *buffer, uint32_t read_addr, uint16_t num_to_read);
-//    void        fast_read(uint8_t *buffer, uint32_t read_addr, uint16_t num_to_read);
-//    void        write(uint8_t *buffer, uint32_t write_addr, uint16_t num_to_write);
-//    void        write_no_check(const uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
-//    virtual int erase_sector(uint32_t dst_addr);
-//    void        erase_chip(void);
 
-//    uint8_t     read_sr(uint8_t index = 0);
-//    void        write_sr(uint8_t index,uint8_t value);
-//    void        wait_busy(void);
-//    void        power_down(void);
-//    void        wake_up(void);
-//    void        write_enable(void);
-//    void        write_disable(void);
-//    uint16_t    get_type();
-//    
-//private:
-//    uint8_t     spi_flash_buf[4096];
-//    Spi::Config_t cfg;
-//    Gpio        *cs;
-//    Spi         *spi;
-//    bool     initialized;
-
-//    int         init();
-//    uint16_t    read_id();
-//    void        write_page(const uint8_t *buf, uint32_t write_addr, uint16_t num_to_write);
-
-//    uint16_t    type;				//∂®“ÂW25QXX–æ∆¨–Õ∫≈	
-//    uint32_t    page_count;
-
-
-//};
 #endif

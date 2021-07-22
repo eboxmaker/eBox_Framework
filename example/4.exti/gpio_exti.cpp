@@ -21,7 +21,6 @@
 
 #include "ebox.h"
 #include "bsp_ebox.h"
-#include "base64.h"
 /**
 	*	1	此例程演示了GPIO中断
     *   2   其中userbt1连接用户按键，按下和弹起绑定不同的回调函数

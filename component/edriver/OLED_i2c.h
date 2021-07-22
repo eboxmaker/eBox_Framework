@@ -2,7 +2,7 @@
 #define __OLED_IIC_H
 
 #include "ebox_core.h"
-#include "ebox_i2c.h"
+#include "i2c.h"
 #include "font.h"
 
 #define OLED_CMD  0	//Ð´ÃüÁî
@@ -23,12 +23,11 @@
 class OledI2c
 {
 public:
-    OledI2c(SoftI2c *i2c)
+    OledI2c(I2c *i2c)
     {
         this->i2c = i2c;
-        speed = 0;
     }
-    bool begin(uint32_t speed);
+    bool begin(I2c::Speed_t speed = I2c::K100);
 
     void clear(void);
     void on(void);
@@ -37,7 +36,7 @@ public:
 
     void show_char(uint8_t x, uint8_t y, uint8_t chr, uint8_t Char_Size);
     void show_string(uint8_t x, uint8_t y, char  *chr, uint8_t Char_Size);
-    void show_num(uint8_t x, uint8_t y, u32 num, uint8_t len, uint8_t size2);
+    void show_num(uint8_t x, uint8_t y, uint32_t num, uint8_t len, uint8_t size2);
     void show_chinese(uint8_t x, uint8_t y, uint8_t no);
 
 
@@ -45,8 +44,7 @@ public:
     void draw_bmp(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1, unsigned char BMP[]);
 
 private:
-    SoftI2c *i2c;
-    uint32_t speed;
+    I2c *i2c;
     void write_cmd(uint8_t cmd);
     void write_data(uint8_t data);
     void set_pos(unsigned char x, unsigned char y) ;

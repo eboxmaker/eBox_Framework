@@ -78,7 +78,7 @@ int main(void)
         hsl.h++;
         if(hsl.h > 360)hsl.h = 0;
         led.color_hsl(hsl);
-        delay_ms(50);
+        delay_ms(10);
 
 
 

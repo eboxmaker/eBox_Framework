@@ -2,7 +2,7 @@
 #define __EVENT_MANAGER_H
 
 #include "ebox.h"
-#include "list.h"
+#include "elist.h"
 
 class Event:public Object
 {

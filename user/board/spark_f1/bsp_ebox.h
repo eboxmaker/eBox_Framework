@@ -41,6 +41,14 @@ extern EventManager manager;
 extern W5500Class w5500;
 
 #define UART uart1
+
+
+#define BtnPin PA8
+
+#define LED_R PB7
+#define LED_G PB8
+#define LED_B PB9
+
 #define LED1 PB8
 #define LED2 PB9
 #define LED3 PB10

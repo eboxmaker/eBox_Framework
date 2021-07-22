@@ -27,8 +27,9 @@
 	*/
 
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"EventGPIO example"
-#define EXAMPLE_DATE	"2018-08-02"
+
+#define EXAMPLE_NAME	"EventGPIO btn example"
+#define EXAMPLE_DATE	"2019-05-17"
 
 
 /** 创建EventGpio对象，并挂载事件回调函数高电平，低电平，上升沿，
@@ -36,8 +37,7 @@
 	*/
 // 使用长按事件会自动禁用单击事件，且长按发生后不触发释放事件。但不影响上升沿和下降沿事件
 // 使用长按事件，可以和释放事件配合，当没有触发长按事件的时候，释放事件会被执行
-EventGpio btn(&PA8, 1,"btn1");
-EventManager manager;
+
 
 // 下降沿检测
 void neg(Object *sender)

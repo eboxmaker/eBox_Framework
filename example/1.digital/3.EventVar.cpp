@@ -52,7 +52,6 @@ void down(Object *sender)
 }
 
 
-EventManager manager;
 void setup()
 {
     ebox_init();

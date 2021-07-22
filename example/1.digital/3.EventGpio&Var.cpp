@@ -35,7 +35,6 @@
 	*/
 // 使用长按事件会自动禁用单击事件，且长按发生后不触发释放事件。但不影响上升沿和下降沿事件
 // 使用长按事件，可以和释放事件配合，当没有触发长按事件的时候，释放事件会被执行
-EventGpio btn(&PA8, 1,"btn");
 
 uint8_t volume = 0;
 EventVarUint8 var(&volume,"volume");
@@ -98,7 +97,6 @@ void down(Object *sender)
 }
 
 
-EventManager manager;
 void setup()
 {
     ebox_init();

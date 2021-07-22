@@ -23,8 +23,8 @@
 
 
 
-char ssid[] = "opposhen";
-char password[] = "12345678";
+char ssid[] = "10506";
+char password[] = "syzx22213621362";
 
 
 #if 1
@@ -183,7 +183,7 @@ bool ESP8266::begin(Gpio *rst, Uart *uart, uint32_t baud)
     this->rst   = rst;
     this->uart  = uart;
 
-    this->uart->begin(baud);
+    this->uart->begin(baud,RxIt);
     this->uart->attach(uart_interrupt_event, RxIrq);
     this->uart->interrupt(RxIrq, ENABLE);
     this->rst->mode(OUTPUT_PP);
@@ -192,7 +192,7 @@ bool ESP8266::begin(Gpio *rst, Uart *uart, uint32_t baud)
 
     hard_reset();
 
-    net_buf.begin(net_data_buf, NET_DATA_BUFFER_SIZE); //初始化环形缓冲区
+    net_buf.begin(NET_DATA_BUFFER_SIZE); //初始化环形缓冲区
     net_data_rx_cnt = 0;
     net_data_len = 0;
     net_data_id = 0;

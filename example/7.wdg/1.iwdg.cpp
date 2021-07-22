@@ -29,7 +29,7 @@ void setup()
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
     UART.printf("reset !!!\r\n");
-    dog.begin(26208);
+    dog.begin(4000);
 }
 
 int main(void)
@@ -42,7 +42,7 @@ int main(void)
         dog.feed();//在常见的应用中喂狗应该在定时器中断中定时喂狗
         UART.printf("feed %d running %.02fs interval %.02f s!\r\n", i++, (millis() / 1000.0), (float)((millis() - current) / 1000.0));
         current = millis();
-        delay_ms(25000);
+        delay_ms(5000);
     }
 }
 

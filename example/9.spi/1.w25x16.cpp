@@ -52,7 +52,7 @@ int main(void)
         for(int i = 0; i < 100; i++)
             wbuf[i] = random() % 256;
 
-        flash.read_id(&id);
+        id = flash.read_id();
         uart1.printf("\r\n==readid=======\r\n");
         uart1.printf("id = %x", id);
 

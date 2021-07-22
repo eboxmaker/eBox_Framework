@@ -21,6 +21,7 @@
 #ifndef __SI4432_H
 #define __SI4432_H
 #include "ebox_core.h"
+#include "spi.h"
 
 //Si4432ÖÐ¶Ï¹Ü½Å	 P2.13
 //#define  Si4432_NIRQ_ST()  	    FIO2_ST(13)

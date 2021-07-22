@@ -16,8 +16,8 @@
   * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
   ******************************************************************************
   */
-#ifndef __LIST_H
-#define __LIST_H
+#ifndef __ELIST_H
+#define __ELIST_H
 #include "ebox_type.h"
 #include "ebox_core.h"
 #include "ebox_mem.h"

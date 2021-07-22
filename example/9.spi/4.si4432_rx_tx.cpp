@@ -13,7 +13,10 @@ Copyright 2015 shentq. All Rights Reserved.
 
 #include "si4432.h"
 #include "led.h"
-#include "button.h"
+#include "EventGpio.h"
+#include "EventManager.h"
+
+
 /**
 	*	1	此例程需要调用eDrive目录下的si4432驱动
 	*	2	此例程演示了si4432无线模块收发
@@ -29,7 +32,6 @@ Led     led_net(&LED1, 1);
 Led     led_rx(&LED2, 1);
 Led		led_tx(&LED3, 1);
 
-Button btn(&BtnPin, 1);
 ///////////////////////////////////
 uint8_t     recv_buf[1024] = {0};
 uint16_t    len = 0;
@@ -37,6 +39,8 @@ uint32_t    count = 0;
 
 uint8_t rbuf[512];
 uint8_t wbuf[512];
+uint16_t tx_cnt = 0;
+
 
 
 //无线发射采集数据
@@ -60,7 +64,13 @@ void RF_TxData(uint8_t protno)
     //发射完毕后设置模块接收状态；
     rf.set_rx_mode();
 }
-
+void click(Object *sender)
+{
+    UART.println("检测到按键单击");
+    tx_cnt++;
+    RF_TxData(tx_cnt);
+    led_tx.toggle();
+}
 
 void setup()
 {
@@ -68,8 +78,13 @@ void setup()
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
-    rf.begin(2);
+    rf.begin();
+    
+    btn.event_click = click;
+    
     btn.begin();
+    manager.add(&btn);
+
     led_net.begin();
     led_rx.begin();
     led_tx.begin();
@@ -78,7 +93,6 @@ void setup()
 int main(void)
 {
     int ret;
-    uint16_t tx_cnt = 0;
 
 
     setup();
@@ -92,14 +106,7 @@ int main(void)
 
     while(1)
     {
-        btn.loop();
-        if(btn.click())
-        {
-            tx_cnt++;
-            RF_TxData(tx_cnt);
-            led_tx.toggle();
-        }
-
+        manager.loop();
 
         //无线模块接收中断
         if(rf.read_irq() == 0)

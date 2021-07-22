@@ -51,7 +51,7 @@ int main(void)
         if(x >= PI)x = 0;
         y = 2000 - (sin(x) + 1) * 1000;
 
-        analog_write(&DAC_0, y);
+        analog_write(&PB8, y);
         delay_ms(20);
     }
 }
