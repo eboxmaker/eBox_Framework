@@ -3,6 +3,7 @@
 
 #include "ebox_core.h"
 #include "i2c.h"
+#include "hmi.h"
 #include "font.h"
 
 #define OLED_CMD  0	//Ğ´ÃüÁî

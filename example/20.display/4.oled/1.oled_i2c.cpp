@@ -34,15 +34,16 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    oled.begin(400000);
+    oled.begin();
 }
 int main(void)
 {
-    static uint64_t last_time = millis();
-    static uint64_t last_time1 = millis();
+
     setup();
     uint16_t temp;
     float speed;
+	static uint64_t last_time = millis();
+    static uint64_t last_time1 = millis();
     while(1)
     {
         last_time = millis();

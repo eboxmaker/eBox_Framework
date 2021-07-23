@@ -39,6 +39,7 @@ extern EventGpio btn;
 extern EventManager manager;
 
 extern W5500Class w5500;
+extern Lcd lcd;
 
 #define UART uart1
 

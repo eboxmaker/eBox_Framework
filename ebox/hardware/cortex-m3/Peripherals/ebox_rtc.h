@@ -26,7 +26,7 @@
 #include "ebox_core.h"
 #include "mcu.h"
 #include "FunctionPointer.h"
-
+#include "time.h"
 /**
   *1.提供一个32位的循环计数,每秒加1.
   *2.一个中断源，三个中断事件
@@ -140,8 +140,8 @@ private:
     void        _setTimeFlag(uint16_t configFlag);
     uint8_t     _getTimeFlag(void);
     void        _nvic(FunctionalState state);
-    void				_setTimeCounter(uint32_t count);
-    uint32_t 		_getTimeCounter(void);
+    void        _setTimeCounter(uint32_t count);
+    uint32_t    _getTimeCounter(void);
     uint32_t    _getAlarmCounter(void);
     void        _updateDate(uint32_t dayElapsed);
     uint8_t     _isLeapYear(uint16_t nYear);
