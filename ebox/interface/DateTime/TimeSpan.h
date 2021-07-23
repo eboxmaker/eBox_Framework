@@ -88,10 +88,10 @@ public :
     int hours;
     int days;
 
-    float total_seconds;
-    float total_minutes;
-    float total_hours;
-    float total_days;
+    double total_seconds;
+    double total_minutes;
+    double total_hours;
+    double total_days;
 
     void print(Uart& uart);
 

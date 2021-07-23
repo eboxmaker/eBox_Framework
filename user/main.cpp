@@ -24,7 +24,7 @@
 #include "datetime.h"
 
 
-DateTimeClass dt("2021-01-2 2:28:3");
+DateTimeClass dt("2021-07-24 2:28:3");
 //DateTimeClass dt2("2022-02-3 3:54:50");
 DateTimeClass dt2("2000-02-3 5:53:27");
 
@@ -40,7 +40,10 @@ int main(void)
     
     dt.print(uart1);
     dt2.print(uart1);
-    
+    uart1.println("=====DateTime UTC DateTime Test=====");
+    DateTimeClass dtutc = dt.ToUniversalTime();
+    dtutc.print(uart1);
+
     uart1.println("=====DateTime Add Days Test=====");
     for(int i = 0; i < 367; i++)
     {
@@ -88,6 +91,7 @@ int main(void)
     {
         dt.add_seconds(1);
         dt.print(uart1);
+        uart1.println(dt.ToTimeStamp());
         delay_ms(1000);
     }
 }

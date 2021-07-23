@@ -46,11 +46,14 @@ int seconds_in_year(int year)
     return IsLeapYear(year)?SECONDS_PER_YEAR:SECONDS_PER_LEAP_YEAR;
 }
 
-DateTimeClass::DateTimeClass()
+DateTimeClass::DateTimeClass():
+kind(Local)
 {
 
 }
-DateTimeClass::DateTimeClass(String str)
+
+DateTimeClass::DateTimeClass(String str,DateTimeKind_t _kind):
+kind(Local)
 {
   *this = parse(str);
 }
@@ -152,8 +155,8 @@ String DateTimeClass::toString(TimeFormat_t format ,TimeSeparatorFormat_t gap)
 
 void DateTimeClass::print(Uart &uart)
 {
-    uart.printf("%04d-%02d-%02d %02d:%02d:%02d\n",year,month,day,\
-        hour,minute,second);
+    uart.printf("%04d-%02d-%02d %02d:%02d:%02d week:%d\n",year,month,day,\
+        hour,minute,second,day_of_week());
 }
 
 bool DateTimeClass::is_leap_year()
@@ -187,14 +190,14 @@ int DateTimeClass::day_of_year()
 int DateTimeClass::day_of_week()
 {
     int week;
-    uint16_t year = year;
-    uint8_t month = month;
-    if(month == 1 || month == 2)
+    uint16_t _year = year;
+    uint8_t _month = month;
+    if(_month == 1 || _month == 2)
     {
-        month += 12;
-        year--;
+        _month += 12;
+        _year--;
     }
-    week = (day + 2 * month + 3 * (month + 1) / 5 + year + year / 4 - year / 100 + year / 400) % 7 + 1;
+    week = (day + 2 * _month + 3 * (_month + 1) / 5 + _year + _year / 4 - _year / 100 + _year / 400) % 7 + 1;
     return week;
 }
 int DateTimeClass::seconde_of_day()
@@ -277,7 +280,21 @@ void DateTimeClass::add_seconds(int value)
     add_minutes(minute_to_add);
 }
     
-    
+DateTimeClass DateTimeClass::ToUniversalTime()
+{
+    DateTimeClass dt = *this;
+    dt.kind = Utc;
+    dt.add_hours(-UtcOffset);
+    return dt;
+}
+double DateTimeClass::ToTimeStamp()
+{
+    DateTimeClass dtStart("1970-1-1 0:0:0",Utc);
+    DateTimeClass dt = this->ToUniversalTime();
+    TimeSpan ts = dt - dtStart;
+    return ts.total_seconds;
+}
+
 
 
 TimeSpan DateTimeClass::operator-(DateTimeClass& b)
@@ -341,10 +358,10 @@ TimeSpan DateTimeClass::operator-(DateTimeClass& b)
         ts.seconds = remainderSec;
     }
     
-    ts.total_days = ts.days + (ts.hours*3600 + ts.minutes*60 + ts.seconds)/(float)SECONDS_PER_DAY;
-    ts.total_hours = (ts.days * 24) + ts.hours + (ts.minutes*60 + ts.seconds)/(float)SECONDS_PER_HOUR;
-    ts.total_minutes = (float)ts.days * MINUTE_PER_DAY + ts.hours * MINUTE_PER_HOUR + ts.minutes + ts.seconds/(float)SECONDS_PER_MINUTE;
-    ts.total_seconds = (float)ts.days * SECONDS_PER_DAY + ts.hours * SECONDS_PER_HOUR + ts.minutes*SECONDS_PER_MINUTE + ts.seconds;
+    ts.total_days = ts.days + (ts.hours*3600 + ts.minutes*60 + ts.seconds)/(double)SECONDS_PER_DAY;
+    ts.total_hours = (ts.days * 24) + ts.hours + (ts.minutes*60 + ts.seconds)/(double)SECONDS_PER_HOUR;
+    ts.total_minutes = (double)ts.days * MINUTE_PER_DAY + ts.hours * MINUTE_PER_HOUR + ts.minutes + ts.seconds/(double)SECONDS_PER_MINUTE;
+    ts.total_seconds = (double)ts.days * SECONDS_PER_DAY + ts.hours * SECONDS_PER_HOUR + ts.minutes*SECONDS_PER_MINUTE + ts.seconds;
     return ts;
 };
 
