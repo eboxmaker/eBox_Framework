@@ -42,33 +42,36 @@ public:
     int hour;
     int minute;
     int second;
-    int milli_second;
+    int milliSecond;
+    int err;
 
 
     DateTimeClass();
     DateTimeClass(String str,DateTimeKind_t _kind = Local);
 
-    static DateTimeClass parse(String str);
+    static DateTimeClass parse(String &str);
+    static bool limitCheck(DateTimeClass &dt);
+    static DateTimeClass now();
 
-    bool is_leap_year();
+    bool isLeapYear();
 
 
-    int day_of_year();
-    int day_of_week();
-    int seconde_of_day();
-    int seconde_of_year();
-    int minute_of_day();
-    void add_months(int value);
-    void add_years(int value);
-    void add_days(int value);
-    void add_hours(int value);
-    void add_minutes(int value);
-    void add_seconds(int value);
+    int dayOfYear();
+    int dayOfWeek();
+    int secondeOfDay();
+    int secondeOfYear();
+    int minuteOfDay();
+    void addMonths(int value);
+    void addYears(int value);
+    void addDays(int value);
+    void addHours(int value);
+    void addMinutes(int value);
+    void addSeconds(int value);
     
     String toString(TimeFormat_t format = YYYY_MM_DD_HH_MM_SS,TimeSeparatorFormat_t gap = Sep1);
     
-    DateTimeClass ToUniversalTime();
-    double ToTimeStamp();
+    DateTimeClass toUniversalTime();
+    double toTimeStamp();
     TimeSpan  operator-(DateTimeClass& b);
     DateTimeClass  operator+(TimeSpan& b);
     void print(Uart &uart);
@@ -76,7 +79,7 @@ public:
 private:
     DateTimeKind_t kind;
     void add_one_day();
-    
+
 };
 
 

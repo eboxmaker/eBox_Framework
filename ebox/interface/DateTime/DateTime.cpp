@@ -1,5 +1,5 @@
 #include "DateTime.h"
-
+#include "ebox_core.h"
 const uint8_t days_in_month_table[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 
@@ -12,7 +12,7 @@ const uint8_t days_in_month_table[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31,
 #define MINUTE_PER_HOUR (60)
 #define MINUTE_PER_DAY  (60*24)
 
-bool IsLeapYear(int year)
+bool is_leap_year(int year)
 {
     if(year % 4 == 0) //必须能被4整除
     {
@@ -27,7 +27,7 @@ bool IsLeapYear(int year)
 }
 int days_in_month(int year,int month)
 {
-    if(month == 2 && IsLeapYear(year))
+    if(month == 2 && is_leap_year(year))
     {
          return  29;
     }
@@ -38,63 +38,104 @@ int days_in_month(int year,int month)
 }
 int days_in_year(int year)
 {
-    return IsLeapYear(year)?366:365;
+    return is_leap_year(year)?366:365;
 }
 
 int seconds_in_year(int year)
 {
-    return IsLeapYear(year)?SECONDS_PER_YEAR:SECONDS_PER_LEAP_YEAR;
+    return is_leap_year(year)?SECONDS_PER_YEAR:SECONDS_PER_LEAP_YEAR;
+}
+int find_uint_from_string(String &str,int seek,uint32_t *value)
+{
+    char buf[64];
+    uint32_t val = 0;
+    if(str.length() > 64) return -1;
+    memcpy(buf,str.c_str(),64);
+    int index = seek;
+    while(1)
+    {
+        if(isDigit(buf[index])){break;}//如果是数字则进入下一循环
+        else{//否则加一
+            index++;
+            if(index == 64) return -1;
+        }
+    }
+    while(1)
+    {
+        if(isDigit(buf[index])){
+            val = val * 10 + buf[index++] - '0';
+        }
+        else{
+            *value = val;
+            return index;
+        }
+    }
+    return -1;
 }
 
-DateTimeClass::DateTimeClass():
-kind(Local)
+DateTimeClass::DateTimeClass()
 {
-
+    kind = Local;
+    err = 0;
 }
 
-DateTimeClass::DateTimeClass(String str,DateTimeKind_t _kind):
-kind(Local)
+DateTimeClass::DateTimeClass(String str,DateTimeKind_t _kind)
 {
-  *this = parse(str);
+    kind = _kind;
+    err = 0;
+    *this = parse(str);
 }
-DateTimeClass DateTimeClass::parse(String str)
+DateTimeClass DateTimeClass::parse(String &str)
 {
-    DateTimeClass dt;
-    String temp[10];
+    DateTimeClass dt;    
+    uint32_t value[10];
     int seek = 0;
-    int last = 0;
-    seek = str.indexOf("-",last);
-    temp[0] = str.substring(last,seek);
-    last = seek + 1;
-    
-    seek = str.indexOf("-",last);
-    temp[1] = str.substring(last,seek);
-    last = seek + 1;
-
-    seek = str.indexOf(" ",last);
-    temp[2] = str.substring(last,seek);
-    last = seek + 1;
-    
-    seek = str.indexOf(":",last);
-    temp[3] = str.substring(last,seek);
-    last = seek + 1;
-
-    seek = str.indexOf(":",last);
-    temp[4] = str.substring(last,seek);
-    last = seek + 1;
-
-    temp[5] = str.substring(last);
-    
-    uint16_t y = temp[0].toInt();
-
-    dt.year = y;
-    dt.month = temp[1].toInt();
-    dt.day = temp[2].toInt();
-    dt.hour = temp[3].toInt();
-    dt.minute = temp[4].toInt();
-    dt.second = temp[5].toInt();
+    int k = 0;
+    while(seek >= 0)
+    {
+        seek = find_uint_from_string(str,seek,&value[k++]);
+        if(k == 6) break;
+    }
+    if(k != 6)
+    {
+        dt.err = -1;
+        return dt;
+    }
+    dt.year = value[0];
+    dt.month = value[1];
+    dt.day = value[2];
+    dt.hour = value[3];
+    dt.minute = value[4];
+    dt.second = value[5];
+    DateTimeClass::limitCheck(dt);
     return dt;
 }
+bool DateTimeClass::limitCheck(DateTimeClass &dt)
+{
+    bool ret;
+    if(dt.second < 0)       {dt.second = 0;ret = false;}
+    else if(dt.second > 59) {dt.second = 59;ret = false;}
+    if(dt.minute < 0)       {dt.minute = 0;ret = false;}
+    else if(dt.minute > 59) {dt.minute = 59;ret = false;}
+    if(dt.hour < 0)         {dt.hour = 0;ret = false;}
+    else if(dt.hour > 23)   {dt.hour = 23;ret = false;}
+
+    if(dt.year < 0)         {dt.year = 0;ret = false;}
+    else if(dt.year > 3000) {dt.year = 3000;ret = false;}
+    if(dt.month < 1)        {dt.month = 1;ret = false;}
+    else if(dt.month > 12)  {dt.month = 12;ret = false;}
+    
+    if(dt.day < 1)          {dt.day = 1;ret = false;}
+    else if(dt.day > days_in_month(dt.year,dt.month)) {dt.day = days_in_month(dt.year,dt.month);ret = false;}
+    if(ret == false) dt.err = -1;
+    return ret;
+}
+DateTimeClass DateTimeClass::now()
+{
+    DateTimeClass dt;    
+    return dt;
+}
+
 String DateTimeClass::toString(TimeFormat_t format ,TimeSeparatorFormat_t gap)
 {
     String str;
@@ -156,10 +197,10 @@ String DateTimeClass::toString(TimeFormat_t format ,TimeSeparatorFormat_t gap)
 void DateTimeClass::print(Uart &uart)
 {
     uart.printf("%04d-%02d-%02d %02d:%02d:%02d week:%d\n",year,month,day,\
-        hour,minute,second,day_of_week());
+        hour,minute,second,dayOfWeek());
 }
 
-bool DateTimeClass::is_leap_year()
+bool DateTimeClass::isLeapYear()
 {
     if(year % 4 == 0) //必须能被4整除
     {
@@ -173,7 +214,7 @@ bool DateTimeClass::is_leap_year()
     else return false;
 }
 
-int DateTimeClass::day_of_year()
+int DateTimeClass::dayOfYear()
 {
     int days = day;
 
@@ -181,13 +222,13 @@ int DateTimeClass::day_of_year()
     {
         days += days_in_month_table[i];
     }
-    if(is_leap_year()  && month > 2)
+    if(isLeapYear()  && month > 2)
     {
         days -= 1;
     }
     return days;
 }
-int DateTimeClass::day_of_week()
+int DateTimeClass::dayOfWeek()
 {
     int week;
     uint16_t _year = year;
@@ -200,26 +241,26 @@ int DateTimeClass::day_of_week()
     week = (day + 2 * _month + 3 * (_month + 1) / 5 + _year + _year / 4 - _year / 100 + _year / 400) % 7 + 1;
     return week;
 }
-int DateTimeClass::seconde_of_day()
+int DateTimeClass::secondeOfDay()
 {
     return hour * 3600 + minute * 60 + second;
 }
-int DateTimeClass::seconde_of_year()
+int DateTimeClass::secondeOfYear()
 {
-    int days = day_of_year() - 1;
-    return days * 86400 + seconde_of_day();
+    int days = dayOfYear() - 1;
+    return days * 86400 + secondeOfDay();
 }
 
-int DateTimeClass::minute_of_day()
+int DateTimeClass::minuteOfDay()
 {
     return hour * 60 + minute ;
 
 }
-void DateTimeClass::add_years(int value)
+void DateTimeClass::addYears(int value)
 {
     year += value;
 }
-void DateTimeClass::add_months(int value)
+void DateTimeClass::addMonths(int value)
 {
     month = month + value;
     if(month > 12)
@@ -237,7 +278,7 @@ void DateTimeClass::add_months(int value)
     }
 }
 
-void DateTimeClass::add_days(int value)
+void DateTimeClass::addDays(int value)
 {
     day = day + value;
     if(day > days_in_month(year,month))
@@ -245,52 +286,52 @@ void DateTimeClass::add_days(int value)
         while(day > days_in_month(year,month))
         {
             day -= days_in_month(year,month);
-            add_months(1);
+            addMonths(1);
         }
     }
     else if(day <= 0)
     {
         while(day <= 0)
         {
-            add_months(-1);
+            addMonths(-1);
             day += days_in_month(year,month);
         }
     }
 
 }
-void DateTimeClass::add_hours(int value)
+void DateTimeClass::addHours(int value)
 {
     int days_to_add = (hour + value) / 24;
     hour = (hour + value) % 24;
     if(hour < 0) {hour += 24;days_to_add -= 1;}
-    add_days(days_to_add);
+    addDays(days_to_add);
 }
-void DateTimeClass::add_minutes(int value)
+void DateTimeClass::addMinutes(int value)
 {
     int hours_to_add = (minute + value) / 60;
     minute = (minute + value) % 60;
     if(minute < 0) {minute += 60;hours_to_add -= 1;}
-    add_hours(hours_to_add);
+    addHours(hours_to_add);
 }
-void DateTimeClass::add_seconds(int value)
+void DateTimeClass::addSeconds(int value)
 {
     int minute_to_add = (second + value) / 60;
     second = (second + value) % 60;
     if(second < 0){ second += 60;minute_to_add -= 1;}
-    add_minutes(minute_to_add);
+    addMinutes(minute_to_add);
 }
     
-DateTimeClass DateTimeClass::ToUniversalTime()
+DateTimeClass DateTimeClass::toUniversalTime()
 {
     DateTimeClass dt = *this;
     dt.kind = Utc;
-    dt.add_hours(-UtcOffset);
+    dt.addHours(-UtcOffset);
     return dt;
 }
-double DateTimeClass::ToTimeStamp()
+double DateTimeClass::toTimeStamp()
 {
     DateTimeClass dtStart("1970-1-1 0:0:0",Utc);
-    DateTimeClass dt = this->ToUniversalTime();
+    DateTimeClass dt = this->toUniversalTime();
     TimeSpan ts = dt - dtStart;
     return ts.total_seconds;
 }
@@ -304,7 +345,7 @@ TimeSpan DateTimeClass::operator-(DateTimeClass& b)
     
     if(this->year == b.year)
     {
-        int remainderSec = this->seconde_of_year() - b.seconde_of_year();
+        int remainderSec = this->secondeOfYear() - b.secondeOfYear();
         ts.days = remainderSec / 86400;remainderSec  %= 86400; 
         ts.hours = remainderSec / 3600;remainderSec  %= 3600; 
         ts.minutes = remainderSec / 60;remainderSec  %= 60; 
@@ -317,21 +358,21 @@ TimeSpan DateTimeClass::operator-(DateTimeClass& b)
         {
             yearMin = this->year;
             yearMax = b.year;
-            ts.days = days_in_year(this->year) - this->day_of_year();
-            ts.days += b.day_of_year();
+            ts.days = days_in_year(this->year) - this->dayOfYear();
+            ts.days += b.dayOfYear();
             flag = 1;
         }
         else
         {
             yearMax = this->year;
             yearMin = b.year;
-            ts.days = days_in_year(b.year) - b.day_of_year();
-            ts.days += this->day_of_year();
+            ts.days = days_in_year(b.year) - b.dayOfYear();
+            ts.days += this->dayOfYear();
 
         }
         for(int i = yearMin + 1 ; i < yearMax ; i++)
         {
-            if(IsLeapYear(i))
+            if(is_leap_year(i))
                 ts.days += 366;
             else 
                 ts.days += 365;
@@ -340,8 +381,8 @@ TimeSpan DateTimeClass::operator-(DateTimeClass& b)
         if(flag)
             ts.days = -ts.days;
         
-        int secs1 = this->seconde_of_day();
-        int secs2 = b.seconde_of_day();
+        int secs1 = this->secondeOfDay();
+        int secs2 = b.secondeOfDay();
         remainderSec = secs1 - secs2;
         if(ts.days < 0 && remainderSec > 0)
         {
@@ -368,9 +409,9 @@ TimeSpan DateTimeClass::operator-(DateTimeClass& b)
 DateTimeClass  DateTimeClass::operator+(TimeSpan& b)
 {
     DateTimeClass dt = *this;
-    dt.add_days(b.days);
-    dt.add_hours(b.hours);
-    dt.add_minutes(b.minutes);
-    dt.add_seconds(b.seconds);
+    dt.addDays(b.days);
+    dt.addHours(b.hours);
+    dt.addMinutes(b.minutes);
+    dt.addSeconds(b.seconds);
     return dt;
 }

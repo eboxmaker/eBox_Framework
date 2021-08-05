@@ -24,14 +24,17 @@
 #include "datetime.h"
 
 
-DateTimeClass dt("2021-01-2 2:28:3");
+DateTimeClass dt("2021-07-24 2:28:3");
 //DateTimeClass dt2("2022-02-3 3:54:50");
 DateTimeClass dt2("2000-02-3 5:53:27");
 
 void setup()
 {
     ebox_init();
+ 
     uart1.begin(115200);
+    uart3.begin(115200);
+    
 }
 int main(void)
 {
@@ -40,23 +43,26 @@ int main(void)
     
     dt.print(uart1);
     dt2.print(uart1);
-    
+    uart1.println("=====DateTime UTC DateTime Test=====");
+    DateTimeClass dtutc = dt.toUniversalTime();
+    dtutc.print(uart1);
+
     uart1.println("=====DateTime Add Days Test=====");
     for(int i = 0; i < 367; i++)
     {
-        dt.add_days(1);
+        dt.addDays(1);
         dt.print(uart1);
         uart1.flush();
     }
     uart1.println("=====DateTime Add Seconds Test=====");
     for(int i = 0; i < 367; i++)
     {
-        dt.add_seconds(3601);
+        dt.addSeconds(3601);
         dt.print(uart1);
         uart1.flush();
     }
     uart1.println(dt.toString());
-    uart1.printf("day of year = %d\n",dt2.day_of_year());
+    uart1.printf("day of year = %d\n",dt2.dayOfYear());
 
     uart1.println("=====TimeSpan 1 Test=====");
     TimeSpan ts;
@@ -86,8 +92,10 @@ int main(void)
 
     while(1)
     {
-        dt.add_seconds(1);
+        dt.addSeconds(1);
         dt.print(uart1);
+        uart1.println(dt.toTimeStamp());
+        uart3.println(dt.toTimeStamp());
         delay_ms(1000);
     }
 }

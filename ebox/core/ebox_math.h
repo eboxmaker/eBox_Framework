@@ -2,7 +2,7 @@
 #define __EBOX_MATH_H
 #include "ebox_type.h"
 
-namespace eBox{
+namespace eBoxMath{
     
 //限制某个数的上下界
 template<typename T>
@@ -34,7 +34,7 @@ T min(T *ptr, uint16_t size)
 double avarage(float *ptr, size_t size);
 
 //方差 s= ∑(x-u)^2/N;;;
-double var(float *ptr, size_t size);
+double variance(float *ptr, size_t size);
 
 //标准差(均方差) o = sqrt(var);
 double stdev(float *ptr, size_t size);

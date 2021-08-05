@@ -1,6 +1,6 @@
 #include "ebox_math.h"
 
-namespace eBox{
+namespace eBoxMath{
 
 double avarage(float *ptr, size_t size)
 {
@@ -15,7 +15,7 @@ double avarage(float *ptr, size_t size)
 
 
 //方差 s= ∑(x-u)^2/N;;;
-double var(float *ptr, size_t size)
+double variance(float *ptr, size_t size)
 {
     double sum = 0;
     double avg = avarage(ptr,size);
@@ -30,7 +30,7 @@ double var(float *ptr, size_t size)
 //标准差(均方差) o = sqrt(var);
 double stdev(float *ptr, size_t size)
 {
-    double temp = var(ptr,size);
+    double temp = variance(ptr,size);
     return sqrt(temp);
 }
 
