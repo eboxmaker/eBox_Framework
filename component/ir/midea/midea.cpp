@@ -243,7 +243,8 @@ String MideaNormal::modetostr(Mode_t mode)
             return "制热";
         case ModeWind:
             return "送风";
-        
+        default:
+            return "xxx";
     }
 }
 String MideaNormal::windtostr(Wind_t mode)
@@ -260,7 +261,8 @@ String MideaNormal::windtostr(Wind_t mode)
             return "低";
         case WindMid:
             return "中";
-        
+        default:
+            return "xxx";        
     }
 }
 void MideaNormal::print(Uart &uart)

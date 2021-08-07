@@ -108,7 +108,7 @@ extern "C" {
 #define bitShift(shift)                 (1UL << (shift))
 #define bitMaskShift(mask, shift)       ((mask) << (shift))
 #define isPow2(v)                       ((v) && !((v) & ((v) - 1)))
-#define	getArraySize(__ARR)									(sizeof(__ARR)/sizeof(__ARR[0]))		// 获取数组大小
+#define	getArraySize(__ARR)				(sizeof(__ARR)/sizeof(__ARR[0]))		// 获取数组大小
 
 
 void        random_seed(unsigned int seed);

@@ -38,16 +38,16 @@ void IMUupdate(float gx, float gy, float gz, float ax, float ay, float az, float
     float vx, vy, vz;
     float ex, ey, ez;
     //增加互补滤波
-    float q0q0 = q0 * q0;
-    float q0q1 = q0 * q1;
-    float q0q2 = q0 * q2;
-    float q0q3 = q0 * q3;
-    float q1q1 = q1 * q1;
-    float q1q2 = q1 * q2;
-    float q1q3 = q1 * q3;
-    float q2q2 = q2 * q2;
-    float q2q3 = q2 * q3;
-    float q3q3 = q3 * q3;
+//    float q0q0 = q0 * q0;
+//    float q0q1 = q0 * q1;
+//    float q0q2 = q0 * q2;
+//    float q0q3 = q0 * q3;
+//    float q1q1 = q1 * q1;
+//    float q1q2 = q1 * q2;
+//    float q1q3 = q1 * q3;
+//    float q2q2 = q2 * q2;
+//    float q2q3 = q2 * q3;
+//    float q3q3 = q3 * q3;
 
 
     // 测量正常化
@@ -93,3 +93,4 @@ void IMUupdate(float gx, float gy, float gz, float ax, float ay, float az, float
     *yaw     = atan2(2.0f * (q1 * q2 + q0 * q3), q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3) * 57.3;
 
 }
+

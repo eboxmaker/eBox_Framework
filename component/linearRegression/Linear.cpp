@@ -1,11 +1,55 @@
+
+/**
+  ******************************************************************************
+  * @file    linear.cpp
+  * @author  shentq
+  * @version V2.0
+  * @date    2021/08/7
+  * @brief   ebox application example .
+  ******************************************************************************
+  * @attention
+  *
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
+  * preliminary and is subject to change at any time without notice. shentq assumes
+  * no responsibility for any errors contained herein.
+  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
+  ******************************************************************************
+  */
 #include "linear.h"
-#include "ebox.h"
+#include "ebox_core.h"
+
+
+#if EBOX_DEBUG
+#define  LINEAR_DEBUG false
+#define  LINEAR_ERROR true
+#endif
+
+
+#if EBOX_DEBUG
+
+#if LINEAR_DEBUG
+#define  LinearDebug(...) DBG("[Linear dbg]:"),DBG(__VA_ARGS__)
+#else
+#define  LinearDebug(...)
+#endif
+
+#if LINEAR_ERROR
+#define LinearErr(...) ebox_printf("[Linear err]:%d:", __LINE__),ebox_printf( __VA_ARGS__)
+#else
+#define LinearErr(fmt, ...)
+#endif
+#endif
 
 Linear::Linear()
 {
     rows = 0;
     x = (double*)ebox_malloc(sizeof(*x));
     y = (double*)ebox_malloc(sizeof(*y));
+}
+Linear::~Linear()
+{
+    clear();
 }
 void Linear::add_row(double _x,double _y)
 {
@@ -15,10 +59,10 @@ void Linear::add_row(double _x,double _y)
     y[rows] = _y;
     
     rows++;
-    uart1.printf("------元素(%d)---------\n",rows);
+    LinearDebug("------元素(%d)---------\n",rows);
     for(int i = 0; i < rows;i++)
     {
-        uart1.printf("x[%d]:%0.3f \t y[%d]:%0.3f \n",i,x[i],i,y[i]);
+        LinearDebug("x[%d]:%0.3f \t y[%d]:%0.3f \n",i,x[i],i,y[i]);
     }
 }
 
@@ -45,38 +89,56 @@ bool Linear::exe()
     
     rate = Lxy / Lxx;                                // k = Lxy / Lxx
     offset = ya - rate * xa;                              // b = Ya - k*Xa
-    uart1.printf("y=%0.3f*x+%0.3f\n",rate,offset);
+    LinearDebug("y=%0.3f*x+%0.3f\n",rate,offset);
     // 方差分析
     SquarePoor[0] = SquarePoor[1] = 0.0;
     for (int i = 0; i < rows; i++)
     {
-        Lxy = offset + rate * x[i];
+        Lxy = offset + rate * x[i];//估计值
         SquarePoor[0] += ((Lxy - ya) * (Lxy - ya)); // U(回归平方和)
         SquarePoor[1] += ((y[i] - Lxy) * (y[i] - Lxy)); // Q(剩余平方和)
     }
+    RSS = SquarePoor[0];//估计值和真实平均值的差的平方和
+    ESS = SquarePoor[1];//估计值和真实值的差的平方和
+    TSS = RSS + ESS;
+    
+
+    
     SquarePoor[2] = SquarePoor[0];                  // 回归方差
     SquarePoor[3] = SquarePoor[1] / (rows - 2);     // 剩余方差
+    
+    RMSE2 = SquarePoor[3];
+    RMSE = sqrt(SquarePoor[3]);
+    R = sqrt(SquarePoor[0] / (SquarePoor[0] + SquarePoor[1]));
+    F = SquarePoor[2] /SquarePoor[3];
+    
     display();
+    return true;
+}
+void Linear::clear()
+{
+    rows = 0;
+    ebox_free(x);
+    ebox_free(y);
 }
 void Linear::display()
 {
 
     double v;
-    int i, j;
-    uart1.printf("回归方程式:    Y = %.5lf", offset);
-    uart1.printf(" + %.5lf*X\r\n", rate);
-    uart1.printf("回归显著性检验: \r\n");
-    uart1.printf("回归平方和：%12.4lf  回归方差：%12.4lf \r\n", SquarePoor[0], SquarePoor[2]);
-    uart1.printf("剩余平方和：%12.4lf  剩余方差：%12.4lf \r\n", SquarePoor[1], SquarePoor[3]);
-    uart1.printf("离差平方和：%12.4lf  标准误差：%12.4lf \r\n", SquarePoor[0] + SquarePoor[1], sqrt(SquarePoor[3]));
-    uart1.printf("F   检  验：%12.4lf  相关系数：%12.4lf \r\n", SquarePoor[2] /SquarePoor[3],
-           sqrt(SquarePoor[0] / (SquarePoor[0] + SquarePoor[1])));
-    uart1.printf("剩余分析: \r\n");
-    uart1.printf("      观察值      估计值      剩余值    剩余平方 \r\n");
+    int i;
+    LinearDebug("回归方程式:    Y = %.5lf", offset);
+    LinearDebug(" + %.5lf*X\r\n", rate);
+    LinearDebug("回归显著性检验: \r\n");
+    LinearDebug("回归平方和：%12.4lf  回归方差：%12.4lf \r\n", RSS, RSS);
+    LinearDebug("剩余平方和：%12.4lf  剩余方差：%12.4lf \r\n", ESS, RMSE2);
+    LinearDebug("离差平方和：%12.4lf  标准误差：%12.4lf \r\n", TSS, RMSE);
+    LinearDebug("F   检  验：%12.4lf  相关系数：%12.4lf \r\n", F,R);
+    LinearDebug("剩余分析: \r\n");
+    LinearDebug("      观察值      估计值      剩余值    剩余平方 \r\n");
     for (i = 0; i < rows; i ++)
     {
         v = offset;
         v += x[i] * rate;
-        uart1.printf("%12.2lf%12.2lf%12.2lf%12.2lf \r\n", y[i], v, y[i] - v, (y[i] - v) * (y[i] - v));
+        LinearDebug("%12.2lf%12.2lf%12.2lf%12.2lf \r\n", y[i], v, y[i] - v, (y[i] - v) * (y[i] - v));
     }
 }

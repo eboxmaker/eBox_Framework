@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    ringbuf.cpp
+  * @file    DateTiemTest.cpp
   * @author  shentq
-  * @version V2.1
-  * @date    2016/08/14
-  * @brief
+  * @version V2.0
+  * @date    2021/07/23
+  * @brief   ebox application example .
   ******************************************************************************
   * @attention
   *
@@ -18,5 +18,34 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include "ringbuf.h"
+
+
+#include "ebox.h"
+#include "datetime.h"
+#include "Linear.h"
+
+Linear lin;
+void setup()
+{
+    ebox_init();
+    uart1.begin(115200);
+    lin.add_row(1,3);
+    lin.add_row(2,5);
+    lin.add_row(3,6.4);
+    lin.add_row(4,9.5);
+    lin.exe();
+}
+int main(void)
+{
+
+    setup();
+    while(1)
+    {
+        
+        delay_ms(1000);
+    }
+}
+
+
+
 

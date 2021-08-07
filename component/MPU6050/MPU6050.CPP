@@ -44,7 +44,6 @@ void MPU6050::get_id(uint8_t *id)
 
 int16_t  MPU6050::get_data(uint8_t reg_address)
 {
-    uint16_t value;
     return readRegister16(reg_address);
 }
 int8_t  MPU6050::get_data(uint8_t reg_address, int16_t *buf, uint8_t num_to_read)
@@ -68,17 +67,16 @@ float MPU6050::getGres() {
     // Here's a bit of an algorith to calculate DPS/(ADC tick) based on that 2-bit value:
     case GFS_250DPS:
       return 250.0 / 32768.0;
-      break;
     case GFS_500DPS:
       return 500.0 / 32768.0;
-      break;
     case GFS_1000DPS:
       return 1000.0 / 32768.0;
-      break;
     case GFS_2000DPS:
       return 2000.0 / 32768.0;
-      break;
+    default:
+        break;
   }
+    return 0;
 }
 float MPU6050::getAres() {
   switch (Ascale)
@@ -88,17 +86,16 @@ float MPU6050::getAres() {
     // Here's a bit of an algorith to calculate DPS/(ADC tick) based on that 2-bit value:
     case AFS_2G:
       return 2.0 / 32768.0;
-      break;
     case AFS_4G:
       return 4.0 / 32768.0;
-      break;
     case AFS_8G:
       return 8.0 / 32768.0;
-      break;
     case AFS_16G:
       return 16.0 / 32768.0;
-      break;
+    default:
+        break;
   }
+  return 0;
 }
 void MPU6050::setScale(uint8_t scale)
 {
@@ -618,5 +615,5 @@ void MPU6050::writeRegister16(uint8_t reg, int16_t value)
     i2c->write(data.byte[0]);                 // Put data in Tx buffer
     i2c->write(data.byte[1]);                 // Put data in Tx buffer
     i2c->endTransmission();           // Send the Tx buffer
-
 }
+

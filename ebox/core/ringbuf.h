@@ -65,6 +65,7 @@ public:
     {
         //        __disable_irq();
         int seek = (head + 1) % max;
+        
 
         // If the output buffer is full, there's nothing for it other than to
         // wait for the interrupt handler to empty it a bit

@@ -131,7 +131,6 @@ i2c_err_t mcuI2c::_write(const uint8_t *data, size_t quantity)
  */
 i2c_err_t mcuI2c::_write(uint8_t address,const uint8_t *data, size_t quantity, int sendStop)
 {
-    uint32_t cnt = 0;
     i2c_err_t ret;
     _start();
     ret = _send7bitsAddress(address, 0);
@@ -157,7 +156,6 @@ i2c_err_t mcuI2c::_write(uint8_t address,const uint8_t *data, size_t quantity, i
   */
 size_t mcuI2c::_read(uint8_t address,uint8_t *data, uint16_t length,uint8_t sendStop)
 {
-    uint32_t cnt = 0;
     i2c_err_t err = I2C_ERROR_OK;
     int ret = 0;
     ret = length;
@@ -189,9 +187,7 @@ size_t mcuI2c::_read(uint8_t address,uint8_t *data, uint16_t length,uint8_t send
   */
 i2c_err_t mcuI2c::_start(void)
 {   
-    i2c_err_t ret;
     uint32_t cnt = 0;
-
 
     /* Send STRAT condition */
     I2C_GenerateSTART(_i2cx, ENABLE);
@@ -235,7 +231,7 @@ i2c_err_t mcuI2c::_stop(void)
  */
 i2c_err_t mcuI2c::_waitAck()
 {
-
+    return I2C_ERROR_OK;
 }
 /*
   * @brief ·¢ËÍÊý¾Ý.

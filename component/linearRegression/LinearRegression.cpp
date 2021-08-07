@@ -46,7 +46,7 @@ int linear_regression(double *data, int rows, double *a, double *b, double *Squa
 
 void free_data(double **dat, double *d, int count)
 {
-    int i, j;
+    int i;
     ebox_free(d);
     for (i = 0; i < count; i ++)
         ebox_free(dat[i]);

@@ -699,6 +699,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\ebox_math.cpp</FilePath>
             </File>
+            <File>
+              <FileName>eboxList.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\eboxList.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1028,6 +1033,11 @@
               <FileName>Linear.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\linearRegression\Linear.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>LinearPiecewise.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\linearRegression\LinearPiecewise.cpp</FilePath>
             </File>
           </Files>
         </Group>

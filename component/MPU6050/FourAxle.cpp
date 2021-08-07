@@ -152,4 +152,5 @@ uint8_t FourAxle::addSum(uint8_t *buf)
 uint8_t FourAxle::getFrameLength(uint8_t *buf)
 {
     uint8_t len = buf[3] + 4;
+    return len;
 }

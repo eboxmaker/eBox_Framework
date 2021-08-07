@@ -288,7 +288,7 @@ boolean PN532_I2C::sendCommandCheckAck(uint8_t *cmd, uint8_t cmdlen, uint16_t ti
 */
 /**************************************************************************/
 boolean PN532_I2C::writeGPIO(uint8_t pinstate) {
-  uint8_t errorbit;
+//  uint8_t errorbit;
 
   // Make sure pinstate does not try to toggle P32 or P34
   pinstate |= (1 << PN532_GPIO_P32) | (1 << PN532_GPIO_P34);
@@ -453,7 +453,7 @@ boolean PN532_I2C::readPassiveTargetID(uint8_t cardbaudrate, uint8_t * uid, uint
   }
   
   // Wait for a card to enter the field
-  uint8_t status = PN532_I2C_BUSY;
+//  uint8_t status = PN532_I2C_BUSY;
   #ifdef PN532DEBUG
   Serial.println(F("Waiting for IRQ (indicates card presence)"));
   #endif
@@ -578,7 +578,7 @@ bool PN532_I2C::mifareclassic_IsTrailerBlock (uint32_t uiBlock)
 /**************************************************************************/
 uint8_t PN532_I2C::mifareclassic_AuthenticateBlock (uint8_t * uid, uint8_t uidLen, uint32_t blockNumber, uint8_t keyNumber, uint8_t * keyData)
 {
-  uint8_t len;
+//  uint8_t len;
   uint8_t i;
   
   // Hang on to the key and uid data
@@ -966,7 +966,7 @@ uint8_t PN532_I2C::wirereadstatus(void) {
 */
 /**************************************************************************/
 void PN532_I2C::wirereaddata(uint8_t* buff, uint8_t n) {
-  uint16_t timer = 0;
+//  uint16_t timer = 0;
   
   delay_ms(2); 
 
@@ -1234,5 +1234,5 @@ boolean PN532_I2C::inListPassiveTarget() {
     return false;
   }
 
-  return true;
+//  return true;
 }

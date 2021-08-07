@@ -70,7 +70,7 @@ int find_uint_from_string(String &str,int seek,uint32_t *value)
             return index;
         }
     }
-    return -1;
+//    return -1;
 }
 
 DateTimeClass::DateTimeClass()
