@@ -21,8 +21,8 @@
 #define __LINEARPiecewise_H
 
 #include "ebox_mem.h"
-#include "eboxList.h"
-#include "vector.h"
+#include "LinkedList/LinkedList.h"
+
 
 /*
     1,创建对象
@@ -47,7 +47,7 @@ public:
 public:
     LinearPiecewise();
     ~LinearPiecewise();
-    bool add_row(double _x,double _y);
+    bool add_row(double x,double y);
     bool exe();
     double get(double x);
     void clear();
@@ -55,10 +55,12 @@ public:
 private:
     Group calculate(double x0,double y0,double x1,double y1);
     void sort();
-    Pair* pair;
+    static int cmp(LinearPiecewise::Pair &a, LinearPiecewise::Pair &b) {
+        return a.x > b.x;
+    }
     int rows;
-
-    Group *itemListPtr;
+    LinkedList<Pair> pList;
+    LinkedList<Group> itemList;
 };
 
 

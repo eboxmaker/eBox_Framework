@@ -21,88 +21,19 @@
 
 
 #include "ebox.h"
-#include "datetime.h"
-#include "Linear.h"
-#include "Vector.h"
-#include "eboxList.h"
+#include "att7022/att7022.h"
 
-stl::Vector<String> vectStr;
-stl::List<String>  listStr;
+Att7022 at(&PA3,&PA4,&spi1);
+PhaseData_t APhaseData;
+void readAll(void);
+
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    listStr.init();
-    listStr.push_back("LIST 123");
-    listStr.push_back("LIST ABC");
-    listStr.push_back("LIST ebox");
-    uart1.printf("=======List test========\n");
-    for(stl::List<String>::iterator it = listStr.begin(); it != listStr.end(); it++)
-    {
-        uart1.printf("str:%s\n",it.current->data.c_str());
-    }
-    for(stl::List<String>::iterator it = listStr.begin(); it != listStr.end(); it++)
-    {
-        if(it.current->data == "LIST ebox")
-        {
-            listStr.erase(it);
-        }
-    }
-    for(stl::List<String>::iterator it = listStr.begin(); it != listStr.end(); it++)
-    {
-        uart1.printf("str:%s\n",it.current->data.c_str());
-    }
-    
-    
-    uart1.printf("=======vector test========\n");
-    vectStr.push_back("123");
-    vectStr.push_back("ABC");
-    vectStr.push_back("ebox");
-    for(stl::Vector<String>::iterator it = vectStr.begin(); it != vectStr.end(); it++)
-    {
-        uart1.printf("str:%s\n",it->c_str());
-    }
-    for(int i = 0; i < vectStr.size(); i++)
-    {
-        uart1.printf("str:%s\n",vectStr[i].c_str());
-    }
-    //存在风险，删除最后一个元素会出现野指针
-//    for(stl::Vector<String>::iterator it = vectStr.begin(); it != vectStr.end(); it++)
-//    {
-//        if(*it == "ebox")
-//        {
-//            uart1.printf("删除:%s\n",it->c_str());
-//            uart1.flush();
-//            vectStr.erase(it);
-//        }
-//    }
-    for (int i=0; i<vectStr.size(); i++)
-    {
-        if (vectStr[i] == "ebox")
-        {
-            uart1.printf("删除:%s\n",vectStr[i].c_str());
-            uart1.flush();
-            vectStr.erase(vectStr.begin()+i);
-            i--;//重要！！！
-        }
-    }
-    for(int i = 0; i < vectStr.size(); i++)
-    {
-        uart1.printf("str:%s\n",vectStr[i].c_str());
-    }
-    
-    for (int i=0; i<vectStr.size(); i++)
-    {
-        uart1.printf("删除:%s\n",vectStr[i].c_str());
-        uart1.flush();
-        vectStr.erase(vectStr.begin()+i);
-        i--;//重要！！
-    }
-    for(int i = 0; i < vectStr.size(); i++)
-    {
-        uart1.printf("str:%s\n",vectStr[i].c_str());
-    }
-    
+    at.begin();
+    uart1.printf("0x%08x\n",at.read_id());
+
 }
 int main(void)
 {
@@ -110,10 +41,38 @@ int main(void)
     setup();
     while(1)
     {
-
-        delay_ms(1000);
+        readAll();
+        uart1.printf("=======A相参数=======\n");
+        uart1.printf("A有效电压:%0.1f\n",APhaseData.urms.value);
+        uart1.printf("A有效电流:%0.1f\n",APhaseData.irms.value);
+        uart1.printf("A电压电流相位角:%0.1f\n",APhaseData.pg.value);
+        uart1.printf("有功功率:%0.1f\n",APhaseData.p.value);
+        uart1.printf("无功功率:%0.1f\n",APhaseData.pq.value);
+        uart1.printf("视在功率:%0.1f\n",APhaseData.ps.value);
+        uart1.printf("功率因数:%0.1f\n",APhaseData.pf.value);
+        uart1.printf("电能:%0.1f\n",APhaseData.p.value);
+        
+        delay(1000);
     }
 }
+void readAll(void)
+{
+	u8 x,i,j;
+    //更新参数
+	APhaseData.urms.value = at.ReadURms(APhase);;
+	APhaseData.irms.value = at.ReadIRms(APhase);
+	APhaseData.pg.value = at.ReadPG(APhase);//电压电流相位角
+	APhaseData.p.value = at.ReadP(APhase);//有功功率
+	APhaseData.pq.value = at.ReadQ(APhase);//无功功率
+	APhaseData.pf.value = at.ReadPF(APhase);//功率因数
+	APhaseData.ps.value = at.ReadS(APhase);//视在功率
+	APhaseData.ep.value = at.ReadEP(APhase);//电能
+	APhaseData.epKwh.value = at.ReadEPKwh(APhase);//电能
+
+    
+}
+
+
 
 
 

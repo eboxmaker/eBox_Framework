@@ -21,7 +21,7 @@
 #include "sort.h"
 
 #if EBOX_DEBUG
-#define  LINEAR_DEBUG false
+#define  LINEAR_DEBUG true
 #define  LINEAR_ERROR true
 #endif
 
@@ -49,21 +49,21 @@ LinearPiecewise::~LinearPiecewise()
 {
     clear();
 }
-bool LinearPiecewise::add_row(double _x,double _y)
+bool LinearPiecewise::add_row(double x,double y)
 {
     for(int i = 0; i < rows;i++)
     {
-        if(_x == pair[i].x)
+        if(x == pList.get(i).x)
         {
             LinearErr("item is exist\n");
             return false;
         }
     }
-    
-    pair = (Pair*)ebox_realloc(pair,sizeof(*pair)*(rows+1));
-    pair[rows].x = _x;
-    pair[rows].y = _y;
-    LinearDebug("元素：x:%0.3f \t y:%0.3f \n",pair[rows].x,pair[rows].y);
+    Pair p;
+    p.x = x;
+    p.y = y;
+    pList.add(p);
+    LinearDebug("add:x = %0.3f\t y = %0.3f\n",p.x,p.y);
     rows++;
     return true;
 }
@@ -97,16 +97,15 @@ bool LinearPiecewise::exe()
     if ( rows < 2)
         return false;
 
-    itemListPtr = (Group*)ebox_malloc(sizeof(Group) * (rows - 1));
     sort();
     for (int i = 0; i < rows - 1; i++)
     {
-        Group item = calculate(pair[i].x,pair[i].y,pair[i+1].x,pair[i+1].y);
-        itemListPtr[i] = item;
+        Group item = calculate(pList[i].x,pList[i].y,pList[i+1].x,pList[i+1].y);
+        itemList.add(item);
     }
     for(int i = 0; i < rows - 1; i++)
     {
-        LinearDebug("区间信息：xs = %0.3f,xe=%0.3f,k=%0.3f,b=%0.3f\n",itemListPtr[i].xStart,itemListPtr[i].xEnd,itemListPtr[i].rate,itemListPtr[i].offset);
+        LinearDebug("区间信息：xs = %0.3f,xe=%0.3f,k=%0.3f,b=%0.3f\n",itemList[i].xStart,itemList[i].xEnd,itemList[i].rate,itemList[i].offset);
     }
 
     return true;
@@ -115,31 +114,31 @@ double LinearPiecewise::get(double x)
 {
     double value;
     int room = -1;
-    if(x < itemListPtr[0].xStart)
+    if(x < itemList[0].xStart)
     {
         room = 0;
-        value = (itemListPtr[0].rate * x + itemListPtr[0].offset);
+        value = (itemList[0].rate * x + itemList[0].offset);
     }
-    else if(x > itemListPtr[rows - 2].xEnd)
+    else if(x > itemList[rows - 2].xEnd)
     {
         room = rows - 2;
-        value = (itemListPtr[rows - 2].rate * x + itemListPtr[rows - 2].offset);
+        value = (itemList[rows - 2].rate * x + itemList[rows - 2].offset);
     }
     else
     {
         for(int i = 0; i < rows - 1; i++)
         {
-            if(x >= itemListPtr[i].xStart && x <= itemListPtr[i].xEnd)
+            if(x >= itemList[i].xStart && x <= itemList[i].xEnd)
             {
                 room = i;
-                value = itemListPtr[i].rate * x + itemListPtr[i].offset;
+                value = itemList[i].rate * x + itemList[i].offset;
                 break;
             }
         }
     }
     LinearDebug("区间:%d\t rate=%0.3f\t offset=%0.3f\t%0.3f<=x=%0.1f<=%0.3f\ty=%0.3f\n",\
-                room,itemListPtr[room].rate,itemListPtr[room].offset
-                ,itemListPtr[room].xStart,x,itemListPtr[room].xEnd,value);
+                room,itemList[room].rate,itemList[room].offset
+                ,itemList[room].xStart,x,itemList[room].xEnd,value);
 
     return value;
 
@@ -147,48 +146,18 @@ double LinearPiecewise::get(double x)
 
 void LinearPiecewise::clear()
 {
-    ebox_free(pair);
-    ebox_free(itemListPtr);
+    pList.clear();
+    itemList.clear();
     rows = 0;
 }
 
 void LinearPiecewise::sort()
 {
-    Pair* tempPair = (Pair*)ebox_malloc(sizeof(Pair) * (rows));
-    double *buf = (double*)ebox_malloc(sizeof(double) * rows);
-    
-    LinearDebug("------元素(%d)---------\n",rows);
-    for(int i = 0; i < rows;i++)
-    {
-        LinearDebug("x[%d]:%0.3f \t y[%d]:%0.3f \n",i,pair[i].x,i,pair[i].y);
-    }
-    
-    
-    for(int i = 0; i < rows; i++)
-    {
-        buf[i] = pair[i].x;
-    }
-    quick_sort(buf,0,rows - 1);
-    for(int i = 0; i < rows; i++)
-    {
-        for(int j = 0; j < rows; j++)
-        {
-            if(buf[i] == pair[j].x)
-            {
-                tempPair[i] = pair[j];
-            }
-        }
-    }
-    for(int i = 0; i < rows;i++)
-    {
-        pair[i] = tempPair[i];
-    }
-    ebox_free(buf);
-    ebox_free(tempPair);
+    pList.sort(LinearPiecewise::cmp);
     LinearDebug("------排序元素(%d)---------\n",rows);
     for(int i = 0; i < rows;i++)
     {
-        LinearDebug("x[%d]:%0.3f \t y[%d]:%0.3f \n",i,pair[i].x,i,pair[i].y);
+        LinearDebug("x[%d]:%0.3f \t y[%d]:%0.3f \n",i,pList[i].x,i,pList[i].y);
     }
     
 
