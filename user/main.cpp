@@ -21,6 +21,7 @@
 
 
 #include "ebox.h"
+#include "bsp_ebox.h"
 #include "oneButton/oneButton.h"
 OneButton btn(&PA8,false);
 OneButton btn2(&PA7,false);
@@ -62,6 +63,7 @@ void setup()
 {
     ebox_init();
     uart1.begin(115200);
+    print_log();
     btn.begin();
     btn.attachClick(click);
     btn.attachClick(click_para,(void*)"btn1");

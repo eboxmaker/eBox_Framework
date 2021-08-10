@@ -26,8 +26,8 @@
 #include "ebox_config.h"
 
 #define EBOX_VERSION_MAJOR  "2" // 
-#define EBOX_VERSION_MINOR  "3" // 
-#define EBOX_VERSION_BUGFIX "1" // 
+#define EBOX_VERSION_MINOR  "4" // 
+#define EBOX_VERSION_BUGFIX "0" // 
 
 #define EBOX_VERSION (EBOX_VERSION_MAJOR##"."##EBOX_VERSION_MINOR##"."##EBOX_VERSION_BUGFIX)
 
