@@ -21,19 +21,60 @@
 
 
 #include "ebox.h"
-#include "att7022/att7022.h"
-
-Att7022 at(&PA3,&PA4,&spi1);
-PhaseData_t APhaseData;
-void readAll(void);
-
+#include "oneButton/oneButton.h"
+OneButton btn(&PA8,false);
+OneButton btn2(&PA7,false);
+void click()
+{
+    uart1.printf("按键1click\n");
+}
+void clickbtn2()
+{
+    uart1.printf("按键2click\n");
+}
+void click_para(void* t)
+{
+    char *str = (char *)t;
+    uart1.printf("按键click:%s\n",str);
+}
+void doubleclick()
+{
+    uart1.printf("按键双击\n");
+}
+void longPress()
+{
+    static uint32_t lastTime = 0;
+    if(millis() - lastTime > 200)
+    {
+        lastTime = millis();
+        uart1.printf("按键1长按\n");
+    }
+}
+void longPressStart()
+{
+    uart1.printf("按键1长按开始\n");
+}
+void longPressStop()
+{
+    uart1.printf("按键1长按结束\n");
+}
 void setup()
 {
     ebox_init();
     uart1.begin(115200);
-    at.begin();
-    uart1.printf("0x%08x\n",at.read_id());
-
+    btn.begin();
+    btn.attachClick(click);
+    btn.attachClick(click_para,(void*)"btn1");
+    btn.attachDoubleClick(doubleclick);
+    btn.attachDuringLongPress(longPress);
+    btn.attachLongPressStart(longPressStart);
+    btn.attachLongPressStop(longPressStop);
+    
+    btn2.begin();
+    btn2.attachClick(clickbtn2);
+    btn2.attachClick(click_para,(void*)"btn2");
+    btn2.attachDoubleClick(doubleclick);
+    
 }
 int main(void)
 {
@@ -41,39 +82,8 @@ int main(void)
     setup();
     while(1)
     {
-        readAll();
-        uart1.printf("=======A相参数=======\n");
-        uart1.printf("A有效电压:%0.1f\n",APhaseData.urms.value);
-        uart1.printf("A有效电流:%0.1f\n",APhaseData.irms.value);
-        uart1.printf("A电压电流相位角:%0.1f\n",APhaseData.pg.value);
-        uart1.printf("有功功率:%0.1f\n",APhaseData.p.value);
-        uart1.printf("无功功率:%0.1f\n",APhaseData.pq.value);
-        uart1.printf("视在功率:%0.1f\n",APhaseData.ps.value);
-        uart1.printf("功率因数:%0.1f\n",APhaseData.pf.value);
-        uart1.printf("电能:%0.1f\n",APhaseData.p.value);
-        
-        delay(1000);
+        btn.loop();
+        btn2.loop();
+        delay_ms(1);
     }
 }
-void readAll(void)
-{
-	u8 x,i,j;
-    //更新参数
-	APhaseData.urms.value = at.ReadURms(APhase);;
-	APhaseData.irms.value = at.ReadIRms(APhase);
-	APhaseData.pg.value = at.ReadPG(APhase);//电压电流相位角
-	APhaseData.p.value = at.ReadP(APhase);//有功功率
-	APhaseData.pq.value = at.ReadQ(APhase);//无功功率
-	APhaseData.pf.value = at.ReadPF(APhase);//功率因数
-	APhaseData.ps.value = at.ReadS(APhase);//视在功率
-	APhaseData.ep.value = at.ReadEP(APhase);//电能
-	APhaseData.epKwh.value = at.ReadEPKwh(APhase);//电能
-
-    
-}
-
-
-
-
-
-

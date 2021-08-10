@@ -690,19 +690,14 @@
               <FilePath>..\..\..\ebox\core\list_c.c</FilePath>
             </File>
             <File>
-              <FileName>elist.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\elist.cpp</FilePath>
-            </File>
-            <File>
               <FileName>ebox_math.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\core\ebox_math.cpp</FilePath>
             </File>
             <File>
-              <FileName>eboxList.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\eboxList.cpp</FilePath>
+              <FileName>LinkedList.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\ebox\core\LinkedList\LinkedList.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -733,11 +728,6 @@
               <FileName>hmi.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\interface\hmi.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>EventGpio.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\event\EventGpio.cpp</FilePath>
             </File>
             <File>
               <FileName>EventVar.cpp</FileName>
@@ -904,6 +894,11 @@
         <Group>
           <GroupName>edriver</GroupName>
           <Files>
+            <File>
+              <FileName>OneButton.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\OneButton\OneButton.cpp</FilePath>
+            </File>
             <File>
               <FileName>DS3231.cpp</FileName>
               <FileType>8</FileType>
@@ -1198,16 +1193,6 @@
               <FileName>midea.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\ir\midea\midea.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>LinkedList</GroupName>
-          <Files>
-            <File>
-              <FileName>LinkedList.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\component\LinkedList\LinkedList.h</FilePath>
             </File>
           </Files>
         </Group>

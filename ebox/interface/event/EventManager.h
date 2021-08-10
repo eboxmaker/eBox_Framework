@@ -2,7 +2,7 @@
 #define __EVENT_MANAGER_H
 
 #include "ebox.h"
-#include "elist.h"
+#include "LinkedList/LinkedList.h"
 
 class Event:public Object
 {
@@ -18,14 +18,14 @@ class EventManager
 public:
     void add(Event *object)
     {
-        list.insert_tail(object);
+        list.add(object);
     }
     void print_list(Uart &uart)
     {
         uart.printf("list size:%d\r\n",list.size());
         for(int i = 0; i < list.size(); i++)
         {
-            node = (Event *)list.data(i);
+            node = list.get(i);
             uart.println(node->name);
         }
     }
@@ -35,14 +35,13 @@ public:
         int i = 0;
         while(i < list.size())
         {
-            node = (Event *)list.data(i);
-            node->loop();
+            list.get(i)->loop();
             i++;
         }
     }
 
 private:
-    List list;
+    LinkedList<Event*> list;
     Event *node;
 
 };

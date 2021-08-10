@@ -37,7 +37,6 @@ W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
 //              BL    ½ÓPB6
 Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
 
-EventGpio btn(&PA8, 1,"btn1");
 EventManager manager;
 
 /*

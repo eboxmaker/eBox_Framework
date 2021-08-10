@@ -20,8 +20,7 @@
 #ifndef __BSP_EBOX_H
 #define __BSP_EBOX_H
 #include "ebox.h"
-#include "interface/event/EventGpio.h"
-#include "interface/event/EventManager.h"
+#include "EventManager.h"
 #include "lcd_1.8.h"
 #include "graphic.h"
 #include "../Ethernet3/utility/w5500.h"
@@ -35,7 +34,7 @@ extern SoftI2c Wire;
 extern mcuI2c mcuWire;
 
 
-extern EventGpio btn;
+//extern EventGpio btn;
 extern EventManager manager;
 
 extern W5500Class w5500;
