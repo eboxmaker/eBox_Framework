@@ -114,7 +114,7 @@ public:
    * @brief Call this function every some milliseconds for checking the input
    * level at the initialized digital pin.
    */
-  void loop(void);
+  virtual void loop(void);
 
 
   /**
