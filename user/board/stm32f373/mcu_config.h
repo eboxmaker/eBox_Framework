@@ -8,10 +8,10 @@
 
 //用户配置区域
 //请查阅ebox_cpu_type.h寻找特定信号CPU的详细配置
-#define STM32_TYPE    STM32F373VC
-#define STM32_PINS    100
-#define STM32_FLASH   256
-#define STM32_RAM1    32
+#define STM32_TYPE    STM32F334R8
+#define STM32_PINS    64
+#define STM32_FLASH   64
+#define STM32_RAM1    12
 #define STM32_RAM2    0
 #define STM32_RAM3    0
 #define STM32_COMPANY "ST\0"
@@ -104,7 +104,12 @@ extern int SHT$$INIT_ARRAY$$Limit;
 
 
 #include "stm32f3xx.h"
-
+#include "stm32f3xx_ll_dma.h"
+#include "stm32f3xx_ll_exti.h"
+#include "stm32f3xx_ll_usart.h"
+#include "stm32f3xx_ll_gpio.h"
+#include "stm32f3xx_ll_exti.h"
+#include "stm32f3xx_ll_exti.h"
 
 
 

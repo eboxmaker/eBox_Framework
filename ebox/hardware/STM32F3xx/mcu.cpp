@@ -104,19 +104,25 @@ uint16_t attachSystickCallBack(fun_noPara_t fun, uint16_t multiple)
         return ENG;
     }
 }
+#include "stm32f3xx_ll_rcc.h"
 
 
 static void update_system_clock(CpuClock_t *clock)
 {
-    //RCC_ClocksTypeDef RCC_ClocksStatus;
-
+    LL_RCC_ClocksTypeDef RCC_Clocks;
     SystemCoreClockUpdate();
-//    RCC_GetClocksFreq(&RCC_ClocksStatus);
+    
+//      uint32_t SYSCLK_Frequency;        /*!< SYSCLK clock frequency */
+//  uint32_t HCLK_Frequency;          /*!< HCLK clock frequency */
+//  uint32_t PCLK1_Frequency;         /*!< PCLK1 clock frequency */
+//  uint32_t PCLK2_Frequency;         /*!< PCLK2 clock frequency */
+//} LL_RCC_ClocksTypeDef;
 
-//    clock->core = RCC_ClocksStatus.SYSCLK_Frequency;
-//    clock->hclk = RCC_ClocksStatus.HCLK_Frequency;
-//    clock->pclk2 = RCC_ClocksStatus.PCLK2_Frequency;
-//    clock->pclk1 = RCC_ClocksStatus.PCLK1_Frequency;
+    LL_RCC_GetSystemClocksFreq(&RCC_Clocks);
+    clock->core = RCC_Clocks.SYSCLK_Frequency;
+    clock->hclk = RCC_Clocks.HCLK_Frequency;
+    clock->pclk1 = RCC_Clocks.PCLK1_Frequency;
+    clock->pclk2 = RCC_Clocks.PCLK2_Frequency;
 }
 void SysTick_Handler(void)//systick中断
 {
@@ -134,10 +140,11 @@ static void update_chip_info()
     cpu.type = MCU_TYPE;
     cpu.pins = MCU_PINS;
     memcpy(cpu.company, "st\0", sizeof("st\0"));
-    cpu.chip_id[2] = *(__IO uint32_t *)(0x1FFF7A10 + 0x00); //低字节
-    cpu.chip_id[1] = *(__IO uint32_t *)(0x1FFF7A10 + 0x04); //
-    cpu.chip_id[0] = *(__IO uint32_t *)(0x1FFF7A10 + 0x08); //高字节
-    cpu.flash_size = *(uint16_t *)(0x1FFF7A10 + 0x12);   //芯片flash容量
+    
+//    cpu.chip_id[2] = *(__IO uint32_t *)(0x1FFF7A10 + 0x00); //低字节
+//    cpu.chip_id[1] = *(__IO uint32_t *)(0x1FFF7A10 + 0x04); //
+//    cpu.chip_id[0] = *(__IO uint32_t *)(0x1FFF7A10 + 0x08); //高字节
+//    cpu.flash_size = *(uint16_t *)(0x1FFF7A10 + 0x12);   //芯片flash容量
 
     millis_seconds = 0;
     SysTick->VAL = 0;

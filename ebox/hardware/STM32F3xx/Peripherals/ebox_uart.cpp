@@ -93,21 +93,21 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 
 #if USE_UART1
     case (uint32_t)USART1_BASE:
-        dma_rx = &Dma1Ch3;
+        dma_rx = &Dma1Ch5;
         _index = NUM_UART1;
         break;
 #endif
 
 #if USE_UART2
     case (uint32_t)USART2_BASE:
-        dma_rx = &Dma1Ch5;
+        dma_rx = &Dma1Ch6;
         _index = NUM_UART2;
         break;
 #endif
 
 #if USE_UART3
     case (uint32_t)USART3_BASE:
-        dma_rx = &Dma1Ch2;
+        dma_rx = &Dma1Ch3;
         _index = NUM_UART3;
         break;
 #endif
@@ -201,10 +201,13 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
         dma_rx->init(&DMA_InitStructure);
         dma_rx->enable();
     }
-
+    _tx_pin->mode(AF_PP,7);
+    _rx_pin->mode(AF_OD_PU,7);
+    delay_ms(10);
     nvic(ENABLE, 0, 0);
     interrupt(RxIrq, ENABLE);
     interrupt(TxIrq, DISABLE);
+
 }
 
 /**
@@ -457,6 +460,27 @@ extern "C" {
         {
             tx_bufferx_one(USART2, NUM_UART2);
             irq_handler(serial_irq_ids[NUM_UART2], TxIrq);
+            // 清除发送结束中断标志
+            //            LL_USART_IsActiveFlag_TXE(USART2);
+        }
+    }
+#endif
+    
+#if USE_UART3
+    void USART3_IRQHandler(void)
+    {
+        if(LL_USART_IsActiveFlag_RXNE(USART3) == SET)
+        {
+            rx_buffer_one(USART3, NUM_UART3);
+            irq_handler(serial_irq_ids[NUM_UART3], RxIrq);
+            // 如果回调函数中没有读取数据，则将当前数据抛弃，准备下一次接收
+            LL_USART_RequestRxDataFlush(USART3);
+        }
+
+        if(LL_USART_IsActiveFlag_TXE(USART3) == SET)
+        {
+            tx_bufferx_one(USART3, NUM_UART3);
+            irq_handler(serial_irq_ids[NUM_UART3], TxIrq);
             // 清除发送结束中断标志
             //            LL_USART_IsActiveFlag_TXE(USART2);
         }

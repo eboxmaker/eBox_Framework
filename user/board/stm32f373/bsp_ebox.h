@@ -36,11 +36,11 @@
 //extern Led     led2;
 //extern Led     led3;
 
-#define LED1 PA0
+#define LED1 PA5
 #define LED2 PA1
 #define LED3 PA2
 
-#define UART uart1
+#define UART uart2
 
 //#define BtnPin	PH15
 

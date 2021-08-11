@@ -98,7 +98,6 @@ mcuSpi  spi3(SPI3, &PB3, &PB4, &PB5);
 //Led     led3(&LED3,0);
 //Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
 W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
-EventGpio btn(&PA8, 1,"btn1");
 EventManager manager;
 
 

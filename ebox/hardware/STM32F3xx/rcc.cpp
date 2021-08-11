@@ -1,4 +1,5 @@
 #include "rcc.h"
+#include "stm32f3xx_ll_bus.h"
 
 
 typedef struct
@@ -15,7 +16,7 @@ static const DevToRcc_t dev_to_rcc_table[] =
     {GPIOB_BASE, LL_AHB1_GRP1_PERIPH_GPIOB},
     {GPIOC_BASE, LL_AHB1_GRP1_PERIPH_GPIOC},
     {GPIOD_BASE, LL_AHB1_GRP1_PERIPH_GPIOD},
-    {GPIOE_BASE, LL_AHB1_GRP1_PERIPH_GPIOE},
+//    {GPIOE_BASE, LL_AHB1_GRP1_PERIPH_GPIOE},
     {GPIOF_BASE, LL_AHB1_GRP1_PERIPH_GPIOF},
     //    {GPIOG_BASE,LL_AHB1_GRP1_PERIPH_GPIOA},
     //    {GPIOH_BASE,RCC_APB2Periph_GPIOH},
@@ -24,9 +25,9 @@ static const DevToRcc_t dev_to_rcc_table[] =
     {ADC1_BASE, LL_APB1_GRP1_PERIPH_DAC1},
     //    {ADC2_BASE,RCC_APB2Periph_ADC2},
     //
-    {SDADC1_BASE,LL_APB2_GRP1_PERIPH_SDADC1},
-    {SDADC2_BASE,LL_APB2_GRP1_PERIPH_SDADC2},
-    {SDADC3_BASE,LL_APB2_GRP1_PERIPH_SDADC3},
+//    {SDADC1_BASE,LL_APB2_GRP1_PERIPH_SDADC1},
+//    {SDADC2_BASE,LL_APB2_GRP1_PERIPH_SDADC2},
+//    {SDADC3_BASE,LL_APB2_GRP1_PERIPH_SDADC3},
     
     //{TIM1_BASE, LL_APB1_GRP2_PERIPH_TIM1},
     {TIM2_BASE, LL_APB1_GRP1_PERIPH_TIM2},
@@ -40,13 +41,13 @@ static const DevToRcc_t dev_to_rcc_table[] =
     //    {TIM10_BASE,RCC_APB2Periph_TIM10},
     //    {TIM11_BASE,RCC_APB2Periph_TIM11},
     //
-    //{SPI1_BASE, LL_APB1_GRP2_PERIPH_SPI1},
-    {SPI2_BASE, LL_APB1_GRP1_PERIPH_SPI2},
-    {SPI3_BASE,LL_APB1_GRP1_PERIPH_SPI3},
+    {SPI1_BASE, LL_APB2_GRP1_PERIPH_SPI1},
+//    {SPI2_BASE, LL_APB1_GRP1_PERIPH_SPI2},
+//    {SPI3_BASE,LL_APB1_GRP1_PERIPH_SPI3},
     //    {SPI4_BASE,RCC_APB2Periph_SPI4},
     //    {SPI5_BASE,RCC_APB2Periph_SPI5},
     {I2C1_BASE, LL_APB1_GRP1_PERIPH_I2C1},
-    {I2C2_BASE, LL_APB1_GRP1_PERIPH_I2C2},
+//    {I2C2_BASE, LL_APB1_GRP1_PERIPH_I2C2},
     //    {I2C3_BASE,RCC_APB1Periph_I2C3},
 
     {USART1_BASE, LL_APB2_GRP1_PERIPH_USART1},
@@ -73,7 +74,10 @@ void rcc_clock_cmd(uint32_t dev, FunctionalState state)
     for(int i = 0; i < sizeof(dev_to_rcc_table) / sizeof(DevToRcc_t); i++)
     {
         if(dev_to_rcc_table[i].dev == dev)
+        {
             rcc  = dev_to_rcc_table[i].rcc;
+            break;
+        }
     }
 
 
@@ -86,7 +90,7 @@ void rcc_clock_cmd(uint32_t dev, FunctionalState state)
     {
         state ? LL_AHB1_GRP1_EnableClock(rcc) : LL_AHB1_GRP1_DisableClock(rcc);
     }
-    else if(dev >= APB2PERIPH_BASE + 0x00010000)
+    else if(dev >= APB2PERIPH_BASE)
     {
         state ? LL_APB2_GRP1_EnableClock(rcc) : LL_APB2_GRP1_DisableClock(rcc);
     }

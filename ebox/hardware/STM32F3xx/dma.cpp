@@ -1,4 +1,5 @@
 #include "dma.h"
+#include "stm32f3xx_ll_bus.h"
 
 static uint32_t dma_irq_ids[DMA_NUM] = {0, 0, 0, 0, 0, 0, 0};
 

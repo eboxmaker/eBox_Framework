@@ -2,6 +2,8 @@
 
 #include "ebox_core.h"
 #include "nvic.h"
+#include "stm32f3xx_ll_dma.h"
+#include "stm32f3xx_ll_exti.h"
 
 
 //设备->中断号查询表
@@ -9,21 +11,21 @@ const DevToIRQn_t dev_to_IRQn_table[] =
 {
     {TIM2_BASE, TIM2_IRQn},
     {TIM3_BASE, TIM3_IRQn},
-    {TIM4_BASE, TIM4_IRQn},
-    {TIM4_BASE, TIM5_IRQn},
+//    {TIM4_BASE, TIM4_IRQn},
+//    {TIM4_BASE, TIM5_IRQn},
 
-    {TIM12_BASE, TIM12_IRQn},
-    {TIM13_BASE, TIM13_IRQn},
-    {TIM14_BASE, TIM14_IRQn},
+//    {TIM12_BASE, TIM12_IRQn},
+//    {TIM13_BASE, TIM13_IRQn},
+//    {TIM14_BASE, TIM14_IRQn},
     //    {ADC1_BASE,ADC1_2_IRQn},
     //    {ADC2_BASE,ADC1_2_IRQn},
 
     {SPI1_BASE, SPI1_IRQn},
-    {SPI2_BASE, SPI2_IRQn},
-    {SPI3_BASE, SPI3_IRQn},
+//    {SPI2_BASE, SPI2_IRQn},
+//    {SPI3_BASE, SPI3_IRQn},
 
     {I2C1_BASE, I2C1_EV_IRQn,I2C1_ER_IRQn},
-    {I2C2_BASE, I2C2_EV_IRQn,I2C2_ER_IRQn},
+//    {I2C2_BASE, I2C2_EV_IRQn,I2C2_ER_IRQn},
 
     {LL_DMA_CHANNEL_1, DMA1_Channel1_IRQn},
     {LL_DMA_CHANNEL_2, DMA1_Channel2_IRQn},
@@ -58,10 +60,10 @@ const DevToIRQn_t dev_to_IRQn_table[] =
     
 
     {SPI1_BASE, SPI1_IRQn},
-    {SPI2_BASE, SPI2_IRQn},
+//    {SPI2_BASE, SPI2_IRQn},
 
     {I2C1_BASE, I2C1_EV_IRQn, I2C1_ER_IRQn},
-    {I2C2_BASE, I2C2_EV_IRQn, I2C2_ER_IRQn},
+//    {I2C2_BASE, I2C2_EV_IRQn, I2C2_ER_IRQn},
 
 
     {USART1_BASE, USART1_IRQn},

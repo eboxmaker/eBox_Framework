@@ -55,8 +55,8 @@ extern "C" {
 
 ////创建所有引脚对象和宏定义其指针
 extern Uart uart1;
-//extern Uart uart2;
-//extern Uart uart3;
+extern Uart uart2;
+extern Uart uart3;
 ////extern Uart uart4;
 ////extern Uart uart5;
 

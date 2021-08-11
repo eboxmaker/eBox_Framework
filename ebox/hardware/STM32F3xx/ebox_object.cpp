@@ -18,9 +18,9 @@ This specification is preliminary and is subject to change at any time without n
 
 Uart uart1(USART1, &PA9, &PA10);
 ////Usart uart1(USART1,&PB6,&PB7);
-//Uart uart2(USART2, &PA2, &PA3);
+Uart uart2(USART2, &PA2, &PA3);
 ////Usart uart2(USART2,&PD5,&PD6);
-//Uart uart3(USART3, &PB10, &PB11);
+Uart uart3(USART3, &PB10, &PB11);
 ////spi
 //mcuSpi  spi1(SPI1, &PA5, &PA6, &PA7);
 //mcuSpi  spi2(SPI2, &PB13, &PB14, &PB15);

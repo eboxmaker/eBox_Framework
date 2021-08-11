@@ -694,11 +694,6 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\ebox\core\list_c.c</FilePath>
             </File>
-            <File>
-              <FileName>elist.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\elist.cpp</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -728,11 +723,6 @@
               <FileName>FileSystem.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\interface\storage\filesystem\FileSystem.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>EventGpio.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\event\EventGpio.cpp</FilePath>
             </File>
             <File>
               <FileName>EventVar.cpp</FileName>
@@ -908,6 +898,11 @@
               <FileName>OLED_4spi.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\edriver\OLED_4spi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>OneButton.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\OneButton\OneButton.cpp</FilePath>
             </File>
           </Files>
         </Group>

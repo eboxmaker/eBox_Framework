@@ -4,7 +4,7 @@
 #include "ebox_core.h"
 #include "mcu.h"
 #include "FunctionPointer.h"
-
+#include "stm32f3xx_ll_dma.h"
 
 //”√ªß≈‰÷√//////////////
 #define DMA_NUM (7)

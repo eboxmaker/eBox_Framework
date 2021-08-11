@@ -24,7 +24,7 @@
 #define GETPIN(A) 	 	  (uint16_t)(1<<(A&0x0f))
 // 获取端口索引，返回0,1,2,3,4,5
 //#define GETPORTINDEX(A)   ((A)&0xf0)>>4
-#define GETPORT(A)   (GPIO_TypeDef*)(((((A)&0xf0)+0x20)<<6)+AHB2PERIPH_BASE)
+#define GETPORT(A)   (GPIO_TypeDef*)(((((A)&0xf0))<<6)+AHB2PERIPH_BASE)
 
 // 此函数会被 parallel—gpio.cpp调用，请勿移除
 void port_mode(GPIO_TypeDef* port,uint32_t pin, PinMode_t mode)
@@ -37,7 +37,7 @@ void port_mode(GPIO_TypeDef* port,uint32_t pin, PinMode_t mode)
 //		#error "注意:当前配置禁止用户使用SW端口，默认为PA13，PA14"
 #endif
 
-    LL_GPIO_InitTypeDef GPIO_InitStructure;    
+    LL_GPIO_InitTypeDef GPIO_InitStructure;   
     rcc_clock_cmd((uint32_t)port, ENABLE);
 
     switch ((uint8_t)mode)

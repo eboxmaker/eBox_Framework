@@ -22,7 +22,6 @@
 #include "ebox.h"
 //#include "led.h"
 #include "lcd_1.8.h"
-#include "EventGpio.h"
 #include "EventManager.h"
 #include "../Ethernet3/utility/w5500.h"
 
@@ -133,7 +132,6 @@ extern mcuSpi spi2;
 //extern Led      led3;
 //extern CNC      cnc;
 extern Lcd      lcd;
-extern EventGpio btn;
 extern EventManager manager;
 extern W5500Class w5500;
 

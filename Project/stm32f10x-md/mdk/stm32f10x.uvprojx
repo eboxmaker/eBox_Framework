@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>ARM_MATH_CM3</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\ebox;..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\ebox\interface;..\..\..\ebox\interface\spi;..\..\..\ebox\interface\i2c;..\..\..\ebox\interface\TwoWire;..\..\..\ebox\interface\event;..\..\..\ebox\interface\DateTime;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266;..\..\..\component\MPU6050;..\..\..\component\mqtt\src;..\..\..\os\ebox_os;..\..\..\component\Ethernet3;..\..\..\component\Ethernet3\utility;..\..\..\component\modbus\libraries\ModbusIP;..\..\..\component\soft_uart;..\..\..\component\Firmata;..\..\..\component\Firmata\utility;..\..\..\component\arducat\libraries\arducat;..\..\..\component\fat;..\..\..\component\littlefs;..\..\..\component\pn532;..\..\..\os\FreeRTOS\Cfg;..\..\..\os\FreeRTOS\Source\portable\RVDS\ARM_CM3;..\..\..\os\FreeRTOS\Source\include;..\..\..\component\linearRegression;..\..\..\component\ArduinoJson</IncludePath>
+              <IncludePath>..\..\..\ebox;..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\ebox\interface;..\..\..\ebox\interface\spi;..\..\..\ebox\interface\i2c;..\..\..\ebox\interface\TwoWire;..\..\..\ebox\interface\event;..\..\..\ebox\interface\DateTime;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266;..\..\..\component\MPU6050;..\..\..\component\mqtt\src;..\..\..\os\ebox_os;..\..\..\component\Ethernet3;..\..\..\component\Ethernet3\utility;..\..\..\component\modbus\libraries\ModbusIP;..\..\..\component\fat;..\..\..\component\littlefs;..\..\..\component\pn532;..\..\..\os\FreeRTOS\Cfg;..\..\..\os\FreeRTOS\Source\portable\RVDS\ARM_CM3;..\..\..\os\FreeRTOS\Source\include;..\..\..\component\linearRegression;..\..\..\component\ArduinoJson</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1198,6 +1198,16 @@
               <FileName>midea.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\ir\midea\midea.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mqtt</GroupName>
+          <Files>
+            <File>
+              <FileName>PubSubClient.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\mqtt\src\PubSubClient.cpp</FilePath>
             </File>
           </Files>
         </Group>
