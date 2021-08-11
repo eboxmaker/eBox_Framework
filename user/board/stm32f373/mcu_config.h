@@ -108,8 +108,8 @@ extern int SHT$$INIT_ARRAY$$Limit;
 #include "stm32f3xx_ll_exti.h"
 #include "stm32f3xx_ll_usart.h"
 #include "stm32f3xx_ll_gpio.h"
-#include "stm32f3xx_ll_exti.h"
-#include "stm32f3xx_ll_exti.h"
+#include "stm32f3xx_ll_spi.h"
+#include "stm32f3xx_ll_i2c.h"
 
 
 

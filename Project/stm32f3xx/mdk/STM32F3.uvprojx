@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F334x8,USE_FULL_LL_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcuLib\stm32f3xx\Libraries\STM32F3xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Device\ST\STM32F3xx\Include;..\..\..\ebox;..\..\..\ebox\core;..\..\..\ebox\hardware\STM32F3xx;..\..\..\ebox\hardware\STM32F3xx\Peripherals;..\..\..\ebox\interface\event;..\..\..\ebox\interface\i2c;..\..\..\ebox\interface\spi;..\..\..\component;..\..\..\user;..\..\..\user\board\stm32f373</IncludePath>
+              <IncludePath>..\..\..\mcuLib\stm32f3xx\Libraries\STM32F3xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Device\ST\STM32F3xx\Include;..\..\..\ebox;..\..\..\ebox\core;..\..\..\ebox\hardware\STM32F3xx;..\..\..\ebox\hardware\STM32F3xx\Peripherals;..\..\..\ebox\interface;..\..\..\ebox\interface\event;..\..\..\ebox\interface\i2c;..\..\..\ebox\interface\spi;..\..\..\component;..\..\..\user;..\..\..\user\board\stm32f373;..\..\..\component\edriver</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -437,6 +437,16 @@
               <FileName>stm32f3xx_ll_tim.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\mcuLib\stm32f3xx\Libraries\STM32F3xx_HAL_Driver\Src\stm32f3xx_ll_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f3xx_ll_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcuLib\stm32f3xx\Libraries\STM32F3xx_HAL_Driver\Src\stm32f3xx_ll_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f3xx_ll_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcuLib\stm32f3xx\Libraries\STM32F3xx_HAL_Driver\Src\stm32f3xx_ll_i2c.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -633,6 +643,16 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\STM32F3xx\ebox_it.cpp</FilePath>
             </File>
+            <File>
+              <FileName>ebox_i2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_i2c.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_spi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_spi.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -642,6 +662,11 @@
               <FileName>OneButton.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\OneButton\OneButton.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>OLED_i2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\OLED_i2c.cpp</FilePath>
             </File>
           </Files>
         </Group>

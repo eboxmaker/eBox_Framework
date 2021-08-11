@@ -25,116 +25,95 @@ mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 
 }
 
-void mcuSpi::begin(SpiConfig_t *spi_config)
+void mcuSpi::begin(Config_t *newConfig)
 {
 
-    if(_spi == SPI1)
-    {
-        _sck->mode(AF_PP_PU, GPIO_AF_SPI1);
-        _miso->mode(AF_PP_PU, GPIO_AF_SPI1);
-        _mosi->mode(AF_PP_PU, GPIO_AF_SPI1);
-
-    }
-    if(_spi == SPI2)
-    {
-        _sck->mode(AF_PP_PU, GPIO_AF_SPI2);
-        _miso->mode(AF_PP_PU, GPIO_AF_SPI2);
-        _mosi->mode(AF_PP_PU, GPIO_AF_SPI2);
-
-    }
-    if(_spi == SPI3)
-    {
-        _sck->mode(AF_PP_PU, GPIO_AF_SPI3);
-        _miso->mode(AF_PP_PU, GPIO_AF_SPI3);
-        _mosi->mode(AF_PP_PU, GPIO_AF_SPI3);
-
-    }
+    _sck->mode(AF_PP);
+    _miso->mode(AF_PP);
+    _mosi->mode(AF_PP);
 
     rcc_clock_cmd((uint32_t)_spi, ENABLE);
-    config(spi_config);
+    config(newConfig);
 }
-void mcuSpi::config(SpiConfig_t *spi_config)
+void mcuSpi::config(Config_t *newConfig)
 {
-    SPI_InitTypeDef SPI_InitStructure;
+    LL_SPI_InitTypeDef SPI_InitStructure;
+    
+    current_dev_num = newConfig->dev_num;
 
-    current_dev_num = spi_config->dev_num;
-
-    SPI_Cmd(_spi, DISABLE);
-
-    SPI_I2S_DeInit(_spi);
-    SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex; //全双工
-    SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b; //8位数据模式
-    SPI_InitStructure.SPI_NSS = SPI_NSS_Soft; //NSS软件管理
-    SPI_InitStructure.SPI_CRCPolynomial = 7; //CRC多项式
-    SPI_InitStructure.SPI_Mode = SPI_Mode_Master; //主机模式
-
-    if(spi_config->mode == SPI_MODE0)
+    LL_SPI_Disable(_spi);
+    LL_SPI_DeInit(_spi);
+    SPI_InitStructure.TransferDirection = LL_SPI_FULL_DUPLEX;//全双工
+    SPI_InitStructure.DataWidth = LL_SPI_DATAWIDTH_8BIT;//8位数据模式
+    SPI_InitStructure.NSS = LL_SPI_NSS_SOFT;//NSS软件管理
+    SPI_InitStructure.CRCPoly = 7;//CRC多项式
+    SPI_InitStructure.Mode = LL_SPI_MODE_MASTER;//主机模式
+    if(newConfig->mode == MODE0)
     {
-        SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
-        SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
+        SPI_InitStructure.ClockPhase = LL_SPI_PHASE_1EDGE;
+        SPI_InitStructure.ClockPolarity = LL_SPI_POLARITY_LOW;
     }
-    else if(spi_config->mode == SPI_MODE1)
+    else if(newConfig->mode == MODE1)
     {
-        SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
-        SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
+        SPI_InitStructure.ClockPhase = LL_SPI_PHASE_2EDGE;
+        SPI_InitStructure.ClockPolarity = LL_SPI_POLARITY_LOW;
     }
-    else if(spi_config->mode == SPI_MODE2)
+    else if(newConfig->mode == MODE2)
     {
-        SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
-        SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
+        SPI_InitStructure.ClockPhase = LL_SPI_PHASE_1EDGE;
+        SPI_InitStructure.ClockPolarity = LL_SPI_POLARITY_HIGH;
     }
-    else if(spi_config->mode == SPI_MODE3)
+    else if(newConfig->mode == MODE3)
     {
-        SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
-        SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
+        SPI_InitStructure.ClockPhase = LL_SPI_PHASE_2EDGE;
+        SPI_InitStructure.ClockPolarity = LL_SPI_POLARITY_HIGH;
     }
-    switch(spi_config->prescaler)
+    switch(newConfig->prescaler)
     {
-    case SPI_CLOCK_DIV2:
-        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;
+    case DIV2:
+        SPI_InitStructure.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV2;
         break;
-    case SPI_CLOCK_DIV4:
-        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;
+    case DIV4:
+        SPI_InitStructure.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV4;
         break;
-    case SPI_CLOCK_DIV8:
-        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8;
+    case DIV8:
+        SPI_InitStructure.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV8;
         break;
-    case SPI_CLOCK_DIV16:
-        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;
+    case DIV16:
+        SPI_InitStructure.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV16;
         break;
-    case SPI_CLOCK_DIV32:
-        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_32;
+    case DIV32:
+        SPI_InitStructure.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV32;
         break;
-    case SPI_CLOCK_DIV64:
-        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;
+    case DIV64:
+        SPI_InitStructure.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV64;
         break;
-    case SPI_CLOCK_DIV128:
-        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128;
+    case DIV128:
+        SPI_InitStructure.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV128;
         break;
-    case SPI_CLOCK_DIV256:
-        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;
+    case DIV256:
+        SPI_InitStructure.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV256;
         break;
     default :
-        SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;
+        SPI_InitStructure.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV256;
         break;
 
     }
 
-    switch(spi_config->bit_order)
+    switch(newConfig->bit_order)
     {
-    case MSB_FIRST:
-        SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+    case MSB:
+        SPI_InitStructure.BitOrder = LL_SPI_MSB_FIRST;
         break;
-    case LSB_FIRST:
-        SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_LSB;
+    case LSB:
+        SPI_InitStructure.BitOrder = LL_SPI_LSB_FIRST;
         break;
     default :
-        SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+        SPI_InitStructure.BitOrder = LL_SPI_MSB_FIRST;
         break;
-
     }
-    SPI_Init(_spi, &SPI_InitStructure);
-    SPI_Cmd(_spi, ENABLE);
+    LL_SPI_Init(_spi, &SPI_InitStructure);
+    LL_SPI_Enable(_spi);
 }
 
 uint8_t mcuSpi::read_config(void)
@@ -150,10 +129,10 @@ uint8_t mcuSpi::read_config(void)
   */
 uint8_t mcuSpi::transfer(uint8_t data)
 {
-    while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+    while (LL_SPI_IsActiveFlag_TXE(_spi) == RESET)
         ;
     _spi->DR = data;
-    while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+    while (LL_SPI_IsActiveFlag_RXNE(_spi) == RESET)
         ;
     return _spi->DR;
 }
@@ -166,10 +145,10 @@ uint8_t mcuSpi::transfer(uint8_t data)
 int8_t mcuSpi::write(uint8_t data)
 {
     __IO uint8_t dummyByte;
-    while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+    while (LL_SPI_IsActiveFlag_TXE(_spi) == RESET)
         ;
     _spi->DR = data;
-    while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+    while (LL_SPI_IsActiveFlag_RXNE(_spi) == RESET)
         ;
     dummyByte = _spi->DR;
 
@@ -187,10 +166,10 @@ int8_t mcuSpi::write_buf(uint8_t *data, uint16_t len)
         return -1;
     while(len--)
     {
-        while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+        while (LL_SPI_IsActiveFlag_TXE(_spi) == RESET)
             ;
         _spi->DR = *data++;
-        while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+        while (LL_SPI_IsActiveFlag_RXNE(_spi) == RESET)
             ;
         dummyByte = _spi->DR;
     }
@@ -198,20 +177,20 @@ int8_t mcuSpi::write_buf(uint8_t *data, uint16_t len)
 }
 uint8_t mcuSpi::read()
 {
-    while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+        while (LL_SPI_IsActiveFlag_TXE(_spi) == RESET)
         ;
     _spi->DR = 0xff;
-    while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+        while (LL_SPI_IsActiveFlag_RXNE(_spi) == RESET)
         ;
     return(_spi->DR);
 
 }
 int8_t mcuSpi::read(uint8_t *recv_data)
 {
-    while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+    while (LL_SPI_IsActiveFlag_TXE(_spi) == RESET)
         ;
     _spi->DR = 0xff;
-    while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+    while (LL_SPI_IsActiveFlag_RXNE(_spi) == RESET)
         ;
     *recv_data = _spi->DR;
 
@@ -229,10 +208,10 @@ int8_t mcuSpi::read_buf(uint8_t *recv_data, uint16_t len)
         return -1;
     while(len--)
     {
-        while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
+        while (LL_SPI_IsActiveFlag_TXE(_spi) == RESET)
             ;
         _spi->DR = 0xff;
-        while ((_spi->SR & SPI_I2S_FLAG_RXNE) == RESET)
+        while (LL_SPI_IsActiveFlag_RXNE(_spi) == RESET)
             ;
         *recv_data++ = _spi->DR;
     }
@@ -244,18 +223,23 @@ int8_t mcuSpi::read_buf(uint8_t *recv_data, uint16_t len)
   *@param    none
   *@retval   none
   */
-int8_t mcuSpi::take(SpiConfig_t *spi_config)
+int8_t mcuSpi::take(Spi::Config_t *newConfig)
 {
-    while((_busy == 1) && (spi_config->dev_num != read_config()))
-        delay_ms(1);
-    if(spi_config->dev_num == read_config())
+    uint32_t end = GetEndTime(200);
+
+    while (_busy == 1)
     {
-        _busy = 1;
-        return 0;
+        delay_ms(1);
+        if (IsTimeOut(end, 200))
+        {
+            ebox_printf("\r\nSPI产生多线程异常调用\r\n");
+            return EWAIT;
+        }
     }
-    config(spi_config);
+    if (newConfig->dev_num != read_config()) 
+        config(newConfig);
     _busy = 1;
-    return 0;
+    return EOK;
 }
 /**
   *@brief    释放控制权
