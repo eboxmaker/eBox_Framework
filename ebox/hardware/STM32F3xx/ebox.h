@@ -32,8 +32,8 @@
 //#include "ebox_exti.h"
 //#include "ebox_timer.h"
 //#include "ebox_pwm.h"
-//#include "ebox_i2c.h"
-//#include "ebox_spi.h"
+#include "ebox_i2c.h"
+#include "ebox_spi.h"
 #include "ebox_uart.h"
 //#include "ebox_uart_stream.h"
 //#include "ebox_in_capture.h"
@@ -66,7 +66,7 @@ extern Uart uart3;
 //extern SoftSpi sspi1;
 //extern SoftSpi sspi2;
 
-//extern mcuI2c i2c1;
+extern mcuI2c mcuI2c1;
 //extern mcuI2c i2c2;
 //extern SoftI2c si2c;
 //extern SoftI2c si2c1;

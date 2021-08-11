@@ -39,9 +39,9 @@ int8_t At24x::write_byte(uint8_t byte_addr, uint8_t *buf, uint16_t num_to_write)
     int8_t ret = 0;
     
     i2c->beginTransmission(slaveAddr);
-    i2c->write(byte_addr);
-    i2c->write(buf,num_to_write);
-    i2c->endTransmission();
+    ret = i2c->write(byte_addr);
+    ret = i2c->write(buf,num_to_write);
+    ret = i2c->endTransmission();
     return ret;
 }
 

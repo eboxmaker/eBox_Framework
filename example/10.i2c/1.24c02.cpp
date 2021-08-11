@@ -10,11 +10,8 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 #include "ebox.h"
 #include "bsp_ebox.h"
-
-#include "at24c02.h"
 #include "at24x.h"
-
-At24x ee(&Wire);
+At24x ee(&mcuI2c1);
 /**
     *	1	此例程需要调用eDrive目录下的at24c02驱动
 	*	2	此例程演示了at24c02的读写操作
@@ -60,7 +57,7 @@ void test()
 {
     ret = 0;
 
-    uart1.printf("=================wbuf================\r\n");
+    UART.printf("=================wbuf================\r\n");
     for(uint16_t i = 0; i < MAX_LEN; i++)
     {
         wbuf[i] = random()%255;
@@ -68,21 +65,23 @@ void test()
     }
     for(uint16_t i = 0; i < MAX_LEN; i++)
     {
-        uart1.printf(" %02x ", wbuf[i ]);
+        UART.printf(" %02x ", wbuf[i ]);
         //ee.byteWrite(i*16+j,buf[i*16+j]);
     }
-    uart1.printf("\r\n ");
+    UART.printf("\r\n ");
 
-    ee.write_byte(0, wbuf, MAX_LEN);
+    ret = ee.write_byte(0, wbuf, MAX_LEN);
+    if(ret)
+        UART.printf("write:%d\r\n",ret);
 
-    uart1.printf("==================rbuf==============\r\n");
-
+    UART.printf("==================rbuf==============\r\n");
+    UART.flush();
     data = ee.read_byte(0, rbuf, MAX_LEN);
     for(uint16_t i = 0; i < MAX_LEN; i++)
     {
-        uart1.printf(" %02x ", rbuf[i]);
+        UART.printf(" %02x ", rbuf[i]);
     }
-    uart1.printf("\r\n ");
+    UART.printf("\r\n ");
     for(int i = 0; i < MAX_LEN; i++)
     {
         if(wbuf[i] != rbuf[i])
@@ -93,13 +92,13 @@ void test()
     }
     if(ret == 1)
     {
-        uart1.printf("eeprom check ......[err]");
-        ee.begin();
+        UART.printf("eeprom check ......[err]");
+//        ee.begin();
     }
     else
-        uart1.printf("eeprom check ......[OK]");
+        UART.printf("eeprom check ......[OK]");
 
-    uart1.printf("\r\n================================\r\n");
+    UART.printf("\r\n================================\r\n");
     delay_ms(1000);
 
 }

@@ -20,12 +20,15 @@
 #ifndef __BSP_EBOX_H
 #define __BSP_EBOX_H
 #include "ebox.h"
+#include "soft_i2c.h"
+
 ////#include "w5500.h"
 //#include "../Ethernet3/utility/w5500.h"
 //#include "button.h"
 //#include "led.h"
 #define	HARDWARE	"ebox_spark£¬STM32F407IGT6"
 
+extern SoftI2c Wire;
 
 //extern mcuSpi spi_w5500;
 ////extern W5500 w5500;

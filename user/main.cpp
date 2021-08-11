@@ -1,70 +1,104 @@
-/**
-  ******************************************************************************
-  * @file    pwm.cpp
-  * @author  shentq
-  * @version V2.0
-  * @date    2016/08/14
-  * @brief   ebox application example .
-  ******************************************************************************
-  * @attention
-  *
-  * No part of this software may be used for any commercial activities by any form
-  * or means, without the prior written consent of shentq. This specification is
-  * preliminary and is subject to change at any time without notice. shentq assumes
-  * no responsibility for any errors contained herein.
-  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
-  ******************************************************************************
-  */
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
 
+Copyright 2015 shentq. All Rights Reserved.
+*/
 
-/* Includes ------------------------------------------------------------------*/
-
-
+//STM32 RUN IN eBox
 #include "ebox.h"
-#include "math.h"
-#include "oled_i2c.h"
-#include "font.h"
-#include "soft_i2c.h"
 #include "bsp_ebox.h"
+#include "at24x.h"
+At24x ee(&mcuI2c1);
+/**
+    *	1	此例程需要调用eDrive目录下的at24c02驱动
+	*	2	此例程演示了at24c02的读写操作
+    *   3   通过begin可以设置i2c速率为10k，100k，200k，400k
+    *   4   通过config可以自由设置i2c速率，注意f0需要借助官方工具生成timing传入
+	*/
 
-SoftI2c si2cx(&PB10, &PB11);
-OledI2c oled(&si2cx);
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"AT24C02 example"
+#define EXAMPLE_DATE	"2018-08-11"
 
+uint8_t data;
 
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
-    uart2.begin(115200);
-    print_log();
-    oled.begin(I2c::K100);
-    LED1.mode(OUTPUT_PP);
+    UART.begin(115200);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
+   // Wire.begin();
+    ee.begin();
+
 }
+int16_t x, i;
+uint8_t wbuf[512];
+uint8_t rbuf[512];
+#define MAX_LEN 10
+int ret = 0;
+void test();
+
+
 int main(void)
 {
-
     setup();
-    uint16_t temp;
-    float speed;
-	static uint64_t last_time = millis();
-    static uint64_t last_time1 = millis();
+
     while(1)
     {
-        last_time = millis();
-        oled.clear();
-        last_time1 = millis();
-        uart1.printf("%d\r\n", last_time1 - last_time);
-
-        oled.draw_bmp(0, 0, 128, 8, (uint8_t *)BMP1);
-        delay_ms(1000);
-        oled.show_num(103, 6, 25, 3, 16); //显示ASCII字符的码值
-        delay_ms(1000);
-        oled.show_chinese(0, 4, 0); //中
-        LED1.toggle();
-        delay_ms(1000);
+        test();
+        
     }
 }
 
+void test()
+{
+    ret = 0;
 
+    UART.printf("=================wbuf================\r\n");
+    for(uint16_t i = 0; i < MAX_LEN; i++)
+    {
+        wbuf[i] = random()%255;
+        rbuf[i] = 0;
+    }
+    for(uint16_t i = 0; i < MAX_LEN; i++)
+    {
+        UART.printf(" %02x ", wbuf[i ]);
+        //ee.byteWrite(i*16+j,buf[i*16+j]);
+    }
+    UART.printf("\r\n ");
 
+    ret = ee.write_byte(0, wbuf, MAX_LEN);
+    if(ret)
+        UART.printf("write:%d\r\n",ret);
 
+    UART.printf("==================rbuf==============\r\n");
+    UART.flush();
+    data = ee.read_byte(0, rbuf, MAX_LEN);
+    for(uint16_t i = 0; i < MAX_LEN; i++)
+    {
+        UART.printf(" %02x ", rbuf[i]);
+    }
+    UART.printf("\r\n ");
+    for(int i = 0; i < MAX_LEN; i++)
+    {
+        if(wbuf[i] != rbuf[i])
+        {
+            ret = 1;
+            break;
+        }
+    }
+    if(ret == 1)
+    {
+        UART.printf("eeprom check ......[err]");
+//        ee.begin();
+    }
+    else
+        UART.printf("eeprom check ......[OK]");
+
+    UART.printf("\r\n================================\r\n");
+    delay_ms(1000);
+
+}
