@@ -6,8 +6,16 @@
 #include "ebox_uart.h"
 #include "TimeSpan.h"
 
+
+
+bool is_leap_year(int year);
+int days_in_month(int year,int month);
+int days_in_year(int year);
+int seconds_in_year(int year);
+    
+
 #define LOCAL_UTC_OFFSET 8
-class DateTimeClass 
+class DateTime 
 {
 public:
     typedef enum {
@@ -38,10 +46,11 @@ public:
     int err;
 
 
-    DateTimeClass(int utc_offset = LOCAL_UTC_OFFSET);
-    DateTimeClass(String str,int utc_offset = LOCAL_UTC_OFFSET);
-    DateTimeClass(String date,String time,int utc_offset = LOCAL_UTC_OFFSET);
-
+    DateTime(int utc_offset = LOCAL_UTC_OFFSET);
+    DateTime(uint64_t time_span,int utc_offset = LOCAL_UTC_OFFSET);
+    DateTime(String str,int utc_offset = LOCAL_UTC_OFFSET);
+    DateTime(String date,String time,int utc_offset = LOCAL_UTC_OFFSET);
+    bool parse(uint64_t stamp);
     bool parse(String &str);
     bool isLeapYear();
 
@@ -57,22 +66,23 @@ public:
     void addHours(int value);
     void addMinutes(int value);
     void addSeconds(int value);
+    void addMilliSeconds(int value);
     
     String toString(TimeFormat_t format = YYYY_MM_DD_HH_MM_SS,TimeSeparatorFormat_t gap = Sep1);
     
-    DateTimeClass getUniversalTime();
+    DateTime getUniversalTime();
     double getTimeStamp();
-    TimeSpan  operator-(DateTimeClass& b);
-    DateTimeClass  operator+(TimeSpan& b);
-    DateTimeClass  operator-(TimeSpan& b);
-    bool operator<( DateTimeClass &right);
-    bool operator>( DateTimeClass &right) { return right < *this; }
-    bool operator<=( DateTimeClass &right) { return !(*this > right); }
-    bool operator>=( DateTimeClass &right)  { return !(*this < right); }
-    bool operator==( DateTimeClass &right) ;
+    TimeSpan  operator-(DateTime& b);
+    DateTime  operator+(TimeSpan& b);
+    DateTime  operator-(TimeSpan& b);
+    bool operator<( DateTime &right);
+    bool operator>( DateTime &right) { return right < *this; }
+    bool operator<=( DateTime &right) { return !(*this > right); }
+    bool operator>=( DateTime &right)  { return !(*this < right); }
+    bool operator==( DateTime &right) ;
 
     void print(Uart &uart);
-    static bool limitCheck(DateTimeClass &dt);
+    static bool limitCheck(DateTime &dt);
 
 private:
     int utcOffset;

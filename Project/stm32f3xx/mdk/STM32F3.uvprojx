@@ -10,7 +10,7 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060750::V5.06 update 6 (build 750)::.\ARMCC</pCCUsed>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -184,8 +184,6 @@
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
             <RvdsVP>2</RvdsVP>
-            <RvdsMve>0</RvdsMve>
-            <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -339,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>USE_FULL_LL_DRIVER,STM32F334x8</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcuLib\stm32f3xx\Libraries\STM32F3xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Device\ST\STM32F3xx\Include;..\..\..\ebox;..\..\..\ebox\core;..\..\..\ebox\hardware\STM32F3xx;..\..\..\ebox\hardware\STM32F3xx\Peripherals;..\..\..\ebox\interface;..\..\..\ebox\interface\event;..\..\..\ebox\interface\i2c;..\..\..\ebox\interface\spi;..\..\..\component;..\..\..\user;..\..\..\user\board\Nucleo_F334R8;..\..\..\component\edriver</IncludePath>
+              <IncludePath>..\..\..\mcuLib\stm32f3xx\Libraries\STM32F3xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Device\ST\STM32F3xx\Include;..\..\..\ebox;..\..\..\ebox\core;..\..\..\ebox\hardware\STM32F3xx;..\..\..\ebox\hardware\STM32F3xx\Peripherals;..\..\..\ebox\interface;..\..\..\ebox\interface\DateTime;..\..\..\ebox\interface\event;..\..\..\ebox\interface\i2c;..\..\..\ebox\interface\spi;..\..\..\component;..\..\..\user;..\..\..\user\board\Nucleo_F334R8;..\..\..\component\edriver</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -352,7 +350,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <ClangAsOpt>4</ClangAsOpt>
+            <uClangAs>0</uClangAs>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -544,11 +542,6 @@
           <GroupName>interface</GroupName>
           <Files>
             <File>
-              <FileName>basicRtc.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\basicRtc.cpp</FilePath>
-            </File>
-            <File>
               <FileName>hmi.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\interface\hmi.cpp</FilePath>
@@ -597,6 +590,16 @@
               <FileName>spi.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\ebox\interface\spi\spi.h</FilePath>
+            </File>
+            <File>
+              <FileName>DateTime.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\DateTime\DateTime.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>basicRtc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\DateTime\basicRtc.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -719,20 +722,5 @@
     </components>
     <files/>
   </RTE>
-
-  <LayerInfo>
-    <Layers>
-      <Layer>
-        <LayName>&lt;Project Info&gt;</LayName>
-        <LayDesc></LayDesc>
-        <LayUrl></LayUrl>
-        <LayKeys></LayKeys>
-        <LayCat></LayCat>
-        <LayLic></LayLic>
-        <LayTarg>0</LayTarg>
-        <LayPrjMark>1</LayPrjMark>
-      </Layer>
-    </Layers>
-  </LayerInfo>
 
 </Project>

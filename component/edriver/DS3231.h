@@ -23,7 +23,7 @@
 
 #include "ebox_core.h"
 #include "i2c.h"
-#include "interface/basicRtc.h"
+#include "DateTime/basicRtc.h"
 #include "ebox_uart.h"
 #include "ebox_exti.h"
 
@@ -57,48 +57,48 @@
 #define DS3231_TEMPERATUREL 0x12    //温度寄存器低字节(高2位)  
 //timer.w_year,timer.w_month,timer.w_date,timer.hour,timer.min,timer.sec
 
-class DS3231:public BasicRtc
-{
+//class DS3231:public BasicRtc
+//{
 
-public:
-    typedef enum{
-        HOUR24,
-        HOUR12,
-    }HourMode_t;
+//public:
+//    typedef enum{
+//        HOUR24,
+//        HOUR12,
+//    }HourMode_t;
 
-public:
-    DS3231(I2c *i2c,uint16_t slaveAddr)
-    {
-        this->i2c = i2c;
-        this->intPin = NULL;
-        this->slaveAddr = slaveAddr;
-    };
-    DS3231(I2c *i2c,Gpio *intPin,uint16_t slaveAddr)
-    {
-        this->i2c = i2c;
-        this->slaveAddr = slaveAddr;
-        this->intPin = intPin;
-    };    
-    
-    virtual void        begin();
-    virtual void        event();
-    virtual void        loop();
-    
-private:
-    virtual void        write_dt(DateTime_t &dt);
-    virtual DateTime_t  read_dt();
+//public:
+//    DS3231(I2c *i2c,uint16_t slaveAddr)
+//    {
+//        this->i2c = i2c;
+//        this->intPin = NULL;
+//        this->slaveAddr = slaveAddr;
+//    };
+//    DS3231(I2c *i2c,Gpio *intPin,uint16_t slaveAddr)
+//    {
+//        this->i2c = i2c;
+//        this->slaveAddr = slaveAddr;
+//        this->intPin = intPin;
+//    };    
+//    
+//    virtual void        begin();
+//    virtual void        event();
+//    virtual void        loop();
+//    
+//private:
+//    virtual void        write_dt(DateTime_t &dt);
+//    virtual DateTime_t  read_dt();
 
-    I2c *i2c;
-    Gpio *intPin;
-    Exti *exti;
-    uint32_t last_time;
-    uint16_t slaveAddr;
-    void set_hour_mode(HourMode_t mode);
-    HourMode_t get_hour_mode();
+//    I2c *i2c;
+//    Gpio *intPin;
+//    Exti *exti;
+//    uint32_t last_time;
+//    uint16_t slaveAddr;
+//    void set_hour_mode(HourMode_t mode);
+//    HourMode_t get_hour_mode();
 
-    HourMode_t hour_mode;
+//    HourMode_t hour_mode;
 
-};
+//};
 
 
 #endif

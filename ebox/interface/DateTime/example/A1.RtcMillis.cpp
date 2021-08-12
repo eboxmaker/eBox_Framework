@@ -21,51 +21,34 @@
 
 
 #include "ebox.h"
+#include "bsp_ebox.h"
 #include "datetime.h"
+#include "basicRtc.h"
 
+DateTime dt(__DATE__,__TIME__,8);//东八区
 
-DateTimeClass dt("2021-07-24 0:0:0",8);//东八区
-DateTimeClass dt2("2021-07-24 0:0:0",-8);//西八区
-
+RtcMillis rtc;
 void setup()
 {
     ebox_init();
- 
-    uart1.begin(115200);
-    uart3.begin(115200);
-    
+    UART.begin(115200);
+    rtc.begin(dt);
+    dt.print(UART);
+    rtc.dateTime.print(UART);
+
 }
 int main(void)
 {
 
     setup();
-    
-    TimeSpan ts(100,200,313);
-    ts.print(uart1);
-    
-    TimeSpan ts1(372313);
-    ts1.print(uart1);
-    
-    TimeSpan ts2(360000,7,25,13);
-    ts2.print(uart1);
-    
-        
-    TimeSpan ts3(-100,-200,-313);
-    ts3.print(uart1);
-    
-    TimeSpan ts4(-372313);
-    ts4.print(uart1);
-    
-    TimeSpan ts5(-3600000,-7,-25,-13);
-    ts5.print(uart1);
-
-    TimeSpan ts6 = dt - dt2;
-    ts6.print(uart1);
-
-
     while(1)
     {
-        delay_ms(1000);
+        uint32_t last1 = micros();
+        rtc.update();
+        uint32_t last2 = micros();
+        UART.printf("time cost:%dus\n", last2 - last1);
+        rtc.dateTime.print(UART);
+        delay_ms(100);
     }
 }
 
