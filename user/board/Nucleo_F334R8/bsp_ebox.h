@@ -30,29 +30,9 @@
 
 extern SoftI2c Wire;
 
-//extern mcuSpi spi_w5500;
-////extern W5500 w5500;
-////extern W5500Class  w5500;
-
-//extern Button btn;
-//extern Led     led1;
-//extern Led     led2;
-//extern Led     led3;
-
 #define LED1 PA5
-#define LED2 PA1
-#define LED3 PA2
-
 #define UART uart2
 
-//#define BtnPin	PH15
-
-
-//#define	ADC_0   PA0
-//#define	ADC_1   PA1
-//#define	ADC_2   PA2
-
-//#define DAC_0   PB8
 
 void print_log(const char *name = "test", const char *date = __DATE__);
 

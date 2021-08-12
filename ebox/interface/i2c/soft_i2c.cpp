@@ -1,18 +1,26 @@
 #include "soft_i2c.h"
 
-#include "ebox.h"
+
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
-#define SoftTwoWireDebug 1
+#define EBOX_DEBUG_SOFTI2C_ENABLE       true
+#define EBOX_DEBUG_SOFTI2C_ENABLE_ERR   true
 #endif
 
-#if SoftTwoWireDebug
-#define  I2C_DEBUG(...) DBG("[SoftI2c]:"),DBG(__VA_ARGS__),uart1.flush()
+
+#if EBOX_DEBUG_SOFTI2C_ENABLE
+#define softI2cDebug(...)  ebox_printf("[sI2C DBG]:%d: ",__LINE__),ebox_printf(__VA_ARGS__ )
 #else
-#define  I2C_DEBUG(...)
+#define softI2cDebug(...)
 #endif
 
-//#define _bitDelay 5
+#if EBOX_DEBUG_SOFTI2C_ENABLE_ERR
+#define softI2cDebugErr(fmt, ...)  ebox_printf("[sI2C err]:%d: " fmt "\n", __LINE__, __VA_ARGS__)
+#else
+#define softI2cDebugErr(fmt, ...)
+#endif
+
+
 
 SoftI2c::SoftI2c(Gpio *sclPin, Gpio *sdaPin)
 {
@@ -33,7 +41,7 @@ void SoftI2c::begin(uint8_t address)
     _scl->mode(OUTPUT_OD_PU);
     _sda->set();
     _scl->set();
-    I2C_DEBUG("scl_pin: 0x%x ; sda_pin: 0x%x\n",_scl->id, _sda->id);
+    softI2cDebug("scl_pin: 0x%x ; sda_pin: 0x%x\n",_scl->id, _sda->id);
     setClock();
 }
 void SoftI2c::begin(int address)
@@ -42,7 +50,7 @@ void SoftI2c::begin(int address)
     _scl->mode(OUTPUT_OD_PU);
     _sda->set();
     _scl->set();
-    I2C_DEBUG(" scl_pin: 0x%x ; sda_pin: 0x%x\n",_scl->id, _sda->id);
+    softI2cDebug(" scl_pin: 0x%x ; sda_pin: 0x%x\n",_scl->id, _sda->id);
     setClock();
 }
 void SoftI2c::begin()
@@ -51,7 +59,7 @@ void SoftI2c::begin()
     _scl->mode(OUTPUT_OD_PU);
     _sda->set();
     _scl->set();
-    I2C_DEBUG(" scl_pin: 0x%x ; sda_pin: 0x%x\n",_scl->id, _sda->id);
+    softI2cDebug(" scl_pin: 0x%x ; sda_pin: 0x%x\n",_scl->id, _sda->id);
     setClock();
 }
 /**
@@ -65,6 +73,7 @@ void SoftI2c::setClock(Speed_t speed)
 {
     switch(speed)
     {
+    case K1000:
     case K400:
     case K300:
         _bitDelay = 1;    // 约200k
@@ -79,7 +88,7 @@ void SoftI2c::setClock(Speed_t speed)
         _bitDelay = 10;    // 约80k
         break;
     }
-    I2C_DEBUG("bit delay:%d;\n",speed);
+    softI2cDebug("bit delay:%d;\n",speed);
 }
 
 i2c_err_t SoftI2c::_write(const uint8_t *data, size_t quantity)
@@ -111,7 +120,7 @@ i2c_err_t SoftI2c::_write(uint8_t address,const uint8_t *data, size_t quantity, 
     if(ret != I2C_ERROR_OK)
     {
         ret =  I2C_ERROR_ADDR_NACK_NO_RECV;
-        I2C_DEBUG("I2C_ERROR_ADDR_NACK_NO_RECV\n");
+        softI2cDebugErr("I2C_ERROR_ADDR_NACK_NO_RECV:%d\n",ret);
     }
     if(quantity > 1)
     {
@@ -119,13 +128,13 @@ i2c_err_t SoftI2c::_write(uint8_t address,const uint8_t *data, size_t quantity, 
         if(ret != I2C_ERROR_OK)
         {
             ret = I2C_ERROR_DATA_NACK_NO_RECV;
-            I2C_DEBUG("I2C_ERROR_DATA_NACK_NO_RECV\n");
+            softI2cDebugErr("I2C_ERROR_DATA_NACK_NO_RECV:%d\n",ret);
         }
         ret = _write(&data[1], quantity - 1);                
         if(ret != I2C_ERROR_OK)
         {
             ret = I2C_ERROR_DATA_NACK_NO_RECV;
-            I2C_DEBUG("I2C_ERROR_DATA_NACK_NO_RECV\n");
+            softI2cDebugErr("I2C_ERROR_DATA_NACK_NO_RECV:%d\n",ret);
         }
     }
     else if(quantity == 1)
@@ -134,7 +143,7 @@ i2c_err_t SoftI2c::_write(uint8_t address,const uint8_t *data, size_t quantity, 
         if(ret != I2C_ERROR_OK)
         {
             ret = I2C_ERROR_DATA_NACK_NO_RECV;
-            I2C_DEBUG("I2C_ERROR_DATA_NACK_NO_RECV\n");
+            softI2cDebugErr("I2C_ERROR_DATA_NACK_NO_RECV:%d\n",ret);
         }
     }
     if(sendStop)
@@ -159,7 +168,11 @@ size_t SoftI2c::_read(uint8_t address,uint8_t *data, uint16_t length,uint8_t sen
 
     _start();
     ret = _send7bitsAddress(address , 1); // clr read bit
-    if(ret) return 0;
+    if(ret) 
+    {
+        softI2cDebugErr("Address No Ack:%d\n",ret);
+        return 0;
+    }
     while (length--)
     {
         ret = _receiveByte(data);
@@ -243,7 +256,7 @@ i2c_err_t SoftI2c::_waitAck()
         else if(cnt >= 5)
         {
             ret = I2C_ERROR_TIMEOUT;
-            I2C_DEBUG("I2C_ERROR_TIMEOUT(at:%d)\n",_err_at );
+            softI2cDebugErr("I2C_ERROR_TIMEOUT(at:%d)\n",_err_at );
             break;
         }
         delay_us(_bitDelay);
@@ -299,7 +312,7 @@ i2c_err_t SoftI2c::_sendByte_first( uint8_t c)
         if(cnt > 0x2ff)
         {
             _err_at++;
-            I2C_DEBUG("I2C_ERROR_TIMEOUT(at:%d)\n",_err_at );
+            softI2cDebugErr("I2C_ERROR_TIMEOUT(at:%d)\n",_err_at );
             return I2C_ERROR_TIMEOUT;
         }
     }
@@ -355,7 +368,7 @@ i2c_err_t SoftI2c::_receiveByte(uint8_t *data)
     }
     _scl->reset();
     delay_us(_bitDelay);
-//    I2C_DEBUG("rx :0x%x\n",byte);
+//    softI2cDebug("rx :0x%x\n",byte);
 
     *data = byte;
     return I2C_ERROR_OK;

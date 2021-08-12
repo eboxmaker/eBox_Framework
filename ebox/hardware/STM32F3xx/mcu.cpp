@@ -16,9 +16,11 @@ __IO uint16_t micro_para;
 
 static void update_chip_info();
 static void update_system_clock(CpuClock_t *clock);
+void SystemClock_Config(void);
 
 void mcu_init(void)
 {
+    SystemClock_Config();
     update_system_clock(&cpu.clock);
     SysTick_Config(cpu.clock.core / 1000); //  每隔 (nhz/168,000,000)s产生一次中断
     micro_para = cpu.clock.core / 1000000; //减少micros函数计算量
@@ -124,6 +126,53 @@ static void update_system_clock(CpuClock_t *clock)
     clock->pclk1 = RCC_Clocks.PCLK1_Frequency;
     clock->pclk2 = RCC_Clocks.PCLK2_Frequency;
 }
+//默认72Mhz配置
+void SystemClock_Config(void)
+{
+   LL_FLASH_SetLatency(LL_FLASH_LATENCY_2);
+  while(LL_FLASH_GetLatency()!= LL_FLASH_LATENCY_2)
+  {
+  }
+  LL_RCC_HSE_Enable();
+
+   /* Wait till HSE is ready */
+  while(LL_RCC_HSE_IsReady() != 1)
+  {
+
+  }
+  LL_RCC_HSI_Enable();
+
+   /* Wait till HSI is ready */
+  while(LL_RCC_HSI_IsReady() != 1)
+  {
+
+  }
+  LL_RCC_HSI_SetCalibTrimming(16);
+  LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSE_DIV_1, LL_RCC_PLL_MUL_9);
+  LL_RCC_PLL_Enable();
+
+   /* Wait till PLL is ready */
+  while(LL_RCC_PLL_IsReady() != 1)
+  {
+
+  }
+  LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
+  LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_2);
+  LL_RCC_SetAPB2Prescaler(LL_RCC_APB1_DIV_1);
+  LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_PLL);
+
+   /* Wait till System clock is ready */
+  while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_PLL)
+  {
+
+  }
+  LL_SetSystemCoreClock(72000000);
+
+  LL_RCC_SetUSARTClockSource(LL_RCC_USART1_CLKSOURCE_PCLK1);
+
+}
+
+
 void SysTick_Handler(void)//systick中断
 {
     if (millis_seconds++ % _multiple == 0)
@@ -147,14 +196,15 @@ static void update_chip_info()
 //    cpu.flash_size = *(uint16_t *)(0x1FFF7A10 + 0x12);   //芯片flash容量
 
     millis_seconds = 0;
-    SysTick->VAL = 0;
-    //统计cpu计算能力//////////////////
+    SysTick->VAL = SysTick->LOAD;
+    /////////////////统计cpu计算能力(汇编语言约9条)//////////////////
     do
     {
-        cpu.ability++;//统计cpu计算能力
+        cpu.ability++;
     }
-    while(millis_seconds < 1);
-    cpu.ability = cpu.ability  * 1000 * 2;
+    while(millis_seconds < 1);//统计cpu计算能力
+    ////////////////////////////////////////////////////////////////
+    cpu.ability = cpu.ability  * 1000 * 9;
     ////////////////////////////////
 }
 

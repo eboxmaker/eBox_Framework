@@ -24,20 +24,6 @@
 #include "ebox_core.h"
 #include "spi.h"
 
-#define EBOX_DEBUG_SPI_ENABLE       true
-#define EBOX_DEBUG_SPI_ENABLE_ERR   false
-
-#if EBOX_DEBUG_SPI_ENABLE
-#define spiDebug(...)  ebox_printf("[SOFTSPI]:%d: ",__LINE__),ebox_printf(__VA_ARGS__ )
-#else
-#define spiDebug(...)
-#endif
-
-#if EBOX_DEBUG_SPI_ENABLE_ERR
-#define spiDebugErr(fmt, ...)  ebox_printf("[SOFTSPI err]:%d: " fmt "\n", __LINE__, __VA_ARGS__)
-#else
-#define spiDebugErr(fmt, ...)
-#endif
 
 
 /*

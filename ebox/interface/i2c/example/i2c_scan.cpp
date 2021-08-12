@@ -10,11 +10,9 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 #include "ebox.h"
 #include "bsp_ebox.h"
+#include "soft_i2c.h"
 
-#include "at24x.h"
-
-#include "i2c.h"
-SoftI2c Wire(&PB10, &PB11);
+//SoftI2c Wire(&PB8, &PB9);
 /**
     *	1	此例程为IIC扫描程序
 	*	2	此例程演示了扫描总线上所有地址有响应的设备
@@ -32,7 +30,8 @@ void setup()
     ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
-    Wire.begin();
+    mcuI2c1.begin();
+    mcuI2c1.setClock(I2c::K100);
 
 }
 
@@ -54,39 +53,39 @@ void scan()
 {
       int nDevices = 0;
 
-      Serial.println("Scanning...");
+      UART.println("Scanning...");
 
       for (byte address = 0; address < 254; ) {
-        address += 2;
         // The i2c_scanner uses the return value of
         // the Write.endTransmisstion to see if
         // a device did acknowledge to the address.
-        Wire.beginTransmission(address);
-        byte error = Wire.endTransmission();
+        mcuI2c1.beginTransmission(address);
+        byte error = mcuI2c1.endTransmission();
 
         if (error == 0) {
-          Serial.print("I2C device found at address 0x");
+          UART.print("I2C device found at address 0x");
           if (address < 16) {
-            Serial.print("0");
+            UART.print("0");
           }
-          Serial.print(address, HEX);
-          Serial.println("  !");
+          UART.print(address, HEX);
+          UART.println("  !");
 
           ++nDevices;
         } else if (error == 4) {
-          Serial.print("Unknown error at address 0x");
+          UART.print("Unknown error at address 0x");
           if (address < 16) {
-            Serial.print("0");
+            UART.print("0");
           }
-          Serial.println(address, HEX);
+          UART.println(address, HEX);
         }
         uart1.flush();
+        address += 2;
 
       }
       if (nDevices == 0) {
-        Serial.println("No I2C devices found\n");
+        UART.println("No I2C devices found\n");
       } else {
-          Serial.printf("done:%d\n",nDevices);
+          UART.printf("done:%d\n",nDevices);
       }
       delay_ms(1000); // Wait 5 seconds for next scan
 }

@@ -71,11 +71,11 @@
 #define USE_UART1 1
 #define USE_UART2 1
 #define USE_UART3 1
-#define USE_UART4 1
-#define USE_UART5 1
-#define USE_UART6 1
-#define USE_UART7 1
-#define USE_UART8 1
+#define USE_UART4 0
+#define USE_UART5 0
+#define USE_UART6 0
+#define USE_UART7 0
+#define USE_UART8 0
 #define UART_NUM (USE_UART1 + USE_UART2 + USE_UART3 + USE_UART4 + USE_UART5 + USE_UART6 + USE_UART7 + USE_UART8)
 
 

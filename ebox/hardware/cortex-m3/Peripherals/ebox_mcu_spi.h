@@ -27,21 +27,6 @@
 #include "dma.h"
 
 
-#define EBOX_DEBUG_MCUSPI_ENABLE       false
-#define EBOX_DEBUG_MCUSPI_ENABLE_ERR   true
-
-#if EBOX_DEBUG_MCUSPI_ENABLE
-#define mcuSpiDebug(...)  ebox_printf("[SPI]:%d: ",__LINE__),ebox_printf(__VA_ARGS__ )
-#else
-#define mcuSpiDebug(...)
-#endif
-
-#if EBOX_DEBUG_MCUSPI_ENABLE_ERR
-#define mcuSpiDebugErr(fmt, ...)  ebox_printf("[SPI err]:%d: " fmt "\n", __LINE__, __VA_ARGS__)
-#else
-#define mcuSpiDebugErr(fmt, ...)
-#endif
-
 
 /*
 	1.目前只测试了SPI1、SPI2，spi3望网友测试

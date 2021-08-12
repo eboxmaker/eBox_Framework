@@ -3,13 +3,21 @@
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
-#define mcuTwoWireDebug 1
+#define EBOX_DEBUG_MCUI2C_ENABLE       true
+#define EBOX_DEBUG_MCUI2C_ENABLE_ERR   true
 #endif
 
-#if mcuTwoWireDebug
-#define  mcuI2C_DEBUG(...) DBG("[mcuI2c]:"),DBG(__VA_ARGS__)
+
+#if EBOX_DEBUG_MCUI2C_ENABLE
+#define mcuI2cDebug(...)  ebox_printf("[mcuI2C DBG]:%d: ",__LINE__),ebox_printf(__VA_ARGS__ )
 #else
-#define  mcuI2C_DEBUG(...)
+#define mcuI2cDebug(...)
+#endif
+
+#if EBOX_DEBUG_MCUI2C_ENABLE_ERR
+#define mcuI2cDebugErr(fmt, ...)  ebox_printf("[mcuI2C err]:%d: " fmt "\n", __LINE__, __VA_ARGS__)
+#else
+#define mcuI2cDebugErr(fmt, ...)
 #endif
 
 //#define _bitDelay 5
@@ -33,8 +41,8 @@ void mcuI2c::begin(uint8_t address)
 {    
     uint32_t rcc_src;
 
-    _sda->mode(AF_OD);
-    _scl->mode(AF_OD);  
+    _sda->mode(AF_OD_PU);
+    _scl->mode(AF_OD_PU);  
     
     rcc_clock_cmd((uint32_t)_i2cx, ENABLE);
     switch((uint32_t)_i2cx)    
@@ -61,7 +69,7 @@ void mcuI2c::begin(uint8_t address)
 
     
   
-    mcuI2C_DEBUG("scl_pin: 0x%x ; sda_pin: 0x%x\n",_scl->id, _sda->id);
+    mcuI2cDebug("scl_pin: 0x%x ; sda_pin: 0x%x\n",_scl->id, _sda->id);
 }
 void mcuI2c::begin(int address)
 {
@@ -94,8 +102,11 @@ void mcuI2c::setClock(Speed_t speed)
     case K400:
         _speed = (400000);
         break;
+    case K1000:
+        _speed = (1000000);
+        break;
     default:
-        _speed = (200000);
+        _speed = (100000);
     }
     I2C_InitStructure.I2C_ClockSpeed = _speed;
 
@@ -105,7 +116,7 @@ void mcuI2c::setClock(Speed_t speed)
     I2C_Init(_i2cx, &I2C_InitStructure);
     
     
-    mcuI2C_DEBUG("speed:%dKhz;\n",_speed/1000);
+    mcuI2cDebug("speed:%dKhz;\n",_speed/1000);
 }
 
 i2c_err_t mcuI2c::_write(const uint8_t *data, size_t quantity)
@@ -197,7 +208,7 @@ i2c_err_t mcuI2c::_start(void)
         cnt++;
         if (cnt > 0xfffe)
         {
-            mcuI2C_DEBUG("start fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
+            mcuI2cDebugErr("start fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
             return I2C_ERROR_TIMEOUT;
         }
     }
@@ -255,7 +266,7 @@ i2c_err_t mcuI2c::_sendByte( uint8_t data )
         cnt++;
         if (cnt > 0xfffe)
         {
-            mcuI2C_DEBUG("send data fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
+            mcuI2cDebugErr("send data fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
             return I2C_ERROR_DATA_NACK_NO_RECV;
         }
     }
@@ -284,7 +295,7 @@ i2c_err_t	mcuI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
         cnt++;
         if (cnt > 0xfffe)
             {
-                mcuI2C_DEBUG("send read address fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
+                mcuI2cDebugErr("send read address fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
                 return I2C_ERROR_ADDR_NACK_NO_RECV;
             }
         }
@@ -299,7 +310,7 @@ i2c_err_t	mcuI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
             cnt++;
             if (cnt > 0xfffe)
             {
-                mcuI2C_DEBUG("send write address fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
+                mcuI2cDebugErr("send write address fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
                 return I2C_ERROR_ADDR_NACK_NO_RECV;
             }
         }
@@ -320,7 +331,7 @@ i2c_err_t mcuI2c::_receiveByte(uint8_t *data)
         cnt++;
         if (cnt > 0xfffe)
         {
-            mcuI2C_DEBUG("read data fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
+            mcuI2cDebugErr("read data fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
             return ret;
         }
 

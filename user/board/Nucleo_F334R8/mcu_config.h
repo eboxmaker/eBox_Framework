@@ -20,8 +20,14 @@
 
 
 
-#if ((STM32_TYPE >= STM32F401CB) && (STM32_TYPE <= STM32F417VG))
-#define STM32F40_41xxx
+#if (STM32_TYPE == STM32F334R8)
+    #ifndef STM32F334x8
+        #define STM32F334x8
+    #endif
+#elif (STM32_TYPE == STM32F373VC)
+    #ifndef STM32F373xC
+        #define STM32F373xC
+    #endif
 #endif
 
 
@@ -104,12 +110,20 @@ extern int SHT$$INIT_ARRAY$$Limit;
 
 
 #include "stm32f3xx.h"
+#include "stm32f3xx_ll_system.h"
+#include "stm32f3xx_ll_rcc.h"
+#include "stm32f3xx_ll_utils.h"
+#include "stm32f3xx_ll_bus.h"
+#include "stm32f3xx_ll_cortex.h"
+#include "stm32f3xx_ll_pwr.h"
+
 #include "stm32f3xx_ll_dma.h"
 #include "stm32f3xx_ll_exti.h"
 #include "stm32f3xx_ll_usart.h"
 #include "stm32f3xx_ll_gpio.h"
 #include "stm32f3xx_ll_spi.h"
 #include "stm32f3xx_ll_i2c.h"
+
 
 
 

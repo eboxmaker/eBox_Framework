@@ -1064,6 +1064,11 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\user\board\spark_f1\ebox_config.h</FilePath>
             </File>
+            <File>
+              <FileName>mcu_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\user\board\spark_f1\mcu_config.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

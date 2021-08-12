@@ -3,16 +3,24 @@
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
-#define mcuTwoWireDebug 1
+#define EBOX_DEBUG_MCUI2C_ENABLE       true
+#define EBOX_DEBUG_MCUI2C_ENABLE_ERR   true
 #endif
 
-#if mcuTwoWireDebug
-#define  mcuI2C_DEBUG(...) DBG("[mcuI2c]:"),DBG(__VA_ARGS__)
+
+#if EBOX_DEBUG_MCUI2C_ENABLE
+#define mcuI2cDebug(...)  ebox_printf("[I2C DBG]:%d: ",__LINE__),ebox_printf(__VA_ARGS__ )
 #else
-#define  mcuI2C_DEBUG(...)
+#define mcuI2cDebug(...)
 #endif
 
-//#define _bitDelay 5
+#if EBOX_DEBUG_MCUI2C_ENABLE_ERR
+#define mcuI2cDebugErr(fmt, ...)  ebox_printf("[I2C err]:%d: " fmt "\n", __LINE__, __VA_ARGS__)
+#else
+#define mcuI2cDebugErr(fmt, ...)
+#endif
+
+
 
 mcuI2c::mcuI2c(I2C_TypeDef *I2Cx,Gpio *sclPin, Gpio *sdaPin)
 {
@@ -35,49 +43,51 @@ void mcuI2c::begin(uint8_t address)
 
   /* USER CODE END I2C1_Init 0 */
 
-  LL_I2C_InitTypeDef I2C_InitStruct = {0};
+    LL_I2C_InitTypeDef I2C_InitStruct = {0};
 
-  LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
+    _scl->mode(AF_OD_PU,LL_GPIO_AF_4);
+    _sda->mode(AF_OD_PU,LL_GPIO_AF_4);
+    
+    switch((uint32_t)_i2cx)//只能使用内部时钟，否则波特率计算就不正确
+    {
+        case I2C1_BASE:
+            LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_HSI);break;
+        #if (USE_I2C2 )
+        case I2C2_BASE:
+            LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_HSI);break;
+        #endif
+        #if (USE_I2C3 )
+        case I2C3_BASE:
+            LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_HSI);break;
+        #endif
+        default:
+            mcuI2cDebugErr("i2cx :0x%08x",_i2cx);
+            break;
+    }
 
-  LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOB);
-  /**I2C1 GPIO Configuration
-  PB8   ------> I2C1_SCL
-  PB9   ------> I2C1_SDA
-  */
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_8|LL_GPIO_PIN_9;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
-  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
-  GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
-  GPIO_InitStruct.Alternate = LL_GPIO_AF_4;
-  LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+    /* Peripheral clock enable */
+    rcc_clock_cmd((uint32_t)_i2cx,ENABLE);
 
-  /* Peripheral clock enable */
-  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_I2C1);
+    /* USER CODE BEGIN I2C1_Init 1 */
 
-  /* USER CODE BEGIN I2C1_Init 1 */
-
-  /* USER CODE END I2C1_Init 1 */
-  /** I2C Initialization
-  */
-  LL_I2C_EnableAutoEndMode(I2C1);
-  LL_I2C_DisableOwnAddress2(I2C1);
-  LL_I2C_EnableGeneralCall(I2C1);
-  LL_I2C_EnableClockStretching(I2C1);
-  I2C_InitStruct.PeripheralMode = LL_I2C_MODE_I2C;
-  I2C_InitStruct.Timing = 0x2000090E;
-  I2C_InitStruct.AnalogFilter = LL_I2C_ANALOGFILTER_ENABLE;
-  I2C_InitStruct.DigitalFilter = 0;
-  I2C_InitStruct.OwnAddress1 = 0;
-  I2C_InitStruct.TypeAcknowledge = LL_I2C_ACK;
-  I2C_InitStruct.OwnAddrSize = LL_I2C_OWNADDRESS1_7BIT;
-  LL_I2C_Init(I2C1, &I2C_InitStruct);
-  LL_I2C_SetOwnAddress2(I2C1, 0, LL_I2C_OWNADDRESS2_NOMASK);
-//    LL_I2C_SetTiming(_i2cx,timing);
-
-//    setClock(K100);
-    mcuI2C_DEBUG("scl_pin: 0x%x ; sda_pin: 0x%x\n",_scl->id, _sda->id);
-    mcuI2C_DEBUG("speed:%dKhz;\n",_speed/1000);
+    /* USER CODE END I2C1_Init 1 */
+    /** I2C Initialization
+    */
+    LL_I2C_EnableAutoEndMode(I2C1);
+    LL_I2C_DisableOwnAddress2(I2C1);
+    LL_I2C_DisableGeneralCall(I2C1);
+    LL_I2C_EnableClockStretching(I2C1);
+    I2C_InitStruct.PeripheralMode = LL_I2C_MODE_I2C;
+    I2C_InitStruct.Timing = 0X2000090E;_speed = 1000000;
+    I2C_InitStruct.AnalogFilter = LL_I2C_ANALOGFILTER_ENABLE;
+    I2C_InitStruct.DigitalFilter = 0;
+    I2C_InitStruct.OwnAddress1 = 0;
+    I2C_InitStruct.TypeAcknowledge = LL_I2C_ACK;
+    I2C_InitStruct.OwnAddrSize = LL_I2C_OWNADDRESS1_7BIT;
+    LL_I2C_Init(I2C1, &I2C_InitStruct);
+    LL_I2C_SetOwnAddress2(I2C1, 0, LL_I2C_OWNADDRESS2_NOMASK);
+    mcuI2cDebug("scl_pin: 0x%x ; sda_pin: 0x%x\n",_scl->id, _sda->id);
+    mcuI2cDebug("speed:%dKhz;\n",_speed/1000);
 
 }
 void mcuI2c::begin(int address)
@@ -97,33 +107,42 @@ void mcuI2c::begin()
  */
 void mcuI2c::setClock(Speed_t speed)
 {
+    uint32_t timing = 0x2000090e;
    switch (speed)
     {
     case K10:
         _speed = (10000);
+         timing = 0X200009FE;
         break;
     case K100:
         _speed = (100000);
+        timing = 0X2000090E;
         break;
     case K200:
         _speed = (200000);
+        timing = 0X00000A17;
         break;
+    case K300:
+        _speed = (400000);
+        timing = 0X00000212;
     case K400:
         _speed = (400000);
+        timing = 0X0000020B;
+        break;
+    case K1000:
+        _speed = (1000000);
+        timing = 0X00000001;
         break;
     default:
         _speed = (200000);
     }
-//    LL_I2C_SetTiming(_i2cx,_speed);
-    mcuI2C_DEBUG("speed:%dKhz;\n",_speed/1000);
+    LL_I2C_Disable(_i2cx);
+    LL_I2C_ConfigFilters(_i2cx,LL_I2C_ANALOGFILTER_ENABLE,0);
+    LL_I2C_SetTiming(_i2cx,timing);
+    LL_I2C_Enable(_i2cx);
+    mcuI2cDebug("speed:%dKhz;\n",_speed/1000);
 }
 
-i2c_err_t mcuI2c::_write(const uint8_t *data, size_t quantity)
-{
-    i2c_err_t ret = I2C_ERROR_OK;
-
-    return ret;
-}
 
 /*
  * Output   0 .. success
@@ -138,16 +157,13 @@ i2c_err_t mcuI2c::_write(uint8_t address,const uint8_t *data, size_t quantity, i
     i2c_err_t ret = I2C_ERROR_OK;
     uint32_t counter = 0;
     uint8_t send_cnt = 0;
-//    quantity =1;
-    char buf[10] ;
-    for(int i = 0; i < 10; i++)
-    buf[i] = i;
     LL_I2C_ClearFlag_NACK(I2C1);
 
     while(LL_I2C_IsActiveFlag_BUSY(_i2cx) == SET){
         counter++;
         if( counter == 25000 ) {//
             LL_I2C_ClearFlag_BERR(_i2cx);
+            mcuI2cDebugErr("busy ISR:0X%08X\n",_i2cx->ISR);
             return I2C_ERROR_BUS;
         }
     }
@@ -160,13 +176,20 @@ i2c_err_t mcuI2c::_write(uint8_t address,const uint8_t *data, size_t quantity, i
     LL_I2C_HandleTransfer(I2C1, address, LL_I2C_ADDRSLAVE_7BIT, (quantity), LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_WRITE);
     if(quantity == 0) /*如果数据为空，则检测设备响应位 */
     {
+        counter = 0;
         while(!LL_I2C_IsActiveFlag_STOP(I2C1))
         {
-            ;
+            counter++;
+            if( counter == 25000 ) {//发送数据超时
+                mcuI2cDebugErr("Addr stop. ISR:0X%08X\n",_i2cx->ISR);
+                ret =  I2C_ERROR_BUS;
+                break;
+            }
         }//等待发送完成
         LL_I2C_ClearFlag_STOP(I2C1);
         if(LL_I2C_IsActiveFlag_NACK(I2C1))//如果没有响应则表示没有找到设备
         {
+            mcuI2cDebugErr("Addr no ack. ISR:0X%08X\n",_i2cx->ISR);
             ret =  I2C_ERROR_ADDR_NACK_NO_RECV;
             LL_I2C_ClearFlag_NACK(I2C1);
         }
@@ -180,6 +203,7 @@ i2c_err_t mcuI2c::_write(uint8_t address,const uint8_t *data, size_t quantity, i
             {
                 counter++;
                 if( counter == 25000 ) {//发送数据超时
+                    mcuI2cDebugErr("data %dBytes send cnt:%d ISR:0X%08X\n",quantity,send_cnt,_i2cx->ISR);
                     ret =  I2C_ERROR_BUS;
                     break;
                 }
@@ -193,9 +217,15 @@ i2c_err_t mcuI2c::_write(uint8_t address,const uint8_t *data, size_t quantity, i
                 LL_I2C_TransmitData8(I2C1, data[send_cnt++]);
             }
         }
+        counter = 0;
         while(!LL_I2C_IsActiveFlag_STOP(I2C1))
         {
-            ;
+            counter++;
+            if( counter == 25000 ) {//发送数据超时
+                mcuI2cDebugErr("data stop err ISR:0X%08X\n",_i2cx->ISR);
+                ret =  I2C_ERROR_BUS;
+                break;
+            }
         }//等待发送完成
         LL_I2C_ClearFlag_STOP(I2C1);
     }
@@ -214,14 +244,14 @@ size_t mcuI2c::_read(uint8_t address,uint8_t *data, uint16_t length,uint8_t send
 {
     uint32_t counter = 0;
     i2c_err_t err = I2C_ERROR_OK;
-    int ret = 0;
-    ret = length;
+    int read_cnt = 0;
     
     LL_I2C_ClearFlag_NACK(I2C1);
 
     while(LL_I2C_IsActiveFlag_BUSY(_i2cx) == SET){
         counter++;
         if( counter == 25000 ) {//
+            mcuI2cDebugErr("busy ISR:0X%08X\n",_i2cx->ISR);
             LL_I2C_ClearFlag_BERR(_i2cx);
             return I2C_ERROR_BUS;
         }
@@ -235,12 +265,15 @@ size_t mcuI2c::_read(uint8_t address,uint8_t *data, uint16_t length,uint8_t send
 	while(!LL_I2C_IsActiveFlag_STOP(_i2cx))
 	{
         if(LL_I2C_IsActiveFlag_RXNE(_i2cx))
-            *data++ = LL_I2C_ReceiveData8(_i2cx);
+        {
+            data[read_cnt++] = LL_I2C_ReceiveData8(_i2cx);
+        }
         counter++;
         if( counter == 25000 ) {//
-            return I2C_ERROR_TIMEOUT;
+            mcuI2cDebugErr("data recv:%d; ISR:0X%08X\n",read_cnt,_i2cx->ISR);
+            return read_cnt;
         }
 	}
     LL_I2C_ClearFlag_STOP(I2C1);
-    return ret;
+    return read_cnt;
 }

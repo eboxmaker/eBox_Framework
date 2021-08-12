@@ -29,7 +29,7 @@ extern "C" {
 #include "nvic.h"
 
 
-#define NVIC_GROUP_CONFIG NVIC_PriorityGroup_2//以后NVIC_PriorityGroupConfig()函数不需要再被调用。更不能再以非NVIC_GROUP_CONFIG值填充调用
+#define NVIC_GROUP_CONFIG NVIC_PRIORITYGROUP_4//以后NVIC_PriorityGroupConfig()函数不需要再被调用。更不能再以非NVIC_GROUP_CONFIG值填充调用
 
 // 空函数，不做任何操作，用来给函数指针赋值，防止函数指针 = null时被调用，出错
 __inline void   nullFun(void) {}

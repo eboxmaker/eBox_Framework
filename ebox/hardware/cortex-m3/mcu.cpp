@@ -204,17 +204,17 @@ extern "C" {
         cpu.chip_id[0] = *(__IO uint32_t *)(0X1FFFF7F0); //高字节
 
         cpu.flash_size = *(uint16_t *)(0x1FFFF7E0);   //芯片flash容量
-#if	EBOX_DEBUG
         milli_seconds = 0;
-        SysTick->VAL = 0;
+        SysTick->VAL = SysTick->LOAD;
         //统计cpu计算能力//////////////////
         do
         {
             cpu.ability++;//统计cpu计算能力
         }
         while (milli_seconds < 1);
-        cpu.ability = cpu.ability  * 1000 * 2;
+        cpu.ability = cpu.ability  * 1000 * 9;
         ////////////////////////////////
+#if	EBOX_DEBUG
 #endif
     }
 

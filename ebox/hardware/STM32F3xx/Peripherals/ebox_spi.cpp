@@ -15,6 +15,25 @@ This specification is preliminary and is subject to change at any time without n
 */
 #include "ebox_spi.h"
 
+#if EBOX_DEBUG
+// 是否打印调试信息, 1打印,0不打印
+#define EBOX_DEBUG_MCUSPI_ENABLE       true
+#define EBOX_DEBUG_MCUSPI_ENABLE_ERR   true
+#endif
+
+
+#if EBOX_DEBUG_MCUSPI_ENABLE
+#define mcuSpiDebug(...)  ebox_printf("[mcuSPI DBG]:%d: ",__LINE__),ebox_printf(__VA_ARGS__ )
+#else
+#define mcuSpiDebug(...)
+#endif
+
+#if EBOX_DEBUG_MCUSPI_ENABLE_ERR
+#define mcuSpiDebugErr(fmt, ...)  ebox_printf("[mcuSPI err]:%d: " fmt "\n", __LINE__, __VA_ARGS__)
+#else
+#define mcuSpiDebugErr(fmt, ...)
+#endif
+
 mcuSpi::mcuSpi(SPI_TypeDef *SPIx, Gpio *sck, Gpio *miso, Gpio *mosi)
 {
     _busy = 0;
@@ -232,7 +251,7 @@ int8_t mcuSpi::take(Spi::Config_t *newConfig)
         delay_ms(1);
         if (IsTimeOut(end, 200))
         {
-            ebox_printf("\r\nSPI产生多线程异常调用\r\n");
+            mcuSpiDebugErr("\r\nSPI产生多线程异常调用:%d\r\n",newConfig->dev_num);
             return EWAIT;
         }
     }

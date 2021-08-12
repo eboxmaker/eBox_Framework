@@ -23,14 +23,23 @@
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
-#define debug 1
+#define EBOX_DEBUG_SPI_ENABLE       true
+#define EBOX_DEBUG_SPI_ENABLE_ERR   true
 #endif
 
-#if debug
-#define  SPI_DEBUG(...) DBG("[SPI]  "),DBG(__VA_ARGS__)
+
+#if EBOX_DEBUG_SPI_ENABLE
+#define softSpiDebug(...)  ebox_printf("[sSPI DBG]:%d: ",__LINE__),ebox_printf(__VA_ARGS__ )
 #else
-#define  SPI_DEBUG(...)
+#define softSpiDebug(...)
 #endif
+
+#if EBOX_DEBUG_SPI_ENABLE_ERR
+#define softSpiDebugErr(fmt, ...)  ebox_printf("[sSPI err]:%d: " fmt "\n", __LINE__, __VA_ARGS__)
+#else
+#define softSpiDebugErr(fmt, ...)
+#endif
+
 SoftSpi::SoftSpi(Gpio *sck, Gpio *miso, Gpio *mosi)
 {
     _sck =  sck;
@@ -324,7 +333,7 @@ int8_t SoftSpi::take(Config_t *newConfig)
         delay_ms(1);
         if (cnt >= 200)
         {
-            ebox_printf("\r\nSPI产生多线程异常调用\r\n");
+            softSpiDebugErr("\nSPI产生多线程异常调用:%d\n",newConfig->dev_num);
             return EWAIT;
         }
     }

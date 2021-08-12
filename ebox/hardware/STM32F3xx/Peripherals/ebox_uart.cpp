@@ -85,6 +85,10 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     uint32_t _DataWidth;
     uint32_t _Parity;
     uint32_t _StopBits = 0;
+    uint32_t periphclk = LL_RCC_PERIPH_FREQUENCY_NO;
+    LL_RCC_ClocksTypeDef RCC_Clocks;
+    LL_RCC_GetSystemClocksFreq(&RCC_Clocks);
+
     rcc_clock_cmd((uint32_t)_USARTx, ENABLE);
     _mode = mode;
 
@@ -95,6 +99,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     case (uint32_t)USART1_BASE:
         dma_rx = &Dma1Ch5;
         _index = NUM_UART1;
+        periphclk = LL_RCC_GetUSARTClockFreq(LL_RCC_USART1_CLKSOURCE);
         break;
 #endif
 
@@ -102,14 +107,35 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     case (uint32_t)USART2_BASE:
         dma_rx = &Dma1Ch6;
         _index = NUM_UART2;
-        break;
+#if defined(RCC_CFGR3_USART2SW)
+      periphclk = LL_RCC_GetUSARTClockFreq(LL_RCC_USART2_CLKSOURCE);
+#else
+      /* USART2 clock is PCLK */
+      LL_RCC_GetSystemClocksFreq(&RCC_Clocks);
+      periphclk = RCC_Clocks.PCLK1_Frequency;
+#endif
+    break;
 #endif
 
 #if USE_UART3
     case (uint32_t)USART3_BASE:
         dma_rx = &Dma1Ch3;
         _index = NUM_UART3;
+#if defined(RCC_CFGR3_USART3SW)
+      periphclk = LL_RCC_GetUSARTClockFreq(LL_RCC_USART3_CLKSOURCE);
+#else
+      /* USART3 clock is PCLK */
+      LL_RCC_GetSystemClocksFreq(&RCC_Clocks);
+      periphclk = RCC_Clocks.PCLK1_Frequency;
+#endif
+    break;
+#if USE_UART4
+    case (uint32_t)USART4_BASE:
         break;
+#endif
+    default :
+        break;
+
 #endif
     }
 
@@ -160,7 +186,7 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
 
     LL_USART_SetTransferDirection(_USARTx, LL_USART_DIRECTION_TX_RX);
     LL_USART_ConfigCharacter(_USARTx, _DataWidth, _Parity, _StopBits);
-    LL_USART_SetBaudRate(_USARTx, SystemCoreClock, LL_USART_OVERSAMPLING_16, baud_rate);
+    LL_USART_SetBaudRate(_USARTx, periphclk, LL_USART_OVERSAMPLING_16, baud_rate);
     //	½ûÖ¹Òç³ö¼ì²â
     LL_USART_DisableOverrunDetect(_USARTx);
     LL_USART_Enable(_USARTx);
@@ -203,7 +229,6 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     }
     _tx_pin->mode(AF_PP,7);
     _rx_pin->mode(AF_OD_PU,7);
-    delay_ms(10);
     nvic(ENABLE, 0, 0);
     interrupt(RxIrq, ENABLE);
     interrupt(TxIrq, DISABLE);

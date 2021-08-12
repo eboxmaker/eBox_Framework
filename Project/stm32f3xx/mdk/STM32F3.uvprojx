@@ -337,9 +337,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32F334x8,USE_FULL_LL_DRIVER</Define>
+              <Define>USE_FULL_LL_DRIVER,STM32F334x8</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcuLib\stm32f3xx\Libraries\STM32F3xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Device\ST\STM32F3xx\Include;..\..\..\ebox;..\..\..\ebox\core;..\..\..\ebox\hardware\STM32F3xx;..\..\..\ebox\hardware\STM32F3xx\Peripherals;..\..\..\ebox\interface;..\..\..\ebox\interface\event;..\..\..\ebox\interface\i2c;..\..\..\ebox\interface\spi;..\..\..\component;..\..\..\user;..\..\..\user\board\stm32f373;..\..\..\component\edriver</IncludePath>
+              <IncludePath>..\..\..\mcuLib\stm32f3xx\Libraries\STM32F3xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f3xx\Libraries\CMSIS\Device\ST\STM32F3xx\Include;..\..\..\ebox;..\..\..\ebox\core;..\..\..\ebox\hardware\STM32F3xx;..\..\..\ebox\hardware\STM32F3xx\Peripherals;..\..\..\ebox\interface;..\..\..\ebox\interface\event;..\..\..\ebox\interface\i2c;..\..\..\ebox\interface\spi;..\..\..\component;..\..\..\user;..\..\..\user\board\Nucleo_F334R8;..\..\..\component\edriver</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -649,9 +649,9 @@
               <FilePath>..\..\..\ebox\hardware\STM32F3xx\ebox_it.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_object.cpp</FileName>
+              <FileName>object.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\STM32F3xx\ebox_object.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\STM32F3xx\object.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -679,14 +679,24 @@
           <GroupName>user</GroupName>
           <Files>
             <File>
-              <FileName>bsp_ebox.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\board\stm32f373\bsp_ebox.cpp</FilePath>
-            </File>
-            <File>
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\main.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_Nucleo_F334R8.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\board\Nucleo_F334R8\bsp_Nucleo_F334R8.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\user\board\Nucleo_F334R8\ebox_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>mcu_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\user\board\Nucleo_F334R8\mcu_config.h</FilePath>
             </File>
           </Files>
         </Group>
