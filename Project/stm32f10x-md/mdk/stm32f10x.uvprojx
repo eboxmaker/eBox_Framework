@@ -764,11 +764,6 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\interface\DateTime\DateTime.cpp</FilePath>
             </File>
-            <File>
-              <FileName>TimeSpan.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\DateTime\TimeSpan.cpp</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

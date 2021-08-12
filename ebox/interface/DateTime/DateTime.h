@@ -6,8 +6,7 @@
 #include "ebox_uart.h"
 #include "TimeSpan.h"
 
-#define UtcOffset 8  //东八区
-
+#define LOCAL_UTC_OFFSET 8
 class DateTimeClass 
 {
 public:
@@ -27,13 +26,6 @@ public:
         SepC,//汉字
     }TimeSeparatorFormat_t;
     
-    //指定 System.DateTime 对象是表示本地时间、协调通用时间 (UTC)，还是既不指定为本地时间，也不指定为 UTC。
-    typedef enum 
-    {        
-        Unspecified = 0,//表示的时间既未指定为本地时间，也未指定为协调通用时间 (UTC)。
-        Utc = 1,//     表示的时间为 UTC。
-        Local = 2//     表示的时间为本地时间。
-    }DateTimeKind_t;
     
 public:
     int year;
@@ -46,13 +38,11 @@ public:
     int err;
 
 
-    DateTimeClass();
-    DateTimeClass(String str,DateTimeKind_t _kind = Local);
+    DateTimeClass(int utc_offset = LOCAL_UTC_OFFSET);
+    DateTimeClass(String str,int utc_offset = LOCAL_UTC_OFFSET);
+    DateTimeClass(String date,String time,int utc_offset = LOCAL_UTC_OFFSET);
 
-    static DateTimeClass parse(String &str);
-    static bool limitCheck(DateTimeClass &dt);
-    static DateTimeClass now();
-
+    bool parse(String &str);
     bool isLeapYear();
 
 
@@ -70,17 +60,29 @@ public:
     
     String toString(TimeFormat_t format = YYYY_MM_DD_HH_MM_SS,TimeSeparatorFormat_t gap = Sep1);
     
-    DateTimeClass toUniversalTime();
-    double toTimeStamp();
+    DateTimeClass getUniversalTime();
+    double getTimeStamp();
     TimeSpan  operator-(DateTimeClass& b);
     DateTimeClass  operator+(TimeSpan& b);
+    DateTimeClass  operator-(TimeSpan& b);
+    bool operator<( DateTimeClass &right);
+    bool operator>( DateTimeClass &right) { return right < *this; }
+    bool operator<=( DateTimeClass &right) { return !(*this > right); }
+    bool operator>=( DateTimeClass &right)  { return !(*this < right); }
+    bool operator==( DateTimeClass &right) ;
+
     void print(Uart &uart);
+    static bool limitCheck(DateTimeClass &dt);
 
 private:
-    DateTimeKind_t kind;
+    int utcOffset;
     void add_one_day();
 
 };
+
+
+
+
 
 
 #endif

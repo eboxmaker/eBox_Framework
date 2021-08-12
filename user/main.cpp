@@ -1,93 +1,51 @@
-/*
-file   : *.cpp
-author : shentq
-version: V1.0
-date   : 2015/7/5
+/**
+  ******************************************************************************
+  * @file    DateTiemTest.cpp
+  * @author  shentq
+  * @version V2.0
+  * @date    2021/07/23
+  * @brief   ebox application example .
+  ******************************************************************************
+  * @attention
+  *
+  * No part of this software may be used for any commercial activities by any form
+  * or means, without the prior written consent of shentq. This specification is
+  * preliminary and is subject to change at any time without notice. shentq assumes
+  * no responsibility for any errors contained herein.
+  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
+  ******************************************************************************
+  */
 
-Copyright 2015 shentq. All Rights Reserved.
-*/
 
-//STM32 RUN IN eBox
+/* Includes ------------------------------------------------------------------*/
+
+
 #include "ebox.h"
 #include "bsp_ebox.h"
-#include "soft_i2c.h"
+#include "datetime.h"
 
-//SoftI2c Wire(&PB8, &PB9);
-/**
-    *	1	此例程为IIC扫描程序
-	*	2	此例程演示了扫描总线上所有地址有响应的设备
-    *   3   通过begin可以设置i2c速率为10k，100k，200k，400k，默认100k
-	*/
 
-/* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"IIC Scan example"
-#define EXAMPLE_DATE	"2021-02-27"
-
-uint8_t data;
+DateTimeClass dt1("2021-07-24 0:0:0",8);//东八区
+DateTimeClass dt2("2021-07-24 0:0:0",-8);//西八区
+DateTimeClass dt3(__DATE__,__TIME__,-8);//西八区
 
 void setup()
 {
     ebox_init();
     UART.begin(115200);
-    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
-    mcuI2c2.begin();
-    mcuI2c2.setClock(I2c::K100);
-
+    dt1.print(UART);
+    dt2.print(UART);
+    dt3.print(UART);
+    
 }
-
-void scan();
-
-
-
 int main(void)
 {
-    setup();
 
+    setup();
     while(1)
     {
-        scan();
+        delay_ms(1000);
     }
-}
-
-void scan()
-{
-      int nDevices = 0;
-
-      UART.println("Scanning...");
-
-      for (byte address = 0; address < 254; ) {
-        // The i2c_scanner uses the return value of
-        // the Write.endTransmisstion to see if
-        // a device did acknowledge to the address.
-        mcuI2c2.beginTransmission(address);
-        byte error = mcuI2c2.endTransmission();
-
-        if (error == 0) {
-          UART.print("I2C device found at address 0x");
-          if (address < 16) {
-            UART.print("0");
-          }
-          UART.print(address, HEX);
-          UART.println("  !");
-
-          ++nDevices;
-        } else if (error == 4) {
-          UART.print("Unknown error at address 0x");
-          if (address < 16) {
-            UART.print("0");
-          }
-          UART.println(address, HEX);
-        }
-        uart1.flush();
-        address += 2;
-
-      }
-      if (nDevices == 0) {
-        UART.println("No I2C devices found\n");
-      } else {
-          UART.printf("done:%d\n",nDevices);
-      }
-      delay_ms(1000); // Wait 5 seconds for next scan
 }
 
 
