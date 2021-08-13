@@ -151,7 +151,7 @@ DateTime::DateTime(String date,String time,int utc_offset)
     hour = atoi(buff);
     minute = atoi(buff + 3);
     second = atoi(buff + 6);
-
+    milliSecond = 0;
 }
 
 bool DateTime::parse(uint64_t stamp)
@@ -165,6 +165,7 @@ bool DateTime::parse(uint64_t stamp)
     hour = dt.hour;
     minute = dt.minute;
     second = dt.second;
+    milliSecond = 0;
 }
 
 bool DateTime::parse(String &str)
@@ -187,6 +188,7 @@ bool DateTime::parse(String &str)
     hour = value[3];
     minute = value[4];
     second = value[5];
+    milliSecond = 0;
     DateTime::limitCheck(*this);
     return true;
 }
@@ -212,7 +214,7 @@ bool DateTime::limitCheck(DateTime &dt)
 }
 
 
-String DateTime::toString(TimeFormat_t format ,TimeSeparatorFormat_t gap)
+String DateTime::toString(TimeFormat_t format ,TimeSeparatorFormat_t sep)
 {
     String str;
     char buf[32];
@@ -226,42 +228,42 @@ String DateTime::toString(TimeFormat_t format ,TimeSeparatorFormat_t gap)
     switch((int)format)
     {
         case YYYY_MM_DD_HH_MM_SS:
-            snprintf(buf,32,"%04d%s%02d%s%02d%s%02d%s%02d%s%02d%s",year,snap[gap][0],month,snap[gap][1],day,snap[gap][2],\
-                        hour,snap[gap][3],minute,snap[gap][4],second,snap[gap][5]);break;
+            snprintf(buf,32,"%04d%s%02d%s%02d%s%02d%s%02d%s%02d%s",year,snap[sep][0],month,snap[sep][1],day,snap[sep][2],\
+                        hour,snap[sep][3],minute,snap[sep][4],second,snap[sep][5]);break;
         case YYYY_MM_DD_H12_MM_SS:
 
         case YY_MM_DD_HH_MM_SS:
-            snprintf(buf,32,"%02d%s%02d%s%02d%s%02d%s%02d%s%02d%s",year%100,snap[gap][0],month,snap[gap][1],day,snap[gap][2],\
-                        hour,snap[gap][3],minute,snap[gap][4],second,snap[gap][5]);break;
+            snprintf(buf,32,"%02d%s%02d%s%02d%s%02d%s%02d%s%02d%s",year%100,snap[sep][0],month,snap[sep][1],day,snap[sep][2],\
+                        hour,snap[sep][3],minute,snap[sep][4],second,snap[sep][5]);break;
         case YY_MM_DD_H12_MM_SS:
             am = (hour <= 12)?true:false;
             if(am)
             {
-                snprintf(buf,32,"%02d%s%02d%s%02d%s%02d%s%02d%s%02d%s",year%100,snap[gap][0],month,snap[gap][1],day,snap[gap][2],\
-                            hour,snap[gap][3],minute,snap[gap][4],second,snap[gap][5]);break;
+                snprintf(buf,32,"%02d%s%02d%s%02d%s%02d%s%02d%s%02d%s",year%100,snap[sep][0],month,snap[sep][1],day,snap[sep][2],\
+                            hour,snap[sep][3],minute,snap[sep][4],second,snap[sep][5]);break;
             }
             else
             {
                 newHour = hour - 12;
-                snprintf(buf,32,"%04d%s%02d%s%02d%s%02d%s%02d%s%02d%s",year%100,snap[gap][0],month,snap[gap][1],day,snap[gap][2],\
-                            newHour,snap[gap][3],minute,snap[gap][4],second,snap[gap][5]);break;
+                snprintf(buf,32,"%04d%s%02d%s%02d%s%02d%s%02d%s%02d%s",year%100,snap[sep][0],month,snap[sep][1],day,snap[sep][2],\
+                            newHour,snap[sep][3],minute,snap[sep][4],second,snap[sep][5]);break;
             }
         case YY_MM_DD:
-            snprintf(buf,32,"%02d%s%02d%s%02d%s",year%100,snap[gap][0],month,snap[gap][1],day,snap[gap][2]);break;
+            snprintf(buf,32,"%02d%s%02d%s%02d%s",year%100,snap[sep][0],month,snap[sep][1],day,snap[sep][2]);break;
         case YYYY_MM_DD:
-            snprintf(buf,32,"%04d%s%02d%s%02d%s",year,snap[gap][0],month,snap[gap][1],day,snap[gap][2]);break;
+            snprintf(buf,32,"%04d%s%02d%s%02d%s",year,snap[sep][0],month,snap[sep][1],day,snap[sep][2]);break;
         case HH_MM_SS:
-            snprintf(buf,32,"%02d%s%02d%s%02d%s",hour,snap[gap][3],minute,snap[gap][4],second,snap[gap][5]);break;
+            snprintf(buf,32,"%02d%s%02d%s%02d%s",hour,snap[sep][3],minute,snap[sep][4],second,snap[sep][5]);break;
         case H12_MM_SS:
             am = (hour <= 12)?true:false;
             if(am)
             {
-                snprintf(buf,32,"%02d%s%02d%s%02d%s AM",hour,snap[gap][3],minute,snap[gap][4],second,snap[gap][5]);break;
+                snprintf(buf,32,"%02d%s%02d%s%02d%s AM",hour,snap[sep][3],minute,snap[sep][4],second,snap[sep][5]);break;
             }
             else
             {
                 newHour = hour - 12;
-                snprintf(buf,32,"%02d%s%02d%s%02d%s",newHour,snap[gap][3],minute,snap[gap][4],second,snap[gap][5]);break;
+                snprintf(buf,32,"%02d%s%02d%s%02d%s",newHour,snap[sep][3],minute,snap[sep][4],second,snap[sep][5]);break;
             }
         default :
             break;
@@ -380,6 +382,7 @@ void DateTime::addHours(int value)
     int days_to_add = (hour + value) / 24;
     hour = (hour + value) % 24;
     if(hour < 0) {hour += 24;days_to_add -= 1;}
+    if(days_to_add != 0)
     addDays(days_to_add);
 }
 void DateTime::addMinutes(int value)
@@ -387,6 +390,7 @@ void DateTime::addMinutes(int value)
     int hours_to_add = (minute + value) / 60;
     minute = (minute + value) % 60;
     if(minute < 0) {minute += 60;hours_to_add -= 1;}
+    if(hours_to_add != 0)
     addHours(hours_to_add);
 }
 void DateTime::addSeconds(int value)
@@ -394,6 +398,7 @@ void DateTime::addSeconds(int value)
     int minute_to_add = (second + value) / 60;
     second = (second + value) % 60;
     if(second < 0){ second += 60;minute_to_add -= 1;}
+    if(minute_to_add != 0)
     addMinutes(minute_to_add);
 }
 void DateTime::addMilliSeconds(int value)
@@ -401,6 +406,7 @@ void DateTime::addMilliSeconds(int value)
     int sec_to_add = (milliSecond + value) / 1000;
     milliSecond = (milliSecond + value) % 1000;
     if(milliSecond < 0){ milliSecond += 1000;sec_to_add -= 1;}
+    if(sec_to_add != 0)
     addSeconds(sec_to_add);
 }
 

@@ -25,10 +25,9 @@ public:
     BasicRtc(){dateTime = DateTime();};
     virtual void    begin()  = 0;
     virtual void    begin(DateTime &dt)  = 0;
-    virtual void    loop()  = 0;
     virtual void    update()  = 0;
-    virtual void            set(DateTime &dt) = 0;
-    virtual DateTime   now() = 0;
+    virtual void    set(DateTime &dt) = 0;
+    virtual DateTime    now() = 0;
     void            print(Uart &uart);            
 
 public:
@@ -69,47 +68,45 @@ protected:
 
 class ChinaCalendar
 {
-//    public:
+    public:
 
-//        typedef struct 
-//        {
-//            uint8_t month;
-//            uint8_t date;
-//            String name;
-//        }Festival_t;
+        typedef struct 
+        {
+            uint8_t month;
+            uint8_t date;
+            String name;
+        }Festival_t;
 
-//    public:
-//        ChinaCalendar(){};
-//            
-//        DateTime_t update_cdt(DateTime_t &dt);
-//        DateTime_t get_cdt();
-//            
-//        String get_str();
-//            
-//        uint8_t get_jieqi_mday(DateTime_t &dt);
-//        String get_jieqi_str(DateTime_t &dt);
-//            
+    public:
+        ChinaCalendar(){};
+        
+        void set(DateTime &dt);
+        DateTime get();
+            
+        String get_year_str();
+        String get_month_str();
+        String get_date_str();
+        String get_str();
+            
+        uint8_t get_jieqi_mday(DateTime &dt);
+        String get_jieqi_str(DateTime &dt);
+            
 
-//        uint8_t get_sky_earth_year(uint16_t year);//获取天干地支年
-//        uint8_t get_zodiac();//获取生肖索引值0-11
-//        String get_zodiac_str();//获取生肖字符串
+        uint8_t get_sky_earth_year(uint16_t year);//获取天干地支年
+        uint8_t get_zodiac();//获取生肖索引值0-11
+        String get_zodiac_str();//获取生肖字符串
 
-//        String get_year_str();
-//        String get_month_str();
-//        String get_date_str();
-//        
-//        String get_fastival();
-//        void print(Uart &uart);
-//    private:
-//        
-//        uint8_t GetMoonDay(unsigned char month_p,unsigned short table_addr);
-//        int spacil_year_offset(DateTime_t dt);
-//        DateTime_t cdt;
-//        String cdtStr;
-//        String solar_terms;
-//        String zodiac;
+        
+        String get_fastival();
+        void print(Uart &uart);
+    private:
+        
+        uint8_t GetMoonDay(unsigned char month_p,unsigned short table_addr);
+        int spacil_year_offset(DateTime dt);
+        DateTime moon_dt;
+        DateTime sun_dt;
 //    
 };
-//extern const ChinaCalendar::Festival_t c_festival_table[9];
+extern const ChinaCalendar::Festival_t c_festival_table[9];
 
 #endif
