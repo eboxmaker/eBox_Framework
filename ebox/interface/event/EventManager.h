@@ -1,7 +1,8 @@
 #ifndef __EVENT_MANAGER_H
 #define __EVENT_MANAGER_H
 
-#include "ebox.h"
+#include "ebox_core.h"
+#include "ebox_uart.h"
 #include "LinkedList/LinkedList.h"
 
 class Event:public Object

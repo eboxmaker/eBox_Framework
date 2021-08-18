@@ -11,7 +11,6 @@ Copyright 2015 shentq. All Rights Reserved.
 #include "ebox.h"
 #include "bsp_ebox.h"
 #include "ds3231.h"
-
 /**
 	*	1	此例程需要调用eDrive目录下的ds3231驱动
 	*	2	此例程演示了ds3231时钟芯片的基本操作
@@ -27,6 +26,7 @@ SoftI2c iic(&PA10,&PA11);
 DS3231 ds(&iic);
 
 uint32_t last_time;
+
 
 void setup()
 {

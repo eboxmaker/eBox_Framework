@@ -27,7 +27,7 @@ namespace ebox {
 
 /** Dir class
  */
-class Dir {
+class Dir : public DirHandle{
 public:
     /** Create an uninitialized directory
      *

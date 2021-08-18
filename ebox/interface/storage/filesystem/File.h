@@ -18,6 +18,7 @@
 #define __FILE_H
 
 #include "interface/storage/filesystem/FileSystem.h"
+#include "interface/storage/filesystem/FileHandle.h"
 
 namespace ebox {
 /** \addtogroup filesystem */
@@ -26,7 +27,7 @@ namespace ebox {
 
 /** File class
  */
-class File  {
+class File : public FileHandle {
 public:
     /** Create an uninitialized file
      *

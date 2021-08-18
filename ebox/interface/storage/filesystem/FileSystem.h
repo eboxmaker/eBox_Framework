@@ -20,8 +20,8 @@
 
 
 //#include "FileBase.h"
-//#include "FileHandle.h"
-//#include "DirHandle.h"
+#include "interface/storage/fileSystem/FileHandle.h"
+#include "interface/storage/fileSystem/DirHandle.h"
 //#include "FileSystemLike.h"
 #include "interface/storage/blockdevice/BlockDevice.h"
 
@@ -288,8 +288,8 @@ protected:
 
 //protected:
 //    // Hooks for file systemHandle
-//    virtual int open(FileHandle **file, const char *path, int flags);
-//    virtual int open(DirHandle **dir, const char *path);
+    virtual int open(FileHandle **file, const char *path, int flags);
+    virtual int open(DirHandle **dir, const char *path);
 };
 
 

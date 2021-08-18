@@ -705,21 +705,6 @@
           <GroupName>interface</GroupName>
           <Files>
             <File>
-              <FileName>Dir.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\Dir.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>File.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\File.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FileSystem.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileSystem.cpp</FilePath>
-            </File>
-            <File>
               <FileName>DateTime.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\interface\DateTime\DateTime.cpp</FilePath>
@@ -745,11 +730,6 @@
               <FilePath>..\..\..\ebox\interface\event\EventManager.h</FilePath>
             </File>
             <File>
-              <FileName>ebox_block.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\blockdevice\ebox_block.cpp</FilePath>
-            </File>
-            <File>
               <FileName>i2c.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\interface\i2c\i2c.cpp</FilePath>
@@ -763,6 +743,36 @@
               <FileName>soft_spi.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\interface\spi\soft_spi.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>interface/file</GroupName>
+          <Files>
+            <File>
+              <FileName>Dir.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\Dir.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>File.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\File.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FileHandle.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileHandle.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FileSystem.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileSystem.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_block.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\blockdevice\ebox_block.cpp</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,8 +1,7 @@
 #ifndef __EBOX_BLOCK_H
 #define __EBOX_BLOCK_H
 
-
-#include "ebox_core.h"
+#include <stdint.h>
 
 
 class Block

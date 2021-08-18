@@ -51,7 +51,9 @@ namespace ebox {
  *  @note to create a directory, @see Dir
  *  @note Synchronization level: Set by subclass
  */
-class DirHandle  {
+ #include "NonCopyable.h"
+
+class DirHandle : private ebox::NonCopyable<DirHandle> {
 public:
     virtual ~DirHandle() {}
 

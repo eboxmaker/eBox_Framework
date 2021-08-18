@@ -151,31 +151,30 @@ public:
         return err;
     }
 };
+int FileSystem::open(FileHandle **file, const char *path, int flags)
+{
+    File *f = new Managed<File>;
+    int err = f->open(this, path, flags);
+    if (err) {
+        delete f;
+        return err;
+    }
 
-//int FileSystem::open(FileHandle **file, const char *path, int flags)
-//{
-//    File *f = new Managed<File>;
-//    int err = f->open(this, path, flags);
-//    if (err) {
-//        delete f;
-//        return err;
-//    }
+    *file = f;
+    return 0;
+}
 
-//    *file = f;
-//    return 0;
-//}
+int FileSystem::open(DirHandle **dir, const char *path)
+{
+    Dir *d = new Managed<Dir>;
+    int err = d->open(this, path);
+    if (err) {
+        delete d;
+        return err;
+    }
 
-//int FileSystem::open(DirHandle **dir, const char *path)
-//{
-//    Dir *d = new Managed<Dir>;
-//    int err = d->open(this, path);
-//    if (err) {
-//        delete d;
-//        return err;
-//    }
-
-//    *dir = d;
-//    return 0;
-//}
+    *dir = d;
+    return 0;
+}
 
 } // namespace mbed
