@@ -1,7 +1,5 @@
 #ifndef __EBOXTWOWIRE_H
 #define __EBOXTWOWIRE_H
-#include "ebox_core.h"
-#include "stream.h"
 #include "i2c.h"
 #include "mcu.h"
 

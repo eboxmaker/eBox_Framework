@@ -241,7 +241,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_i2c.cpp</Filename>
+          <Filename>C:\Users\Administrator\Documents\GitHub\eBox_Framework\ebox\hardware\STM32F3xx\Peripherals\ebox_i2c.cpp</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -1023,8 +1023,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_i2c.cpp</PathWithFileName>
-      <FilenameWithoutPath>ebox_i2c.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\ebox\hardware\STM32F3xx\ebox_it.cpp</PathWithFileName>
+      <FilenameWithoutPath>ebox_it.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1035,8 +1035,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_spi.cpp</PathWithFileName>
-      <FilenameWithoutPath>ebox_spi.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_mcu_i2c.cpp</PathWithFileName>
+      <FilenameWithoutPath>ebox_mcu_i2c.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1047,8 +1047,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\ebox\hardware\STM32F3xx\ebox_it.cpp</PathWithFileName>
-      <FilenameWithoutPath>ebox_it.cpp</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_mcu_spi.cpp</PathWithFileName>
+      <FilenameWithoutPath>ebox_mcu_spi.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>STM32F334R8Tx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F3xx_DFP.2.1.0</PackID>
+          <PackID>Keil.STM32F3xx_DFP.2.2.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x00004000) IROM(0x08000000,0x00010000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -659,19 +659,19 @@
               <FilePath>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_uart.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_i2c.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_i2c.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_spi.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_spi.cpp</FilePath>
-            </File>
-            <File>
               <FileName>ebox_it.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\STM32F3xx\ebox_it.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_mcu_i2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_mcu_i2c.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_mcu_spi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\STM32F3xx\Peripherals\ebox_mcu_spi.cpp</FilePath>
             </File>
             <File>
               <FileName>object.cpp</FileName>

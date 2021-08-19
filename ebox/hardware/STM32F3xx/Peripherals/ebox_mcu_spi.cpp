@@ -13,7 +13,7 @@ No part of this software may be used for any commercial activities by any form o
 Disclaimer
 This specification is preliminary and is subject to change at any time without notice. shentq assumes no responsibility for any errors contained herein.
 */
-#include "ebox_spi.h"
+#include "ebox_mcu_spi.h"
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印

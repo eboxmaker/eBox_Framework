@@ -1,5 +1,4 @@
-#include "ebox_i2c.h"
-#include "ebox.h"
+#include "ebox_mcu_i2c.h"
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
