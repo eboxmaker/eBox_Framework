@@ -36,7 +36,8 @@ public:
     virtual const char *get_type() const;
     
     
-    
+    int         get_CID(uint8_t *cid_data);
+    int         get_CSD(uint8_t *csd_data);        
 
 private:
     
@@ -58,8 +59,7 @@ private:
     
     ebox::bd_size_t  _get_capacity(void);
 
-    int         get_CID(uint8_t *cid_data);
-    int         get_CSD(uint8_t *csd_data);        
+
 private:
     uint8_t     _wait(void);
     uint8_t     _send_command(uint8_t cmd, uint32_t arg, uint8_t crc);

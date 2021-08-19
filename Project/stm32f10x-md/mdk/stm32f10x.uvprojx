@@ -779,6 +779,16 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\interface\storage\blockdevice\ebox_block.cpp</FilePath>
             </File>
+            <File>
+              <FileName>FileSystemHandle.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileSystemHandle.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FileBase.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileBase.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1223,6 +1233,26 @@
               <FileName>PubSubClient.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\mqtt\src\PubSubClient.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>fatfs</GroupName>
+          <Files>
+            <File>
+              <FileName>ffunicode.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\fat\ChaN\ffunicode.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ff.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\fat\ChaN\ff.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FATFileSystem.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\fat\FATFileSystem.cpp</FilePath>
             </File>
           </Files>
         </Group>

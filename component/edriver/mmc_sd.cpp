@@ -193,8 +193,8 @@ int SD::init()
     uart1.printf("type       : %s(%d)\r\n",get_type(),SD_Type);
     uart1.printf("read_size  : %u\r\n",get_read_size());
     uart1.printf("prog_size  : %u\r\n",get_program_size());
-    uart1.printf("capacity   : %f MByte\r\n",size()/1024/1024.0);
-    uart1.printf("erase_size   : %u Byte\r\n",get_erase_size());
+    uart1.printf("capacity   : %0.1f MByte\r\n",size()/1024/1024.0);
+    uart1.printf("erase_size : %u Byte\r\n",get_erase_size());
     uart1.printf("================================\r\n");
     uart1.flush();
     return r1;
@@ -277,7 +277,26 @@ bd_size_t SD::size() const
 
 const char *SD::get_type() const
 {
-    return "SD";
+//#define SD_TYPE_MMC     0
+//#define SD_TYPE_V1      1
+//#define SD_TYPE_V2      2
+//#define SD_TYPE_V2HC    4
+    switch(SD_Type)
+    {
+        case 0:
+            return "SD_TYPE_MMC";
+        case 1:
+            return "SD_TYPE_V1";
+        case 2:
+            return "SD_TYPE_V2";
+        case 3:
+            return "UNKNOW(3)";
+        case 4:
+            return "SD_TYPE_V2HC";
+        default:
+            return "UNKNOW";
+    }
+    return "UNKNOW";
 }
 
 /*******************************************************************************
@@ -543,7 +562,7 @@ ebox::bd_size_t SD::_get_capacity(void)
 
 //    spi->release();
     ebox_printf("Capacity:%u",Capacity);
-    ebox_printf("sector:%u",_sectors);
+    ebox_printf("sector:%u\n",_sectors);
     return (uint64_t)Capacity;
 }
 

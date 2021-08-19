@@ -1,50 +1,66 @@
-/**
- ******************************************************************************
- * @file    main.cpp
- * @author  shentq
- * @version V1.2
- * @date    2016/08/14
- * @brief   ebox application example .
-*					 2018-8-5	通过引入bsp，定义硬件端口，方便例程可以在不同平台上运行
- ******************************************************************************
- * @attention
- *
- * No part of this software may be used for any commercial activities by any form
- * or means, without the prior written consent of shentq. This specification is
- * preliminary and is subject to change at any time without notice. shentq assumes
- * no responsibility for any errors contained herein.
- * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
- ******************************************************************************
- */
+/*
+file   : *.cpp
+author : shentq
+version: V1.0
+date   : 2015/7/5
 
+Copyright 2015 shentq. All Rights Reserved.
+*/
+
+//STM32 RUN IN eBox
 #include "ebox.h"
 #include "bsp_ebox.h"
+#include "mmc_sd.h"
+#include "w25xxx.h"
+#include "interface/storage/filesystem/FileSystem.h"
+#include "interface/storage/filesystem/FAT/FATFileSystem.h"
 
-/**
-	*	1	通过串口打印消息
-	*/
-/* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"hello world example"
-#define EXAMPLE_DATE	"2018-08-06"
+FATFileSystem fs("fs");
 
+W25xxx flash(&PA15, &spi1);
+SD sd(&PB12, &spi2);
+
+void dirOpt()
+{
+//    res = f_mkdir("0:123"); //新建目录只能一级一级的建，即调用一次f_mkdir(),建一层目录而已，目录名不能以数字开头
+//    if(res == FR_OK)
+//        uart1.printf("\r\ncreat dir ok !");
+//    else if(res == FR_EXIST)
+//        uart1.printf("\r\ndir is exist !");
+//    else
+//        uart1.printf("\r\ncreate failed~~~~(>_<)~~~~");
+
+//    res = f_opendir(&DirObject, "0:123"); //打开目录
+//    if(res == FR_OK)
+//    {
+//        uart1.printf("\r\nopen dir ok !");
+//        uart1.printf("\r\nclust  num：%d", DirObject.clust);
+//        uart1.printf("\r\nsect num：%d", DirObject.sect);
+//    }
+//    else if(res == FR_NO_PATH)
+//        uart1.printf("\r\ndir is not exist");
+//    else
+//        uart1.printf("\r\nopen dir failed~~~~(>_<)~~~~");
+}
 void setup()
 {
+    u8 ret;
     ebox_init();
-    LED1.mode(OUTPUT_PP);
-    UART.begin(115200);
-    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
+    uart1.begin(115200);
+    print_log();
+    ret = fs.mount(&sd);
+
 }
 int main(void)
 {
     setup();
     while(1)
     {
-        UART.printf("hello World !\r\n");
+
         delay_ms(1000);
-        LED1.set();
-        delay_ms(1000);
-        LED1.reset();
     }
+
+
 }
 
 

@@ -28,6 +28,25 @@
 #include <errno.h>
 #include <stdlib.h>
 
+#if EBOX_DEBUG
+// 是否打印调试信息, 1打印,0不打印
+#define EBOX_DEBUG_FAT_ENABLE       true
+#define EBOX_DEBUG_FAT_ENABLE_ERR   true
+#endif
+
+
+#if EBOX_DEBUG_FAT_ENABLE
+#define fatDebug(...)  ebox_printf("[fat DBG]:%d: ",__LINE__),ebox_printf(__VA_ARGS__ )
+#else
+#define fatDebug(...)
+#endif
+
+#if EBOX_DEBUG_FAT_ENABLE_ERR
+#define fatDebugErr(fmt, ...)  ebox_printf("[fat err]:%d: " fmt "\n", __LINE__, __VA_ARGS__)
+#else
+#define fatDebugErr(fmt, ...)
+#endif
+
 namespace ebox {
 
 using namespace ebox;
@@ -309,10 +328,10 @@ int FATFileSystem::mount(BlockDevice *bd, bool mount)
             _fsid[0] = '0' + _id;
             _fsid[1] = ':';
             _fsid[2] = '\0';
-            //debug_if(FFS_DBG, "Mounting [%s] on ffs drive [%s]\n", getName(), _fsid);
+            fatDebug("Mounting [%s] on ffs drive [%s]\n", getName(), _fsid);
             FRESULT res = f_mount(&_fs, _fsid, mount);
             if(res){
-                ebox_printf("[FAT]mount err:%d",res);
+                fatDebugErr("mount err:%d",res);
             }
             return fat_error_remap(res);
         }
@@ -330,7 +349,7 @@ int FATFileSystem::unmount()
 
     FRESULT res = f_mount(NULL, _fsid, 0);
     if(res){
-        ebox_printf("[FAT]unmount err:%d",res);
+        fatDebugErr("unmount err:%d",res);
     }
     _ffs[_id] = NULL;
     _id = -1;
@@ -400,7 +419,7 @@ int FATFileSystem::format(BlockDevice *bd, bd_size_t cluster_size)
     // Logical drive number, Partitioning rule, Allocation unit size (bytes per cluster)
     FRESULT res = f_mkfs(fs._fsid, FM_ANY | FM_SFD, cluster_size, work, 4096);
     if (res != FR_OK) {
-        ebox_printf("[FAT]formate err:%d",res);
+        fatDebugErr("formate err:%d",res);
         fs.unmount();
         return fat_error_remap(res);
     }
@@ -435,7 +454,7 @@ int FATFileSystem::reformat(BlockDevice *bd, int allocation_unit)
 
     int err = FATFileSystem::format(bd, allocation_unit);
     if (err) {
-        ebox_printf("[FAT]reformate err:%d",err);
+        fatDebugErr("reformate err:%d",err);
         return err;
     }
 
@@ -485,7 +504,7 @@ int FATFileSystem::mkdir(const char *path, mode_t mode)
     
 
     if (res != FR_OK) {
-        ebox_printf("f_mkdir() failed: %d\n", res);
+        fatDebugErr("f_mkdir() failed: %d\n", res);
     }
     return fat_error_remap(res);
 }
@@ -581,7 +600,7 @@ int FATFileSystem::file_open(fs_file_t *file, const char *path, int flags)
 
     if (res != FR_OK) {
        
-        //debug_if(FFS_DBG, "f_open('w') failed: %d\n", res);
+        fatDebugErr("f_open('w') failed: %d\n", res);
         delete fh;
         return fat_error_remap(res);
     }
@@ -613,7 +632,7 @@ ssize_t FATFileSystem::file_read(fs_file_t file, void *buffer, size_t len)
     
 
     if (res != FR_OK) {
-        //debug_if(FFS_DBG, "f_read() failed: %d\n", res);
+        fatDebugErr("f_read() failed: %d\n", res);
         return fat_error_remap(res);
     } else {
         return n;
@@ -630,7 +649,7 @@ ssize_t FATFileSystem::file_write(fs_file_t file, const void *buffer, size_t len
     
 
     if (res != FR_OK) {
-        //debug_if(FFS_DBG, "f_write() failed: %d", res);
+        fatDebugErr("f_write() failed: %d", res);
         return fat_error_remap(res);
     } else {
         return n;
@@ -646,7 +665,7 @@ int FATFileSystem::file_sync(fs_file_t file)
     
 
     if (res != FR_OK) {
-        //debug_if(FFS_DBG, "f_sync() failed: %d\n", res);
+        fatDebugErr("f_sync() failed: %d\n", res);
     }
     return fat_error_remap(res);
 }
@@ -667,7 +686,7 @@ off_t FATFileSystem::file_seek(fs_file_t file, off_t offset, int whence)
     
 
     if (res != FR_OK) {
-        //debug_if(FFS_DBG, "lseek failed: %d\n", res);
+        fatDebugErr("lseek failed: %d\n", res);
         return fat_error_remap(res);
     } else {
         return noffset;
@@ -738,7 +757,7 @@ int FATFileSystem::dir_open(fs_dir_t *dir, const char *path)
     
 
     if (res != FR_OK) {
-        //debug_if(FFS_DBG, "f_opendir() failed: %d\n", res);
+        fatDebugErr("f_opendir() failed: %d\n", res);
         delete dh;
         return fat_error_remap(res);
     }
