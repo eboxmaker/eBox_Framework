@@ -20,16 +20,20 @@
 /* Includes ------------------------------------------------------------------*/
 #include "DS3231.h"
 
-    
+void test()
+{
+
+}
+
 void DS3231::begin()
 {  
     if(intPin != NULL)
     {
         exti = new Exti(intPin);
         exti->begin();
-        exti->attach(this,&DS3231::event,RISE);
+        exti->attach(this,&DS3231::event);
         exti->nvic(ENABLE);
-        exti->interrupt(RISE,ENABLE);
+        exti->interrupt(Exti::TrigRise,ENABLE);
     }
     i2c->begin();
     set_hour_mode(HOUR24);

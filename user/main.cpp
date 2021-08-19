@@ -1,78 +1,51 @@
-/*
-file   : *.cpp
-author : shentq
-version: V1.0
-date   : 2015/7/5
+/**
+ ******************************************************************************
+ * @file    main.cpp
+ * @author  shentq
+ * @version V1.2
+ * @date    2016/08/14
+ * @brief   ebox application example .
+*					 2018-8-5	通过引入bsp，定义硬件端口，方便例程可以在不同平台上运行
+ ******************************************************************************
+ * @attention
+ *
+ * No part of this software may be used for any commercial activities by any form
+ * or means, without the prior written consent of shentq. This specification is
+ * preliminary and is subject to change at any time without notice. shentq assumes
+ * no responsibility for any errors contained herein.
+ * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
+ ******************************************************************************
+ */
 
-Copyright 2015 shentq. All Rights Reserved.
-*/
-
-//STM32 RUN IN eBox
 #include "ebox.h"
 #include "bsp_ebox.h"
-#include "ds3231.h"
+
 /**
-	*	1	此例程需要调用eDrive目录下的ds3231驱动
-	*	2	此例程演示了ds3231时钟芯片的基本操作
+	*	1	通过串口打印消息
 	*/
-
 /* 定义例程名和例程发布日期 */
-#define EXAMPLE_NAME	"ds3231 example"
-#define EXAMPLE_DATE	"2021-08-11"
-
-//ChinaCalendar Cdt;
-SoftI2c iic(&PA10,&PA11);
-
-DS3231 ds(&iic);
-
-uint32_t last_time;
-
+#define EXAMPLE_NAME	"hello world example"
+#define EXAMPLE_DATE	"2018-08-06"
 
 void setup()
 {
     ebox_init();
+    LED1.mode(OUTPUT_PP);
     UART.begin(115200);
-    UART.setTimeout(10);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
-    
-    DateTime dt(__DATE__,__TIME__,8);
-    ds.begin(dt);
-    
-
 }
 int main(void)
 {
     setup();
     while(1)
     {
-        ds.loop();
-        String dtstr = uart1.readString();
-        if(dtstr != "")
-        {
-            DateTime dt(dtstr);
-            if(dt.err == 0)
-                ds.set(dt);
-        }
-        if(millis() - last_time > 1000)
-        {
-            last_time = millis();
-            
-//            DateTime dt = ds.now();
-//            dt.print(UART);
-            
-//            ds.dateTime.print(UART);
-            
-                UART.println(ds.dateTime.toString());
-            
-        }
+        UART.printf("hello World !\r\n");
+        delay_ms(1000);
+        LED1.set();
+        delay_ms(1000);
+        LED1.reset();
     }
-
-
 }
-
-
-
-
 
 
 

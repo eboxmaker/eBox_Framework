@@ -21,106 +21,76 @@
 #ifndef __EBOX_I2C_H_
 #define __EBOX_I2C_H_
 
-#include "ebox_core.h"
+#include "i2c.h"
 #include "mcu.h"
 
-#define WRITE   0
-#define READ    1
+//#define WRITE   0
+//#define READ    1
 
-/*
-	1.支持I2C1和I2C2,两个均使用PCLKclock
-	2.支持remap,在stm32f072define中定义
-*/
+///*
+//	1.支持I2C1和I2C2,两个均使用PCLKclock
+//	2.支持remap,在stm32f072define中定义
+//*/
+
+//class mcuI2c : public I2c
+//{
+
+//public:
+//    mcuI2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin);
+//    // 启动I2C, speed - 10,100,400 分别代表10k，100k，400k
+//    virtual void	begin(Config_t *cfg);
+//    virtual void    config(Config_t *cfg);
+//    // 单字节读写
+//    virtual uint8_t	write(uint16_t slaveAddr, uint8_t data);
+//    virtual uint8_t write(uint16_t slaveAddr, uint16_t regAddr, uint8_t data);
+//    virtual uint8_t read(uint16_t slaveAddr);
+//    virtual uint8_t read(uint16_t slaveAddr, uint16_t regAddr);
+//    // 读写n字节
+//    virtual uint8_t write_buf(uint16_t slaveAddr, uint8_t *data, uint16_t nWrite);
+//    virtual uint8_t	write_buf(uint16_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nWrite);
+
+//    virtual uint8_t	read_buf(uint16_t slaveAddr, uint8_t *data, uint16_t nRead);
+//    virtual uint8_t	read_buf(uint16_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nRead);
+//    // 等待设备响应
+//    virtual uint8_t check_busy(uint16_t slaveAddr);
+
+//    // 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
+//    virtual uint8_t take(Config_t *cfg);
+//    // 释放I2C控制权
+//    virtual void    release(void);
+
+//private:
+//    I2C_TypeDef     *_i2cx;		// i2c外设
+//    Config_t        *_cfg;	// i2c时序
+//    uint32_t   	 	_timing;	// i2c时序
+//    uint8_t     	_busy;
+//    Gpio            *_sda;
+//    Gpio            *_scl;
+//};
+
 
 class mcuI2c : public I2c
 {
-
 public:
-    mcuI2c(I2C_TypeDef *I2Cx, Gpio *scl_pin, Gpio *sda_pin);
-    // 启动I2C, speed - 10,100,400 分别代表10k，100k，400k
-    virtual void	begin(Config_t *cfg);
-    virtual void    config(Config_t *cfg);
-    // 单字节读写
-    virtual uint8_t	write(uint16_t slaveAddr, uint8_t data);
-    virtual uint8_t write(uint16_t slaveAddr, uint16_t regAddr, uint8_t data);
-    virtual uint8_t read(uint16_t slaveAddr);
-    virtual uint8_t read(uint16_t slaveAddr, uint16_t regAddr);
-    // 读写n字节
-    virtual uint8_t write_buf(uint16_t slaveAddr, uint8_t *data, uint16_t nWrite);
-    virtual uint8_t	write_buf(uint16_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nWrite);
+    // public methods
+    mcuI2c();
+    mcuI2c(I2C_TypeDef *I2Cx, Gpio *sclPin, Gpio *sdaPin);
 
-    virtual uint8_t	read_buf(uint16_t slaveAddr, uint8_t *data, uint16_t nRead);
-    virtual uint8_t	read_buf(uint16_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nRead);
-    // 等待设备响应
-    virtual uint8_t check_busy(uint16_t slaveAddr);
-
-    // 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
-    virtual uint8_t take(Config_t *cfg);
-    // 释放I2C控制权
-    virtual void    release(void);
+    virtual void begin(uint8_t address);
+    virtual void begin(int address);
+    virtual void begin();
+    virtual void setClock(Speed_t speed = K100);
 
 private:
+  // per object data
     I2C_TypeDef 	*_i2cx;		// i2c外设
-		Config_t      *_cfg;	// i2c时序
-    uint32_t   	 	_timing;	// i2c时序
-    uint8_t     	_busy;
     Gpio            *_sda;
     Gpio            *_scl;
-};
-
-/*
-	1.支持任何IO引脚；
-	2.函数接口和硬件I2C完全一样可以互相替代
-	注意：
-				1.该类的speed是由delay_us延时函数控制。略有不准
-				2.speed设置只能为100000，200000,300k,400k。如果不是此值，则会将speed的值直接传递给delay_us.即delay_us(speed);
-				3.初期调试I2C设备建议使用100k。或者大于10的值
-*/
-class SoftI2c : public I2c
-{
-public:
-    SoftI2c(Gpio *scl, Gpio *sda);
-    // 启动I2C, speed - 10,100,400 分别代表10k，100k，400k
-    virtual void	    begin(Config_t *cfg);
-    virtual void      config(Config_t *cfg);
-    // 单字节读写
-    virtual uint8_t   write(uint16_t slaveAddr, uint8_t data);
-    virtual uint8_t   write(uint16_t slaveAddr, uint16_t regAddr, uint8_t data);
-    virtual uint8_t   read(uint16_t slaveAddr);
-    virtual uint8_t   read(uint16_t slaveAddr, uint16_t regAddr);
-    // 读写n字节
-    virtual uint8_t   write_buf(uint16_t slaveAddr, uint8_t *data, uint16_t nWrite);
-    virtual uint8_t	write_buf(uint16_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nWrite);
-
-    virtual uint8_t	read_buf(uint16_t slaveAddr, uint8_t *data, uint16_t nRead);
-    virtual uint8_t	read_buf(uint16_t slaveAddr, uint16_t regAddr, uint8_t *data, uint16_t nRead);
-    // 等待设备响应
-    virtual uint8_t   check_busy(uint16_t slaveAddr);
-
-    // 获取I2C控制权,成功返回E_OK,E_BUSY;需要和releaseRight成对使用
-    virtual uint8_t   take(Config_t *cfg);
-    // 释放I2C控制权
-    virtual void    release(void);
-
-private:
-
-    int8_t _start();
-    void _stop();
-    int8_t _sendAck();
-    int8_t _sendNack();
-
-    int8_t _sendByte(uint8_t byte);
-    int8_t _send7bitsAddress(uint8_t slaveAddr, uint8_t WR);
-    int8_t _receiveByte(uint8_t *data);
-
-    int8_t _waitAck();
-
-private:
-    Gpio      *_sda;
-    Gpio      *_scl;
-		Config_t  *_cfg;	// i2c时序
-    uint32_t  _timing;	// i2c时序
-    uint8_t 	_busy;
+    uint32_t         _speed;
+    
+    // private methods
+    virtual i2c_err_t _write(uint8_t address,const uint8_t *data, size_t quantity, int sendStop);
+    virtual size_t _read(uint8_t address,uint8_t *data, uint16_t quantity,uint8_t sendStop);
 };
 
 #endif

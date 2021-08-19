@@ -715,6 +715,11 @@
               <FilePath>..\..\..\ebox\interface\DateTime\basicRtc.cpp</FilePath>
             </File>
             <File>
+              <FileName>RtcMillis.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\DateTime\RtcMillis.cpp</FilePath>
+            </File>
+            <File>
               <FileName>hmi.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\interface\hmi.cpp</FilePath>

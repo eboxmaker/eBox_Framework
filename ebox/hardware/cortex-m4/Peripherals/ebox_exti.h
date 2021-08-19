@@ -38,25 +38,25 @@ class Exti
 {
 public:
     // 触发类型
-    enum Trigger_t
+    enum Trig_t
     {
-        FALL = 0,	// 下降沿触发
-        RISE,		// 上升沿触发
-        CHANGE		// 上升沿下降沿
+        TrigNone = 0,	// 下降沿触发
+        TrigFall,	    // 下降沿触发
+        TrigRise,			// 上升沿触发
+        TrigFallRise		// 上升沿下降沿
     };
-    enum Exti_t
+    enum Mode_t
     {
-        IT = 0,			// 中断
-        EVENT,			// 事件
-        IT_EVENT		// 中断&事件
+        ModeIt = 0,			// 中断
+        ModeEvent,			// 事件
+        ModeItEvent		// 中断&事件
     };
-
 public:
     Exti(Gpio *exti_pin);
-    void begin(PinMode_t mode = INPUT, Exti_t type = IT);
+    void begin(PinMode_t mode = INPUT, Mode_t type = ModeIt);
     void nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
-    void interrupt(Trigger_t type, FunctionalState enable);
-
+    void interrupt(Trig_t trig, FunctionalState enable);
+    virtual bool read(){return pin->read();};
     static void _irq_handler( uint32_t id);
     void attach(void (*fptr)(void));
     template<typename T>

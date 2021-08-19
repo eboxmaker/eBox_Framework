@@ -1,6 +1,6 @@
 #ifndef __TWOWIRE_H
 #define __TWOWIRE_H
-#include "ebox_core.h"
+#include "ebox_port_gpio.h"
 #include "stream.h"
 
 

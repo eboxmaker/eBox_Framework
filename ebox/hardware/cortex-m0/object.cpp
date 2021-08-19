@@ -49,7 +49,7 @@ SoftSpi	sspi1(&PA5, &PA6, &PA7);
 mcuI2c  i2c1(I2C1, &PB8, &PB9);
 //mcuI2c  i2c2(I2C2, &PB10, &PB11);
 //SoftI2c si2c(&PA4, &PA5);
-SoftI2c si2c1(&PB8, &PB9);
+//SoftI2c si2c1(&PB8, &PB9);
 //SoftI2c si2c2(&PB10, &PB11);
 
 

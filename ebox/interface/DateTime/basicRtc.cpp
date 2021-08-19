@@ -1,6 +1,7 @@
 #include "basicRtc.h"
 
 
+#if DATETIME_USE_PRINT
 
 void BasicRtc::print(Uart &uart)
 {
@@ -9,7 +10,7 @@ void BasicRtc::print(Uart &uart)
     uart.printf("===================================\r\n");
 
 }
-
+#endif
 
 
 
@@ -18,7 +19,7 @@ void BasicRtc::print(Uart &uart)
 ** 输　入:  dt     公历
 ** 输　出:  moon_dt    农历
 ********************************************************************************************************/
-void ChinaCalendar::set(DateTime &dt)
+void ChinaCalendar::set(DateTime &dtSun)
 { 
 	unsigned char temp1,temp2,temp3,month_p,yearH,yearL;	
 	unsigned char flag_y;
@@ -26,10 +27,11 @@ void ChinaCalendar::set(DateTime &dt)
     
 	unsigned char month,date;
 
-    sun_dt = dt;
-	yearH=dt.year/100;	yearL=dt.year%100;
-	month = dt.month;
-    date = dt.day;
+    sun_dt = dtSun;
+	yearH=dtSun.year/100;	
+    yearL=dtSun.year%100;
+	month = dtSun.month;
+    date = dtSun.day;
 	// 定位数据表地址
 	if(yearH==20)	table_addr=(yearL+100-1)*3;
 	else  			table_addr=(yearL-1)*3;
@@ -114,15 +116,20 @@ void ChinaCalendar::set(DateTime &dt)
 	moon_dt.month=month;
 	moon_dt.day = date;
     
-    moon_dt.hour = dt.hour;
-    moon_dt.minute = dt.minute;
-    moon_dt.second = dt.second;
+    moon_dt.hour = dtSun.hour;
+    moon_dt.minute = dtSun.minute;
+    moon_dt.second = dtSun.second;
     return;
 }
 
-DateTime ChinaCalendar::get()
+DateTime ChinaCalendar::get_moon()
 {
     return moon_dt;
+}
+   
+DateTime ChinaCalendar::get_sun()
+{
+    return sun_dt;
 }
 
 
@@ -489,6 +496,7 @@ String ChinaCalendar::get_zodiac_str()
     return zodiac_table[get_sky_earth_year(moon_dt.year)%12];
 }
 
+#if DATETIME_USE_PRINT
 
 void ChinaCalendar::print(Uart &uart)
 {
@@ -507,7 +515,7 @@ void ChinaCalendar::print(Uart &uart)
     uart.printf("%s\n",str.c_str());
 
 }
-
+#endif
 
 
 

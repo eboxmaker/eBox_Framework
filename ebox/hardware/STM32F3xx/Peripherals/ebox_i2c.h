@@ -31,6 +31,5 @@ private:
     // private methods
     virtual i2c_err_t _write(uint8_t address,const uint8_t *data, size_t quantity, int sendStop);
     virtual size_t _read(uint8_t address,uint8_t *data, uint16_t quantity,uint8_t sendStop);
- 
 };
 #endif

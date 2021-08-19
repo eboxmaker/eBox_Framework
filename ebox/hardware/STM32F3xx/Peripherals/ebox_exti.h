@@ -33,34 +33,36 @@
         - CHANGE: 上升沿和下降沿均触发中断
  */
  
-// 触发类型
-enum TrigType
-{
-    FALL = 0,	// 下降沿触发
-    RISE,			// 上升沿触发
-    FALL_RISING		// 上升沿下降沿
-};
 
-enum ExtiType
-{
-    IT = 0,			// 中断
-    EVENT,			// 事件
-    IT_EVENT		// 中断&事件
-};
 
 class Exti
 {
 public:
+    // 触发类型
+    enum Trig_t
+    {
+        TrigNone = 0,	// 下降沿触发
+        TrigFall,	    // 下降沿触发
+        TrigRise,			// 上升沿触发
+        TrigFallRise		// 上升沿下降沿
+    };
+    enum Mode_t
+    {
+        ModeIt = 0,			// 中断
+        ModeEvent,			// 事件
+        ModeItEvent		// 中断&事件
+    };
+public:
     Exti(Gpio *exti_pin);
-    void begin(PIN_MODE mode = INPUT, ExtiType type = IT);
+    void begin(PinMode_t mode = INPUT, Mode_t extiMode = ModeIt);
     void nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
-    void interrupt(FunctionalState enable);
-
+    void interrupt(Trig_t trig, FunctionalState enable);
+    bool read();
     void attach(void (*fptr)(void));
     template<typename T>
     void attach(T *tptr, void (T::*mptr)(void))
     {
-        _irq.attach(tptr, mptr);
+        _pirq.attach(tptr, mptr);
     }
 
 private:
@@ -68,15 +70,13 @@ private:
     // 所有实例共享静态成员，静态成员不能访问普通成员，需要通过对象名间接访问
     static void _irq_handler(uint32_t pObj);
     // 回调函数指针数组，分别绑定下降沿回调和上升沿回调函数
-    FunctionPointer _pirq[2];
+    FunctionPointer _pirq;
     Gpio	*_pin;
     uint16_t	_extiLine;	//外部中断0-15
 
-    void _init(ExtiType type = IT);
-
 
 protected:
-    FunctionPointer _irq;
+//    FunctionPointer _irq;
 };
 #ifdef __cplusplus
 extern "C" {

@@ -1,7 +1,5 @@
 #ifndef __SOFT_I2C_H
 #define __SOFT_I2C_H
-#include "ebox_core.h"
-#include "stream.h"
 #include "i2c.h"
 
 

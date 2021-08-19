@@ -71,7 +71,6 @@ extern Uart uart2;
 #include "parallel_gpio.h"
 #include "tft9225.h"
 #include "graphic.h"
-#include "EventGpio.h"
 #include "EventManager.h"
 
 extern Lcd 						lcd;

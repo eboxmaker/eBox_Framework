@@ -37,15 +37,8 @@ MainPage::MainPage(String name):GuiPage(name){
 
 MainPage::~MainPage()
 {
-
-    for(int i = 0; i < activityList.size(); i++)
-    {
-        delete (ActivityComponent *)activityList.data(i);
-    }
-    for(int i = 0; i < componentList.size(); i++)
-    {
-        delete (Component *)componentList.data(i);
-    }
+    activityList.clear();
+    componentList.clear();
 }
 void MainPage::create()
 {
@@ -70,8 +63,8 @@ void MainPage::create()
 //    regedit(bar);
 //    regedit(bar1);
 //    regedit(par);
-    regedit(Text1);
-    regedit(TextO2);
+    Register(Text1);
+    Register(TextO2);
     GuiPage::create();
 }
 //void MainPage::cancel()

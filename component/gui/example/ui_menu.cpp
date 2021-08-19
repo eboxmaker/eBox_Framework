@@ -123,11 +123,11 @@ const menu_t menu_3 = {
 void MenuPage::create()
 {
     _gpu->clear();
-    pMenu = new GuiMenu(30,0,100,100,&menu);
+    pMenu = new GuiMenu(30,0,100,100,&menu,"menu");
     bar = new GuiSideBar(0,0,100,5,1,10);
 
-    regedit(pMenu);
-    regedit(bar);
+    Register(pMenu);
+    Register(bar);
     
     bar->set_max( pMenu->current_menu->count);
     bar->set_prograss( pMenu->index_get());

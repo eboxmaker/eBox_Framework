@@ -83,7 +83,7 @@ Exti::Exti(Gpio *pin)
  * @note    初始化会默认开启中断，如果用户想禁用中断，
  *          可以调用interrupt(DISABLE)关闭中断。
  */
-void Exti::begin(PinMode_t mode, Exti_t type)
+void Exti::begin(PinMode_t mode, Mode_t extiMode)
 {
 
     pin->mode((mode == INPUT) ? (INPUT_PU) : (mode));
@@ -94,17 +94,17 @@ void Exti::begin(PinMode_t mode, Exti_t type)
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
 
-    switch (type)
+    switch (extiMode)
     {
-    case IT:
+    case ModeIt:
         SET_BIT(EXTI->IMR, exti_line);
         CLEAR_BIT(EXTI->EMR, exti_line);
         break;
-    case EVENT:
+    case ModeEvent:
         SET_BIT(EXTI->EMR, exti_line);
         CLEAR_BIT(EXTI->IMR, exti_line);
         break;
-    case IT_EVENT:
+    case ModeItEvent:
 
         SET_BIT(EXTI->EMR, exti_line);
         SET_BIT(EXTI->IMR, exti_line);
@@ -135,20 +135,25 @@ void Exti::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub
  *
  * @return  NONE
  */
-void Exti::interrupt(Trigger_t type,FunctionalState enable)
+void Exti::interrupt(Trig_t trig,FunctionalState enable)
 {
 
     EXTI_InitTypeDef EXTI_InitStructure;
-    switch(type)
+    switch(trig)
     {
-    case RISE:
+    case TrigNone:
+        EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling; //?????????????????
+        break;
+    case TrigFall:
+        EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; //下降沿中断
+        break; 
+    case TrigRise:
         EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //上升沿沿中断
         break;
-    case FALL:
-        EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; //下降沿中断
-        break;
-    case CHANGE:
+    case TrigFallRise:
         EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling; //上升，下降沿都中断
+        break;
+    default:
         break;
     }
     SYSCFG_EXTILineConfig(port_source, pin_source);

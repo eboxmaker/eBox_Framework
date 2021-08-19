@@ -1,7 +1,7 @@
 #ifndef __TIMESPAN_H
 #define __TIMESPAN_H
 
-#include "ebox_uart.h"
+#include "ebox_type.h"
 class TimeSpan
 {
 public :
@@ -30,7 +30,7 @@ public :
     double total_minutes;
     double total_hours;
     double total_days;
-    void print(Uart& uart);
+//    void print(Uart& uart);
 
 };  
 #endif

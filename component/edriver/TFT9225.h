@@ -23,6 +23,7 @@
 #include "ebox_core.h"
 #include "font.h"
 #include "parallel_gpio.h"
+#include "hmi.h"
 
 #define X_MAX_PIXEL	        176
 #define Y_MAX_PIXEL	        220
@@ -43,7 +44,7 @@
 
 
 
-class Lcd : public Vhmi
+class Lcd : public HMI
 {
 public:
   Lcd(Gpio *cs,Gpio *rst, Gpio *rd, Gpio *rs, Gpio *wr, ParallelGpio *db)

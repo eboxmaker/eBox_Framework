@@ -109,7 +109,7 @@ extern mcuSpi spi2;
 
 //#define PWMLED  PB8
 
-#define BtnPin	PA8
+#define BTN1	PA8
 
 #define	UART    uart1
 #define	Serial  uart1
@@ -126,7 +126,6 @@ extern mcuSpi spi2;
 
 
 
-//extern Button   btn;
 //extern Led      led1;
 //extern Led      led2;
 //extern Led      led3;

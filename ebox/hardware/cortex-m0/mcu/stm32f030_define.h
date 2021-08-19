@@ -104,7 +104,7 @@ static const AF_FUN_S I2C_MAP[] =
     // i2c1
 		PA9_ID,AF_PP_PU,LL_GPIO_AF_4,I2C1_BASE,
 		PA10_ID,AF_PP_PU,LL_GPIO_AF_4,I2C1_BASE,
-    (PIN_ID_t)0xff
+    (PinId_t)0xff
 };
 
 // sck,miso,mosi
@@ -133,7 +133,7 @@ static const AF_FUN_S TIM_MAP[] =
     PA8_ID, AF_PP, LL_GPIO_AF_2, TIM1_BASE + TIMxCH1,
     PA9_ID, AF_PP, LL_GPIO_AF_2, TIM1_BASE + TIMxCH2,
     PA10_ID, AF_PP, LL_GPIO_AF_2, TIM1_BASE + TIMxCH3,
-    (PIN_ID_t)0xff
+    (PinId_t)0xff
 };
 
 #endif

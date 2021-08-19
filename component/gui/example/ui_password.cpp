@@ -9,8 +9,8 @@
 #include "gui_button.h"
 
 //static GuiSideBar bar(1,10,100,5);
-
 static GuiList      *par[4];
+static char *itemTableFloat[] = {"0","1","2","3","4","5","6","7","8","9"};
 
 PwdPage *pagePwd = new PwdPage("pwd");
 
@@ -34,14 +34,8 @@ PwdPage::PwdPage(String name):GuiPage(name){
 PwdPage::~PwdPage()
 {
 
-    for(int i = 0; i < activityList.size(); i++)
-    {
-        delete (ActivityComponent *)activityList.data(i);
-    }
-    for(int i = 0; i < componentList.size(); i++)
-    {
-        delete (Component *)componentList.data(i);
-    }
+    activityList.clear();
+    componentList.clear();
     UART.print("Ö´ÐÐÎö¹¹º¯Êý\r\n");
 
     
@@ -58,8 +52,8 @@ void PwdPage::create()
     
     for(int i = 0; i < 4; i++)
     {
-        par[i] = new GuiList(0 + i*20,100,20,30);
-        regedit(par[i]);
+        par[i] = new GuiList(0 + i*20,100,20,30,itemTableFloat,getArraySize(itemTableFloat));
+        Register(par[i]);
     }
 //    regedit(btn1);
 //    regedit(btn2);
@@ -89,7 +83,7 @@ void PwdPage::event(Object *sender,GuiMessage *msg)
             ptr->index = 0;  
          else
             ptr->index++;
-         ptr->update_value();
+         ptr->update_item_index();
     }
     
         
@@ -99,7 +93,7 @@ void PwdPage::event(Object *sender,GuiMessage *msg)
             ptr->index=9;
         else
             ptr->index--;
-        ptr->update_value();
+        ptr->update_item_index();
 
     }
 

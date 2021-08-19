@@ -40,8 +40,6 @@
 #define GETPINNUMBER(a)(a & 0x0f)
 
 
-// uint32_t pObj 类对象
-typedef void (*exti_irq_handler)(uint32_t pObj);
 
 static exti_irq_handler  exti_handler;   // 声明函数指针变量，指向类的静态成员
 static uint32_t  exti_irq_ids[16];    	 // 保存对象地址，供静态成员识别对象，并访问对象的普通成员
@@ -76,7 +74,7 @@ Exti::Exti(Gpio *pin)
  * @param    mode: gpio模式，type 中断类型，IT，EVENT,IT_EVENT。默认为中断
  * @return   NONE
  */
-void Exti::begin(PIN_MODE mode, ExtiType type)
+void Exti::begin(PinMode_t mode, Mode_t extiMode)
 {
     _pin->mode(mode);
 
@@ -86,17 +84,17 @@ void Exti::begin(PIN_MODE mode, ExtiType type)
     EXTI_DEBUG("extiLine is %d , %d \r\n", _extiLine, GETEXTILINE(_pin->id));
     EXTI_DEBUG("pinNumber is %d \r\n", GETPINNUMBER(_pin->id));
 
-    switch (type)
+    switch (extiMode)
     {
-    case IT:
+    case ModeIt:
         LL_EXTI_EnableIT_0_31(_extiLine);
         LL_EXTI_DisableEvent_0_31(_extiLine);
         break;
-    case EVENT:
+    case ModeEvent:
         LL_EXTI_EnableEvent_0_31(_extiLine);
         LL_EXTI_DisableIT_0_31(_extiLine);
         break;
-    case IT_EVENT:
+    case ModeItEvent:
         LL_EXTI_EnableIT_0_31(_extiLine);
         LL_EXTI_EnableEvent_0_31(_extiLine);
         break;
@@ -105,102 +103,47 @@ void Exti::begin(PIN_MODE mode, ExtiType type)
         LL_EXTI_DisableEvent_0_31(_extiLine);
         break;
     }
+    
+    nvic(ENABLE,0,0);
 }
 
-//void Exti::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
-//{
-//  nvic_dev_set_priority((uint32_t)exti_line,0,0,0);
-//  if (enable != DISABLE)
-//    nvic_dev_enable((uint32_t)exti_line,0);
-//  else
-//    nvic_dev_disable((uint32_t)exti_line,0);
-//}
+void Exti::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
+{
+  nvic_dev_set_priority((uint32_t)_extiLine,0,0,0);
+  if (enable != DISABLE)
+    nvic_dev_enable((uint32_t)_extiLine,0);
+  else
+    nvic_dev_disable((uint32_t)_extiLine,0);
+}
+void Exti::interrupt(Trig_t trig, FunctionalState enable)
+{
 
-/**
-  *@brief    使能中断
-  *@param    trig 触发类型
-  *@retval   NONE
-  */
-//void Exti::enable(TrigType trig, uint32_t priority)
-//{
-//    switch (trig) // 使能触发类型
-//    {
-//    case FALL:
-//        LL_EXTI_EnableFallingTrig_0_31(_extiLine);
-//        LL_EXTI_DisableRisingTrig_0_31(_extiLine);
-//        break;
-//    case RISE:
-//        LL_EXTI_EnableRisingTrig_0_31(_extiLine);
-//        LL_EXTI_DisableFallingTrig_0_31(_extiLine);
-//        break;
-//    case FALL_RISING:
-//        LL_EXTI_EnableFallingTrig_0_31(_extiLine);
-//        LL_EXTI_EnableRisingTrig_0_31(_extiLine);
-//        break;
-//    default:
-//        break;
-//    }
-
-//    switch (GETPINNUMBER(_pin->id))   // 使能对应中断
-//    {
-//    case 0:
-//        NVIC_EnableIRQ(EXTI0_IRQn);
-//        NVIC_SetPriority(EXTI0_IRQn, priority);
-//        break;
-//    case 1:
-//        NVIC_EnableIRQ(EXTI1_IRQn);
-//        NVIC_SetPriority(EXTI1_IRQn, priority);
-//        break;
-//    case 2:
-//        NVIC_EnableIRQ(EXTI2_TSC_IRQn);
-//        NVIC_SetPriority(EXTI2_TSC_IRQn, priority);
-//        break;
-//    case 3:
-//        NVIC_EnableIRQ(EXTI3_IRQn);
-//        NVIC_SetPriority(EXTI3_IRQn, priority);
-//        break;
-//    case 4:
-//        NVIC_EnableIRQ(EXTI4_IRQn);
-//        NVIC_SetPriority(EXTI4_IRQn, priority);
-//        break;
-//    case 5:
-//    case 6:
-//    case 7:
-//    case 8:
-//    case 9:
-//        NVIC_EnableIRQ(EXTI9_5_IRQn);
-//        NVIC_SetPriority(EXTI9_5_IRQn, priority);
-//        break;
-//    default:
-//        NVIC_EnableIRQ(EXTI15_10_IRQn);
-//        NVIC_SetPriority(EXTI15_10_IRQn, priority);
-//        break;
-//    }
-//}
-
-///**
-//  *@brief    禁止触发
-//  *@param    trig 触发类型
-//  *@retval   NONE
-//  */
-//void Exti::disable(TrigType trig)
-//{
-//    switch (trig)
-//    {
-//    case FALL:
-//        LL_EXTI_DisableFallingTrig_0_31(_extiLine);
-//        break;
-//    case RISE:
-//        LL_EXTI_DisableRisingTrig_0_31(_extiLine);
-//        break;
-//    case FALL_RISING:
-//        LL_EXTI_DisableRisingTrig_0_31(_extiLine);
-//        LL_EXTI_DisableFallingTrig_0_31(_extiLine);
-//        break;
-//    default:
-//        break;
-//    }
-//}
+    switch (trig) // 使能触发类型
+    {
+    case TrigNone:
+        LL_EXTI_DisableRisingTrig_0_31(_extiLine);
+        LL_EXTI_DisableFallingTrig_0_31(_extiLine);
+        break;
+    case TrigFall:
+        LL_EXTI_DisableRisingTrig_0_31(_extiLine);
+        LL_EXTI_EnableFallingTrig_0_31(_extiLine);
+        break;
+    case TrigRise:
+        LL_EXTI_DisableFallingTrig_0_31(_extiLine);
+        LL_EXTI_EnableRisingTrig_0_31(_extiLine);
+        break;
+    case TrigFallRise:
+        LL_EXTI_EnableFallingTrig_0_31(_extiLine);
+        LL_EXTI_EnableRisingTrig_0_31(_extiLine);
+        break;
+    default:
+        break;
+    }
+}
+bool Exti::read()
+{
+    return _pin->read();
+}
 
 /**
  *@brief    EXTI 静态成员函数，在中断中调用，解析执行相关回调函数
@@ -210,7 +153,7 @@ void Exti::begin(PIN_MODE mode, ExtiType type)
 void Exti::_irq_handler(uint32_t pObj)
 {
     Exti *handler = (Exti *)pObj; // 指向回调函数地址
-    handler->_pirq[handler->_pin->read()].call();
+    handler->_pirq.call();
 
 }
 /**
@@ -219,23 +162,15 @@ void Exti::_irq_handler(uint32_t pObj)
  *
  * @return  NONE
  */
-void Exti::attach(void (*fptr)(void), TrigType type)
+void Exti::attach(void (*fptr)(void))
 {
-    if (type == FALL_RISING)
-    {
-        _pirq[FALL].attach(fptr);
-        _pirq[RISE].attach(fptr);
-    }
-    else
-    {
-        _pirq[type].attach(fptr);
-    }
+    _pirq.attach(fptr);
 }
 
 extern "C" {
-    void EXTI4_15_IRQHandler(void)
+    void EXTI15_10_IRQHandler(void)
     {
-        for (uint8_t i = 4; i <= 15; i++)
+        for (uint8_t i = 10; i <= 15; i++)
         {
             if (LL_EXTI_IsActiveFlag_0_31(1 << i) != RESET)
             {
@@ -244,7 +179,6 @@ extern "C" {
             }
         }
     }
-
     void EXTI0_1_IRQHandler(void)
     {
         if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_0) != RESET)

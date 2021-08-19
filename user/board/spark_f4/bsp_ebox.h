@@ -40,7 +40,7 @@
 #define LED2 PI6
 #define LED3 PI7
 
-//#define BtnPin	PH15
+#define BTN1 	PH15
 #define	UART    uart1
 #define	Serial    uart1
 

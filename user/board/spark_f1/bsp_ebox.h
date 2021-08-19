@@ -43,7 +43,7 @@ extern Lcd lcd;
 #define UART uart1
 
 
-#define BtnPin PA8
+#define BTN1 PA8
 
 #define LED_R PB7
 #define LED_G PB8

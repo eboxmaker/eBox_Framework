@@ -22,6 +22,7 @@
 #define __SPI_H
 
 #include "ebox_core.h"
+#include "spi.h"
 #include "mcu.h"
 
 /*

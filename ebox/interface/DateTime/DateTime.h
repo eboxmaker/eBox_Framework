@@ -3,9 +3,13 @@
 
 #include "ebox_type.h"
 #include "wstring.h"
-#include "ebox_uart.h"
 #include "TimeSpan.h"
 
+#define DATETIME_USE_PRINT false
+
+#if DATETIME_USE_PRINT
+    #include "ebox_uart.h"
+#endif
 
 
 bool is_leap_year(int year);
@@ -81,7 +85,9 @@ public:
     bool operator>=( DateTime &right)  { return !(*this < right); }
     bool operator==( DateTime &right) ;
 
+#if DATETIME_USE_PRINT
     void print(Uart &uart);
+#endif
     static bool limitCheck(DateTime &dt);
 
 private:

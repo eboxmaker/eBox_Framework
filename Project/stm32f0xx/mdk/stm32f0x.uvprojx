@@ -10,13 +10,13 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::.\ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F030C8Tx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F0xx_DFP.2.0.0</PackID>
+          <PackID>Keil.STM32F0xx_DFP.2.1.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x00002000) IROM(0x08000000,0x00010000) CPUTYPE("Cortex-M0") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -184,6 +184,8 @@
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
             <RvdsVP>0</RvdsVP>
+            <RvdsMve>0</RvdsMve>
+            <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -337,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_FULL_LL_DRIVER,STM32F030x8</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f0xx\Libraries\STM32F0xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Device\ST\STM32F0xx\Include;..\..\..\ebox\core;..\..\..\ebox\core\port;..\..\..\ebox\hardware\cortex-m0;..\..\..\ebox\hardware\cortex-m0\Peripherals;..\..\..\user;..\..\..\user\board\Nucleo_f0;..\..\..\component\edriver;..\..\..\ebox\hardware\cortex-m0\mcu;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\gui;..\..\..\component\apps</IncludePath>
+              <IncludePath>..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Include;..\..\..\mcuLib\stm32f0xx\Libraries\STM32F0xx_HAL_Driver\Inc;..\..\..\mcuLib\stm32f0xx\Libraries\CMSIS\Device\ST\STM32F0xx\Include;..\..\..\ebox\core;..\..\..\ebox\core\LinkedList;..\..\..\ebox\hardware\cortex-m0;..\..\..\ebox\hardware\cortex-m0\Peripherals;..\..\..\ebox\interface;..\..\..\ebox\interface\spi;..\..\..\ebox\interface\i2c;..\..\..\ebox\interface\event;..\..\..\user;..\..\..\user\board\Nucleo_f0;..\..\..\component\edriver;..\..\..\ebox\hardware\cortex-m0\mcu;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\gui;..\..\..\component\apps</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -350,7 +352,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <uClangAs>0</uClangAs>
+            <ClangAsOpt>4</ClangAsOpt>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -413,7 +415,7 @@
                     <NoWarn>2</NoWarn>
                     <uSurpInc>2</uSurpInc>
                     <useXO>2</useXO>
-                    <uClangAs>2</uClangAs>
+                    <ClangAsOpt>0</ClangAsOpt>
                     <VariousControls>
                       <MiscControls></MiscControls>
                       <Define></Define>
@@ -572,6 +574,51 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>interface</GroupName>
+          <Files>
+            <File>
+              <FileName>DateTime.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\DateTime\DateTime.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>basicRtc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\DateTime\basicRtc.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>RtcMillis.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\DateTime\RtcMillis.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>soft_spi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\spi\soft_spi.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>soft_i2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\i2c\soft_i2c.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>i2c.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\i2c\i2c.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EventVar.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\event\EventVar.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>hmi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\hmi.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>ebox_mcu</GroupName>
           <Files>
             <File>
@@ -665,19 +712,94 @@
               <FilePath>..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_spi.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_softspi.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_softspi.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_softi2c.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_softi2c.cpp</FilePath>
-            </File>
-            <File>
               <FileName>ebox_rtc.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\cortex-m0\Peripherals\ebox_rtc.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>gui</GroupName>
+          <Files>
+            <File>
+              <FileName>Font8_ASCII.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\Font8_ASCII.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Font16_ASCII.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\Font16_ASCII.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Font16_HZ.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\Font16_HZ.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Font24_ASCII.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\Font24_ASCII.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Font32_ASCII.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\Font32_ASCII.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FontCustom.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\FontCustom.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>graphic.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\graphic.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_base.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_base.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_bitmap.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_bitmap.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_button.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_button.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_list.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_list.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_menu.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_menu.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_page.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_page.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_sidebar.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_sidebar.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_text.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_text.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gui_textview.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\gui\gui_textview.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -748,27 +870,27 @@
             <File>
               <FileName>ui.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\user\ui.cpp</FilePath>
+              <FilePath>..\..\..\component\gui\example\ui.cpp</FilePath>
             </File>
             <File>
               <FileName>ui_main.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\user\ui_main.cpp</FilePath>
+              <FilePath>..\..\..\component\gui\example\ui_main.cpp</FilePath>
             </File>
             <File>
               <FileName>ui_menu.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\user\ui_menu.cpp</FilePath>
+              <FilePath>..\..\..\component\gui\example\ui_menu.cpp</FilePath>
             </File>
             <File>
               <FileName>ui_password.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\user\ui_password.cpp</FilePath>
+              <FilePath>..\..\..\component\gui\example\ui_password.cpp</FilePath>
             </File>
             <File>
               <FileName>ui_setValue.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\user\ui_setValue.cpp</FilePath>
+              <FilePath>..\..\..\component\gui\example\ui_setValue.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -2472,7 +2594,7 @@
                 <NoWarn>2</NoWarn>
                 <uSurpInc>2</uSurpInc>
                 <useXO>2</useXO>
-                <uClangAs>2</uClangAs>
+                <ClangAsOpt>0</ClangAsOpt>
                 <VariousControls>
                   <MiscControls></MiscControls>
                   <Define></Define>
@@ -2674,91 +2796,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>gui</GroupName>
-          <Files>
-            <File>
-              <FileName>Font8_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\Font8_ASCII.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font16_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\Font16_ASCII.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font16_HZ.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\Font16_HZ.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font24_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\Font24_ASCII.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Font32_ASCII.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\Font32_ASCII.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FontCustom.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\FontCustom.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>graphic.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\graphic.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_base.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_base.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_bitmap.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_bitmap.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_button.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_button.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_list.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_list.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_menu.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_menu.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_page.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_page.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_sidebar.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_sidebar.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_text.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_text.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>gui_textview.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\gui\gui_textview.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>::CMSIS</GroupName>
           <GroupOption>
             <CommonProperty>
@@ -2819,7 +2856,7 @@
                 <NoWarn>2</NoWarn>
                 <uSurpInc>2</uSurpInc>
                 <useXO>2</useXO>
-                <uClangAs>2</uClangAs>
+                <ClangAsOpt>0</ClangAsOpt>
                 <VariousControls>
                   <MiscControls></MiscControls>
                   <Define></Define>
@@ -2852,5 +2889,20 @@
     </components>
     <files/>
   </RTE>
+
+  <LayerInfo>
+    <Layers>
+      <Layer>
+        <LayName>&lt;Project Info&gt;</LayName>
+        <LayDesc></LayDesc>
+        <LayUrl></LayUrl>
+        <LayKeys></LayKeys>
+        <LayCat></LayCat>
+        <LayLic></LayLic>
+        <LayTarg>0</LayTarg>
+        <LayPrjMark>1</LayPrjMark>
+      </Layer>
+    </Layers>
+  </LayerInfo>
 
 </Project>

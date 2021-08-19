@@ -21,6 +21,7 @@
 
 #include "ebox.h"
 #include "bsp_ebox.h"
+#include "ebox_exti.h"
 /**
 	*	1	此例程演示了GPIO中断
     *   2   其中userbt1连接用户按键，按下和弹起绑定不同的回调函数
@@ -36,7 +37,7 @@
 uint32_t xx;
 
 
-Exti   userbt1(&BtnPin);
+Exti   userbt1(&BTN1);
 //Exti   ex(&BtnPin);
 
 /**
@@ -53,13 +54,20 @@ void fall()
 void rise()
 {
     xx++;
+    LED1.toggle();
     UART.printf("\r\n rising, xx = %d", xx);
 }
 
-void fallrise()
+void exti_event()
 {
     xx++;
-    UART.printf("\r\n fallrise, xx = %d", xx);
+    LED1.toggle();
+    if(userbt1.read())
+        UART.printf("\r\n rise, xx = %d", xx);
+    else
+        UART.printf("\r\n fall, xx = %d", xx);
+
+
 }
 
 /**
@@ -85,15 +93,14 @@ void setup()
 
     LED1.mode(OUTPUT_PP);
     // 上升沿，下降沿均触发,绑定同一个中断回调函数
-//    ex.begin();
-//    ex.attach(fallrise, FALL_RISING);
-//    ex.enable(FALL_RISING);
-
-    // 上升沿，下降沿调用不同的回调函数
     userbt1.begin();
-    userbt1.attach(rise, RISE);
-    userbt1.attach(fall, FALL);
-    userbt1.interrupt(FALL_RISING,ENABLE);
+    userbt1.attach(exti_event);
+    userbt1.interrupt(ApiExti::TrigFall,ENABLE);
+
+//    // 上升沿，下降沿调用不同的回调函数
+//    userbt1.begin();
+//    userbt1.attach(rise);
+//    userbt1.interrupt(TrigFall,ENABLE);
 
 }
 

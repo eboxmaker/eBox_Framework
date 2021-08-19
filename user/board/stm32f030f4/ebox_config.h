@@ -25,7 +25,7 @@
  * 1 标准库printf，优点：可靠，稳定；缺点：占用空间大
  * 2 自定义printf，有点：空间小；缺点：可能有bug。仅建议在flash紧张时使用
  */
-#define USE_PRINTF 1
+#define USE_PRINTF 0
 
 #if  USE_PRINTF == 1				
 #include <stdio.h>
@@ -68,7 +68,7 @@
  * 0 不使用object，用户需要根据需要实例对象,建议在bsp_ebox中实例
  * 1 使用默认实例
  */
-#define	USE_OBJECT			1
+#define	USE_OBJECT			0
 
 /* 是否使用SW接口，防止用户误关闭
  * 0 可以将SW端口设置为普通IO口

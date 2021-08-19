@@ -16,6 +16,7 @@ static GuiSideBar *bar1;
 static GuiList      *par[5];
 
 SetValuePage *pageSetValue = new SetValuePage("set");
+static char *itemTableFloat[] = {"0","1","2","3","4","5","6","7","8","9",".","-"};
 
 static void onBtn1Click()
 {
@@ -36,15 +37,8 @@ SetValuePage::SetValuePage(String name):GuiPage(name){
 
 SetValuePage::~SetValuePage()
 {
-
-    for(int i = 0; i < activityList.size(); i++)
-    {
-        delete (ActivityComponent *)activityList.data(i);
-    }
-    for(int i = 0; i < componentList.size(); i++)
-    {
-        delete (Component *)componentList.data(i);
-    }
+    activityList.clear();
+    componentList.clear();
 }
 void SetValuePage::create()
 {
@@ -58,14 +52,14 @@ void SetValuePage::create()
     
     for(int i = 0; i < 5; i++)
     {
-        par[i] = new GuiList(0 + i*20,100,20,30);
-        regedit(par[i]);
+        par[i] = new GuiList(80 + i*20,32,20,30,itemTableFloat,getArraySize(itemTableFloat));
+        Register(par[i]);
     }
     btn1->click = onBtn1Click;
-    regedit(btn1);
-    regedit(btn2);
-    regedit(bar);
-    regedit(bar1);
+    Register(btn1);
+    Register(btn2);
+    Register(bar);
+    Register(bar1);
     GuiPage::create();
 }
 

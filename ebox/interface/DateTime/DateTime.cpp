@@ -1,5 +1,6 @@
 #include "DateTime.h"
-#include "ebox_core.h"
+#include <stdio.h>
+#include "WCharacter.h"
 const uint8_t days_in_month_table[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 
@@ -166,6 +167,8 @@ bool DateTime::parse(uint64_t stamp)
     minute = dt.minute;
     second = dt.second;
     milliSecond = 0;
+    err = false;
+    return true;
 }
 
 bool DateTime::parse(String &str)
@@ -212,7 +215,6 @@ bool DateTime::limitCheck(DateTime &dt)
     if(ret == false) dt.err = -1;
     return ret;
 }
-
 
 String DateTime::toString(TimeFormat_t format ,TimeSeparatorFormat_t sep)
 {
@@ -271,12 +273,13 @@ String DateTime::toString(TimeFormat_t format ,TimeSeparatorFormat_t sep)
     str = buf;
     return str;
 }
-
+#if DATETIME_USE_PRINT
 void DateTime::print(Uart &uart)
 {
     uart.printf("%04d-%02d-%02d %02d:%02d:%02d.%03d week:%d,stamp:%0.0f;\tutcoffset:%d\n",year,month,day,\
         hour,minute,second,milliSecond,dayOfWeek(),getTimeStamp(),utcOffset);
 }
+#endif
 
 bool DateTime::isLeapYear()
 {
@@ -604,15 +607,15 @@ TimeSpan::TimeSpan(int _days, int _hours, int _minutes, int _seconds)
 }
 
 
-void TimeSpan::print(Uart& uart)
-{
-    uart.printf("Days:%d\nHours:%d\nMinutes:%d\nSeconds:%d\n",\
-                days,hours,minutes,seconds);
-    
-    uart.printf("TotalDays :%0.5f\n",total_days);
-    uart.printf("TotalHours:%0.5f\n",total_hours);
-    uart.printf("TotalMinutes:%0.5f\n",total_minutes);
-    uart.printf("TotalSecs:%0.5f\n",total_seconds);
-    uart.flush();
-}
+//void TimeSpan::print(Uart& uart)
+//{
+//    uart.printf("Days:%d\nHours:%d\nMinutes:%d\nSeconds:%d\n",\
+//                days,hours,minutes,seconds);
+//    
+//    uart.printf("TotalDays :%0.5f\n",total_days);
+//    uart.printf("TotalHours:%0.5f\n",total_hours);
+//    uart.printf("TotalMinutes:%0.5f\n",total_minutes);
+//    uart.printf("TotalSecs:%0.5f\n",total_seconds);
+//    uart.flush();
+//}
 

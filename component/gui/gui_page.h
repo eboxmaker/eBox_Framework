@@ -2,7 +2,7 @@
 #define __GUI_PAGE_H
 #include "graphic.h"
 #include "gui_base.h"
-#include "list.h"
+#include "LinkedList.h"
 
 class GuiPage :public Component
 {
@@ -54,8 +54,8 @@ class GuiPage :public Component
         bool index_previous();
 
     public:
-        List activityList;
-        List componentList;
+        LinkedList<ActivityComponent*> activityList;
+        LinkedList<Component*> componentList;
     
         int index;
         int last_index;

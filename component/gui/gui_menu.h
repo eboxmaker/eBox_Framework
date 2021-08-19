@@ -27,7 +27,7 @@ class GuiMenu :public ActivityComponent
 
     public:
         GuiMenu(int16_t x,int16_t y,int16_t len,int16_t hight,
-                const menu_t *menu,String name)
+                const menu_t *menu,String name = "")
         {
             this->x = x;
             this->y = y;

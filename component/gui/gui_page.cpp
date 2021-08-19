@@ -3,11 +3,11 @@
 
 void GuiPage::Register(ActivityComponent *object)
 {
-    activityList.insert_tail(object);
+    activityList.add(object);
 }
 void GuiPage::Register(Component *object)
 {
-    componentList.insert_tail(object);
+    componentList.add(object);
 }
 void GuiPage::create()
 {
@@ -18,13 +18,12 @@ void GuiPage::create()
     Component *p;
     for(int i = 0; i < componentList.size(); i++)
     {
-         p = (Component *)componentList.data(i);
-         p->create();
+        componentList[i]->create();
     }
+    
     for(int i = 0; i < activityList.size(); i++)
     {
-         p = (Component *)activityList.data(i);
-         p->create();
+        activityList[i]->create();
     }  
     index_set(0);
     
@@ -40,13 +39,11 @@ void GuiPage::show()
     Component *p;
     for(int i = 0; i < componentList.size(); i++)
     {
-         p = (Component *)componentList.data(i);
-         p->show();
+         componentList[i]->show();
     }
     for(int i = 0; i < activityList.size(); i++)
     {
-         p = (Component *)activityList.data(i);
-         p->show();
+        activityList[i]->show();        
     }  
     update_index();
 }
@@ -59,17 +56,10 @@ void GuiPage::hide()
 }
 void GuiPage::cancel()
 {
-    for(int i = 0; i < activityList.size(); i++)
-    {
-        delete (ActivityComponent *)activityList.data(i);
-    }
-    for(int i = 0; i < componentList.size(); i++)
-    {
-        delete (Component *)componentList.data(i);
-    }
-    
-    componentList.clear();
+
     activityList.clear();
+    componentList.clear();
+
     index = 0;
     _gpu->clear();
     UART.printf("×¢Ïú£º%s\r\n",name.c_str());
@@ -114,16 +104,13 @@ void GuiPage::loop()
 }
 ActivityComponent * GuiPage::get_selected_object()
 {
-    return (ActivityComponent *)activityList.data(index);
+    return activityList[index];
 }
 void GuiPage::update_index()
 {
     if(activityList.size() == 0)
         return;
-    
-    ActivityComponent * p1 = (ActivityComponent *)(activityList.data(last_index));
-    p1->set_select(false);
-    ActivityComponent * p2 = (ActivityComponent *)(activityList.data(index));
-    p2->set_select(true);
+    activityList[last_index]->set_select(false);
+    activityList[index]->set_select(true);
     last_index = index;
 }

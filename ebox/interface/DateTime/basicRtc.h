@@ -1,10 +1,9 @@
 #ifndef __BASICRTC_H
 #define __BASICRTC_H
 
-#include "ebox_core.h"
 #include "string.h"
-#include "ebox_uart.h"
 #include "DateTime.h"
+
 
 extern const unsigned char day_code1[];
 extern const unsigned int day_code2[];
@@ -28,42 +27,14 @@ public:
     virtual void    update()  = 0;
     virtual void    set(DateTime &dt) = 0;
     virtual DateTime    now() = 0;
-    void            print(Uart &uart);            
 
+#if DATETIME_USE_PRINT
+    void            print(Uart &uart);            
+#endif
+    
 public:
     DateTime      dateTime;
-
-private:
-//    virtual void        write_dt(DateTime_t &dt)  = 0;
-//    virtual DateTime_t  read_dt()  = 0;
 };
-
-class RtcMillis :public BasicRtc
-    {
-public:
-    RtcMillis(){};
-    virtual void    begin(){};
-    virtual void    begin(DateTime &dt){set(dt);};
-    virtual void    loop(){update();};
-    virtual void    update(){
-        uint32_t rightNow = millis();
-        uint32_t diff = rightNow - lastMillis;
-        lastMillis = rightNow;
-        dateTime.addMilliSeconds(diff);
-    };
-    virtual void    set(DateTime &dt){
-        uint64_t unix_timestamp = dt.getTimeStamp();
-        dateTime.parse(unix_timestamp);
-    };
-    virtual DateTime   now(){
-        update();
-        return dateTime;
-    }
-protected:
-    uint32_t lastMillis;
-};
-
-
 
 
 class ChinaCalendar
@@ -80,8 +51,9 @@ class ChinaCalendar
     public:
         ChinaCalendar(){};
         
-        void set(DateTime &dt);
-        DateTime get();
+        void set(DateTime &dtSun);
+        DateTime get_moon();
+        DateTime get_sun();
             
         String get_year_str();
         String get_month_str();
@@ -98,7 +70,10 @@ class ChinaCalendar
 
         
         String get_fastival();
+#if DATETIME_USE_PRINT
         void print(Uart &uart);
+#endif
+
     private:
         
         uint8_t GetMoonDay(unsigned char month_p,unsigned short table_addr);

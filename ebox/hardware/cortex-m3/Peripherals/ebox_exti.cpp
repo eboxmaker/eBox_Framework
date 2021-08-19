@@ -69,7 +69,7 @@ Exti::Exti(Gpio *pin)
  * @param    mode: gpio模式，type 中断类型，IT，EVENT,IT_EVENT。默认为中断
  * @return   NONE
  */
-void Exti::begin(PinMode_t mode, ExtiType type)
+void Exti::begin(PinMode_t mode, Mode_t extiMode)
 {
     // f1系列不能设置为
     _pin->mode((mode == INPUT) ? (INPUT_PU) : (mode));
@@ -80,18 +80,17 @@ void Exti::begin(PinMode_t mode, ExtiType type)
     EXTI_DEBUG("extiLine is %d , %d \r\n", _extiLine, GETEXTILINE(_pin->id));
     EXTI_DEBUG("pinNumber is %d \r\n", GETPINNUMBER(_pin->id));
 
-    switch (type)
+    switch (extiMode)
     {
-    case IT:
+    case ModeIt:
         SET_BIT(EXTI->IMR, _extiLine);
         CLEAR_BIT(EXTI->EMR, _extiLine);
         break;
-    case EVENT:
+    case ModeEvent:
         SET_BIT(EXTI->EMR, _extiLine);
         CLEAR_BIT(EXTI->IMR, _extiLine);
         break;
-    case IT_EVENT:
-
+    case ModeItEvent:
         SET_BIT(EXTI->EMR, _extiLine);
         SET_BIT(EXTI->IMR, _extiLine);
         break;
@@ -113,18 +112,18 @@ void Exti::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub
 }
 
 
-void Exti::interrupt(TrigType trig, FunctionalState enable)
+void Exti::interrupt(Trig_t trig, FunctionalState enable)
 {
 
     switch (trig) // 使能触发类型
     {
-    case FALL:
+    case TrigFall:
         bit_write(EXTI->FTSR,GETPINNUMBER(_pin->id),enable);
         break;
-    case RISE:
+    case TrigRise:
         bit_write(EXTI->RTSR,GETPINNUMBER(_pin->id),enable);
         break;
-    case FALL_RISING:
+    case TrigFallRise:
         bit_write(EXTI->FTSR,GETPINNUMBER(_pin->id),enable);
         bit_write(EXTI->RTSR,GETPINNUMBER(_pin->id),enable);
         break;
@@ -146,7 +145,7 @@ void Exti::soft_triger()
 void Exti::_irq_handler(uint32_t pObj)
 {
     Exti *handler = (Exti *)pObj; // 指向回调函数地址
-    handler->_pirq[handler->_pin->read()].call();
+    handler->_pirq.call();
 
 }
 /**
@@ -155,17 +154,9 @@ void Exti::_irq_handler(uint32_t pObj)
  *
  * @return  NONE
  */
-void Exti::attach(void (*fptr)(void), TrigType type)
+void Exti::attach(void (*fptr)(void))
 {
-    if (type == FALL_RISING)
-    {
-        _pirq[FALL].attach(fptr);
-        _pirq[RISE].attach(fptr);
-    }
-    else
-    {
-        _pirq[type].attach(fptr);
-    }
+    _pirq.attach(fptr);
 }
 
 extern "C" {

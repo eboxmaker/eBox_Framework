@@ -31,6 +31,7 @@
 extern SoftI2c Wire;
 
 #define LED1 PA5
+#define BTN1 PC13
 #define UART uart2
 
 
