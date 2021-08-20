@@ -5,9 +5,9 @@
 
 void BasicRtc::print(Uart &uart)
 {
-    uart.printf("=========system date time==========\r\n");
-    uart.printf("20%02d-%02d-%02d %02d:%02d:%02d weed:%d\r\n",dateTime.year,dateTime.month,dateTime.day,dateTime.hour,dateTime.minute,dateTime.second,dateTime.dayOfWeek());
-    uart.printf("===================================\r\n");
+    uart.printf("=========system date time==========\n");
+    uart.printf("%04d-%02d-%02d %02d:%02d:%02d weed:%d\n",dateTime.year,dateTime.month,dateTime.day,dateTime.hour,dateTime.minute,dateTime.second,dateTime.dayOfWeek());
+    uart.printf("===================================\n");
 
 }
 #endif

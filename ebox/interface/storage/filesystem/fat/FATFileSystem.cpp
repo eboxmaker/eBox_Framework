@@ -751,13 +751,14 @@ int FATFileSystem::dir_open(fs_dir_t *dir, const char *path)
 {
     FATFS_DIR *dh = new FATFS_DIR;
     const char * fpath = fat_path_prefix(_id, path);
+//    fatDebug("fpath:[%s]\n", fpath);
 
     
     FRESULT res = f_opendir(dh, fpath);
     
 
     if (res != FR_OK) {
-        fatDebugErr("f_opendir() failed: %d\n", res);
+        fatDebugErr("f_opendir() failed: %s,%d\n",path, res);
         delete dh;
         return fat_error_remap(res);
     }
@@ -788,7 +789,9 @@ ssize_t FATFileSystem::dir_read(fs_dir_t dir, struct dirent *ent)
     
 
     if (res != FR_OK) {
-        return fat_error_remap(res);
+        ssize_t ret = fat_error_remap(res);
+        fatDebugErr("dir_read() err:res=%d,ret=%d",res,ret);
+        return ret;
     } else if (finfo.fname[0] == 0) {
         return 0;
     }

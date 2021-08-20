@@ -88,7 +88,7 @@ int Rtc::begin(ClockS clock)
         {
             if (_config(clock) != EOK)
             {
-                DEBUG("LSE时钟启动失败,使用LSI时钟\r\n");
+                DEBUG("LSE时钟启动失败,使用LSI时钟\n");
                 _config(clock_lsi);
             }
         }
@@ -97,16 +97,16 @@ int Rtc::begin(ClockS clock)
             /* Check if the Power On Reset flag is set */
             if (RCC_GetFlagStatus(RCC_FLAG_PORRST) != RESET)
             {
-                DEBUG("Power On Reset occurred.... \r\n\n");
+                DEBUG("Power On Reset occurred.... \n");
             }
             /* Check if the Pin Reset flag is set */
             else if (RCC_GetFlagStatus(RCC_FLAG_PINRST) != RESET)
             {
-                DEBUG("External Reset occurred....\r\n\n ");
+                DEBUG("External Reset occurred....\n ");
             }
 
-            DEBUG("\r\n No need to configure RTC....");
-            DEBUG("\r\n step 0....");
+            DEBUG("\n No need to configure RTC....");
+            DEBUG("\n step 0....");
             /* Wait for RTC registers synchronization */
             RTC_WaitForSynchro();
             /* Enable the RTC Second */
@@ -119,7 +119,7 @@ int Rtc::begin(ClockS clock)
     }
     else
     {
-        DEBUG("使用LSI时钟\r\n");
+        DEBUG("使用LSI时钟\n");
         ret = _config(clock_lsi);
     }
     rtc_irq_init(Rtc::_irq_handler, (uint32_t)this);

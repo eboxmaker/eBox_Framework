@@ -127,18 +127,18 @@ void Linear::display()
     double v;
     int i;
     LinearDebug("回归方程式:    Y = %.5lf", offset);
-    LinearDebug(" + %.5lf*X\r\n", rate);
-    LinearDebug("回归显著性检验: \r\n");
-    LinearDebug("回归平方和：%12.4lf  回归方差：%12.4lf \r\n", RSS, RSS);
-    LinearDebug("剩余平方和：%12.4lf  剩余方差：%12.4lf \r\n", ESS, RMSE2);
-    LinearDebug("离差平方和：%12.4lf  标准误差：%12.4lf \r\n", TSS, RMSE);
-    LinearDebug("F   检  验：%12.4lf  相关系数：%12.4lf \r\n", F,R);
-    LinearDebug("剩余分析: \r\n");
-    LinearDebug("      观察值      估计值      剩余值    剩余平方 \r\n");
+    LinearDebug(" + %.5lf*X\n", rate);
+    LinearDebug("回归显著性检验: \n");
+    LinearDebug("回归平方和：%12.4lf  回归方差：%12.4lf \n", RSS, RSS);
+    LinearDebug("剩余平方和：%12.4lf  剩余方差：%12.4lf \n", ESS, RMSE2);
+    LinearDebug("离差平方和：%12.4lf  标准误差：%12.4lf \n", TSS, RMSE);
+    LinearDebug("F   检  验：%12.4lf  相关系数：%12.4lf \n", F,R);
+    LinearDebug("剩余分析: \n");
+    LinearDebug("      观察值      估计值      剩余值    剩余平方 \n");
     for (i = 0; i < rows; i ++)
     {
         v = offset;
         v += x[i] * rate;
-        LinearDebug("%12.2lf%12.2lf%12.2lf%12.2lf \r\n", y[i], v, y[i] - v, (y[i] - v) * (y[i] - v));
+        LinearDebug("%12.2lf%12.2lf%12.2lf%12.2lf \n", y[i], v, y[i] - v, (y[i] - v) * (y[i] - v));
     }
 }

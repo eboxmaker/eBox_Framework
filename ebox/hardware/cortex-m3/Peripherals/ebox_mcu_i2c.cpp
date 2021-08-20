@@ -1,5 +1,4 @@
 #include "ebox_mcu_i2c.h"
-#include "ebox.h"
 
 #if EBOX_DEBUG
 // 是否打印调试信息, 1打印,0不打印
@@ -208,7 +207,7 @@ i2c_err_t mcuI2c::_start(void)
         cnt++;
         if (cnt > 0xfffe)
         {
-            mcuI2cDebugErr("start fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
+            mcuI2cDebugErr("start fail, state reg SR2 = %d，SR1 = %d \n", _i2cx->SR2, _i2cx->SR1);
             return I2C_ERROR_TIMEOUT;
         }
     }
@@ -266,7 +265,7 @@ i2c_err_t mcuI2c::_sendByte( uint8_t data )
         cnt++;
         if (cnt > 0xfffe)
         {
-            mcuI2cDebugErr("send data fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
+            mcuI2cDebugErr("send data fail, state reg SR2 = %d，SR1 = %d\n", _i2cx->SR2, _i2cx->SR1);
             return I2C_ERROR_DATA_NACK_NO_RECV;
         }
     }
@@ -287,7 +286,7 @@ i2c_err_t	mcuI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
 
     if (WR) /* Send address for read */
     {
-        //    mcuI2C_DEBUG("send read address is %d \r\n",slaveAddr);
+        //    mcuI2C_DEBUG("send read address is %d \n",slaveAddr);
         I2C_Send7bitAddress(_i2cx, slaveAddr, I2C_Direction_Receiver);
         /* Test on EV6 and clear it */
         while (!I2C_CheckEvent(_i2cx, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
@@ -295,14 +294,14 @@ i2c_err_t	mcuI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
         cnt++;
         if (cnt > 0xfffe)
             {
-                mcuI2cDebugErr("send read address fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
+                mcuI2cDebugErr("send read address fail, state reg SR2 = %d，SR1 = %d\n", _i2cx->SR2, _i2cx->SR1);
                 return I2C_ERROR_ADDR_NACK_NO_RECV;
             }
         }
     }
     else   /* Send address for write */
     {
-        //    mcuI2C_DEBUG("send write address is %d \r\n",slaveAddr);
+        //    mcuI2C_DEBUG("send write address is %d \n",slaveAddr);
         I2C_Send7bitAddress(_i2cx, slaveAddr, I2C_Direction_Transmitter);
         /* Test on EV6 and clear it */
         while (!I2C_CheckEvent(_i2cx, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
@@ -310,7 +309,7 @@ i2c_err_t	mcuI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
             cnt++;
             if (cnt > 0xfffe)
             {
-                mcuI2cDebugErr("send write address fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
+                mcuI2cDebugErr("send write address fail, state reg SR2 = %d，SR1 = %d\n", _i2cx->SR2, _i2cx->SR1);
                 return I2C_ERROR_ADDR_NACK_NO_RECV;
             }
         }
@@ -331,7 +330,7 @@ i2c_err_t mcuI2c::_receiveByte(uint8_t *data)
         cnt++;
         if (cnt > 0xfffe)
         {
-            mcuI2cDebugErr("read data fail, state reg SR2 = %d，SR1 = %d \r\n", _i2cx->SR2, _i2cx->SR1);
+            mcuI2cDebugErr("read data fail, state reg SR2 = %d，SR1 = %d\n", _i2cx->SR2, _i2cx->SR1);
             return ret;
         }
 

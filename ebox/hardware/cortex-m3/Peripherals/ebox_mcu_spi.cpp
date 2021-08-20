@@ -495,7 +495,7 @@ int8_t mcuSpi::take(Config_t *newConfig)
         delay_ms(1);
         if (IsTimeOut(end, 200))
         {
-            ebox_printf("\r\nSPI产生多线程异常调用\r\n");
+            ebox_printf("\nSPI产生多线程异常调用\n");
             return EWAIT;
         }
     }

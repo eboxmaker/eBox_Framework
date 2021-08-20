@@ -57,8 +57,6 @@ void StepMotor::begin()
 }
 
 
-
-#include "ebox.h"
 void StepMotor::move(signed int step, unsigned int accel, unsigned int decel, unsigned int speed)
 {
     //! Number of steps before we hit max speed.
@@ -162,15 +160,15 @@ void StepMotor::move(signed int step, unsigned int accel, unsigned int decel, un
         //    OCR1A = 10;
         //    // Set Timer/Counter to divide clock by 8
         //    TCCR1B |= ((0<<CS12)|(1<<CS11)|(0<<CS10));
-        //    ebox_printf("===========\r\n");
-        //    ebox_printf("step:%d\r\n",step);
-        //    ebox_printf("min_delay:%d\r\n",srd.min_delay);
-        //    ebox_printf("step_delay:%d\r\n",srd.step_delay);
-        //    ebox_printf("max_s_lim:%d\r\n",max_s_lim);
-        //    ebox_printf("accel_lim:%d\r\n",accel_lim);
-        //    ebox_printf("decel_val:%d(%d)\r\n",srd.decel_val,-10);
-        //    ebox_printf("decel_start:%d\r\n",srd.decel_start);
-        //    ebox_printf("decel_start:%d\r\n",srd.run_state);
+        //    ebox_printf("===========\n");
+        //    ebox_printf("step:%d\n",step);
+        //    ebox_printf("min_delay:%d\n",srd.min_delay);
+        //    ebox_printf("step_delay:%d\n",srd.step_delay);
+        //    ebox_printf("max_s_lim:%d\n",max_s_lim);
+        //    ebox_printf("accel_lim:%d\n",accel_lim);
+        //    ebox_printf("decel_val:%d(%d)\n",srd.decel_val,-10);
+        //    ebox_printf("decel_start:%d\n",srd.decel_start);
+        //    ebox_printf("decel_start:%d\n",srd.run_state);
         //    ebox_printf_flush();
         mode_init_oc_toggle();
         set_ccr(100);
@@ -483,10 +481,10 @@ void StepMotor::callback()
         }
         srd.step_delay = new_step_delay;
 
-        //        uart1.printf(":%d\r\n",srd.step_delay);
+        //        uart1.printf(":%d\n",srd.step_delay);
         counter = 0;
     }
-    //    ebox_printf("\r\n");
+    //    ebox_printf("\n");
 
 
 }

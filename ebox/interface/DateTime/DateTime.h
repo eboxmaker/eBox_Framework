@@ -5,7 +5,7 @@
 #include "wstring.h"
 #include "TimeSpan.h"
 
-#define DATETIME_USE_PRINT false
+#define DATETIME_USE_PRINT true
 
 #if DATETIME_USE_PRINT
     #include "ebox_uart.h"
@@ -56,6 +56,7 @@ public:
     DateTime(String date,String time,int utc_offset = LOCAL_UTC_OFFSET);
     bool parse(uint64_t stamp);
     bool parse(String &str);
+    bool parse(String date,String time,int utc_offset = LOCAL_UTC_OFFSET);
     bool isLeapYear();
 
 

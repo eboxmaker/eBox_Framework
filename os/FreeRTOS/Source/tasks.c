@@ -3731,7 +3731,7 @@ void vTaskList( char *pcWriteBuffer )
             pcWriteBuffer = prvWriteNameToBuffer( pcWriteBuffer, pxTaskStatusArray[ x ].pcTaskName );
 
             /* Write the rest of the string. */
-            sprintf( pcWriteBuffer, "\t%c\t%u\t%u\t%u\r\n", cStatus, ( unsigned int ) pxTaskStatusArray[ x ].uxCurrentPriority, ( unsigned int ) pxTaskStatusArray[ x ].usStackHighWaterMark, ( unsigned int ) pxTaskStatusArray[ x ].xTaskNumber );
+            sprintf( pcWriteBuffer, "\t%c\t%u\t%u\t%u\n", cStatus, ( unsigned int ) pxTaskStatusArray[ x ].uxCurrentPriority, ( unsigned int ) pxTaskStatusArray[ x ].usStackHighWaterMark, ( unsigned int ) pxTaskStatusArray[ x ].xTaskNumber );
             pcWriteBuffer += strlen( pcWriteBuffer );
         }
 
@@ -3824,13 +3824,13 @@ void vTaskGetRunTimeStats( char *pcWriteBuffer )
                 {
 #ifdef portLU_PRINTF_SPECIFIER_REQUIRED
                     {
-                        sprintf( pcWriteBuffer, "\t%lu\t\t%lu%%\r\n", pxTaskStatusArray[ x ].ulRunTimeCounter, ulStatsAsPercentage );
+                        sprintf( pcWriteBuffer, "\t%lu\t\t%lu%%\n", pxTaskStatusArray[ x ].ulRunTimeCounter, ulStatsAsPercentage );
                     }
 #else
                     {
                         /* sizeof( int ) == sizeof( long ) so a smaller
                         printf() library can be used. */
-                        sprintf( pcWriteBuffer, "\t%u\t\t%u%%\r\n", ( unsigned int ) pxTaskStatusArray[ x ].ulRunTimeCounter, ( unsigned int ) ulStatsAsPercentage );
+                        sprintf( pcWriteBuffer, "\t%u\t\t%u%%\n", ( unsigned int ) pxTaskStatusArray[ x ].ulRunTimeCounter, ( unsigned int ) ulStatsAsPercentage );
                     }
 #endif
                 }
@@ -3840,13 +3840,13 @@ void vTaskGetRunTimeStats( char *pcWriteBuffer )
                     consumed less than 1% of the total run time. */
 #ifdef portLU_PRINTF_SPECIFIER_REQUIRED
                     {
-                        sprintf( pcWriteBuffer, "\t%lu\t\t<1%%\r\n", pxTaskStatusArray[ x ].ulRunTimeCounter );
+                        sprintf( pcWriteBuffer, "\t%lu\t\t<1%%\n", pxTaskStatusArray[ x ].ulRunTimeCounter );
                     }
 #else
                     {
                         /* sizeof( int ) == sizeof( long ) so a smaller
                         printf() library can be used. */
-                        sprintf( pcWriteBuffer, "\t%u\t\t<1%%\r\n", ( unsigned int ) pxTaskStatusArray[ x ].ulRunTimeCounter );
+                        sprintf( pcWriteBuffer, "\t%u\t\t<1%%\n", ( unsigned int ) pxTaskStatusArray[ x ].ulRunTimeCounter );
                     }
 #endif
                 }

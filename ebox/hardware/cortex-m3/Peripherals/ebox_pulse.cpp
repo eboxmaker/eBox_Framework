@@ -19,12 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_pulse.h"
-#define PWM_DEBUG 0
-#if PWM_DEBUG
-#include "ebox.h"
-#endif
-
-
 
 
 Pulse::Pulse(Gpio *pwm_pin)

@@ -77,8 +77,8 @@ void Exti::begin(PinMode_t mode, Mode_t extiMode)
     //  LL_APB1_GRP2_EnableClock(LL_APB1_GRP2_PERIPH_SYSCFG);
     GPIO_EXTILineConfig(GETEXTIPORT(_pin->id), GETPINNUMBER(_pin->id));
 
-    EXTI_DEBUG("extiLine is %d , %d \r\n", _extiLine, GETEXTILINE(_pin->id));
-    EXTI_DEBUG("pinNumber is %d \r\n", GETPINNUMBER(_pin->id));
+    EXTI_DEBUG("extiLine is %d , %d\n", _extiLine, GETEXTILINE(_pin->id));
+    EXTI_DEBUG("pinNumber is %d\n", GETPINNUMBER(_pin->id));
 
     switch (extiMode)
     {

@@ -4,7 +4,24 @@ file   : mmc_sd.cpp
 
 #include "mmc_sd.h"
 
-#include  "ebox.h"
+#if EBOX_DEBUG
+// 是否打印调试信息, 1打印,0不打印
+#define EBOX_DEBUG_SD_ENABLE       true
+#define EBOX_DEBUG_SD_ENABLE_ERR   true
+#endif
+
+
+#if EBOX_DEBUG_SD_ENABLE
+#define sdDebug(...)  ebox_printf("[sd DBG]:%d: ",__LINE__),ebox_printf(__VA_ARGS__ )
+#else
+#define sdDebug(...)
+#endif
+
+#if EBOX_DEBUG_SD_ENABLE_ERR
+#define sdDebugErr(fmt, ...)  ebox_printf("[sd err]:%d: " fmt "\n", __LINE__, __VA_ARGS__)
+#else
+#define sdDebugErr(fmt, ...)
+#endif
 
 using namespace ebox;
 
@@ -189,14 +206,13 @@ int SD::init()
     _is_initialized = true;
     _get_capacity();
                 
-    uart1.printf("===========sd card==========\r\n");
-    uart1.printf("type       : %s(%d)\r\n",get_type(),SD_Type);
-    uart1.printf("read_size  : %u\r\n",get_read_size());
-    uart1.printf("prog_size  : %u\r\n",get_program_size());
-    uart1.printf("capacity   : %0.1f MByte\r\n",size()/1024/1024.0);
-    uart1.printf("erase_size : %u Byte\r\n",get_erase_size());
-    uart1.printf("================================\r\n");
-    uart1.flush();
+    sdDebug("===========sd card==========\n");
+    sdDebug("type       : %s(%d)\n",get_type(),SD_Type);
+    sdDebug("read_size  : %d Byte\n",(int)get_read_size());
+    sdDebug("prog_size  : %d Byte\n",(int)get_program_size());
+    sdDebug("capacity   : %0.1f MByte\r\n",size()/1024/1024.0);
+    sdDebug("erase_size : %d Byte\n",(int)get_erase_size());
+    sdDebug("================================\n");
     return r1;
 }
 
@@ -216,7 +232,6 @@ int  SD::read(void *b, bd_addr_t addr, bd_size_t size)
         
         return -1;
     }
-    uart1.flush();
     uint8_t *buffer = static_cast<uint8_t *>(b);
 
     size_t blockCnt =  size / _block_size;
@@ -239,7 +254,6 @@ int  SD::program(const void *b, bd_addr_t addr, bd_size_t size)
     if (!_is_initialized) {
         return -1;
     }
-    uart1.flush();
     const uint8_t *buffer = static_cast<const uint8_t *>(b);
 //    int status = BD_ERROR_OK;
 
@@ -247,7 +261,6 @@ int  SD::program(const void *b, bd_addr_t addr, bd_size_t size)
     size_t blockCnt = size / _block_size;
 
     addr = addr / _block_size;
-    uart1.flush();
     if (blockCnt > 1) {
        return  write_sector( buffer,  addr,  blockCnt);
     }
@@ -561,7 +574,7 @@ ebox::bd_size_t SD::_get_capacity(void)
     _sectors = Capacity / 512;
 
 //    spi->release();
-    ebox_printf("Capacity:%u",Capacity);
+    ebox_printf("Capacity:%0.1f\t",(double)Capacity);
     ebox_printf("sector:%u\n",_sectors);
     return (uint64_t)Capacity;
 }

@@ -112,47 +112,10 @@ DateTime::DateTime(String date,String time,int utc_offset)
 {
     utcOffset = utc_offset%24;
     err = 0;
-
-    char buff[11];
-    memcpy(buff, date.c_str(), 11);
-    year = atoi(buff + 7);
-    // Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
-    switch (buff[0]) {
-        case 'J':
-            month = (buff[1] == 'a') ? 1 : ((buff[2] == 'n') ? 6 : 7);
-            break;
-        case 'F':
-            month = 2;
-            break;
-        case 'A':
-            month = buff[2] == 'r' ? 4 : 8;
-            break;
-        case 'M':
-            month = buff[2] == 'r' ? 3 : 5;
-            break;
-        case 'S':
-            month = 9;
-            break;
-        case 'O':
-            month = 10;
-            break;
-        case 'N':
-            month = 11;
-            break;
-        case 'D':
-            month = 12;
-            break;
-        default:
-          err = -1;
-          break;
+    if(!parse(date,time,utc_offset))
+    {
+        err = -1;
     }
-    day = atoi(buff + 4);
-    memset(buff,0,11);
-    memcpy(buff, time.c_str(), 8);
-    hour = atoi(buff);
-    minute = atoi(buff + 3);
-    second = atoi(buff + 6);
-    milliSecond = 0;
 }
 
 bool DateTime::parse(uint64_t stamp)
@@ -195,6 +158,62 @@ bool DateTime::parse(String &str)
     DateTime::limitCheck(*this);
     return true;
 }
+bool DateTime::parse(String date,String time,int utc_offset)
+{
+    utcOffset = utc_offset%24;
+    err = 0;
+
+    char buff[11];
+    memcpy(buff, date.c_str(), 11);
+    year = atoi(buff + 7);
+    // Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+    switch (buff[0]) {
+        case 'J':
+            month = (buff[1] == 'a') ? 1 : ((buff[2] == 'n') ? 6 : 7);
+            break;
+        case 'F':
+            month = 2;
+            break;
+        case 'A':
+            month = buff[2] == 'r' ? 4 : 8;
+            break;
+        case 'M':
+            month = buff[2] == 'r' ? 3 : 5;
+            break;
+        case 'S':
+            month = 9;
+            break;
+        case 'O':
+            month = 10;
+            break;
+        case 'N':
+            month = 11;
+            break;
+        case 'D':
+            month = 12;
+            break;
+        default:
+          err = -1;
+          break;
+    }
+    if(err)
+    {
+        return false;
+    }
+    else
+    {
+        day = atoi(buff + 4);
+        memset(buff,0,11);
+        memcpy(buff, time.c_str(), 8);
+        hour = atoi(buff);
+        minute = atoi(buff + 3);
+        second = atoi(buff + 6);
+        milliSecond = 0;
+        return true;
+    }
+
+}
+
 bool DateTime::limitCheck(DateTime &dt)
 {
     bool ret;

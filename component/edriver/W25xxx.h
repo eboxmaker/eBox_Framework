@@ -126,9 +126,9 @@ private:
     DataU16_t   type;				//∂®“ÂW25QXX–æ∆¨–Õ∫≈	
     uint32_t    page_count;
 
-    bd_size_t capacity ;
-    bd_size_t sector_size;
-    bd_size_t sector_count;
+    uint32_t capacity ;
+    uint32_t sector_size;
+    uint32_t sector_count;
 
 
 };

@@ -277,7 +277,7 @@ extern "C" {
         //        hard_fault_isr();
         while (1)
         {
-            // ebox_printf("123\r\n");
+            // ebox_printf("123\n");
 
         }
     }

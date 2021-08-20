@@ -156,7 +156,7 @@ void InCapture::begin(uint16_t prescaler ,ICMode_t mode)
 void InCapture::close()
 {
     rcc_clock_cmd((uint32_t)TIMx,DISABLE);
-    ebox_printf("CLOSE\r\n");
+    ebox_printf("CLOSE\n");
 }
 
 void InCapture::base_init(uint16_t period, uint16_t prescaler)

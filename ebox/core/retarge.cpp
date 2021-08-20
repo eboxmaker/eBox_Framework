@@ -25,7 +25,6 @@ struct __FILE
 
 int fputc(int ch, FILE *f)
 {
-
     ebox_uart_putc(ch);
     return ch;
 }

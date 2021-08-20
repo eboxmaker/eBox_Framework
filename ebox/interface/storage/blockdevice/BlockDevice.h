@@ -1,5 +1,5 @@
-#ifndef __EBOX_BLOCK_H
-#define __EBOX_BLOCK_H
+#ifndef __BLOCKDEVICE_H
+#define __BLOCKDEVICE_H
 
 
 #include "ebox_core.h"
@@ -31,11 +31,6 @@ public:
      */
     virtual ~BlockDevice() {};
 
-//    /** Initialize a block device
-//     *
-//     *  @return         0 on success or a negative error code on failure
-//     */
-//    virtual int begin() = 0;
 
     /** Initialize a block device
      *

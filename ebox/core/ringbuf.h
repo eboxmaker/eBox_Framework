@@ -54,8 +54,6 @@ public:
     {
         ptr = (T *)ebox_malloc(size * sizeof(T));
         max = size;
-        //        ebox_printf("xx\r\n");
-        //        ebox_printf_flush();
         if(ptr != NULL)
             return true;
         else

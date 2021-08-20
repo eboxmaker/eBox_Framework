@@ -1,5 +1,24 @@
 #include "ir_decoder.h"
-#include "ebox.h"
+
+#if EBOX_DEBUG
+// 是否打印调试信息, 1打印,0不打印
+#define EBOX_DEBUG_IR_ENABLE       true
+#define EBOX_DEBUG_IR_ENABLE_ERR   true
+#endif
+
+
+#if EBOX_DEBUG_IR_ENABLE
+#define irDebug(...)  ebox_printf("[ir DBG]:%d: ",__LINE__),ebox_printf(__VA_ARGS__ )
+#else
+#define irSpiDebug(...)
+#endif
+
+#if EBOX_DEBUG_IR_ENABLE_ERR
+#define irSpiDebugErr(fmt, ...)  ebox_printf("[ir err]:%d: " fmt "\n", __LINE__, __VA_ARGS__)
+#else
+#define irSpiDebugErr(fmt, ...)
+#endif
+
 /*
  * ir_decoder.cpp
  *
@@ -62,8 +81,7 @@ void IrDecoder::handler( void )
     
     ic->update_resault();
     time = ic->res.peroid;
-//    uart1.print("ms:" );
-//    uart1.println(ic->res.peroid/1000.0);
+    irDebug("%ms:0.3f",ic->res.peroid/1000.0);
     switch ((uint8_t)state)
     {
 

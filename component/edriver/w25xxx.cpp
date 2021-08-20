@@ -20,47 +20,30 @@
 /* Includes ------------------------------------------------------------------*/
 #include "w25xxx.h"
 
-#include "ebox.h"
+
+#if EBOX_DEBUG
+// 是否打印调试信息, 1打印,0不打印
+#define EBOX_DEBUG_W25X_ENABLE       true
+#define EBOX_DEBUG_W25X_ENABLE_ERR   true
+#endif
+
+
+#if EBOX_DEBUG_W25X_ENABLE
+#define w25xDebug(...)  ebox_printf("[w25x DBG]:%d: ",__LINE__),ebox_printf(__VA_ARGS__ )
+#else
+#define w25xDebug(...)
+#endif
+
+#if EBOX_DEBUG_W25X_ENABLE_ERR
+#define w25xDebugErr(fmt, ...)  ebox_printf("[w25x err]:%d: " fmt "\n", __LINE__, __VA_ARGS__)
+#else
+#define w25xDebugErr(fmt, ...)
+#endif
+
 
 int W25xxx::begin()
 {
-    uint16_t temp;
-    int ret = 0;
-    if(initialized == 0)
-    {
-        cfg.dev_num = cs->id;
-        cfg.mode = Spi::MODE0;
-        cfg.bit_order = Spi::MSB;
-        cfg.prescaler = Spi::DIV2;
-        cs->mode(OUTPUT_PP);
-        cs->set();
-        
-        spi->begin(&cfg); 
-        ret = init();
-        if(ret == 0)
-        {
-            temp = type.value - W25Q80;
-            page_count  = 4096;//W25Q80的页数是4096。没增加一个序号数量翻倍
-            for(int i = 0; i < temp; i++)
-                page_count = page_count * 2;
-            
-            capacity = W25X_PAGE_SIZE * page_count;
-            sector_size = W25X_SECTOR_SIZE;
-            sector_count = capacity / sector_size;
-            
-            
-            uart1.printf("===========spi flash==========\r\n");
-            uart1.printf("type       : 0X%04X\r\n",type);
-            uart1.printf("page_size  : %u\r\n",W25X_PAGE_SIZE);
-            uart1.printf("page_count : %u\r\n",page_count);
-            uart1.printf("cap        : %f MByte\r\n",capacity/1024.0/1024.0);
-            uart1.printf("sct_size   : %u Byte\r\n",sector_size);
-            uart1.printf("sct_count  : %u\r\n",sector_count);
-            uart1.printf("================================\r\n");
-            initialized = 1;
-        }
-    }
-    return ret;
+    return init();
 }
 
 
@@ -85,8 +68,8 @@ int W25xxx::init()
         {
             spi->take(&cfg);
             cs->reset();
-            spi->dma_write(W25X_Enable4ByteAddr);//发送进入4字节地址模式指令   
-            spi->dma_wait();
+            spi->write(W25X_Enable4ByteAddr);//发送进入4字节地址模式指令   
+            //spi->dma_wait();
             cs->set(); 
             spi->release();
         }
@@ -106,14 +89,14 @@ int W25xxx::init()
             sector_size = W25X_SECTOR_SIZE;
             sector_count = capacity / sector_size;
             
-            uart1.printf("===========spi flash==========\r\n");
-            uart1.printf("type       : 0X%04X\r\n",type);
-            uart1.printf("page_size  : %u\r\n",W25X_PAGE_SIZE);
-            uart1.printf("page_count : %u\r\n",page_count);
-            uart1.printf("cap        : %f MByte\r\n",capacity/1024.0/1024.0);
-            uart1.printf("sct_size   : %u Byte\r\n",sector_size);
-            uart1.printf("sct_count  : %0.0f\r\n",sector_count*1.0);
-            uart1.printf("================================\r\n");
+            w25xDebug("===========spi flash==========\n");
+            w25xDebug("type       : 0X%04X\n",type);
+            w25xDebug("page_size  : %d Byte\n",W25X_PAGE_SIZE);
+            w25xDebug("page_count : %d Byte\n",page_count);
+            w25xDebug("cap        : %f MByte\n",capacity/1024.0/1024.0);
+            w25xDebug("sct_size   : %d Byte\n",sector_size);
+            w25xDebug("sct_count  : %0.0f\n",sector_count*1.0);
+            w25xDebug("================================\n");
             initialized = 1;
         }
     }
@@ -135,16 +118,16 @@ int W25xxx::deinit()
  
     spi->take(&cfg);
     cs->reset();
-    spi->dma_write(W25X_ReadData);         //发送读取命令
+    spi->write(W25X_ReadData);         //发送读取命令
     if(type.value == W25Q256)                //如果是W25Q256的话地址为4字节的，要发送最高8位
     {
-        spi->dma_write((uint8_t)((addr)>>24));    
+        spi->write((uint8_t)((addr)>>24));    
     }
-    spi->dma_write((uint8_t)((addr) >> 16)); //发送24bit地址
-    spi->dma_write((uint8_t)((addr) >> 8));
-    spi->dma_write((uint8_t)addr);
-    spi->dma_read_buf((uint8_t *)buffer, size);
-    spi->dma_wait();
+    spi->write((uint8_t)((addr) >> 16)); //发送24bit地址
+    spi->write((uint8_t)((addr) >> 8));
+    spi->write((uint8_t)addr);
+    spi->read_buf((uint8_t *)buffer, size);
+    //spi->dma_wait();
     cs->set();
     spi->release();
     return 0;
@@ -171,11 +154,11 @@ int W25xxx::deinit()
         write_enable();                  //SET WEL
         wait_busy();
         cs->reset();
-        spi->dma_write(W25X_SectorErase);      //发送扇区擦除指令
-        spi->dma_write((uint8_t)((addr) >> 16)); //发送24bit地址
-        spi->dma_write((uint8_t)((addr) >> 8));
-        spi->dma_write((uint8_t)addr);
-        spi->dma_wait();
+        spi->write(W25X_SectorErase);      //发送扇区擦除指令
+        spi->write((uint8_t)((addr) >> 16)); //发送24bit地址
+        spi->write((uint8_t)((addr) >> 8));
+        spi->write((uint8_t)addr);
+        //spi->dma_wait();
 
         cs->set();
         wait_busy();   				   //等待擦除完成
@@ -185,13 +168,11 @@ int W25xxx::deinit()
  }
  bd_size_t W25xxx::get_read_size() const
  {
- 
-    return 256;
+    return W25X_PAGE_SIZE;
  }
  bd_size_t W25xxx::get_program_size() const 
  {
- 
-    return 256;
+    return W25X_PAGE_SIZE;
  }
 
 bd_size_t W25xxx::get_erase_size() const
@@ -205,12 +186,11 @@ bd_size_t W25xxx::get_erase_size(bd_addr_t addr) const
 
  bd_size_t W25xxx::size() const 
 {
-    return 4096*512;
+    return capacity;
 }
 const char *W25xxx::get_type() const
 {
     return (const char*)type.byte;
-    
 }
 
 int W25xxx::get_erase_value() const
@@ -234,13 +214,13 @@ uint16_t W25xxx::read_id()
     spi->take(&cfg);
 
     cs->reset();
-    spi->dma_write(0x90);
-    spi->dma_write(0x00);
-    spi->dma_write(0x00);
-    spi->dma_write(0x00);
-    id |= spi->dma_read() << 8;
-    id |= spi->dma_read();
-    spi->dma_wait();
+    spi->write(0x90);
+    spi->write(0x00);
+    spi->write(0x00);
+    spi->write(0x00);
+    id |= spi->read() << 8;
+    id |= spi->read();
+    //spi->dma_wait();
 
     cs->set();
     spi->release();
@@ -265,16 +245,16 @@ int W25xxx:: read_sector(uint8_t *buffer, uint32_t sector, uint8_t count)
     uint32_t read_count = sector_size  * count;
     spi->take(&cfg);
     cs->reset();
-    spi->dma_write(W25X_ReadData);         //发送读取命令
+    spi->write(W25X_ReadData);         //发送读取命令
     if(type.value == W25Q256)                //如果是W25Q256的话地址为4字节的，要发送最高8位
     {
-        spi->dma_write((uint8_t)((addr)>>24));    
+        spi->write((uint8_t)((addr)>>24));    
     }
-    spi->dma_write((uint8_t)((addr) >> 16)); //发送24bit地址
-    spi->dma_write((uint8_t)((addr) >> 8));
-    spi->dma_write((uint8_t)addr);
-    spi->dma_read_buf(buffer, read_count);
-    spi->dma_wait();
+    spi->write((uint8_t)((addr) >> 16)); //发送24bit地址
+    spi->write((uint8_t)((addr) >> 8));
+    spi->write((uint8_t)addr);
+    spi->read_buf(buffer, read_count);
+    //spi->dma_wait();
 
     cs->set();
     spi->release();
@@ -294,12 +274,12 @@ void W25xxx::read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read)
 {
     spi->take(&cfg);
     cs->reset();
-    spi->dma_write(W25X_ReadData);         //发送读取命令
-    spi->dma_write((uint8_t)((read_addr) >> 16)); //发送24bit地址
-    spi->dma_write((uint8_t)((read_addr) >> 8));
-    spi->dma_write((uint8_t)read_addr);
-    spi->dma_read_buf(buf, num_to_read);
-    spi->dma_wait();
+    spi->write(W25X_ReadData);         //发送读取命令
+    spi->write((uint8_t)((read_addr) >> 16)); //发送24bit地址
+    spi->write((uint8_t)((read_addr) >> 8));
+    spi->write((uint8_t)read_addr);
+    spi->read_buf(buf, num_to_read);
+    //spi->dma_wait();
 
     cs->set();
     spi->release();
@@ -346,13 +326,13 @@ void W25xxx::fast_read(uint8_t *buf, uint32_t read_addr, uint16_t num_to_read)
 {
     spi->take(&cfg);
     cs->reset();
-    spi->dma_write(W25X_FastReadData);         //发送读取命令
-    spi->dma_write((uint8_t)((read_addr) >> 16)); //发送24bit地址
-    spi->dma_write((uint8_t)((read_addr) >> 8));
-    spi->dma_write((uint8_t)read_addr);
-    spi->dma_write(0xff);   //空字节
-    spi->dma_read_buf(buf, num_to_read);
-    spi->dma_wait();
+    spi->write(W25X_FastReadData);         //发送读取命令
+    spi->write((uint8_t)((read_addr) >> 16)); //发送24bit地址
+    spi->write((uint8_t)((read_addr) >> 8));
+    spi->write((uint8_t)read_addr);
+    spi->write(0xff);   //空字节
+    spi->read_buf(buf, num_to_read);
+    //spi->dma_wait();
     cs->set();
     spi->release();
 
@@ -464,16 +444,16 @@ void W25xxx::write_page(const uint8_t *buf, uint32_t write_addr, uint16_t num_to
     write_enable();                  //SET WEL
     spi->take(&cfg);
     cs->reset();
-    spi->dma_write(W25X_PageProgram);      //发送写页命令
+    spi->write(W25X_PageProgram);      //发送写页命令
     if(type.value == W25Q256)                //如果是W25Q256的话地址为4字节的，要发送最高8位
     {
-        spi->dma_write((uint8_t)((write_addr)>>24));    
+        spi->write((uint8_t)((write_addr)>>24));    
     }
-    spi->dma_write((uint8_t)((write_addr) >> 16)); //发送24bit地址
-    spi->dma_write((uint8_t)((write_addr) >> 8));
-    spi->dma_write((uint8_t)write_addr);
-    spi->dma_write_buf((uint8_t *)buf, num_to_write);
-    spi->dma_wait();
+    spi->write((uint8_t)((write_addr) >> 16)); //发送24bit地址
+    spi->write((uint8_t)((write_addr) >> 8));
+    spi->write((uint8_t)write_addr);
+    spi->write_buf((uint8_t *)buf, num_to_write);
+    //spi->dma_wait();
 
     cs->set();
     wait_busy();					   //等待写入结束
@@ -492,11 +472,11 @@ int W25xxx::erase_sector(uint32_t dst_addr)
     write_enable();                  //SET WEL
     wait_busy();
     cs->reset();
-    spi->dma_write(W25X_SectorErase);      //发送扇区擦除指令
-    spi->dma_write((uint8_t)((dst_addr) >> 16)); //发送24bit地址
-    spi->dma_write((uint8_t)((dst_addr) >> 8));
-    spi->dma_write((uint8_t)dst_addr);
-    spi->dma_wait();
+    spi->write(W25X_SectorErase);      //发送扇区擦除指令
+    spi->write((uint8_t)((dst_addr) >> 16)); //发送24bit地址
+    spi->write((uint8_t)((dst_addr) >> 8));
+    spi->write((uint8_t)dst_addr);
+    //spi->dma_wait();
 
     cs->set();
     wait_busy();   				   //等待擦除完成
@@ -518,8 +498,8 @@ void W25xxx::erase_chip(void)
     write_enable();                  //SET WEL
     wait_busy();
     cs->reset();
-    spi->dma_write(W25X_ChipErase); 	//发送片擦除命令
-    spi->dma_wait();
+    spi->write(W25X_ChipErase); 	//发送片擦除命令
+    //spi->dma_wait();
 
     cs->set();
     wait_busy();   				   				//等待芯片擦除结束
@@ -540,8 +520,8 @@ void W25xxx::power_down(void)
 {
     volatile int i;
     cs->reset();
-    spi->dma_write(W25X_PowerDown);        //发送掉电命令
-    spi->dma_wait();
+    spi->write(W25X_PowerDown);        //发送掉电命令
+    //spi->dma_wait();
 
     //等待TPD
     for (i = 0; i < 300; i++);
@@ -553,8 +533,8 @@ void W25xxx::wake_up(void)
 {
     volatile int i;
     cs->reset();
-    spi->dma_write(W25X_ReleasePowerDown);   //  send W25X_PowerDown command 0xAB
-    spi->dma_wait();
+    spi->write(W25X_ReleasePowerDown);   //  send W25X_PowerDown command 0xAB
+    //spi->dma_wait();
 
     //等待TRES1
     for (i = 0; i < 300; i++);
@@ -601,9 +581,9 @@ uint8_t W25xxx::read_sr(uint8_t index)
             break;
     }  
     cs->reset();
-    spi->dma_write(command);    //发送读取状态寄存器命令
-    byte = spi->dma_read();
-    spi->dma_wait();
+    spi->write(command);    //发送读取状态寄存器命令
+    byte = spi->read();
+    //spi->dma_wait();
 
     cs->set();
     return byte;
@@ -635,9 +615,9 @@ void W25xxx::write_sr(uint8_t index,uint8_t value)
             break;
     } 
     cs->reset();
-    spi->dma_write(command);   //发送写取状态寄存器命令
-    spi->dma_write(value);               //写入一个字节
-    spi->dma_wait();
+    spi->write(command);   //发送写取状态寄存器命令
+    spi->write(value);               //写入一个字节
+    //spi->dma_wait();
 
     cs->set();
 }
@@ -653,8 +633,8 @@ void W25xxx::write_sr(uint8_t index,uint8_t value)
 void W25xxx::write_enable(void)
 {
     cs->reset();
-    spi->dma_write(W25X_WriteEnable);      //发送写使能
-    spi->dma_wait();
+    spi->write(W25X_WriteEnable);      //发送写使能
+    //spi->dma_wait();
 
     cs->set();
 }
@@ -668,8 +648,8 @@ void W25xxx::write_enable(void)
 void W25xxx::write_disable(void)
 {
     cs->reset();
-    spi->dma_write(W25X_WriteDisable);     //发送写禁止指令
-    spi->dma_wait();
+    spi->write(W25X_WriteDisable);     //发送写禁止指令
+    //spi->dma_wait();
 
     cs->set();
 }

@@ -356,14 +356,14 @@ uint16_t ebox_free_block_print(void)
 #if (EBOX_DEBUG && USE_PRINTF)
     eboxBlockLink_t *p;
     int i = 0;
-    ebox_printf("\r\n------------------start------------------\r\n");
-    ebox_printf(" free block\taddres\t|size\t|\r\n");
+    ebox_printf("\n------------------start------------------\n");
+    ebox_printf(" free block\taddres\t|size\t|\n");
     for(p = (eboxBlockLink_t *)( &(heap[0]) ); p != NULL; p = ( p->nextFreeBlock))
     {
         ebox_printf("free block %d: ", i++);
-        ebox_printf("|@0X%X\t|%06d\t|\r\n", p, p->blockSize);
+        ebox_printf("|@0X%X\t|%06d\t|\n", p, p->blockSize);
     }
-    ebox_printf("-------------------end-------------------\r\n");
+    ebox_printf("-------------------end-------------------\n");
     return i - 2;
 #else
     return 0;

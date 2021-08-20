@@ -14,7 +14,7 @@ bool Ds18b20::begin()
     write(0xcc);
     write(0x44);
     delay_ms(20);
-//    uart1.printf("芯片初始化(ret = %d)\r\n",ret);
+//    uart1.printf("芯片初始化(ret = %d)\n",ret);
     update_temp();//更新读取
     last = millis();
     state = 0;
@@ -115,13 +115,13 @@ bool Ds18b20::update_temp()
     temperature = xdata.value * 0.0625; 
 
     ret = true;
-//    uart1.printf("更新完成%0.1f℃,0X%04X(0X%02X,0X%02X)\r\n",temperature,xdata.value,buf[0],buf[1]);
+//    uart1.printf("更新完成%0.1f℃,0X%04X(0X%02X,0X%02X)\n",temperature,xdata.value,buf[0],buf[1]);
     return ret;
 }
 
 float Ds18b20::get_temp()
 {
-//    uart1.printf("温度：%0.1f\r\n",temperature);
+//    uart1.printf("温度：%0.1f\n",temperature);
     return temperature;
 }
 void Ds18b20::loop()
@@ -134,7 +134,7 @@ void Ds18b20::loop()
             write(0x44);
             state = 1;
             last = millis();
-//            uart1.printf("更新温度\r\n");
+//            uart1.printf("更新温度\n");
             break;
         case 1:
             if(millis() - last > 750)

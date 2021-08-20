@@ -19,7 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "gt30l32s4w.h"
-#include "ebox.h"
 
 //const uint32_t FontBaseTable[] = 
 //{

@@ -49,8 +49,8 @@ EventManager manager;
 */
 void print_log(const char *name, const char *date)
 {
-    UART.print("\n\r");
-    UART.print("*************************************************************\n\r");
+    UART.print("\n");
+    UART.print("*************************************************************\n");
     UART.print("* \r\n");	                /* 打印一行空格 */
     UART.print("* 例程名称      : ");	    /* 打印例程名称 */
     UART.println(name);
@@ -61,7 +61,7 @@ void print_log(const char *name, const char *date)
     UART.println(HARDWARE);
     UART.print("* EBOX库版本    : ebox_V" );/* 版本信息 */
     UART.println(EBOX_VERSION);
-    UART.print("*                     CPU 信息\r\n");	/* CPU信息 */
+    UART.print("*                     CPU 信息\n");	/* CPU信息 */
     UART.println();
     UART.print("* CPU TYPE      : ");	    /* 打印CPU类型 */
     UART.println(MCU_TYPE);
@@ -131,8 +131,8 @@ void print_log(const char *name, const char *date)
     UART.print(ebox_get_free() / 1024.0);
     UART.println("KB");
 
-    UART.print("* \r\n");	                /* 打印一行空格 */
-    UART.print("*************************************************************\n\r");
+    UART.print("*\n");	                /* 打印一行空格 */
+    UART.print("*************************************************************\n");
     UART.flush();
 }
 

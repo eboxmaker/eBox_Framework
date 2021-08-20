@@ -10,7 +10,6 @@ extern "C" {
 #include "EthernetClient.h"
 #include "EthernetServer.h"
 #include "Dns.h"
-#include "ebox.h"
 
 uint16_t EthernetClient::_srcport = 49152; //Use IANA recommended ephemeral port range 49152-65535
 
