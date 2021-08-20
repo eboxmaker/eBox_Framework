@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>STM32F103ZE</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F1xx_DFP.2.1.0</PackID>
+          <PackID>Keil.STM32F1xx_DFP.2.3.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x10000) IROM(0x08000000,0x80000) CPUTYPE("Cortex-M3") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -769,6 +769,16 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\interface\storage\filesystem\FileSystem.cpp</FilePath>
             </File>
+            <File>
+              <FileName>FileBase.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileBase.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FileSystemHandle.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileSystemHandle.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -914,6 +924,16 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\component\OneButton\OneButton.cpp</FilePath>
             </File>
+            <File>
+              <FileName>w25xxx.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\w25xxx.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>mmc_sd.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\edriver\mmc_sd.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1031,6 +1051,26 @@
               <FileName>MPU6050.CPP</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\MPU6050\MPU6050.CPP</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Fs</GroupName>
+          <Files>
+            <File>
+              <FileName>FATFileSystem.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\fat\FATFileSystem.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ff.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\fat\ChaN\ff.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ffunicode.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\storage\filesystem\fat\ChaN\ffunicode.cpp</FilePath>
             </File>
           </Files>
         </Group>

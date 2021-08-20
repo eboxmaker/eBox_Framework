@@ -131,7 +131,7 @@
 
 
 #define FF_LFN_BUF		255
-#define FF_SFN_BUF		255
+#define FF_SFN_BUF		12
 /* This set of options defines size of file name members in the FILINFO structure
 /  which is used to read out directory items. These values should be suffcient for
 /  the file names to read. The maximum possible length of the read file name depends
