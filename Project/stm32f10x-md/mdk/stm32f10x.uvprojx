@@ -1252,6 +1252,46 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>epaper</GroupName>
+          <Files>
+            <File>
+              <FileName>font8.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\component\epaper\font8.c</FilePath>
+            </File>
+            <File>
+              <FileName>font12.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\component\epaper\font12.c</FilePath>
+            </File>
+            <File>
+              <FileName>font16.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\component\epaper\font16.c</FilePath>
+            </File>
+            <File>
+              <FileName>font20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\component\epaper\font20.c</FilePath>
+            </File>
+            <File>
+              <FileName>font24.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\component\epaper\font24.c</FilePath>
+            </File>
+            <File>
+              <FileName>epd2in13b.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\epaper\epd2in13b.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>epdpaint.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\epaper\epdpaint.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>

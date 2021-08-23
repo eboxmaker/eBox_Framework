@@ -10,196 +10,85 @@ Copyright 2015 shentq. All Rights Reserved.
 //STM32 RUN IN eBox
 #include "ebox.h"
 #include "bsp_ebox.h"
-#include "mmc_sd.h"
-#include "w25xxx.h"
-#include "interface/storage/filesystem/FileSystem.h"
-#include "interface/storage/filesystem/FAT/FATFileSystem.h"
-#include "interface/storage/filesystem/file.h"
 #include "rtcmillis.h"
 #include "ebox_mem.h"
+#include "./epaper/epd2in13b.h"
+#include "imagedata.h"
+#include "./epaper/epdpaint.h"
 
-FATFileSystem fs("sd");
+#define COLORED     0
+#define UNCOLORED   1
 
-W25xxx flash(&PA15, &spi1);
-SD sd(&PB12, &spi2);
 RtcMillis LocalTime;
+Epd epd(&PA1,&PA2,&PA3,&PA4,&spi1);
 
-void file_create()
-{
-    int ret;
-    UART.printf("file_create...\n");
-    for(int i = 0; i < 10; i++)
-    {
-        String path("/ebox_");
-        path += i;
-        path += ".txt";
-        File file;
-        ret = file.open(&fs,path.c_str(),O_CREAT);
-        if(ret)
-        {
-            UART.printf("open[%s]:%d\n",path.c_str(), ret);
-        }
-        else
-        {
-            UART.printf("open:[%s]...ok\n", path.c_str());
-        }
-        file.close();
-        UART.flush();
-    }
-    
-}
-void file_write()
-{
-    int ret;
-    int bw;
-    UART.printf("file_write...\n");
-    String str = "ebox file opt test.";
-    for(int i = 0; i < 10; i++)
-    {
-        String path("/ebox_");
-        path += i;
-        path += ".txt";
-        File file;
-        ret = file.open(&fs,path.c_str(),O_WRONLY);
-        if(ret)
-        {
-            UART.printf("open[%s]:%d\n",path.c_str(), ret);
-        }
-        else
-        {
-            UART.printf("open:[%s]...ok\n", path.c_str());
-        }
-        
-        bw = file.write(str.c_str(),str.length());
-        if(bw == 0){
-            UART.printf("file write err : %d\r\n", bw);
-        }
-        else 
-        {
-            UART.printf("writed size : %d\r\n", bw);
-        }
-        UART.flush();
-    }
-}
-void file_write_append()
-{
-    int ret;
-    int bw;
-    UART.printf("file_write...\n");
-    String str = "a!";
-
-    String path("/ebox_9.txt");
-
-    File file;
-    ret = file.open(&fs,path.c_str(),O_WRONLY|O_APPEND);
-    if(ret)
-    {
-        UART.printf("open[%s]:%d\n",path.c_str(), ret);
-    }
-    else
-    {
-        UART.printf("open:[%s]...ok\n", path.c_str());
-    }
-    
-    bw = file.write(str.c_str(),str.length());
-    if(bw == 0){
-        UART.printf("file write err : %d\r\n", bw);
-    }
-    else 
-    {
-        UART.printf("writed size : %d\r\n", bw);
-    }
-    UART.flush();
-    
-}
-
-void file_delete()
-{
-    int ret=0;
-    UART.printf("file_delete...\n");
-    for(int i = 0; i < 5; i++)
-    {
-        String path("/ebox_");
-        path += i;
-        path += ".txt";
-        ret = fs.remove(path.c_str());
-        if(ret)
-        {
-            UART.printf("remove[%s]:%d\n",path.c_str(), ret);
-        }
-        else
-        {
-            UART.printf("remove:[%s]...ok\n", path.c_str());
-        }
-        UART.flush();
-    }  
-}
-void file_read()
-{
-    int ret;
-    int br;
-    UART.printf("file_write...\n");
-    char buf[128];
-    for(int i = 0; i < 10; i++)
-    {
-        memset(buf,0,128);
-        String path("/ebox_");
-        path += i;
-        path += ".txt";
-        File file;
-        ret = file.open(&fs,path.c_str(),O_RDONLY);
-        if(ret)
-        {
-            UART.printf("open[%s]:%d\n",path.c_str(), ret);
-        }
-        else
-        {
-            UART.printf("open:[%s]...ok\n", path.c_str());
-        }
-        br = file.read(buf,128);
-        UART.printf("file read :[%s] size:%d\r\n",buf, br);
-        file.close();
-        UART.flush();
-    }
-}
-
-
-void fileOpt()
-{
-    int ret;
-    file_create();
-    file_write();
-    file_write_append();
-    file_read();
-    file_delete();
-}
 void setup()
 {
     u8 ret;
     ebox_init();
     LocalTime.begin();
     LocalTime.dateTime.parse(String(__DATE__),String(__TIME__),8);
-
     UART.begin(115200);
     print_log();
-    ret = fs.mount(&sd);
-    if(ret)
-    {
-        UART.printf("mount err:%d\n",ret);
+
+    if (epd.Init() != 0) {
+        Serial.print("e-Paper init failed");
+        return;
     }
-    else
-    {
-        UART.printf("mount ok\n");
-    }
-    LocalTime.print(UART);
-    fileOpt();
+      /* This clears the SRAM of the e-paper display */
+    epd.ClearFrame();
+    unsigned char image[1024];
+    Paint paint(image, 128, 18);    //width should be the multiple of 8 
+    
+    paint.Clear(COLORED);
+    paint.DrawStringAt(8, 2, "Hello world", &Font12, UNCOLORED);
+    epd.SetPartialWindowRed(paint.GetImage(), 0, 50, paint.GetWidth(), paint.GetHeight());
+    epd.DisplayFrame();
+    UART.printf("第一个执行完成\n");
+    paint.Clear(UNCOLORED);
+    paint.DrawStringAt(8, 2, "e-Paper Demo", &Font12, COLORED);
+    epd.SetPartialWindowBlack(paint.GetImage(), 0, 8, paint.GetWidth(), paint.GetHeight());
+
+    paint.SetWidth(64);
+    paint.SetHeight(64);
+
+    paint.Clear(UNCOLORED);
+    paint.DrawRectangle(0, 0, 40, 50, COLORED);
+    paint.DrawLine(0, 0, 40, 50, COLORED);
+    paint.DrawLine(40, 0, 0, 50, COLORED);
+    epd.SetPartialWindowBlack(paint.GetImage(), 8, 72, paint.GetWidth(), paint.GetHeight());
+
+    paint.Clear(UNCOLORED);
+    paint.DrawCircle(16, 16, 15, COLORED);
+    epd.SetPartialWindowBlack(paint.GetImage(), 64, 72, paint.GetWidth(), paint.GetHeight());
+
+    paint.Clear(UNCOLORED);
+    paint.DrawFilledRectangle(0, 0, 40, 50, COLORED);
+    epd.SetPartialWindowRed(paint.GetImage(), 8, 144, paint.GetWidth(), paint.GetHeight());
+
+    paint.Clear(UNCOLORED);
+    paint.DrawFilledCircle(16, 16, 15, COLORED);
+    epd.SetPartialWindowRed(paint.GetImage(), 64, 144, paint.GetWidth(), paint.GetHeight());
+
+    /* This displays the data from the SRAM in e-Paper module */
+    epd.DisplayFrame();
+    UART.printf("第二个执行完成\n");
+    /* This displays an image */
+    
+
+    /* Deep sleep */
+    epd.Sleep();
 }
 int main(void)
 {
     setup();
     while(1)
     {
+         /* This displays an image */
+
+        /* Deep sleep */
         LocalTime.update();
+        LocalTime.dateTime.print(UART);
         delay_ms(1000);
     }
 
