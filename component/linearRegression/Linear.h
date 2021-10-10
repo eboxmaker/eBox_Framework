@@ -29,9 +29,11 @@ public:
     bool exe();
     void clear();
     void display();
-private:
+public:
     double rate;
     double offset;
+private:
+
     double *x;
     double *y;
     int rows;
