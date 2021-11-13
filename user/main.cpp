@@ -1,81 +1,123 @@
 /**
-  ******************************************************************************
-  * @file    pwm.cpp
-  * @author  shentq
-  * @version V2.0
-  * @date    2016/08/14
-  * @brief   ebox application example .
-  ******************************************************************************
-  * @attention
-  *
-  * No part of this software may be used for any commercial activities by any form
-  * or means, without the prior written consent of shentq. This specification is
-  * preliminary and is subject to change at any time without notice. shentq assumes
-  * no responsibility for any errors contained herein.
-  * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    main.cpp
+ * @author  cat_li
+ * @version V1.0
+ * @date    2017/07/13
+ * @brief   ebox exti example, 基于stm32nucleo(072)平台验证
+ ******************************************************************************
+ * @attention
+ *
+ * No part of this software may be used for any commercial activities by any form
+ * or means, without the prior written consent of shentq. This specification is
+ * preliminary and is subject to change at any time without notice. shentq assumes
+ * no responsibility for any errors contained herein.
+ * <h2><center>&copy; Copyright 2015 shentq. All Rights Reserved.</center></h2>
+ ******************************************************************************
+ */
 
 
 /* Includes ------------------------------------------------------------------*/
 
-
 #include "ebox.h"
-#include "math.h"
-#include "ebox_encoder.h"
-#include "oled_ssd1306_128x32.h"
+#include "bsp_ebox.h"
+#include "ebox_exti.h"
+/**
+	*	1	此例程演示了GPIO中断
+    *   2   其中userbt1连接用户按键，按下和弹起绑定不同的回调函数
+            弹起串口打印信息，按下反转led输出
+    *   3   ex连接PA0，下降沿和上升沿绑定同一个回调函数，x++并从串口输出
+	*/
 
-//SoftI2c si2cx(&PB10, &PB11);
-OledSSD1306_128x32 oled(&mcuI2c2);
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"STM32F0 GPIO_EXTI example"
+#define EXAMPLE_DATE	"2017-09-10"
 
+
+uint32_t xx;
+
+
+Exti   userbt1(&PA8);
+//Exti   ex(&BtnPin);
+
+/**
+ *@brief    静态回调函数
+ *@param    none
+ *@retval   none
+*/
+void fall()
+{
+    xx--;
+    UART.printf("\r\n falling,xx = %d", xx);
+}
+
+void rise()
+{
+    xx++;
+    LED1.toggle();
+    UART.printf("\r\n rising, xx = %d", xx);
+}
+
+void exti_event()
+{
+    xx++;
+    LED1.toggle();
+    if(userbt1.read())
+        UART.printf("\r\n rise, xx = %d", xx);
+    else
+        UART.printf("\r\n fall, xx = %d", xx);
+
+
+}
+
+/**
+ *@brief    测试类，用来测试类成员绑定
+ *@param    none
+ *@retval   none
+*/
+class Test
+{
+public:
+    void event()
+    {
+        xx++;
+        LED1.toggle();
+        if(userbt1.read())
+            UART.printf("\r\n Test::rise, xx = %d", xx);
+        else
+            UART.printf("\r\n Test::fall, xx = %d", xx);
+    }
+};
+Test test;
 
 void setup()
 {
     ebox_init();
-    uart1.begin(115200);
-    oled.begin();
+    UART.begin(115200);
+    print_log(EXAMPLE_NAME, EXAMPLE_DATE);
+
+    LED1.mode(OUTPUT_PP);
+    // 上升沿，下降沿均触发,绑定同一个中断回调函数
+    userbt1.begin();
+//    userbt1.attach(exti_event);
+    userbt1.attach(&test,&Test::event);
+    userbt1.interrupt(Exti::TrigFallRise,ENABLE);
+
+//    // 上升沿，下降沿调用不同的回调函数
+//    userbt1.begin();
+//    userbt1.attach(rise);
+//    userbt1.interrupt(TrigFall,ENABLE);
+
 }
-int x = 0;
-int y = 0;
+
+
 int main(void)
 {
-
     setup();
-    uint16_t temp;
-    float speed;
-	static uint64_t last_time = millis();
-    static uint64_t last_time1 = millis();
     while(1)
     {
-        last_time = millis();
-        oled.clear();
-        last_time1 = millis();
-        uart1.printf("%d\r\n", last_time1 - last_time);
-
-    unsigned char image[1024];
-
-   oled.draw_line(0,0,10,20,1);
-        
-       
-
-//        oled.draw_pixel(x,y,1);
-        oled.fill_screen(1);
-        oled.flush();
-//        delay_ms(1000);
-//        oled.show_num(0, 2, 25, 3, 16); //显示ASCII字符的码值
-//        delay_ms(1000);
-        x++;
-        if(x>127) 
-        {
-            x= 0;
-            y++;
-            if(y>32) 
-                y =0;
-
-        }
-        
-//        oled.show_chinese(19, 1, 1); //中
-        delay_ms(1);
+        //userbt1.soft_triger();
+        delay_ms(1000);
     }
 }
 

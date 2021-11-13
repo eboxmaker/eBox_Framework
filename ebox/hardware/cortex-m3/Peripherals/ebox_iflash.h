@@ -29,29 +29,20 @@ extern "C" {
 
 #include "mcu.h"
 
-#define FLASH_USER_START_ADDR   MCU_FLASH_PRG_END  +  FLASH_PAGE_SIZE
-#define FLASH_USER_END_ADDR     MCU_FLASH_END
-
-
-#if defined (STM32F10X_HD) || defined (STM32F10X_HD_VL) || defined (STM32F10X_CL) || defined (STM32F10X_XL)
-#define FLASH_PAGE_SIZE    ((uint16_t)0x800)
-#else
-#define FLASH_PAGE_SIZE    ((uint16_t)0x400)
-#endif
-
-
 
 class Flash
 {
 public:
+
     Flash();
+
     /**
-    *@brief    构造函数,设定的flash大小 = nPage * FLASH_PAGE_SIZE
-    *@param    uint8_t startAddr  从第几个扇区开始
+    *@brief    初始化,设定的flash大小 = nPage * cpu.flash.page_size
+                选中的page从后向前数nPage个页，用于用户空间
        uint8_t nPage		页面数 > 0
-    *@retval   E_FlashStates
+    *@retval   false 失败，true 成功
     */
-    Flash(uint8_t startAddr, uint8_t nPage = 1);
+    bool begin(int nPage = 0xFF);
     /**
     *@brief    读出一组数据
     *@param    uint32_t offsetAdd  	要读取的地址

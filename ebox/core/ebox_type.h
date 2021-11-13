@@ -98,12 +98,21 @@ typedef struct
 
 typedef struct
 {
+    uint32_t    size;
+    uint16_t    page_size;
+    uint32_t    start;
+    uint32_t    end;
+    uint32_t    used;
+
+} FlashInfo_t;
+typedef struct
+{
     CpuType     type;
     uint8_t     pins;
-    uint16_t    flash_size;
+    FlashInfo_t flash;
     uint32_t    ability;//cpu calculate plus per second;
     CpuClock_t	clock;
-    uint32_t    chip_id[3];
+    uint8_t    chip_id[12];
     char        company[8];
 
 } Cpu_t;

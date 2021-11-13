@@ -1312,6 +1312,21 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>modbus</GroupName>
+          <Files>
+            <File>
+              <FileName>Modbus.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\modbus\libraries\Modbus\Modbus.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ModbusSerial.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\modbus\libraries\ModbusSerial\ModbusSerial.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>

@@ -72,9 +72,13 @@ void print_log(const char *name, const char *date)
 
 
     UART.print("* CPUID         : ");       /* 打印CPU唯一ID */
-    UART.print(cpu.chip_id[2], HEX);
-    UART.print(cpu.chip_id[1], HEX);
-    UART.println(cpu.chip_id[0], HEX);
+    for(int i = 0 ; i <11; i++)
+    {
+        UART.printf("%02X-",cpu.chip_id[i]);
+    }
+    UART.printf("%02X",cpu.chip_id[11]);
+    UART.printf("\n");
+
 
 
     UART.print("* core          : ");
@@ -96,15 +100,20 @@ void print_log(const char *name, const char *date)
 
 
     UART.print("* flash size    : ");       /* 打印flash大小 */
-    UART.print(cpu.flash_size);
+    UART.print(cpu.flash.size/1024);
     UART.println("KB");
+    
+    UART.print("* flash page size    : ");  /* 打印flash page大小 */
+    UART.print(cpu.flash.page_size);
+    UART.println("B");
+
 
     UART.print("* flash used    : ");	    /* 打印flash使用了多少KB */
-    UART.print(MCU_FLASH_USED / 1024.0);
+    UART.print(cpu.flash.used / 1024.0);
     UART.println("KB");
 
     UART.print("* flash remaind : ");	    /* 打印flash剩余了多少KB  */
-    UART.print(MCU_FLASH_REMAIND / 1024.0);
+    UART.print((cpu.flash.size - cpu.flash.used) / 1024.0);
     UART.println("KB");
 
     UART.print("* mem size      : ");       /* 打印SRAM大小 */

@@ -113,8 +113,8 @@ EventManager manager;
 */
 void print_log(const char *name, const char *date)
 {
-    UART.print("\n\r");
-    UART.print("*************************************************************\n\r");
+    UART.print("\n");
+    UART.print("*************************************************************\n");
     UART.print("* \r\n");	                /* 打印一行空格 */
     UART.print("* 例程名称      : ");	    /* 打印例程名称 */
     UART.println(name);
@@ -123,9 +123,9 @@ void print_log(const char *name, const char *date)
 
     UART.print("* 硬件平台      : ");       /* 硬件平台 */
     UART.println(HARDWARE);
-    UART.print("* EBOX库版本    : ebox_" );/* 版本信息 */
+    UART.print("* EBOX库版本    : ebox_V" );/* 版本信息 */
     UART.println(EBOX_VERSION);
-    UART.print("*                     CPU 信息\r\n");	/* CPU信息 */
+    UART.print("*                     CPU 信息\n");	/* CPU信息 */
     UART.println();
     UART.print("* CPU TYPE      : ");	    /* 打印CPU类型 */
     UART.println(MCU_TYPE);
@@ -136,9 +136,13 @@ void print_log(const char *name, const char *date)
 
 
     UART.print("* CPUID         : ");       /* 打印CPU唯一ID */
-    UART.print(cpu.chip_id[2], HEX);
-    UART.print(cpu.chip_id[1], HEX);
-    UART.println(cpu.chip_id[0], HEX);
+    for(int i = 0 ; i <11; i++)
+    {
+        UART.printf("%02X-",cpu.chip_id[i]);
+    }
+    UART.printf("%02X",cpu.chip_id[11]);
+    UART.printf("\n");
+
 
 
     UART.print("* core          : ");
@@ -160,15 +164,20 @@ void print_log(const char *name, const char *date)
 
 
     UART.print("* flash size    : ");       /* 打印flash大小 */
-    UART.print(cpu.flash_size);
+    UART.print(cpu.flash.size/1024);
     UART.println("KB");
+    
+    UART.print("* flash page size    : ");  /* 打印flash page大小 */
+    UART.print(cpu.flash.page_size);
+    UART.println("B");
+
 
     UART.print("* flash used    : ");	    /* 打印flash使用了多少KB */
-    UART.print(MCU_FLASH_USED / 1024.0);
+    UART.print(cpu.flash.used / 1024.0);
     UART.println("KB");
 
     UART.print("* flash remaind : ");	    /* 打印flash剩余了多少KB  */
-    UART.print(MCU_FLASH_REMAIND / 1024.0);
+    UART.print((cpu.flash.size - cpu.flash.used) / 1024.0);
     UART.println("KB");
 
     UART.print("* mem size      : ");       /* 打印SRAM大小 */
@@ -195,8 +204,9 @@ void print_log(const char *name, const char *date)
     UART.print(ebox_get_free() / 1024.0);
     UART.println("KB");
 
-    UART.print("* \r\n");	                /* 打印一行空格 */
-    UART.print("*************************************************************\n\r");
+    UART.print("*\n");	                /* 打印一行空格 */
+    UART.print("*************************************************************\n");
+    UART.flush();
 }
 
 

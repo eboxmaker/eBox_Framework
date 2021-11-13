@@ -128,11 +128,32 @@ static void update_chip_info()
     cpu.type = MCU_TYPE;
     cpu.pins = MCU_PINS;
     memcpy(cpu.company, "st\0", sizeof("st\0"));
-    cpu.chip_id[2] = *(__IO uint32_t *)(0x1FFF7A10 + 0x00); //低字节
-    cpu.chip_id[1] = *(__IO uint32_t *)(0x1FFF7A10 + 0x04); //
-    cpu.chip_id[0] = *(__IO uint32_t *)(0x1FFF7A10 + 0x08); //高字节
-    cpu.flash_size = *(uint16_t *)(0x1FFF7A10 + 0x12);   //芯片flash容量
 
+    
+    uint8_t *p = (uint8_t *)(0x1FFF7A10);
+    for(int i = 0 ; i < 12; i++)
+    {
+        cpu.chip_id[i] = *p++;
+    }
+
+
+    cpu.flash.size = *(uint16_t *)(0x1FFF7A22);   //芯片flash容量
+    switch(cpu.flash.size)
+    {
+        case 32:
+        case 64:
+        case 128:
+            cpu.flash.page_size = 1024;
+            break;
+        default:
+            cpu.flash.page_size = 2048;
+            break;
+    }
+    cpu.flash.size = cpu.flash.size * 1024;
+    cpu.flash.start = MCU_FLASH_BEGIN;
+    cpu.flash.end = MCU_FLASH_BEGIN + cpu.flash.size - 1;
+    cpu.flash.used = MCU_FLASH_USED;
+    
     millis_seconds = 0;
     SysTick->VAL = 0;
     //统计cpu计算能力//////////////////

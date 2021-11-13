@@ -70,6 +70,8 @@ int exti_irq_init(uint8_t index, exti_irq_handler handler, uint32_t id)
 Exti::Exti(Gpio *pin)
 {
     this->pin = pin;
+    port_source = (uint32_t)pin->id >> 4;
+    pin_source = pin->id & 0x0f;
     exti_line = 1 << pin_source;
     exti_irq_init(this->pin_source, (&Exti::_irq_handler), (uint32_t)this);
 
@@ -88,9 +90,6 @@ void Exti::begin(PinMode_t mode, Mode_t extiMode)
 
     pin->mode((mode == INPUT) ? (INPUT_PU) : (mode));
 
-//    port_source = (uint32_t)pin->id >> 4;
-//    pin_source = pin->id & 0x0f;
-//    GPIO_EXTILineConfig(GETEXTIPORT(pin->id), GETPINNUMBER(pin->id));
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
 

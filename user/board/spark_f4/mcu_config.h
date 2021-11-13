@@ -10,7 +10,6 @@
 //请查阅ebox_cpu_type.h寻找特定信号CPU的详细配置
 #define STM32_TYPE    STM32F417VG
 #define STM32_PINS    176
-#define STM32_FLASH   1024
 #define STM32_RAM1    128
 #define STM32_RAM2    0
 #define STM32_RAM3    0
@@ -94,11 +93,9 @@ extern int SHT$$INIT_ARRAY$$Limit;
 #endif
 
 #define MCU_FLASH_BEGIN         0x8000000
-#define MCU_FLASH_END           (0x8000000+MCU_FLASH_SIZE)
-
-
 #define MCU_FLASH_USED          (MCU_FLASH_PRG_END - MCU_FLASH_BEGIN)
-#define MCU_FLASH_REMAIND       (MCU_FLASH_END - MCU_FLASH_PRG_END)
+
+
 //--------------------------------------------------------
 
 

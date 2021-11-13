@@ -71,16 +71,23 @@ void print_log(const char *name, const char *date)
     UART.printf("* CPU TYPE      : %020d\r\n", MCU_TYPE);	/* 打印一行空格 */
     UART.printf("* CPU PINS      : %-020d\r\n", STM32_PINS);	/* 打印一行空格 */
     UART.printf("* CPU COMPANY   : %s\r\n", MCU_COMPANY);	/* 打印一行空格 */
-    UART.printf("* CPUID         : %-010.2f %08X %08X\n\r"
-                , -123.456, cpu.chip_id[1], cpu.chip_id[0]);
+    
+    UART.print("* CPUID         : ");       /* 打印CPU唯一ID */
+    for(int i = 0 ; i <11; i++)
+    {
+        UART.printf("%02X-",cpu.chip_id[i]);
+    }
+    UART.printf("%02X",cpu.chip_id[11]);
+    UART.printf("\n");
+    
     UART.printf("* core          : %0.3fMhz\r\n", cpu.clock.core / 1000000.0);
     UART.printf("* hclk          : %0.3fMhz\r\n", cpu.clock.hclk / 1000000.0);
     UART.printf("* pclk1         : %0.3fMhz\r\n", cpu.clock.pclk1 / 1000000.0);
     UART.printf("* pclk2         : %0.3fMhz\r\n", cpu.clock.pclk2 / 1000000.0);
 
-    UART.printf("* flash size    : %d    \tKB \r\n", cpu.flash_size);
-    UART.printf("* flash used    : %0.3f \tKB\r\n", MCU_FLASH_USED / 1024.0);	/* 打印一行空格 */
-    UART.printf("* flash remaind : %0.3f \tKB\r\n", MCU_FLASH_REMAIND / 1024.0);	/* 打印一行空格 */
+    UART.printf("* flash size    : %0.3f \tKB \r\n", cpu.flash.size/ 1024.0);
+    UART.printf("* flash used    : %0.3f \tKB\r\n", cpu.flash.used / 1024.0);	/* 打印一行空格 */
+    UART.printf("* flash remaind : %0.3f \tKB\r\n", (cpu.flash.size - cpu.flash.used) / 1024.0);	/* 打印一行空格 */
 
     UART.printf("* mem size      : %0.3f \tKB \r\n", MCU_SRAM1_SIZE / 1024.0);
     UART.printf("* mem used      : %0.3f \tKB\r\n", MCU_SRAM1_USED / 1024.0);	/* 打印一行空格 */

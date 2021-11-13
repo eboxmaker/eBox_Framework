@@ -54,7 +54,7 @@ extern SoftI2c Wire;
 extern mcuI2c mcuWire;
 
 
-void print_log(const char *name, const char *date);
+void print_log(const char *name = "", const char *date = "");
 
 #endif
 
