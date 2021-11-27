@@ -62,8 +62,6 @@ private:
     uint8_t tx_buffer[1];
     uint8_t rx_buffer[1];
 
-    void dma_config( void );
-
 private:
     SPI_Module *_spi;
     Gpio        *_sck;

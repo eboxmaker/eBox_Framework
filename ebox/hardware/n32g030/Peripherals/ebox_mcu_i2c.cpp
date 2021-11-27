@@ -21,7 +21,7 @@
 
 //#define _bitDelay 5
 
-mcuI2c::mcuI2c(I2C_TypeDef *I2Cx,Gpio *sclPin, Gpio *sdaPin)
+mcuI2c::mcuI2c(I2C_Module *I2Cx,Gpio *sclPin, Gpio *sdaPin)
 {
     _scl = sclPin;
     _sda = sdaPin;
@@ -44,26 +44,26 @@ void mcuI2c::begin(uint8_t address)
     _scl->mode(AF_OD_PU);  
     
     rcc_clock_cmd((uint32_t)_i2cx, ENABLE);
-    switch((uint32_t)_i2cx)    
-    {
-        case I2C1_BASE:
-            rcc_src = RCC_APB1Periph_I2C1;break;
-        case I2C2_BASE:
-            rcc_src = RCC_APB1Periph_I2C2;break;
-//        case I2C3_BASE:
-//            rcc_src = RCC_APB1Periph_I2C3;break;
-    }       
-    /* Reset I2Cx IP */
-    RCC_APB1PeriphResetCmd(rcc_src, ENABLE);
-    /* Release reset signal of I2Cx IP */
-    RCC_APB1PeriphResetCmd(rcc_src, DISABLE);
+//    switch((uint32_t)_i2cx)    
+//    {
+//        case I2C1_BASE:
+//            rcc_src = RCC_APB1Periph_I2C1;break;
+//        case I2C2_BASE:
+//            rcc_src = RCC_APB1Periph_I2C2;break;
+////        case I2C3_BASE:
+////            rcc_src = RCC_APB1Periph_I2C3;break;
+//    }       
+//    /* Reset I2Cx IP */
+//    RCC_APB1PeriphResetCmd(rcc_src, ENABLE);
+//    /* Release reset signal of I2Cx IP */
+//    RCC_APB1PeriphResetCmd(rcc_src, DISABLE);
     
     /* I2C configuration */
-    I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
-    I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
-    I2C_InitStructure.I2C_OwnAddress1 = address;
-    I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
-    I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+    I2C_InitStructure.BusMode = I2C_BUSMODE_I2C;
+    I2C_InitStructure.FmDutyCycle = I2C_FMDUTYCYCLE_2;
+    I2C_InitStructure.OwnAddr1 = address;
+    I2C_InitStructure.AckEnable = I2C_ACKEN;
+    I2C_InitStructure.AddrMode = I2C_ADDR_MODE_7BIT;
     setClock();
 
     
@@ -107,10 +107,10 @@ void mcuI2c::setClock(Speed_t speed)
     default:
         _speed = (100000);
     }
-    I2C_InitStructure.I2C_ClockSpeed = _speed;
+    I2C_InitStructure.ClkSpeed = _speed;
 
     /* I2C Peripheral Enable */
-    I2C_Cmd(_i2cx, ENABLE);
+    I2C_Enable(_i2cx, ENABLE);
     /* Apply I2C configuration after enabling it */
     I2C_Init(_i2cx, &I2C_InitStructure);
     
@@ -200,10 +200,11 @@ i2c_err_t mcuI2c::_start(void)
     uint32_t cnt = 0;
 
     /* Send STRAT condition */
-    I2C_GenerateSTART(_i2cx, ENABLE);
+    I2C_GenerateStart(_i2cx, ENABLE);
     /* Test on EV5 and clear it */
-    while (!I2C_CheckEvent(_i2cx, I2C_EVENT_MASTER_MODE_SELECT))
+    while (!I2C_CheckEvent(_i2cx, I2C_EVT_MASTER_MODE_FLAG))
     {
+        
         cnt++;
         if (cnt > 0xfffe)
         {
@@ -222,7 +223,7 @@ i2c_err_t mcuI2c::_start(void)
   */
 i2c_err_t mcuI2c::_stop(void)
 {   
-    I2C_GenerateSTOP(_i2cx, ENABLE);
+    I2C_GenerateStop(_i2cx, ENABLE);
     return I2C_ERROR_OK;
 }
 
@@ -260,8 +261,9 @@ i2c_err_t mcuI2c::_sendByte( uint8_t data )
     /* Send the byte to be written */
     I2C_SendData(_i2cx, data);
     /* Test on EV8 and clear it */
-    while (!I2C_CheckEvent(_i2cx, I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+    while (!I2C_CheckEvent(_i2cx, I2C_EVT_MASTER_DATA_SENDED))
     {
+        
         cnt++;
         if (cnt > 0xfffe)
         {
@@ -287,10 +289,12 @@ i2c_err_t	mcuI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
     if (WR) /* Send address for read */
     {
         //    mcuI2C_DEBUG("send read address is %d \n",slaveAddr);
-        I2C_Send7bitAddress(_i2cx, slaveAddr, I2C_Direction_Receiver);
+        I2C_SendAddr7bit(_i2cx, slaveAddr, I2C_DIRECTION_RECV);
+        
         /* Test on EV6 and clear it */
-        while (!I2C_CheckEvent(_i2cx, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
+        while (!I2C_CheckEvent(_i2cx, I2C_EVT_MASTER_RXMODE_FLAG))
         {
+            
         cnt++;
         if (cnt > 0xfffe)
             {
@@ -302,10 +306,11 @@ i2c_err_t	mcuI2c::_send7bitsAddress(uint8_t slaveAddr, uint8_t WR)
     else   /* Send address for write */
     {
         //    mcuI2C_DEBUG("send write address is %d \n",slaveAddr);
-        I2C_Send7bitAddress(_i2cx, slaveAddr, I2C_Direction_Transmitter);
+        I2C_SendAddr7bit(_i2cx, slaveAddr, I2C_DIRECTION_SEND);
         /* Test on EV6 and clear it */
-        while (!I2C_CheckEvent(_i2cx, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
+        while (!I2C_CheckEvent(_i2cx, I2C_EVT_MASTER_TXMODE_FLAG))
         {
+            
             cnt++;
             if (cnt > 0xfffe)
             {
@@ -325,7 +330,7 @@ i2c_err_t mcuI2c::_receiveByte(uint8_t *data)
 {
     i2c_err_t ret = I2C_ERROR_OK;
     uint32_t cnt = 0;
-    while (!I2C_CheckEvent(_i2cx, I2C_EVENT_MASTER_BYTE_RECEIVED))
+    while (!I2C_CheckEvent(_i2cx, I2C_EVT_MASTER_DATA_RECVD_FLAG))
     {
         cnt++;
         if (cnt > 0xfffe)
@@ -335,7 +340,7 @@ i2c_err_t mcuI2c::_receiveByte(uint8_t *data)
         }
 
     }
-    *data = I2C_ReceiveData(_i2cx);//读出寄存器数据
+    *data = I2C_RecvData(_i2cx);//读出寄存器数据
     return ret;
 }
 
@@ -347,7 +352,7 @@ i2c_err_t mcuI2c::_receiveByte(uint8_t *data)
 i2c_err_t mcuI2c::_sendAck()
 {
     i2c_err_t err = I2C_ERROR_OK;
-    I2C_AcknowledgeConfig(_i2cx, ENABLE);
+    I2C_ConfigAck(_i2cx, ENABLE);
     return err;
 }
 
@@ -359,7 +364,7 @@ i2c_err_t mcuI2c::_sendAck()
 i2c_err_t mcuI2c::_sendNack()
 {
     i2c_err_t err = I2C_ERROR_OK;
-    I2C_AcknowledgeConfig(_i2cx, DISABLE);
+    I2C_ConfigAck(_i2cx, DISABLE);
     return err;
 }
 

@@ -75,7 +75,7 @@ void Exti::begin(PinMode_t mode, Mode_t extiMode)
     _pin->mode((mode == INPUT) ? (INPUT_PU) : (mode));
 
     //  LL_APB1_GRP2_EnableClock(LL_APB1_GRP2_PERIPH_SYSCFG);
-    GPIO_EXTILineConfig(GETEXTIPORT(_pin->id), GETPINNUMBER(_pin->id));
+    GPIO_ConfigEXTILine(GETEXTIPORT(_pin->id), GETPINNUMBER(_pin->id));
 
     EXTI_DEBUG("extiLine is %d , %d\n", _extiLine, GETEXTILINE(_pin->id));
     EXTI_DEBUG("pinNumber is %d\n", GETPINNUMBER(_pin->id));
@@ -83,20 +83,20 @@ void Exti::begin(PinMode_t mode, Mode_t extiMode)
     switch (extiMode)
     {
     case ModeIt:
-        SET_BIT(EXTI->IMR, _extiLine);
-        CLEAR_BIT(EXTI->EMR, _extiLine);
+        SET_BIT(EXTI->IMASK, _extiLine);
+        CLEAR_BIT(EXTI->EMASK, _extiLine);
         break;
     case ModeEvent:
-        SET_BIT(EXTI->EMR, _extiLine);
-        CLEAR_BIT(EXTI->IMR, _extiLine);
+        SET_BIT(EXTI->EMASK, _extiLine);
+        CLEAR_BIT(EXTI->IMASK, _extiLine);
         break;
     case ModeItEvent:
-        SET_BIT(EXTI->EMR, _extiLine);
-        SET_BIT(EXTI->IMR, _extiLine);
+        SET_BIT(EXTI->EMASK, _extiLine);
+        SET_BIT(EXTI->IMASK, _extiLine);
         break;
     default:
-        SET_BIT(EXTI->IMR, _extiLine);
-        CLEAR_BIT(EXTI->EMR, _extiLine);
+        SET_BIT(EXTI->IMASK, _extiLine);
+        CLEAR_BIT(EXTI->EMASK, _extiLine);
         break;
     }
     nvic(ENABLE);
@@ -104,11 +104,16 @@ void Exti::begin(PinMode_t mode, Mode_t extiMode)
 
 void Exti::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority )
 {
-    nvic_dev_set_priority((uint32_t)_extiLine,0,0,0);
-    if(enable != DISABLE)
-        nvic_dev_enable((uint32_t)_extiLine,0);
-    else
-        nvic_dev_disable((uint32_t)_extiLine,0);
+//    nvic_dev_set_priority((uint32_t)_extiLine,0,0,0);
+//    if(enable != DISABLE)
+//        nvic_dev_enable((uint32_t)_extiLine,0);
+//    else
+//        nvic_dev_disable((uint32_t)_extiLine,0);
+    NVIC_InitType NVIC_InitStructure;
+    NVIC_InitStructure.NVIC_IRQChannel          = dev_to_irqn(_extiLine,0);
+    NVIC_InitStructure.NVIC_IRQChannelPriority  = preemption_priority;
+    NVIC_InitStructure.NVIC_IRQChannelCmd       = enable;
+    NVIC_Init(&NVIC_InitStructure);
 }
 
 
@@ -118,14 +123,14 @@ void Exti::interrupt(Trig_t trig, FunctionalState enable)
     switch (trig) // 使能触发类型
     {
     case TrigFall:
-        bit_write(EXTI->FTSR,GETPINNUMBER(_pin->id),enable);
+        bit_write(EXTI->FT_CFG,GETPINNUMBER(_pin->id),enable);
         break;
     case TrigRise:
-        bit_write(EXTI->RTSR,GETPINNUMBER(_pin->id),enable);
+        bit_write(EXTI->RT_CFG,GETPINNUMBER(_pin->id),enable);
         break;
     case TrigFallRise:
-        bit_write(EXTI->FTSR,GETPINNUMBER(_pin->id),enable);
-        bit_write(EXTI->RTSR,GETPINNUMBER(_pin->id),enable);
+        bit_write(EXTI->FT_CFG,GETPINNUMBER(_pin->id),enable);
+        bit_write(EXTI->RT_CFG,GETPINNUMBER(_pin->id),enable);
         break;
     default:
         break;
@@ -134,7 +139,7 @@ void Exti::interrupt(Trig_t trig, FunctionalState enable)
 
 void Exti::soft_triger()
 {
-    bit_set(EXTI->SWIER,GETPINNUMBER(_pin->id));
+    bit_set(EXTI->SWIE,GETPINNUMBER(_pin->id));
 }
 
 /**
@@ -161,69 +166,45 @@ void Exti::attach(void (*fptr)(void))
 
 extern "C" {
 
-    void EXTI0_IRQHandler(void)
+    void EXTI0_1_IRQHandler(void)
     {
-        if (EXTI_GetITStatus(EXTI_Line0) != RESET)
+        if (EXTI_GetITStatus(EXTI_LINE0) != RESET)
         {
             exti_handler(exti_irq_ids[0]);
-            EXTI_ClearITPendingBit(EXTI_Line0);
+            EXTI_ClrITPendBit(EXTI_LINE0);
         }
-    }
-    void EXTI1_IRQHandler(void)
-    {
-        if (EXTI_GetITStatus(EXTI_Line1) != RESET)
+        if (EXTI_GetITStatus(EXTI_LINE1) != RESET)
         {
             exti_handler(exti_irq_ids[1]);
-            EXTI_ClearITPendingBit(EXTI_Line1);
+            EXTI_ClrITPendBit(EXTI_LINE1);
         }
     }
-    void EXTI2_IRQHandler(void)
+    void EXTI2_3_IRQHandler(void)
     {
-        if (EXTI_GetITStatus(EXTI_Line2) != RESET)
+        if (EXTI_GetITStatus(EXTI_LINE2) != RESET)
         {
             exti_handler(exti_irq_ids[2]);
-            EXTI_ClearITPendingBit(EXTI_Line2);
+            EXTI_ClrITPendBit(EXTI_LINE2);
         }
-    }
-    void EXTI3_IRQHandler(void)
-    {
-        if (EXTI_GetITStatus(EXTI_Line3) != RESET)
+        if (EXTI_GetITStatus(EXTI_LINE3) != RESET)
         {
             exti_handler(exti_irq_ids[3]);
-            EXTI_ClearITPendingBit(EXTI_Line3);
+            EXTI_ClrITPendBit(EXTI_LINE3);
         }
     }
-    void EXTI4_IRQHandler(void)
-    {
-        if (EXTI_GetITStatus(EXTI_Line4) != RESET)
-        {
-            exti_handler(exti_irq_ids[4]);
-            EXTI_ClearITPendingBit(EXTI_Line4);
-        }
-    }
+   
 
-    void EXTI9_5_IRQHandler(void)
+    void EXTI4_15_IRQHandler(void)
     {
-        for (uint8_t i = 5; i <= 9; i++)
+        for (uint8_t i = 4; i <= 15; i++)
         {
             if (EXTI_GetITStatus(1 << i) != RESET)
             {
                 exti_handler(exti_irq_ids[i]);
-                EXTI_ClearITPendingBit(1 << i);
+                EXTI_ClrITPendBit(1 << i);
             }
         }
     }
 
-    void EXTI15_10_IRQHandler(void)
-    {
-        for (uint8_t i = 10; i <= 15; i++)
-        {
-            if (EXTI_GetITStatus(1 << i) != RESET)
-            {
-                exti_handler(exti_irq_ids[i]);
-                EXTI_ClearITPendingBit(1 << i);
-            }
-        }
-    }
 
 }

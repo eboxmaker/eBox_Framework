@@ -41,13 +41,13 @@ static const DevToRcc_t dev_to_rcc_table[] =
 //    {TIM10_BASE, RCC_APB2Periph_TIM10},
 //    {TIM11_BASE, RCC_APB2Periph_TIM11},
 
-//    {SPI1_BASE, RCC_APB2Periph_SPI1},
-//    {SPI2_BASE, RCC_APB1Periph_SPI2},
+    {SPI1_BASE, RCC_APB2_PERIPH_SPI1},
+    {SPI2_BASE, RCC_APB2_PERIPH_SPI2},
 //    {SPI3_BASE, RCC_APB1Periph_SPI3},
 //    //    {SPI4_BASE,RCC_APB2Periph_SPI4},
 //    //    {SPI5_BASE,RCC_APB2Periph_SPI5},
-//    {I2C1_BASE, RCC_APB1Periph_I2C1},
-//    {I2C2_BASE, RCC_APB1Periph_I2C2},
+    {I2C1_BASE, RCC_APB1_PERIPH_I2C1},
+    {I2C2_BASE, RCC_APB1_PERIPH_I2C2},
 //    //    {I2C3_BASE,RCC_APB1Periph_I2C3},
 
 //    {USART1_BASE, RCC_APB2Periph_USART1},

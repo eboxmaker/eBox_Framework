@@ -37,29 +37,29 @@ enum DmaIrqType
 
 enum DmaItIndex
 {
-    DMA1_CH1  = 0,
-    DMA1_CH2  = 1,
-    DMA1_CH3  = 2,
-    DMA1_CH4  = 3,
-    DMA1_CH5  = 4,
-    DMA1_CH6  = 5,
-    DMA1_CH7  = 6,
-    DMA2_CH1,
-    DMA2_CH2,
-    DMA2_CH3,
-    DMA2_CH4,
-    DMA2_CH5,
+    DmaItIndex_CH1  = 0,
+    DmaItIndex_CH2  = 1,
+    DmaItIndex_CH3  = 2,
+    DmaItIndex_CH4  = 3,
+    DmaItIndex_CH5  = 4,
+    DmaItIndex_CH6  = 5,
+    DmaItIndex_CH7  = 6,
+    Dma2ItIndex_CH1,
+    Dma2ItIndex_CH2,
+    Dma2ItIndex_CH3,
+    Dma2ItIndex_CH4,
+    Dma2ItIndex_CH5,
 } ;
 
 typedef void (*DmaIrqHandler_t)(uint32_t id, DmaIrqType type);
 class Dma
 {
 public:
-    DMA_Channel_TypeDef *DMAy_Channelx;
+    DMA_ChannelType *DMAy_Channelx;
 
 
 public:
-    Dma(DMA_Channel_TypeDef *DMAy_Channelx);
+    Dma(DMA_ChannelType *DMAy_Channelx);
 
     void rcc_enable();
     void rcc_disable();
@@ -69,7 +69,7 @@ public:
 
     void deInit();
 
-    void init(DMA_InitTypeDef *DMA_InitStruct);
+    void init(DMA_InitType *DMA_InitStruct);
     void enable();
     void disable();
     void set_current_len(uint16_t len);
@@ -78,7 +78,7 @@ public:
     bool get_flag_status();
     void clear_flag();
 
-    DMA_Channel_TypeDef *get_dma_ch();
+    DMA_ChannelType *get_dma_ch();
 
 
 

@@ -24,7 +24,7 @@
 #define GETPIN(A) 	 	  (uint16_t)(1<<(A&0x0f))
 // 获取端口索引，返回0,1,2,3,4,5
 //#define GETPORTINDEX(A)   ((A)&0xf0)>>4
-#define GETPORT(A)   (GPIO_Module*)(((((A)&0xf0)+0x20)<<6)+APB2PERIPH_BASE)
+#define GETPORT(A)   (GPIO_Module*)((((A)&0xf0)<<6)+GPIOA_BASE)
 
 
 
