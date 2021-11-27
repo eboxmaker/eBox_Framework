@@ -41,7 +41,7 @@
 class Timer
 {
 public:
-    Timer(TIM_TypeDef *TIMx);
+    Timer(TIM_Module *TIMx);
     void begin(uint32_t frq);
     void nvic(FunctionalState enable, uint8_t preemption_priority = 0, uint8_t sub_priority = 0);
     void interrupt(FunctionalState enable);
@@ -63,7 +63,7 @@ private:
     void base_init(uint16_t period, uint16_t prescaler);
     void set_reload(uint16_t auto_reload);
     void clear_count(void);
-    TIM_TypeDef *_TIMx;
+    TIM_Module *_TIMx;
     uint8_t nvic_ch;
 protected:
     FunctionPointer _irq;

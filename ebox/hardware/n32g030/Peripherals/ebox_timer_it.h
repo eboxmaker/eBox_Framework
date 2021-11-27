@@ -29,6 +29,7 @@ enum Tim_It_Index
     TIM5_IT_Update  = 4,
     TIM6_IT_Update  = 5,
     TIM7_IT_Update  = 6,
+    TIM8_IT_Update  = 6,
     TIM1_IT_CC1     = 7,
     TIM1_IT_CC2     = 8,
     TIM1_IT_CC3     = 9,

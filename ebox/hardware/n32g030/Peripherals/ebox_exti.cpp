@@ -110,7 +110,7 @@ void Exti::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub
 //    else
 //        nvic_dev_disable((uint32_t)_extiLine,0);
     NVIC_InitType NVIC_InitStructure;
-    NVIC_InitStructure.NVIC_IRQChannel          = dev_to_irqn(_extiLine,0);
+    NVIC_InitStructure.NVIC_IRQChannel          = dev_to_irqn((uint32_t)_extiLine,0);
     NVIC_InitStructure.NVIC_IRQChannelPriority  = preemption_priority;
     NVIC_InitStructure.NVIC_IRQChannelCmd       = enable;
     NVIC_Init(&NVIC_InitStructure);

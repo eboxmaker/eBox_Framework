@@ -25,7 +25,7 @@
 //////////////////////////////////////
 
 
-Timer::Timer(TIM_TypeDef *TIMx)
+Timer::Timer(TIM_Module *TIMx)
 {
     _TIMx = TIMx;
 }
@@ -49,23 +49,26 @@ void Timer::begin(uint32_t frq)
     case (uint32_t)TIM1_BASE:
         index = TIM1_IT_Update;
         break;
-    case (uint32_t)TIM2_BASE:
-        index = TIM2_IT_Update;
-        break;
+//    case (uint32_t)TIM2_BASE:
+//        index = TIM2_IT_Update;
+//        break;
     case (uint32_t)TIM3_BASE:
         index = TIM3_IT_Update;
         break;
-    case (uint32_t)TIM4_BASE:
-        index = TIM4_IT_Update;
-        break;
-    case (uint32_t)TIM5_BASE:
-        index = TIM5_IT_Update;
-        break;
+//    case (uint32_t)TIM4_BASE:
+//        index = TIM4_IT_Update;
+//        break;
+//    case (uint32_t)TIM5_BASE:
+//        index = TIM5_IT_Update;
+//        break;
     case (uint32_t)TIM6_BASE:
         index = TIM6_IT_Update;
         break;
-    case (uint32_t)TIM7_BASE:
-        index = TIM7_IT_Update;
+//    case (uint32_t)TIM7_BASE:
+//        index = TIM7_IT_Update;
+//        break;
+    case (uint32_t)TIM8_BASE:
+        index = TIM8_IT_Update;
         break;
     }
     tim_irq_init(index, (&Timer::_irq_handler), (uint32_t)this);
@@ -83,54 +86,60 @@ void Timer::reset_frq(uint32_t frq)
 }
 void Timer::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
 {
-    nvic_dev_set_priority((uint32_t)_TIMx, 0, preemption_priority, sub_priority);
-    if(enable != DISABLE)
-        nvic_dev_enable((uint32_t)_TIMx, 0);
-    else
-        nvic_dev_disable((uint32_t)_TIMx, 0);
+//    nvic_dev_set_priority((uint32_t)_TIMx, 0, preemption_priority, sub_priority);
+//    if(enable != DISABLE)
+//        nvic_dev_enable((uint32_t)_TIMx, 0);
+//    else
+//        nvic_dev_disable((uint32_t)_TIMx, 0);
+    NVIC_InitType NVIC_InitStructure;
+    NVIC_InitStructure.NVIC_IRQChannel          = dev_to_irqn((uint32_t)_TIMx,0);
+    NVIC_InitStructure.NVIC_IRQChannelPriority  = preemption_priority;
+    NVIC_InitStructure.NVIC_IRQChannelCmd       = enable;
+    NVIC_Init(&NVIC_InitStructure);
 }
 
 void Timer::interrupt(FunctionalState enable)
 {
-    TIM_ClearITPendingBit(_TIMx, TIM_FLAG_Update); //必须加，否则开启中断会立即产生一次中断
-    TIM_ITConfig(_TIMx, TIM_IT_Update, enable);
+    TIM_ClrIntPendingBit(_TIMx, TIM_FLAG_UPDATE); //必须加，否则开启中断会立即产生一次中断
+    TIM_ConfigInt(_TIMx, TIM_INT_UPDATE, enable);
+    
 }
 
 void Timer::start(void)
 {
-    TIM_Cmd(_TIMx, ENABLE);
+    TIM_Enable(_TIMx, ENABLE);
 }
 
 void Timer::stop(void)
 {
-    TIM_Cmd(_TIMx, DISABLE);
+    TIM_Enable(_TIMx, DISABLE);
 }
 void Timer::base_init(uint16_t period, uint16_t prescaler)
 {
-
-
-    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
+    TIM_TimeBaseInitType TIM_TimeBaseStructure;
     TIM_DeInit(_TIMx);
 
 
-    TIM_InternalClockConfig(_TIMx);
+    TIM_ConfigInternalClk(_TIMx);
+    
     //此处和通用定时器不一样 控制定时器溢出多少次产生一次中断
     if(_TIMx == TIM1)
-        TIM_TimeBaseStructure.TIM_RepetitionCounter = 0 ;
+        TIM_TimeBaseStructure.RepetCnt = 0 ;
 
-    TIM_TimeBaseStructure.TIM_Period = period - 1; //ARR寄存器
-    TIM_TimeBaseStructure.TIM_Prescaler = prescaler - 1;
-    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; //单边斜坡
-    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+    TIM_TimeBaseStructure.Period = period - 1; //ARR寄存器
+    TIM_TimeBaseStructure.Prescaler = prescaler - 1;
+    TIM_TimeBaseStructure.CntMode = TIM_CNT_MODE_UP; //单边斜坡
+    TIM_TimeBaseStructure.ClkDiv = TIM_CLK_DIV1;
 
-    TIM_TimeBaseInit(_TIMx, &TIM_TimeBaseStructure);
-    TIM_ARRPreloadConfig(_TIMx, ENABLE);	//控制ARR寄存器是否使用影子寄存器
-
+    TIM_InitTimeBase(_TIMx, &TIM_TimeBaseStructure);
+    
+    TIM_ConfigArPreload(_TIMx, ENABLE);	//控制ARR寄存器是否使用影子寄存器
+    
 
 }
 void Timer::set_reload(uint16_t auto_reload)
 {
-    TIM_SetAutoreload(_TIMx, auto_reload);
+    TIM_SetAutoReload(_TIMx, auto_reload);
 }
 void Timer::clear_count(void)
 {
@@ -148,7 +157,7 @@ uint32_t Timer::get_timer_source_clock()
     }
     else
     {
-        temp = RCC->CFGR;
+        temp = RCC->CFG;
         if(temp & 0x00000400)//检测PCLK是否进行过分频，如果进行过分频则定时器的频率为PCLK1的两倍
             timer_clock = cpu.clock.pclk1 * 2;
         else

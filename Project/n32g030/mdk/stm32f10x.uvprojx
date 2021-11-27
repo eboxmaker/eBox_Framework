@@ -719,14 +719,19 @@
               <FilePath>..\..\..\ebox\hardware\n32g030\rcc.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_gpio.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\n32g030\Peripherals\ebox_gpio.cpp</FilePath>
-            </File>
-            <File>
               <FileName>nvic.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\n32g030\nvic.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>dma.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\n32g030\dma.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_gpio.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\n32g030\Peripherals\ebox_gpio.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_exti.cpp</FileName>
@@ -734,9 +739,9 @@
               <FilePath>..\..\..\ebox\hardware\n32g030\Peripherals\ebox_exti.cpp</FilePath>
             </File>
             <File>
-              <FileName>object.cpp</FileName>
+              <FileName>ebox_uart.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\n32g030\object.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\n32g030\Peripherals\ebox_uart.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_mcu_i2c.cpp</FileName>
@@ -749,14 +754,19 @@
               <FilePath>..\..\..\ebox\hardware\n32g030\Peripherals\ebox_mcu_spi.cpp</FilePath>
             </File>
             <File>
-              <FileName>dma.cpp</FileName>
+              <FileName>ebox_timer.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\n32g030\dma.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\n32g030\Peripherals\ebox_timer.cpp</FilePath>
             </File>
             <File>
-              <FileName>ebox_uart.cpp</FileName>
+              <FileName>ebox_it.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\n32g030\Peripherals\ebox_uart.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\n32g030\ebox_it.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>object.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\hardware\n32g030\object.cpp</FilePath>
             </File>
           </Files>
         </Group>
