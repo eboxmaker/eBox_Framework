@@ -20,10 +20,10 @@
 
 
 #include "FileBase.h"
-#include "interface/storage/fileSystem/FileHandle.h"
-#include "interface/storage/fileSystem/DirHandle.h"
+#include "storage/fileSystem/FileHandle.h"
+#include "storage/fileSystem/DirHandle.h"
 #include "FileSystemLike.h"
-#include "interface/storage/blockdevice/BlockDevice.h"
+#include "./storage/blockdevice/BlockDevice.h"
 
 namespace ebox {
 /** \addtogroup file system */

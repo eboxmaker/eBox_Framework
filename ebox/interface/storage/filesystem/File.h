@@ -17,8 +17,8 @@
 #ifndef __FILE_H
 #define __FILE_H
 
-#include "interface/storage/filesystem/FileSystem.h"
-#include "interface/storage/filesystem/FileHandle.h"
+#include "./storage/filesystem/FileSystem.h"
+#include "./storage/filesystem/FileHandle.h"
 
 namespace ebox {
 /** \addtogroup filesystem */

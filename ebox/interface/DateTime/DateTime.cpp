@@ -293,7 +293,7 @@ String DateTime::toString(TimeFormat_t format ,TimeSeparatorFormat_t sep)
     return str;
 }
 #if DATETIME_USE_PRINT
-void DateTime::print(Uart &uart)
+void DateTime::print(Stream &uart)
 {
     uart.printf("%04d-%02d-%02d %02d:%02d:%02d.%03d week:%d,stamp:%0.0f;\tutcoffset:%d\n",year,month,day,\
         hour,minute,second,milliSecond,dayOfWeek(),getTimeStamp(),utcOffset);

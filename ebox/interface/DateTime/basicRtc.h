@@ -29,7 +29,7 @@ public:
     virtual DateTime    now() = 0;
 
 #if DATETIME_USE_PRINT
-    void            print(Uart &uart);            
+    void            print(Stream &uart);            
 #endif
     
 public:
@@ -71,7 +71,7 @@ class ChinaCalendar
         
         String get_fastival();
 #if DATETIME_USE_PRINT
-        void print(Uart &uart);
+        void print(Stream &uart);
 #endif
 
     private:

@@ -656,6 +656,9 @@ typedef enum
     STM32F479VI	,
     STM32F479ZG	,
     STM32F479ZI	,
+    
+    N32G030C8	,
+    N32G030K8	,
 
 } CpuType;
 

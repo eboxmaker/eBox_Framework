@@ -8,7 +8,7 @@
 #define DATETIME_USE_PRINT true
 
 #if DATETIME_USE_PRINT
-    #include "ebox_uart.h"
+    #include "stream.h"
 #endif
 
 
@@ -87,7 +87,7 @@ public:
     bool operator==( DateTime &right) ;
 
 #if DATETIME_USE_PRINT
-    void print(Uart &uart);
+    void print(Stream &uart);
 #endif
     static bool limitCheck(DateTime &dt);
 

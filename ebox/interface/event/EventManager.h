@@ -2,7 +2,7 @@
 #define __EVENT_MANAGER_H
 
 #include "ebox_core.h"
-#include "ebox_uart.h"
+#include "stream.h"
 #include "LinkedList/LinkedList.h"
 
 class Event:public Object
@@ -21,7 +21,7 @@ public:
     {
         list.add(object);
     }
-    void print_list(Uart &uart)
+    void print_list(Stream &uart)
     {
         uart.printf("list size:%d\r\n",list.size());
         for(int i = 0; i < list.size(); i++)

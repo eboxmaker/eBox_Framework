@@ -17,7 +17,7 @@
 #ifndef DIR_H
 #define DIR_H
 
-#include "interface/storage/filesystem/FileSystem.h"
+#include "storage/filesystem/FileSystem.h"
 #include "DirHandle.h"
 
 namespace ebox {
