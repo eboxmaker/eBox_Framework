@@ -225,11 +225,11 @@ static void update_chip_info()
     milli_seconds = 0;
     SysTick->VAL = SysTick->LOAD;
     //统计cpu计算能力//////////////////
-    do
-    {
-        cpu.ability++;//统计cpu计算能力
-    }
-    while (milli_seconds < 1);
+//    do
+//    {
+//        cpu.ability++;//统计cpu计算能力
+//    }
+//    while (milli_seconds < 1);
     cpu.ability = cpu.ability  * 1000 * 9;
     ////////////////////////////////
 #if	EBOX_DEBUG

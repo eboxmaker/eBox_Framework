@@ -21,26 +21,9 @@
 #define __BSP_EBOX_H
 #include "ebox.h"
 #include "EventManager.h"
-#include "lcd_1.8.h"
-#include "graphic.h"
-#include "../Ethernet3/utility/w5500.h"
 #include "soft_i2c.h"
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
-
-
-
-extern SoftI2c Wire;
-extern mcuI2c mcuWire;
-
-
-//extern EventGpio btn;
-extern EventManager manager;
-
-extern W5500Class w5500;
-extern Lcd lcd;
-
-#define UART uart1
 
 
 #define BTN1 PA8
@@ -55,6 +38,7 @@ extern Lcd lcd;
 #define I2C  i2c2
 
 extern void print_log(const char *name = "test", const char *date = __DATE__);
+#define UART uart1
 
 #define Serial UART
 

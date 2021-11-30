@@ -21,23 +21,6 @@
 #include "bsp_ebox.h"
 #include "ebox_mem.h"
 
-SoftI2c Wire(&PB10, &PB11);
-mcuI2c mcuWire(I2C2, &PB10, &PB11);
-
-W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
-
-//本程序适用eBox
-//              GND   电源地
-//              VCC   接5V或3.3v电源
-//              SCL   接PA5（SCL）
-//              SDA   接PA7（SDA）
-//              RES   接PB3 (RST)
-//              DC    接PB4 (RS)
-//              CS    接PB5
-//              BL    接PB6
-Lcd lcd(&PB5, &PB6, &PB4, &PB3, &spi1);
-
-EventManager manager;
 
 /*
 *********************************************************************************************************

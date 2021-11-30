@@ -78,8 +78,8 @@ void *ebox_malloc( size_t xWantedSize )
     eboxBlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
     void *pvReturn = NULL;
 
-    uint32_t temp = __get_PRIMASK();//保存之前中断设置
-    __disable_irq();
+//    uint32_t temp = __get_PRIMASK();//保存之前中断设置
+//    __disable_irq();
 
     if(end_block[0] == NULL)//如果在调用之前没有初始化内存，则初始化
     {
@@ -133,7 +133,7 @@ void *ebox_malloc( size_t xWantedSize )
             pxBlock->nextFreeBlock = NULL;//将已分配区块的指向设置为0
 
         }
-        __set_PRIMASK(temp);
+//        __set_PRIMASK(temp);
 
     }
     if(pvReturn == NULL)
@@ -150,8 +150,8 @@ void ebox_free( void *pv )
     uint8_t *puc = ( uint8_t * ) pv;
     eboxBlockLink_t *pxLink;
 
-    uint32_t temp = __get_PRIMASK();//保存之前中断设置
-    __disable_irq();
+//    uint32_t temp = __get_PRIMASK();//保存之前中断设置
+//    __disable_irq();
     if( pv != NULL )
     {
         /* The memory being freed will have an BlockLink_t structure immediately
@@ -185,7 +185,7 @@ void ebox_free( void *pv )
         {
         }
     }
-    __set_PRIMASK(temp);
+//    __set_PRIMASK(temp);
 
 }
 

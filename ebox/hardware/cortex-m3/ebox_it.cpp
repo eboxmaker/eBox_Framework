@@ -271,16 +271,16 @@ extern "C" {
       * @param  None
       * @retval None
       */
-    void HardFault_Handler(void)
-    {
-        /* Go to infinite loop when Hard Fault exception occurs */
-        //        hard_fault_isr();
-        while (1)
-        {
-            // ebox_printf("123\n");
+//    void HardFault_Handler(void)
+//    {
+//        /* Go to infinite loop when Hard Fault exception occurs */
+//        //        hard_fault_isr();
+//        while (1)
+//        {
+//            // ebox_printf("123\n");
 
-        }
-    }
+//        }
+//    }
 
     /**
       * @brief  This function handles Memory Manage exception.
