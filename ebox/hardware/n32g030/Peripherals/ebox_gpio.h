@@ -48,6 +48,6 @@ public:
 };
 
 
-void port_mode(GPIO_Module* port,uint32_t pin, PinMode_t mode);
+void port_mode(GPIO_Module* port,uint32_t pin, PinMode_t mode,uint8_t af_configration);
 
 #endif

@@ -1,6 +1,6 @@
 #include "dma.h"
 
-static uint32_t dma_irq_ids[DMA_NUM] = {0, 0, 0, 0, 0, 0, 0};
+static uint32_t dma_irq_ids[DMA_NUM] = {0};
 
 static DmaIrqHandler_t irq_handler;
 
@@ -143,6 +143,7 @@ void Dma::deInit()
 void Dma::init(DMA_InitType *DMA_InitStruct)
 {
     DMA_Init(DMAy_Channelx, DMA_InitStruct);
+
 }
 
 
@@ -179,13 +180,13 @@ uint16_t Dma::get_current_len()
 }
 void Dma::wait()
 {
-    while( Dma1Ch3.get_current_len())
-    {
+//    while( Dma1Ch3.get_current_len())
+//    {
 //        int i = Dma1Ch3.get_current_len();
 //        dmaDebug("%d\n",i);
 //        if(i == 0)
 //            break;
-    }
+//    }
 }
 
 bool Dma::get_flag_status()
@@ -364,11 +365,11 @@ void DMA_Channel5_IRQHandler(void)
 }
 
 #endif
-Dma Dma1Ch1(DMA_CH1);
-Dma Dma1Ch2(DMA_CH2);
-Dma Dma1Ch3(DMA_CH3);
-Dma Dma1Ch4(DMA_CH4);
-Dma Dma1Ch5(DMA_CH5);
+//Dma Dma1Ch1(DMA_CH1);
+//Dma Dma1Ch2(DMA_CH2);
+//Dma Dma1Ch3(DMA_CH3);
+//Dma Dma1Ch4(DMA_CH4);
+//Dma Dma1Ch5(DMA_CH5);
 //Dma Dma1Ch6(DMA_CH6);
 //Dma Dma1Ch7(DMA_CH7);
 

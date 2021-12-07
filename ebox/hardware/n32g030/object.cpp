@@ -45,14 +45,14 @@ Uart uart5(UART5, &PC12, &PD2);
 //spi
 //mcuSpi  spi1(SPI1, &PA5, &PA6, &PA7);
 //mcuSpi  spi2(SPI2, &PB13, &PB14, &PB15);
-SoftSpi	sspi1(&PA5, &PA6, &PA7);
-SoftSpi	sspi2(&PB13, &PB14, &PB15);
+//SoftSpi	sspi1(&PA5, &PA6, &PA7);
+//SoftSpi	sspi2(&PB13, &PB14, &PB15);
 
 //SlaveSpi slave_spi1(SPI1, &PA5, &PA6, &PA7);
 
 //i2c
-SoftI2c sI2c1(&PB6, &PB7);
-SoftI2c sI2c2(&PB10, &PB11);
+//SoftI2c sI2c1(&PB6, &PB7);
+//SoftI2c sI2c2(&PB10, &PB11);
 //mcuI2c mcuI2c1(I2C1,&PB6, &PB7);
 //mcuI2c mcuI2c2(I2C2,&PB10, &PB11);
 

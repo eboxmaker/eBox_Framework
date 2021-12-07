@@ -46,7 +46,7 @@ mcuGpio::mcuGpio(PinId_t pin_id){
   */
 void mcuGpio::mode(PinMode_t mode)
 {
-    port_mode(_port,_pin,mode);
+    port_mode(_port,_pin,mode,0);
 }
 /**
   *@brief    GPIO模式设置,f1无需af_configration参数
@@ -55,7 +55,7 @@ void mcuGpio::mode(PinMode_t mode)
   */
 void mcuGpio::mode(PinMode_t mode, uint8_t af_configration)
 {
-    mcuGpio::mode(mode);
+    port_mode(_port,_pin,mode,af_configration);
 }
 /**
  *@brief    GPIO输出高电平
@@ -147,7 +147,7 @@ mcuGpio mcuGpio::operator= ( int value)
 
 
 // 此函数会被 parallel—gpio.cpp调用，请勿移除
-void port_mode(GPIO_Module* port,uint32_t pin, PinMode_t mode)
+void port_mode(GPIO_Module* port,uint32_t pin, PinMode_t mode,uint8_t af_configration)
 {
 #if ENABLE_USESWD
 		if(SWD_PORT == port)
@@ -198,6 +198,7 @@ void port_mode(GPIO_Module* port,uint32_t pin, PinMode_t mode)
     case AF_OD_PD:
 //        RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
         GPIO_InitStructure.GPIO_Mode = GPIO_MODE_AF_OD;
+        GPIO_InitStructure.GPIO_Alternate = af_configration;
         break;
 
     case AF_PP:
@@ -205,6 +206,7 @@ void port_mode(GPIO_Module* port,uint32_t pin, PinMode_t mode)
     case AF_PP_PD:
 //        RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); //
         GPIO_InitStructure.GPIO_Mode = GPIO_MODE_AF_PP;
+        GPIO_InitStructure.GPIO_Alternate = af_configration;
         break;
     /* if parament is other mode,set as INPUT mode
      */

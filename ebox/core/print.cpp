@@ -56,9 +56,9 @@ size_t Print::write(const uint8_t *buffer, size_t size)
 //  return n;
 //}
 
+#if USE_PRINTF
 size_t Print::printf(const char *fmt, ...)
 {
-#if USE_PRINTF
     int     size1 = 0;
     size_t  size2 = 64;
     char *p;
@@ -88,8 +88,8 @@ size_t Print::printf(const char *fmt, ...)
     write(p, size1);
     ebox_free(p);
     return size1;
-#endif
 }
+#endif
 size_t Print::print(const String &s)
 {
     return write(s.c_str(), s.length());

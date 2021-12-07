@@ -4,7 +4,7 @@
 #include "stream.h"
 
 
-#define I2C_BUFFER_LENGTH 128
+#define I2C_BUFFER_LENGTH 64
 
 typedef enum {
     I2C_ERROR_OK,

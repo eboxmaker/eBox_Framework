@@ -10,7 +10,7 @@
 
 #define STM32_TYPE    N32G030C8
 #define STM32_PINS    48
-#define STM32_RAM1    20
+#define STM32_RAM1    8
 #define STM32_COMPANY "NATIONS\0"
 
 #define HSE_VALUE    ((uint32_t)8000000) /*!< Value of the External oscillator in Hz */

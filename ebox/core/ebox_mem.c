@@ -227,22 +227,6 @@ size_t ebox_get_free(void)
     return FreeBytesRemaining;
 }
 
-void *malloc(size_t size)
-{
-    return ebox_malloc(size);
-}
-
-void free(void *ptr)
-{
-    ebox_free(ptr);
-}
-
-void *realloc(void *ptr, size_t size)
-{
-    return ebox_realloc(ptr, size);
-}
-
-
 static void insert_block_into_freeList( eboxBlockLink_t *pxBlockToInsert)
 {
     eboxBlockLink_t *pxIterator;

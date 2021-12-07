@@ -93,8 +93,9 @@ public:
     size_t println(const Printable &);
     size_t println(void);
     virtual void flush() { /* Empty implementation for backward compatibility */ }
+#if USE_PRINTF
     size_t printf(const char *fmt, ...);
-
+#endif
 };
 
 #endif

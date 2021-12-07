@@ -50,8 +50,8 @@ static const DevToRcc_t dev_to_rcc_table[] =
     {I2C2_BASE, RCC_APB1_PERIPH_I2C2},
 //    //    {I2C3_BASE,RCC_APB1Periph_I2C3},
 
-//    {USART1_BASE, RCC_APB2Periph_USART1},
-//    {USART2_BASE, RCC_APB1Periph_USART2},
+    {USART1_BASE, RCC_APB2_PERIPH_USART1},
+    {USART2_BASE, RCC_APB1_PERIPH_USART2},
 //    {USART3_BASE, RCC_APB1Periph_USART3},
 //    {UART4_BASE, RCC_APB1Periph_UART4},
 //    {UART5_BASE, RCC_APB1Periph_UART5}

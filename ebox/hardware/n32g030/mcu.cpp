@@ -199,14 +199,14 @@ static void update_chip_info()
     cpu.pins = MCU_PINS;
     memcpy(cpu.company, MCU_COMPANY, sizeof(MCU_COMPANY));
 
-    uint8_t *p = (uint8_t *)(0X1FFFF7E8);
+    uint8_t *p = (uint8_t *)(0x1FFFF4FC);
     for(int i = 0 ; i < 12; i++)
     {
         cpu.chip_id[i] = *p++;
     }
 
-
-    cpu.flash.size = *(uint16_t *)(0x1FFFF7E0);   //–æ∆¨flash»›¡ø
+    uint32_t val = *(uint32_t *)(0x1FFFF508);
+    cpu.flash.size = (val & 0x00f00000) >> 20;   //–æ∆¨flash»›¡ø
     switch(cpu.flash.size)
     {
         case 32:

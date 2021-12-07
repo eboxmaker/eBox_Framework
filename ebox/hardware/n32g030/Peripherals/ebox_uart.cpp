@@ -135,8 +135,8 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
     _rx_buffer_size[index] = rx_buffer_size;
 
 #ifdef UART_9_BIT
-    _tx_ptr[index] = (uint16_t *)ebox_malloc(_tx_buffer_size[index] * sizeof(uint16_t));
-    _rx_ptr[index] = (uint16_t *)ebox_malloc(_rx_buffer_size[index] * sizeof(uint16_t));
+    _tx_ptr[index] = (uint16_t *)rt_malloc(_tx_buffer_size[index] * sizeof(uint16_t));
+    _rx_ptr[index] = (uint16_t *)rt_malloc(_rx_buffer_size[index] * sizeof(uint16_t));
 #else
     _tx_ptr[index] = (uint8_t *)ebox_malloc(_tx_buffer_size[index] * sizeof(uint8_t));
     _rx_ptr[index] = (uint8_t *)ebox_malloc(_rx_buffer_size[index] * sizeof(uint8_t));
@@ -219,12 +219,14 @@ void Uart::begin(uint32_t baud_rate, uint8_t data_bit, uint8_t parity, float sto
         DMA_InitStructure.Priority = DMA_PRIORITY_HIGH;
         DMA_InitStructure.Mem2Mem = DMA_M2M_DISABLE;
         dma_rx->init(&DMA_InitStructure);
+        DMA_RequestRemap(DMA_REMAP_USART1_RX, DMA, dma_rx->DMAy_Channelx, ENABLE);
+
         dma_rx->enable();
     }
 
     USART_Enable(_USARTx,ENABLE);
-    _tx_pin->mode(AF_PP);
-    _rx_pin->mode(INPUT);
+    _tx_pin->mode(AF_PP,GPIO_AF4_USART1);
+    _rx_pin->mode(AF_PP,GPIO_AF4_USART1);
 
     nvic(ENABLE, 0, 0);
     interrupt(RxIrq, ENABLE);
@@ -425,6 +427,7 @@ extern "C" {
         unsigned char c = _tx_ptr[index][_tx_buffer_tail[index]];   // 取出字符
         _tx_buffer_tail[index] = (_tx_buffer_tail[index] + 1) % _tx_buffer_size[index];
         uart->DAT = (c & (uint16_t)0x01FF);
+
     }
     /**
       *@brief    读入一个字符放入缓冲区

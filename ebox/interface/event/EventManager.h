@@ -23,7 +23,7 @@ public:
     }
     void print_list(Stream &uart)
     {
-        uart.printf("list size:%d\r\n",list.size());
+//        uart.printf("list size:%d\r\n",list.size());
         for(int i = 0; i < list.size(); i++)
         {
             node = list.get(i);

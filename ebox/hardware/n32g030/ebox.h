@@ -46,7 +46,7 @@ extern "C" {
 //#include "ebox_pulse.h"
 //#include "ebox_in_capture.h"
 //#include "ebox_encoder.h"
-//#include "ebox_uart.h"
+#include "ebox_uart.h"
 //#include "ebox_rtc.h"
 //#include "ebox_iflash.h"
 //#include "ebox_dac.h"

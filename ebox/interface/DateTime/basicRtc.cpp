@@ -5,9 +5,9 @@
 
 void BasicRtc::print(Stream &uart)
 {
-    uart.printf("=========system date time==========\n");
-    uart.printf("%04d-%02d-%02d %02d:%02d:%02d weed:%d\n",dateTime.year,dateTime.month,dateTime.day,dateTime.hour,dateTime.minute,dateTime.second,dateTime.dayOfWeek());
-    uart.printf("===================================\n");
+//    uart.printf("=========system date time==========\n");
+//    uart.printf("%04d-%02d-%02d %02d:%02d:%02d weed:%d\n",dateTime.year,dateTime.month,dateTime.day,dateTime.hour,dateTime.minute,dateTime.second,dateTime.dayOfWeek());
+//    uart.printf("===================================\n");
 
 }
 #endif
@@ -509,10 +509,10 @@ void ChinaCalendar::print(Stream &uart)
     moon_dt.print(uart);
     
     str = get_str();
-    uart.printf("%s\t",str.c_str());
+//    uart.printf("%s\t",str.c_str());
     
     str = get_jieqi_str(sun_dt);            
-    uart.printf("%s\n",str.c_str());
+//    uart.printf("%s\n",str.c_str());
 
 }
 #endif

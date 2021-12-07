@@ -138,7 +138,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -384,14 +384,14 @@
           <GroupName>CMSIS</GroupName>
           <Files>
             <File>
-              <FileName>system_n32g030.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcuLib\N32G030\CMSIS\device\system_n32g030.c</FilePath>
-            </File>
-            <File>
               <FileName>startup_n32g030.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\..\..\mcuLib\N32G030\CMSIS\device\startup\startup_n32g030.s</FilePath>
+            </File>
+            <File>
+              <FileName>system_n32g030.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcuLib\N32G030\CMSIS\device\system_n32g030.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -534,29 +534,9 @@
               <FilePath>..\..\..\ebox\core\ebox_init.cpp</FilePath>
             </File>
             <File>
-              <FileName>big_little.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\big_little.c</FilePath>
-            </File>
-            <File>
-              <FileName>crc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\crc.c</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_mem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\ebox_mem.c</FilePath>
-            </File>
-            <File>
-              <FileName>fifo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\fifo.c</FilePath>
-            </File>
-            <File>
-              <FileName>itoa.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\itoa.c</FilePath>
+              <FileName>ebox_math.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\core\ebox_math.cpp</FilePath>
             </File>
             <File>
               <FileName>IPAddress.cpp</FileName>
@@ -594,65 +574,40 @@
               <FilePath>..\..\..\ebox\core\WString.cpp</FilePath>
             </File>
             <File>
-              <FileName>myprintf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\myprintf.c</FilePath>
-            </File>
-            <File>
-              <FileName>retarge.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\retarge.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>list_c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\ebox\core\list_c.c</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_math.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\core\ebox_math.cpp</FilePath>
-            </File>
-            <File>
               <FileName>LinkedList.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\ebox\core\LinkedList\LinkedList.h</FilePath>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\crc.c</FilePath>
+            </File>
+            <File>
+              <FileName>ebox_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\ebox_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>fifo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\fifo.c</FilePath>
+            </File>
+            <File>
+              <FileName>itoa.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\itoa.c</FilePath>
+            </File>
+            <File>
+              <FileName>myprintf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ebox\core\myprintf.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
           <GroupName>interface</GroupName>
           <Files>
-            <File>
-              <FileName>DateTime.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\DateTime\DateTime.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>basicRtc.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\DateTime\basicRtc.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>RtcMillis.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\DateTime\RtcMillis.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>hmi.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\hmi.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>EventVar.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\event\EventVar.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>EventManager.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\ebox\interface\event\EventManager.h</FilePath>
-            </File>
             <File>
               <FileName>i2c.cpp</FileName>
               <FileType>8</FileType>
@@ -668,40 +623,10 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\interface\spi\soft_spi.cpp</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>interface/file</GroupName>
-          <Files>
             <File>
-              <FileName>Dir.cpp</FileName>
+              <FileName>EventVar.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\Dir.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>File.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\File.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FileHandle.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileHandle.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FileSystem.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileSystem.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FileSystemHandle.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileSystemHandle.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FileBase.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\FileBase.cpp</FilePath>
+              <FilePath>..\..\..\ebox\interface\event\EventVar.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -714,9 +639,9 @@
               <FilePath>..\..\..\ebox\hardware\n32g030\mcu.cpp</FilePath>
             </File>
             <File>
-              <FileName>rcc.cpp</FileName>
+              <FileName>dma.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\n32g030\rcc.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\n32g030\dma.cpp</FilePath>
             </File>
             <File>
               <FileName>nvic.cpp</FileName>
@@ -724,19 +649,14 @@
               <FilePath>..\..\..\ebox\hardware\n32g030\nvic.cpp</FilePath>
             </File>
             <File>
-              <FileName>dma.cpp</FileName>
+              <FileName>rcc.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\n32g030\dma.cpp</FilePath>
+              <FilePath>..\..\..\ebox\hardware\n32g030\rcc.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_gpio.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\n32g030\Peripherals\ebox_gpio.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ebox_exti.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\hardware\n32g030\Peripherals\ebox_exti.cpp</FilePath>
             </File>
             <File>
               <FileName>ebox_uart.cpp</FileName>
@@ -774,14 +694,14 @@
           <GroupName>user</GroupName>
           <Files>
             <File>
-              <FileName>bsp_ebox.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\board\N32G030\bsp_ebox.cpp</FilePath>
-            </File>
-            <File>
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\user\board\N32G030\main.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_ebox.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\board\N32G030\bsp_ebox.cpp</FilePath>
             </File>
             <File>
               <FileName>bsp_ebox.h</FileName>
