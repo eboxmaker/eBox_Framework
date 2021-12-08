@@ -162,55 +162,23 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>98</LineNumber>
+          <LineNumber>241</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134228726</Address>
+          <Address>134225742</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\ebox\hardware\n32g030\Peripherals\ebox_uart.cpp</Filename>
+          <Filename>..\..\..\ebox\hardware\n32g030\ebox_it.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../ebox/hardware/n32g030/Peripherals/ebox_uart.cpp\98</Expression>
+          <Expression>\\ebox\../../../ebox/hardware/n32g030/ebox_it.cpp\241</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>86</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134231848</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\ebox\core\ebox_mem.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../ebox/core/ebox_mem.c\86</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>209</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134226256</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\ebox\hardware\n32g030\mcu.cpp</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../ebox/hardware/n32g030/mcu.cpp\209</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>34</LineNumber>
+          <LineNumber>60</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -296,6 +264,14 @@
         <Entry>
           <Name>System Viewer\RCC</Name>
           <WinId>35905</WinId>
+        </Entry>
+        <Entry>
+          <Name>System Viewer\TIM1</Name>
+          <WinId>35903</WinId>
+        </Entry>
+        <Entry>
+          <Name>System Viewer\TIM8</Name>
+          <WinId>35902</WinId>
         </Entry>
       </SystemViewers>
     </TargetOption>
@@ -887,7 +863,7 @@
 
   <Group>
     <GroupName>ebox_mcu</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

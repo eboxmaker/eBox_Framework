@@ -63,7 +63,7 @@ void tim_irq_callback(uint8_t index)
 extern "C" {
 
 
-    void TIM1_UP_IRQHandler(void)
+    void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
     {
 
         if(TIM_GetIntStatus(TIM1, TIM_INT_UPDATE) == SET)
@@ -215,7 +215,7 @@ extern "C" {
 //            TIM_ClrIntPendingBit(TIM5, TIM_FLAG_CC4);
 //        }
     }
-    void TIM6_IRQHandler(void)
+    void LPTIM_TIM6_IRQHandler(void)
     {
         if(TIM_GetIntStatus(TIM6, TIM_INT_UPDATE) == SET)
         {
@@ -231,7 +231,7 @@ extern "C" {
 //            TIM_ClrIntPendingBit(TIM7, TIM_FLAG_UPDATE);
 //        }
     }
-    void TIM8_UP_IRQHandler(void)
+    void TIM8_BRK_UP_TRG_COM_IRQHandler(void)
     {
 
         if(TIM_GetIntStatus(TIM8, TIM_INT_UPDATE) == SET)

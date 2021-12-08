@@ -24,6 +24,7 @@
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 #define UART uart1
 #define ConsoleUart uart1
+#define LED1 PB7
 
 void print_log(const char *name, const char *date);
 #endif
