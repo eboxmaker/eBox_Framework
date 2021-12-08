@@ -5,6 +5,7 @@
 #include "i2c.h"
 #include "mcu.h"
 
+#define I2CT_LONG_TIMEOUT 20000
 
 class mcuI2c : public I2c
 {
@@ -38,20 +39,11 @@ private:
 
 
     // private methods
-    virtual i2c_err_t _write(const uint8_t *data, size_t);
     virtual i2c_err_t _write(uint8_t address,const uint8_t *data, size_t quantity, int sendStop);
     virtual size_t _read(uint8_t address,uint8_t *data, uint16_t quantity,uint8_t sendStop);
 
 
-    //基础的i2c功能
-    i2c_err_t _start(void);
-    i2c_err_t _stop(void);
-    i2c_err_t _waitAck();
-    i2c_err_t _sendByte( uint8_t data);
-    i2c_err_t  _send7bitsAddress(uint8_t slaveAddr, uint8_t WR);
-    i2c_err_t _receiveByte(uint8_t *data);
-    i2c_err_t _sendAck();
-    i2c_err_t _sendNack();
+
     
         
 

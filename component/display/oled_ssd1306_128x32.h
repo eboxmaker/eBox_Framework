@@ -5,7 +5,7 @@
 #include "i2c.h"
 #include "spi.h"
 #include "hmi.h"
-#include "font.h"
+//#include "font.h"
 
 #define OLED_CMD  0	//ะดรüม๎
 #define OLED_DATA 1	//ะดสýพÝ

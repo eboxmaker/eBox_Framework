@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\mcuLib\N32G030\CMSIS\core;..\..\..\mcuLib\N32G030\CMSIS\device;..\..\..\mcuLib\N32G030\n32g030_std_periph_driver\inc;..\..\..\ebox\core;..\..\..\ebox\hardware\n32g030;..\..\..\ebox\hardware\n32g030\Peripherals;..\..\..\ebox\interface;..\..\..\ebox\interface\spi;..\..\..\ebox\interface\i2c;..\..\..\ebox\interface\TwoWire;..\..\..\ebox\interface\event;..\..\..\ebox\interface\DateTime;..\..\..\user;..\..\..\user\board\N32G030</IncludePath>
+              <IncludePath>..\..\..\mcuLib\N32G030\CMSIS\core;..\..\..\mcuLib\N32G030\CMSIS\device;..\..\..\mcuLib\N32G030\n32g030_std_periph_driver\inc;..\..\..\ebox\core;..\..\..\ebox\hardware\n32g030;..\..\..\ebox\hardware\n32g030\Peripherals;..\..\..\ebox\interface;..\..\..\ebox\interface\spi;..\..\..\ebox\interface\i2c;..\..\..\ebox\interface\TwoWire;..\..\..\ebox\interface\event;..\..\..\ebox\interface\DateTime;..\..\..\user;..\..\..\user\board\N32G030;..\..\..\component\display</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -628,6 +628,26 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\interface\event\EventVar.cpp</FilePath>
             </File>
+            <File>
+              <FileName>basicRtc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\DateTime\basicRtc.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>DateTime.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\DateTime\DateTime.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>RtcMillis.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\DateTime\RtcMillis.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>hmi.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\ebox\interface\hmi.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -687,6 +707,16 @@
               <FileName>object.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\ebox\hardware\n32g030\object.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>driver</GroupName>
+          <Files>
+            <File>
+              <FileName>oled_ssd1306_128x32.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\component\display\oled_ssd1306_128x32.cpp</FilePath>
             </File>
           </Files>
         </Group>

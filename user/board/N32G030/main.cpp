@@ -21,6 +21,7 @@
 
 #include "ebox.h"
 #include "bsp_ebox.h"
+#include "oled_ssd1306_128x32.h"
 
 
 /**
@@ -34,6 +35,8 @@
 #define EXAMPLE_DATE	"2018-08-08"
 
 Timer timer1(TIM6);
+OledSSD1306_128x32 oled(&mcuI2c1);
+//OledSSD1306_128x32 oled(&sI2c1);
 
 void t2it()
 {
@@ -56,13 +59,17 @@ void setup()
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
 
     LED1.mode(OUTPUT_PP);
-    PB6.mode(OUTPUT_PP);
+    LED1.mode(OUTPUT_PP);
 
     timer1.begin(1);
     //    timer1.attach(t2it);
     timer1.attach(&test, &Test::event);
     timer1.interrupt(ENABLE);
     timer1.start();
+    oled.begin(I2c::K400);
+    oled.fill_screen(0xff);
+    oled.flush();
+
 }
 
 
@@ -71,7 +78,7 @@ int main(void)
     setup();
     while(1)
     {
-        PB6.toggle();
+        LED1.toggle();
         delay_ms(1000);
     }
 
