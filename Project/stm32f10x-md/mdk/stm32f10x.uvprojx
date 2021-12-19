@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>ARM_MATH_CM3</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\ebox;..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\ebox\interface;..\..\..\ebox\interface\spi;..\..\..\ebox\interface\i2c;..\..\..\ebox\interface\TwoWire;..\..\..\ebox\interface\event;..\..\..\ebox\interface\DateTime;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266;..\..\..\component\MPU6050;..\..\..\component\mqtt\src;..\..\..\os\ebox_os;..\..\..\component\Ethernet3;..\..\..\component\Ethernet3\utility;..\..\..\component\modbus\libraries\ModbusIP;..\..\..\component\fat;..\..\..\component\littlefs;..\..\..\component\pn532;..\..\..\os\FreeRTOS\Cfg;..\..\..\os\FreeRTOS\Source\portable\RVDS\ARM_CM3;..\..\..\os\FreeRTOS\Source\include;..\..\..\component\linearRegression;..\..\..\component\ArduinoJson;..\..\..\component\display;..\..\..\ebox\interface\painter</IncludePath>
+              <IncludePath>..\..\..\ebox;..\..\..\ebox\hardware\cortex-m3;..\..\..\ebox\hardware\cortex-m3\Peripherals;..\..\..\ebox\core;..\..\..\ebox\interface;..\..\..\ebox\interface\spi;..\..\..\ebox\interface\i2c;..\..\..\ebox\interface\TwoWire;..\..\..\ebox\interface\event;..\..\..\ebox\interface\DateTime;..\..\..\mcuLib\stm32f10x\libraries\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\CoreSupport;..\..\..\mcuLib\stm32f10x\libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;..\..\..\component;..\..\..\component\edriver;..\..\..\component\apps;..\..\..\user;..\..\..\user\board\spark_f1;..\..\..\component\ddc;..\..\..\component\stepMotor;..\..\..\component\gui;..\..\..\component\Firmata;..\..\..\component\apps\Filters;..\..\..\component\apps\Filters\normal;..\..\..\component\modbus\libraries\Modbus;..\..\..\component\modbus\libraries\ModbusSerial;..\..\..\component\WeeESP8266;..\..\..\component\MPU6050;..\..\..\component\mqtt\src;..\..\..\os\ebox_os;..\..\..\component\Ethernet3;..\..\..\component\Ethernet3\utility;..\..\..\component\modbus\libraries\ModbusIP;..\..\..\component\fat;..\..\..\component\littlefs;..\..\..\component\pn532;..\..\..\os\FreeRTOS\Cfg;..\..\..\os\FreeRTOS\Source\portable\RVDS\ARM_CM3;..\..\..\os\FreeRTOS\Source\include;..\..\..\component\linearRegression;..\..\..\component\ArduinoJson;..\..\..\component\display;..\..\..\ebox\interface\painter;..\..\..\component\ArduinoHttpClient\src</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1187,51 +1187,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>pn532</GroupName>
-          <Files>
-            <File>
-              <FileName>PN532_I2C.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\pn532\PN532_I2C.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>mpu</GroupName>
-          <Files>
-            <File>
-              <FileName>FourAxle.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\MPU6050\FourAxle.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>IMU.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\MPU6050\IMU.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>MPU6050.CPP</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\MPU6050\MPU6050.CPP</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>midea</GroupName>
-          <Files>
-            <File>
-              <FileName>ir_r05d.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\ir\ir_r05d.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>midea.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\ir\midea\midea.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>mqtt</GroupName>
           <Files>
             <File>
@@ -1242,87 +1197,27 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>fatfs</GroupName>
+          <GroupName>http</GroupName>
           <Files>
             <File>
-              <FileName>ff.cpp</FileName>
+              <FileName>b64.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\fat\ChaN\ff.cpp</FilePath>
+              <FilePath>..\..\..\component\ArduinoHttpClient\src\b64.cpp</FilePath>
             </File>
             <File>
-              <FileName>ffunicode.cpp</FileName>
+              <FileName>HttpClient.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\fat\ChaN\ffunicode.cpp</FilePath>
+              <FilePath>..\..\..\component\ArduinoHttpClient\src\HttpClient.cpp</FilePath>
             </File>
             <File>
-              <FileName>FATFileSystem.cpp</FileName>
+              <FileName>URLEncoder.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\ebox\interface\storage\filesystem\fat\FATFileSystem.cpp</FilePath>
+              <FilePath>..\..\..\component\ArduinoHttpClient\src\URLEncoder.cpp</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>epaper</GroupName>
-          <Files>
             <File>
-              <FileName>epd2in13b.cpp</FileName>
+              <FileName>WebSocketClient.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\component\epaper\epd2in13b.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>epdpaint.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\epaper\epdpaint.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>font8.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\component\epaper\font8.c</FilePath>
-            </File>
-            <File>
-              <FileName>font12.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\component\epaper\font12.c</FilePath>
-            </File>
-            <File>
-              <FileName>font16.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\component\epaper\font16.c</FilePath>
-            </File>
-            <File>
-              <FileName>font20.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\component\epaper\font20.c</FilePath>
-            </File>
-            <File>
-              <FileName>font24.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\component\epaper\font24.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>rc522</GroupName>
-          <Files>
-            <File>
-              <FileName>RFID.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\RFID-RC522\RFID.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>modbus</GroupName>
-          <Files>
-            <File>
-              <FileName>Modbus.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\modbus\libraries\Modbus\Modbus.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ModbusSerial.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\component\modbus\libraries\ModbusSerial\ModbusSerial.cpp</FilePath>
+              <FilePath>..\..\..\component\ArduinoHttpClient\src\WebSocketClient.cpp</FilePath>
             </File>
           </Files>
         </Group>

@@ -144,7 +144,7 @@ String::String(double value, unsigned char decimalPlaces)
 
 String::~String()
 {
-    free(buffer);
+    ebox_free(buffer);
 }
 
 /*********************************************/
@@ -160,7 +160,7 @@ inline void String::init(void)
 
 void String::invalidate(void)
 {
-    if (buffer) free(buffer);
+    if (buffer) ebox_free(buffer);
     buffer = NULL;
     capacity = len = 0;
 }
@@ -178,7 +178,7 @@ unsigned char String::reserve(unsigned int size)
 
 unsigned char String::changeBuffer(unsigned int maxStrLen)
 {
-    char *newbuffer = (char *)realloc(buffer, maxStrLen + 1);
+    char *newbuffer = (char *)ebox_realloc(buffer, maxStrLen + 1);
     if (newbuffer)
     {
         buffer = newbuffer;
@@ -230,7 +230,7 @@ void String::move(String &rhs)
         }
         else
         {
-            free(buffer);
+            ebox_free(buffer);
         }
     }
     buffer = rhs.buffer;

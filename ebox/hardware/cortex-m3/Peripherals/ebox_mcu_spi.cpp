@@ -238,7 +238,7 @@ uint8_t mcuSpi::read_config(void)
   */
 uint8_t mcuSpi::transfer(uint8_t data)
 {
-    mcuSpiDebug("\n===========err\n");
+//    mcuSpiDebug("\n===========err\n");
     while ((_spi->SR & SPI_I2S_FLAG_TXE) == RESET)
         ;
     _spi->DR = data;

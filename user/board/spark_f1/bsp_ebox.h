@@ -22,8 +22,10 @@
 #include "ebox.h"
 #include "EventManager.h"
 #include "soft_i2c.h"
+#include "w5500.h"
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
+extern W5500Class  w5500;
 
 
 #define BTN1 PA8

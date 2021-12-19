@@ -66,8 +66,6 @@ void exti_event()
         UART.printf("\r\n rise, xx = %d", xx);
     else
         UART.printf("\r\n fall, xx = %d", xx);
-
-
 }
 
 /**
