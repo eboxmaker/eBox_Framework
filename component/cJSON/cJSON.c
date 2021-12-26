@@ -57,6 +57,7 @@
 #endif
 
 #include "cJSON.h"
+#include "ebox_mem.h"
 
 /* define our own boolean type */
 #ifdef true
@@ -164,20 +165,20 @@ typedef struct internal_hooks
 /* work around MSVC error C2322: '...' address of dllimport '...' is not static */
 static void * CJSON_CDECL internal_malloc(size_t size)
 {
-    return malloc(size);
+    return ebox_malloc(size);
 }
 static void CJSON_CDECL internal_free(void *pointer)
 {
-    free(pointer);
+    ebox_free(pointer);
 }
 static void * CJSON_CDECL internal_realloc(void *pointer, size_t size)
 {
-    return realloc(pointer, size);
+    return ebox_realloc(pointer, size);
 }
 #else
-#define internal_malloc malloc
-#define internal_free free
-#define internal_realloc realloc
+#define internal_malloc ebox_malloc
+#define internal_free ebox_free
+#define internal_realloc ebox_realloc
 #endif
 
 /* strlen of character literals resolved at compile time */
@@ -211,19 +212,19 @@ CJSON_PUBLIC(void) cJSON_InitHooks(cJSON_Hooks* hooks)
     if (hooks == NULL)
     {
         /* Reset hooks */
-        global_hooks.allocate = malloc;
-        global_hooks.deallocate = free;
-        global_hooks.reallocate = realloc;
+        global_hooks.allocate = ebox_malloc;
+        global_hooks.deallocate = ebox_free;
+        global_hooks.reallocate = ebox_realloc;
         return;
     }
 
-    global_hooks.allocate = malloc;
+    global_hooks.allocate = ebox_malloc;
     if (hooks->malloc_fn != NULL)
     {
         global_hooks.allocate = hooks->malloc_fn;
     }
 
-    global_hooks.deallocate = free;
+    global_hooks.deallocate = ebox_free;
     if (hooks->free_fn != NULL)
     {
         global_hooks.deallocate = hooks->free_fn;
@@ -231,9 +232,9 @@ CJSON_PUBLIC(void) cJSON_InitHooks(cJSON_Hooks* hooks)
 
     /* use realloc only if both free and malloc are used */
     global_hooks.reallocate = NULL;
-    if ((global_hooks.allocate == malloc) && (global_hooks.deallocate == free))
+    if ((global_hooks.allocate == ebox_malloc) && (global_hooks.deallocate == ebox_free))
     {
-        global_hooks.reallocate = realloc;
+        global_hooks.reallocate = ebox_realloc;
     }
 }
 
