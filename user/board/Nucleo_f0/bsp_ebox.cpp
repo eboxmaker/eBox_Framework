@@ -76,9 +76,6 @@ Uart uart2(USART2, &PA2, &PA3);
 
 #endif
 
-Port 					db(GPIOB_BASE,8);		// PB0-PB7
-Lcd  					lcd(&PA12,&PB9, &PA15, &PF6, &PF7, &db);
-Graphic 			gpu(&lcd,170,220);
 //EventGpio 		btn(&PB13, 1,"btn1");
 //EventManager 	manager;
 
@@ -115,7 +112,7 @@ void print_log(const char *name, const char *date)
     UART.printf("* pclk2         : %0.3fMhz\r\n", cpu.clock.pclk2 / 1000000.0);
     UART.printf("* ability/s     : %0.3fMhz\r\n", cpu.ability / 1000000.0);
 
-    UART.printf("* flash size    : %d    \tKB \r\n", cpu.flash_size);
+    UART.printf("* flash size    : %d    \tKB \r\n", cpu.flash.size);
     UART.printf("* flash used    : %0.3f \tKB\r\n", MCU_FLASH_USED / 1024.0);	/* 打印一行空格 */
     UART.printf("* flash remaind : %0.3f \tKB\r\n", MCU_FLASH_REMAIND / 1024.0);	/* 打印一行空格 */
 

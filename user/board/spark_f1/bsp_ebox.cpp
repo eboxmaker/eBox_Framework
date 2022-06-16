@@ -56,10 +56,11 @@ void print_log(const char *name, const char *date)
     UART.print("* CPUID         : ");       /* ¥Ú”°CPUŒ®“ªID */
     for(int i = 0 ; i <11; i++)
     {
-        UART.printf("%02X-",cpu.chip_id[i]);
+        UART.print(cpu.chip_id[i],HEX);
+        UART.print("-");
+        
     }
-    UART.printf("%02X",cpu.chip_id[11]);
-    UART.printf("\n");
+    UART.println(cpu.chip_id[11],HEX);
 
 
 

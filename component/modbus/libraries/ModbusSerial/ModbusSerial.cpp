@@ -99,6 +99,7 @@ bool ModbusSerial::send(byte *frame)
     {
         this->_txPin->write(LOW);
     }
+    return true;
 }
 
 bool ModbusSerial::sendPDU(byte *pduframe)
@@ -131,6 +132,7 @@ bool ModbusSerial::sendPDU(byte *pduframe)
     {
         this->_txPin->write(LOW);
     }
+    return true;
 }
 
 void ModbusSerial::task()

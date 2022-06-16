@@ -39,7 +39,7 @@ extern "C" {
     *@param    mcu
     *@retval   none
     */
-    __weak void SystemClock_Config()
+    void SystemClock_Config()
     {
         /* Configuration will allow to reach a SYSCLK frequency set to 24MHz:
          Syst freq = ((HSI_VALUE * PLLMUL)/ PLLDIV)
@@ -215,7 +215,7 @@ extern "C" {
         cpu.chip_id[1] = (uint32_t)(READ_REG(*((uint32_t *)(UID_BASE_ADDRESS + 4U))));
         cpu.chip_id[0] = (uint32_t)(READ_REG(*((uint32_t *)(UID_BASE_ADDRESS + 8U))));  //¸ß×Ö½Ú
 
-        cpu.flash_size = (uint16_t)(READ_REG(*((uint32_t *)FLASHSIZE_BASE_ADDRESS)));   //Ð¾Æ¬flashÈÝÁ¿
+        cpu.flash.size = (uint16_t)(READ_REG(*((uint32_t *)FLASHSIZE_BASE_ADDRESS)));   //Ð¾Æ¬flashÈÝÁ¿
 #if	EBOX_DEBUG
         millis_seconds = 0;
         SysTick->VAL = 0;

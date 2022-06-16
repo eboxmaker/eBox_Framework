@@ -62,7 +62,7 @@
 
 
 //HEAP定义管理区域，用于动态内存管理
-#ifdef __CC_ARM
+#if defined(__CC_ARM) || defined(__clang__)
 extern int Image$$RW_IRAM1$$ZI$$Limit;
 #define MCU_HEAP_BEGIN 	((uint32_t)&Image$$RW_IRAM1$$ZI$$Limit)
 #elif __ICCARM__
@@ -87,7 +87,7 @@ extern int __bss_end;
 #define MCU_FLASH_SIZE        MCU_FLASH*1024
 
 
-#ifdef __CC_ARM
+#if defined(__CC_ARM) || defined(__clang__)
 extern int SHT$$INIT_ARRAY$$Limit;
 #define MCU_FLASH_PRG_END 	((uint32_t)&SHT$$INIT_ARRAY$$Limit)
 #endif

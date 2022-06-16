@@ -68,16 +68,6 @@ extern Uart uart1;
 extern Uart uart2;
 #endif
 
-#include "parallel_gpio.h"
-#include "tft9225.h"
-#include "graphic.h"
-#include "EventManager.h"
-
-extern Lcd 						lcd;
-extern Graphic 				gpu;
-//extern EventGpio 			btn;
-//extern EventManager 	manager;
-
 
 #define PWMLED  	PA5
 #define LED1  		PA5

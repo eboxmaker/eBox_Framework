@@ -8,7 +8,11 @@ void ebox_init(void)
 {
 
     interrupts  = __enable_irq;
-    no_interrupts  = __disable_irq;
+    #if defined(__CC_ARM)
+        int        (*no_interrupts)(void);
+    #elif defined(__clang__)
+        void        (*no_interrupts)(void);
+    #endif
     delay       = mcu_delay_ms;
     delay_ms    = mcu_delay_ms;
     delay_us    = mcu_delay_us;
