@@ -125,8 +125,7 @@ void print_log(const char *name, const char *date)
     UART.println(HARDWARE);
     UART.print("* EBOX库版本    : ebox_V" );/* 版本信息 */
     UART.println(EBOX_VERSION);
-    UART.print("*                     CPU 信息\n");	/* CPU信息 */
-    UART.println();
+    UART.println("******CPU 信息******");	/* CPU信息 */
     UART.print("* CPU TYPE      : ");	    /* 打印CPU类型 */
     UART.println(MCU_TYPE);
     UART.print("* CPU PINS      : ");	    /* 打印CPU引脚数量 */

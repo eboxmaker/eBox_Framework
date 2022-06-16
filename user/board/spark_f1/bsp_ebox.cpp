@@ -33,7 +33,7 @@ W5500Class w5500(&PC13, &PC14, &PC15, &spi2);
 void print_log(const char *name, const char *date)
 {
     UART.print("\n");
-    UART.print("***\n");
+    UART.print("*******************************************\n");
     UART.print("* \r\n");	                /* 打印一行空格 */
     UART.print("* 例程名称      : ");	    /* 打印例程名称 */
     UART.println(name);
@@ -43,8 +43,8 @@ void print_log(const char *name, const char *date)
     UART.print("* 硬件平台      : ");       /* 硬件平台 */
     UART.println(HARDWARE);
     UART.print("* EBOX库版本    : ebox_V" );/* 版本信息 */
-    UART.print("*                     CPU 信息\n");	/* CPU信息 */
-    UART.println();
+    UART.println(EBOX_VERSION);
+    UART.println("******CPU 信息******");	/* CPU信息 */
     UART.print("* CPU TYPE      : ");	    /* 打印CPU类型 */
     UART.println(MCU_TYPE);
     UART.print("* CPU PINS      : ");	    /* 打印CPU引脚数量 */

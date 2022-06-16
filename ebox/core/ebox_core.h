@@ -25,13 +25,30 @@
 #include "binary.h"
 #include "ebox_config.h"
 
-#define EBOX_VERSION_MAJOR  "2" // 
-#define EBOX_VERSION_MINOR  "4" // 
-#define EBOX_VERSION_BUGFIX "0" // 
+#define EBOX_VERSION_MAJOR  2 // 
+#define EBOX_VERSION_MINOR  4 // 
+#define EBOX_VERSION_BUGFIX 0 // 
 
-#define EBOX_VERSION (EBOX_VERSION_MAJOR##"."##EBOX_VERSION_MINOR##"."##EBOX_VERSION_BUGFIX)
+#define AUX_STR_EXP(__A)     #__A
+#define AUX_STR(__A)         AUX_STR_EXP(__A)
+
+#define AUX_WSTR_EXP(__A)    L ## #__A
+#define AUX_WSTR(__A)        AUX_WSTR_EXP(__A)
+
+//#define EBOX_VERSION (EBOX_VERSION_MAJOR##"."##EBOX_VERSION_MINOR##"."##EBOX_VERSION_BUGFIX)
+ 
+#define EBOX_VERSION    AUX_STR(EBOX_VERSION_MAJOR) "."     \
+                        AUX_STR(EBOX_VERSION_MINOR) "."     \
+                        AUX_STR(EBOX_VERSION_BUGFIX)
+
+ #define EBOX_VERSION_WSTR      AUX_WSTR(XX_VERSION_MAJOR) "."    \
+                                AUX_WSTR(XX_VERSION_MINOR) "."    \
+                                AUX_WSTR(XX_VERSION_REVISION)
 
 
+ 
+
+                                
 
 
 #if __cplusplus
