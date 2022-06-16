@@ -3,7 +3,7 @@
  * Auto generated Run-Time-Environment Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'stm32f10x' 
+ * Project: 'STM32F3' 
  * Target:  'Target 1' 
  */
 
@@ -14,7 +14,7 @@
 /*
  * Define the Device Header File: 
  */
-#define CMSIS_device_header "stm32f0xx.h"
+#define CMSIS_device_header "stm32f3xx.h"
 
 
 

@@ -41,7 +41,11 @@ extern "C" {
     extern Cpu_t cpu;
 
     extern void        (*interrupts)(void);
+    #if defined(__CC_ARM)
     extern int         (*no_interrupts)(void);
+    #elif defined(__clang__)
+    extern void         (*no_interrupts)(void);
+    #endif
     extern void        (*ebox_reset)();
     extern uint32_t    (*micros)();
     extern uint32_t    (*millis)();

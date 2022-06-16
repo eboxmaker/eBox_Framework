@@ -24,8 +24,9 @@
 #include "soft_i2c.h"
 #include "w5500.h"
 
-#define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 extern W5500Class  w5500;
+
+#define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
 
 #define BTN1 PA8
@@ -38,6 +39,12 @@ extern W5500Class  w5500;
 #define LED2 PB9
 #define LED3 PB10
 #define I2C  i2c2
+
+#ifdef __cplusplus
+extern "C" void eboxInit();
+#else
+void eboxInit();
+#endif
 
 extern void print_log(const char *name = "test", const char *date = __DATE__);
 #define UART uart1

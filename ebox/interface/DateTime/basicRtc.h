@@ -21,7 +21,7 @@ extern const char *JieQiStr[];
 class BasicRtc
 {
 public:
-    BasicRtc(){dateTime = DateTime();};
+    BasicRtc(){dateTime = DateTime();}
     virtual void    begin()  = 0;
     virtual void    begin(DateTime &dt)  = 0;
     virtual void    update()  = 0;

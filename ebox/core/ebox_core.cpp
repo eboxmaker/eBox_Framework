@@ -5,7 +5,11 @@
 extern "C" {
 #endif
     void        (*interrupts)(void);
-    int         (*no_interrupts)(void);
+    #if defined(__CC_ARM)
+        int        (*no_interrupts)(void);
+    #elif defined(__clang__)
+        void        (*no_interrupts)(void);
+    #endif
     void        (*ebox_reset)(void);
     uint32_t    (*micros)(void);
     uint32_t    (*millis)(void);

@@ -47,7 +47,7 @@
 #define MCU_SRAM1_BEGIN  0x20000000
 #define MCU_SRAM1_END    (MCU_SRAM1_BEGIN + MCU_SRAM1_SIZE)
 
-#ifdef __CC_ARM
+#if defined(__CC_ARM) || defined(__clang__)
 extern int Image$$RW_IRAM1$$ZI$$Limit;
 #define MCU_HEAP_BEGIN 	((uint32_t)&Image$$RW_IRAM1$$ZI$$Limit)
 #elif __ICCARM__
@@ -64,7 +64,7 @@ extern int __bss_end;
 
 
 //FLASH «¯”Ú∂®“Â
-#ifdef __CC_ARM
+#if defined(__CC_ARM) || defined(__clang__)
 extern int SHT$$INIT_ARRAY$$Limit;
 #define MCU_FLASH_PRG_END 	((uint32_t)&SHT$$INIT_ARRAY$$Limit)
 #endif

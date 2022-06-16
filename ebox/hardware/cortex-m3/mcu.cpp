@@ -39,7 +39,7 @@ static void update_chip_info(void);
   *@param    mcu
   *@retval   none
   */
-__weak void SystemClock_Config()
+__WEAK void SystemClock_Config()
 {
 
 }

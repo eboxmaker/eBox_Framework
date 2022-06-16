@@ -20,11 +20,7 @@
 
 #include "ebox.h"
 #include "bsp_ebox.h"
-#include "ebox_exti.h"
-#include "rtthread.h"
-#include "cxx_Thread.h"
 
-using namespace rtthread;
 
 /**
 	*	1	此例程演示了GPIO中断
@@ -39,60 +35,21 @@ using namespace rtthread;
 
 void setup()
 {
+    ebox_init();
     UART.begin(115200);
     print_log(EXAMPLE_NAME, EXAMPLE_DATE);
+    uart1.flush();
     LED1.mode(OUTPUT_PP);
-}
-
-
-//动态线程任务
-static void dynamic_entry(void *param)
-{
-    static int cnt = 0;
-	
-    while (++cnt)
-    {
-		rt_kprintf("dynamic_thread is run:%d\n",cnt);
-        rt_thread_mdelay(500);
-    }
-}
-int thread_sample(void)
-{
-    static rt_thread_t thread_id = RT_NULL;
-    thread_id = rt_thread_create("dynamic_th",    //名称
-                                 dynamic_entry,   //线程代码
-                                 RT_NULL,         //参数
-                                 1024,            //栈大小
-                                 15,              //优先级
-                                 20);             //时间片
-
-    if (thread_id != RT_NULL)
-        rt_thread_startup(thread_id);			  //线程进入就绪态
-    else
-        rt_kprintf("dynamic_thread create failure\n");
-					//线程进入就绪态		
-									 
-    return RT_EOK;									 
-}
-void myTask(void *p)
-{
-    while(1)
-    {
-        uart1.printf("MyTask Run\n");
-        Thread::sleep(1000);
-    }
+    int cnt = 10;
+    
 }
 
 int main(void)
 {
     setup();
-    thread_sample();
-    Thread task1(myTask);
-    task1.start();
     while(1)
     {
         LED1.toggle();
-        rt_thread_mdelay(1000);
-        
+        delay(1000);
     }
 }

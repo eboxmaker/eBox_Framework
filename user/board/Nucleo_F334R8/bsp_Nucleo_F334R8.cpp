@@ -37,12 +37,7 @@ void print_log(const char *name, const char *date)
     UART.print("* 发布日期      : ");	    /* 打印例程日期 */
     UART.println(date);
 
-    UART.print("* 硬件平台      : ");       /* 硬件平台 */
-    UART.println(HARDWARE);
-    UART.print("* EBOX库版本    : ebox_" );/* 版本信息 */
-    UART.println(EBOX_VERSION);
-    UART.print("*                     CPU 信息\r\n");	/* CPU信息 */
-    UART.println();
+
     UART.print("* CPU TYPE      : ");	    /* 打印CPU类型 */
     UART.println(MCU_TYPE);
     UART.print("* CPU PINS      : ");	    /* 打印CPU引脚数量 */
@@ -76,7 +71,7 @@ void print_log(const char *name, const char *date)
 
 
     UART.print("* flash size    : ");       /* 打印flash大小 */
-    UART.print(cpu.flash_size);
+    UART.print(cpu.flash.size);
     UART.println("KB");
 
     UART.print("* flash used    : ");	    /* 打印flash使用了多少KB */
